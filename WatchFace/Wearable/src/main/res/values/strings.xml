@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2017 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">WatchFace</string>
+
+    <string name="opengl_name">Sample OpenGL</string>
+    <string name="interactive_name">Sample Interactive</string>
+    <string name="analog_complication">Sample Analog</string>
+    <string name="digital_name">Sample Digital 1.0</string>
+
+    <string name="digital_background_color">Background color</string>
+    <string name="digital_config_name">Digital watch face configuration</string>
+    <string name="digital_am">AM</string>
+    <string name="digital_pm">PM</string>
+
+    <string name="analog_complication_config_name">Configuration</string>
+    <string name="complications_provider_incrementing_number">Incrementing Number</string>
+
+    <string name="analog_complication_preference_file_key">com.example.android.wearable.watchface.ANALOG_COMPLICATION_PREFERENCE_FILE_KEY</string>
+    <string name="saved_marker_color">saved_markers_color</string>
+    <string name="saved_background_color">saved_background_color</string>
+    <string name="saved_unread_notifications_pref">saved_unread_notifications</string>
+
+    <!-- Use of "\n" is to conserve horizontal space in config menu. -->
+    <string name="config_marker_color_label">Marker\nColor</string>
+    <string name="config_background_color_label">Background\nColor</string>
+    <string name="config_unread_notifications_label">Unread\nNotifications</string>
+    <string name="config_background_image_complication_label">Background\nImage</string>
+
+    <!-- TODO: this should be shared (needs covering all the samples with Gradle build model) -->
+    <string name="color_black">Black</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_gray">Gray</string>
+    <string name="color_green">Green</string>
+    <string name="color_navy">Navy</string>
+    <string name="color_red">Red</string>
+    <string name="color_white">White</string>
+    <string name="analog_complication_config">Analog Complication Config</string>
+    <string name="add_complication">Add Complication</string>
+    <string name="edit_complication">Edit Complication <xliff:g id="name" example="World Clock">%1$s</xliff:g></string>
+
+    <string-array name="color_array">
+        <item>@string/color_black</item>
+        <item>@string/color_blue</item>
+        <item>@string/color_gray</item>
+        <item>@string/color_green</item>
+        <item>@string/color_navy</item>
+        <item>@string/color_red</item>
+        <item>@string/color_white</item>
+    </string-array>
+</resources>

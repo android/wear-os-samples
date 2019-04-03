@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2017 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<manifest package="com.example.android.wearable.watchface"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.type.watch"/>
+
+    <!-- Required to act as a custom watch face. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!-- Required for complications to receive complication data and open the provider chooser. -->
+    <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name">
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="false"/>
+
+        <service
+            android:name=".watchface.OpenGLWatchFaceService"
+            android:label="@string/opengl_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_opengl"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_opengl_circular"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.companionConfigurationAction"
+                android:value="com.example.android.wearable.watchface.CONFIG_OPENGL"/>
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".watchface.AnalogComplicationWatchFaceService"
+            android:enabled="true"
+            android:label="@string/analog_complication"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_analog_complication"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_analog_complication_circular"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.wearableConfigurationAction"
+                android:value="com.example.android.wearable.watchface.CONFIG_COMPLICATION_SIMPLE"/>
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
+            </intent-filter>
+        </service>
+
+        <activity android:name="android.support.wearable.complications.ComplicationHelperActivity"/>
+        <activity
+            android:name=".config.AnalogComplicationConfigActivity"
+            android:label="@string/analog_complication_config">
+            <intent-filter>
+                <action android:name="com.example.android.wearable.watchface.CONFIG_COMPLICATION_SIMPLE"/>
+
+                <category android:name="com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".watchface.InteractiveWatchFaceService"
+            android:label="@string/interactive_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_interactive"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_interactive_circular"/>
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".watchface.DigitalWatchFaceService"
+            android:label="@string/digital_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_digital"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_digital_circular"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.companionConfigurationAction"
+                android:value="com.example.android.wearable.watchface.CONFIG_DIGITAL"/>
+            <meta-data
+                android:name="com.google.android.wearable.watchface.wearableConfigurationAction"
+                android:value="com.example.android.wearable.watchface.CONFIG_DIGITAL"/>
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
+            </intent-filter>
+        </service>
+
+        <!--
+             All intent-filters for config actions must include the categories
+            com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION
+            and android.intent.category.DEFAULT.
+        -->
+
+        <activity
+            android:name=".config.DigitalWatchFaceWearableConfigActivity"
+            android:label="@string/digital_config_name">
+            <intent-filter>
+                <action android:name="com.example.android.wearable.watchface.CONFIG_DIGITAL"/>
+
+                <category android:name="com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name=".config.DigitalWatchFaceConfigListenerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/"
+                    android:scheme="wear"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".provider.IncrementingNumberComplicationProviderService"
+            android:icon="@drawable/icn_complications"
+            android:label="@string/complications_provider_incrementing_number"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="RANGED_VALUE,SHORT_TEXT,LONG_TEXT"/>
+            <!--
+            When your complication data provider is active, UPDATE_PERIOD_SECONDS specifies how
+            often you want the system to check for updates to the data.
+
+            In general, you want to manually trigger updates only when your complication data
+            actually changes via ProviderUpdateRequester (check UpdateComplicationDataService.java
+            for an example).
+
+            If you do decide to use UPDATE_PERIOD_SECONDS, set the interval in the order of minutes.
+            A good value might be 600 seconds (10 minutes) if you need updates pulled often.
+
+            Also, remember that this is only a guidance for the system. Wear may update less
+            frequently.
+            -->
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="0"/>
+        </service>
+        <receiver android:name=".provider.ComplicationToggleReceiver"/>
+
+        <activity android:name=".config.ColorSelectionActivity"/>
+    </application>
+</manifest>

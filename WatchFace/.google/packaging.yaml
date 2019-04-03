@@ -1,0 +1,25 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [Wearable]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android-WatchFace
+level:        INTERMEDIATE
+icon:         screenshots/icon-web.png
+apiRefs:
+    - android:android.support.wearable.complications.ComplicationData
+    - android:android.support.wearable.complications.ComplicationHelperActivity
+    - android:android.support.wearable.complications.ComplicationProviderInfo
+    - android:android.support.wearable.complications.ComplicationText
+    - android:android.support.wearable.complications.ProviderChooserIntent
+    - android:android.support.wearable.view.WearableRecyclerView
+    - android:android.support.wearable.watchface.CanvasWatchFaceService
+    - android:android.support.wearable.watchface.WatchFaceService
+    - android:android.support.wearable.watchface.WatchFaceStyle
+license: apache2
