@@ -1,0 +1,19 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [UI, Wearable]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android-DataLayer
+level:        ADVANCED
+icon:         Application/src/main/res/drawable-xxhdpi/ic_launcher.png
+apiRefs:
+    - gms:com.google.android.gms.wearable.DataApi
+    - gms:com.google.android.gms.wearable.DataEvent
+    - gms:com.google.android.gms.wearable.WearableListenerService
+license: apache2
