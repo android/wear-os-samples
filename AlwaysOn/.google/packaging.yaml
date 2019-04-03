@@ -1,0 +1,16 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [Wearable]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android-AlwaysOn
+level:        INTERMEDIATE
+apiRefs:
+    - android:android.support.wearable.activity.WearableActivity
+license: apache2
