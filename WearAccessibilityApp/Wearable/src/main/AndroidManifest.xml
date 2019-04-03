@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2017 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<manifest package="com.example.android.wearable.wear.wearaccessibilityapp"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.type.watch"/>
+
+    <!-- Required for Always-on. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/launcher_image"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/SampleAppTheme">
+
+        <activity
+            android:label="@string/app_name"
+            android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/lists"
+            android:name=".ListsActivity">
+        </activity>
+        <activity
+            android:label="@string/dialogs"
+            android:name=".DialogsActivity">
+        </activity>
+        <activity
+            android:label="@string/progress"
+            android:name=".ProgressActivity">
+        </activity>
+        <activity
+            android:label="@string/controls"
+            android:name=".ControlsActivity">
+        </activity>
+        <activity
+            android:label="@string/notifications"
+            android:name=".NotificationsActivity">
+        </activity>
+        <activity
+            android:label="@string/accessibility"
+            android:name=".AccessibilityActivity">
+        </activity>
+        <activity
+            android:label="@string/a_long_list"
+            android:name=".LongListActivity">
+        </activity>
+        <activity
+            android:label="@string/list_of_graphics"
+            android:name=".ListOfGraphicsActivity">
+        </activity>
+        <activity
+            android:label="@string/photo_carousel"
+            android:name=".PhotoCarouselActivity">
+        </activity>
+        <activity
+            android:label="@string/images"
+            android:name=".ImagesActivity">
+        </activity>
+        <activity
+            android:label="@string/zoom_image"
+            android:name=".ZoomImageActivity">
+        </activity>
+        <activity
+            android:label="@string/open_on_phone_animation"
+            android:name=".OpenOnPhoneAnimationActivity"
+            android:theme="@style/OpenOnPhoneAnimationTheme">
+        </activity>
+        <activity
+            android:label="@string/radio_list"
+            android:name=".RadioListActivity">
+        </activity>
+        <activity
+            android:label="@string/full_screen"
+            android:name=".FullScreenActivity">
+        </activity>
+        <activity
+            android:label="@string/in_line"
+            android:name=".InLineActivity">
+        </activity>
+    </application>
+</manifest>

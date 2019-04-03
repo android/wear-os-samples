@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2017 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view_tutorial_images"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="?android:dialogPreferredPadding"
+        android:paddingBottom="?android:dialogPreferredPadding"
+        android:paddingStart="?android:listPreferredItemPaddingStart"
+        android:paddingEnd="?android:listPreferredItemPaddingEnd"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/title_images"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:gravity="center_horizontal"
+            android:text="@string/images"
+            android:textAppearance="@style/android:TextAppearance.Material.Title"/>
+        <TextView
+            android:id="@+id/description_1_tutorial_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="@string/description_1_tutorial_image"
+            android:textAppearance="@style/android:TextAppearance.Material.Body1"/>
+        <ImageView
+            android:id="@+id/swipe_left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:contentDescription="@string/swipe_left"
+            android:foregroundTint="@color/dark_blue"
+            android:src="@drawable/oobe_swipe_left_long_animation"
+            android:tint="@color/dark_blue"/>
+        <TextView
+            android:id="@+id/description_2_tutorial_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="4dp"
+            android:text="@string/description_2_tutorial_image"
+            android:textAppearance="@style/android:TextAppearance.Material.Body1"/>
+        <ImageView
+            android:id="@+id/tap_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/tap"
+            android:foregroundTint="@color/dark_blue"
+            android:src="@drawable/oobe_tap_animation"
+            android:tint="@color/dark_blue"/>
+        <TextView
+            android:id="@+id/description_3_tutorial_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            android:text="@string/description_3_tutorial_image"
+            android:textAppearance="@style/android:TextAppearance.Material.Body1"/>
+        <TextView
+            android:id="@+id/description_1_decorative_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp"
+            android:text="@string/description_1_decorative_image"
+            android:textAppearance="@style/android:TextAppearance.Material.Body1"/>
+        <ImageView
+            android:id="@+id/bow_image"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/bow"/>
+        <TextView
+            android:id="@+id/description_2_decorative_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="@string/description_2_decorative_image"
+            android:textAppearance="@style/android:TextAppearance.Material.Body1"/>
+    </LinearLayout>
+</ScrollView>

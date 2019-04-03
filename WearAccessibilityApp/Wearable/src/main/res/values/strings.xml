@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2017 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<resources>
+    <string name="app_name">Wear Accessibility App</string>
+
+    <!-- Strings for Lists -->
+    <string name="lists">Lists</string>
+    <string name="description_2_tutorial_image">Swipe hint is labeled \"swipe left\"</string>
+    <string name="description_3_tutorial_image">Tap hint labeled \"tap\"</string>
+    <string name="description_1_decorative_image">Graphics that are used decoratively that do
+            not add additional meaning do not need a text label.</string>
+    <string name="description_2_decorative_image">Bow graphic is unlabeled and would be passed
+            over by a screen reader.</string>
+    <string name="a_long_list">A long list</string>
+    <string name="list_of_graphics">List of graphics</string>
+    <string name="bottom_action_drawer">Bottom action \ndrawer</string>
+    <string name="photo_carousel">Photo carousel</string>
+    <string name="images">Images</string>
+    <string name="graphics_description">
+            Each image has a descriptive label for a screenreader.</string>
+    <string name="description_of_cat_image">Two cats forming a heart.</string>
+    <string name="description_of_dog_image">Dog holding a bone.</string>
+    <string name="description_of_hamster_image">Hamster hugging a baby carrot.</string>
+    <string name="description_of_bird_image">Two love birds on a branch.</string>
+    <string name="zoom_image">Zoomed Image</string>
+    <string name="intent_extra_image">image</string>
+    <string name="description_1_tutorial_image">Graphics that add additional information should
+            be properly labeled.</string>
+    <string name="swipe_left">swipe left</string>
+    <string name="action_1">Action 1</string>
+    <string name="action_2">Action 2</string>
+    <string name="action_3">Action 3</string>
+    <string name="item_text">Item %1$d</string>
+    <string name="switch_bottom_action_drawer">%1$s Switch Bottom Action Drawer</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+
+    <!-- Strings for Dialogs -->
+    <string name="dialogs">Dialogs</string>
+    <string name="open_on_phone_animation">Open On Phone Animation</string>
+    <string name="yes_no_dialog">Yes/no dialog</string>
+    <string name="yes_no_dialog_description">This dialog only has two actions available.</string>
+    <string name="one_action_dialog">One action dialog</string>
+    <string name="one_action_dialog_description">There is only one action on this dialog.</string>
+    <string name="multiple_action_dialog">Multiple action dialog</string>
+    <string name="multiple_action_dialog_description">This dialog has multiple actions.</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
+    <string name="open_on_phone">Open on phone</string>
+    <string name="yes_no_action">Yes/No action</string>
+    <string name="one_action">One action</string>
+    <string name="multiple_actions">Multiple actions</string>
+    <string name="continue_on_phone">Continue on phone</string>
+    <string name="tap">tap</string>
+
+    <!-- Strings for Progress -->
+    <string name="progress">Progress</string>
+    <string name="in_line">In-line</string>
+    <string name="full_screen">Full screen</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="start">Start</string>
+    <string name="determinant">Determinant</string>
+    <string name="in_line_progress">In-line Progress</string>
+    <string name="indeterminant_progress">Indeterminant\nProgress</string>
+    <string name="key_pref_determinant_switch">pref_determinant_switch</string>
+    <string name="key_pref_circled_image_view">pref_circled_image_view</string>
+    <string name="key_pref_progress_screen">pref_progress_screen</string>
+
+    <!-- Strings for Controls -->
+    <string name="controls">Controls</string>
+    <string name="checkbox">Checkbox</string>
+    <string name="radio_list">Radio List</string>
+    <string name="switch_name">Switch</string>
+    <string name="hello">Hello</string>
+    <string name="hi">Hi</string>
+    <string name="howdy">Howdy</string>
+    <string name="radio_button_list">Radio Button List</string>
+
+    <!-- Strings for Notifications -->
+    <string name="notifications">Notifications</string>
+    <string name="main_text_activity_messaging_main">
+            This Activity would handle the messaging app\'s functionality for a chat(s).
+            \n\nThe notification type for this example was the Messaging Style!
+    </string>
+    <string name="reply_label">Reply</string>
+    <string name="inline_action">In-line action</string>
+    <string name="avatar">Avatar</string>
+    <string name="push_notification">Push notification now</string>
+    <string name="key_pref_avatar">pref_avatar</string>
+    <string name="key_pref_action">pref_action</string>
+    <string name="key_pref_push_notification">pref_push_notification</string>
+
+    <!-- Strings for Accessibility -->
+    <string name="description_1_accessibility">
+            Make sure your watch is accessible for all users</string>
+    <string name="description_2_accessibility">
+            What does your app look like in the largest text size?</string>
+    <string name="description_3_accessibility">Does your app work with a screen reader?</string>
+    <string name="accessibility">Accessibility</string>
+    <string name="accessibility_settings">Accessibility settings</string>
+
+    <string name="default_text">TextView</string>
+    <string name="title">title</string>
+</resources>
