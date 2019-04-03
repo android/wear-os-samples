@@ -1,0 +1,25 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [Getting Started, UI]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android-WearVerifyRemoteApp
+level:        INTERMEDIATE
+icon:         screenshots/icon-web.png
+apiRefs:
+    - android:android.support.wearable.activity.WearableActivity
+    - android:android.support.wearable.view.ConfirmationOverlay
+    - android:com.google.android.gms.common.api.GoogleApiClient
+    - android:com.google.android.gms.wearable.CapabilityApi
+    - android:com.google.android.gms.wearable.CapabilityInfo
+    - android:com.google.android.gms.wearable.Node
+    - android:com.google.android.gms.wearable.Wearable
+    - android:com.google.android.wearable.intent.RemoteIntent
+    - android:com.google.android.wearable.playstore.PlayStoreAvailability
+license: apache2
