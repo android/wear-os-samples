@@ -1,0 +1,27 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [GPS, Wearable]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android-SpeedTracker
+level:        INTERMEDIATE
+apiRefs:
+    - android:com.google.android.gms.maps.MapFragment
+    - android:com.google.android.gms.common.ConnectionResult
+    - android:com.google.android.gms.common.api.GoogleApiClient
+    - android:com.google.android.gms.common.api.ResultCallback
+    - android:com.google.android.gms.common.api.Status
+    - android:com.google.android.gms.location.LocationListener
+    - android:com.google.android.gms.location.LocationRequest
+    - android:com.google.android.gms.location.LocationServices
+    - android:com.google.android.gms.wearable.DataApi
+    - android:com.google.android.gms.wearable.PutDataMapRequest
+    - android:com.google.android.gms.wearable.PutDataRequest
+    - android:com.google.android.gms.wearable.Wearable
+license: apache2

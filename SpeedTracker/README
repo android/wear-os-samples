@@ -1,0 +1,12 @@
+In order to run this application, you need to install the
+wearable apk on a device that has GPS capabilities in
+hardware. In addition, you need to obtain an API key for
+using Map v2 APIs, see the following link for the details:
+https://developers.google.com/maps/documentation/android/start#get_an_android_certificate_and_the_google_maps_api_key
+After getting the key, find the following line in
+Application/src/main/res/values/strings.xml:
+
+<string name="map_v2_api_key">YOUR_MAP_V2_API_KEY</string>
+
+and replace YOUR_MAP_V2_API_KEY with your own key.
+
