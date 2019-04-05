@@ -1,0 +1,39 @@
+
+# GOOGLE SAMPLE PACKAGING DATA
+#
+# This file is used by Google as part of our samples packaging process.
+# End users may safely ignore this file. It has no relevance to other systems.
+---
+status:       PUBLISHED
+technologies: [Android]
+categories:   [Wearable, Location, Notification]
+languages:    [Java]
+solutions:    [Mobile]
+github:       android-XYZTouristAttractions
+level:        INTERMEDIATE
+icon:         screenshots/icon-web.png
+apiRefs:
+    - android:android.support.v7.appcompat
+    - android:android.support.v7.widget.RecyclerView
+    - android:android.support.v7.widget.GridLayoutManager
+    - android:android.support.v4.content.ContextCompat
+    - android:android.support.v4.app.ActivityCompat
+    - android:android.support.design.widget.FloatingActionButton
+    - android:android.support.design.widget.CoordinatorLayout
+    - android:com.google.android.gms.common.api.GoogleApiClient
+    - android:com.google.android.gms.wearable.Wearable
+    - android:com.google.android.gms.wearable.DataApi
+    - android:com.google.android.gms.wearable.NodeApi
+    - android:com.google.android.gms.wearable.WearableListenerService
+    - android:com.google.android.gms.location.LocationServices.GeofencingApi
+    - android:com.google.android.gms.location.LocationServices.FusedLocationApi
+    - android:android.support.wearable.view.DismissOverlayView
+    - android:android.support.wearable.view.DotsPageIndicator
+    - android:android.support.wearable.view.GridViewPager
+    - android:android.support.wearable.activity.ConfirmationActivity
+    - android:android.support.wearable.view.CardFrame
+    - android:android.support.wearable.view.CardScrollView
+    - android:android.support.wearable.view.GridPagerAdapter
+    - android:android.support.wearable.view.WatchViewStub
+    - android:android.support.wearable.view.ActionPage
+license: apache2
