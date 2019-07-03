@@ -31,7 +31,7 @@ technologies: [Android]
 categories:   [Wearable]
 languages:    [Java]
 solutions:    [Mobile]
-github:       android-AlwaysOn
+github:       android/wear-os
 level:        INTERMEDIATE
 apiRefs:
     - android:android.support.wearable.activity.WearableActivity

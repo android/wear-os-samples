@@ -31,7 +31,7 @@ technologies: [Android]
 categories:   [GPS, Wearable]
 languages:    [Java]
 solutions:    [Mobile]
-github:       android-SpeedTracker
+github:       android/wear-os
 level:        INTERMEDIATE
 apiRefs:
     - android:com.google.android.gms.maps.MapFragment

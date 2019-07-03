@@ -31,7 +31,7 @@ technologies: [Android]
 categories:   [Wearable]
 languages:    [Java]
 solutions:    [Mobile]
-github:       android-WearSpeakerSample
+github:       android/wear-os
 level:        INTERMEDIATE
 icon:         screenshots/1.png
 apiRefs:

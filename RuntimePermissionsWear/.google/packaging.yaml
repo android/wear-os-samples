@@ -31,7 +31,7 @@ technologies: [Android]
 categories:   [Wearable, Permissions]
 languages:    [Java]
 solutions:    [Mobile]
-github:       android-RuntimePermissionsWear
+github:       android/wear-os
 level:        INTERMEDIATE
 icon:         screenshots/icon-web.png
 apiRefs:

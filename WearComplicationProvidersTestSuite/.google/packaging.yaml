@@ -31,7 +31,7 @@ technologies: [Android]
 categories:   [Wearable]
 languages:    [Java]
 solutions:    [Mobile]
-github:       android-WearComplicationProvidersTestSuite
+github:       android/wear-os
 level:        INTERMEDIATE
 icon:         screenshots/icon-web.png
 apiRefs:

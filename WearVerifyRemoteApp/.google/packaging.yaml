@@ -31,7 +31,7 @@ technologies: [Android]
 categories:   [Getting Started, UI]
 languages:    [Java]
 solutions:    [Mobile]
-github:       android-WearVerifyRemoteApp
+github:       android/wear-os
 level:        INTERMEDIATE
 icon:         screenshots/icon-web.png
 apiRefs:
