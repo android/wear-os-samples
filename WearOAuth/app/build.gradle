@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.example.android.wearable.wear.wearoauth"
+        minSdkVersion 25
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // Used to make the direct HTTP call for the token exchange. This will eventually be removed
+    // when the sample is updated to use server-side redirects.
+    useLibrary 'org.apache.http.legacy'
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+
+    implementation 'com.google.android.support:wearable:2.4.0'
+    compileOnly 'com.google.android.wearable:wearable:2.4.0'
+}
