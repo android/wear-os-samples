@@ -17,40 +17,36 @@ package com.example.android.wearable.wear.wearstandalonegooglesignin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+import androidx.annotation.NonNull;
 
 /**
  * Demonstrates using Google Sign-In on Android Wear, including the Wear-styled
  * {@link com.example.android.wearable.wear.wearstandalonegooglesignin.WearGoogleSignInButton}.
  */
-public class GoogleSignInActivity extends WearableActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        ResultCallback<Status> {
+public class GoogleSignInActivity extends WearableActivity {
 
     private static final String TAG = "GoogleSignInActivity";
-    private GoogleApiClient mGoogleApiClient;
-    private GoogleSignInAccount mGoogleSignInAccount;
+    private GoogleSignInClient mGoogleSignInClient;
 
     /* Custom Wear Google Sign-In button to be used until the button is supported in a future Play
      *  Services releases, following the Wear 2.0 final release */
-    private WearGoogleSignInButton mSignInButton;
+    private SignInButton mSignInButton;
     private Button mSignOutButton;
 
     // Used to verify the user on the server
@@ -65,7 +61,7 @@ public class GoogleSignInActivity extends WearableActivity implements
         setupGoogleApiClient();
 
         // Set up the sign in button.
-        mSignInButton = (WearGoogleSignInButton) findViewById(R.id.sign_in_button);
+        mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,29 +70,19 @@ public class GoogleSignInActivity extends WearableActivity implements
         });
 
         // Set up the sign out button.
-        mSignOutButton = (Button) findViewById(R.id.sign_out_button);
+        mSignOutButton = findViewById(R.id.sign_out_button);
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signOut();
             }
         });
+        checkAlreadySignedIn();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onPause();
+    private void checkAlreadySignedIn() {
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUi(account);
     }
 
     @Override
@@ -105,8 +91,10 @@ public class GoogleSignInActivity extends WearableActivity implements
         Log.d(TAG, "Activity request code: " + requestCode);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == REQUEST_CODE_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
         }
     }
 
@@ -118,54 +106,37 @@ public class GoogleSignInActivity extends WearableActivity implements
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestProfile()
                 .requestEmail()
-                .requestIdToken(getString(R.string.server_client_id))
                 .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addOnConnectionFailedListener(this)
-                .addConnectionCallbacks(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    protected void handleSignInResult(GoogleSignInResult result) {
-        if (result == null) {
-            Log.d(TAG, "Google Sign-In result is null");
-            onGoogleSignInFailure();
-        }
+    protected void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-        if (result.isSuccess()) {
-            mGoogleSignInAccount = result.getSignInAccount();
-            if (mGoogleSignInAccount != null) {
-                Toast.makeText(this, R.string.google_signin_successful, Toast.LENGTH_SHORT).show();
-
-                mUserIdToken = mGoogleSignInAccount.getIdToken();
-                Log.d(TAG, "Google Sign-In success " + mUserIdToken);
-
-                mSignInButton.setVisibility(View.GONE);
-                mSignOutButton.setVisibility(View.VISIBLE);
-
-            }
-        } else {
-            Log.d(TAG, "Google Sign-In failure: " + result.getStatus());
-            onGoogleSignInFailure();
+            // Signed in successfully, show authenticated UI.
+            updateUi(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG,
+                    "signInResult:failed code=" + e.getStatusCode() + ". Msg=" + GoogleSignInStatusCodes.getStatusCodeString(e.getStatusCode()));
+            updateUi(null);
         }
     }
 
-    /**
-     * Try to silently retrieve sign-in information for a user who is already signed into the app.
-     */
-    private void refreshSignIn() {
-        OptionalPendingResult<GoogleSignInResult> pendingResult =
-                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (pendingResult.isDone()) {
-            handleSignInResult(pendingResult.get());
+    private void updateUi(GoogleSignInAccount account) {
+        if (account != null) {
+            Toast.makeText(this, R.string.google_signin_successful, Toast.LENGTH_SHORT).show();
+
+            mUserIdToken = account.getIdToken();
+            Log.d(TAG, "Google Sign-In success " + mUserIdToken);
+
+            mSignInButton.setVisibility(View.GONE);
+            mSignOutButton.setVisibility(View.VISIBLE);
         } else {
-            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult result) {
-                    handleSignInResult(result);
-                }
-            });
+            mSignInButton.setVisibility(View.VISIBLE);
+            mSignOutButton.setVisibility(View.GONE);
         }
     }
 
@@ -173,11 +144,11 @@ public class GoogleSignInActivity extends WearableActivity implements
      * Starts Google sign in activity, response handled in onActivityResult.
      */
     private void signIn() {
-        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
-            Log.e(TAG, "Google API client not initialized or not connected.");
+        if (mGoogleSignInClient == null) {
+            Log.e(TAG, "Google Sign In API client not initialized.");
             return;
         }
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
     }
 
@@ -185,51 +156,16 @@ public class GoogleSignInActivity extends WearableActivity implements
      * Signs the user out and resets the sign-in button to visible.
      */
     private void signOut() {
-        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
-            Log.e(TAG, "Google API client not initialized or not connected");
+        if (mGoogleSignInClient == null) {
+            Log.e(TAG, "Google Sign In API client not initialized.");
             return;
         }
-        mGoogleApiClient.connect();
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(this);
-    }
-
-    /**
-     * If the user isn't signed in, enable the sign-in button.
-     */
-    protected void onGoogleSignInFailure() {
-        mSignInButton.setEnabled(true);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "Connection failed.");
-        CharSequence success = "Connection failed.";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, success, duration);
-        toast.show();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.d(TAG, "onConnected()");
-        refreshSignIn();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d(TAG, "onConnectionSuspended(): connection to location client suspended: " + i);
-    }
-
-    @Override
-    public void onResult(Status status) {
-        if (status != null && status.isSuccess()) {
-            Log.d(TAG, "Successfully signed out");
-            Toast.makeText(this, R.string.signout_successful,
-                    Toast.LENGTH_SHORT).show();
-            mSignOutButton.setVisibility(View.GONE);
-            mSignInButton.setVisibility(View.VISIBLE);
-        } else {
-            Log.d(TAG, "Sign out not successful.");
-        }
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                updateUi(null);
+                Toast.makeText(GoogleSignInActivity.this, R.string.signout_successful, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

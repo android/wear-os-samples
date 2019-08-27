@@ -1,15 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.example.android.wearable.wear.wearstandalonegooglesignin"
 
         minSdkVersion 25
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -23,13 +21,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     compileOnly "com.google.android.wearable:wearable:2.4.0"
     implementation 'com.google.android.support:wearable:2.4.0'
-
-    implementation 'androidx.appcompat:appcompat:1.0.2'
 }
-
-apply plugin: 'com.google.gms.google-services'
