@@ -36,16 +36,13 @@ import com.google.android.gms.tasks.Task;
 import androidx.annotation.NonNull;
 
 /**
- * Demonstrates using Google Sign-In on Android Wear, including the Wear-styled
- * {@link com.example.android.wearable.wear.wearstandalonegooglesignin.WearGoogleSignInButton}.
+ * Demonstrates using Google Sign-In on Android Wear
  */
 public class GoogleSignInActivity extends WearableActivity {
 
     private static final String TAG = "GoogleSignInActivity";
     private GoogleSignInClient mGoogleSignInClient;
 
-    /* Custom Wear Google Sign-In button to be used until the button is supported in a future Play
-     *  Services releases, following the Wear 2.0 final release */
     private SignInButton mSignInButton;
     private Button mSignOutButton;
 
@@ -58,7 +55,7 @@ public class GoogleSignInActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupGoogleApiClient();
+        setupGoogleSignInClient();
 
         // Set up the sign in button.
         mSignInButton = findViewById(R.id.sign_in_button);
@@ -101,7 +98,7 @@ public class GoogleSignInActivity extends WearableActivity {
     /**
      * Configures the GoogleApiClient used for sign in. Requests scopes profile and email.
      */
-    protected void setupGoogleApiClient() {
+    protected void setupGoogleSignInClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestProfile()
