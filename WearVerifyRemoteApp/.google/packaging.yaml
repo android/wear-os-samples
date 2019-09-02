@@ -19,7 +19,7 @@
 ---
 status:       PUBLISHED
 technologies: [Android]
-categories:   [Getting Started, UI]
+categories:   [Wearable]
 languages:    [Java]
 solutions:    [Mobile]
 github:       android/wear-os
