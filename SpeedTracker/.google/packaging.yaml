@@ -19,7 +19,7 @@
 ---
 status:       PUBLISHED
 technologies: [Android]
-categories:   [GPS, Wearable]
+categories:   [Location, Wearable]
 languages:    [Java]
 solutions:    [Mobile]
 github:       android/wear-os
