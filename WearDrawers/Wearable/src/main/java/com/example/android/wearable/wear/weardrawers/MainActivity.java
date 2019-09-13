@@ -15,8 +15,6 @@ limitations under the License.
  */
 package com.example.android.wearable.wear.weardrawers;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
@@ -31,17 +29,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.wear.ambient.AmbientModeSupport;
 import androidx.wear.widget.drawer.WearableActionDrawerView;
 import androidx.wear.widget.drawer.WearableNavigationDrawerView;
+import androidx.wear.widget.drawer.WearableNavigationDrawerView.WearableNavigationDrawerAdapter;
 
 import java.util.ArrayList;
 
 /**
  * Demonstrates use of Navigation and Action Drawers on Wear.
  */
-public class MainActivity extends FragmentActivity implements
+public class MainActivity extends AppCompatActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
         MenuItem.OnMenuItemClickListener,
         WearableNavigationDrawerView.OnItemSelectedListener {
@@ -79,21 +80,19 @@ public class MainActivity extends FragmentActivity implements
 
         args.putInt(PlanetFragment.ARG_PLANET_IMAGE_ID, imageId);
         mPlanetFragment.setArguments(args);
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, mPlanetFragment).commit();
 
 
         // Top Navigation Drawer
-        mWearableNavigationDrawer =
-                (WearableNavigationDrawerView) findViewById(R.id.top_navigation_drawer);
+        mWearableNavigationDrawer = findViewById(R.id.top_navigation_drawer);
         mWearableNavigationDrawer.setAdapter(new NavigationAdapter(this));
         // Peeks navigation drawer on the top.
         mWearableNavigationDrawer.getController().peekDrawer();
         mWearableNavigationDrawer.addOnItemSelectedListener(this);
 
         // Bottom Action Drawer
-        mWearableActionDrawer =
-                (WearableActionDrawerView) findViewById(R.id.bottom_action_drawer);
+        mWearableActionDrawer = findViewById(R.id.bottom_action_drawer);
         // Peeks action drawer on the bottom.
         mWearableActionDrawer.getController().peekDrawer();
         mWearableActionDrawer.setOnMenuItemClickListener(this);
@@ -106,13 +105,11 @@ public class MainActivity extends FragmentActivity implements
     }
 
     private ArrayList<Planet> initializeSolarSystem() {
-        ArrayList<Planet> solarSystem = new ArrayList<Planet>();
+        ArrayList<Planet> solarSystem = new ArrayList<>();
         String[] planetArrayNames = getResources().getStringArray(R.array.planets_array_names);
 
-        for (int i = 0; i < planetArrayNames.length; i++) {
-            String planet = planetArrayNames[i];
-            int planetResourceId =
-                    getResources().getIdentifier(planet, "array", getPackageName());
+        for (String planet : planetArrayNames) {
+            int planetResourceId = getResources().getIdentifier(planet, "array", getPackageName());
             String[] planetInformation = getResources().getStringArray(planetResourceId);
 
             solarSystem.add(new Planet(
@@ -176,12 +173,11 @@ public class MainActivity extends FragmentActivity implements
         mPlanetFragment.updatePlanet(drawableId);
     }
 
-    private final class NavigationAdapter
-            extends WearableNavigationDrawerView.WearableNavigationDrawerAdapter {
+    private final class NavigationAdapter extends WearableNavigationDrawerAdapter {
 
         private final Context mContext;
 
-        public NavigationAdapter(Context context) {
+        /* package */ NavigationAdapter(Context context) {
             mContext = context;
         }
 
@@ -210,7 +206,7 @@ public class MainActivity extends FragmentActivity implements
      * Fragment that appears in the "content_frame", just shows the currently selected planet.
      */
     public static class PlanetFragment extends Fragment {
-        public static final String ARG_PLANET_IMAGE_ID = "planet_image_id";
+        /* package */ static final String ARG_PLANET_IMAGE_ID = "planet_image_id";
 
         private ImageView mImageView;
         private ColorFilter mImageViewColorFilter;
@@ -226,19 +222,20 @@ public class MainActivity extends FragmentActivity implements
 
             mImageView = rootView.findViewById(R.id.image);
 
-            int imageIdToLoad = getArguments().getInt(ARG_PLANET_IMAGE_ID);
+            int imageIdToLoad = getArguments() != null
+                    ? getArguments().getInt(ARG_PLANET_IMAGE_ID)
+                    : 0;
             mImageView.setImageResource(imageIdToLoad);
-
             mImageViewColorFilter = mImageView.getColorFilter();
 
             return rootView;
         }
 
-        public void updatePlanet(int imageId) {
+        /* package */ void updatePlanet(int imageId) {
             mImageView.setImageResource(imageId);
         }
 
-        public void onEnterAmbientInFragment(Bundle ambientDetails) {
+        /* package */ void onEnterAmbientInFragment(Bundle ambientDetails) {
             Log.d(TAG, "PlanetFragment.onEnterAmbient() " + ambientDetails);
 
             // Convert image to grayscale for ambient mode.
@@ -249,8 +246,10 @@ public class MainActivity extends FragmentActivity implements
             mImageView.setColorFilter(filter);
         }
 
-        /** Restores the UI to active (non-ambient) mode. */
-        public void onExitAmbientInFragment() {
+        /**
+         * Restores the UI to active (non-ambient) mode.
+         */
+        /* package */ void onExitAmbientInFragment() {
             Log.d(TAG, "PlanetFragment.onExitAmbient()");
 
             mImageView.setColorFilter(mImageViewColorFilter);
@@ -263,7 +262,9 @@ public class MainActivity extends FragmentActivity implements
     }
 
     private class MyAmbientCallback extends AmbientModeSupport.AmbientCallback {
-        /** Prepares the UI for ambient mode. */
+        /**
+         * Prepares the UI for ambient mode.
+         */
         @Override
         public void onEnterAmbient(Bundle ambientDetails) {
             super.onEnterAmbient(ambientDetails);
@@ -274,7 +275,9 @@ public class MainActivity extends FragmentActivity implements
             mWearableActionDrawer.getController().closeDrawer();
         }
 
-        /** Restores the UI to active (non-ambient) mode. */
+        /**
+         * Restores the UI to active (non-ambient) mode.
+         */
         @Override
         public void onExitAmbient() {
             super.onExitAmbient();
