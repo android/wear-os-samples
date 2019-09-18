@@ -46,9 +46,6 @@ public class GoogleSignInActivity extends WearableActivity {
     private SignInButton mSignInButton;
     private Button mSignOutButton;
 
-    // Used to verify the user on the server
-    protected String mUserIdToken;
-
     public static final int REQUEST_CODE_SIGN_IN = 8001;
 
     @Override
@@ -125,9 +122,6 @@ public class GoogleSignInActivity extends WearableActivity {
     private void updateUi(GoogleSignInAccount account) {
         if (account != null) {
             Toast.makeText(this, R.string.google_signin_successful, Toast.LENGTH_SHORT).show();
-
-            mUserIdToken = account.getIdToken();
-            Log.d(TAG, "Google Sign-In success " + mUserIdToken);
 
             mSignInButton.setVisibility(View.GONE);
             mSignOutButton.setVisibility(View.VISIBLE);
