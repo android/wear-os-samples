@@ -64,14 +64,3 @@ project and credentials, or otherwise modify the sample appropriately if you wan
 to use a different package name.
 
 https://developers.google.com/identity/sign-in/android/start-integrating
-
-4) Update the strings.xml file for the string value 'server_client_id' to the
-value for the OAuth web client id created in step 3).
-
-Special Notes
----------------
-
-1) For Wear integrations using Google Sign-In, please use the Wear-styled
-Google Sign-In button contained in this sample as throwaway code. The final
-version of this button will be released in a future Play Service version, following the
-Wear 2.0 final release
