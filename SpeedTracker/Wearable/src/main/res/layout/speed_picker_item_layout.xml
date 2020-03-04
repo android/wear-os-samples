@@ -14,11 +14,12 @@
      limitations under the License.
 -->
 
-<com.example.android.wearable.speedtracker.ui.SpeedPickerLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="80dp">
+
     <ImageView
         android:id="@+id/circle"
         android:layout_height="20dp"
@@ -35,4 +36,4 @@
         android:lineSpacingExtra="-4sp"
         android:textColor="@color/text_color"
         android:textSize="20sp"/>
-</com.example.android.wearable.speedtracker.ui.SpeedPickerLayout>
+</LinearLayout>

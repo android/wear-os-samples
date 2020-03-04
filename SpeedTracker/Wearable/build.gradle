@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
     }
 }
 
@@ -20,13 +20,13 @@ repositories {
 dependencies {
     implementation 'androidx.wear:wear:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
-    implementation 'com.google.android.gms:play-services-wearable:16.0.1'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
 
 
-    compileOnly 'com.google.android.wearable:wearable:2.4.0'
+    compileOnly 'com.google.android.wearable:wearable:2.5.0'
 
-    implementation 'com.google.android.support:wearable:2.4.0'
+    implementation 'com.google.android.support:wearable:2.5.0'
 
     implementation project(':Shared')
 }
@@ -58,8 +58,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     sourceSets {

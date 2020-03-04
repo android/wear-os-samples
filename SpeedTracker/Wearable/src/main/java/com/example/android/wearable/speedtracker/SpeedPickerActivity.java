@@ -19,16 +19,18 @@ package com.example.android.wearable.speedtracker;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.wearable.view.WearableListView;
 import android.widget.TextView;
 
-import com.example.android.wearable.speedtracker.ui.SpeedPickerListAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.wear.widget.WearableRecyclerView;
+
+import com.example.android.wearable.speedtracker.ui.SpeedPickerRecyclerAdapter;
 
 /**
  * An activity that presents a list of speeds to user and allows user to pick one, to be used as
  * the current speed limit.
  */
-public class SpeedPickerActivity extends Activity implements WearableListView.ClickListener {
+public class SpeedPickerActivity extends Activity implements SpeedPickerRecyclerAdapter.Callbacks {
 
     public static final String EXTRA_NEW_SPEED_LIMIT =
             "com.example.android.wearable.speedtracker.extra.NEW_SPEED_LIMIT";
@@ -41,40 +43,33 @@ public class SpeedPickerActivity extends Activity implements WearableListView.Cl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speed_picker_activity);
 
-        final TextView header = (TextView) findViewById(R.id.header);
+        final TextView header = findViewById(R.id.header);
 
         // Get the list component from the layout of the activity
-        WearableListView listView = (WearableListView) findViewById(R.id.wearable_list);
+        WearableRecyclerView recyclerView = findViewById(R.id.wearable_recycler_view);
+
+        // Aligns the first and last items on the list vertically centered on the screen.
+        recyclerView.setEdgeItemsCenteringEnabled(true);
+
+        // Improves performance because we know changes in content do not change the layout size of
+        // the RecyclerView.
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Assign an adapter to the list
-        listView.setAdapter(new SpeedPickerListAdapter(this, speeds));
-
-        // Set a click listener
-        listView.setClickListener(this);
-
-        listView.addOnScrollListener(new WearableListView.OnScrollListener() {
-            @Override
-            public void onScroll(int i) {
-            }
-
-            @Override
-            public void onAbsoluteScrollChange(int i) {
-                // only scroll the header up from the base position, not down...
-                if (i > 0) {
-                    header.setY(-i);
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(int i) {
-            }
-
-            @Override
-            public void onCentralPositionChanged(int i) {
-            }
-        });
+        recyclerView.setAdapter(new SpeedPickerRecyclerAdapter(speeds, this));
     }
 
+    @Override
+    public void speedLimitChange(int speedChange) {
+        Intent resultIntent = new Intent(Intent.ACTION_PICK);
+        resultIntent.putExtra(EXTRA_NEW_SPEED_LIMIT, speedChange);
+        setResult(RESULT_OK, resultIntent);
+
+        finish();
+    }
+/*
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
 
@@ -90,4 +85,6 @@ public class SpeedPickerActivity extends Activity implements WearableListView.Cl
     @Override
     public void onTopEmptyRegionClick() {
     }
+
+ */
 }

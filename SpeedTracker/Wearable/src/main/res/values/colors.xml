@@ -19,9 +19,10 @@
     <color name="wl_gray">#c1c1c1</color>
     <color name="text_color">#BBB</color>
     <color name="yellow">#ced020</color>
-    <color name="speed_below">@color/green</color>
-    <color name="speed_close">@color/yellow</color>
-    <color name="speed_above">@color/red</color>
+    <color name="blue">#0000FF</color>
+    <color name="speed_below">#008000</color>
+    <color name="speed_close">#FFFF00</color>
+    <color name="speed_above">#FF0000</color>
 
     <color name="cancel">#c1c1c1</color>
     <color name="cancel_pressed">#838383</color>

@@ -17,7 +17,6 @@
 package com.example.android.wearable.speedtracker;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -40,14 +40,13 @@ import androidx.wear.ambient.AmbientModeSupport;
 
 import com.example.android.wearable.speedtracker.common.Constants;
 import com.example.android.wearable.speedtracker.common.LocationEntry;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
@@ -64,10 +63,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class WearableMainActivity extends FragmentActivity implements
         AmbientModeSupport.AmbientCallbackProvider,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        ActivityCompat.OnRequestPermissionsResultCallback,
-        LocationListener {
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "WearableActivity";
 
@@ -114,7 +110,8 @@ public class WearableMainActivity extends FragmentActivity implements
      */
     private AmbientModeSupport.AmbientController mAmbientController;
 
-    private GoogleApiClient mGoogleApiClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationCallback locationCallback;
 
     private Handler mHandler = new Handler();
 
@@ -201,31 +198,43 @@ public class WearableMainActivity extends FragmentActivity implements
 
         setupViews();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-    }
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if ((mGoogleApiClient != null) && (mGoogleApiClient.isConnected()) &&
-                (mGoogleApiClient.isConnecting())) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
 
+                for (Location location : locationResult.getLocations()) {
+                    Log.d(TAG, "onLocationChanged() : " + location);
+
+
+                    if (mWaitingForGpsSignal) {
+                        mWaitingForGpsSignal = false;
+                        updateActivityViewsBasedOnLocationPermissions();
+                    }
+
+                    mSpeed = location.getSpeed() * MPH_IN_METERS_PER_SECOND;
+                    updateSpeedInViews();
+                    addLocationEntry(location.getLatitude(), location.getLongitude());
+                }
+            };
+        };
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
+        requestLocation();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
     }
 
     private void setupViews() {
@@ -337,15 +346,6 @@ public class WearableMainActivity extends FragmentActivity implements
         }
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected(Bundle bundle) {
-
-        Log.d(TAG, "onConnected()");
-        requestLocation();
-
-
-    }
 
     private void requestLocation() {
         Log.d(TAG, "requestLocation()");
@@ -362,60 +362,22 @@ public class WearableMainActivity extends FragmentActivity implements
                     .setInterval(UPDATE_INTERVAL_MS)
                     .setFastestInterval(FASTEST_INTERVAL_MS);
 
-            LocationServices.FusedLocationApi
-                    .requestLocationUpdates(mGoogleApiClient, locationRequest, this)
-                    .setResultCallback(new ResultCallback<Status>() {
 
-                        @Override
-                        public void onResult(Status status) {
-                            if (status.getStatus().isSuccess()) {
-                                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                                    Log.d(TAG, "Successfully requested location updates");
-                                }
-                            } else {
-                                Log.e(TAG,
-                                        "Failed in requesting location updates, "
-                                                + "status code: "
-                                                + status.getStatusCode() + ", message: " + status
-                                                .getStatusMessage());
-                            }
-                        }
-                    });
+            try {
+                fusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest, locationCallback, Looper.getMainLooper());
+
+            } catch (SecurityException unlikely) {
+                Log.e(TAG, "Lost location permissions. Couldn't remove updates. " + unlikely);
+            }
         }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d(TAG, "onConnectionSuspended(): connection to location client suspended");
-
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "onConnectionFailed(): " + connectionResult.getErrorMessage());
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged() : " + location);
-
-
-        if (mWaitingForGpsSignal) {
-            mWaitingForGpsSignal = false;
-            updateActivityViewsBasedOnLocationPermissions();
-        }
-
-        mSpeed = location.getSpeed() * MPH_IN_METERS_PER_SECOND;
-        updateSpeedInViews();
-        addLocationEntry(location.getLatitude(), location.getLongitude());
     }
 
     /*
      * Adds a data item to the data Layer storage.
      */
     private void addLocationEntry(double latitude, double longitude) {
-        if (!mGpsPermissionApproved || !mGoogleApiClient.isConnected()) {
+        if (!mGpsPermissionApproved) {
             return;
         }
         mCalendar.setTimeInMillis(System.currentTimeMillis());
@@ -428,17 +390,17 @@ public class WearableMainActivity extends FragmentActivity implements
                 .putLong(Constants.KEY_TIME, entry.calendar.getTimeInMillis());
         PutDataRequest request = putDataMapRequest.asPutDataRequest();
         request.setUrgent();
-        Wearable.DataApi.putDataItem(mGoogleApiClient, request)
-                .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                    @Override
-                    public void onResult(DataApi.DataItemResult dataItemResult) {
-                        if (!dataItemResult.getStatus().isSuccess()) {
-                            Log.e(TAG, "AddPoint:onClick(): Failed to set the data, "
-                                    + "status: " + dataItemResult.getStatus()
-                                    .getStatusCode());
-                        }
-                    }
-                });
+
+        Task<DataItem> dataItemTask =
+                Wearable.getDataClient(getApplicationContext()).putDataItem(request);
+
+        dataItemTask.addOnSuccessListener(dataItem -> {
+            Log.d(TAG, "Data successfully sent: " + dataItem.toString());
+        });
+        dataItemTask.addOnFailureListener(exception -> {
+            Log.e(TAG, "AddPoint:onClick(): Failed to set the data, "
+                    + "exception: " + exception);
+        });
     }
 
     /**
@@ -484,9 +446,7 @@ public class WearableMainActivity extends FragmentActivity implements
                 Log.i(TAG, "GPS permission granted.");
                 mGpsPermissionApproved = true;
 
-                if(mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-                    requestLocation();
-                }
+                requestLocation();
 
             } else {
                 Log.i(TAG, "GPS permission NOT granted.");
