@@ -33,7 +33,7 @@ public class Utils {
      * Causes device to vibrate for the given duration (in millis). If duration is set to 0, then it
      * will use the <code>DEFAULT_VIBRATION_DURATION_MS</code>.
      */
-    public final static void vibrate(Context context, int duration) {
+    public static void vibrate(Context context, int duration) {
         if (duration == 0) {
             duration = DEFAULT_VIBRATION_DURATION_MS;
         }

@@ -19,7 +19,6 @@ package com.example.android.wearable.jumpingjack.fragments;
 import com.example.android.wearable.jumpingjack.R;
 import com.example.android.wearable.jumpingjack.Utils;
 
-import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,7 +52,7 @@ public class CounterFragment extends Fragment {
         View view = inflater.inflate(R.layout.counter_layout, container, false);
         mDownDrawable = getResources().getDrawable(R.drawable.jump_down_50);
         mUpDrawable = getResources().getDrawable(R.drawable.jump_up_50);
-        mCounterText = (TextView) view.findViewById(R.id.counter);
+        mCounterText = view.findViewById(R.id.counter);
         mCounterText.setCompoundDrawablesWithIntrinsicBounds(mUpDrawable, null, null, null);
         setCounter(Utils.getCounterFromPreference(getActivity()));
         mHandler = new Handler();
@@ -78,7 +79,7 @@ public class CounterFragment extends Fragment {
                 ANIMATION_INTERVAL_MS);
     }
 
-    public void setCounter(String text) {
+    private void setCounter(String text) {
         mCounterText.setText(text);
     }
 

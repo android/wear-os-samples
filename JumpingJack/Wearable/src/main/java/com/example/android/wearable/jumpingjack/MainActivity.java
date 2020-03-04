@@ -97,7 +97,7 @@ public class MainActivity extends FragmentActivity
         mFirstIndicator = findViewById(R.id.indicator_0);
         mSecondIndicator = findViewById(R.id.indicator_1);
 
-        final PagerAdapter adapter = new PagerAdapter(getFragmentManager());
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
 
         mCounterPage = new CounterFragment();
         mSettingPage = new SettingsFragment();
@@ -105,7 +105,7 @@ public class MainActivity extends FragmentActivity
         adapter.addFragment(mCounterPage);
         adapter.addFragment(mSettingPage);
         setIndicator(0);
-        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
             }
