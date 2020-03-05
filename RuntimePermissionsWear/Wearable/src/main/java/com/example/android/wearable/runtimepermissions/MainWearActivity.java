@@ -92,7 +92,7 @@ public class MainWearActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
-        super.onCreate(savedInstanceState);;
+        super.onCreate(savedInstanceState);
 
         /*
          * Since this is a remote permission, we initialize it to false and then check the remote
