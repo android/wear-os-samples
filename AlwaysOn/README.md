@@ -15,7 +15,7 @@ In ambient mode, this app follows best practices by keeping most pixels black, a
 
 In addition and most importantly, the app sleeps while in ambient mode for 20 seconds between any updates to conserving battery life (processor allowed to sleep). If you can hold off on updates for a full minute, you can throw away the Handler and just use onUpdateAmbient to save even more battery life.
 
-As always, you will still want to apply the [performance guidelines][3] outlined in the Watch Faces documention to your app.
+As always, you will still want to apply the [performance guidelines][3] outlined in the Watch Face documentation to your app.
 
 [1]: http://developer.android.com/reference/android/support/wearable/activity/WearableActivity.html
 [2]: https://developer.android.com/training/wearables/watch-faces/designing.html#DesignGuidelines
