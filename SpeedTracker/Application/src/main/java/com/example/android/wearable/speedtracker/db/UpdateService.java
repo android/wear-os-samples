@@ -16,10 +16,9 @@
 
 package com.example.android.wearable.speedtracker.db;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
@@ -28,7 +27,6 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.example.android.wearable.speedtracker.LocationDataManager;
@@ -44,92 +42,81 @@ import java.util.Set;
  * A {@link com.google.android.gms.wearable.WearableListenerService} that is responsible for
  * reading location data that gets added to the Data Layer storage.
  */
-public class UpdateService extends WearableListenerService
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        ResultCallback<DataApi.DeleteDataItemsResult> {
+public class UpdateService extends WearableListenerService {
 
     private static final String TAG = "UpdateService";
     private LocationDataManager mDataManager;
-    private GoogleApiClient mGoogleApiClient;
-    private final Set<Uri> mToBeDeletedUris = new HashSet<Uri>();
-    public static final String ACTION_NOTIFY = "com.example.android.wearable.speedtracker.Message";
-    public static final String EXTRA_ENTRY = "entry";
-    public static final String EXTRA_LOG = "log";
+
+    private final Set<Uri> mToBeDeletedUris = new HashSet<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        mGoogleApiClient.connect();
         mDataManager = ((PhoneApplication) getApplicationContext()).getDataManager();
     }
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        for (DataEvent dataEvent : dataEvents) {
-            if (dataEvent.getType() == DataEvent.TYPE_CHANGED) {
-                Uri dataItemUri = dataEvent.getDataItem().getUri();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Received a data item with uri: " + dataItemUri.getPath());
-                }
-                if (dataItemUri.getPath().startsWith(Constants.PATH)) {
-                    DataMap dataMap = DataMapItem.fromDataItem(dataEvent.getDataItem())
-                            .getDataMap();
-                    double longitude = dataMap.getDouble(Constants.KEY_LONGITUDE);
-                    double latitude = dataMap.getDouble(Constants.KEY_LATITUDE);
-                    long time = dataMap.getLong(Constants.KEY_TIME);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(time);
-                    mDataManager.addPoint(
-                            new LocationEntry(calendar, latitude, longitude));
-                    if (mGoogleApiClient.isConnected()) {
-                        Wearable.DataApi.deleteDataItems(
-                                mGoogleApiClient, dataItemUri).setResultCallback(this);
-                    } else {
-                        synchronized (mToBeDeletedUris) {
-                            mToBeDeletedUris.add(dataItemUri);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
-    @Override // ConnectionCallbacks
-    public void onConnected(Bundle bundle) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnected(): api client is connected now");
-        }
+        // First check if any data items need to be deleted.
         synchronized (mToBeDeletedUris) {
             if (!mToBeDeletedUris.isEmpty()) {
                 for (Uri dataItemUri : mToBeDeletedUris) {
-                    Wearable.DataApi.deleteDataItems(
-                            mGoogleApiClient, dataItemUri).setResultCallback(this);
+                    removeWearableData(dataItemUri);
+                }
+            }
+        }
+
+        for (DataEvent dataEvent : dataEvents) {
+            if (dataEvent.getType() == DataEvent.TYPE_CHANGED) {
+
+                Uri dataItemUri = dataEvent.getDataItem().getUri();
+
+                Log.d(TAG, "Received a data item with uri: " + dataItemUri.getPath());
+
+                if (dataItemUri.getPath().startsWith(Constants.PATH)) {
+
+                    DataMap dataMap =
+                            DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
+
+                    double longitude = dataMap.getDouble(Constants.KEY_LONGITUDE);
+                    double latitude = dataMap.getDouble(Constants.KEY_LATITUDE);
+                    long time = dataMap.getLong(Constants.KEY_TIME);
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(time);
+
+                    mDataManager.addPoint(new LocationEntry(calendar, latitude, longitude));
+
+                    removeWearableData(dataItemUri);
                 }
             }
         }
     }
 
-    @Override // ConnectionCallbacks
-    public void onConnectionSuspended(int i) {
+    private void removeWearableData(Uri dataItemUri) {
+
+        Task<Integer> dataDeleteTask =
+                Wearable.getDataClient(getApplicationContext()).deleteDataItems(dataItemUri);
+
+        dataDeleteTask.addOnSuccessListener(getIntegerOnSuccessListener());
+        dataDeleteTask.addOnFailureListener(getOnFailureListener(dataItemUri));
     }
 
-    @Override // OnConnectionFailedListener
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "Failed to connect to the Google API client");
+    private OnFailureListener getOnFailureListener(Uri dataItemUri) {
+
+        return exception -> {
+            Log.e(TAG, "Failed to delete item, exception: " + exception);
+
+            synchronized (mToBeDeletedUris) {
+                mToBeDeletedUris.add(dataItemUri);
+            }
+        };
     }
 
-    @Override // ResultCallback
-    public void onResult(DataApi.DeleteDataItemsResult deleteDataItemsResult) {
-        if (!deleteDataItemsResult.getStatus().isSuccess()) {
-            Log.e(TAG,
-                    "Failed to delete a dataItem, status code: " + deleteDataItemsResult.getStatus()
-                            .getStatusCode() + deleteDataItemsResult.getStatus()
-                            .getStatusMessage());
-        }
+    private OnSuccessListener<Integer> getIntegerOnSuccessListener() {
+        return resultItem -> {
+            Log.d(TAG, "Data successfully deleted; Result: " + resultItem);
+        };
     }
 }

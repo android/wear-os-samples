@@ -28,11 +28,11 @@
         app:boxedEdges="left|bottom|right">
 
 
-        <android.support.wearable.view.WearableListView
-            android:id="@+id/wearable_list"
+        <androidx.wear.widget.WearableRecyclerView
+            android:id="@+id/wearable_recycler_view"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
-        </android.support.wearable.view.WearableListView>
+        </androidx.wear.widget.WearableRecyclerView>
         <TextView
             android:id="@+id/header"
             android:layout_width="wrap_content"

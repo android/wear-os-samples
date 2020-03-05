@@ -19,12 +19,13 @@ package com.example.android.wearable.jumpingjack.fragments;
 import com.example.android.wearable.jumpingjack.MainActivity;
 import com.example.android.wearable.jumpingjack.R;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple fragment that shows a button to reset the counter
@@ -35,7 +36,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_layout, container, false);
-        Button button = (Button) view.findViewById(R.id.btn);
+        Button button = view.findViewById(R.id.btn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
