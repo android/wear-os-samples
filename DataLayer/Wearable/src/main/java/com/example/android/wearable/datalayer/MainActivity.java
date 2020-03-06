@@ -330,7 +330,6 @@ public class MainActivity extends FragmentActivity
                 // Moves RecyclerView to appropriate row to show new image sent over.
                 if (imageAssetItemIndex > -1) {
                     mWearableRecyclerView.scrollToPosition(imageAssetItemIndex);
-                    ;
                 }
             }
         }

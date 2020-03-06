@@ -100,13 +100,13 @@ public class MainActivity extends FragmentActivity
     private AmbientModeSupport.AmbientController mAmbientController;
 
     /** If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts. */
-    boolean mIsLowBitAmbient;
+    private boolean mIsLowBitAmbient;
 
     /**
      * If the display requires burn-in protection in ambient mode, rendered pixels need to be
      * intermittently offset to avoid screen burn-in.
      */
-    boolean mDoBurnInProtection;
+    private boolean mDoBurnInProtection;
 
     private View mContentView;
     private TextView mTimeTextView;
@@ -385,10 +385,8 @@ public class MainActivity extends FragmentActivity
             MainActivity mainActivity = mMainActivityWeakReference.get();
 
             if (mainActivity != null) {
-                switch (message.what) {
-                    case MSG_UPDATE_SCREEN:
-                        mainActivity.refreshDisplayAndSetNextUpdate();
-                        break;
+                if (message.what == MSG_UPDATE_SCREEN) {
+                    mainActivity.refreshDisplayAndSetNextUpdate();
                 }
             }
         }

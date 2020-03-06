@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.6.1'
     }
 }
 
@@ -19,8 +19,8 @@ repositories {
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.android.gms:play-services-wearable:16.0.1'
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.5'
 }
 
