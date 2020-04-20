@@ -20,7 +20,9 @@
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
     android:paddingStart="@dimen/activity_config_padding"
-    android:paddingEnd="@dimen/activity_config_padding">
+    android:paddingEnd="@dimen/activity_config_padding"
+    android:paddingTop="@dimen/activity_config_padding"
+    android:paddingBottom="@dimen/activity_config_padding">
     <androidx.wear.widget.WearableRecyclerView
         android:id="@+id/wearable_recycler_view"
         android:layout_height="wrap_content"
