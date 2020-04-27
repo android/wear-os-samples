@@ -552,7 +552,7 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
                             // If the DataItem hasn't been created yet or some keys are missing,
                             // use the default values.
                             setDefaultValuesForMissingConfigKeys(startupConfig);
-                            DigitalWatchFaceUtil.putConfigDataItem(mGoogleApiClient, startupConfig);
+                            DigitalWatchFaceUtil.putConfigDataItem(mGoogleApiClient, startupConfig, null);
 
                             updateUiForConfigDataMap(startupConfig);
                         }

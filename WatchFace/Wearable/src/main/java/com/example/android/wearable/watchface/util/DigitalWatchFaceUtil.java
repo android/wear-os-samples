@@ -31,6 +31,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import com.example.android.wearable.watchface.watchface.DigitalWatchFaceService;
+import java.util.concurrent.Callable;
 
 public final class DigitalWatchFaceUtil {
     private static final String TAG = "DigitalWatchFaceUtil";
@@ -146,7 +147,7 @@ public final class DigitalWatchFaceUtil {
      * {@code configKeysToOverwrite}. The rest of the keys remains unmodified in this case.
      */
     public static void overwriteKeysInConfigDataMap(final GoogleApiClient googleApiClient,
-            final DataMap configKeysToOverwrite) {
+            final DataMap configKeysToOverwrite, final Callable<Void> callable) {
 
         DigitalWatchFaceUtil.fetchConfigDataMap(googleApiClient,
                 new FetchConfigDataMapCallback() {
@@ -155,7 +156,7 @@ public final class DigitalWatchFaceUtil {
                         DataMap overwrittenConfig = new DataMap();
                         overwrittenConfig.putAll(currentConfig);
                         overwrittenConfig.putAll(configKeysToOverwrite);
-                        DigitalWatchFaceUtil.putConfigDataItem(googleApiClient, overwrittenConfig);
+                        DigitalWatchFaceUtil.putConfigDataItem(googleApiClient, overwrittenConfig, callable);
                     }
                 }
         );
@@ -165,7 +166,7 @@ public final class DigitalWatchFaceUtil {
      * Overwrites the current config {@link DataItem}'s {@link DataMap} with {@code newConfig}.
      * If the config DataItem doesn't exist, it's created.
      */
-    public static void putConfigDataItem(GoogleApiClient googleApiClient, DataMap newConfig) {
+    public static void putConfigDataItem(GoogleApiClient googleApiClient, DataMap newConfig, final Callable<Void> callable) {
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH_WITH_FEATURE);
         putDataMapRequest.setUrgent();
         DataMap configToPut = putDataMapRequest.getDataMap();
@@ -174,6 +175,13 @@ public final class DigitalWatchFaceUtil {
                 .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
                     @Override
                     public void onResult(DataApi.DataItemResult dataItemResult) {
+                        try{
+                            if (callable != null) {
+                                callable.call();
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Finish callback failed.", e);
+                        }
                         if (Log.isLoggable(TAG, Log.DEBUG)) {
                             Log.d(TAG, "putDataItem result status: " + dataItemResult.getStatus());
                         }

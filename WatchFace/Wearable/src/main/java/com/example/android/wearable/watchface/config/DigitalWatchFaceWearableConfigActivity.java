@@ -41,6 +41,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.Wearable;
+import java.util.concurrent.Callable;
 
 /**
  * The watch-side config activity for {@link DigitalWatchFaceService}, which allows for setting the
@@ -129,7 +130,6 @@ public class DigitalWatchFaceWearableConfigActivity extends Activity implements
     public void onClick(WearableListView.ViewHolder viewHolder) {
         ColorItemViewHolder colorItemViewHolder = (ColorItemViewHolder) viewHolder;
         updateConfigDataItem(colorItemViewHolder.mColorItem.getColor());
-        finish();
     }
 
     @Override // WearableListView.ClickListener
@@ -154,7 +154,14 @@ public class DigitalWatchFaceWearableConfigActivity extends Activity implements
         DataMap configKeysToOverwrite = new DataMap();
         configKeysToOverwrite.putInt(DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR,
                 backgroundColor);
-        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, configKeysToOverwrite);
+        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, configKeysToOverwrite,
+            new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    finish();
+                    return null;
+                }
+            });
     }
 
     private class ColorListAdapter extends WearableListView.Adapter {
