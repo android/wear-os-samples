@@ -73,7 +73,7 @@ public class DigitalWatchFaceConfigListenerService extends WearableListenerServi
             }
         }
 
-        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, configKeysToOverwrite);
+        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, configKeysToOverwrite, null);
     }
 
     @Override // GoogleApiClient.ConnectionCallbacks
