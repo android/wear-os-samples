@@ -75,6 +75,11 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
          */
         private boolean mLowBitAmbient;
 
+        Engine(){
+            //  Ask for a hardware accelerated canvas.
+            super(true);
+        }
+
         @Override
         public void onCreate(SurfaceHolder holder) {
             if (Log.isLoggable(TAG, Log.DEBUG)) {
