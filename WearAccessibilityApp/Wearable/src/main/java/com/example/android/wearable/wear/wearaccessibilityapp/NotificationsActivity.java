@@ -205,8 +205,10 @@ public class NotificationsActivity extends FragmentActivity implements
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
+
             // 4. Set up a RemoteInput Action, so users can input (keyboard, drawing, voice)
             // directly from the notification without entering the app.
+            // Note, this is only used if the user has selected an action in UI.
 
             // Create the RemoteInput specifying this key.
             String replyLabel = getString(R.string.reply_label);
@@ -260,15 +262,18 @@ public class NotificationsActivity extends FragmentActivity implements
             GlobalNotificationBuilder.setNotificationCompatBuilderInstance(
                     notificationCompatBuilder);
 
+            int iconToUse = mAvatarOn ? R.drawable.avatar : R.drawable.watch;
+
+
             notificationCompatBuilder
                     // MESSAGING_STYLE sets title and content for Wear 1.+ and Wear 2.0 devices.
                     .setStyle(messagingStyle)
                     .setContentTitle(contentTitle)
                     .setContentText(messagingStyleCommsAppData.getContentText())
-                    .setSmallIcon(R.drawable.watch)
+                    .setSmallIcon(iconToUse)
                     .setLargeIcon(BitmapFactory.decodeResource(
                             getResources(),
-                            mAvatarOn ? R.drawable.avatar : R.drawable.watch))
+                            iconToUse))
                     .setContentIntent(mainPendingIntent)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     // Set primary color (important for Wear 2.0 Notifications).
@@ -277,7 +282,7 @@ public class NotificationsActivity extends FragmentActivity implements
                     // Number of new notifications for API <24 (Wear 1.+) devices.
                     .setSubText(
                             Integer.toString(messagingStyleCommsAppData.getNumberOfNewMessages()))
-                    .addAction(replyAction)
+
                     .setCategory(Notification.CATEGORY_MESSAGE)
 
                     // Sets priority for 25 and below. For 26 and above, 'priority' is deprecated
@@ -289,6 +294,10 @@ public class NotificationsActivity extends FragmentActivity implements
                     // Sets lock-screen visibility for 25 and below. For 26 and above, lock screen
                     // visibility is set in the NotificationChannel.
                     .setVisibility(messagingStyleCommsAppData.getChannelLockscreenVisibility());
+
+            if (mActionOn) {
+                notificationCompatBuilder.addAction(replyAction);
+            }
 
             // If the phone is in "Do not disturb" mode, the user may still be notified if the
             // sender(s) are in a group allowed through "Do not disturb" by the user.
