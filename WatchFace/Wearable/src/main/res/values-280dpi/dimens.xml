@@ -18,4 +18,5 @@
     <dimen name="analog_complication_settings_preview_size">180dp</dimen>
     <dimen name="analog_complication_color_picker_size">70dp</dimen>
     <dimen name="watch_face_preview_background_padding">16dp</dimen>
+    <dimen name="digital_text_size">32dp</dimen>
 </resources>
