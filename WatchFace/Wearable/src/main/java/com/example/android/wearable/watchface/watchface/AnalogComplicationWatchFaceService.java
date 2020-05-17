@@ -208,6 +208,11 @@ public class AnalogComplicationWatchFaceService extends CanvasWatchFaceService {
                     }
                 };
 
+        Engine(){
+            //  Ask for a hardware accelerated canvas.
+            super(true);
+        }
+
         @Override
         public void onCreate(SurfaceHolder holder) {
             Log.d(TAG, "onCreate");
