@@ -13,7 +13,7 @@ This example extends [WearableActivity][1] and overrides onEnterAmbient, onUpdat
 
 In ambient mode, this app follows best practices by keeping most pixels black, avoiding large blocks of white pixels, using only black and white, and disabling anti-aliasing (following the [design guidelines for Watch Faces][2]).
 
-In addition and most importantly, the app sleeps while in ambient mode for 20 seconds between any updates to conserving battery life (processor allowed to sleep). If you can hold off on updates for a full minute, you can throw away the Handler and just use onUpdateAmbient to save even more battery life.
+In addition and most importantly, the app sleeps while in ambient mode for 20 seconds between any updates to conserve battery life (processor allowed to sleep). If you can hold off on updates for a full minute, you can throw away the Handler and just use onUpdateAmbient to save even more battery life.
 
 As always, you will still want to apply the [performance guidelines][3] outlined in the Watch Face documentation to your app.
 
