@@ -39,6 +39,10 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * IMPORTANT NOTE: Most apps shouldn't use always on ambient mode, as it drains battery life. Unless
+ * required, it's much better to allow the system to take over after the user stops interacting
+ * with your app.
+ *
  * Demonstrates support for <i>Ambient Mode</i> by attaching ambient mode support to the activity,
  * and listening for ambient mode updates (onEnterAmbient, onUpdateAmbient, and onExitAmbient) via a
  * named AmbientCallback subclass.

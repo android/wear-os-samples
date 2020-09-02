@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/center"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:layout_alignEnd="@+id/capability_2_btn"
         android:layout_alignStart="@+id/capability_2_btn"
         android:onClick="onCapabilityDiscoveryButtonClicked" />
