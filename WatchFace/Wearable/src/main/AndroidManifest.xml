@@ -44,6 +44,19 @@
             android:name=".watchface.OpenGLWatchFaceService"
             android:label="@string/opengl_name"
             android:permission="android.permission.BIND_WALLPAPER">
+
+            <!--
+            By default, Watchfaces on rectangular devices will be run in a emulation mode where they
+            are provided a square surface to draw the watchface (allows watchfaces built for
+            circular and square devices to work well).
+
+            For this watchface, we explicitly enable rectangular devices, so we get the complete
+            surface.
+            -->
+            <meta-data
+                android:name="android.service.wallpaper.square_mode"
+                android:value="false" />
+
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face"/>
@@ -63,11 +76,26 @@
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
             </intent-filter>
         </service>
+
+
         <service
             android:name=".watchface.AnalogComplicationWatchFaceService"
             android:enabled="true"
             android:label="@string/analog_complication"
             android:permission="android.permission.BIND_WALLPAPER">
+
+            <!--
+            By default, Watchfaces on rectangular devices will be run in a emulation mode where they
+            are provided a square surface to draw the watchface (allows watchfaces built for
+            circular and square devices to work well).
+
+            For this watchface, we explicitly enable rectangular devices, so we get the complete
+            surface.
+            -->
+            <meta-data
+                android:name="android.service.wallpaper.square_mode"
+                android:value="false" />
+
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face"/>
@@ -104,6 +132,19 @@
             android:name=".watchface.InteractiveWatchFaceService"
             android:label="@string/interactive_name"
             android:permission="android.permission.BIND_WALLPAPER">
+
+            <!--
+            By default, Watchfaces on rectangular devices will be run in a emulation mode where they
+            are provided a square surface to draw the watchface (allows watchfaces built for
+            circular and square devices to work well).
+
+            For this watchface, we explicitly enable rectangular devices, so we get the complete
+            surface.
+            -->
+            <meta-data
+                android:name="android.service.wallpaper.square_mode"
+                android:value="false" />
+
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face"/>
@@ -125,6 +166,19 @@
             android:name=".watchface.DigitalWatchFaceService"
             android:label="@string/digital_name"
             android:permission="android.permission.BIND_WALLPAPER">
+
+            <!--
+            By default, Watchfaces on rectangular devices will be run in a emulation mode where they
+            are provided a square surface to draw the watchface (allows watchfaces built for
+            circular and square devices to work well).
+
+            For this watchface, we explicitly enable rectangular devices, so we get the complete
+            surface.
+            -->
+            <meta-data
+                android:name="android.service.wallpaper.square_mode"
+                android:value="false" />
+
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face"/>

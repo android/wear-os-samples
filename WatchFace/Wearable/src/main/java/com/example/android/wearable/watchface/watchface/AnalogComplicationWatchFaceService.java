@@ -713,6 +713,7 @@ public class AnalogComplicationWatchFaceService extends CanvasWatchFaceService {
 
             /* Restore the canvas' original orientation. */
             canvas.restore();
+
         }
 
         @Override
