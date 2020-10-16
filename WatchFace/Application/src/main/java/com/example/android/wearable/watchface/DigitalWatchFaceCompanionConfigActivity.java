@@ -30,13 +30,15 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.Wearable;
 
 /**
@@ -45,8 +47,7 @@ import com.google.android.gms.wearable.Wearable;
  * color. Additionally, enables setting the color for hour, minute and second digits.
  */
 public class DigitalWatchFaceCompanionConfigActivity extends Activity
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-                ResultCallback<DataApi.DataItemResult> {
+        implements OnCompleteListener<DataItem> {
     private static final String TAG = "DigitalWatchFaceConfig";
 
     // TODO: use the shared constants (needs covering all the samples with Gradle build model)
@@ -56,7 +57,6 @@ public class DigitalWatchFaceCompanionConfigActivity extends Activity
     private static final String KEY_SECONDS_COLOR = "SECONDS_COLOR";
     private static final String PATH_WITH_FEATURE = "/watch_face_config/Digital";
 
-    private GoogleApiClient mGoogleApiClient;
     private String mPeerId;
 
     @Override
@@ -65,72 +65,28 @@ public class DigitalWatchFaceCompanionConfigActivity extends Activity
         setContentView(R.layout.activity_digital_watch_face_config);
 
         mPeerId = getIntent().getStringExtra(WatchFaceCompanion.EXTRA_PEER_ID);
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Wearable.API)
-                .build();
 
-        ComponentName name = getIntent().getParcelableExtra(
-                WatchFaceCompanion.EXTRA_WATCH_FACE_COMPONENT);
+        ComponentName name =
+                getIntent().getParcelableExtra(WatchFaceCompanion.EXTRA_WATCH_FACE_COMPONENT);
         TextView label = (TextView)findViewById(R.id.label);
         label.setText(label.getText() + " (" + name.getClassName() + ")");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
-    @Override // GoogleApiClient.ConnectionCallbacks
-    public void onConnected(Bundle connectionHint) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnected: " + connectionHint);
-        }
 
         if (mPeerId != null) {
+            DataClient dataClient = Wearable.getDataClient(getApplicationContext());
+
             Uri.Builder builder = new Uri.Builder();
-            Uri uri = builder.scheme("wear").path(PATH_WITH_FEATURE).authority(mPeerId).build();
-            Wearable.DataApi.getDataItem(mGoogleApiClient, uri).setResultCallback(this);
+            // Build request for DataItem with local node as authority.
+            Uri uri = new Uri.Builder()
+                    .scheme("wear")
+                    .path(PATH_WITH_FEATURE)
+                    .authority(mPeerId)
+                    .build();
+
+            Task<DataItem> getDataItemResponseTask = dataClient.getDataItem(uri);
+            getDataItemResponseTask.addOnCompleteListener(this);
+
         } else {
             displayNoConnectedDeviceDialog();
-        }
-    }
-
-    @Override // ResultCallback<DataApi.DataItemResult>
-    public void onResult(DataApi.DataItemResult dataItemResult) {
-        if (dataItemResult.getStatus().isSuccess() && dataItemResult.getDataItem() != null) {
-            DataItem configDataItem = dataItemResult.getDataItem();
-            DataMapItem dataMapItem = DataMapItem.fromDataItem(configDataItem);
-            DataMap config = dataMapItem.getDataMap();
-            setUpAllPickers(config);
-        } else {
-            // If DataItem with the current config can't be retrieved, select the default items on
-            // each picker.
-            setUpAllPickers(null);
-        }
-    }
-
-    @Override // GoogleApiClient.ConnectionCallbacks
-    public void onConnectionSuspended(int cause) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnectionSuspended: " + cause);
-        }
-    }
-
-    @Override // GoogleApiClient.OnConnectionFailedListener
-    public void onConnectionFailed(ConnectionResult result) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnectionFailed: " + result);
         }
     }
 
@@ -193,7 +149,7 @@ public class DigitalWatchFaceCompanionConfigActivity extends Activity
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
                 final String colorName = (String) adapterView.getItemAtPosition(pos);
-                sendConfigUpdateMessage(configKey, Color.parseColor(colorName));
+                sendConfigUpdateMessageToWatch(configKey, Color.parseColor(colorName));
             }
 
             @Override
@@ -201,17 +157,36 @@ public class DigitalWatchFaceCompanionConfigActivity extends Activity
         });
     }
 
-    private void sendConfigUpdateMessage(String configKey, int color) {
+    private void sendConfigUpdateMessageToWatch(String configKey, int color) {
         if (mPeerId != null) {
             DataMap config = new DataMap();
             config.putInt(configKey, color);
             byte[] rawData = config.toByteArray();
-            Wearable.MessageApi.sendMessage(mGoogleApiClient, mPeerId, PATH_WITH_FEATURE, rawData);
+
+            MessageClient messageClient = Wearable.getMessageClient(getApplicationContext());
+            messageClient.sendMessage(mPeerId, PATH_WITH_FEATURE, rawData);
 
             if (Log.isLoggable(TAG, Log.DEBUG)) {
                 Log.d(TAG, "Sent watch face config message: " + configKey + " -> "
                         + Integer.toHexString(color));
             }
         }
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<DataItem> dataItemTask) {
+        if (dataItemTask.isSuccessful() && (dataItemTask.getResult() != null)) {
+
+            DataItem configDataItem = dataItemTask.getResult();
+            DataMapItem dataMapItem = DataMapItem.fromDataItem(configDataItem);
+            DataMap config = dataMapItem.getDataMap();
+            setUpAllPickers(config);
+
+        } else {
+            // If DataItem with the current config can't be retrieved, select the default items on
+            // each picker.
+            setUpAllPickers(null);
+        }
+
     }
 }

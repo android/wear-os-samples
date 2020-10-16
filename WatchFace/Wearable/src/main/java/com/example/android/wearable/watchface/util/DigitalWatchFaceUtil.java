@@ -16,17 +16,21 @@
 
 package com.example.android.wearable.watchface.util;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeClient;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 
@@ -119,23 +123,59 @@ public final class DigitalWatchFaceUtil {
      * If the current config {@link DataItem} doesn't exist, it isn't created and the callback
      * receives an empty DataMap.
      */
-    public static void fetchConfigDataMap(final GoogleApiClient client,
+    public static void fetchConfigDataMap(
+            final Context context,
             final FetchConfigDataMapCallback callback) {
-        Wearable.NodeApi.getLocalNode(client).setResultCallback(
-                new ResultCallback<NodeApi.GetLocalNodeResult>() {
+
+        // You must first get the local node to pass in as an argument for the DataItem get request.
+        NodeClient nodeClient = Wearable.getNodeClient(context);
+        Task<Node> localNodeTask = nodeClient.getLocalNode();
+
+        localNodeTask.addOnCompleteListener(
+                new OnCompleteListener<Node>() {
                     @Override
-                    public void onResult(NodeApi.GetLocalNodeResult getLocalNodeResult) {
-                        String localNode = getLocalNodeResult.getNode().getId();
-                        Uri uri = new Uri.Builder()
-                                .scheme("wear")
-                                .path(DigitalWatchFaceUtil.PATH_WITH_FEATURE)
-                                .authority(localNode)
-                                .build();
-                        Wearable.DataApi.getDataItem(client, uri)
-                                .setResultCallback(new DataItemResultCallback(callback));
+                    public void onComplete(@NonNull Task<Node> nodeTask) {
+                        if (nodeTask.isSuccessful() && (nodeTask.getResult() != null)) {
+                            DataClient dataClient = Wearable.getDataClient(context);
+
+                            String localNode = nodeTask.getResult().getId();
+
+                            // Build request for DataItem with local node as authority.
+                            Uri uri = new Uri.Builder()
+                                    .scheme("wear")
+                                    .path(PATH_WITH_FEATURE)
+                                    .authority(localNode)
+                                    .build();
+
+                            Task<DataItem> getDataItemResponseTask = dataClient.getDataItem(uri);
+
+                            getDataItemResponseTask.addOnCompleteListener(
+                                    new OnCompleteListener<DataItem>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DataItem> dataItemTask) {
+                                            if (dataItemTask.isSuccessful() &&
+                                                    (dataItemTask.getResult() != null)) {
+
+                                                DataItem configDataItem = dataItemTask.getResult();
+                                                DataMapItem dataMapItem =
+                                                        DataMapItem.fromDataItem(configDataItem);
+                                                DataMap startupConfig = dataMapItem.getDataMap();
+
+                                                callback.onConfigDataMapFetched(startupConfig);
+                                            } else {
+                                                // If the DataItem hasn't been created yet or some
+                                                // keys are missing, send back an empty set.
+                                                callback.onConfigDataMapFetched(new DataMap());
+                                            }
+                                        }
+                                    });
+                        } else {
+                            // If the DataItem hasn't been created yet or some keys are missing,
+                            // send back an empty set.
+                            callback.onConfigDataMapFetched(new DataMap());
+                        }
                     }
-                }
-        );
+                });
     }
 
     /**
@@ -146,17 +186,22 @@ public final class DigitalWatchFaceUtil {
      * It is allowed that only some of the keys used in the config DataItem appear in
      * {@code configKeysToOverwrite}. The rest of the keys remains unmodified in this case.
      */
-    public static void overwriteKeysInConfigDataMap(final GoogleApiClient googleApiClient,
-            final DataMap configKeysToOverwrite, final Callable<Void> callable) {
+    public static void overwriteKeysInConfigDataMap(
+            final Context context,
+            final DataMap configKeysToOverwrite,
+            final Callable<Void> callable) {
 
-        DigitalWatchFaceUtil.fetchConfigDataMap(googleApiClient,
+        DigitalWatchFaceUtil.fetchConfigDataMap(
+                context,
                 new FetchConfigDataMapCallback() {
                     @Override
                     public void onConfigDataMapFetched(DataMap currentConfig) {
-                        DataMap overwrittenConfig = new DataMap();
-                        overwrittenConfig.putAll(currentConfig);
-                        overwrittenConfig.putAll(configKeysToOverwrite);
-                        DigitalWatchFaceUtil.putConfigDataItem(googleApiClient, overwrittenConfig, callable);
+                        currentConfig.putAll(configKeysToOverwrite);
+
+                        DigitalWatchFaceUtil.putConfigDataItem(
+                                context,
+                                currentConfig,
+                                callable);
                     }
                 }
         );
@@ -166,51 +211,38 @@ public final class DigitalWatchFaceUtil {
      * Overwrites the current config {@link DataItem}'s {@link DataMap} with {@code newConfig}.
      * If the config DataItem doesn't exist, it's created.
      */
-    public static void putConfigDataItem(GoogleApiClient googleApiClient, DataMap newConfig, final Callable<Void> callable) {
+    public static void putConfigDataItem(
+            final Context context,
+            DataMap newConfig,
+            final Callable<Void> callable) {
+
+        DataClient dataClient = Wearable.getDataClient(context);
+
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH_WITH_FEATURE);
         putDataMapRequest.setUrgent();
         DataMap configToPut = putDataMapRequest.getDataMap();
         configToPut.putAll(newConfig);
-        Wearable.DataApi.putDataItem(googleApiClient, putDataMapRequest.asPutDataRequest())
-                .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+
+        Task<DataItem> putDataItemResponseTask =
+                dataClient.putDataItem(putDataMapRequest.asPutDataRequest());
+
+        putDataItemResponseTask.addOnCompleteListener(
+                new OnCompleteListener<DataItem>() {
                     @Override
-                    public void onResult(DataApi.DataItemResult dataItemResult) {
-                        try{
-                            if (callable != null) {
-                                callable.call();
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        if (task.isSuccessful() && (task.getResult() != null)) {
+                            try {
+                                if (callable != null) {
+                                    callable.call();
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Finish callback failed.", e);
                             }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Finish callback failed.", e);
-                        }
-                        if (Log.isLoggable(TAG, Log.DEBUG)) {
-                            Log.d(TAG, "putDataItem result status: " + dataItemResult.getStatus());
+                        } else {
+                            Log.e(TAG, "Put failed: " + task.getException());
                         }
                     }
                 });
     }
-
-    private static class DataItemResultCallback implements ResultCallback<DataApi.DataItemResult> {
-
-        private final FetchConfigDataMapCallback mCallback;
-
-        public DataItemResultCallback(FetchConfigDataMapCallback callback) {
-            mCallback = callback;
-        }
-
-        @Override
-        public void onResult(DataApi.DataItemResult dataItemResult) {
-            if (dataItemResult.getStatus().isSuccess()) {
-                if (dataItemResult.getDataItem() != null) {
-                    DataItem configDataItem = dataItemResult.getDataItem();
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(configDataItem);
-                    DataMap config = dataMapItem.getDataMap();
-                    mCallback.onConfigDataMapFetched(config);
-                } else {
-                    mCallback.onConfigDataMapFetched(new DataMap());
-                }
-            }
-        }
-    }
-
     private DigitalWatchFaceUtil() { }
 }

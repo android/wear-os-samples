@@ -53,7 +53,6 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
     private class Engine extends CanvasWatchFaceService.Engine {
 
         private Paint mTextPaint;
-        private final Paint mPeekCardBackgroundPaint = new Paint();
 
         private float mXOffset;
         private float mYOffset;
@@ -66,8 +65,6 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
 
         private int mTouchCoordinateX;
         private int mTouchCoordinateY;
-
-        private final Rect mCardBounds = new Rect();
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -87,11 +84,7 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
             }
             super.onCreate(holder);
 
-            /** Accepts tap events via WatchFaceStyle (setAcceptsTapEvents(true)). */
             setWatchFaceStyle(new WatchFaceStyle.Builder(InteractiveWatchFaceService.this)
-                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)
-                    .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
-                    .setShowSystemUiTime(false)
                     .setAcceptsTapEvents(true)
                     .build());
 
@@ -108,7 +101,6 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
             mTapCommandTotal = 0;
 
             mTouchCoordinateX = 0;
-            mTouchCoordinateX = 0;
         }
 
         @Override
@@ -118,7 +110,7 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
             }
             super.onApplyWindowInsets(insets);
 
-            /** Loads offsets / text size based on device type (square vs. round). */
+            // Loads offsets / text size based on device type (square vs. round).
             Resources resources = InteractiveWatchFaceService.this.getResources();
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(
@@ -130,19 +122,6 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
                     isRound ? R.dimen.interactive_text_size_round : R.dimen.interactive_text_size);
 
             mTextPaint.setTextSize(textSize);
-        }
-
-        @Override
-        public void onPeekCardPositionUpdate(Rect bounds) {
-            super.onPeekCardPositionUpdate(bounds);
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "onPeekCardPositionUpdate: " + bounds);
-            }
-            super.onPeekCardPositionUpdate(bounds);
-            if (!bounds.equals(mCardBounds)) {
-                mCardBounds.set(bounds);
-                invalidate();
-            }
         }
 
         @Override
@@ -203,7 +182,7 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
 
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
-            /** Draws background */
+            // Draws background
             canvas.drawColor(Color.BLACK);
 
             canvas.drawText(
@@ -230,11 +209,6 @@ public class InteractiveWatchFaceService extends CanvasWatchFaceService {
                     mYOffset + (mTextSpacingHeight * 3),
                     mTextPaint
             );
-
-            /** Covers area under peek card */
-            if (isInAmbientMode()) {
-                canvas.drawRect(mCardBounds, mPeekCardBackgroundPaint);
-            }
         }
     }
 }

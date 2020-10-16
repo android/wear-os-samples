@@ -72,7 +72,6 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>
-
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
             </intent-filter>
         </service>
@@ -111,7 +110,6 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>
-
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
             </intent-filter>
         </service>
@@ -157,7 +155,6 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>
-
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
             </intent-filter>
         </service>
@@ -197,7 +194,6 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>
-
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
             </intent-filter>
         </service>
@@ -213,7 +209,6 @@
             android:label="@string/digital_config_name">
             <intent-filter>
                 <action android:name="com.example.android.wearable.watchface.CONFIG_DIGITAL"/>
-
                 <category android:name="com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>

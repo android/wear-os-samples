@@ -37,10 +37,7 @@ import androidx.wear.widget.BoxInsetLayout;
 import com.example.android.wearable.watchface.R;
 import com.example.android.wearable.watchface.util.DigitalWatchFaceUtil;
 import com.example.android.wearable.watchface.watchface.DigitalWatchFaceService;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.Wearable;
 import java.util.concurrent.Callable;
 
 /**
@@ -51,7 +48,6 @@ public class DigitalWatchFaceWearableConfigActivity extends Activity implements
         WearableListView.ClickListener, WearableListView.OnScrollListener {
     private static final String TAG = "DigitalWatchFaceConfig";
 
-    private GoogleApiClient mGoogleApiClient;
     private TextView mHeader;
 
     @Override
@@ -84,46 +80,6 @@ public class DigitalWatchFaceWearableConfigActivity extends Activity implements
         String[] colors = getResources().getStringArray(R.array.color_array);
         listView.setAdapter(new ColorListAdapter(colors));
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle connectionHint) {
-                        if (Log.isLoggable(TAG, Log.DEBUG)) {
-                            Log.d(TAG, "onConnected: " + connectionHint);
-                        }
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int cause) {
-                        if (Log.isLoggable(TAG, Log.DEBUG)) {
-                            Log.d(TAG, "onConnectionSuspended: " + cause);
-                        }
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(ConnectionResult result) {
-                        if (Log.isLoggable(TAG, Log.DEBUG)) {
-                            Log.d(TAG, "onConnectionFailed: " + result);
-                        }
-                    }
-                })
-                .addApi(Wearable.API)
-                .build();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
     }
 
     @Override // WearableListView.ClickListener
@@ -151,17 +107,23 @@ public class DigitalWatchFaceWearableConfigActivity extends Activity implements
     public void onCentralPositionChanged(int centralPosition) {}
 
     private void updateConfigDataItem(final int backgroundColor) {
+
         DataMap configKeysToOverwrite = new DataMap();
-        configKeysToOverwrite.putInt(DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR,
+        configKeysToOverwrite.putInt(
+                DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR,
                 backgroundColor);
-        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, configKeysToOverwrite,
-            new Callable<Void>() {
-                @Override
-                public Void call() throws Exception {
-                    finish();
-                    return null;
-                }
-            });
+
+        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(
+                getApplicationContext(),
+                configKeysToOverwrite,
+                new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        Log.d(TAG, "callback successful for datalayer write");
+                        finish();
+                        return null;
+                    }
+                });
     }
 
     private class ColorListAdapter extends WearableListView.Adapter {
