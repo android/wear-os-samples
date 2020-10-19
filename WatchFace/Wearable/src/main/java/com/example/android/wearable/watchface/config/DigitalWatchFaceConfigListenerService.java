@@ -16,32 +16,23 @@
 
 package com.example.android.wearable.watchface.config;
 
-import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import com.example.android.wearable.watchface.watchface.DigitalWatchFaceService;
 import com.example.android.wearable.watchface.util.DigitalWatchFaceUtil;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * A {@link WearableListenerService} listening for {@link DigitalWatchFaceService} config messages
  * and updating the config {@link com.google.android.gms.wearable.DataItem} accordingly.
  */
-public class DigitalWatchFaceConfigListenerService extends WearableListenerService
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DigitalWatchFaceConfigListenerService extends WearableListenerService {
     private static final String TAG = "DigitalListenerService";
 
-    private GoogleApiClient mGoogleApiClient;
-
-    @Override // WearableListenerService
+    @Override
     public void onMessageReceived(MessageEvent messageEvent) {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
@@ -59,41 +50,9 @@ public class DigitalWatchFaceConfigListenerService extends WearableListenerServi
             Log.d(TAG, "Received watch face config message: " + configKeysToOverwrite);
         }
 
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this).addApi(Wearable.API).build();
-        }
-        if (!mGoogleApiClient.isConnected()) {
-            ConnectionResult connectionResult =
-                    mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
-
-            if (!connectionResult.isSuccess()) {
-                Log.e(TAG, "Failed to connect to GoogleApiClient.");
-                return;
-            }
-        }
-
-        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, configKeysToOverwrite, null);
-    }
-
-    @Override // GoogleApiClient.ConnectionCallbacks
-    public void onConnected(Bundle connectionHint) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnected: " + connectionHint);
-        }
-    }
-
-    @Override  // GoogleApiClient.ConnectionCallbacks
-    public void onConnectionSuspended(int cause) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnectionSuspended: " + cause);
-        }
-    }
-
-    @Override  // GoogleApiClient.OnConnectionFailedListener
-    public void onConnectionFailed(ConnectionResult result) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onConnectionFailed: " + result);
-        }
+        DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(
+                getApplicationContext(),
+                configKeysToOverwrite,
+                null);
     }
 }

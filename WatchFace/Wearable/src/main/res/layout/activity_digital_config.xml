@@ -20,6 +20,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/config_activity_background">
+
+    <androidx.wear.widget.WearableRecyclerView
+        android:id="@+id/color_picker_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        app:boxedEdges="left|right"/>
+
+    <!--
+    Even though this appears at the top of the screen, we define it last so it will have the highest
+    depth in the BoxInsetLayout, so when you scroll the WearableRecyclerView, it will scroll beneath
+    this TextView.
+    -->
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -27,14 +40,10 @@
         android:layout_marginTop="6dp"
         android:layout_marginStart="6dp"
         android:textSize="22sp"
+        android:background="@color/white"
         android:textColor="@color/config_activity_header_text_color"
         android:text="@string/digital_background_color"
         android:fontFamily="sans-serif-condensed-light"
+        android:gravity="center"
         app:boxedEdges="left|top"/>
-    <android.support.wearable.view.WearableListView
-        android:id="@+id/color_picker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        app:boxedEdges="left|right"/>
 </androidx.wear.widget.BoxInsetLayout>

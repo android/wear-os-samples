@@ -132,11 +132,7 @@ public class OpenGLWatchFaceService extends Gles2WatchFaceService {
             }
             super.onCreate(surfaceHolder);
             setWatchFaceStyle(new WatchFaceStyle.Builder(OpenGLWatchFaceService.this)
-                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
-                    .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
                     .setStatusBarGravity(Gravity.RIGHT | Gravity.TOP)
-                    .setHotwordIndicatorGravity(Gravity.LEFT | Gravity.TOP)
-                    .setShowSystemUiTime(false)
                     .build());
         }
 
@@ -239,7 +235,7 @@ public class OpenGLWatchFaceService extends Gles2WatchFaceService {
                     2 /* near */,
                     7 /* far */);
 
-            // Precompute the products of Projection and View matrices for each camera angle.
+            // Pre-compute the products of Projection and View matrices for each camera angle.
             for (int i = 0; i < mNumCameraAngles; ++i) {
                 Matrix.multiplyMM(mVpMatrices[i], 0, mProjectionMatrix, 0, mViewMatrices[i], 0);
             }

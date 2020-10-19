@@ -40,15 +40,14 @@ import androidx.core.content.ContextCompat;
 
 import com.example.android.wearable.watchface.R;
 import com.example.android.wearable.watchface.util.DigitalWatchFaceUtil;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,8 +57,6 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
- * IMPORTANT NOTE: This watch face is optimized for Wear 1.x. If you want to see a Wear 2.0 watch
- * face, check out AnalogComplicationWatchFaceService.java.
  *
  * Sample digital watch face with blinking colons and seconds. In ambient mode, the seconds are
  * replaced with an AM/PM indicator and the colons don't blink. On devices with low-bit ambient
@@ -91,8 +88,9 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
         return new Engine();
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener,
-            GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private class Engine extends CanvasWatchFaceService.Engine implements
+            DataClient.OnDataChangedListener {
+
         static final String COLON_STRING = ":";
 
         /** Alpha value for drawing time when in mute mode. */
@@ -127,16 +125,10 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             }
         };
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(DigitalWatchFaceService.this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Wearable.API)
-                .build();
-
         /**
          * Handles time zone and locale changes.
          */
-        final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 mCalendar.setTimeZone(TimeZone.getDefault());
@@ -145,11 +137,7 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             }
         };
 
-        /**
-         * Unregistering an unregistered receiver throws an exception. Keep track of the
-         * registration state to prevent that.
-         */
-        boolean mRegisteredReceiver = false;
+        boolean mTimeZoneReceiverRegistered = false;
 
         Paint mBackgroundPaint;
         Paint mDatePaint;
@@ -200,9 +188,6 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             super.onCreate(holder);
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(DigitalWatchFaceService.this)
-                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)
-                    .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
-                    .setShowSystemUiTime(false)
                     .build());
             Resources resources = DigitalWatchFaceService.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
@@ -224,6 +209,7 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
 
             mCalendar = Calendar.getInstance();
             mDate = new Date();
+
             initFormats();
         }
 
@@ -253,20 +239,25 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             super.onVisibilityChanged(visible);
 
             if (visible) {
-                mGoogleApiClient.connect();
+                // Registers for color changes to the watch face which can be set either on the
+                // watch via ({@code DigitalWatchFaceWearableConfigActivity.java}) or on the phone
+                // via the Wear OS companion app using
+                // ({@code DigitalWatchFaceCompanionConfigActivity}).
+                Wearable.getDataClient(getApplicationContext()).addListener(this);
 
-                registerReceiver();
+                registerTimeZoneReceiver();
 
                 // Update time zone and date formats, in case they changed while we weren't visible.
                 mCalendar.setTimeZone(TimeZone.getDefault());
                 initFormats();
-            } else {
-                unregisterReceiver();
 
-                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-                    Wearable.DataApi.removeListener(mGoogleApiClient, this);
-                    mGoogleApiClient.disconnect();
-                }
+                initColorPreferencesFromDataLayer();
+
+            } else {
+                unregisterTimeZoneReceiver();
+
+                // Unregisters for color changes to the watch face.
+                Wearable.getDataClient(getApplicationContext()).removeListener(this);
             }
 
             // Whether the timer should be running depends on whether we're visible (as well as
@@ -281,22 +272,22 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             mDateFormat.setCalendar(mCalendar);
         }
 
-        private void registerReceiver() {
-            if (mRegisteredReceiver) {
+        private void registerTimeZoneReceiver() {
+            if (mTimeZoneReceiverRegistered) {
                 return;
             }
-            mRegisteredReceiver = true;
+            mTimeZoneReceiverRegistered = true;
             IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
             filter.addAction(Intent.ACTION_LOCALE_CHANGED);
-            DigitalWatchFaceService.this.registerReceiver(mReceiver, filter);
+            DigitalWatchFaceService.this.registerReceiver(mTimeZoneReceiver, filter);
         }
 
-        private void unregisterReceiver() {
-            if (!mRegisteredReceiver) {
+        private void unregisterTimeZoneReceiver() {
+            if (!mTimeZoneReceiverRegistered) {
                 return;
             }
-            mRegisteredReceiver = false;
-            DigitalWatchFaceService.this.unregisterReceiver(mReceiver);
+            mTimeZoneReceiverRegistered = false;
+            DigitalWatchFaceService.this.unregisterReceiver(mTimeZoneReceiver);
         }
 
         @Override
@@ -383,8 +374,10 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             updateTimer();
         }
 
-        private void adjustPaintColorToCurrentMode(Paint paint, int interactiveColor,
-                                                   int ambientColor) {
+        private void adjustPaintColorToCurrentMode(
+                Paint paint,
+                int interactiveColor,
+                int ambientColor) {
             paint.setColor(isInAmbientMode() ? ambientColor : interactiveColor);
         }
 
@@ -513,18 +506,14 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
                         mCalendar.get(Calendar.AM_PM)), x, mYOffset, mAmPmPaint);
             }
 
-            // Only render the day of week and date if there is no peek card, so they do not bleed
-            // into each other in ambient mode.
-            if (getPeekCardPosition().isEmpty()) {
-                // Day of week
-                canvas.drawText(
-                        mDayOfWeekFormat.format(mDate),
-                        mXOffset, mYOffset + mLineHeight, mDatePaint);
-                // Date
-                canvas.drawText(
-                        mDateFormat.format(mDate),
-                        mXOffset, mYOffset + mLineHeight * 2, mDatePaint);
-            }
+            // Day of week
+            canvas.drawText(
+                    mDayOfWeekFormat.format(mDate),
+                    mXOffset, mYOffset + mLineHeight, mDatePaint);
+            // Date
+            canvas.drawText(
+                    mDateFormat.format(mDate),
+                    mXOffset, mYOffset + mLineHeight * 2, mDatePaint);
         }
 
         /**
@@ -549,62 +538,98 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
             return isVisible() && !isInAmbientMode();
         }
 
-        private void updateConfigDataItemAndUiOnStartup() {
-            DigitalWatchFaceUtil.fetchConfigDataMap(mGoogleApiClient,
+        /*
+         * Retrieves color preferences saved my user.
+         */
+        private void initColorPreferencesFromDataLayer() {
+            if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "updateConfigDataItemAndUiOnStartup()");
+            }
+
+            DigitalWatchFaceUtil.fetchConfigDataMap(
+                    getApplicationContext(),
                     new DigitalWatchFaceUtil.FetchConfigDataMapCallback() {
                         @Override
                         public void onConfigDataMapFetched(DataMap startupConfig) {
-                            // If the DataItem hasn't been created yet or some keys are missing,
-                            // use the default values.
                             setDefaultValuesForMissingConfigKeys(startupConfig);
-                            DigitalWatchFaceUtil.putConfigDataItem(mGoogleApiClient, startupConfig, null);
-
-                            updateUiForConfigDataMap(startupConfig);
+                            updateUiFromConfigDataMap(startupConfig);
                         }
                     }
             );
         }
 
+        /*
+         * Sets DataItem defaults if any keys are missing.
+         */
         private void setDefaultValuesForMissingConfigKeys(DataMap config) {
-            addIntKeyIfMissing(config, DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR,
+
+            boolean configKeysChanged = addIntKeyIfMissing(
+                    config,
+                    DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR,
                     DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_BACKGROUND);
-            addIntKeyIfMissing(config, DigitalWatchFaceUtil.KEY_HOURS_COLOR,
-                    DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_HOUR_DIGITS);
-            addIntKeyIfMissing(config, DigitalWatchFaceUtil.KEY_MINUTES_COLOR,
-                    DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_MINUTE_DIGITS);
-            addIntKeyIfMissing(config, DigitalWatchFaceUtil.KEY_SECONDS_COLOR,
-                    DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_SECOND_DIGITS);
+
+            configKeysChanged = addIntKeyIfMissing(
+                    config,
+                    DigitalWatchFaceUtil.KEY_HOURS_COLOR,
+                    DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_HOUR_DIGITS
+            ) || configKeysChanged;
+
+            configKeysChanged = addIntKeyIfMissing(config,
+                    DigitalWatchFaceUtil.KEY_MINUTES_COLOR,
+                    DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_MINUTE_DIGITS
+            ) || configKeysChanged;
+
+            configKeysChanged = addIntKeyIfMissing(
+                    config,
+                    DigitalWatchFaceUtil.KEY_SECONDS_COLOR,
+                    DigitalWatchFaceUtil.COLOR_VALUE_DEFAULT_AND_AMBIENT_SECOND_DIGITS
+            ) || configKeysChanged;
+
+            if (configKeysChanged) {
+                DigitalWatchFaceUtil.putConfigDataItem(
+                        getApplicationContext(),
+                        config,
+                        null);
+            }
         }
 
-        private void addIntKeyIfMissing(DataMap config, String key, int color) {
+        private boolean addIntKeyIfMissing(DataMap config, String key, int color) {
             if (!config.containsKey(key)) {
                 config.putInt(key, color);
+                return true;
+            } else {
+                return false;
             }
         }
 
-        @Override // DataApi.DataListener
+        @Override
         public void onDataChanged(DataEventBuffer dataEvents) {
+            if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "onDataChanged(): " + dataEvents);
+            }
+
             for (DataEvent dataEvent : dataEvents) {
-                if (dataEvent.getType() != DataEvent.TYPE_CHANGED) {
-                    continue;
-                }
 
-                DataItem dataItem = dataEvent.getDataItem();
-                if (!dataItem.getUri().getPath().equals(
-                        DigitalWatchFaceUtil.PATH_WITH_FEATURE)) {
-                    continue;
-                }
+                if (dataEvent.getType() == DataEvent.TYPE_CHANGED) {
+                    DataItem dataItem = dataEvent.getDataItem();
+                    String path = dataItem.getUri().getPath();
 
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                DataMap config = dataMapItem.getDataMap();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Config DataItem updated:" + config);
+                    if (path.equals(DigitalWatchFaceUtil.PATH_WITH_FEATURE)) {
+
+                        DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
+                        DataMap config = dataMapItem.getDataMap();
+
+                        if (Log.isLoggable(TAG, Log.DEBUG)) {
+                            Log.d(TAG, "Config DataItem updated:" + config);
+                        }
+
+                        updateUiFromConfigDataMap(config);
+                    }
                 }
-                updateUiForConfigDataMap(config);
             }
         }
 
-        private void updateUiForConfigDataMap(final DataMap config) {
+        private void updateUiFromConfigDataMap(final DataMap config) {
             boolean uiUpdated = false;
             for (String configKey : config.keySet()) {
                 if (!config.containsKey(configKey)) {
@@ -631,42 +656,24 @@ public class DigitalWatchFaceService extends CanvasWatchFaceService {
          * @return whether UI has been updated
          */
         private boolean updateUiForKey(String configKey, int color) {
-            if (configKey.equals(DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR)) {
-                setInteractiveBackgroundColor(color);
-            } else if (configKey.equals(DigitalWatchFaceUtil.KEY_HOURS_COLOR)) {
-                setInteractiveHourDigitsColor(color);
-            } else if (configKey.equals(DigitalWatchFaceUtil.KEY_MINUTES_COLOR)) {
-                setInteractiveMinuteDigitsColor(color);
-            } else if (configKey.equals(DigitalWatchFaceUtil.KEY_SECONDS_COLOR)) {
-                setInteractiveSecondDigitsColor(color);
-            } else {
-                Log.w(TAG, "Ignoring unknown config key: " + configKey);
-                return false;
+            switch (configKey) {
+                case DigitalWatchFaceUtil.KEY_BACKGROUND_COLOR:
+                    setInteractiveBackgroundColor(color);
+                    break;
+                case DigitalWatchFaceUtil.KEY_HOURS_COLOR:
+                    setInteractiveHourDigitsColor(color);
+                    break;
+                case DigitalWatchFaceUtil.KEY_MINUTES_COLOR:
+                    setInteractiveMinuteDigitsColor(color);
+                    break;
+                case DigitalWatchFaceUtil.KEY_SECONDS_COLOR:
+                    setInteractiveSecondDigitsColor(color);
+                    break;
+                default:
+                    Log.w(TAG, "Ignoring unknown config key: " + configKey);
+                    return false;
             }
             return true;
-        }
-
-        @Override  // GoogleApiClient.ConnectionCallbacks
-        public void onConnected(Bundle connectionHint) {
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "onConnected: " + connectionHint);
-            }
-            Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
-            updateConfigDataItemAndUiOnStartup();
-        }
-
-        @Override  // GoogleApiClient.ConnectionCallbacks
-        public void onConnectionSuspended(int cause) {
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "onConnectionSuspended: " + cause);
-            }
-        }
-
-        @Override  // GoogleApiClient.OnConnectionFailedListener
-        public void onConnectionFailed(ConnectionResult result) {
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "onConnectionFailed: " + result);
-            }
         }
     }
 }

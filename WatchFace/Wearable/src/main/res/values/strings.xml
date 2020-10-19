@@ -19,7 +19,7 @@
     <string name="opengl_name">Sample OpenGL</string>
     <string name="interactive_name">Sample Interactive</string>
     <string name="analog_complication">Sample Analog</string>
-    <string name="digital_name">Sample Digital 1.0</string>
+    <string name="digital_name">Sample Digital</string>
 
     <string name="digital_background_color">Background color</string>
     <string name="digital_config_name">Digital watch face configuration</string>
