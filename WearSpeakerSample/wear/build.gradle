@@ -37,9 +37,9 @@ android {
 
 dependencies {
 
-    implementation 'androidx.wear:wear:1.0.0'
+    implementation 'androidx.wear:wear:1.1.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation 'androidx.media:media:1.1.0'
+    implementation 'androidx.media:media:1.2.0'
 
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
 
