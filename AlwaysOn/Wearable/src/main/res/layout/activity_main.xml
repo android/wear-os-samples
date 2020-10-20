@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        app:boxedEdges="all">
+        app:layout_boxedEdges="all">
 
         <TextView
             android:id="@+id/time"
