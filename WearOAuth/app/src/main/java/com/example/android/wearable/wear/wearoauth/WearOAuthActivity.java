@@ -85,13 +85,32 @@ public class WearOAuthActivity extends Activity {
     public void onClickStartGoogleOAuth2Flow(View view) {
         Log.d(TAG, "onClickStartGoogleOAuth2Flow()");
 
-        performRequest(
-                "https://accounts.google.com/o/oauth2/v2/auth?response_type=code"
-                        + "&client_id="
-                        + CLIENT_ID
-                        + "&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login"
-                        + "&redirect_uri=" + redirectUrl(),
-                new GoogleOAuth2RequestCallback(this));
+        if (clientIdsAreSet()) {
+            performRequest(
+                    "https://accounts.google.com/o/oauth2/v2/auth?response_type=code"
+                            + "&client_id="
+                            + CLIENT_ID
+                            + "&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login"
+                            + "&redirect_uri=" + redirectUrl(),
+                    new GoogleOAuth2RequestCallback(this));
+        } else {
+            updateStatus("CLIENT_ID and CLIENT_SECRET aren't properly set.");
+        }
+    }
+
+    private boolean clientIdsAreSet() {
+
+        if (TextUtils.isEmpty(CLIENT_ID)) {
+            return false;
+        } else if (TextUtils.isEmpty(CLIENT_SECRET)) {
+            return false;
+        } else if (CLIENT_ID.toLowerCase().contains("todo")) {
+            return false;
+        } else if (CLIENT_SECRET.toLowerCase().contains("todo")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
