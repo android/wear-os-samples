@@ -25,32 +25,33 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.example.android.wearable.wear.wearoauth.R.id.text_view;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
- * Demonstrates the OAuth flow on Android Wear. This sample currently handles the callback from the
- * Android Wear companion app after receiving user consent, and the follow-up call to perform the
- * OAuth token exchange before making authenticated API calls.
+ * Demonstrates the OAuth 2.0 flow on Wear OS by initiating an auth request that is passed to the
+ * phone and triggers a browser view where the user can easily approve/deny access from a signed
+ * account.
  *
- * The sample uses the Google+ and Google OAuth 2.0 APIs, but can be easily extended for any other
+ * After approval/denial, sample handles response via callback and performs the OAuth token exchange
+ * before making an authenticated API call.
+ *
+ * If you are using a Google OAuth client ID (make sure the application type is "Web application"
+ * not "Android"). You can find more details here:
+ * https://developer.android.com/training/wearables/apps/auth-wear#OAuth
+ *
+ * The sample uses the Google and Google OAuth 2.0 APIs, but can be easily extended for any other
  * OAuth 2.0 provider.
  */
 public class WearOAuthActivity extends Activity {
@@ -58,13 +59,13 @@ public class WearOAuthActivity extends Activity {
     public static final String TAG = "WearOAuthActivity";
 
     // Note that normally the redirect URL would be your own server, which would in turn
-    // redirect to this URL intercepted by the Android Wear companion app after completing the
+    // redirect to this URL intercepted by the Wear OS companion app after completing the
     // auth code exchange.
     private static final String HTTP_REDIRECT_URL = "https://www.android.com/wear/3p_auth";
 
     // TODO Add your client id and client secret here (for dev purposes only).
-    private static final String CLIENT_ID = "";
-    private static final String CLIENT_SECRET = "";
+    private static final String CLIENT_ID = "TODO_ADD_CLIENT_ID.apps.googleusercontent.com";
+    private static final String CLIENT_SECRET = "TODO_ADD_CLIENT_SECRET";
 
     private OAuthClient mOAuthClient;
 
@@ -72,7 +73,7 @@ public class WearOAuthActivity extends Activity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         mOAuthClient = OAuthClient.create(this);
-        setContentView(com.example.android.wearable.wear.wearoauth.R.layout.layout);
+        setContentView(R.layout.layout);
     }
 
     @Override
@@ -82,6 +83,7 @@ public class WearOAuthActivity extends Activity {
     }
 
     public void onClickStartGoogleOAuth2Flow(View view) {
+        Log.d(TAG, "onClickStartGoogleOAuth2Flow()");
 
         performRequest(
                 "https://accounts.google.com/o/oauth2/v2/auth?response_type=code"
@@ -94,10 +96,11 @@ public class WearOAuthActivity extends Activity {
 
     /**
      * This method should be called with any OAuth 2.0 URL scheme and for any provider. The callback
-     * object is called after the user provides consent on the authorization screen on the Android
-     * Wear companion app.
+     * object is called after the user provides consent on the authorization screen on the Wear OS
+     * companion app.
      */
     private void performRequest(String url, @Nullable OAuthClient.Callback callback) {
+        Log.d(TAG, "performRequest()");
         mOAuthClient.sendAuthorizationRequest(Uri.parse(url), callback);
     }
 
@@ -118,7 +121,7 @@ public class WearOAuthActivity extends Activity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        TextView textView = (TextView) findViewById(text_view);
+                        TextView textView = findViewById(R.id.text_view);
                         Log.d(TAG, text);
                         textView.setText(text);
                     }
@@ -126,7 +129,7 @@ public class WearOAuthActivity extends Activity {
     }
 
     /**
-     * Handles the callback from the Android Wear phone app after user consents to the OAuth
+     * Handles the callback from the Wear OS phone app after user consents to the OAuth
      * authorization screen. Currently this callback performs both the token exchange for the
      * authorization code, and a follow test authenticated call to the Google OAuth 2.0 API.
      */
@@ -134,9 +137,9 @@ public class WearOAuthActivity extends Activity {
 
         protected @Nullable String accessToken;
         protected Uri responseUrl;
-        protected final HttpClient httpClient = new DefaultHttpClient();
-        protected WearOAuthActivity authActivity = null;
+        protected final OkHttpClient okHttpClient = new OkHttpClient();
 
+        protected WearOAuthActivity authActivity = null;
 
         public GoogleOAuth2RequestCallback(WearOAuthActivity activity) {
             this.authActivity = activity;
@@ -149,16 +152,17 @@ public class WearOAuthActivity extends Activity {
 
         @Override
         public void onAuthorizationResponse(Uri requestUrl, Uri responseUrl) {
-            Log.d(TAG, "onResult(). requestUrl:" + requestUrl + " responseUrl: " + responseUrl);
-            authActivity.updateStatus("Request completed. Response URL: " + responseUrl);
+            Log.d(TAG, "onAuthorizationResponse()");
+
+            authActivity.updateStatus("Request completed. Response URL:\n" + responseUrl);
             this.responseUrl = responseUrl;
 
             Runnable runnable =
                     new Runnable() {
                         public void run() {
-                            HttpPost httpPost = createHttpPostObject();
-                            if (httpPost != null) {
-                                acquireToken(httpPost);
+                            Request formPost = createFormPostRequest();
+                            if (formPost != null) {
+                                acquireToken(formPost);
                                 accessAPI();
                             }
                         }
@@ -167,79 +171,85 @@ public class WearOAuthActivity extends Activity {
             executor.submit(runnable);
         }
 
-        private HttpPost createHttpPostObject() {
+        private Request createFormPostRequest() {
+            Log.d(TAG, "createHttpPostObject()");
+
             String code = responseUrl.getQueryParameter("code");
             if (TextUtils.isEmpty(code)) {
                 authActivity.updateStatus(
-                        "Google OAuth 2.0 API token exchange failed. No code query parameter in "
-                                + "response URL");
+                        "Google OAuth 2.0 API token exchange failed. No code query parameter" +
+                                " in response URL");
                 return null;
             }
 
-            HttpPost httpPost = new HttpPost("https://www.googleapis.com/oauth2/v4/token");
-            ArrayList<BasicNameValuePair> nameValuePair = new ArrayList<BasicNameValuePair>(5);
-            nameValuePair.add(new BasicNameValuePair("grant_type", "authorization_code"));
-            nameValuePair.add(new BasicNameValuePair("code", code));
-            nameValuePair.add(new BasicNameValuePair("redirect_uri", redirectUrl()));
-            nameValuePair.add(new BasicNameValuePair("client_id", CLIENT_ID));
-            nameValuePair.add(
-                    new BasicNameValuePair("client_secret", CLIENT_SECRET));
+            RequestBody formBody = new FormBody.Builder()
+                    .add("grant_type", "authorization_code")
+                    .add("code", code)
+                    .add("redirect_uri", redirectUrl())
+                    .add("client_id", CLIENT_ID)
+                    .add("client_secret", CLIENT_SECRET)
+                    .build();
 
-            try {
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, "Unsupported encoding exception occurred. Stack trace:\n\n"
-                        + Log.getStackTraceString(e));
-            }
-            return httpPost;
+            return new Request.Builder()
+                    .url("https://www.googleapis.com/oauth2/v4/token")
+                    .post(formBody)
+                    .build();
         }
 
-        private void acquireToken(HttpPost httpPost) {
+        private void acquireToken(Request formRequest) {
+            Log.d(TAG, "acquireToken()");
+
             try {
-                HttpResponse response = httpClient.execute(httpPost);
-                WearOAuthActivity.this.updateStatus(
-                        "Google OAuth 2.0 API token exchange occurred. Response: "
-                                + response.toString());
-                String jsonString = EntityUtils.toString(response.getEntity());
-                try {
-                    JSONObject jsonResponse = new JSONObject(jsonString);
-                    String accessToken = jsonResponse.getString("access_token");
-                    if (TextUtils.isEmpty(accessToken)) {
-                        authActivity.updateStatus(
-                                "Google OAuth 2.0 API token exchange failed. No access token in "
-                                        + "response.");
-                        return;
-                    }
-                    this.accessToken = accessToken;
-                } catch (JSONException e) {
-                    Log.e(TAG, "Bad JSON returned:\n\n" + Log.getStackTraceString(e));
+                Response response = okHttpClient.newCall(formRequest).execute();
+
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
                 }
-            } catch (ClientProtocolException e) {
-                Log.e(TAG, "Bad protocol:\n\n" + Log.getStackTraceString(e));
-            } catch (IOException e) {
-                Log.e(TAG, "Exception occurred:\n\n" + Log.getStackTraceString(e));
+
+                ResponseBody body = response.body();
+                JSONObject jsonObject = new JSONObject(body.string());
+
+                accessToken = jsonObject.getString("access_token");
+
+                if (TextUtils.isEmpty(accessToken)) {
+                    authActivity.updateStatus("Google OAuth 2.0 API token exchange failed. " +
+                            " No access token in response.");
+                } else {
+                    authActivity.updateStatus("Google OAuth 2.0 API token exchange " +
+                            "succeeded. Token:\n" + accessToken);
+                }
+            } catch (IOException | JSONException exception) {
+                Log.e(TAG, "Exception: " + exception);
+                authActivity.updateStatus("Google OAuth 2.0 API token exchange failed. " +
+                        "Check exception");
             }
         }
 
         private void accessAPI() {
-            HttpGet httpGet = new HttpGet("https://www.googleapis.com/oauth2/v2/userinfo");
-            httpGet.setHeader("Authorization", "Bearer " + accessToken);
+            Log.d(TAG, "accessAPI()");
+
+            Request request = new Request.Builder()
+                    .url("https://www.googleapis.com/oauth2/v2/userinfo")
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .build();
+
             try {
-                HttpResponse response = httpClient.execute(httpGet);
+                Response response = okHttpClient.newCall(request).execute();
+                Log.d(TAG, "Response: " + response);
 
-                if(response == null) {
+                if (response != null) {
+                    String jsonString = response.body().string();
+                    JSONObject jsonObject = new JSONObject(jsonString);
+
+                    authActivity.updateStatus("Google OAuth 2.0 API request occurred. " +
+                            "Response:\n" + jsonObject);
+                } else {
                     Log.e(TAG, "Could not execute HTTP request. No response returned.");
-                    return;
+                    authActivity.updateStatus("Accessing API failed; Check logs.");
                 }
-
-                authActivity.updateStatus(
-                        "Google OAuth 2.0 API request occurred. Response: " + response.toString());
-                String jsonString = EntityUtils.toString(response.getEntity());
-                authActivity.updateStatus("Google OAuth 2.0 API response: " + jsonString);
-            } catch (ClientProtocolException e) {
-                Log.e(TAG, "Bad protocol:\n\n" + Log.getStackTraceString(e));
-            } catch (IOException e) {
-                Log.e(TAG, "Exception occurred\n\n" + Log.getStackTraceString(e));
+            } catch (IOException | JSONException exception) {
+                Log.e(TAG, "Exception occurred\n\n" + Log.getStackTraceString(exception));
+                authActivity.updateStatus("Accessing API failed; Check logs.");
             }
         }
     }
