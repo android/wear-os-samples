@@ -41,6 +41,11 @@ Configurations to "Do not launch Activity" for both the Wear and Application mod
 unsure how to do this, please review the "Run Starter project" section in the
 [Google Watch Face Code Lab][1].
 
+Steps to build in Android Studio
+--------------------------------
+Once the project is open, edit run configurations -> General -> Launch Options -> Launch: Nothing
+this will allow runs.
+
 [1]: https://codelabs.developers.google.com/codelabs/watchface/index.html
 
 Pre-requisites
