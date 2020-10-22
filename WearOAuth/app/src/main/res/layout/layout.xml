@@ -19,22 +19,28 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
+
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
-            <Button
-                android:id="@+id/googlePlusButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClickStartGoogleOAuth2Flow"
-                android:text="@string/googleoauth2_flow" />
-            <TextView
-                android:id="@+id/text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/googlePlusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickStartGoogleOAuth2Flow"
+            android:text="@string/googleoauth2_flow" />
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp" />
     </LinearLayout>
 </ScrollView>
