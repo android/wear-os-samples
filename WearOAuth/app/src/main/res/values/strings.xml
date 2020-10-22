@@ -17,5 +17,5 @@
 <resources>
     <!-- Name of the test app [CHAR_LIMIT=20]
          Shown in the launcher under "start ... " -->
-    <string name="googleoauth2_flow">Google+ OAuth</string>
+    <string name="googleoauth2_flow">Google OAuth</string>
 </resources>
