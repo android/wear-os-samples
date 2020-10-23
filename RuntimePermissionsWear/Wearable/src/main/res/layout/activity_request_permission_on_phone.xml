@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:onClick="onClickPermissionPhoneStorage"
         android:orientation="vertical"
-        app:boxedEdges="all">
+        app:layout_boxedEdges="all">
 
         <TextView
             android:layout_width="wrap_content"

@@ -45,5 +45,5 @@
         android:text="@string/digital_background_color"
         android:fontFamily="sans-serif-condensed-light"
         android:gravity="center"
-        app:boxedEdges="left|top"/>
+        app:layout_boxedEdges="left|top"/>
 </androidx.wear.widget.BoxInsetLayout>
