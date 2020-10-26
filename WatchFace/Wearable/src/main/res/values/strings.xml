@@ -40,6 +40,10 @@
     <string name="config_unread_notifications_label">Unread\nNotifications</string>
     <string name="config_background_image_complication_label">Background\nImage</string>
 
+    <string name="analog_complication_config">Analog Complication Config</string>
+    <string name="add_complication">Add Complication</string>
+    <string name="edit_complication">Edit Complication <xliff:g id="name" example="World Clock">%1$s</xliff:g></string>
+
     <!-- TODO: this should be shared (needs covering all the samples with Gradle build model) -->
     <string name="color_black">Black</string>
     <string name="color_blue">Blue</string>
@@ -48,9 +52,6 @@
     <string name="color_navy">Navy</string>
     <string name="color_red">Red</string>
     <string name="color_white">White</string>
-    <string name="analog_complication_config">Analog Complication Config</string>
-    <string name="add_complication">Add Complication</string>
-    <string name="edit_complication">Edit Complication <xliff:g id="name" example="World Clock">%1$s</xliff:g></string>
 
     <string-array name="color_array">
         <item>@string/color_black</item>

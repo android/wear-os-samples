@@ -134,7 +134,6 @@ public class AnalogComplicationConfigData {
 
         // Data for background complications UX in settings Activity.
         ConfigItemType backgroundImageComplicationConfigItem =
-                // TODO (jewalker): Revised in another CL to support background complication.
                 new BackgroundComplicationConfigItem(
                         context.getString(R.string.config_background_image_complication_label),
                         R.drawable.ic_landscape_white);
