@@ -1,0 +1,3 @@
+include ':wear'
+include ':mobile'
+rootProject.name = "My Application"
