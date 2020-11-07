@@ -15,21 +15,19 @@
  */
 package com.example.android.wearable.watchfacekotlin.config
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.wearable.view.CircledImageView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
+import android.support.wearable.view.CircledImageView
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.edit
 
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView
 
-import com.example.android.wearable.watchfacekotlin.R;
-
-import java.util.ArrayList;
+import com.example.android.wearable.watchfacekotlin.R
 
 /**
  * Provides a binding from color selection data set to views that are displayed within

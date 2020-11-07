@@ -18,44 +18,43 @@ package com.example.android.wearable.watchfacekotlin.config
 import com.example.android.wearable.watchfacekotlin.config.ColorSelectionActivity.Companion.EXTRA_SHARED_PREF
 import java.io.InvalidClassException
 
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
-import android.support.wearable.complications.ComplicationHelperActivity;
-import android.support.wearable.complications.ComplicationProviderInfo;
-import android.support.wearable.complications.ProviderInfoRetriever;
-import android.support.wearable.complications.ProviderInfoRetriever.OnProviderInfoReceivedCallback;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.app.Activity
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
+import android.support.wearable.complications.ComplicationHelperActivity
+import android.support.wearable.complications.ComplicationProviderInfo
+import android.support.wearable.complications.ProviderInfoRetriever
+import android.support.wearable.complications.ProviderInfoRetriever.OnProviderInfoReceivedCallback
+import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Switch
+import android.widget.Toast
 
 import androidx.core.content.edit
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView
 
-import com.example.android.wearable.watchfacekotlin.R;
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.BackgroundComplicationConfigItem;
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.ColorConfigItem;
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.ConfigItemType;
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.MoreOptionsConfigItem;
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.PreviewAndComplicationsConfigItem;
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.UnreadNotificationConfigItem;
-import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService;
+import com.example.android.wearable.watchfacekotlin.R
+import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.BackgroundComplicationConfigItem
+import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.ColorConfigItem
+import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.ConfigItemType
+import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.MoreOptionsConfigItem
+import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.PreviewAndComplicationsConfigItem
+import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData.UnreadNotificationConfigItem
+import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
 
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
+import java.util.concurrent.Executors
 
 /**
  * Displays different layouts for configuring watch face's complications and appearance settings

@@ -15,19 +15,19 @@
 */
 package com.example.android.wearable.watchfacekotlin.model
 
-import android.content.Context;
-import android.graphics.Color;
+import android.content.Context
+import android.graphics.Color
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-import com.example.android.wearable.watchfacekotlin.R;
-import com.example.android.wearable.watchfacekotlin.config.AnalogComplicationConfigActivity;
-import com.example.android.wearable.watchfacekotlin.config.AnalogComplicationConfigRecyclerViewAdapter;
-import com.example.android.wearable.watchfacekotlin.config.ColorSelectionActivity;
-import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService;
+import com.example.android.wearable.watchfacekotlin.R
+import com.example.android.wearable.watchfacekotlin.config.AnalogComplicationConfigActivity
+import com.example.android.wearable.watchfacekotlin.config.AnalogComplicationConfigRecyclerViewAdapter
+import com.example.android.wearable.watchfacekotlin.config.ColorSelectionActivity
+import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
 
-import java.util.ArrayList;
+import java.util.ArrayList
 
 /**
  * Data represents different views for configuring the [AnalogComplicationWatchFaceService] watch
