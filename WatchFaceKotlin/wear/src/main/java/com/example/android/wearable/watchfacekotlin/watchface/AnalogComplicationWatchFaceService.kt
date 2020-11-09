@@ -87,11 +87,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         private lateinit var tickAndCirclePaint: Paint
         private lateinit var backgroundPaint: Paint
 
-        /* Maps active complication ids to the data for that complication. Note: Data will only be
-         * present if the user has chosen a provider via the settings activity for the watch face.
-         */
-        private lateinit var activeComplicationDataSparseArray: SparseArray<ComplicationData>
-
         /* Maps complication ids to corresponding ComplicationDrawable that renders the
          * the complication data on the watch face.
          */
@@ -175,7 +170,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             // Initialize background color (in case background complication is inactive).
             backgroundPaint = Paint()
             backgroundPaint.color = backgroundColor
-            activeComplicationDataSparseArray = SparseArray(complicationIds.size)
 
             // Creates a ComplicationDrawable for each location where the user can render a
             // complication on the watch face. In this watch face, we create one for left, right,
@@ -310,9 +304,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             complicationData: ComplicationData
         ) {
             Log.d(TAG, "onComplicationDataUpdate() id: $complicationId")
-
-            // Adds/updates active complication data in the array.
-            activeComplicationDataSparseArray.put(complicationId, complicationData)
 
             if (complicationId == BACKGROUND_COMPLICATION_ID) {
                 // If background image isn't the correct type, it means either there was no data,
