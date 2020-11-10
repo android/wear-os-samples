@@ -130,8 +130,15 @@ object AnalogComplicationConfigData {
     }
 
     /**
-     * Interface all ConfigItems must implement so the [RecyclerView]'s Adapter associated
-     * with the configuration activity knows what type of ViewHolder to inflate.
+     * [AnalogComplicationConfigActivity] allows users to configure various items in
+     * [AnalogComplicationWatchFaceService] watch face, e.g., background color, highlight color,
+     * complications, etc.
+     *
+     * Each of these items are a row/[ViewHolder] in a [RecyclerView] powered by
+     * [AnalogComplicationConfigRecyclerViewAdapter].
+     *
+     * The [ConfigItemType] interface is required to allow us to return the correct config item type
+     * supported by the adapter with the correct data.
      */
     interface ConfigItemType {
         val configType: Int

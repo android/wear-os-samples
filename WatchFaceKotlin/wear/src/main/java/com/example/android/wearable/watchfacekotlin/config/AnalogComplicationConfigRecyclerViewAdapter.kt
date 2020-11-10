@@ -83,7 +83,7 @@ import java.util.concurrent.Executors
  * Background image complication configuration for changing background image of watch face.
  */
 class AnalogComplicationConfigRecyclerViewAdapter(
-    private val mContext: Context,
+    private val context: Context,
     watchFaceServiceClass: Class<*>,
     settingsDataSet: ArrayList<ConfigItemType>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -116,7 +116,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
     private lateinit var previewAndComplicationsViewHolder: PreviewAndComplicationsViewHolder
 
     init {
-        watchFaceComponentName = ComponentName(mContext, watchFaceServiceClass)
+        watchFaceComponentName = ComponentName(context, watchFaceServiceClass)
         this.settingsDataSet = settingsDataSet
 
         // Default value is invalid (only changed when user taps to change complication).
@@ -129,13 +129,13 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         rightComplicationId =
             AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.RIGHT)
 
-        sharedPref = mContext.getSharedPreferences(
-            mContext.getString(R.string.analog_complication_preference_file_key),
+        sharedPref = context.getSharedPreferences(
+            context.getString(R.string.analog_complication_preference_file_key),
             Context.MODE_PRIVATE
         )
 
         // Initialization of code to retrieve active complication data for the watch face.
-        providerInfoRetriever = ProviderInfoRetriever(mContext, Executors.newCachedThreadPool())
+        providerInfoRetriever = ProviderInfoRetriever(context, Executors.newCachedThreadPool())
         providerInfoRetriever.init()
     }
 
@@ -196,8 +196,6 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         return viewHolder
     }
 
-
-
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         Log.d(TAG, "Element $position set.")
 
@@ -209,33 +207,50 @@ class AnalogComplicationConfigRecyclerViewAdapter(
             TYPE_PREVIEW_AND_COMPLICATIONS_CONFIG -> {
                 val previewAndComplicationsViewHolder: PreviewAndComplicationsViewHolder =
                     viewHolder as PreviewAndComplicationsViewHolder
+
+                // Retrieve config item (contains data to populate view).
                 val previewAndComplicationsConfigItem: PreviewAndComplicationsConfigItem =
                     configItemType as PreviewAndComplicationsConfigItem
+
+                // Retrieve specific icon needed for view holder.
                 val defaultComplicationResourceId: Int =
                     previewAndComplicationsConfigItem.defaultComplicationResourceId
+
+                // Set icon in view holder and initialize colors/complications.
                 previewAndComplicationsViewHolder.setDefaultComplicationDrawable(
                     defaultComplicationResourceId
                 )
+
                 previewAndComplicationsViewHolder.initializesColorsAndComplications()
             }
 
             TYPE_MORE_OPTIONS -> {
                 val moreOptionsViewHolder: MoreOptionsViewHolder =
                     viewHolder as MoreOptionsViewHolder
+
+                // Retrieve config item (contains data to populate view).
                 val moreOptionsConfigItem: MoreOptionsConfigItem =
                     configItemType as MoreOptionsConfigItem
+
+                // Get and set icon in view holder.
                 moreOptionsViewHolder.setIcon(moreOptionsConfigItem.iconResourceId)
             }
 
             TYPE_COLOR_CONFIG -> {
                 val colorPickerViewHolder: ColorPickerViewHolder =
                     viewHolder as ColorPickerViewHolder
+
+                // Retrieve config item (contains data to populate view).
                 val colorConfigItem: ColorConfigItem = configItemType as ColorConfigItem
+
+                // Retrieve specific icons, strings, etc. needed for view holder.
                 val iconResourceId: Int = colorConfigItem.iconResourceId
                 val name: String = colorConfigItem.name
                 val sharedPrefString: String = colorConfigItem.sharedPrefString
                 val activity: Class<ColorSelectionActivity> =
                     colorConfigItem.getActivityToChoosePreference()
+
+                // Set icons, strings, etc. in view holder.
                 colorPickerViewHolder.setIcon(iconResourceId)
                 colorPickerViewHolder.setName(name)
                 colorPickerViewHolder.setSharedPrefString(sharedPrefString)
@@ -243,14 +258,21 @@ class AnalogComplicationConfigRecyclerViewAdapter(
             }
 
             TYPE_UNREAD_NOTIFICATION_CONFIG -> {
+
                 val unreadViewHolder: UnreadNotificationViewHolder =
                     viewHolder as UnreadNotificationViewHolder
+
+                // Retrieve config item (contains data to populate view).
                 val unreadConfigItem: UnreadNotificationConfigItem =
                     configItemType as UnreadNotificationConfigItem
+
+                // Retrieve specific icons, strings, etc. needed for view holder.
                 val unreadEnabledIconResourceId: Int = unreadConfigItem.iconEnabledResourceId
                 val unreadDisabledIconResourceId: Int = unreadConfigItem.iconDisabledResourceId
                 val unreadName: String = unreadConfigItem.name
                 val unreadSharedPrefId: Int = unreadConfigItem.sharedPrefId
+
+                // Set icons, strings, etc. in view holder.
                 unreadViewHolder.setIcons(
                     unreadEnabledIconResourceId, unreadDisabledIconResourceId
                 )
@@ -261,11 +283,16 @@ class AnalogComplicationConfigRecyclerViewAdapter(
             TYPE_BACKGROUND_COMPLICATION_IMAGE_CONFIG -> {
                 val backgroundComplicationViewHolder: BackgroundComplicationViewHolder =
                     viewHolder as BackgroundComplicationViewHolder
+
+                // Retrieve config item (contains data to populate view).
                 val backgroundComplicationConfigItem: BackgroundComplicationConfigItem =
                     configItemType as BackgroundComplicationConfigItem
-                val backgroundIconResourceId: Int =
-                    backgroundComplicationConfigItem.iconResourceId
+
+                // Retrieve specific icons, strings, etc. needed for view holder.
+                val backgroundIconResourceId: Int = backgroundComplicationConfigItem.iconResourceId
                 val backgroundName: String = backgroundComplicationConfigItem.name
+
+                // Set icons, strings, etc. in view holder.
                 backgroundComplicationViewHolder.setIcon(backgroundIconResourceId)
                 backgroundComplicationViewHolder.setName(backgroundName)
             }
@@ -315,6 +342,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         private val watchFaceArmsAndTicksView: View
         private val watchFaceHighlightPreviewView: View
         private val watchFaceBackgroundPreviewImageView: ImageView
+
         private val leftComplicationBackground: ImageView
         private val rightComplicationBackground: ImageView
         private val leftComplication: ImageButton
@@ -340,7 +368,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
             // Only update background colors for preview if background complications are disabled.
             if (!backgroundComplicationEnabled) {
                 // Updates background color.
-                val backgroundSharedPrefString = mContext.getString(R.string.saved_background_color)
+                val backgroundSharedPrefString = context.getString(R.string.saved_background_color)
                 val currentBackgroundColor =
                     sharedPref.getInt(backgroundSharedPrefString, Color.BLACK)
                 val backgroundColorFilter =
@@ -351,13 +379,13 @@ class AnalogComplicationConfigRecyclerViewAdapter(
                 // Inform user that they need to disable background image for color to work.
                 val text: CharSequence = "Selected image overrides background color."
                 val duration = Toast.LENGTH_LONG
-                val toast = Toast.makeText(mContext, text, duration)
+                val toast = Toast.makeText(context, text, duration)
                 toast.setGravity(Gravity.CENTER, 0, 0)
                 toast.show()
             }
 
             // Updates highlight color (just second arm).
-            val highlightSharedPrefString = mContext.getString(R.string.saved_marker_color)
+            val highlightSharedPrefString = context.getString(R.string.saved_marker_color)
             val currentHighlightColor = sharedPref.getInt(highlightSharedPrefString, Color.RED)
             val highlightColorFilter =
                 PorterDuffColorFilter(currentHighlightColor, PorterDuff.Mode.SRC_ATOP)
@@ -372,15 +400,20 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         ) {
             selectedComplicationId =
                 AnalogComplicationWatchFaceService.getComplicationId(complicationLocation)
+
             backgroundComplicationEnabled = false
+
             if (selectedComplicationId >= 0) {
                 val supportedTypes: IntArray =
                     AnalogComplicationWatchFaceService.getSupportedComplicationTypes(
                         complicationLocation
                     )
+
                 val watchFace = ComponentName(
-                    currentActivity, AnalogComplicationWatchFaceService::class.java
+                    currentActivity,
+                    AnalogComplicationWatchFaceService::class.java
                 )
+
                 currentActivity.startActivityForResult(
                     ComplicationHelperActivity.createProviderChooserHelperIntent(
                         currentActivity,
@@ -397,9 +430,12 @@ class AnalogComplicationConfigRecyclerViewAdapter(
 
         fun setDefaultComplicationDrawable(resourceId: Int) {
             val context = watchFaceArmsAndTicksView.context
+
             defaultComplicationDrawable = context.getDrawable(resourceId)
+
             leftComplication.setImageDrawable(defaultComplicationDrawable)
             leftComplicationBackground.visibility = View.INVISIBLE
+
             rightComplication.setImageDrawable(defaultComplicationDrawable)
             rightComplicationBackground.visibility = View.INVISIBLE
         }
@@ -430,7 +466,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
                         android.R.color.transparent
                     )
                     val backgroundSharedPrefString =
-                        mContext.getString(R.string.saved_background_color)
+                        context.getString(R.string.saved_background_color)
                     val currentBackgroundColor =
                         sharedPref.getInt(backgroundSharedPrefString, Color.BLACK)
                     val backgroundColorFilter = PorterDuffColorFilter(
@@ -458,7 +494,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         ) {
             if (complicationProviderInfo != null) {
                 button.setImageIcon(complicationProviderInfo.providerIcon)
-                button.contentDescription = mContext.getString(
+                button.contentDescription = context.getString(
                     R.string.edit_complication,
                     complicationProviderInfo.appName + " " +
                             complicationProviderInfo.providerName
@@ -466,7 +502,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
                 background.visibility = View.VISIBLE
             } else {
                 button.setImageDrawable(defaultComplicationDrawable)
-                button.contentDescription = mContext.getString(R.string.add_complication)
+                button.contentDescription = context.getString(R.string.add_complication)
                 background.visibility = View.INVISIBLE
             }
         }
@@ -474,7 +510,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         fun initializesColorsAndComplications() {
 
             // Initializes highlight color (just second arm and part of complications).
-            val highlightSharedPrefString = mContext.getString(R.string.saved_marker_color)
+            val highlightSharedPrefString = context.getString(R.string.saved_marker_color)
             val currentHighlightColor = sharedPref.getInt(highlightSharedPrefString, Color.RED)
             val highlightColorFilter =
                 PorterDuffColorFilter(currentHighlightColor, PorterDuff.Mode.SRC_ATOP)
@@ -483,8 +519,8 @@ class AnalogComplicationConfigRecyclerViewAdapter(
             // Initializes background color to gray (updates to color or complication icon based
             // on whether the background complication is live or not.
             val backgroundColorFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
-            watchFaceBackgroundPreviewImageView
-                .background.colorFilter = backgroundColorFilter
+            watchFaceBackgroundPreviewImageView.background.colorFilter = backgroundColorFilter
+
             val complicationIds: IntArray = AnalogComplicationWatchFaceService.complicationIds
             providerInfoRetriever.retrieveProviderInfo(
                 object : OnProviderInfoReceivedCallback() {
