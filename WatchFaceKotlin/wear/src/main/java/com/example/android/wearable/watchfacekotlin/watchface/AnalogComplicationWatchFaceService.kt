@@ -74,18 +74,66 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         private var minuteHandLength = 0f
         private var hourHandLength = 0f
 
-        // Colors for all hands (hour, minute, seconds, ticks) based on photo loaded.
-        private var watchHandAndComplicationsColor = 0
-        private var watchHandHighlightColor = 0
-        private var watchHandShadowColor = 0
-        private var backgroundColor = 0
+        // Colors for all hands (hour, minute, seconds, ticks) and complications.
+        // Can be set by user via config Activities.
+        private var watchHandAndComplicationsColor = Color.WHITE
+        private var watchHandHighlightColor = Color.RED
+        private var watchHandShadowColor = Color.BLACK
+        private var backgroundColor = Color.BLACK
 
 
-        private lateinit var hourPaint: Paint
-        private lateinit var minutePaint: Paint
-        private lateinit var secondAndHighlightPaint: Paint
-        private lateinit var tickAndCirclePaint: Paint
-        private lateinit var backgroundPaint: Paint
+        private var hourPaint: Paint  = Paint().apply {
+            color = watchHandAndComplicationsColor
+            strokeWidth = HOUR_STROKE_WIDTH
+            isAntiAlias = true
+            strokeCap = Paint.Cap.ROUND
+            setShadowLayer(
+                SHADOW_RADIUS.toFloat(),
+                0f,
+                0f,
+                watchHandShadowColor
+
+            )
+        }
+
+        private var minutePaint: Paint = Paint().apply {
+            color = watchHandAndComplicationsColor
+            strokeWidth = MINUTE_STROKE_WIDTH
+            isAntiAlias = true
+            strokeCap = Paint.Cap.ROUND
+            setShadowLayer(
+                SHADOW_RADIUS.toFloat(),
+                0f,
+                0f,
+                watchHandShadowColor
+            )
+        }
+
+        private var secondAndHighlightPaint: Paint = Paint().apply {
+            color = watchHandHighlightColor
+            strokeWidth = SECOND_TICK_STROKE_WIDTH
+            isAntiAlias = true
+            strokeCap = Paint.Cap.ROUND
+            setShadowLayer(
+                SHADOW_RADIUS.toFloat(),
+                0f,
+                0f,
+                watchHandShadowColor
+            )
+        }
+
+        private var tickAndCirclePaint: Paint = Paint().apply {
+            color = watchHandAndComplicationsColor
+            strokeWidth = SECOND_TICK_STROKE_WIDTH
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+            setShadowLayer(
+                SHADOW_RADIUS.toFloat(),
+                0f,
+                0f,
+                watchHandShadowColor
+            )
+        }
 
         /* Maps complication ids to corresponding ComplicationDrawable that renders the
          * the complication data on the watch face.
@@ -107,6 +155,18 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         // User's preference for if they want visual shown to indicate unread notifications.
         private var unreadNotificationsPreference = false
         private var numberOfUnreadNotifications = 0
+
+        // The unread notification icon is split into two parts: an outer ring that is always
+        // visible when any Wear OS notification is unread and a smaller circle inside the ring
+        // when the watch is in active (non-ambient) mode. The values below represent pixels.
+        // NOTE: We don't draw circle in ambient mode to avoid burn-in.
+        private val unreadNotificationIconOuterRingSize = 10
+        private val unreadNotificationIconInnerCircle = 4
+
+        // Represents how far up from the bottom (Y-axis) the icon will be drawn (in pixels).
+        private val unreadNotificationIconOffsetY = 40
+
+
         private val timeZoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 calendar.timeZone = TimeZone.getDefault()
@@ -138,8 +198,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                     .build()
             )
             loadSavedPreferences()
-            initializeComplicationsAndBackground()
-            initializeWatchFace()
+            initializeComplications()
         }
 
         // Pulls all user's preferences for watch face appearance.
@@ -147,10 +206,12 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             val backgroundColorResourceName =
                 applicationContext.getString(R.string.saved_background_color)
             backgroundColor = sharedPreferences.getInt(backgroundColorResourceName, Color.BLACK)
-            val markerColorResourceName = applicationContext.getString(R.string.saved_marker_color)
 
-            // Set defaults for colors
+            val markerColorResourceName =
+                applicationContext.getString(R.string.saved_marker_color)
             watchHandHighlightColor = sharedPreferences.getInt(markerColorResourceName, Color.RED)
+
+            // Sets watch hands, complication, and shadow colors based on the background color
             if (backgroundColor == Color.WHITE) {
                 watchHandAndComplicationsColor = Color.BLACK
                 watchHandShadowColor = Color.WHITE
@@ -158,18 +219,15 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                 watchHandAndComplicationsColor = Color.WHITE
                 watchHandShadowColor = Color.BLACK
             }
+
             val unreadNotificationPreferenceResourceName =
                 applicationContext.getString(R.string.saved_unread_notifications_pref)
             unreadNotificationsPreference =
                 sharedPreferences.getBoolean(unreadNotificationPreferenceResourceName, true)
         }
 
-        private fun initializeComplicationsAndBackground() {
+        private fun initializeComplications() {
             Log.d(TAG, "initializeComplications()")
-
-            // Initialize background color (in case background complication is inactive).
-            backgroundPaint = Paint()
-            backgroundPaint.color = backgroundColor
 
             // Creates a ComplicationDrawable for each location where the user can render a
             // complication on the watch face. In this watch face, we create one for left, right,
@@ -191,58 +249,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             setActiveComplications(*complicationIds)
         }
 
-        private fun initializeWatchFace() {
-            hourPaint = Paint()
-            hourPaint.color = watchHandAndComplicationsColor
-            hourPaint.strokeWidth = HOUR_STROKE_WIDTH
-            hourPaint.isAntiAlias = true
-            hourPaint.strokeCap = Paint.Cap.ROUND
-            hourPaint.setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
-                0f,
-                0f,
-                watchHandShadowColor
-            )
-
-            minutePaint = Paint()
-            minutePaint.color = watchHandAndComplicationsColor
-            minutePaint.strokeWidth = MINUTE_STROKE_WIDTH
-            minutePaint.isAntiAlias = true
-            minutePaint.strokeCap = Paint.Cap.ROUND
-            minutePaint.setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
-                0f,
-                0f,
-                watchHandShadowColor
-            )
-
-            secondAndHighlightPaint = Paint()
-            secondAndHighlightPaint.color = watchHandHighlightColor
-            secondAndHighlightPaint.strokeWidth =
-                SECOND_TICK_STROKE_WIDTH
-            secondAndHighlightPaint.isAntiAlias = true
-            secondAndHighlightPaint.strokeCap = Paint.Cap.ROUND
-            secondAndHighlightPaint.setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
-                0f,
-                0f,
-                watchHandShadowColor
-            )
-
-            tickAndCirclePaint = Paint()
-            tickAndCirclePaint.color = watchHandAndComplicationsColor
-            tickAndCirclePaint.strokeWidth =
-                SECOND_TICK_STROKE_WIDTH
-            tickAndCirclePaint.isAntiAlias = true
-            tickAndCirclePaint.style = Paint.Style.STROKE
-            tickAndCirclePaint.setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
-                0f,
-                0f,
-                watchHandShadowColor
-            )
-        }
-
         /* Sets active/ambient mode colors for all complications.
          *
          * Note: With the rest of the watch face, we update the paint colors based on
@@ -251,24 +257,25 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
          * again if the user changes the highlight color via AnalogComplicationConfigActivity.
          */
         private fun setComplicationsActiveAndAmbientColors(primaryComplicationColor: Int) {
-            var complicationId: Int
             var complicationDrawable: ComplicationDrawable
 
-            for (index in complicationIds.indices) {
-                complicationId = complicationIds[index]
+            for (complicationId in complicationIds) {
                 complicationDrawable = complicationDrawableSparseArray[complicationId]
                 if (complicationId == BACKGROUND_COMPLICATION_ID) {
                     // It helps for the background color to be black in case the image used for the
                     // watch face's background takes some time to load.
                     complicationDrawable.setBackgroundColorActive(Color.BLACK)
-                } else {
-                    // Active mode colors.
-                    complicationDrawable.setBorderColorActive(primaryComplicationColor)
-                    complicationDrawable.setRangedValuePrimaryColorActive(primaryComplicationColor)
 
-                    // Ambient mode colors.
-                    complicationDrawable.setBorderColorAmbient(Color.WHITE)
-                    complicationDrawable.setRangedValuePrimaryColorAmbient(Color.WHITE)
+                } else {
+                    complicationDrawable.apply {
+                        // Active mode colors.
+                        setBorderColorActive(primaryComplicationColor)
+                        setRangedValuePrimaryColorActive(primaryComplicationColor)
+
+                        // Ambient mode colors.
+                        setBorderColorAmbient(Color.WHITE)
+                        setRangedValuePrimaryColorAmbient(Color.WHITE)
+                    }
                 }
             }
         }
@@ -288,11 +295,11 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
             // Updates complications to properly render in ambient mode based on the
             // screen's capabilities.
-            var complicationDrawable: ComplicationDrawable
-            for (index in complicationIds.indices) {
-                complicationDrawable = complicationDrawableSparseArray[complicationIds[index]]
-                complicationDrawable.setLowBitAmbient(lowBitAmbient)
-                complicationDrawable.setBurnInProtection(burnInProtection)
+            for (complicationId in complicationIds) {
+                complicationDrawableSparseArray[complicationId].apply {
+                    setLowBitAmbient(lowBitAmbient)
+                    setBurnInProtection(burnInProtection)
+                }
             }
         }
 
@@ -356,10 +363,9 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             // Update drawable complications' ambient state.
             // Note: ComplicationDrawable handles switching between active/ambient colors, we just
             // have to inform it to enter ambient mode.
-            var complicationDrawable: ComplicationDrawable
-            for (index in complicationIds.indices) {
-                complicationDrawable = complicationDrawableSparseArray[complicationIds[index]]
-                complicationDrawable.setInAmbientMode(ambient)
+            for (complicationId in complicationIds) {
+                // Sets ComplicationDrawable ambient mode
+                complicationDrawableSparseArray[complicationId].setInAmbientMode(ambient)
             }
 
             if (ambient) {
@@ -369,9 +375,13 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             }
         }
 
+        /**
+         * This function is called every time the watch enters/exits ambient mode. When the device
+         * enters ambient mode, we must switch everything to black/white and also disable shadows
+         * and anti-aliasing.
+         */
         private fun updateWatchPaintStyles() {
             if (ambient) {
-                backgroundPaint.color = Color.BLACK
                 hourPaint.color = Color.WHITE
                 minutePaint.color = Color.WHITE
                 secondAndHighlightPaint.color = Color.WHITE
@@ -386,7 +396,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                 tickAndCirclePaint.clearShadowLayer()
 
             } else {
-                backgroundPaint.color = backgroundColor
                 hourPaint.color = watchHandAndComplicationsColor
                 minutePaint.color = watchHandAndComplicationsColor
                 tickAndCirclePaint.color = watchHandAndComplicationsColor
@@ -515,13 +524,16 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
             if (unreadNotificationsPreference && numberOfUnreadNotifications > 0) {
 
-                val width = canvas.width
-                val height = canvas.height
+                // Calculates the center of the watch (for the X axis).
+                val centerX = canvas.width / 2.toFloat()
+
+                // Calculates how far up from the bottom the icon needs to be painted (Y axis).
+                val offsetY = canvas.width - unreadNotificationIconOffsetY.toFloat()
 
                 canvas.drawCircle(
-                    width / 2.toFloat(),
-                    height - 40.toFloat(),
-                    10f,
+                    centerX,
+                    offsetY,
+                    unreadNotificationIconOuterRingSize.toFloat(),
                     tickAndCirclePaint
                 )
 
@@ -531,9 +543,9 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                  */
                 if (!ambient) {
                     canvas.drawCircle(
-                        width / 2.toFloat(),
-                        height - 40.toFloat(),
-                        4f,
+                        centerX,
+                        offsetY,
+                        unreadNotificationIconInnerCircle.toFloat(),
                         secondAndHighlightPaint
                     )
                 }
@@ -541,22 +553,30 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         }
 
         private fun drawBackground(canvas: Canvas) {
-            if (ambient && (lowBitAmbient || burnInProtection)) {
-                canvas.drawColor(Color.BLACK)
-            } else if (backgroundComplicationActive) {
-                // Overrides any background color to match background complication
-                canvas.drawColor(Color.BLACK)
-            } else {
-                canvas.drawColor(backgroundColor)
+
+            val backgroundColor = when {
+                // Background should always be black in ambient or when burn in protection is
+                // enabled.
+                ambient && (lowBitAmbient || burnInProtection) ->
+                    Color.BLACK
+
+                // Overrides any background color to allow background complication image not to
+                // clash.
+                backgroundComplicationActive ->
+                    Color.BLACK
+
+                else ->
+                    backgroundColor
             }
+
+            canvas.drawColor(backgroundColor)
         }
 
         private fun drawComplications(canvas: Canvas, currentTimeMillis: Long) {
-            var complicationId: Int
+
             var complicationDrawable: ComplicationDrawable
 
-            for (index in complicationIds.indices) {
-                complicationId = complicationIds[index]
+            for (complicationId in complicationIds) {
                 complicationDrawable = complicationDrawableSparseArray[complicationId]
                 complicationDrawable.draw(canvas, currentTimeMillis)
             }
@@ -570,7 +590,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
              */
             val innerTickRadius = centerX - 10
             val outerTickRadius = centerX
-            for (tickIndex in 0..11) {
+            for (tickIndex in 0 until 12) {
                 val tickRot = (tickIndex * Math.PI * 2 / 12).toFloat()
                 val innerX = Math.sin(tickRot.toDouble()).toFloat() * innerTickRadius
                 val innerY = (-Math.cos(tickRot.toDouble())).toFloat() * innerTickRadius
@@ -661,19 +681,18 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                 setComplicationsActiveAndAmbientColors(watchHandHighlightColor)
                 updateWatchPaintStyles()
 
-                registerReceiver()
+                registerTimeZoneChangedReceiver()
                 // Update time zone in case it changed while we weren't visible.
                 calendar.timeZone = TimeZone.getDefault()
 
+                // Since the watch face is now visible again, we need to draw it again.
                 invalidate()
                 startSecondHandAnimation()
 
             } else {
                 stopSecondHandAnimation()
-                unregisterReceiver()
+                unregisterTimeZoneChangedReceiver()
             }
-
-
         }
 
         override fun onUnreadCountChanged(count: Int) {
@@ -687,7 +706,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             }
         }
 
-        private fun registerReceiver() {
+        private fun registerTimeZoneChangedReceiver() {
             if (registeredTimeZoneReceiver) {
                 return
             }
@@ -696,7 +715,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             registerReceiver(timeZoneReceiver, filter)
         }
 
-        private fun unregisterReceiver() {
+        private fun unregisterTimeZoneChangedReceiver() {
             if (!registeredTimeZoneReceiver) {
                 return
             }
