@@ -68,11 +68,26 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         private var registeredTimeZoneReceiver = false
 
         private var muteMode = false
+
         private var centerX = 0f
         private var centerY = 0f
-        private var secondHandLength = 0f
-        private var minuteHandLength = 0f
-        private var hourHandLength = 0f
+
+        // Dimensions of watch face elements (in pixels).
+        // Default values are based on a 280x280 Wear device, but will be overwritten when
+        // onSurfaceChanged() returns the surface dimensions of the Wear OS device.
+        // NOTE: The values are in float since the drawing methods require that type.
+        private var hourHandLength = 70f
+        private var hourStrokeWidth = 5f
+
+        private var minuteHandLength = 105f
+        private var minuteStrokeWidth = 3f
+
+        private var secondHandLength = 122f
+        private var secondAndTickStrokeWidth = 2f
+
+        private var centerGapAndCircleRadius = 4f
+        private var shadowRadius = 6f
+
 
         // Colors for all hands (hour, minute, seconds, ticks) and complications.
         // Can be set by user via config Activities.
@@ -84,11 +99,11 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
         private var hourPaint: Paint  = Paint().apply {
             color = watchHandAndComplicationsColor
-            strokeWidth = HOUR_STROKE_WIDTH
+            strokeWidth = hourStrokeWidth
             isAntiAlias = true
             strokeCap = Paint.Cap.ROUND
             setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
+                shadowRadius,
                 0f,
                 0f,
                 watchHandShadowColor
@@ -98,11 +113,11 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
         private var minutePaint: Paint = Paint().apply {
             color = watchHandAndComplicationsColor
-            strokeWidth = MINUTE_STROKE_WIDTH
+            strokeWidth = minuteStrokeWidth
             isAntiAlias = true
             strokeCap = Paint.Cap.ROUND
             setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
+                shadowRadius,
                 0f,
                 0f,
                 watchHandShadowColor
@@ -111,11 +126,11 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
         private var secondAndHighlightPaint: Paint = Paint().apply {
             color = watchHandHighlightColor
-            strokeWidth = SECOND_TICK_STROKE_WIDTH
+            strokeWidth = secondAndTickStrokeWidth
             isAntiAlias = true
             strokeCap = Paint.Cap.ROUND
             setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
+                shadowRadius,
                 0f,
                 0f,
                 watchHandShadowColor
@@ -124,11 +139,11 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
         private var tickAndCirclePaint: Paint = Paint().apply {
             color = watchHandAndComplicationsColor
-            strokeWidth = SECOND_TICK_STROKE_WIDTH
+            strokeWidth = secondAndTickStrokeWidth
             isAntiAlias = true
             style = Paint.Style.STROKE
             setShadowLayer(
-                SHADOW_RADIUS.toFloat(),
+                shadowRadius,
                 0f,
                 0f,
                 watchHandShadowColor
@@ -405,25 +420,25 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                 secondAndHighlightPaint.isAntiAlias = true
                 tickAndCirclePaint.isAntiAlias = true
                 hourPaint.setShadowLayer(
-                    SHADOW_RADIUS.toFloat(),
+                    shadowRadius,
                     0f,
                     0f,
                     watchHandShadowColor
                 )
                 minutePaint.setShadowLayer(
-                    SHADOW_RADIUS.toFloat(),
+                    shadowRadius,
                     0f,
                     0f,
                     watchHandShadowColor
                 )
                 secondAndHighlightPaint.setShadowLayer(
-                    SHADOW_RADIUS.toFloat(),
+                    shadowRadius,
                     0f,
                     0f,
                     watchHandShadowColor
                 )
                 tickAndCirclePaint.setShadowLayer(
-                    SHADOW_RADIUS.toFloat(),
+                    shadowRadius,
                     0f,
                     0f,
                     watchHandShadowColor
@@ -457,11 +472,18 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             centerY = height / 2f
 
             /*
-             * Calculate lengths of different hands based on watch screen size.
+             * Calculate lengths of different hands based on half the watch screen size (centerX).
              */
             secondHandLength = (centerX * 0.875).toFloat()
             minuteHandLength = (centerX * 0.75).toFloat()
             hourHandLength = (centerX * 0.5).toFloat()
+
+            // Calculates stroke widths and radiuses by total screen size.
+            hourStrokeWidth = (width / 56).toFloat()
+            minuteStrokeWidth = (width / 93).toFloat()
+            secondAndTickStrokeWidth = (width / 140).toFloat()
+            centerGapAndCircleRadius = (width / 70).toFloat()
+            shadowRadius = (width / 46).toFloat()
 
             /*
              * Calculates location bounds for right and left circular complications. Please note,
@@ -623,7 +645,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             canvas.rotate(hoursRotation, centerX, centerY)
             canvas.drawLine(
                 centerX,
-                centerY - CENTER_GAP_AND_CIRCLE_RADIUS,
+                centerY - centerGapAndCircleRadius,
                 centerX,
                 centerY - hourHandLength,
                 hourPaint
@@ -632,7 +654,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             canvas.rotate(minutesRotation - hoursRotation, centerX, centerY)
             canvas.drawLine(
                 centerX,
-                centerY - CENTER_GAP_AND_CIRCLE_RADIUS,
+                centerY - centerGapAndCircleRadius,
                 centerX,
                 centerY - minuteHandLength,
                 minutePaint
@@ -646,7 +668,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
                 canvas.rotate(secondsRotation - minutesRotation, centerX, centerY)
                 canvas.drawLine(
                     centerX,
-                    centerY - CENTER_GAP_AND_CIRCLE_RADIUS,
+                    centerY - centerGapAndCircleRadius,
                     centerX,
                     centerY - secondHandLength,
                     secondAndHighlightPaint
@@ -656,7 +678,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             canvas.drawCircle(
                 centerX,
                 centerY,
-                CENTER_GAP_AND_CIRCLE_RADIUS,
+                centerGapAndCircleRadius,
                 tickAndCirclePaint
             )
 
@@ -785,13 +807,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
          * second hand.
          */
         private val INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1)
-
-        private const val HOUR_STROKE_WIDTH = 5f
-        private const val MINUTE_STROKE_WIDTH = 3f
-        private const val SECOND_TICK_STROKE_WIDTH = 2f
-        private const val CENTER_GAP_AND_CIRCLE_RADIUS = 4f
-        private const val SHADOW_RADIUS = 6
-
 
         // Unique IDs for each complication. The settings activity that supports allowing users
         // to select their complication data provider requires numbers to be >= 0.
