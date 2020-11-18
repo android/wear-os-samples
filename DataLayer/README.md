@@ -19,10 +19,10 @@ It showcases how to use an [WearableListenerService][1] to consume DataEvents
 as well as implementations for various required listeners when using the [DataApi][2],
 [MessageApi][3] and [NodeApi][4].
 
-[1]: https://developer.android.com/reference/com/google/android/gms/wearable/WearableListenerService.html
-[2]: https://developer.android.com/reference/com/google/android/gms/wearable/DataApi.html
-[3]: https://developer.android.com/reference/com/google/android/gms/wearable/MessageApi.html
-[4]: https://developer.android.com/reference/com/google/android/gms/wearable/NodeApi.html
+[1]: https://developers.google.com/android/reference/com/google/android/gms/wearable/WearableListenerService
+[2]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataApi
+[3]: https://developers.google.com/android/reference/com/google/android/gms/wearable/MessageApi
+[4]: https://developers.google.com/android/reference/com/google/android/gms/wearable/NodeApi
 
 Pre-requisites
 --------------
