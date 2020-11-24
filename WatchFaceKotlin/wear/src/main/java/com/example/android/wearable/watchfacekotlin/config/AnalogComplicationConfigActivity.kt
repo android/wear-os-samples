@@ -15,18 +15,15 @@
  */
 package com.example.android.wearable.watchfacekotlin.config
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.wearable.complications.ComplicationProviderInfo
 import android.support.wearable.complications.ProviderChooserIntent
 import android.util.Log
-import android.view.View
 
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.wear.widget.WearableRecyclerView
+import androidx.activity.ComponentActivity
 
-import com.example.android.wearable.watchfacekotlin.R
+import com.example.android.wearable.watchfacekotlin.databinding.ActivityAnalogComplicationConfigBinding
 import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
 
@@ -35,31 +32,34 @@ import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplication
  * allows for setting the left and right complications of watch face along with the second's marker
  * color, background color, unread notifications toggle, and background complication image.
  */
-class AnalogComplicationConfigActivity : Activity() {
+class AnalogComplicationConfigActivity : ComponentActivity() {
 
-    private lateinit var wearableRecyclerView: WearableRecyclerView
+    private lateinit var binding: ActivityAnalogComplicationConfigBinding
     private lateinit var adapter: AnalogComplicationConfigRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_analog_complication_config)
+
+        binding = ActivityAnalogComplicationConfigBinding.inflate(layoutInflater)
+        val view = binding.root
+
+        setContentView(view)
 
         adapter = AnalogComplicationConfigRecyclerViewAdapter(
             applicationContext,
             AnalogComplicationConfigData.watchFaceServiceClass,
             AnalogComplicationConfigData.dataToPopulateAdapter(this)
         )
-        wearableRecyclerView =
-            findViewById<View>(R.id.wearable_recycler_view) as WearableRecyclerView
 
-        // Aligns the first and last items on the list vertically centered on the screen.
-        wearableRecyclerView.isEdgeItemsCenteringEnabled = true
-        wearableRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.wearableRecyclerView.apply {
+            // Aligns the first and last items on the list vertically centered on the screen.
+            isEdgeItemsCenteringEnabled = true
 
-        // Improves performance because we know changes in content do not change the layout size of
-        // the RecyclerView.
-        wearableRecyclerView.setHasFixedSize(true)
-        wearableRecyclerView.adapter = adapter
+            // Improves performance because we know changes in content do not change the layout size of
+            // the RecyclerView.
+            setHasFixedSize(true)
+            adapter = this@AnalogComplicationConfigActivity.adapter
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,7 +81,7 @@ class AnalogComplicationConfigActivity : Activity() {
     }
 
     companion object {
-        private val TAG: String = AnalogComplicationConfigActivity::class.java.simpleName
+        private const val TAG = "AnalogConfigActivity"
         const val COMPLICATION_CONFIG_REQUEST_CODE = 1001
         const val UPDATE_COLORS_CONFIG_REQUEST_CODE = 1002
     }
