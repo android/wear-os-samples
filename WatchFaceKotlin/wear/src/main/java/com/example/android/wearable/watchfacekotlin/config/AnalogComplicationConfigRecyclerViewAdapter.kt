@@ -85,7 +85,7 @@ import java.util.concurrent.Executors
 class AnalogComplicationConfigRecyclerViewAdapter(
     private val context: Context,
     watchFaceServiceClass: Class<*>,
-    settingsDataSet: ArrayList<ConfigItemType>
+    private val settingsDataSet: ArrayList<ConfigItemType>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     /**
      * Used by associated watch face ([AnalogComplicationWatchFaceService]) to let this
@@ -98,44 +98,35 @@ class AnalogComplicationConfigRecyclerViewAdapter(
 
     // ComponentName associated with watch face service (service that renders watch face). Used
     // to retrieve complication information.
-    private val watchFaceComponentName: ComponentName
-    private val settingsDataSet: ArrayList<ConfigItemType>
-    var sharedPref: SharedPreferences
+    private val watchFaceComponentName: ComponentName = ComponentName(context, watchFaceServiceClass)
 
-    // Selected complication id by user.
-    private var selectedComplicationId: Int
-    private val backgroundComplicationId: Int
-    private val leftComplicationId: Int
-    private val rightComplicationId: Int
+    var sharedPref: SharedPreferences = context.getSharedPreferences(
+        context.getString(R.string.analog_complication_preference_file_key),
+        Context.MODE_PRIVATE
+    )
+
+    // Selected complication id by user (default value is invalid [only changed when user taps to
+    // change complication]).
+    private var selectedComplicationId: Int = -1
+    private val backgroundComplicationId: Int =
+        AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.BACKGROUND)
+
+    private val leftComplicationId: Int =
+        AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.LEFT)
+
+    private val rightComplicationId: Int =
+        AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.RIGHT)
 
     // Required to retrieve complication data from watch face for preview.
-    private val providerInfoRetriever: ProviderInfoRetriever
+    private val providerInfoRetriever: ProviderInfoRetriever =
+        ProviderInfoRetriever(context, Executors.newCachedThreadPool())
 
     // Maintains reference view holder to dynamically update watch face preview. Used instead of
     // notifyItemChanged(int position) to avoid flicker and re-inflating the view.
     private lateinit var previewAndComplicationsViewHolder: PreviewAndComplicationsViewHolder
 
     init {
-        watchFaceComponentName = ComponentName(context, watchFaceServiceClass)
-        this.settingsDataSet = settingsDataSet
-
-        // Default value is invalid (only changed when user taps to change complication).
-        selectedComplicationId = -1
-        backgroundComplicationId =
-            AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.BACKGROUND)
-
-        leftComplicationId =
-            AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.LEFT)
-        rightComplicationId =
-            AnalogComplicationWatchFaceService.getComplicationId(ComplicationLocation.RIGHT)
-
-        sharedPref = context.getSharedPreferences(
-            context.getString(R.string.analog_complication_preference_file_key),
-            Context.MODE_PRIVATE
-        )
-
         // Initialization of code to retrieve active complication data for the watch face.
-        providerInfoRetriever = ProviderInfoRetriever(context, Executors.newCachedThreadPool())
         providerInfoRetriever.init()
     }
 
@@ -304,9 +295,7 @@ class AnalogComplicationConfigRecyclerViewAdapter(
         return configItemType.configType
     }
 
-    override fun getItemCount(): Int {
-        return settingsDataSet.size
-    }
+    override fun getItemCount() = settingsDataSet.size
 
     /** Updates the selected complication id saved earlier with the new information.  */
     fun updateSelectedComplication(complicationProviderInfo: ComplicationProviderInfo?) {

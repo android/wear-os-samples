@@ -57,9 +57,7 @@ class ColorSelectionRecyclerViewAdapter(
         colorViewHolder.setColor(color)
     }
 
-    override fun getItemCount(): Int {
-        return colorOptionsDataSet.size
-    }
+    override fun getItemCount() = colorOptionsDataSet.size
 
     /**
      * Displays color options for an item on the watch face and saves value to the
