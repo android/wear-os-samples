@@ -43,7 +43,7 @@ object AnalogComplicationConfigData {
     /**
      * Returns Material Design color options.
      */
-    val colorOptionsDataSet: ArrayList<Int>
+    val colorOptionsDataSet: List<Int>
         get() {
             return ArrayList<Int>().apply {
                 add(Color.parseColor("#FFFFFF")) // White

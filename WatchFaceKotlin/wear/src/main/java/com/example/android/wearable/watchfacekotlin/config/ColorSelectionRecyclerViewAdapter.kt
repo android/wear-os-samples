@@ -37,7 +37,7 @@ import com.example.android.wearable.watchfacekotlin.R
  */
 class ColorSelectionRecyclerViewAdapter(
     private val sharedPrefString: String?,
-    private val colorOptionsDataSet: ArrayList<Int>
+    private val colorOptionsDataSet: List<Int>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
