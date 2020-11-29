@@ -68,6 +68,7 @@ based on changes by the user.
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         style="?android:borderlessButtonStyle"
+        android:onClick="onClickLeftComplication"
         android:background="@android:color/transparent"/>
 
     <ImageView
@@ -87,5 +88,6 @@ based on changes by the user.
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         style="?android:borderlessButtonStyle"
+        android:onClick="onClickRightComplication"
         android:background="@android:color/transparent"/>
 </RelativeLayout>

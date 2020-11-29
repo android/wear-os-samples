@@ -28,13 +28,9 @@ import android.support.wearable.watchface.WatchFaceStyle
 import android.util.Log
 import android.view.SurfaceHolder
 
-import com.example.android.wearable.watchfacekotlin.config.AnalogComplicationConfigRecyclerViewAdapter
-import com.example.android.wearable.watchfacekotlin.config.AnalogComplicationConfigRecyclerViewAdapter.ComplicationLocation
-
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.Calendar
 import java.util.TimeZone
-
 
 /**
  * Demonstrates two simple complications plus a background complication in an analog watch face.
@@ -245,39 +241,12 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             )
         }
 
-        // Used by {@link AnalogComplicationConfigRecyclerViewAdapter} to retrieve all complication
+        // Used by {@link AnalogComplicationConfigActivity} to retrieve all complication
         // ids. Background, Left, and right complication IDs as array for Complication API.
         val complicationIds = intArrayOf(
             ComplicationConfig.Background.id,
             ComplicationConfig.Left.id,
             ComplicationConfig.Right.id
         )
-        // Used by {@link AnalogComplicationConfigRecyclerViewAdapter} to check if complication
-        // location is supported in settings config activity.
-        fun getComplicationId(
-            complicationLocation: AnalogComplicationConfigRecyclerViewAdapter.ComplicationLocation
-        ): Int {
-            // Add any other supported locations here.
-            return when (complicationLocation) {
-                ComplicationLocation.BACKGROUND -> ComplicationConfig.Background.id
-                ComplicationLocation.LEFT -> ComplicationConfig.Left.id
-                ComplicationLocation.RIGHT -> ComplicationConfig.Right.id
-                else -> -1
-            }
-        }
-
-        // Used by {@link AnalogComplicationConfigRecyclerViewAdapter} to see which complication
-        // types are supported in the settings config activity.
-        fun getSupportedComplicationTypes(
-            complicationLocation: AnalogComplicationConfigRecyclerViewAdapter.ComplicationLocation
-        ): IntArray {
-            // Add any other supported locations here.
-            return when (complicationLocation) {
-                ComplicationLocation.BACKGROUND -> ComplicationConfig.Background.supportedTypes
-                ComplicationLocation.LEFT -> ComplicationConfig.Left.supportedTypes
-                ComplicationLocation.RIGHT -> ComplicationConfig.Right.supportedTypes
-                else -> intArrayOf()
-            }
-        }
     }
 }

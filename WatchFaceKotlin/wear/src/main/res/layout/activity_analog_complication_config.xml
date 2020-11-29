@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 The Android Open Source Project
+  ~ Copyright (C) 2020 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<FrameLayout
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,12 +25,90 @@
     android:paddingStart="@dimen/activity_config_padding"
     android:paddingEnd="@dimen/activity_config_padding"
     android:paddingTop="@dimen/activity_config_padding"
-    android:paddingBottom="@dimen/activity_config_padding">
+    android:paddingBottom="@dimen/activity_config_padding"
+    tools:context=".config.AnalogComplicationConfigActivity">
 
-    <androidx.wear.widget.WearableRecyclerView
-        android:id="@+id/wearable_recycler_view"
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/form_layout"
         android:layout_width="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/config_list_color_item"/>
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical"
+        android:background="@color/dark_grey"
+        android:paddingStart="@dimen/activity_config_padding"
+        android:paddingEnd="@dimen/activity_config_padding"
+        android:paddingTop="@dimen/activity_config_padding"
+        android:paddingBottom="@dimen/activity_config_padding">
+
+        <include
+            android:id="@+id/preview"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            layout="@layout/watch_face_and_complications_preview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/more_options_image_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_expand_more_white_18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/preview" />
+
+        <Button
+            android:id="@+id/marker_color_picker_button"
+            style="@style/ButtonConfigurationStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/icn_styles"
+            android:onClick="onClickMarkerColorButton"
+            android:text="@string/config_marker_color_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/more_options_image_view" />
+
+        <Button
+            android:id="@+id/background_color_picker_button"
+            style="@style/ButtonConfigurationStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/icn_styles"
+            android:onClick="onClickBackgroundColorButton"
+            android:text="@string/config_background_color_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/marker_color_picker_button" />
+
+        <Switch
+            android:id="@+id/unread_notification_switch"
+            style="@style/ButtonConfigurationStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_notifications_white_24dp"
+            android:onClick="onClickNotificationSwitch"
+            android:text="@string/config_unread_notifications_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background_color_picker_button" />
+
+        <Button
+            android:id="@+id/background_complication_button"
+            style="@style/ButtonConfigurationStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_landscape_white"
+            android:onClick="onClickBackgroundComplication"
+            android:text="@string/config_background_image_complication_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/unread_notification_switch" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

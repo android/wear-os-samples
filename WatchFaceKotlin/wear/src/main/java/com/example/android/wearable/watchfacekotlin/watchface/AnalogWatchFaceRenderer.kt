@@ -622,13 +622,13 @@ class AnalogWatchFaceRenderer (
     // Pulls all user's preferences for watch face appearance.
     private fun loadWatchFaceStylePreferences(analogWatchFaceStyle:AnalogWatchFaceStyle) {
         val backgroundColorResourceName =
-            context.getString(R.string.saved_background_color)
+            context.getString(R.string.saved_background_color_pref)
 
         analogWatchFaceStyle.backgroundColor.colorStyle.activeColor =
             sharedPreferences.getInt(backgroundColorResourceName, Color.BLACK)
 
         val markerColorResourceName =
-            context.getString(R.string.saved_marker_color)
+            context.getString(R.string.saved_marker_color_pref)
 
         val highlightColor =
             sharedPreferences.getInt(markerColorResourceName, Color.RED)
