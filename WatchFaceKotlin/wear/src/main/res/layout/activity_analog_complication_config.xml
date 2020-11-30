@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/icn_styles"
-            android:onClick="onClickMarkerColorButton"
+            android:onClick="onClickHighlightColorButton"
             android:text="@string/config_marker_color_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,12 +87,12 @@
             app:layout_constraintTop_toBottomOf="@+id/marker_color_picker_button" />
 
         <Switch
-            android:id="@+id/unread_notification_switch"
+            android:id="@+id/unread_notification_icon_switch"
             style="@style/ButtonConfigurationStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_notifications_white_24dp"
-            android:onClick="onClickNotificationSwitch"
+            android:onClick="onClickUnreadNotificationIconSwitch"
             android:text="@string/config_unread_notifications_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +108,7 @@
             android:text="@string/config_background_image_complication_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/unread_notification_switch" />
+            app:layout_constraintTop_toBottomOf="@+id/unread_notification_icon_switch" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
