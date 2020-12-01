@@ -15,35 +15,63 @@
  */
 package com.example.android.wearable.watchfacekotlin.config
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.core.content.edit
 
+import com.example.android.wearable.watchfacekotlin.R
 import com.example.android.wearable.watchfacekotlin.databinding.ActivityColorSelectionConfigBinding
-import com.example.android.wearable.watchfacekotlin.model.AnalogComplicationConfigData
+
+import java.util.ArrayList
 
 /**
- * Allows user to select color for something on the watch face (background, highlight,etc.) and
- * saves it to [android.content.SharedPreferences] in RecyclerView.Adapter.
+ * Allows user to select a color for component on the watch face (background, highlight, etc.) and
+ * saves it to [android.content.SharedPreferences] for later use.
  */
 class ColorSelectionActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityColorSelectionConfigBinding
     private lateinit var colorSelectionRecyclerViewAdapter: ColorSelectionRecyclerViewAdapter
 
+    private lateinit var sharedPref:SharedPreferences
+    private lateinit var sharedPrefString:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedPref = getSharedPreferences(
+            getString(R.string.analog_complication_preference_file_key),
+            Context.MODE_PRIVATE)
+
+        sharedPrefString = intent.getStringExtra(EXTRA_SHARED_PREF)?: ""
 
         binding = ActivityColorSelectionConfigBinding.inflate(layoutInflater)
         val view = binding.root
 
         setContentView(view)
 
-        // Assigns SharedPreference String used to save color selected.
-        val sharedPrefString = intent.getStringExtra(EXTRA_SHARED_PREF)
-        colorSelectionRecyclerViewAdapter = ColorSelectionRecyclerViewAdapter(
-            sharedPrefString,
-            AnalogComplicationConfigData.colorOptionsDataSet
-        )
+        colorSelectionRecyclerViewAdapter = ColorSelectionRecyclerViewAdapter (
+            ColorSelectionRecyclerViewAdapter.ColorListener { color ->
+
+                // Value is saved in [SharedPreferences] for watch face and config access.
+                if (sharedPrefString.isNotEmpty()) {
+                    sharedPref.edit { putInt(sharedPrefString, color) }
+
+                    // Lets Complication Config Activity know there was an update to colors.
+                    setResult(RESULT_OK)
+                } else {
+                    setResult(RESULT_CANCELED)
+                }
+
+                finish()
+            })
+
+        val colorOptionsIntArray = resources.getIntArray(R.array.material_colors_array)
+        val colorOptions = colorOptionsIntArray.toCollection(ArrayList())
+
+        colorSelectionRecyclerViewAdapter.submitList(colorOptions)
 
         binding.wearableRecyclerView.apply {
             // Aligns the first and last items on the list vertically centered on the screen.
@@ -58,7 +86,7 @@ class ColorSelectionActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "ColorSelectionActivity"
-        const val EXTRA_SHARED_PREF =
-            "com.example.android.wearable.watchfacekotlin.config.extra.EXTRA_SHARED_PREF"
+
+        const val EXTRA_SHARED_PREF = "com.example.android.wearable.watchfacekotlin.config.extra.EXTRA_SHARED_PREF"
     }
 }

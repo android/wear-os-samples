@@ -37,7 +37,7 @@ import com.example.android.wearable.watchfacekotlin.databinding.ActivityAnalogCo
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
 
 /**
- * The watch-side config activity for [AnalogComplicationWatchFaceService], which allows users to
+ * The watch-side config activity for [AnalogComplicationWatchFaceService] allows users to
  * set the left and right complications of watch face along with the highlight color (second hand +
  * complications), background color, unread notifications icon indicator, and background
  * complication image.
