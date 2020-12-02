@@ -36,7 +36,7 @@ import java.util.TimeZone
  * Demonstrates two simple complications plus a background complication in an analog watch face.
  *
  * While this class mostly just handles callbacks and triggering the onDraw() (via the invalidate()
- * method), the renderer (AnalogWatchFaceRenderer) does the heavy work of actually drawing on the
+ * method), the renderer [AnalogWatchFaceRenderer] does the heavy work of actually drawing on the
  * canvas.
  *
  * Also, the watch face style class is important as well, as it covers the look/feel of the watch
@@ -51,20 +51,28 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
     }
 
     inner class Engine internal constructor() :
-        CanvasWatchFaceService.Engine(true),
-        AnalogWatchFaceRenderer.DrawWatchFaceCallback {
+        CanvasWatchFaceService.Engine(true) {
 
+        // Calendar and time zone receiver are used to listen for any time zone changes in the
+        // settings, etc., so the time is updated and stays accurate.
         private var calendar = Calendar.getInstance()
         private var registeredTimeZoneReceiver = false
 
         // Renders watch face (background, hands, ticks, complications, etc.).
-        // NOTE: The context is needed for the ComplicationDrawables.
+        // NOTE: The context is required to render for several [ComplicationDrawables] in the
+        // watch face.
         private val analogWatchFaceRender = AnalogWatchFaceRenderer(
             applicationContext,
             AnalogWatchFaceStyle(),
-            this
+            AnalogWatchFaceRenderer.WatchFaceRendererListener {
+                // Draw request triggered from the renderer (usually because it requires an
+                // animation that can't wait for the next automated call to onDraw(). A good example
+                // is the second hand animation while the watch face is in its active mode.
+                invalidate()
+            }
         )
 
+        // Required in case the time zone is changed outside the watch face to keep accurate time.
         private val timeZoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 calendar.timeZone = TimeZone.getDefault()
@@ -76,13 +84,22 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             Log.d(TAG, "onCreate")
             super.onCreate(holder)
 
+            // This is the system watch face style which only covers a couple basic settings
+            // (accepts tap events, hiding/showing indicators, etc.). The custom class in this
+            // project, [AnalogWatchFaceStyle], handles all detailed visual styling (color
+            // styles, dimensions, etc.)
             setWatchFaceStyle(
                 WatchFaceStyle.Builder(this@AnalogComplicationWatchFaceService)
                     .setAcceptsTapEvents(true)
+                    // Hidden because we draw our own.
                     .setHideNotificationIndicator(true)
                     .build()
             )
 
+            // System requires we set all active complication ids. These are unique numbers we
+            // define for each complication location on our watch face. They are defined in this
+            // class but are used by [AnalogWatchFaceRenderer] (render complications) and the
+            // config/ classes (allows users to customize data displayed in complications).
             setActiveComplications(*complicationIds)
         }
 
@@ -141,12 +158,24 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             invalidate()
         }
 
+        /*
+         * This is one of the more important callbacks. It is called when we get the dimensions of
+         * the watch face, that is, the dimensions of the Wear OS device.
+         * We use this to set the dimensions in the renderer, as we don't want to be computing
+         * this every time we draw the watch face.
+         */
         override fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             super.onSurfaceChanged(holder, format, width, height)
 
             analogWatchFaceRender.calculateWatchFaceDimensions(holder, format, width, height)
         }
 
+        /**
+         * Triggered by the system or by invalidate() calls.
+         * NOTE: Because of the [AnalogWatchFaceRenderer.WatchFaceRendererListener] implemented
+         * with our renderer, this can be triggered from that class sooner if it needs to
+         * trigger an animation, for example, the second hand movements.
+         */
         override fun onDraw(canvas: Canvas, bounds: Rect) {
             analogWatchFaceRender.render(canvas, bounds, calendar)
         }
@@ -199,12 +228,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             registeredTimeZoneReceiver = false
             unregisterReceiver(timeZoneReceiver)
         }
-
-        // Draw request triggered from the renderer (usually because it requires for the
-        // second hand animation.
-        override fun onRendererDrawRequest() {
-            invalidate()
-        }
     }
 
     companion object {
@@ -241,8 +264,9 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             )
         }
 
-        // Used by {@link AnalogComplicationConfigActivity} to retrieve all complication
-        // ids. Background, Left, and right complication IDs as array for Complication API.
+        // Used by {@link AnalogComplicationConfigActivity} and this class to retrieve all
+        // complication ids. Background, Left, and right complication IDs as array for
+        // Complication API.
         val complicationIds = intArrayOf(
             ComplicationConfig.Background.id,
             ComplicationConfig.Left.id,
