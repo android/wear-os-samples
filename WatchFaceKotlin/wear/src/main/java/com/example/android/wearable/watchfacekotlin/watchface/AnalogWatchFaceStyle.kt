@@ -15,9 +15,13 @@
 */
 package com.example.android.wearable.watchfacekotlin.watchface
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Paint
+import android.support.wearable.watchface.CanvasWatchFaceService
 import android.util.Size
+import com.example.android.wearable.watchfacekotlin.R
 
 const val SHADOW_RADIUS = 6
 
@@ -149,10 +153,8 @@ class AnalogWatchFaceStyle {
             // If any of the colors are changed in this component, we will update the [Paint]
             // object (which is used to draw the component).
             colorStyle.setOnColorChangeEventListener(
-                object : WatchFaceColorStyle.OnColorChangeEventListener {
-                    override fun onColorChange() {
-                        updatePaintColors()
-                    }
+                WatchFaceColorStyle.OnColorChangeEventListener {
+                    updatePaintColors()
                 }
             )
         }
@@ -259,8 +261,43 @@ class AnalogWatchFaceStyle {
             colorChangeListener = listener
         }
 
-        interface OnColorChangeEventListener {
-            fun onColorChange()
+        class OnColorChangeEventListener (val colorListener: () -> Unit) {
+            fun onColorChange() = colorListener()
+        }
+    }
+
+    class LoadSavedWatchFace (context: Context) {
+
+        // TODO: Move to separate class?
+        // Used to pull user's preferences for background color, highlight color, and visual
+        // indicating there are unread notifications.
+        private var sharedPreferences: SharedPreferences = context.getSharedPreferences(
+            context.getString(R.string.analog_complication_preference_file_key),
+            CanvasWatchFaceService.MODE_PRIVATE
+        )
+
+        private val backgroundColorResourceName =
+            context.getString(R.string.saved_background_color_pref)
+
+        private val markerColorResourceName = context.getString(R.string.saved_marker_color_pref)
+
+        private val unreadNotificationPreferenceResourceName =
+            context.getString(R.string.saved_unread_notifications_pref)
+
+        // Pulls all user's preferences for watch face appearance.
+        fun load(analogWatchFaceStyle:AnalogWatchFaceStyle) {
+
+            analogWatchFaceStyle.backgroundColor.activeColor =
+                sharedPreferences.getInt(backgroundColorResourceName, Color.BLACK)
+
+
+            val highlightColor = sharedPreferences.getInt(markerColorResourceName, Color.RED)
+
+            analogWatchFaceStyle.setHighlightColor(highlightColor)
+
+            analogWatchFaceStyle.unreadNotificationPref =
+                sharedPreferences.getBoolean(unreadNotificationPreferenceResourceName, true)
+
         }
     }
 }

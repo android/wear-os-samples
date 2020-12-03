@@ -58,10 +58,7 @@ class AnalogWatchFaceRenderer (
     // TODO: Move to separate class?
     // Used to pull user's preferences for background color, highlight color, and visual
     // indicating there are unread notifications.
-    private var sharedPreferences: SharedPreferences = context.getSharedPreferences(
-        context.getString(R.string.analog_complication_preference_file_key),
-        CanvasWatchFaceService.MODE_PRIVATE
-    )
+    private val loadSavedWatchFace = AnalogWatchFaceStyle.LoadSavedWatchFace(context)
 
     // Update time for animations in interactive mode (second hand animation, etc.).
     private val interactiveUpdateRateMillis = TimeUnit.SECONDS.toMillis(1)
@@ -81,7 +78,7 @@ class AnalogWatchFaceRenderer (
 
                 // User's style preferences may have changed since the last time the
                 // watch face was visible, so we load the latest.
-                loadWatchFaceStylePreferences(analogWatchFaceStyle)
+                loadSavedWatchFace.load(analogWatchFaceStyle)
 
                 // With the rest of the watch face, we update the paint colors based on
                 // ambient/active mode callbacks, but because the ComplicationDrawable handles
@@ -263,7 +260,6 @@ class AnalogWatchFaceRenderer (
     }
 
     private fun drawWatchFace(canvas: Canvas, calendar:Calendar) {
-
         /*
          * Draw ticks. Usually you will want to bake this directly into the photo, but in
          * cases where you want to allow users to select their own photos, this dynamically
@@ -344,7 +340,6 @@ class AnalogWatchFaceRenderer (
         /* Restore the canvas' original orientation. */
         canvas.restore()
     }
-
 
     /**
      * Starts the coroutine/flow "timer" to animate the second hand every second when the
@@ -581,29 +576,6 @@ class AnalogWatchFaceRenderer (
         val backgroundComplicationDrawable =
             complicationDrawableSparseArray[AnalogComplicationWatchFaceService.BACKGROUND_COMPLICATION_ID]
         backgroundComplicationDrawable.bounds = screenForBackgroundBound
-    }
-
-    // TODO: Move to separate class?
-    // Pulls all user's preferences for watch face appearance.
-    private fun loadWatchFaceStylePreferences(analogWatchFaceStyle:AnalogWatchFaceStyle) {
-        val backgroundColorResourceName =
-            context.getString(R.string.saved_background_color_pref)
-
-        analogWatchFaceStyle.backgroundColor.activeColor =
-            sharedPreferences.getInt(backgroundColorResourceName, Color.BLACK)
-
-        val markerColorResourceName =
-            context.getString(R.string.saved_marker_color_pref)
-
-        val highlightColor =
-            sharedPreferences.getInt(markerColorResourceName, Color.RED)
-
-        analogWatchFaceStyle.setHighlightColor(highlightColor)
-
-        val unreadNotificationPreferenceResourceName =
-            context.getString(R.string.saved_unread_notifications_pref)
-        analogWatchFaceStyle.unreadNotificationPref =
-            sharedPreferences.getBoolean(unreadNotificationPreferenceResourceName, true)
     }
 
     class WatchFaceRendererListener(val drawListener: () -> Unit) {
