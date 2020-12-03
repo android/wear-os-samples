@@ -23,6 +23,7 @@ import androidx.core.content.edit
 
 import com.example.android.wearable.watchfacekotlin.R
 import com.example.android.wearable.watchfacekotlin.databinding.ActivityColorSelectionConfigBinding
+import com.example.android.wearable.watchfacekotlin.watchface.AnalogWatchFace
 
 import java.util.ArrayList
 
@@ -42,7 +43,7 @@ class ColorSelectionActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         sharedPref = getSharedPreferences(
-            getString(R.string.analog_complication_preference_file_key),
+            AnalogWatchFace.analog_complication_preference_file_key,
             Context.MODE_PRIVATE)
 
         sharedPrefString = intent.getStringExtra(EXTRA_SHARED_PREF)?: ""

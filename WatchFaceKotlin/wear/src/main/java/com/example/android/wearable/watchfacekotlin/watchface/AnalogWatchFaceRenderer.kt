@@ -15,19 +15,13 @@
 */
 package com.example.android.wearable.watchfacekotlin.watchface
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.rendering.ComplicationDrawable
 import android.support.wearable.watchface.CanvasWatchFaceService
-import android.util.Size
-import android.util.SparseArray
 import android.view.SurfaceHolder
-import com.example.android.wearable.watchfacekotlin.R
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,19 +40,14 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Handles all rendering/drawing of the watch face.
+ * Handles all rendering/drawing of the watch face (includes second hand animation that
+ * triggers drawing faster than the normal draw request [once a second]).
  *
- * Uses [AnalogWatchFaceStyle] to style colors, dimensions, etc. of the watch face.
+ * Uses [AnalogWatchFace] to for watch face state, colors, dimensions, etc.
  */
 class AnalogWatchFaceRenderer (
-    private val context: Context,
-    private val analogWatchFaceStyle: AnalogWatchFaceStyle,
+    private val analogWatchFace: AnalogWatchFace,
     private val watchFaceRendererListener:WatchFaceRendererListener) {
-
-    // TODO: Move to separate class?
-    // Used to pull user's preferences for background color, highlight color, and visual
-    // indicating there are unread notifications.
-    private val loadSavedWatchFace = AnalogWatchFaceStyle.LoadSavedWatchFace(context)
 
     // Update time for animations in interactive mode (second hand animation, etc.).
     private val interactiveUpdateRateMillis = TimeUnit.SECONDS.toMillis(1)
@@ -66,8 +55,12 @@ class AnalogWatchFaceRenderer (
     // Used to trigger the animation every second.
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
-    private var _visible = false
+    // Represents half the width and height of the screen and used for animation calculations.
+    // (Half both the width and height puts you in the center of the screen.)
+    private var centerX = 0f
+    private var centerY = 0f
 
+    private var _visible = false
     @InternalCoroutinesApi
     var visible:Boolean
         get() = _visible
@@ -75,21 +68,9 @@ class AnalogWatchFaceRenderer (
             _visible = isVisible
 
             if (visible) {
-
-                // User's style preferences may have changed since the last time the
-                // watch face was visible, so we load the latest.
-                loadSavedWatchFace.load(analogWatchFaceStyle)
-
-                // With the rest of the watch face, we update the paint colors based on
-                // ambient/active mode callbacks, but because the ComplicationDrawable handles
-                // the active/ambient colors, we only need to update the complications' colors when
-                // the user actually makes a change to the highlight color, not when the watch goes
-                // in and out of ambient mode.
-                setComplicationsActiveAndAmbientColors(
-                    analogWatchFaceStyle.complicationStyle.activeColor,
-                    analogWatchFaceStyle.complicationStyle.ambientColor
-                )
-
+                // Loads user color preferences in case they have changed since the last
+                // the watch was visible.
+                analogWatchFace.loadColorPreferences()
                 startSecondHandAnimation()
 
             } else {
@@ -97,42 +78,16 @@ class AnalogWatchFaceRenderer (
             }
         }
 
-    // Represents half the width and height of the screen and used for animation calculations.
-    // (Half both the width and height puts you in the center of the screen.)
-    private var centerX = 0f
-    private var centerY = 0f
-
-    /* Maps complication ids (unique for each location) to corresponding [ComplicationDrawable].
-     * The [ComplicationDrawable] is a system API that renders complication data on the watch face.
-     */
-    private var complicationDrawableSparseArray: SparseArray<ComplicationDrawable>
-
-    // If image is active as the background complication, this is used to set the background color
-    // to black to not conflict with image.
-    private var backgroundComplicationActive = false
-
-    private var lowBitAmbient = false
-    private var burnInProtection = false
-
     // Ambient is the battery saving mode of the watch face. We limit the color palette and
     // animations in the mode.
     private var _ambient = false
-
     @InternalCoroutinesApi
     var ambient: Boolean
         get() = _ambient
         set(inAmbientMode) {
             _ambient = inAmbientMode
 
-            // Update drawable complications' ambient state.
-            // Note: ComplicationDrawable handles switching between active/ambient colors, we just
-            // have to inform it to enter ambient mode.
-            for (complicationId in AnalogComplicationWatchFaceService.complicationIds) {
-                // Sets ComplicationDrawable ambient mode
-                complicationDrawableSparseArray[complicationId].setInAmbientMode(ambient)
-            }
-
-            analogWatchFaceStyle.setAmbientMode(_ambient)
+            analogWatchFace.setAmbientMode(_ambient)
 
             if (ambient) {
                 stopSecondHandAnimation()
@@ -142,15 +97,13 @@ class AnalogWatchFaceRenderer (
         }
 
     private var _numberOfUnreadNotifications = 0
-
     var numberOfUnreadNotifications:Int
         get() = _numberOfUnreadNotifications
         set(count) {
-            if (analogWatchFaceStyle.unreadNotificationPref &&
+            if (analogWatchFace.unreadNotificationPref &&
                 _numberOfUnreadNotifications != count &&
                 count > 0) {
-                    // Tell [CanvasWatchFaceService], that is, [AnalogComplicationWatchFaceService] to
-                    // trigger onDraw() from system.
+                    // Tells [CanvasWatchFaceService] to trigger onDraw() from system.
                     watchFaceRendererListener.onDrawRequest()
             }
 
@@ -163,36 +116,18 @@ class AnalogWatchFaceRenderer (
      */
     private var secondHandAnimationJob: Job? = null
 
-    init {
-        // Creates a ComplicationDrawable for each location where the user can render a
-        // complication on the watch face. In this watch face, we create one for left, right,
-        // and background, but you could add many more.
-        val leftComplicationDrawable = ComplicationDrawable(context)
-        val rightComplicationDrawable = ComplicationDrawable(context)
-        val backgroundComplicationDrawable = ComplicationDrawable(context)
+    fun calculateWatchFaceDimensions(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        /*
+         * Find the coordinates of the center point on the screen, and ignore the window
+         * insets, so that, on round watches with a "chin", the watch face is centered on the
+         * entire screen, not just the usable portion.
+         */
+        centerX = width / 2f
+        centerY = height / 2f
 
-        // Adds new complications to a SparseArray to simplify setting styles and ambient
-        // properties for all complications, i.e., iterate over them all.
-        complicationDrawableSparseArray =
-            SparseArray(AnalogComplicationWatchFaceService.complicationIds.size)
-        complicationDrawableSparseArray.put(
-            AnalogComplicationWatchFaceService.LEFT_COMPLICATION_ID,
-            leftComplicationDrawable
-        )
-        complicationDrawableSparseArray.put(
-            AnalogComplicationWatchFaceService.RIGHT_COMPLICATION_ID,
-            rightComplicationDrawable
-        )
-        complicationDrawableSparseArray.put(
-            AnalogComplicationWatchFaceService.BACKGROUND_COMPLICATION_ID,
-            backgroundComplicationDrawable
-        )
-
-        setComplicationsActiveAndAmbientColors(
-            analogWatchFaceStyle.complicationStyle.activeColor,
-            analogWatchFaceStyle.complicationStyle.ambientColor
-        )
+        analogWatchFace.calculateWatchFaceDimensions(width, height)
     }
+
 
     fun render(canvas: Canvas, bounds: Rect, calendar: Calendar) {
         val now = System.currentTimeMillis()
@@ -202,37 +137,25 @@ class AnalogWatchFaceRenderer (
         drawComplications(canvas, now)
         drawUnreadNotificationIndicator(canvas)
         drawWatchFace(canvas, calendar)
-
     }
 
     private fun drawBackground(canvas: Canvas) {
-        val backgroundColor = when {
-            // Background should always be black when in ambient, low bit and burn in, or if a
-            // background complication is active, i.e., a background image is set, we also want the
-            // background to be black.
-            _ambient || (lowBitAmbient && burnInProtection) || backgroundComplicationActive ->
-                analogWatchFaceStyle.backgroundColor.ambientColor
-
-            else ->
-                analogWatchFaceStyle.backgroundColor.activeColor
-        }
-
-        canvas.drawColor(backgroundColor)
+        canvas.drawColor(analogWatchFace.backgroundComponent.currentColor)
     }
 
     private fun drawUnreadNotificationIndicator(canvas: Canvas) {
 
-        if (analogWatchFaceStyle.unreadNotificationPref && _numberOfUnreadNotifications > 0) {
+        if (analogWatchFace.unreadNotificationPref && _numberOfUnreadNotifications > 0) {
 
             // Calculates how far up from the bottom the icon needs to be painted (Y axis).
             val localOffsetY =
-                canvas.width - analogWatchFaceStyle.unreadNotificationIndicatorOffsetY
+                canvas.width - analogWatchFace.unreadNotificationIndicatorOffsetY
 
             canvas.drawCircle(
                 centerX,
                 localOffsetY.toFloat(),
-                analogWatchFaceStyle.unreadNotificationIndicatorOuterRingSize.toFloat(),
-                analogWatchFaceStyle.notificationCircle.paint
+                analogWatchFace.unreadNotificationIndicatorOuterRingSize.toFloat(),
+                analogWatchFace.unreadNotificationCircle.paint
             )
 
             /*
@@ -243,8 +166,8 @@ class AnalogWatchFaceRenderer (
                 canvas.drawCircle(
                     centerX,
                     localOffsetY.toFloat(),
-                    analogWatchFaceStyle.unreadNotificationIndicatorInnerCircle.toFloat(),
-                    analogWatchFaceStyle.secondHand.paint
+                    analogWatchFace.unreadNotificationIndicatorInnerCircle.toFloat(),
+                    analogWatchFace.secondHand.paint
                 )
             }
         }
@@ -252,6 +175,8 @@ class AnalogWatchFaceRenderer (
 
     private fun drawComplications(canvas: Canvas, currentTimeMillis: Long) {
         var complicationDrawable: ComplicationDrawable
+
+        val complicationDrawableSparseArray = analogWatchFace.getComplications()
 
         for (complicationId in AnalogComplicationWatchFaceService.complicationIds) {
             complicationDrawable = complicationDrawableSparseArray[complicationId]
@@ -278,7 +203,7 @@ class AnalogWatchFaceRenderer (
                 centerY + innerY,
                 centerX + outerX,
                 centerY + outerY,
-                analogWatchFaceStyle.ticks.paint
+                analogWatchFace.ticks.paint
             )
         }
 
@@ -300,19 +225,19 @@ class AnalogWatchFaceRenderer (
         canvas.rotate(hoursRotation, centerX, centerY)
         canvas.drawLine(
             centerX,
-            centerY - analogWatchFaceStyle.centerGapAndCircleRadius,
+            centerY - analogWatchFace.centerGapAndCircleRadius,
             centerX,
-            centerY - analogWatchFaceStyle.hourHand.dimensions.height,
-            analogWatchFaceStyle.hourHand.paint
+            centerY - analogWatchFace.hourHand.dimensions.height,
+            analogWatchFace.hourHand.paint
         )
 
         canvas.rotate(minutesRotation - hoursRotation, centerX, centerY)
         canvas.drawLine(
             centerX,
-            centerY - analogWatchFaceStyle.centerGapAndCircleRadius,
+            centerY - analogWatchFace.centerGapAndCircleRadius,
             centerX,
-            centerY - analogWatchFaceStyle.minuteHand.dimensions.height,
-            analogWatchFaceStyle.minuteHand.paint
+            centerY - analogWatchFace.minuteHand.dimensions.height,
+            analogWatchFace.minuteHand.paint
         )
 
         /*
@@ -323,22 +248,57 @@ class AnalogWatchFaceRenderer (
             canvas.rotate(secondsRotation - minutesRotation, centerX, centerY)
             canvas.drawLine(
                 centerX,
-                centerY - analogWatchFaceStyle.centerGapAndCircleRadius,
+                centerY - analogWatchFace.centerGapAndCircleRadius,
                 centerX,
-                centerY - analogWatchFaceStyle.secondHand.dimensions.height,
-                analogWatchFaceStyle.secondHand.paint
+                centerY - analogWatchFace.secondHand.dimensions.height,
+                analogWatchFace.secondHand.paint
             )
         }
 
         canvas.drawCircle(
             centerX,
             centerY,
-            analogWatchFaceStyle.centerGapAndCircleRadius.toFloat(),
-            analogWatchFaceStyle.ticks.paint
+            analogWatchFace.centerGapAndCircleRadius.toFloat(),
+            analogWatchFace.ticks.paint
         )
 
         /* Restore the canvas' original orientation. */
         canvas.restore()
+    }
+
+    fun updateWatchFaceComplication(complicationId: Int, complicationData: ComplicationData) {
+        analogWatchFace.updateWatchFaceComplication(complicationId, complicationData)
+    }
+
+    fun checkTapLocation(tapType: Int, x: Int, y: Int, eventTime: Long) {
+        analogWatchFace.checkTapLocation(tapType, x, y, eventTime)
+    }
+
+    fun setLowBitAndBurnInProtection (properties: Bundle) {
+        val lowBitAmbient =
+            properties.getBoolean(CanvasWatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false)
+        val burnInProtection =
+            properties.getBoolean(CanvasWatchFaceService.PROPERTY_BURN_IN_PROTECTION, false)
+
+        analogWatchFace.setLowBitAndBurnInProtection(lowBitAmbient, burnInProtection)
+    }
+
+    /**
+     * Second hand should only be visible in active mode.
+     */
+    private fun secondHandVisible(): Boolean {
+        return _visible && !_ambient
+    }
+
+    private fun secondHandAnimationActive(): Boolean {
+        return secondHandAnimationJob?.isActive ?: false
+    }
+
+    /**
+     * Dims display in mute mode.
+     */
+    fun toggleDimMode(muteMode: Boolean) {
+        analogWatchFace.setMuteMode(muteMode)
     }
 
     /**
@@ -369,17 +329,6 @@ class AnalogWatchFaceRenderer (
     }
 
     /**
-     * Second hand should only be visible in active mode.
-     */
-    private fun secondHandVisible(): Boolean {
-        return _visible && !_ambient
-    }
-
-    private fun secondHandAnimationActive(): Boolean {
-        return secondHandAnimationJob?.isActive ?: false
-    }
-
-    /**
      * Creates a flow that triggers one second apart. It's used to animate the second hand when
      * the watch face is in active mode.
      */
@@ -393,191 +342,15 @@ class AnalogWatchFaceRenderer (
         }
     }
 
-    /**
-     * Dims display in mute mode.
-     */
-    fun toggleDimMode(muteMode: Boolean) {
-        analogWatchFaceStyle.setMuteMode(muteMode)
-    }
-
-    /*
-     * Called when there is updated data for a complication id.
-     */
-    fun updateWatchFaceComplication(
-        complicationId: Int,
-        complicationData: ComplicationData
-    ) {
-
-        if (complicationId == AnalogComplicationWatchFaceService.BACKGROUND_COMPLICATION_ID) {
-            // If background image isn't the correct type, it means either there was no data,
-            // a permission problem, or the data was empty, i.e., user deselected it.
-            backgroundComplicationActive =
-                complicationData.type == ComplicationData.TYPE_LARGE_IMAGE
-        }
-
-        // Updates correct ComplicationDrawable with updated data.
-        val complicationDrawable = complicationDrawableSparseArray[complicationId]
-        complicationDrawable.setComplicationData(complicationData)
-    }
-
-    fun checkTapLocation(tapType: Int, x: Int, y: Int, eventTime: Long) {
-        when (tapType) {
-            CanvasWatchFaceService.TAP_TYPE_TAP ->
-                // If your background complication is the first item in your array, you need
-                // to walk backward through the array to make sure the tap isn't for a
-                // complication above the background complication.
-            {
-                var index = AnalogComplicationWatchFaceService.complicationIds.size - 1
-                while (index >= 0) {
-                    val complicationId = AnalogComplicationWatchFaceService.complicationIds[index]
-                    val complicationDrawable =
-                        complicationDrawableSparseArray[complicationId]
-                    val successfulTap = complicationDrawable.onTap(x, y)
-                    if (successfulTap) {
-                        return
-                    }
-                    index--
-                }
-            }
-        }
-    }
-
     fun tearDown() {
         stopSecondHandAnimation()
     }
 
-    fun setLowBitAndBurnInProtection(properties: Bundle) {
-        lowBitAmbient =
-            properties.getBoolean(CanvasWatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false)
-        burnInProtection =
-            properties.getBoolean(CanvasWatchFaceService.PROPERTY_BURN_IN_PROTECTION, false)
-
-
-        // Updates complications to properly render in ambient mode based on the screen's
-        // capabilities.
-        for (complicationId in AnalogComplicationWatchFaceService.complicationIds) {
-            complicationDrawableSparseArray[complicationId].apply {
-                setLowBitAmbient(lowBitAmbient)
-                setBurnInProtection(burnInProtection)
-            }
-        }
-    }
-
-    /* Sets active/ambient mode colors for all complications.
-     *
-     * Note: With the rest of the watch face, we update the paint colors based on ambient/active
-     * mode callbacks, but because the ComplicationDrawable handles the active/ambient colors
-     * itself, we only set the colors twice. Once at initialization and again if the user changes
-     * the highlight color via AnalogComplicationConfigActivity.
+    /**
+     * Allows the renderer class to trigger the system onDraw() sooner for animations (example, the
+     * second hand animation). The [CanvasWatchFaceService] containing the renderer simply needs to
+     * specify a lambda.
      */
-    private fun setComplicationsActiveAndAmbientColors(activeColor: Int, ambientColor:Int) {
-        var complicationDrawable: ComplicationDrawable
-
-        for (complicationId in AnalogComplicationWatchFaceService.complicationIds) {
-            complicationDrawable = complicationDrawableSparseArray[complicationId]
-            if (complicationId == AnalogComplicationWatchFaceService.BACKGROUND_COMPLICATION_ID) {
-                // It helps for the background color to be black in case the image used for the
-                // watch face's background takes some time to load.
-                complicationDrawable.setBackgroundColorActive(Color.BLACK)
-
-            } else {
-                complicationDrawable.apply {
-                    // Active mode colors.
-                    setBorderColorActive(activeColor)
-                    setRangedValuePrimaryColorActive(activeColor)
-
-                    // Ambient mode colors.
-                    setBorderColorAmbient(ambientColor)
-                    setRangedValuePrimaryColorAmbient(ambientColor)
-                }
-            }
-        }
-    }
-
-    fun calculateWatchFaceDimensions(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
-        /*
-         * Find the coordinates of the center point on the screen, and ignore the window
-         * insets, so that, on round watches with a "chin", the watch face is centered on the
-         * entire screen, not just the usable portion.
-         */
-        centerX = width / 2f
-        centerY = height / 2f
-
-        /*
-         * Calculate lengths of different hands based on half the watch screen size (centerX).
-         */
-        val hourHeight = (centerX * 0.5).toInt()
-        val minuteHeight = (centerX * 0.75).toInt()
-        val secondHeight = (centerX * 0.875).toInt()
-
-        // Calculates stroke width and radius by total screen size.
-        val hourWidth = (width / 56)
-        val minuteWidth = (width / 93)
-
-        val secondWidth = (width / 140)
-
-        analogWatchFaceStyle.hourHand.dimensions = Size(hourWidth, hourHeight)
-        analogWatchFaceStyle.minuteHand.dimensions = Size(minuteWidth, minuteHeight)
-        analogWatchFaceStyle.secondHand.dimensions = Size(secondWidth, secondHeight)
-
-        // TODO: Add notes
-        analogWatchFaceStyle.ticks.dimensions = Size(secondWidth, secondWidth)
-
-
-        analogWatchFaceStyle.centerGapAndCircleRadius = (width / 70)
-
-        // TODO: Assign shadow radius for all paint objects
-        val shadowRadius = (width / 46).toFloat()
-
-        /*
-         * Calculates location bounds for right and left circular complications. Please note,
-         * we are not demonstrating a long text complication in this watch face.
-         *
-         * We suggest using at least 1/4 of the screen width for circular (or squared)
-         * complications and 2/3 of the screen width for wide rectangular complications for
-         * better readability.
-         */
-
-        // For most Wear devices, width and height are the same, so we just chose one (width).
-        val sizeOfComplication = width / 4
-        val midpointOfScreen = width / 2
-        val horizontalOffset = (midpointOfScreen - sizeOfComplication) / 2
-        val verticalOffset = midpointOfScreen - sizeOfComplication / 2
-
-        val leftBounds =
-            // Left, Top, Right, Bottom
-            Rect(
-                horizontalOffset,
-                verticalOffset,
-                horizontalOffset + sizeOfComplication,
-                verticalOffset + sizeOfComplication
-            )
-        val leftComplicationDrawable =
-            complicationDrawableSparseArray[AnalogComplicationWatchFaceService.LEFT_COMPLICATION_ID]
-        leftComplicationDrawable.bounds = leftBounds
-
-        val rightBounds =
-            // Left, Top, Right, Bottom
-            Rect(
-                midpointOfScreen + horizontalOffset,
-                verticalOffset,
-                midpointOfScreen + horizontalOffset + sizeOfComplication,
-                verticalOffset + sizeOfComplication
-            )
-        val rightComplicationDrawable =
-            complicationDrawableSparseArray[AnalogComplicationWatchFaceService.RIGHT_COMPLICATION_ID]
-        rightComplicationDrawable.bounds = rightBounds
-
-        val screenForBackgroundBound =
-            // Left, Top, Right, Bottom
-            Rect(0, 0, width, height)
-
-        val backgroundComplicationDrawable =
-            complicationDrawableSparseArray[AnalogComplicationWatchFaceService.BACKGROUND_COMPLICATION_ID]
-        backgroundComplicationDrawable.bounds = screenForBackgroundBound
-    }
-
     class WatchFaceRendererListener(val drawListener: () -> Unit) {
         fun onDrawRequest() = drawListener()
     }

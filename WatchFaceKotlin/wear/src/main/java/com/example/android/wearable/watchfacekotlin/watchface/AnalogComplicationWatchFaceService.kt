@@ -62,8 +62,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         // NOTE: The context is required to render for several [ComplicationDrawables] in the
         // watch face.
         private val analogWatchFaceRender = AnalogWatchFaceRenderer(
-            applicationContext,
-            AnalogWatchFaceStyle(),
+            AnalogWatchFace(applicationContext),
             AnalogWatchFaceRenderer.WatchFaceRendererListener {
                 // Draw request triggered from the renderer (usually because it requires an
                 // animation that can't wait for the next automated call to onDraw(). A good example
@@ -231,7 +230,7 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
     }
 
     companion object {
-        private const val TAG = "AnalogWatchFace"
+        private const val TAG = "AnalogWatchFaceService"
 
         // Unique IDs for each complication. The settings activity that supports allowing users
         // to select their complication data provider requires numbers to be >= 0.

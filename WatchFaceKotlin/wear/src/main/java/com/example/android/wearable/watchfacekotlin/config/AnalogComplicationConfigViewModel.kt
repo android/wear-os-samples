@@ -32,8 +32,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-import com.example.android.wearable.watchfacekotlin.R
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
+import com.example.android.wearable.watchfacekotlin.watchface.AnalogWatchFace
 
 import java.util.concurrent.Executors
 
@@ -43,15 +43,6 @@ import java.util.concurrent.Executors
  * This changes the watch face [AnalogComplicationWatchFaceService].
  */
 class AnalogComplicationConfigViewModel(application: Application): AndroidViewModel(application) {
-
-    private val sharedPrefHighlightColorIdentifier =
-        application.getString(R.string.saved_marker_color_pref)
-
-    private val sharedPrefBackgroundColorIdentifier =
-        application.getString(R.string.saved_background_color_pref)
-
-    private val sharedPrefNotificationPrefIdentifier =
-        application.getString(R.string.saved_unread_notifications_pref)
 
     private var _backgroundComplicationEnabled = false
 
@@ -78,7 +69,7 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
     // Used to retrieve the user's highlight color, background color, and unread notification icon
     // preferences.
     private val sharedPref: SharedPreferences = application.getSharedPreferences(
-        application.getString(R.string.analog_complication_preference_file_key),
+        AnalogWatchFace.analog_complication_preference_file_key,
         Context.MODE_PRIVATE
     )
 
@@ -97,7 +88,10 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
 
     private val _highlightColor: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>().also {
-            it.value = sharedPref.getInt(sharedPrefHighlightColorIdentifier, Color.RED)
+            it.value = sharedPref.getInt(
+                AnalogWatchFace.saved_highlight_color_pref,
+                Color.RED
+            )
         }
     }
 
@@ -116,7 +110,10 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
 
     private val _displayUnreadNotifications: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>().also {
-            it.value = sharedPref.getBoolean(sharedPrefNotificationPrefIdentifier, true)
+            it.value = sharedPref.getBoolean(
+                AnalogWatchFace.saved_unread_notifications_pref,
+                true
+            )
         }
     }
 
@@ -124,7 +121,12 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
         get() = _displayUnreadNotifications
 
     fun displayUnreadNotificationsIconToggled(isChecked: Boolean) {
-        sharedPref.edit { putBoolean(sharedPrefNotificationPrefIdentifier, isChecked) }
+        sharedPref.edit {
+            putBoolean(
+                AnalogWatchFace.saved_unread_notifications_pref,
+                isChecked
+            )
+        }
         _displayUnreadNotifications.value = isChecked
     }
 
@@ -158,24 +160,36 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
      * when the user has selected a different color.
      */
     fun loadWatchFaceColors() {
-        _highlightColor.value = sharedPref.getInt(sharedPrefHighlightColorIdentifier, Color.RED)
+        _highlightColor.value = sharedPref.getInt(
+            AnalogWatchFace.saved_highlight_color_pref,
+            Color.RED
+        )
 
         // The background color only needs to be updated in UI when there isn't a background
         // complication active, that is, there isn't an image selected for the background of the
         // watch face.
         if (!_backgroundComplicationEnabled) {
             _background.value = WatchFaceBackground(
-                sharedPref.getInt(sharedPrefBackgroundColorIdentifier, Color.BLACK),
+                sharedPref.getInt(
+                    AnalogWatchFace.saved_background_color_pref,
+                    Color.BLACK
+                ),
                 null
             )
         }
     }
 
     fun createHighlightColorLaunchIntent(context: Context) =
-        createColorLaunchIntent(context, sharedPrefHighlightColorIdentifier)
+        createColorLaunchIntent(
+            context,
+            AnalogWatchFace.saved_highlight_color_pref
+        )
 
     fun createBackgroundColorLaunchIntent(context: Context) =
-        createColorLaunchIntent(context, sharedPrefBackgroundColorIdentifier)
+        createColorLaunchIntent(
+            context,
+            AnalogWatchFace.saved_background_color_pref
+        )
 
     private fun createColorLaunchIntent(context: Context, extraValue: String): Intent {
         return Intent(context, ColorSelectionActivity::class.java).apply {
@@ -225,7 +239,9 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
                     // Since the background color covers the entire canvas, we clear the icon via
                     // setting it to null.
                     _background.value = WatchFaceBackground(
-                        sharedPref.getInt(sharedPrefBackgroundColorIdentifier, Color.BLACK),
+                        sharedPref.getInt(
+                            AnalogWatchFace.saved_background_color_pref,
+                            Color.BLACK),
                         null
                     )
 
