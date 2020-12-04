@@ -33,5 +33,5 @@
 
     <string name="analog_complication_config">Analog Complication Config</string>
     <string name="add_complication">Add Complication</string>
-    <string name="edit_complication">Edit Complication <xliff:g id="name" example="World Clock">%1$s</xliff:g></string>
+    <string name="edit_complication">Edit Complication %1$s : %2$s</string>
 </resources>

@@ -15,4 +15,4 @@
  */
 include ':wear'
 include ':mobile'
-rootProject.name = "My Application"
+rootProject.name = "Analog Watch Face"

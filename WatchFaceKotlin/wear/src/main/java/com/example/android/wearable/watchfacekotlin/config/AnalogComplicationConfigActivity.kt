@@ -178,8 +178,8 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
             imageButton.setImageIcon(complicationProviderInfo.providerIcon)
             imageButton.contentDescription = getString(
                 R.string.edit_complication,
-                complicationProviderInfo.appName + " " +
-                        complicationProviderInfo.providerName
+                complicationProviderInfo.appName,
+                complicationProviderInfo.providerName
             )
             background.visibility = View.VISIBLE
         }

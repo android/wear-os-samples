@@ -25,6 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
 
-        <!-- TODO: Add mobile watchface settings support in followup CL. -->
+        <!-- TODO: Add mobile watchface settings support in followup PR. -->
     </application>
 </manifest>
