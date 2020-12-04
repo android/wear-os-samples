@@ -20,11 +20,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.core.content.edit
-
 import com.example.android.wearable.watchfacekotlin.R
 import com.example.android.wearable.watchfacekotlin.databinding.ActivityColorSelectionConfigBinding
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogWatchFace
-
 import java.util.ArrayList
 
 /**
@@ -36,8 +34,8 @@ class ColorSelectionActivity : ComponentActivity() {
     private lateinit var binding: ActivityColorSelectionConfigBinding
     private lateinit var colorSelectionRecyclerViewAdapter: ColorSelectionRecyclerViewAdapter
 
-    private lateinit var sharedPref:SharedPreferences
-    private lateinit var sharedPrefString:String
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPrefString: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +44,14 @@ class ColorSelectionActivity : ComponentActivity() {
             AnalogWatchFace.analog_complication_preference_file_key,
             Context.MODE_PRIVATE)
 
-        sharedPrefString = intent.getStringExtra(EXTRA_SHARED_PREF)?: ""
+        sharedPrefString = intent.getStringExtra(EXTRA_SHARED_PREF) ?: ""
 
         binding = ActivityColorSelectionConfigBinding.inflate(layoutInflater)
         val view = binding.root
 
         setContentView(view)
 
-        colorSelectionRecyclerViewAdapter = ColorSelectionRecyclerViewAdapter (
+        colorSelectionRecyclerViewAdapter = ColorSelectionRecyclerViewAdapter(
             ColorSelectionRecyclerViewAdapter.ColorListener { color ->
 
                 // Value is saved in [SharedPreferences] for watch face and config access.

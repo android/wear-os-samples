@@ -26,15 +26,12 @@ import android.support.wearable.complications.ComplicationHelperActivity
 import android.support.wearable.complications.ComplicationProviderInfo
 import android.support.wearable.complications.ProviderInfoRetriever
 import android.util.Log
-
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogWatchFace
-
 import java.util.concurrent.Executors
 
 /*
@@ -42,11 +39,11 @@ import java.util.concurrent.Executors
  * [ComplicationProviderInfo] to allow preview/configuration in [AnalogComplicationConfigActivity].
  * This changes the watch face [AnalogComplicationWatchFaceService].
  */
-class AnalogComplicationConfigViewModel(application: Application): AndroidViewModel(application) {
+class AnalogComplicationConfigViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _backgroundComplicationEnabled = false
 
-    val backgroundComplicationEnabled:Boolean
+    val backgroundComplicationEnabled: Boolean
         get() = _backgroundComplicationEnabled
 
     // Selected complication id by user (default value is invalid [only changed when user taps to
@@ -82,7 +79,6 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
     private val _rightComplication: MutableLiveData<ComplicationProviderInfo?> =
         MutableLiveData<ComplicationProviderInfo?>()
 
-
     val rightComplication: LiveData<ComplicationProviderInfo?>
         get() = _rightComplication
 
@@ -96,7 +92,7 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
     }
 
     val highlightColor: LiveData<Int>
-        get () = _highlightColor
+        get() = _highlightColor
 
     // We don't retrieve the background color from SharedPreferences because displaying it depends
     // on whether the background complication has data, that is, the user has selected an image
@@ -136,7 +132,7 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
 
         // Retrieves all unique complication Int ids associated with
         // [AnalogComplicationWatchFaceService].
-        val complicationIds: IntArray = AnalogComplicationWatchFaceService.complicationIds
+        val complicationIds: IntArray = AnalogWatchFace.complicationIds
 
         // Loads Complication Data based on the ids above.
         providerInfoRetriever.retrieveProviderInfo(
@@ -216,7 +212,7 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
      * chooses an individual complication to change.
      */
     private fun updateComplicationData(
-        complicationId:Int,
+        complicationId: Int,
         complicationProviderInfo: ComplicationProviderInfo?
     ) {
 
@@ -224,15 +220,15 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
         Log.d(TAG, "\tinfo: $complicationProviderInfo")
 
         when (complicationId) {
-            AnalogComplicationWatchFaceService.Companion.ComplicationConfig.Left.id -> {
+            AnalogWatchFace.Companion.ComplicationConfig.Left.id -> {
                 _leftComplication.value = complicationProviderInfo
             }
 
-            AnalogComplicationWatchFaceService.Companion.ComplicationConfig.Right.id -> {
+            AnalogWatchFace.Companion.ComplicationConfig.Right.id -> {
                 _rightComplication.value = complicationProviderInfo
             }
 
-            AnalogComplicationWatchFaceService.Companion.ComplicationConfig.Background.id -> {
+            AnalogWatchFace.Companion.ComplicationConfig.Background.id -> {
                 if (complicationProviderInfo == null) {
                     _backgroundComplicationEnabled = false
 
@@ -244,7 +240,6 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
                             Color.BLACK),
                         null
                     )
-
                 } else {
                     _backgroundComplicationEnabled = true
 
@@ -257,7 +252,6 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
                     )
                 }
             }
-
             else -> {
                 Log.d(TAG, "Complication id is invalid!")
             }
@@ -266,7 +260,7 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
 
     fun createComplicationLaunchIntent(
         context: Context,
-        selectedComplication: AnalogComplicationWatchFaceService.Companion.ComplicationConfig
+        selectedComplication: AnalogWatchFace.Companion.ComplicationConfig
     ): Intent {
 
         // Used by callback to update complication in the preview.
@@ -284,7 +278,7 @@ class AnalogComplicationConfigViewModel(application: Application): AndroidViewMo
 
     // Used to cover both the background being a solid color only (color set but icon is null) or
     // an image set as the background via the complication data (color set with an icon).
-    data class WatchFaceBackground (var color:Int, var icon: Icon?)
+    data class WatchFaceBackground(var color: Int, var icon: Icon?)
 
     companion object {
         private const val TAG = "AnalogConfigViewModel"

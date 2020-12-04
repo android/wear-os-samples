@@ -27,14 +27,12 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
-
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
-
 import com.example.android.wearable.watchfacekotlin.R
 import com.example.android.wearable.watchfacekotlin.databinding.ActivityAnalogComplicationConfigBinding
-
 import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplicationWatchFaceService
+import com.example.android.wearable.watchfacekotlin.watchface.AnalogWatchFace
 
 /**
  * The watch-side config activity for [AnalogComplicationWatchFaceService] allows users to
@@ -45,7 +43,7 @@ import com.example.android.wearable.watchfacekotlin.watchface.AnalogComplication
 class AnalogComplicationConfigActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityAnalogComplicationConfigBinding
-    private lateinit var viewModel:AnalogComplicationConfigViewModel
+    private lateinit var viewModel: AnalogComplicationConfigViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +95,6 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
             // Updates preview with new complication information for selected complication id.
             // Note: complication id is saved and tracked in the ViewModel class.
             viewModel.updateSelectedComplicationData(complicationProviderInfo)
-
         } else if (requestCode == UPDATE_COLORS_CONFIG_REQUEST_CODE && resultCode == RESULT_OK) {
             // Updates highlight and background colors based on the user preference.
             viewModel.loadWatchFaceColors()
@@ -108,7 +105,7 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
         Log.d(TAG, "onClickLeftComplication")
 
         launchComplicationHelperActivity(
-            AnalogComplicationWatchFaceService.Companion.ComplicationConfig.Left
+            AnalogWatchFace.Companion.ComplicationConfig.Left
         )
     }
 
@@ -116,7 +113,7 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
         Log.d(TAG, "onClickRightComplication")
 
         launchComplicationHelperActivity(
-            AnalogComplicationWatchFaceService.Companion.ComplicationConfig.Right
+            AnalogWatchFace.Companion.ComplicationConfig.Right
         )
     }
 
@@ -141,7 +138,6 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
             val toast = Toast.makeText(this, text, duration)
             toast.setGravity(Gravity.CENTER, 0, 0)
             toast.show()
-
         } else {
             val intent = viewModel.createBackgroundColorLaunchIntent(this)
 
@@ -164,20 +160,20 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
         Log.d(TAG, "onClickBackgroundComplication")
 
         launchComplicationHelperActivity(
-            AnalogComplicationWatchFaceService.Companion.ComplicationConfig.Background
+            AnalogWatchFace.Companion.ComplicationConfig.Background
         )
     }
 
     private fun updateComplicationUI(
         complicationProviderInfo: ComplicationProviderInfo?,
         imageButton: ImageButton,
-        background:ImageView) {
+        background: ImageView
+    ) {
 
         if (complicationProviderInfo == null) {
             imageButton.setImageDrawable(getDrawable(R.drawable.add_complication))
             imageButton.contentDescription = getString(R.string.add_complication)
             background.visibility = View.INVISIBLE
-
         } else {
             imageButton.setImageIcon(complicationProviderInfo.providerIcon)
             imageButton.contentDescription = getString(
@@ -216,7 +212,6 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
             binding.unreadNotificationIconSwitch.setCompoundDrawablesWithIntrinsicBounds(
                 getDrawable(R.drawable.ic_notifications_white_24dp), null, null, null
             )
-
         } else {
             binding.unreadNotificationIconSwitch.setCompoundDrawablesWithIntrinsicBounds(
                 getDrawable(R.drawable.ic_notifications_off_white_24dp), null, null, null
@@ -227,7 +222,7 @@ class AnalogComplicationConfigActivity : ComponentActivity() {
     // After retrieving the specific intent for the complication the user selected, launches UI to
     // allow user to choose the data that will be displayed in that complication.
     private fun launchComplicationHelperActivity(
-        selectedComplication: AnalogComplicationWatchFaceService.Companion.ComplicationConfig
+        selectedComplication: AnalogWatchFace.Companion.ComplicationConfig
     ) {
         val intent = viewModel.createComplicationLaunchIntent(
             this,

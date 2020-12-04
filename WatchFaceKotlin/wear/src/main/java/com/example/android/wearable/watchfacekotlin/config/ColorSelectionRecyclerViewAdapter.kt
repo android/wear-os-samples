@@ -20,12 +20,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.android.wearable.watchfacekotlin.R
 
 /**
@@ -53,7 +50,6 @@ class ColorSelectionRecyclerViewAdapter(
 
         viewHolder.setColor(getItem(position))
     }
-
 
     // Displays color option for an item on the watch face.
     inner class ColorViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {

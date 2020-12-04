@@ -22,7 +22,10 @@ import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.rendering.ComplicationDrawable
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.view.SurfaceHolder
-
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -34,20 +37,16 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-import java.util.Calendar
-import java.util.concurrent.TimeUnit
-import kotlin.math.cos
-import kotlin.math.sin
-
 /**
  * Handles all rendering/drawing of the watch face (includes second hand animation that
  * triggers drawing faster than the normal draw request [once a second]).
  *
  * Uses [AnalogWatchFace] to for watch face state, colors, dimensions, etc.
  */
-class AnalogWatchFaceRenderer (
+class AnalogWatchFaceRenderer(
     private val analogWatchFace: AnalogWatchFace,
-    private val watchFaceRendererListener:WatchFaceRendererListener) {
+    private val watchFaceRendererListener: WatchFaceRendererListener
+) {
 
     // Update time for animations in interactive mode (second hand animation, etc.).
     private val interactiveUpdateRateMillis = TimeUnit.SECONDS.toMillis(1)
@@ -60,9 +59,11 @@ class AnalogWatchFaceRenderer (
     private var centerX = 0f
     private var centerY = 0f
 
+    // visible = loads user styles, preps complications and animations.
+    // not visible = shuts down animations.
     private var _visible = false
     @InternalCoroutinesApi
-    var visible:Boolean
+    var visible: Boolean
         get() = _visible
         set(isVisible) {
             _visible = isVisible
@@ -72,7 +73,6 @@ class AnalogWatchFaceRenderer (
                 // the watch was visible.
                 analogWatchFace.loadColorPreferences()
                 startSecondHandAnimation()
-
             } else {
                 stopSecondHandAnimation()
             }
@@ -97,7 +97,7 @@ class AnalogWatchFaceRenderer (
         }
 
     private var _numberOfUnreadNotifications = 0
-    var numberOfUnreadNotifications:Int
+    var numberOfUnreadNotifications: Int
         get() = _numberOfUnreadNotifications
         set(count) {
             if (analogWatchFace.unreadNotificationPref &&
@@ -128,7 +128,6 @@ class AnalogWatchFaceRenderer (
         analogWatchFace.calculateWatchFaceDimensions(width, height)
     }
 
-
     fun render(canvas: Canvas, bounds: Rect, calendar: Calendar) {
         val now = System.currentTimeMillis()
         calendar.timeInMillis = now
@@ -149,7 +148,7 @@ class AnalogWatchFaceRenderer (
 
             // Calculates how far up from the bottom the icon needs to be painted (Y axis).
             val localOffsetY =
-                canvas.width - analogWatchFace.unreadNotificationIndicatorOffsetY
+                canvas.width - analogWatchFace.unreadNotificationIndicatorOffset
 
             canvas.drawCircle(
                 centerX,
@@ -178,13 +177,16 @@ class AnalogWatchFaceRenderer (
 
         val complicationDrawableSparseArray = analogWatchFace.getComplications()
 
-        for (complicationId in AnalogComplicationWatchFaceService.complicationIds) {
+        for (complicationId in AnalogWatchFace.complicationIds) {
             complicationDrawable = complicationDrawableSparseArray[complicationId]
             complicationDrawable.draw(canvas, currentTimeMillis)
         }
     }
 
-    private fun drawWatchFace(canvas: Canvas, calendar:Calendar) {
+    /**
+     * Calculates watch face element locations and paints them on canvas.
+     */
+    private fun drawWatchFace(canvas: Canvas, calendar: Calendar) {
         /*
          * Draw ticks. Usually you will want to bake this directly into the photo, but in
          * cases where you want to allow users to select their own photos, this dynamically
@@ -225,7 +227,7 @@ class AnalogWatchFaceRenderer (
         canvas.rotate(hoursRotation, centerX, centerY)
         canvas.drawLine(
             centerX,
-            centerY - analogWatchFace.centerGapAndCircleRadius,
+            centerY - analogWatchFace.centerGapOffsetAndCircleRadius,
             centerX,
             centerY - analogWatchFace.hourHand.dimensions.height,
             analogWatchFace.hourHand.paint
@@ -234,7 +236,7 @@ class AnalogWatchFaceRenderer (
         canvas.rotate(minutesRotation - hoursRotation, centerX, centerY)
         canvas.drawLine(
             centerX,
-            centerY - analogWatchFace.centerGapAndCircleRadius,
+            centerY - analogWatchFace.centerGapOffsetAndCircleRadius,
             centerX,
             centerY - analogWatchFace.minuteHand.dimensions.height,
             analogWatchFace.minuteHand.paint
@@ -248,7 +250,7 @@ class AnalogWatchFaceRenderer (
             canvas.rotate(secondsRotation - minutesRotation, centerX, centerY)
             canvas.drawLine(
                 centerX,
-                centerY - analogWatchFace.centerGapAndCircleRadius,
+                centerY - analogWatchFace.centerGapOffsetAndCircleRadius,
                 centerX,
                 centerY - analogWatchFace.secondHand.dimensions.height,
                 analogWatchFace.secondHand.paint
@@ -258,7 +260,7 @@ class AnalogWatchFaceRenderer (
         canvas.drawCircle(
             centerX,
             centerY,
-            analogWatchFace.centerGapAndCircleRadius.toFloat(),
+            analogWatchFace.centerGapOffsetAndCircleRadius.toFloat(),
             analogWatchFace.ticks.paint
         )
 
@@ -274,7 +276,7 @@ class AnalogWatchFaceRenderer (
         analogWatchFace.checkTapLocation(tapType, x, y, eventTime)
     }
 
-    fun setLowBitAndBurnInProtection (properties: Bundle) {
+    fun setLowBitAndBurnInProtection(properties: Bundle) {
         val lowBitAmbient =
             properties.getBoolean(CanvasWatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false)
         val burnInProtection =

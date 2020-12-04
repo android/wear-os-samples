@@ -27,10 +27,9 @@ import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
 import android.util.Log
 import android.view.SurfaceHolder
-
-import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.Calendar
 import java.util.TimeZone
+import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
  * Demonstrates two simple complications plus a background complication in an analog watch face.
@@ -59,14 +58,15 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
         private var registeredTimeZoneReceiver = false
 
         // Renders watch face (background, hands, ticks, complications, etc.).
-        // NOTE: The context is required to render for several [ComplicationDrawables] in the
-        // watch face.
+        // NOTE: The context is required by [AnalogWatchFace] to initiate [ComplicationDrawables]
+        // and for loading user preferences for the watch face.
         private val analogWatchFaceRender = AnalogWatchFaceRenderer(
             AnalogWatchFace(applicationContext),
             AnalogWatchFaceRenderer.WatchFaceRendererListener {
                 // Draw request triggered from the renderer (usually because it requires an
-                // animation that can't wait for the next automated call to onDraw(). A good example
-                // is the second hand animation while the watch face is in its active mode.
+                // animation that can't wait for the next automated call to onDraw()). A good
+                // example is the second hand animation while the watch face is in its active mode.
+                // Calling invalidate() triggers onDraw() from the system.
                 invalidate()
             }
         )
@@ -85,8 +85,8 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
             // This is the system watch face style which only covers a couple basic settings
             // (accepts tap events, hiding/showing indicators, etc.). The custom class in this
-            // project, [AnalogWatchFaceStyle], handles all detailed visual styling (color
-            // styles, dimensions, etc.)
+            // project, [AnalogWatchFace], handles all detailed visual styling (color
+            // styles, dimensions, etc.) and state.
             setWatchFaceStyle(
                 WatchFaceStyle.Builder(this@AnalogComplicationWatchFaceService)
                     .setAcceptsTapEvents(true)
@@ -96,10 +96,9 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             )
 
             // System requires we set all active complication ids. These are unique numbers we
-            // define for each complication location on our watch face. They are defined in this
-            // class but are used by [AnalogWatchFaceRenderer] (render complications) and the
-            // config/ classes (allows users to customize data displayed in complications).
-            setActiveComplications(*complicationIds)
+            // define for each complication location on our watch face. They are defined in
+            // [AnalogWatchFace] and used by [AnalogWatchFaceRenderer] to render complications.
+            setActiveComplications(*AnalogWatchFace.complicationIds)
         }
 
         override fun onDestroy() {
@@ -112,6 +111,8 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             Log.d(TAG, "onPropertiesChanged: properties = $properties")
             super.onPropertiesChanged(properties)
 
+            // Only need to determine low bit mode and burn in protection to determine the color
+            // of the background.
             analogWatchFaceRender.setLowBitAndBurnInProtection(properties)
         }
 
@@ -142,13 +143,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             invalidate()
         }
 
-        @InternalCoroutinesApi
-        override fun onAmbientModeChanged(inAmbientMode: Boolean) {
-            super.onAmbientModeChanged(inAmbientMode)
-            Log.d(TAG, "onAmbientModeChanged: $inAmbientMode")
-            analogWatchFaceRender.ambient = inAmbientMode
-        }
-
         override fun onInterruptionFilterChanged(interruptionFilter: Int) {
             super.onInterruptionFilterChanged(interruptionFilter)
             val inMuteMode = interruptionFilter == INTERRUPTION_FILTER_NONE
@@ -157,11 +151,18 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
             invalidate()
         }
 
+        @InternalCoroutinesApi
+        override fun onAmbientModeChanged(inAmbientMode: Boolean) {
+            super.onAmbientModeChanged(inAmbientMode)
+            Log.d(TAG, "onAmbientModeChanged: $inAmbientMode")
+            analogWatchFaceRender.ambient = inAmbientMode
+        }
+
         /*
          * This is one of the more important callbacks. It is called when we get the dimensions of
          * the watch face, that is, the dimensions of the Wear OS device.
-         * We use this to set the dimensions in the renderer, as we don't want to be computing
-         * this every time we draw the watch face.
+         * We use this to set the dimensions for all [AnalogWatchFace] elements, as we don't want
+         * to compute this every time we draw the watch face.
          */
         override fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             super.onSurfaceChanged(holder, format, width, height)
@@ -171,9 +172,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
         /**
          * Triggered by the system or by invalidate() calls.
-         * NOTE: Because of the [AnalogWatchFaceRenderer.WatchFaceRendererListener] implemented
-         * with our renderer, this can be triggered from that class sooner if it needs to
-         * trigger an animation, for example, the second hand movements.
          */
         override fun onDraw(canvas: Canvas, bounds: Rect) {
             analogWatchFaceRender.render(canvas, bounds, calendar)
@@ -198,7 +196,6 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
                 // Since the watch face is visible, we need to draw it again.
                 invalidate()
-
             } else {
                 unregisterTimeZoneChangedReceiver()
             }
@@ -231,45 +228,5 @@ class AnalogComplicationWatchFaceService : CanvasWatchFaceService() {
 
     companion object {
         private const val TAG = "AnalogWatchFaceService"
-
-        // Unique IDs for each complication. The settings activity that supports allowing users
-        // to select their complication data provider requires numbers to be >= 0.
-        internal const val BACKGROUND_COMPLICATION_ID = 0
-        internal const val LEFT_COMPLICATION_ID = 100
-        internal const val RIGHT_COMPLICATION_ID = 101
-
-        sealed class ComplicationConfig(val id:Int, val supportedTypes:IntArray) {
-            object Left : ComplicationConfig(
-                LEFT_COMPLICATION_ID,
-                intArrayOf(
-                    ComplicationData.TYPE_RANGED_VALUE,
-                    ComplicationData.TYPE_ICON,
-                    ComplicationData.TYPE_SHORT_TEXT,
-                    ComplicationData.TYPE_SMALL_IMAGE
-                )
-            )
-            object Right : ComplicationConfig(
-                RIGHT_COMPLICATION_ID,
-                intArrayOf(
-                    ComplicationData.TYPE_RANGED_VALUE,
-                    ComplicationData.TYPE_ICON,
-                    ComplicationData.TYPE_SHORT_TEXT,
-                    ComplicationData.TYPE_SMALL_IMAGE
-                )
-            )
-            object Background : ComplicationConfig(
-                BACKGROUND_COMPLICATION_ID,
-                intArrayOf(ComplicationData.TYPE_LARGE_IMAGE)
-            )
-        }
-
-        // Used by {@link AnalogComplicationConfigActivity} and this class to retrieve all
-        // complication ids. Background, Left, and right complication IDs as array for
-        // Complication API.
-        val complicationIds = intArrayOf(
-            ComplicationConfig.Background.id,
-            ComplicationConfig.Left.id,
-            ComplicationConfig.Right.id
-        )
     }
 }
