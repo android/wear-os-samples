@@ -15,11 +15,19 @@
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = "1.4.20"
+    ext {
+        // SDK and tools
+        kotlin_version = '1.4.20'
+
+        // App dependencies
+        watchFaceAlphaVersion = '1.0.0-alpha3'
+    }
+
     repositories {
         google()
         jcenter()
     }
+
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

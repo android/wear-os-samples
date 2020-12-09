@@ -15,7 +15,73 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">WatchFace Alpha (Kotlin)</string>
-    <string name="message">Watch face tapped</string>
-    <string name="my_analog_name">My Analog</string>
+    <string name="app_name" translatable="false">WatchFace Alpha (Kotlin)</string>
+
+    <string name="canvas_analog_watch_face_name"
+        translatable="false">Example Analog Watchface</string>
+
+    <string name="canvas_digital_watch_face_name"
+        translatable="false">Example Digital Watchface</string>
+
+    <string name="gl_watch_face_name" translatable="false">Example OpenGL Watchface</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="red_style_name">Red Style</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="green_style_name">Green Style</string>
+
+    <!-- Name of watchface style category for selecting the color theme [CHAR LIMIT=20] -->
+    <string name="colors_style_setting">Colors</string>
+
+    <!-- Subtitle for the menu option to select the watch face color theme [CHAR LIMIT=20] -->
+    <string name="colors_style_setting_description">Watchface colorization</string>
+
+    <!-- An option within the watch face color style theme settings [CHAR LIMIT=20] -->
+    <string name="colors_style_red">Red</string>
+
+    <!-- An option within the watch face color style theme settings [CHAR LIMIT=20] -->
+    <string name="colors_style_green">Green</string>
+
+    <!-- An option within the watch face color style theme settings [CHAR LIMIT=20] -->
+    <string name="colors_style_blue">Blue</string>
+
+    <!-- An option within the analog watch face to draw pips to mark each hour [CHAR LIMIT=20] -->
+    <string name="watchface_pips_setting">Hour Pips</string>
+
+    <!-- Subtitle for the menu option to configure if we should draw pips to mark each hour
+     on the watch face [CHAR LIMIT=20] -->
+    <string name="watchface_pips_setting_description">Whether to draw or not</string>
+
+    <!-- A menu option to select a widget that lets us configure the length of the watch hands
+    [CHAR LIMIT=20] -->
+    <string name="watchface_hand_length_setting">Hand length</string>
+
+    <!-- Sub title for the menu option to select a widget that lets us configure the length of the
+    watch hands [CHAR LIMIT=20] -->
+    <string name="watchface_hand_length_setting_description">Scale of watch hands</string>
+
+    <!-- A menu option to select a widget that lets us configure the Complications (a watch
+    making term) [CHAR LIMIT=20] -->
+    <string name="watchface_complications_setting">Complications</string>
+
+    <!-- Sub title for the menu option to select a widget that lets us configure the Complications
+    (a watch making term) [CHAR LIMIT=20] -->
+    <string name="watchface_complications_setting_description">Number and position</string>
+
+    <!-- Menu option within the complications configuration widget that lets us select both
+    the left and the right complication for rendering. [CHAR LIMIT=20] -->
+    <string name="watchface_complications_setting_both">Both</string>
+
+    <!-- Menu option within the complications configuration widget that lets us select no
+    complications for rendering. [CHAR LIMIT=20] -->
+    <string name="watchface_complications_setting_none">None</string>
+
+    <!-- Menu option within the complications configuration widget that lets us select only the left
+    complication for rendering. [CHAR LIMIT=20] -->
+    <string name="watchface_complications_setting_left">Left</string>
+
+    <!-- Menu option within the complications configuration widget that lets us select only the
+    right complication for rendering. [CHAR LIMIT=20] -->
+    <string name="watchface_complications_setting_right">Right</string>
 </resources>

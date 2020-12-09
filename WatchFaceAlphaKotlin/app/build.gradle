@@ -42,12 +42,15 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'com.google.android.support:wearable:2.8.1'
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
-    implementation 'androidx.percentlayout:percentlayout:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.gms:play-services-base:17.5.0'
-    implementation 'androidx.palette:palette:1.0.0'
-    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+
+    implementation "androidx.wear:wear-watchface:$rootProject.watchFaceAlphaVersion"
+
+    implementation "androidx.wear:wear-watchface-client:$rootProject.watchFaceAlphaVersion"
+    implementation "androidx.wear:wear-watchface-complications-rendering:$rootProject.watchFaceAlphaVersion"
+
+    implementation "androidx.wear:wear-complications-data:$rootProject.watchFaceAlphaVersion"
+    implementation "androidx.wear:wear-complications-provider:$rootProject.watchFaceAlphaVersion"
+
+    implementation "androidx.wear:wear-watchface-data:$rootProject.watchFaceAlphaVersion"
+    implementation "androidx.wear:wear-watchface-style:$rootProject.watchFaceAlphaVersion"
 }
