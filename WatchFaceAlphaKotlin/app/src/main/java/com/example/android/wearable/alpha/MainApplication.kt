@@ -24,7 +24,7 @@ import kotlinx.coroutines.SupervisorJob
 /**
  * Sets up repository for all app watch faces (services).
  */
-class MainApplication: Application() {
+class MainApplication : Application() {
 
     // Required for pre-population of empty database.
     // No need to cancel this scope as it'll be torn down with the process.

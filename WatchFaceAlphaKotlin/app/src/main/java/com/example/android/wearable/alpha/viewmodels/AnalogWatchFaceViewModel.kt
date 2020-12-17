@@ -64,7 +64,7 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
     }
 
     // [WatchFaceArmDimensionsEntity] operations:
-    val allWatchFaceArmDimensions:LiveData<List<WatchFaceArmDimensionsEntity>> =
+    val allWatchFaceArmDimensions: LiveData<List<WatchFaceArmDimensionsEntity>> =
             repository.watchFaceArmDimensions.asLiveData()
 
     fun insertWatchFaceArmDimensions(watchFaceArmDimensionsEntity: WatchFaceArmDimensionsEntity) = scope.launch {

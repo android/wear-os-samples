@@ -27,10 +27,11 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Manages queries to backend.
  */
-class WatchFaceRepository (
+class WatchFaceRepository(
     private val analogWatchFaceDao: AnalogWatchFaceDao,
     private val watchFaceColorStyleDao: WatchFaceColorStyleDao,
-    private val watchFaceArmDimensionsDao: WatchFaceArmDimensionsDao) {
+    private val watchFaceArmDimensionsDao: WatchFaceArmDimensionsDao
+) {
 
     // [AnalogWatchFaceEntity] properties/operations:
     val allAnalogWatchFaces: Flow<List<AnalogWatchFaceEntity>> = analogWatchFaceDao.getAll()

@@ -58,9 +58,10 @@ private const val TAG = "populateAnalogDatabase"
  * Utility method to populate the database with default values for an analog watch face.
  */
 suspend fun populateAnalogDatabase(
-        analogWatchFaceDao: AnalogWatchFaceDao,
-        watchFaceColorStyleDao: WatchFaceColorStyleDao,
-        watchFaceArmDimensionsDao: WatchFaceArmDimensionsDao) {
+    analogWatchFaceDao: AnalogWatchFaceDao,
+    watchFaceColorStyleDao: WatchFaceColorStyleDao,
+    watchFaceArmDimensionsDao: WatchFaceArmDimensionsDao
+) {
 
     Log.d(TAG, "populateAnalogDatabase()")
 
