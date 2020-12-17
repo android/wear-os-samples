@@ -18,18 +18,37 @@
     <string name="app_name" translatable="false">WatchFace Alpha (Kotlin)</string>
 
     <string name="canvas_analog_watch_face_name"
-        translatable="false">Example Analog Watchface</string>
+        translatable="false">Example Analog</string>
 
     <string name="canvas_digital_watch_face_name"
-        translatable="false">Example Digital Watchface</string>
+        translatable="false">Example Digital</string>
 
-    <string name="gl_watch_face_name" translatable="false">Example OpenGL Watchface</string>
+    <string name="gl_watch_face_name" translatable="false">Example OpenGL</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="hour_arm_dimension_name">Hour Hand</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="minute_arm_dimension_name">Minute Hand</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="second_arm_dimension_name">Second Hand</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="ambient_style_name">Ambient Style</string>
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="red_style_name">Red Style</string>
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="green_style_name">Green Style</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="blue_style_name">Blue Style</string>
+
+    <!-- Name of watchface style [CHAR LIMIT=20] -->
+    <string name="white_style_name">White Style</string>
+
 
     <!-- Name of watchface style category for selecting the color theme [CHAR LIMIT=20] -->
     <string name="colors_style_setting">Colors</string>
