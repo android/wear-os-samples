@@ -17,10 +17,23 @@
 buildscript {
     ext {
         // SDK and tools
-        kotlin_version = '1.4.20'
+        //1.3.21
+        //1.4.21
+        kotlin_version = '1.4.21'
 
         // App dependencies
-        watchFaceAlphaVersion = '1.0.0-alpha3'
+        // TODO: Replace with 1.0.0-alpha04
+        watchFaceAlphaVersion = '1.0.0-alpha04'
+
+        // TODO: Check all these dependencies
+        activityVersion = '1.1.0'
+        appCompatVersion = '1.2.0'
+        constraintLayoutVersion = '2.0.2'
+        coreTestingVersion = '2.1.0'
+        coroutines = '1.4.2'
+        lifecycleVersion = '2.2.0'
+        materialVersion = '1.2.1'
+        roomVersion = '2.2.5'
     }
 
     repositories {
