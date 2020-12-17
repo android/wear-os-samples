@@ -45,7 +45,7 @@ abstract class WatchFaceDatabase : RoomDatabase() {
      * Populates the database on first use.
      */
     private class WatchFaceDatabaseCallback(
-            private val scope: CoroutineScope
+        private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)

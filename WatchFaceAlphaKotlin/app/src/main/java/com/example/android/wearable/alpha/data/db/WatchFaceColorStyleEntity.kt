@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey
  * Data class for watch face color styles.
  */
 @Entity(tableName = "watch_face_color_style_table")
-data class WatchFaceColorStyleEntity (
+data class WatchFaceColorStyleEntity(
     @PrimaryKey
     val id: String,
     val name: String,
