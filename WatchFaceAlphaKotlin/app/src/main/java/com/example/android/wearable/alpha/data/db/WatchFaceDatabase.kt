@@ -19,9 +19,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 private const val DATABASE_NAME = "analog_watch_face_database"
 
@@ -34,32 +32,13 @@ private const val DATABASE_NAME = "analog_watch_face_database"
         WatchFaceColorStyleEntity::class,
         WatchFaceArmDimensionsEntity::class],
     version = 1,
-    exportSchema = false)
+    exportSchema = false
+)
 abstract class WatchFaceDatabase : RoomDatabase() {
 
     abstract fun analogWatchFaceDao(): AnalogWatchFaceDao
     abstract fun watchFaceColorStyleDao(): WatchFaceColorStyleDao
     abstract fun watchFaceArmDimensionsDao(): WatchFaceArmDimensionsDao
-
-    /**
-     * Populates the database on first use.
-     */
-    private class WatchFaceDatabaseCallback(
-        private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    populateAnalogDatabase(
-                            analogWatchFaceDao = database.analogWatchFaceDao(),
-                            watchFaceColorStyleDao = database.watchFaceColorStyleDao(),
-                            watchFaceArmDimensionsDao = database.watchFaceArmDimensionsDao()
-                    )
-                }
-            }
-        }
-    }
 
     companion object {
         // For Singleton instantiation
@@ -80,7 +59,7 @@ abstract class WatchFaceDatabase : RoomDatabase() {
                         // Wipes and rebuilds instead of migrating if no Migration object.
                         // Migration is not part of this sample.
                         .fallbackToDestructiveMigration()
-                        .addCallback(WatchFaceDatabaseCallback(scope))
+                        .addCallback(WatchFaceDatabaseCallback(context, scope))
                         .build()
 
                 INSTANCE = instance
