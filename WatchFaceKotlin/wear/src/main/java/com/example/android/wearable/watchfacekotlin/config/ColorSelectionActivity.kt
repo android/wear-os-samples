@@ -56,7 +56,10 @@ class ColorSelectionActivity : ComponentActivity() {
 
                 // Value is saved in [SharedPreferences] for watch face and config access.
                 if (sharedPrefString.isNotEmpty()) {
-                    sharedPref.edit { putInt(sharedPrefString, color) }
+                    sharedPref.edit {
+                        putInt(sharedPrefString, color)
+                        apply()
+                    }
 
                     // Lets Complication Config Activity know there was an update to colors.
                     setResult(RESULT_OK)

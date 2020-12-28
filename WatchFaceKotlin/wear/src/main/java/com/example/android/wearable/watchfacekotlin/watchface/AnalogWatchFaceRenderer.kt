@@ -28,7 +28,6 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -62,7 +61,6 @@ class AnalogWatchFaceRenderer(
     // visible = loads user styles, preps complications and animations.
     // not visible = shuts down animations.
     private var _visible = false
-    @InternalCoroutinesApi
     var visible: Boolean
         get() = _visible
         set(isVisible) {
@@ -81,7 +79,6 @@ class AnalogWatchFaceRenderer(
     // Ambient is the battery saving mode of the watch face. We limit the color palette and
     // animations in the mode.
     private var _ambient = false
-    @InternalCoroutinesApi
     var ambient: Boolean
         get() = _ambient
         set(inAmbientMode) {
@@ -307,7 +304,6 @@ class AnalogWatchFaceRenderer(
      * Starts the coroutine/flow "timer" to animate the second hand every second when the
      * watch face is active.
      */
-    @InternalCoroutinesApi
     private fun startSecondHandAnimation() {
         if (!secondHandAnimationActive()) {
             secondHandAnimationJob = coroutineScope.launch(Dispatchers.Main) {
