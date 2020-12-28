@@ -36,13 +36,11 @@ class WatchFaceRepository(
     // [AnalogWatchFaceEntity] properties/operations:
     val allAnalogWatchFaces: Flow<List<AnalogWatchFaceEntity>> = analogWatchFaceDao.getAll()
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insertAnalogWatchFace(analogWatchFace: AnalogWatchFaceEntity) {
         analogWatchFaceDao.insert(analogWatchFace)
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteAllAnalogWatchFaces() {
         analogWatchFaceDao.deleteAll()
@@ -51,13 +49,11 @@ class WatchFaceRepository(
     // [WatchFaceColorStyleEntity] properties/operations:
     val watchFaceColorStyle: Flow<List<WatchFaceColorStyleEntity>> = watchFaceColorStyleDao.getAll()
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insertWatchFaceColorStyle(colorStyle: WatchFaceColorStyleEntity) {
         watchFaceColorStyleDao.insert(colorStyle)
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteAllWatchFaceColorStyles() {
         watchFaceColorStyleDao.deleteAll()
@@ -67,13 +63,11 @@ class WatchFaceRepository(
     val watchFaceArmDimensions: Flow<List<WatchFaceArmDimensionsEntity>> =
         watchFaceArmDimensionsDao.getAll()
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insertWatchFaceArmDimensions(armDimensions: WatchFaceArmDimensionsEntity) {
         watchFaceArmDimensionsDao.insert(armDimensions)
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteAllWatchFaceArmDimensions() {
         watchFaceArmDimensionsDao.deleteAll()

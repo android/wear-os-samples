@@ -25,18 +25,21 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "watch_face_color_style_table")
 data class WatchFaceColorStyleEntity(
     @PrimaryKey
+    @ColumnInfo(name = "id")
     val id: String,
+
+    @ColumnInfo(name = "name")
     val name: String,
 
     @ColumnInfo(name = "primary_color")
-    var primaryColor: Int,
+    val primaryColor: Int,
 
     @ColumnInfo(name = "secondary_color")
-    var secondaryColor: Int,
+    val secondaryColor: Int,
 
     @ColumnInfo(name = "background_color")
-    var backgroundColor: Int,
+    val backgroundColor: Int,
 
     @ColumnInfo(name = "outer_element_color")
-    var outerElementColor: Int
+    val outerElementColor: Int
 )

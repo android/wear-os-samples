@@ -25,7 +25,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "watch_face_arm_dimensions_table")
 data class WatchFaceArmDimensionsEntity(
     @PrimaryKey
+    @ColumnInfo(name = "id")
     val id: String,
+
+    @ColumnInfo(name = "name")
     val name: String,
 
     @ColumnInfo(name = "width_fraction")

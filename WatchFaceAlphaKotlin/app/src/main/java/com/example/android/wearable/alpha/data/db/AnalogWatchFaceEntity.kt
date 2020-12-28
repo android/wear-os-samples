@@ -69,8 +69,11 @@ import androidx.room.PrimaryKey
 )
 data class AnalogWatchFaceEntity(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     val id: Int,
-    var name: String,
+
+    @ColumnInfo(name = "name")
+    val name: String,
 
     @ColumnInfo(name = "active_color_style_id")
     val activeColorStyleId: String,
@@ -91,20 +94,20 @@ data class AnalogWatchFaceEntity(
     val secondHandDimensionsId: String,
 
     @ColumnInfo(name = "center_circle_diameter_fraction")
-    var centerCircleDiameterFraction: Float,
+    val centerCircleDiameterFraction: Float,
 
     @ColumnInfo(name = "number_radius_fraction")
-    var numberRadiusFraction: Float,
+    val numberRadiusFraction: Float,
 
     @ColumnInfo(name = "outer_circle_stoke_width_fraction")
-    var outerCircleStokeWidthFraction: Float,
+    val outerCircleStokeWidthFraction: Float,
 
     @ColumnInfo(name = "number_style_outer_circle_radius_fraction")
-    var numberStyleOuterCircleRadiusFraction: Float,
+    val numberStyleOuterCircleRadiusFraction: Float,
 
     @ColumnInfo(name = "gap_between_outer_circle_and_border_fraction")
-    var gapBetweenOuterCircleAndBorderFraction: Float,
+    val gapBetweenOuterCircleAndBorderFraction: Float,
 
     @ColumnInfo(name = "gap_between_hand_and_center_fraction")
-    var gapBetweenHandAndCenterFraction: Float
+    val gapBetweenHandAndCenterFraction: Float
 )
