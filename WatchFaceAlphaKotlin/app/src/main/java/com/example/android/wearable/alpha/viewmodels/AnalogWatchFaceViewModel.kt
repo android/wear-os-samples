@@ -17,7 +17,6 @@ package com.example.android.wearable.alpha.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.example.android.wearable.alpha.AnalogWatchFaceService
 import com.example.android.wearable.alpha.data.WatchFaceRepository
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceEntity
 import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
