@@ -23,6 +23,7 @@ import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
 import com.example.android.wearable.alpha.data.db.WatchFaceColorStyleEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 /**
@@ -34,10 +35,6 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
     private val scope: CoroutineScope = MainScope()
 
     // [AnalogWatchFaceEntity] operations:
-    // Using LiveData to cache what's returned has several benefits:
-    // - We can put an observer on the data (instead of polling for changes) and only update the
-    //   the UI when the data actually changes.
-    // - Repository is completely separated from the UI through the ViewModel.
     val allAnalogWatchFaces: LiveData<List<AnalogWatchFaceEntity>> =
         repository.allAnalogWatchFaces.asLiveData()
 
@@ -72,5 +69,9 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
 
     fun deleteAllWatchFaceArmDimensions() = scope.launch {
         repository.deleteAllWatchFaceArmDimensions()
+    }
+
+    fun clear() {
+        scope.cancel("AnalogWatchFaceViewModel.clear() request")
     }
 }
