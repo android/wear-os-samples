@@ -85,7 +85,7 @@ class WatchFaceDatabaseCallback(
 /**
  * Utility method to populate the database with default values for an analog watch face.
  */
-suspend fun populateAnalogDatabase(
+private suspend fun populateAnalogDatabase(
     analogWatchFaceDao: AnalogWatchFaceDao,
     watchFaceColorStyleDao: WatchFaceColorStyleDao,
     watchFaceArmDimensionsDao: WatchFaceArmDimensionsDao

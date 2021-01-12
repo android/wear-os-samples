@@ -51,7 +51,7 @@ abstract class WatchFaceDatabase : RoomDatabase() {
         ): WatchFaceDatabase {
 
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                INSTANCE = Room.databaseBuilder(
                     context.applicationContext,
                     WatchFaceDatabase::class.java,
                     DATABASE_NAME
@@ -62,8 +62,7 @@ abstract class WatchFaceDatabase : RoomDatabase() {
                         .addCallback(WatchFaceDatabaseCallback(context, scope))
                         .build()
 
-                INSTANCE = instance
-                return instance
+                return INSTANCE!!
             }
         }
     }
