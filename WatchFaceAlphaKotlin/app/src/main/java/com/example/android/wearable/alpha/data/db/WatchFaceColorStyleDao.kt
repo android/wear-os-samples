@@ -21,7 +21,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Defines [WatchFaceColorStyleEntity] database operations.
@@ -30,10 +29,10 @@ import kotlinx.coroutines.flow.Flow
 interface WatchFaceColorStyleDao {
 
     @Query("SELECT * FROM watch_face_color_style_table ORDER BY id ASC")
-    fun getAll(): Flow<List<WatchFaceColorStyleEntity>>
+    suspend fun getAll(): List<WatchFaceColorStyleEntity>
 
-    @Query("SELECT * FROM watch_face_color_style_table WHERE id=(:id)")
-    fun get(id: String): Flow<WatchFaceColorStyleEntity>
+    @Query("SELECT * FROM watch_face_color_style_table WHERE id=(:id) LIMIT 1")
+    suspend fun get(id: String): WatchFaceColorStyleEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(colorStyle: WatchFaceColorStyleEntity)

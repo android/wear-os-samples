@@ -20,6 +20,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
@@ -29,10 +30,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AnalogWatchFaceDao {
     @Query("SELECT * FROM analog_watch_face_table ORDER BY name ASC")
-    fun getAll(): Flow<List<AnalogWatchFaceEntity>>
+    suspend fun getAll(): List<AnalogWatchFaceEntity>
 
-    @Query("SELECT * FROM analog_watch_face_table WHERE id=(:id)")
-    fun get(id: Int): Flow<AnalogWatchFaceEntity>
+    @Query("SELECT * FROM analog_watch_face_table WHERE id=(:id) LIMIT 1")
+    suspend fun get(id: Int): AnalogWatchFaceEntity
+
+    @Transaction
+    @Query("SELECT * FROM analog_watch_face_table WHERE id=(:id) LIMIT 1")
+    fun getAnalogWatchFaceAndStylesAndDimensions(id: Int): Flow<AnalogWatchFaceAndStylesAndDimensions>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(analogWatchFace: AnalogWatchFaceEntity)

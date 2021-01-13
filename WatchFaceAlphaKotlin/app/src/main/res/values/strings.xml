@@ -17,13 +17,11 @@
 <resources>
     <string name="app_name" translatable="false">WatchFace Alpha (Kotlin)</string>
 
-    <string name="canvas_analog_watch_face_name"
-        translatable="false">Example Analog</string>
+    <string name="analog_watch_face_name" translatable="false">Alpha Analog</string>
 
-    <string name="canvas_digital_watch_face_name"
-        translatable="false">Example Digital</string>
+    <string name="digital_watch_face_name" translatable="false">Alpha Digital</string>
 
-    <string name="gl_watch_face_name" translatable="false">Example OpenGL</string>
+    <string name="gl_watch_face_name" translatable="false">Alpha OpenGL</string>
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="hour_arm_dimension_name">Hour Hand</string>

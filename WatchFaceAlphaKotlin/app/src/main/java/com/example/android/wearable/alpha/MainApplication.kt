@@ -25,7 +25,6 @@ import kotlinx.coroutines.SupervisorJob
  * Sets up repository for all app watch faces (services).
  */
 class MainApplication : Application() {
-
     // Required for pre-population of empty database.
     // No need to cancel this scope as it'll be torn down with the process.
     private val applicationScope = CoroutineScope(SupervisorJob())
@@ -33,7 +32,7 @@ class MainApplication : Application() {
     // Both database and repository use lazy so they aren't created when the app starts, but only
     // when repository is first needed.
     private val database by lazy {
-        WatchFaceDatabase.getDatabase(this, applicationScope)
+        WatchFaceDatabase.getDatabase(applicationContext, applicationScope)
     }
 
     val repository by lazy {

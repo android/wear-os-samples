@@ -15,12 +15,10 @@
  */
 package com.example.android.wearable.alpha.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.android.wearable.alpha.data.WatchFaceRepository
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceEntity
 import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
-import com.example.android.wearable.alpha.data.db.WatchFaceColorStyleEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -35,40 +33,32 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
     private val scope: CoroutineScope = MainScope()
 
     // [AnalogWatchFaceEntity] operations:
-    val allAnalogWatchFaces: LiveData<List<AnalogWatchFaceEntity>> =
-        repository.allAnalogWatchFaces.asLiveData()
+    suspend fun getAnalogWatchFace(analogWatchFaceId: Int) =
+        repository.getAnalogWatchFace(analogWatchFaceId)
+
+    fun getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId: Int) =
+        repository.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId).asLiveData()
 
     // Launches a new coroutine to insert the data in a non-blocking way
-    fun insertAnalogWatchFace(analogWatchFaceEntity: AnalogWatchFaceEntity) = scope.launch {
-        repository.insertAnalogWatchFace(analogWatchFaceEntity)
-    }
-
-    fun deleteAllAnalogWatchFaces() = scope.launch {
-        repository.deleteAllAnalogWatchFaces()
+    fun updateAnalogWatchFace(analogWatchFaceEntity: AnalogWatchFaceEntity) = scope.launch {
+        repository.updateAnalogWatchFace(analogWatchFaceEntity)
     }
 
     // [WatchFaceColorStyleEntity] operations:
-    val allWatchFaceColorStyles: LiveData<List<WatchFaceColorStyleEntity>> =
-            repository.watchFaceColorStyle.asLiveData()
+    suspend fun getAllWatchFaceColorStyles() =
+        repository.getAllWatchFaceColorStyles()
 
-    fun insertWatchFaceColorStyle(watchFaceColorStyle: WatchFaceColorStyleEntity) = scope.launch {
-        repository.insertWatchFaceColorStyle(watchFaceColorStyle)
-    }
+    suspend fun getWatchFaceColorStyles(watchFaceColorStylesId: String) =
+        repository.getWatchFaceColorStyles(watchFaceColorStylesId)
 
-    fun deleteAllWatchFaceColorStyles() = scope.launch {
-        repository.deleteAllWatchFaceColorStyles()
-    }
 
     // [WatchFaceArmDimensionsEntity] operations:
-    val allWatchFaceArmDimensions: LiveData<List<WatchFaceArmDimensionsEntity>> =
-            repository.watchFaceArmDimensions.asLiveData()
+    suspend fun getWatchFaceArmDimensions(watchFaceArmDimensionsId: String) =
+        repository.getWatchFaceArmDimensions(watchFaceArmDimensionsId)
 
-    fun insertWatchFaceArmDimensions(watchFaceArmDimensionsEntity: WatchFaceArmDimensionsEntity) = scope.launch {
-        repository.insertWatchFaceArmDimensions(watchFaceArmDimensionsEntity)
-    }
-
-    fun deleteAllWatchFaceArmDimensions() = scope.launch {
-        repository.deleteAllWatchFaceArmDimensions()
+    // Launches a new coroutine to insert the data in a non-blocking way
+    fun updateWatchFaceArmDimensions(watchFaceArmDimensionsEntity: WatchFaceArmDimensionsEntity) = scope.launch {
+        repository.updateWatchFaceArmDimensions(watchFaceArmDimensionsEntity)
     }
 
     fun clear() {
