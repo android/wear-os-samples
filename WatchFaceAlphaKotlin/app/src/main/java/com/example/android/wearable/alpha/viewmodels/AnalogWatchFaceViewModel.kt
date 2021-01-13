@@ -51,7 +51,6 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
     suspend fun getWatchFaceColorStyles(watchFaceColorStylesId: String) =
         repository.getWatchFaceColorStyles(watchFaceColorStylesId)
 
-
     // [WatchFaceArmDimensionsEntity] operations:
     suspend fun getWatchFaceArmDimensions(watchFaceArmDimensionsId: String) =
         repository.getWatchFaceArmDimensions(watchFaceArmDimensionsId)
