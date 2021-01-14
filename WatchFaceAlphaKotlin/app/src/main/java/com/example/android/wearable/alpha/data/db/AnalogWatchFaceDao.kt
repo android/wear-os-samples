@@ -37,7 +37,7 @@ interface AnalogWatchFaceDao {
 
     @Transaction
     @Query("SELECT * FROM analog_watch_face_table WHERE id=(:id) LIMIT 1")
-    fun getAnalogWatchFaceAndStylesAndDimensions(id: Int): Flow<AnalogWatchFaceAndStylesAndDimensions>
+    fun getWithStylesAndDimensions(id: Int): Flow<AnalogWatchFaceAndStylesAndDimensions>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(analogWatchFace: AnalogWatchFaceEntity)

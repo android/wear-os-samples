@@ -33,16 +33,16 @@ class WatchFaceRepository(
 ) {
 
     // [AnalogWatchFaceEntity] properties/operations:
+    @WorkerThread
     suspend fun getAnalogWatchFace(analogWatchFaceId: Int) =
         analogWatchFaceDao.get(analogWatchFaceId)
 
     fun getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId: Int) =
-        analogWatchFaceDao.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId)
+        analogWatchFaceDao.getWithStylesAndDimensions(analogWatchFaceId)
 
     @WorkerThread
-    suspend fun updateAnalogWatchFace(analogWatchFace: AnalogWatchFaceEntity) {
+    suspend fun updateAnalogWatchFace(analogWatchFace: AnalogWatchFaceEntity) =
         analogWatchFaceDao.update(analogWatchFace)
-    }
 
     // [WatchFaceColorStyleEntity] properties/operations:
     @WorkerThread
@@ -54,11 +54,12 @@ class WatchFaceRepository(
         watchFaceColorStyleDao.get(watchFaceColorStylesId)
 
     // [WatchFaceArmDimensionsEntity] properties/operations:
+    @WorkerThread
     suspend fun getWatchFaceArmDimensions(watchFaceArmDimensionsId: String) =
         watchFaceArmDimensionsDao.get(watchFaceArmDimensionsId)
 
     @WorkerThread
-    suspend fun updateWatchFaceArmDimensions(armDimensions: WatchFaceArmDimensionsEntity) {
+    suspend fun updateWatchFaceArmDimensions(armDimensions: WatchFaceArmDimensionsEntity) =
         watchFaceArmDimensionsDao.update(armDimensions)
-    }
+
 }

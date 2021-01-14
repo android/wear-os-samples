@@ -31,7 +31,7 @@ private const val DATABASE_NAME = "analog_watch_face_database"
         AnalogWatchFaceEntity::class,
         WatchFaceColorStyleEntity::class,
         WatchFaceArmDimensionsEntity::class],
-    version = 3,
+    version = 2,
     exportSchema = false
 )
 abstract class WatchFaceDatabase : RoomDatabase() {
