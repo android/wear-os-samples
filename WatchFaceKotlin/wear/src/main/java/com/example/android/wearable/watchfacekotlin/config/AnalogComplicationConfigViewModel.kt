@@ -122,7 +122,6 @@ class AnalogComplicationConfigViewModel(application: Application) : AndroidViewM
                 AnalogWatchFace.saved_unread_notifications_pref,
                 isChecked
             )
-            apply()
         }
         _displayUnreadNotifications.value = isChecked
     }

@@ -58,7 +58,6 @@ class ColorSelectionActivity : ComponentActivity() {
                 if (sharedPrefString.isNotEmpty()) {
                     sharedPref.edit {
                         putInt(sharedPrefString, color)
-                        apply()
                     }
 
                     // Lets Complication Config Activity know there was an update to colors.
