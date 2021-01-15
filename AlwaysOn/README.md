@@ -21,6 +21,12 @@ As always, you will still want to apply the [performance guidelines][4] outlined
 [3]: https://developer.android.com/training/wearables/watch-faces/designing.html#DesignGuidelines
 [4]: https://developer.android.com/training/wearables/watch-faces/performance.html
 
+IMPORTANT NOTE
+--------------
+Most apps shouldn't use the always on/ambient mode APIs, as it drains battery life and the system already handles this for you.
+
+That is, by default (without this API), the system will go into system ambient mode if the user hasn't interacted with the watch in a period of time, and if the user interacts again with the watch soon after that, the system will automatically bring up your app again in the same state it was before that point which covers most use cases.
+
 Pre-requisites
 --------------
 
