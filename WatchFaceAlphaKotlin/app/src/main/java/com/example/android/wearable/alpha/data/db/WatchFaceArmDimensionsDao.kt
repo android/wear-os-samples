@@ -30,6 +30,8 @@ interface WatchFaceArmDimensionsDao {
     @Query("SELECT * FROM watch_face_arm_dimensions_table ORDER BY id ASC")
     suspend fun getAll(): List<WatchFaceArmDimensionsEntity>
 
+    // LIMIT = 1 ensures I only get one item back and can slightly improve performance in larger
+    // databases (but probably not one of this size).
     @Query("SELECT * FROM watch_face_arm_dimensions_table WHERE id=(:id) LIMIT 1")
     suspend fun get(id: String): WatchFaceArmDimensionsEntity
 

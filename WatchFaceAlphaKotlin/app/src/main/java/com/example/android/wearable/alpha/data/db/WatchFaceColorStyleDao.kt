@@ -31,6 +31,8 @@ interface WatchFaceColorStyleDao {
     @Query("SELECT * FROM watch_face_color_style_table ORDER BY id ASC")
     suspend fun getAll(): List<WatchFaceColorStyleEntity>
 
+    // LIMIT = 1 ensures I only get one item back and can slightly improve performance in larger
+    // databases (but probably not one of this size).
     @Query("SELECT * FROM watch_face_color_style_table WHERE id=(:id) LIMIT 1")
     suspend fun get(id: String): WatchFaceColorStyleEntity
 

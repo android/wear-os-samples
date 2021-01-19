@@ -32,9 +32,13 @@ interface AnalogWatchFaceDao {
     @Query("SELECT * FROM analog_watch_face_table ORDER BY name ASC")
     suspend fun getAll(): List<AnalogWatchFaceEntity>
 
+    // LIMIT = 1 ensures I only get one item back and can slightly improve performance in larger
+    // databases (but probably not one of this size).
     @Query("SELECT * FROM analog_watch_face_table WHERE id=(:id) LIMIT 1")
     suspend fun get(id: Int): AnalogWatchFaceEntity
 
+    // LIMIT = 1 ensures I only get one item back and can slightly improve performance in larger
+    // databases (but probably not one of this size).
     @Transaction
     @Query("SELECT * FROM analog_watch_face_table WHERE id=(:id) LIMIT 1")
     fun getWithStylesAndDimensions(id: Int): Flow<AnalogWatchFaceAndStylesAndDimensions>
