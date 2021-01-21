@@ -22,7 +22,6 @@ import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsDao
 import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
 import com.example.android.wearable.alpha.data.db.WatchFaceColorStyleDao
 import com.example.android.wearable.alpha.data.db.WatchFaceColorStyleEntity
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Manages queries to backend.
@@ -34,42 +33,27 @@ class WatchFaceRepository(
 ) {
 
     // [AnalogWatchFaceEntity] properties/operations:
-    val allAnalogWatchFaces: Flow<List<AnalogWatchFaceEntity>> = analogWatchFaceDao.getAll()
+    suspend fun getAnalogWatchFace(analogWatchFaceId: Int) =
+        analogWatchFaceDao.get(analogWatchFaceId)
 
-    @WorkerThread
-    suspend fun insertAnalogWatchFace(analogWatchFace: AnalogWatchFaceEntity) {
-        analogWatchFaceDao.insert(analogWatchFace)
-    }
+    fun getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId: Int) =
+        analogWatchFaceDao.getWithStylesAndDimensions(analogWatchFaceId)
 
-    @WorkerThread
-    suspend fun deleteAllAnalogWatchFaces() {
-        analogWatchFaceDao.deleteAll()
-    }
+    suspend fun updateAnalogWatchFace(analogWatchFace: AnalogWatchFaceEntity) =
+        analogWatchFaceDao.update(analogWatchFace)
 
     // [WatchFaceColorStyleEntity] properties/operations:
-    val watchFaceColorStyle: Flow<List<WatchFaceColorStyleEntity>> = watchFaceColorStyleDao.getAll()
+    suspend fun getAllWatchFaceColorStyles(): List<WatchFaceColorStyleEntity> =
+        watchFaceColorStyleDao.getAll()
 
-    @WorkerThread
-    suspend fun insertWatchFaceColorStyle(colorStyle: WatchFaceColorStyleEntity) {
-        watchFaceColorStyleDao.insert(colorStyle)
-    }
-
-    @WorkerThread
-    suspend fun deleteAllWatchFaceColorStyles() {
-        watchFaceColorStyleDao.deleteAll()
-    }
+    suspend fun getWatchFaceColorStyles(watchFaceColorStylesId: String): WatchFaceColorStyleEntity =
+        watchFaceColorStyleDao.get(watchFaceColorStylesId)
 
     // [WatchFaceArmDimensionsEntity] properties/operations:
-    val watchFaceArmDimensions: Flow<List<WatchFaceArmDimensionsEntity>> =
-        watchFaceArmDimensionsDao.getAll()
+    suspend fun getWatchFaceArmDimensions(watchFaceArmDimensionsId: String) =
+        watchFaceArmDimensionsDao.get(watchFaceArmDimensionsId)
 
-    @WorkerThread
-    suspend fun insertWatchFaceArmDimensions(armDimensions: WatchFaceArmDimensionsEntity) {
-        watchFaceArmDimensionsDao.insert(armDimensions)
-    }
+    suspend fun updateWatchFaceArmDimensions(armDimensions: WatchFaceArmDimensionsEntity) =
+        watchFaceArmDimensionsDao.update(armDimensions)
 
-    @WorkerThread
-    suspend fun deleteAllWatchFaceArmDimensions() {
-        watchFaceArmDimensionsDao.deleteAll()
-    }
 }

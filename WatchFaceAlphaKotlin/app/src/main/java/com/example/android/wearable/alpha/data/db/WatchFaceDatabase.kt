@@ -31,7 +31,7 @@ private const val DATABASE_NAME = "analog_watch_face_database"
         AnalogWatchFaceEntity::class,
         WatchFaceColorStyleEntity::class,
         WatchFaceArmDimensionsEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class WatchFaceDatabase : RoomDatabase() {
@@ -56,12 +56,11 @@ abstract class WatchFaceDatabase : RoomDatabase() {
                     WatchFaceDatabase::class.java,
                     DATABASE_NAME
                 )
-                        // Wipes and rebuilds instead of migrating if no Migration object.
-                        // Migration is not part of this sample.
-                        .fallbackToDestructiveMigration()
-                        .addCallback(WatchFaceDatabaseCallback(context, scope))
-                        .build()
-
+                    // Wipes and rebuilds instead of migrating if no Migration object.
+                    // Migration is not part of this sample.
+                    .fallbackToDestructiveMigration()
+                    .addCallback(WatchFaceDatabaseCallback(context, scope))
+                    .build()
                 return INSTANCE!!
             }
         }

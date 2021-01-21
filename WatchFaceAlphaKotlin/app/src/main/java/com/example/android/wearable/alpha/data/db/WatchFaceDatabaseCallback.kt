@@ -16,12 +16,10 @@
 package com.example.android.wearable.alpha.data.db
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.wearable.alpha.R
-import kotlin.random.Random
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -36,6 +34,8 @@ private const val GAP_BETWEEN_HAND_AND_CENTER_FRACTION =
 
 private const val NUMBER_RADIUS_FRACTION = 0.45f
 
+private const val DRAW_HOUR_PIPS = true
+
 private const val HOUR_HAND_LENGTH_FRACTION = 0.21028f
 private const val HOUR_HAND_WIDTH_FRACTION = 0.02336f
 
@@ -45,9 +45,15 @@ private const val MINUTE_HAND_WIDTH_FRACTION = 0.0163f
 private const val SECOND_HAND_LENGTH_FRACTION = 0.37383f
 private const val SECOND_HAND_WIDTH_FRACTION = 0.00934f
 
+// Used for corner roundness of the arms.
+private const val ROUNDED_RECTANGLE_CORNERS_RADIUS = 1.5f
+private const val SQUARE_RECTANGLE_CORNERS_RADIUS = 0.0f
+
 // Primary key ids assigned for various style and dimension elements in the database.
 // These are accessible to the watch face, so it can assign the element the user chooses in
 // the watch face settings.
+const val analogWatchFaceKeyId = 1
+
 const val hourHandDimensionsKeyId = "hour_key_id"
 const val minuteHandDimensionsKeyId = "minute_key_id"
 const val secondHandDimensionsKeyId = "second_key_id"
@@ -73,6 +79,7 @@ class WatchFaceDatabaseCallback(
         WatchFaceDatabase.getDatabase(context, scope).let { database ->
             scope.launch {
                 populateAnalogDatabase(
+                    context = context,
                     analogWatchFaceDao = database.analogWatchFaceDao(),
                     watchFaceColorStyleDao = database.watchFaceColorStyleDao(),
                     watchFaceArmDimensionsDao = database.watchFaceArmDimensionsDao()
@@ -86,6 +93,7 @@ class WatchFaceDatabaseCallback(
  * Utility method to populate the database with default values for an analog watch face.
  */
 private suspend fun populateAnalogDatabase(
+    context: Context,
     analogWatchFaceDao: AnalogWatchFaceDao,
     watchFaceColorStyleDao: WatchFaceColorStyleDao,
     watchFaceArmDimensionsDao: WatchFaceArmDimensionsDao
@@ -100,27 +108,33 @@ private suspend fun populateAnalogDatabase(
     watchFaceArmDimensionsDao.insert(
         WatchFaceArmDimensionsEntity(
             id = hourHandDimensionsKeyId,
-            name = Resources.getSystem().getString(R.string.minute_arm_dimension_name),
+            name = context.getString(R.string.hour_arm_dimension_name),
             widthFraction = HOUR_HAND_WIDTH_FRACTION,
-            lengthFraction = HOUR_HAND_LENGTH_FRACTION
+            lengthFraction = HOUR_HAND_LENGTH_FRACTION,
+            xRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS,
+            yRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS
         )
     )
 
     watchFaceArmDimensionsDao.insert(
         WatchFaceArmDimensionsEntity(
             id = minuteHandDimensionsKeyId,
-            name = Resources.getSystem().getString(R.string.minute_arm_dimension_name),
+            name = context.getString(R.string.minute_arm_dimension_name),
             widthFraction = MINUTE_HAND_WIDTH_FRACTION,
-            lengthFraction = MINUTE_HAND_LENGTH_FRACTION
+            lengthFraction = MINUTE_HAND_LENGTH_FRACTION,
+            xRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS,
+            yRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS
         )
     )
 
     watchFaceArmDimensionsDao.insert(
         WatchFaceArmDimensionsEntity(
             id = secondHandDimensionsKeyId,
-            name = Resources.getSystem().getString(R.string.minute_arm_dimension_name),
+            name = context.getString(R.string.second_arm_dimension_name),
             widthFraction = SECOND_HAND_WIDTH_FRACTION,
-            lengthFraction = SECOND_HAND_LENGTH_FRACTION
+            lengthFraction = SECOND_HAND_LENGTH_FRACTION,
+            xRadiusRoundedCorners = SQUARE_RECTANGLE_CORNERS_RADIUS,
+            yRadiusRoundedCorners = SQUARE_RECTANGLE_CORNERS_RADIUS
         )
     )
 
@@ -128,11 +142,13 @@ private suspend fun populateAnalogDatabase(
     watchFaceColorStyleDao.insert(
         WatchFaceColorStyleEntity(
             id = ambientColorStyleKeyId,
-            name = Resources.getSystem().getString(R.string.ambient_style_name),
-            primaryColor = R.color.ambient_primary_color,
-            secondaryColor = R.color.ambient_secondary_color,
-            backgroundColor = R.color.ambient_background_color,
-            outerElementColor = R.color.ambient_outer_element_color)
+            name = context.getString(R.string.ambient_style_name),
+            iconDrawableId = R.drawable.white_style,
+            complicationStyleDrawableId = R.drawable.complication_white_style,
+            primaryColor = context.getColor(R.color.ambient_primary_color),
+            secondaryColor = context.getColor(R.color.ambient_secondary_color),
+            backgroundColor = context.getColor(R.color.ambient_background_color),
+            outerElementColor = context.getColor(R.color.ambient_outer_element_color))
     )
 
     // Populates Styles:
@@ -140,53 +156,61 @@ private suspend fun populateAnalogDatabase(
     watchFaceColorStyleDao.insert(
         WatchFaceColorStyleEntity(
             id = redColorStyleKeyId,
-            name = Resources.getSystem().getString(R.string.red_style_name),
-            primaryColor = R.color.red_primary_color,
-            secondaryColor = R.color.red_secondary_color,
-            backgroundColor = R.color.red_background_color,
-            outerElementColor = R.color.red_outer_element_color)
+            name = context.getString(R.string.red_style_name),
+            iconDrawableId = R.drawable.red_style,
+            complicationStyleDrawableId = R.drawable.complication_red_style,
+            primaryColor = context.getColor(R.color.red_primary_color),
+            secondaryColor = context.getColor(R.color.red_secondary_color),
+            backgroundColor = context.getColor(R.color.red_background_color),
+            outerElementColor = context.getColor(R.color.red_outer_element_color))
     )
 
     // Green Style
     watchFaceColorStyleDao.insert(
         WatchFaceColorStyleEntity(
             id = greenColorStyleKeyId,
-            name = Resources.getSystem().getString(R.string.green_style_name),
-            primaryColor = R.color.green_primary_color,
-            secondaryColor = R.color.green_secondary_color,
-            backgroundColor = R.color.green_background_color,
-            outerElementColor = R.color.green_outer_element_color)
+            name = context.getString(R.string.green_style_name),
+            iconDrawableId = R.drawable.green_style,
+            complicationStyleDrawableId = R.drawable.complication_green_style,
+            primaryColor = context.getColor(R.color.green_primary_color),
+            secondaryColor = context.getColor(R.color.green_secondary_color),
+            backgroundColor = context.getColor(R.color.green_background_color),
+            outerElementColor = context.getColor(R.color.green_outer_element_color))
     )
 
     // Blue Style
     watchFaceColorStyleDao.insert(
         WatchFaceColorStyleEntity(
             id = blueColorStyleKeyId,
-            name = Resources.getSystem().getString(R.string.blue_style_name),
-            primaryColor = R.color.blue_primary_color,
-            secondaryColor = R.color.blue_secondary_color,
-            backgroundColor = R.color.blue_background_color,
-            outerElementColor = R.color.blue_outer_element_color)
+            name = context.getString(R.string.blue_style_name),
+            iconDrawableId = R.drawable.blue_style,
+            complicationStyleDrawableId = R.drawable.complication_blue_style,
+            primaryColor = context.getColor(R.color.blue_primary_color),
+            secondaryColor = context.getColor(R.color.blue_secondary_color),
+            backgroundColor = context.getColor(R.color.blue_background_color),
+            outerElementColor = context.getColor(R.color.blue_outer_element_color))
     )
 
     // White Style
     watchFaceColorStyleDao.insert(
         WatchFaceColorStyleEntity(
             id = whiteColorStyleKeyId,
-            name = Resources.getSystem().getString(R.string.white_style_name),
-            primaryColor = R.color.white_primary_color,
-            secondaryColor = R.color.white_secondary_color,
-            backgroundColor = R.color.white_background_color,
-            outerElementColor = R.color.white_outer_element_color)
+            name = context.getString(R.string.white_style_name),
+            iconDrawableId = R.drawable.white_style,
+            complicationStyleDrawableId = R.drawable.complication_white_style,
+            primaryColor = context.getColor(R.color.white_primary_color),
+            secondaryColor = context.getColor(R.color.white_secondary_color),
+            backgroundColor = context.getColor(R.color.white_background_color),
+            outerElementColor = context.getColor(R.color.white_outer_element_color))
     )
 
     analogWatchFaceDao.insert(
         AnalogWatchFaceEntity(
-            id = Random.nextInt(0, 100000),
+            id = analogWatchFaceKeyId,
             name = "Analog Watch Face",
             activeColorStyleId = redColorStyleKeyId,
             ambientColorStyleId = ambientColorStyleKeyId,
-            complicationDrawableStyleId = R.drawable.complication_red_style,
+            drawHourPips = DRAW_HOUR_PIPS,
             hourHandDimensionsId = hourHandDimensionsKeyId,
             minuteHandDimensionsId = minuteHandDimensionsKeyId,
             secondHandDimensionsId = secondHandDimensionsKeyId,

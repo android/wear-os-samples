@@ -31,6 +31,12 @@ data class WatchFaceColorStyleEntity(
     @ColumnInfo(name = "name")
     val name: String,
 
+    @ColumnInfo(name = "icon_drawable_id")
+    val iconDrawableId: Int,
+
+    @ColumnInfo(name = "complication_style_drawable_id")
+    val complicationStyleDrawableId: Int,
+
     @ColumnInfo(name = "primary_color")
     val primaryColor: Int,
 

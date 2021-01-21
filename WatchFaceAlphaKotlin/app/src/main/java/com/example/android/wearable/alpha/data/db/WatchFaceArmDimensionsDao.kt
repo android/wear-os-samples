@@ -21,7 +21,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Defines [WatchFaceArmDimensionsEntity] database operations.
@@ -29,10 +28,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WatchFaceArmDimensionsDao {
     @Query("SELECT * FROM watch_face_arm_dimensions_table ORDER BY id ASC")
-    fun getAll(): Flow<List<WatchFaceArmDimensionsEntity>>
+    suspend fun getAll(): List<WatchFaceArmDimensionsEntity>
 
-    @Query("SELECT * FROM watch_face_arm_dimensions_table WHERE id=(:id)")
-    fun get(id: String): Flow<WatchFaceArmDimensionsEntity>
+    // LIMIT = 1 ensures I only get one item back and can slightly improve performance in larger
+    // databases (but probably not one of this size).
+    @Query("SELECT * FROM watch_face_arm_dimensions_table WHERE id=(:id) LIMIT 1")
+    suspend fun get(id: String): WatchFaceArmDimensionsEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(dimensions: WatchFaceArmDimensionsEntity)

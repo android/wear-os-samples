@@ -81,8 +81,8 @@ data class AnalogWatchFaceEntity(
     @ColumnInfo(name = "ambient_color_style_id")
     val ambientColorStyleId: String,
 
-    @ColumnInfo(name = "complication_drawable_style_id")
-    val complicationDrawableStyleId: Int,
+    @ColumnInfo(name = "draw_hour_pips")
+    val drawHourPips: Boolean,
 
     @ColumnInfo(name = "hour_hand_dimensions_id")
     val hourHandDimensionsId: String,

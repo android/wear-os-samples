@@ -35,5 +35,11 @@ data class WatchFaceArmDimensionsEntity(
     val widthFraction: Float,
 
     @ColumnInfo(name = "length_fraction")
-    val lengthFraction: Float
+    val lengthFraction: Float,
+
+    @ColumnInfo(name = "x_radius_rounded_corners")
+    val xRadiusRoundedCorners: Float,
+
+    @ColumnInfo(name = "y_radius_rounded_corners")
+    val yRadiusRoundedCorners: Float
 )
