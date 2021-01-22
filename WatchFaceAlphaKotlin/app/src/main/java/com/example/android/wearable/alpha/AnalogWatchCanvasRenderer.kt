@@ -35,19 +35,10 @@ import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.Layer
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleRepository
-import com.example.android.wearable.alpha.AnalogWatchFaceService.Companion.COLOR_STYLE_SETTING
-import com.example.android.wearable.alpha.AnalogWatchFaceService.Companion.DRAW_HOUR_PIPS_STYLE_SETTING
-import com.example.android.wearable.alpha.AnalogWatchFaceService.Companion.WATCH_HAND_LENGTH_STYLE_SETTING
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceAndStylesAndDimensions
-import com.example.android.wearable.alpha.data.db.AnalogWatchFaceEntity
-import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
 import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
 /**
  * Renders watch face via data in Room database. Also, updates watch face state based on setting
@@ -69,28 +60,63 @@ class AnalogWatchCanvasRenderer(
     canvasType,
     framePeriodMs
 ) {
-    // Used to launch coroutines (non-blocking way to insert data). We need this to read and then
-    // update multiple tables in the database for user style changes (colors, pip status, and
-    // minute hand length).
-    private val scope: CoroutineScope = MainScope()
-
     // [LiveData] [Observer] for watch face data. Because this class does not have a
     // [LifecycleOwner] and the [AnalogWatchFaceService] only inherits from a [Service] and not a
     // [LifecycleService], we must use observeForever() and removeObserver() when destroying the
     // class.
-    private val watchFaceDataObserver: Observer<AnalogWatchFaceAndStylesAndDimensions> =
-        Observer<AnalogWatchFaceAndStylesAndDimensions> {
-            val previousMinuteLength =
-                analogWatchFaceAndStylesAndDimensions?.minuteHandDimensions?.lengthFraction ?: 0.0f
+    // This observer does three things:
+    // 1. Checks to see if the complication color style has changed to manually change each
+    // complication color.
+    // 2. Checks if the minute arm length has changed and if it has, triggers a recalculation of the
+    // arms when drawing. (Note, we don't recalculate the arms each time a draw method is called,
+    // just when there are changes.)
+    // 3. Sets the new AnalogWatchFaceAndStylesAndDimensions to our local variable,
+    // analogWatchFaceAndStylesAndDimensions.
+    private val watchFaceDataObserver = Observer<AnalogWatchFaceAndStylesAndDimensions> {
 
-            val newMinuteLength = it.minuteHandDimensions.lengthFraction
+        // 1. Updates complication color style if there is a change:
+        // If the color style changes, it also means the complication color style changes, and
+        // while the color style is rendered each time the draw methods are called via the
+        // analogWatchFaceAndStylesAndDimensions instance, the complication color style must be set
+        // manually via the [ComplicationManager]. We check to see if there is a change in color
+        // style then apply it to every complication.
+        val previousComplicationColorStyle =
+            analogWatchFaceAndStylesAndDimensions?.activeColorStyle?.complicationStyleDrawableId ?: -1
 
-            analogWatchFaceAndStylesAndDimensions = it
+        val newComplicationColorStyle = it.activeColorStyle.complicationStyleDrawableId
 
-            if (previousMinuteLength != newMinuteLength) {
-                armLengthChangedRecalculateClockHands = true
+        if (previousComplicationColorStyle != newComplicationColorStyle) {
+            Log.d(TAG, "newComplicationColorStyle: $newComplicationColorStyle")
+
+            // Apply the color style to the complications. ComplicationDrawables for each of
+            // the styles are defined in XML so we need to replace the complication's
+            // drawables.
+            for ((_, complication) in complicationsManager.complications) {
+                complication.renderer = CanvasComplicationDrawable(
+                    ComplicationDrawable.getDrawable(
+                        context,
+                        newComplicationColorStyle)!!,
+                    watchState
+                )
             }
         }
+
+        // 2. Checks for a changes in the minute hand length (since user can change that value in
+        // settings), and if there is a change, set a boolean so the arm lengths are recalculated
+        // on the next draw function calls.
+        val previousMinuteLength =
+            analogWatchFaceAndStylesAndDimensions?.minuteHandDimensions?.lengthFraction ?: 0.0f
+
+        val newMinuteLength = it.minuteHandDimensions.lengthFraction
+
+        if (previousMinuteLength != newMinuteLength) {
+            Log.d(TAG, "newMinuteHandLength: $newMinuteLength")
+            armLengthChangedRecalculateClockHands = true
+        }
+
+        // 3. Reassigns changes to our class that represents all data for the watch face.
+        analogWatchFaceAndStylesAndDimensions = it
+    }
 
     // Changed when setting changes cause a change in the minute hand arm (triggered by user in
     // updateUserStyle() via userStyleRepository.addUserStyleListener()).
@@ -105,7 +131,7 @@ class AnalogWatchCanvasRenderer(
 
     // Default size of watch face drawing area, that is, a no size rectangle. Will be replaced with
     // valid dimensions from the system.
-    private var currentWatchFaceSize: Rect = Rect(0, 0, 0, 0)
+    private var currentWatchFaceSize = Rect(0, 0, 0, 0)
 
     // Initializes paint object for painting the clock hands with default values.
     private val clockHandPaint = Paint().apply {
@@ -137,12 +163,13 @@ class AnalogWatchCanvasRenderer(
 
         userStyleRepository.addUserStyleListener(
             object : UserStyleRepository.UserStyleListener {
-                @SuppressLint("SyntheticAccessor")
                 override fun onUserStyleChanged(userStyle: UserStyle) {
                     Log.d(TAG, "onUserStyleChanged(), userStyle: \n${userStyle.toMap()}")
-                    scope.launch {
-                        updateUserStylesInDatabase(userStyle)
-                    }
+
+                    analogWatchFaceViewModel.updateUserStylesInDatabase(
+                        analogWatchFaceKeyId,
+                        userStyle
+                    )
                 }
             }
         )
@@ -151,8 +178,6 @@ class AnalogWatchCanvasRenderer(
     override fun onDestroy() {
         analogWatchFaceViewModel.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceKeyId)
             .removeObserver(watchFaceDataObserver)
-
-        scope.cancel("AnalogWatchCanvasRenderer.onDestroy()")
         super.onDestroy()
     }
 
@@ -439,99 +464,6 @@ class AnalogWatchCanvasRenderer(
             radiusFraction * bounds.width(),
             outerElementPaint
         )
-    }
-
-    // Saves user style changes to the database.
-    suspend fun updateUserStylesInDatabase(userStyle: UserStyle) {
-        val analogWatchFaceEntity: AnalogWatchFaceEntity =
-            analogWatchFaceViewModel.getAnalogWatchFace(analogWatchFaceKeyId)
-
-        updateColorStyleAndHourPips(
-            userStyle,
-            analogWatchFaceEntity
-        )
-
-        updateMinuteArmLength(
-            userStyle,
-            analogWatchFaceEntity.minuteHandDimensionsId
-        )
-    }
-
-    // Updates the color style and hour hand pips (ticks on the outside of the watch) in the
-    // associated [AnalogWatchFaceEntity] in the database.
-    private suspend fun updateColorStyleAndHourPips(
-        userStyle: UserStyle,
-        analogWatchFaceEntity: AnalogWatchFaceEntity
-    ) {
-        var revisedAnalogWatchFaceEntity = analogWatchFaceEntity
-
-        // 1. Updates color style associated with the watch face.
-        val newColorStyleSetting: String =
-            userStyle.toMap()[COLOR_STYLE_SETTING] ?: revisedAnalogWatchFaceEntity.activeColorStyleId
-
-        if (revisedAnalogWatchFaceEntity.activeColorStyleId != newColorStyleSetting) {
-            revisedAnalogWatchFaceEntity =
-                revisedAnalogWatchFaceEntity.copy(activeColorStyleId = newColorStyleSetting)
-
-            val complicationStyleDrawableId =
-                analogWatchFaceViewModel.getWatchFaceColorStyles(newColorStyleSetting).complicationStyleDrawableId
-
-            // Apply the color style to the complications. ComplicationDrawables for each of
-            // the styles are defined in XML so we need to replace the complication's
-            // drawables.
-            for ((_, complication) in complicationsManager.complications) {
-                complication.renderer = CanvasComplicationDrawable(
-                    ComplicationDrawable.getDrawable(
-                        context,
-                        complicationStyleDrawableId)!!,
-                    watchState
-                )
-            }
-        }
-
-        // 2. Update Hour Pips (dashes around the outside of the watch).
-        val newHoursPipsSettingStringVersion: String =
-            userStyle.toMap()[DRAW_HOUR_PIPS_STYLE_SETTING] ?: ""
-
-        val newHoursPipsSetting =
-            if (newHoursPipsSettingStringVersion.isEmpty()) {
-                revisedAnalogWatchFaceEntity.drawHourPips
-            } else {
-                newHoursPipsSettingStringVersion.toBoolean()
-            }
-
-        if (revisedAnalogWatchFaceEntity.drawHourPips != newHoursPipsSetting) {
-            revisedAnalogWatchFaceEntity =
-                revisedAnalogWatchFaceEntity.copy(drawHourPips = newHoursPipsSetting)
-        }
-
-        analogWatchFaceViewModel.updateAnalogWatchFace(revisedAnalogWatchFaceEntity)
-    }
-
-    // Updates the length of the minute hand arm dimensions in the associated
-    // [WatchFaceArmDimensionsEntity] in the database.
-    private suspend fun updateMinuteArmLength(
-        userStyle: UserStyle,
-        minuteHandDimensionsId: String
-    ) {
-        val newHandLengthSettingStringVersion: String =
-            userStyle.toMap()[WATCH_HAND_LENGTH_STYLE_SETTING] ?: ""
-
-        if (newHandLengthSettingStringVersion.isNotEmpty()) {
-            val newMinuteHandLength: Float =
-                newHandLengthSettingStringVersion.toFloat()
-
-            Log.d(TAG, "newMinuteHandLength: $newMinuteHandLength")
-
-            val minuteWatchFaceArmDimensions: WatchFaceArmDimensionsEntity =
-                analogWatchFaceViewModel.getWatchFaceArmDimensions(minuteHandDimensionsId)
-
-            if (minuteWatchFaceArmDimensions.lengthFraction != newMinuteHandLength) {
-                analogWatchFaceViewModel.updateWatchFaceArmDimensions(
-                    minuteWatchFaceArmDimensions.copy(lengthFraction = newMinuteHandLength)
-                )
-            }
-        }
     }
 
     companion object {

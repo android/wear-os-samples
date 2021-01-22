@@ -133,7 +133,7 @@ class AnalogWatchFaceService : WatchFaceService() {
         // Create left Complication:
         // If not a valid drawable (XML complication color style), return empty list.
         val leftComplicationDrawable: ComplicationDrawable =
-            ComplicationDrawable.getDrawable(context, drawableId) ?: return listOf()
+            ComplicationDrawable.getDrawable(context, drawableId) ?: return emptyList()
 
         val leftCanvasComplicationDrawable = CanvasComplicationDrawable(
             leftComplicationDrawable,
@@ -160,13 +160,13 @@ class AnalogWatchFaceService : WatchFaceService() {
         // If not a valid drawable (XML complication color style), return empty list (want both or
         // none).
         val rightComplicationDrawable: ComplicationDrawable =
-            ComplicationDrawable.getDrawable(context, drawableId) ?: return listOf()
+            ComplicationDrawable.getDrawable(context, drawableId) ?: return emptyList()
 
         val rightCanvasComplicationDrawable = CanvasComplicationDrawable(
             rightComplicationDrawable,
             watchState
         )
-        val rightComplication: Complication = Complication.createRoundRectComplicationBuilder(
+        val rightComplication = Complication.createRoundRectComplicationBuilder(
             id = ComplicationConfig.Right.id,
             renderer = rightCanvasComplicationDrawable,
             supportedTypes = ComplicationConfig.Right.supportedTypes,
