@@ -24,6 +24,7 @@ import android.graphics.Rect
 import android.icu.util.Calendar
 import android.util.Log
 import android.view.SurfaceHolder
+import androidx.lifecycle.Observer
 import androidx.wear.watchface.CanvasComplicationDrawable
 import androidx.wear.watchface.ComplicationsManager
 import androidx.wear.watchface.DrawMode
@@ -73,6 +74,24 @@ class AnalogWatchCanvasRenderer(
     // minute hand length).
     private val scope: CoroutineScope = MainScope()
 
+    // [LiveData] [Observer] for watch face data. Because this class does not have a
+    // [LifecycleOwner] and the [AnalogWatchFaceService] only inherits from a [Service] and not a
+    // [LifecycleService], we must use observeForever() and removeObserver() when destroying the
+    // class.
+    private val watchFaceDataObserver: Observer<AnalogWatchFaceAndStylesAndDimensions> =
+        Observer<AnalogWatchFaceAndStylesAndDimensions> {
+            val previousMinuteLength =
+                analogWatchFaceAndStylesAndDimensions?.minuteHandDimensions?.lengthFraction ?: 0.0f
+
+            val newMinuteLength = it.minuteHandDimensions.lengthFraction
+
+            analogWatchFaceAndStylesAndDimensions = it
+
+            if (previousMinuteLength != newMinuteLength) {
+                armLengthChangedRecalculateClockHands = true
+            }
+        }
+
     // Changed when setting changes cause a change in the minute hand arm (triggered by user in
     // updateUserStyle() via userStyleRepository.addUserStyleListener()).
     private var armLengthChangedRecalculateClockHands: Boolean = false
@@ -114,18 +133,7 @@ class AnalogWatchCanvasRenderer(
         // It's possible for the user to change the minute arm hand length via the settings, so
         // we need to observe any changes from that particular table [] and then render them.
         analogWatchFaceViewModel.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceKeyId)
-            .observeForever {
-                val previousMinuteLength =
-                analogWatchFaceAndStylesAndDimensions?.minuteHandDimensions?.lengthFraction ?: 0.0f
-
-                val newMinuteLength = it.minuteHandDimensions.lengthFraction
-
-                analogWatchFaceAndStylesAndDimensions = it
-
-                if (previousMinuteLength != newMinuteLength) {
-                    armLengthChangedRecalculateClockHands = true
-                }
-            }
+            .observeForever(watchFaceDataObserver)
 
         userStyleRepository.addUserStyleListener(
             object : UserStyleRepository.UserStyleListener {
@@ -141,6 +149,9 @@ class AnalogWatchCanvasRenderer(
     }
 
     override fun onDestroy() {
+        analogWatchFaceViewModel.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceKeyId)
+            .removeObserver(watchFaceDataObserver)
+
         scope.cancel("AnalogWatchCanvasRenderer.onDestroy()")
         super.onDestroy()
     }
