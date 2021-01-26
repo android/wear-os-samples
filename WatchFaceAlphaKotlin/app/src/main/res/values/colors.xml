@@ -24,7 +24,7 @@
     <color name="ambient_outer_element_color">@color/white_30</color>
 
     <!-- Red Style -->
-    <color name="red_primary_color">@color/white</color>
+    <color name="red_primary_color">@color/maroon_50</color>
     <color name="red_secondary_color">@color/maroon</color>
     <color name="red_background_color">@color/dark_gray</color>
     <color name="red_outer_element_color">@color/maroon_50</color>
@@ -44,7 +44,7 @@
     <!-- White Style -->
     <color name="white_primary_color">@color/white_70</color>
     <color name="white_secondary_color">@color/white_50</color>
-    <color name="white_background_color">@color/white_10</color>
+    <color name="white_background_color">@color/dark_gray</color>
     <color name="white_outer_element_color">@color/white_70</color>
 
     <!-- custom colors. -->
