@@ -74,6 +74,16 @@ class AnalogWatchCanvasRenderer(
     // analogWatchFaceAndStylesAndDimensions.
     private val watchFaceDataObserver = Observer<AnalogWatchFaceAndStylesAndDimensions> {
 
+        Log.d(TAG, "watchFaceDataObserver(): it: $it")
+
+        /* The first time the app is installed and loaded, it will trigger a null for the first
+         * observation of the [LiveData] for [AnalogWatchFaceAndStylesAndDimensions], so we need to
+         * Make sure we handle that.
+         */
+        if (it == null) {
+            return@Observer
+        }
+
         // 1. Updates complication color style if there is a change:
         // If the color style changes, it also means the complication color style changes, and
         // while the color style is rendered each time the draw methods are called via the

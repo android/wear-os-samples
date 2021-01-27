@@ -24,10 +24,10 @@
     <color name="ambient_outer_element_color">@color/white_30</color>
 
     <!-- Red Style -->
-    <color name="red_primary_color">@color/maroon_50</color>
-    <color name="red_secondary_color">@color/maroon</color>
+    <color name="red_primary_color">@color/maroon_light</color>
+    <color name="red_secondary_color">@color/maroon_50</color>
     <color name="red_background_color">@color/dark_gray</color>
-    <color name="red_outer_element_color">@color/maroon_50</color>
+    <color name="red_outer_element_color">@color/maroon_30</color>
 
     <!-- Green Style -->
     <color name="green_primary_color">@color/light_green</color>
@@ -76,9 +76,10 @@
     <color name="gray_50">#80424242</color>
     <color name="gray_70">#B3424242</color>
     <color name="dark_gray">#211E1D</color>
-    <color name="maroon">#EEA19A</color>
+    <color name="maroon_light">#EEA19A</color>
     <color name="maroon_30">#4DEEA19A</color>
     <color name="maroon_50">#80EEA19A</color>
+    <color name="maroon_60">#96EEA19A</color>
     <color name="maroon_70">#B3EEA19A</color>
     <color name="yellow">#FDE7B1</color>
     <color name="yellow_30">#4DFDE7B1</color>

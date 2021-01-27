@@ -29,12 +29,10 @@
     app:titleColor="@color/white_90"
     app:titleTypeface="sans-serif-condensed">
     <ambient
-        app:borderColor="@color/white_90"
-        app:borderStyle="solid"
-        app:borderWidth="1dp"
-        app:iconColor="@color/white_50"
-        app:textColor="@color/white_50"
-        app:titleColor="@color/white_50"
+        app:borderColor="@color/white_50"
+        app:iconColor="@color/white"
+        app:textColor="@color/white"
+        app:titleColor="@color/white_70"
         app:rangedValuePrimaryColor="@color/white"
         app:rangedValueSecondaryColor="@color/transparent" />
 </androidx.wear.watchface.complications.rendering.ComplicationDrawable>

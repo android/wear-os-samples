@@ -61,7 +61,8 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
 
     // Updates multiple table entries if the user changes something in the settings.
     fun updateUserStylesInDatabase(analogWatchFaceId: Int, userStyle: UserStyle) = scope.launch {
-        val analogWatchFaceEntity = getAnalogWatchFace(analogWatchFaceId)
+        // Returns if a valid [AnalogWatchFaceEntity] isn't returned for the id.
+        val analogWatchFaceEntity = getAnalogWatchFace(analogWatchFaceId) ?: return@launch
 
         updateColorStyleAndHourPips(userStyle, analogWatchFaceEntity)
         updateMinuteArmLength(userStyle, analogWatchFaceEntity.minuteHandDimensionsId)
