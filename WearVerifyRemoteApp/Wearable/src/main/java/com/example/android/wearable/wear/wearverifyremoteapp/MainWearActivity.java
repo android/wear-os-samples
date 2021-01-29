@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.wearable.phone.PhoneDeviceType;
 import android.support.wearable.view.ConfirmationOverlay;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.wear.ambient.AmbientModeSupport;
+import androidx.wear.phone.interactions.PhoneTypeHelper;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -201,10 +201,10 @@ public class MainWearActivity extends FragmentActivity implements
     private void openAppInStoreOnPhone() {
         Log.d(TAG, "openAppInStoreOnPhone()");
 
-        int phoneDeviceType = PhoneDeviceType.getPhoneDeviceType(getApplicationContext());
+        int phoneDeviceType = PhoneTypeHelper.getPhoneDeviceType(getApplicationContext());
         switch (phoneDeviceType) {
             // Paired to Android phone, use Play Store URI.
-            case PhoneDeviceType.DEVICE_TYPE_ANDROID:
+            case PhoneTypeHelper.DEVICE_TYPE_ANDROID:
                 Log.d(TAG, "\tDEVICE_TYPE_ANDROID");
                 // Create Remote Intent to open Play Store listing of app on remote device.
                 Intent intentAndroid =
@@ -219,7 +219,7 @@ public class MainWearActivity extends FragmentActivity implements
                 break;
 
             // Paired to iPhone, use iTunes App Store URI
-            case PhoneDeviceType.DEVICE_TYPE_IOS:
+            case PhoneTypeHelper.DEVICE_TYPE_IOS:
                 Log.d(TAG, "\tDEVICE_TYPE_IOS");
 
                 // Create Remote Intent to open App Store listing of app on iPhone.
@@ -234,7 +234,7 @@ public class MainWearActivity extends FragmentActivity implements
                         mResultReceiver);
                 break;
 
-            case PhoneDeviceType.DEVICE_TYPE_ERROR_UNKNOWN:
+            case PhoneTypeHelper.DEVICE_TYPE_ERROR | PhoneTypeHelper.DEVICE_TYPE_UNKNOWN:
                 Log.d(TAG, "\tDEVICE_TYPE_ERROR_UNKNOWN");
                 break;
         }
