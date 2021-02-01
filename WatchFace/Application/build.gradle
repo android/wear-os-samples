@@ -24,6 +24,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.wear:wear-remote-interactions:1.0.0-alpha01'
 
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
 
@@ -46,7 +47,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 18
+        minSdkVersion 23
         targetSdkVersion 28
     }
 
