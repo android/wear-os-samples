@@ -19,8 +19,8 @@ package com.example.android.wearable.watchface;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.os.Bundle;
-import android.support.wearable.companion.WatchFaceCompanion;
 import android.widget.TextView;
+import androidx.wear.remote.interactions.WatchFaceConfigIntentHelper;
 
 /**
  * The phone-side config activity for {@code OpenGLWatchFaceService}. The
@@ -34,8 +34,7 @@ public class OpenGLWatchFaceConfigActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opengl_watch_face_config);
 
-        ComponentName name =
-                getIntent().getParcelableExtra(WatchFaceCompanion.EXTRA_WATCH_FACE_COMPONENT);
+        ComponentName name = WatchFaceConfigIntentHelper.getWatchFaceComponentExtra(getIntent());
         TextView label = (TextView) findViewById(R.id.label);
         label.setText(label.getText() + " (" + name.getClassName() + ")");
     }

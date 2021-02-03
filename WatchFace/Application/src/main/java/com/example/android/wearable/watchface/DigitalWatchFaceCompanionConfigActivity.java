@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.wearable.companion.WatchFaceCompanion;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.wear.remote.interactions.WatchFaceConfigIntentHelper;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -64,10 +64,9 @@ public class DigitalWatchFaceCompanionConfigActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_digital_watch_face_config);
 
-        mPeerId = getIntent().getStringExtra(WatchFaceCompanion.EXTRA_PEER_ID);
+        mPeerId = WatchFaceConfigIntentHelper.getPeerIdExtra(getIntent());
 
-        ComponentName name =
-                getIntent().getParcelableExtra(WatchFaceCompanion.EXTRA_WATCH_FACE_COMPONENT);
+        ComponentName name = WatchFaceConfigIntentHelper.getWatchFaceComponentExtra(getIntent());
         TextView label = (TextView)findViewById(R.id.label);
         label.setText(label.getText() + " (" + name.getClassName() + ")");
 
