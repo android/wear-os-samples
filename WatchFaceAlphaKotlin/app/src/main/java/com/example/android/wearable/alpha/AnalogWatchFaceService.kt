@@ -107,7 +107,7 @@ class AnalogWatchFaceService : WatchFaceService() {
         val renderer = AnalogWatchCanvasRenderer(
             context = this,
             analogWatchFaceViewModel = analogWatchFaceViewModel,
-            complicationsManager = complicationsManager,
+            complications = complicationsManager.complications,
             surfaceHolder = surfaceHolder,
             userStyleRepository = userStyleRepository,
             watchState = watchState,

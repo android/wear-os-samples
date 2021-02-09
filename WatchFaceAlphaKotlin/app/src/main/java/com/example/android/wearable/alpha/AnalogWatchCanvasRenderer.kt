@@ -25,7 +25,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import androidx.lifecycle.Observer
 import androidx.wear.watchface.CanvasComplicationDrawable
-import androidx.wear.watchface.ComplicationsManager
+import androidx.wear.watchface.Complication
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.LayerMode
 import androidx.wear.watchface.Renderer
@@ -46,7 +46,7 @@ import kotlin.math.sin
 class AnalogWatchCanvasRenderer(
     private val context: Context,
     private val analogWatchFaceViewModel: AnalogWatchFaceViewModel,
-    private val complicationsManager: ComplicationsManager,
+    private val complications: Map<Int, Complication>,
     surfaceHolder: SurfaceHolder,
     userStyleRepository: UserStyleRepository,
     private val watchState: WatchState,
@@ -97,7 +97,7 @@ class AnalogWatchCanvasRenderer(
                 // Apply the color style to the complications. ComplicationDrawables for each of
                 // the styles are defined in XML so we need to replace the complication's
                 // drawables.
-                for ((_, complication) in complicationsManager.complications) {
+                for ((_, complication) in complications) {
                     complication.renderer = CanvasComplicationDrawable(
                         ComplicationDrawable.getDrawable(
                             context,
@@ -226,7 +226,7 @@ class AnalogWatchCanvasRenderer(
 
     // All drawing functions:
     private fun drawComplications(canvas: Canvas, calendar: Calendar) {
-        for ((_, complication) in complicationsManager.complications) {
+        for ((_, complication) in complications) {
             if (complication.enabled) {
                 complication.render(canvas, calendar, renderParameters)
             }
