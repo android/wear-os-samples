@@ -32,7 +32,6 @@ import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.Layer
-import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleRepository
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceAndStylesAndDimensions
 import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
@@ -167,19 +166,6 @@ class AnalogWatchCanvasRenderer(
         // we need to observe any changes from that particular table [] and then render them.
         analogWatchFaceViewModel.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceKeyId)
             .observeForever(watchFaceDataObserver)
-
-        userStyleRepository.addUserStyleListener(
-            object : UserStyleRepository.UserStyleListener {
-                override fun onUserStyleChanged(userStyle: UserStyle) {
-                    Log.d(TAG, "onUserStyleChanged(), userStyle: \n${userStyle.toMap()}")
-
-                    analogWatchFaceViewModel.updateUserStylesInDatabase(
-                        analogWatchFaceKeyId,
-                        userStyle
-                    )
-                }
-            }
-        )
     }
 
     override fun onDestroy() {

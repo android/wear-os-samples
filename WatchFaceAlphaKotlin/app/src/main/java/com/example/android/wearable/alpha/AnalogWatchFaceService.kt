@@ -20,13 +20,14 @@ import androidx.wear.watchface.Complication
 import androidx.wear.watchface.WatchFace
 import androidx.wear.watchface.WatchFaceService
 import androidx.wear.watchface.WatchState
-import androidx.wear.watchface.style.UserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import com.example.android.wearable.alpha.data.db.WatchFaceColorStyleEntity
+import com.example.android.wearable.alpha.data.db.analogWatchFaceKeyId
 import com.example.android.wearable.alpha.utils.FRAME_PERIOD_MS_DEFAULT
 import com.example.android.wearable.alpha.utils.createAnalogWatchFace
 import com.example.android.wearable.alpha.utils.createComplicationList
+import com.example.android.wearable.alpha.utils.createUserStyleRepositoryWithCallback
 import com.example.android.wearable.alpha.utils.createUserStyleSettingsList
 import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -87,18 +88,22 @@ class AnalogWatchFaceService : WatchFaceService() {
             watchState = watchState
         )
 
+        // Creates UserStyleRepository and adds a callback for any changes to the style to
+        // trigger updates to data layer via ViewModel for the analogWatchFaceKeyId.
+        val userStyleRepository = createUserStyleRepositoryWithCallback(
+            UserStyleSchema(userStyleSettings.toList()),
+            analogWatchFaceKeyId,
+            analogWatchFaceViewModel
+        )
+
         return WatchFace.createAnalogWatchFace(
             surfaceHolder,
             watchState,
             applicationContext,
             analogWatchFaceViewModel,
-            UserStyleRepository(UserStyleSchema(userStyleSettings.toList())),
+            userStyleRepository,
             complications,
             FRAME_PERIOD_MS_DEFAULT
         )
-    }
-
-    companion object {
-        private const val TAG = "AnalogWatchFaceService"
     }
 }
