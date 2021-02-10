@@ -17,7 +17,7 @@ Samples
 
 * **[WatchFace](WatchFace)** (Java) - Shows a full implementation of multiple watch faces, complications, and settings (edit watch faces appearance). Also includes implementation of data providers, so developers can share their data to be displayed in complications on any watch face (without writing a watch face). [Watch face guide](https://developer.android.com/training/wearables/watch-faces#guides), [Data Provider Guide](https://developer.android.com/training/wearables/data-providers#guides)
 
-* **[WatchFaceAlphaKotlin](WatchFaceAlphaKotlin)** (Kotlin) - Demos the new alpha AndroidX Watch Face APIs. The analog watch face in the sample is powered by a full Room database and uses the new settings APIs (amoung many other new APIs). Keep in mind that the APIs can change as the alpha proceeds. This version uses alpha4 and will have some additional updates for the next versions.
+* **[WatchFaceAlphaKotlin](WatchFaceAlphaKotlin)** (Kotlin) - Demos the new alpha AndroidX Watch Face APIs. The analog watch face in the sample is powered by a full Room database and uses the new settings APIs (among many other new APIs). Keep in mind that the APIs can change as the alpha proceeds. This version uses alpha4 and will have some additional updates for the next versions.
 
 * **[WearAccessibilityApp](WearAccessibilityApp)** (Java) - Sample demonstrates how to include accessibility support for your wearable app. [Guide](https://developer.android.com/guide/topics/ui/accessibility)
 
