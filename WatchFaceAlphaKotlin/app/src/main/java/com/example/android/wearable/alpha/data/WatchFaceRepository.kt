@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.alpha.data
 
-import androidx.annotation.WorkerThread
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceDao
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceEntity
 import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsDao
@@ -55,5 +54,4 @@ class WatchFaceRepository(
 
     suspend fun updateWatchFaceArmDimensions(armDimensions: WatchFaceArmDimensionsEntity) =
         watchFaceArmDimensionsDao.update(armDimensions)
-
 }

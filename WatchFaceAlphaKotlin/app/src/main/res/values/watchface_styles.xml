@@ -41,7 +41,7 @@
 
     <style name="red_style_active">
         <item name="primary_color">@color/white</item>
-        <item name="secondary_color">@color/maroon</item>
+        <item name="secondary_color">@color/maroon_light</item>
         <item name="background_color">@color/dark_gray</item>
         <item name="outer_element_color">@color/maroon_50</item>
     </style>

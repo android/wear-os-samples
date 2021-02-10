@@ -72,11 +72,11 @@
 
     <!-- A menu option to select a widget that lets us configure the length of the watch hands
     [CHAR LIMIT=20] -->
-    <string name="watchface_hand_length_setting">Hand length</string>
+    <string name="watchface_hand_length_setting">Minute Hand length</string>
 
     <!-- Sub title for the menu option to select a widget that lets us configure the length of the
     watch hands [CHAR LIMIT=20] -->
-    <string name="watchface_hand_length_setting_description">Scale of watch hands</string>
+    <string name="watchface_hand_length_setting_description">Scale of watch hand</string>
 
     <!-- A menu option to select a widget that lets us configure the Complications (a watch
     making term) [CHAR LIMIT=20] -->
