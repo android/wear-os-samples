@@ -21,6 +21,9 @@ import com.example.android.wearable.alpha.AnalogWatchFaceService
 import com.example.android.wearable.alpha.data.WatchFaceRepository
 import com.example.android.wearable.alpha.data.db.AnalogWatchFaceEntity
 import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
+import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
+import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
+import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -78,7 +81,7 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
 
         // 1. Updates color style associated with the watch face.
         val newColorStyleSetting: String =
-            userStyle.toMap()[AnalogWatchFaceService.COLOR_STYLE_SETTING]
+            userStyle.toMap()[COLOR_STYLE_SETTING]
                 ?: revisedAnalogWatchFaceEntity.activeColorStyleId
 
         if (revisedAnalogWatchFaceEntity.activeColorStyleId != newColorStyleSetting) {
@@ -88,7 +91,7 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
 
         // 2. Updates Hour Pips (dashes around the outside of the watch).
         val newHoursPipsSettingStringVersion: String =
-            userStyle.toMap()[AnalogWatchFaceService.DRAW_HOUR_PIPS_STYLE_SETTING] ?: ""
+            userStyle.toMap()[DRAW_HOUR_PIPS_STYLE_SETTING] ?: ""
 
         val newHoursPipsSetting =
             if (newHoursPipsSettingStringVersion.isEmpty()) {
@@ -112,7 +115,7 @@ class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
         minuteHandDimensionsId: String
     ) {
         val newHandLengthSettingStringVersion =
-            userStyle.toMap()[AnalogWatchFaceService.WATCH_HAND_LENGTH_STYLE_SETTING] ?: ""
+            userStyle.toMap()[WATCH_HAND_LENGTH_STYLE_SETTING] ?: ""
 
         if (newHandLengthSettingStringVersion.isNotEmpty()) {
             val newMinuteHandLength = newHandLengthSettingStringVersion.toFloat()
