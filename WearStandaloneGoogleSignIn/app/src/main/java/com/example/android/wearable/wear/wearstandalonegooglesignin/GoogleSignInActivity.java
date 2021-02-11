@@ -17,12 +17,12 @@ package com.example.android.wearable.wear.wearstandalonegooglesignin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
+import androidx.activity.ComponentActivity;
+import androidx.annotation.NonNull;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,12 +33,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import androidx.annotation.NonNull;
-
 /**
  * Demonstrates using Google Sign-In on Android Wear
  */
-public class GoogleSignInActivity extends WearableActivity {
+public class GoogleSignInActivity extends ComponentActivity {
 
     private static final String TAG = "GoogleSignInActivity";
     private GoogleSignInClient mGoogleSignInClient;
@@ -98,7 +96,6 @@ public class GoogleSignInActivity extends WearableActivity {
     protected void setupGoogleSignInClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestProfile()
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
