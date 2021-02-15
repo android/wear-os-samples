@@ -19,4 +19,6 @@
     <string name="wear_signout_button_text">Sign out</string>
     <string name="google_signin_successful">Google Sign-In successful!</string>
     <string name="signout_successful">Successfully signed out!</string>
+    <!-- Used by the Google Sign In API for auth. -->
+    <string name="server_client_id">TODO_ADD_CLIENT_ID_XXXXXXX.apps.googleusercontent.com</string>
 </resources>
