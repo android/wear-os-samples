@@ -23,6 +23,7 @@ categories:   [Wearable]
 languages:    [Java]
 solutions:    [Mobile]
 github:       android/wear-os
+branch:       main
 level:        INTERMEDIATE
 apiRefs:
     - android:android.support.wearable.activity.WearableActivity
