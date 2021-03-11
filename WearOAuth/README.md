@@ -24,10 +24,6 @@ Please have Android Studio installed and configured.
 Support
 -------
 
-You can find support by posting up on the Android Wear Developers Community
-page at the link below:
-https://plus.google.com/communities/113381227473021565406
-
 If you've found an error in the sample, please file an issue report at:
 https://github.com/android/wear-os/issues
 
