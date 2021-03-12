@@ -119,7 +119,7 @@ class FitnessTileService : TileProviderService() {
                         Text.builder()
                             .setText(goalProgress.current.toString())
                             .setFontStyle(
-                                FontStyle.builder().setSize(sp(44)).build()
+                                FontStyle.builder().setSize(sp(44f)).build()
                             )
                             .setFontStyle(fontStyles.display2())
                     )
@@ -127,7 +127,7 @@ class FitnessTileService : TileProviderService() {
                         Text.builder()
                             .setText(resources.getString(R.string.goal, goalProgress.goal))
                             .setFontStyle(
-                                FontStyle.builder().setSize(sp(44)).build()
+                                FontStyle.builder().setSize(sp(44f)).build()
                             )
                             .setFontStyle(fontStyles.title3())
                     )

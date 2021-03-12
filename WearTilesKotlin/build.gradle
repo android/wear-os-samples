@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = "1.4.30"
+    ext.kotlin_version = "1.4.31"
     repositories {
         google()
         jcenter()
@@ -35,10 +35,6 @@ subprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
-        maven {
-            def snapshot = "7178517"
-            url  "https://androidx.dev/snapshots/builds/$snapshot/artifacts/repository/"
-        }
     }
 
     apply plugin: 'com.diffplug.spotless'
