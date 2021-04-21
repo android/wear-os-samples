@@ -23,7 +23,6 @@ categories:   [Wearable]
 languages:    [Kotlin]
 solutions:    [Mobile]
 github:       android/wear-os-samples
-branch:       main
 level:        INTERMEDIATE
 apiRefs:
   - android:androidx.wear.tiles.TileProviderService
