@@ -19,7 +19,7 @@ import android.content.ComponentName
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import androidx.wear.tiles.manager.TileManager
+import androidx.wear.tiles.manager.TileClient
 import com.example.wear.tiles.fitness.FitnessTileService
 import com.example.wear.tiles.media.PlayNextSongTileService
 import com.example.wear.tiles.messaging.MessagingTileService
@@ -42,10 +42,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val rootLayout = findViewById<FrameLayout>(R.id.tile_container)
-        TileManager(
+        TileClient(
             context = this,
             component = ComponentName(this, tileToShow),
             parentView = rootLayout
-        ).create()
+        ).connect()
     }
 }
