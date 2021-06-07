@@ -24,31 +24,34 @@ import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.TileProviderService
-import androidx.wear.tiles.builders.ColorBuilders.argb
-import androidx.wear.tiles.builders.DimensionBuilders.dp
-import androidx.wear.tiles.builders.LayoutElementBuilders.Box
-import androidx.wear.tiles.builders.LayoutElementBuilders.Column
-import androidx.wear.tiles.builders.LayoutElementBuilders.FontStyles
-import androidx.wear.tiles.builders.LayoutElementBuilders.Image
-import androidx.wear.tiles.builders.LayoutElementBuilders.Layout
-import androidx.wear.tiles.builders.LayoutElementBuilders.LayoutElement
-import androidx.wear.tiles.builders.LayoutElementBuilders.Row
-import androidx.wear.tiles.builders.LayoutElementBuilders.Spacer
-import androidx.wear.tiles.builders.LayoutElementBuilders.TEXT_ALIGN_CENTER
-import androidx.wear.tiles.builders.LayoutElementBuilders.Text
-import androidx.wear.tiles.builders.ModifiersBuilders.Background
-import androidx.wear.tiles.builders.ModifiersBuilders.Corner
-import androidx.wear.tiles.builders.ModifiersBuilders.Modifiers
-import androidx.wear.tiles.builders.ResourceBuilders
-import androidx.wear.tiles.builders.ResourceBuilders.AndroidImageResourceByResId
-import androidx.wear.tiles.builders.ResourceBuilders.ImageResource
-import androidx.wear.tiles.builders.ResourceBuilders.InlineImageResource
-import androidx.wear.tiles.builders.ResourceBuilders.Resources
-import androidx.wear.tiles.builders.TileBuilders.Tile
-import androidx.wear.tiles.builders.TimelineBuilders.Timeline
-import androidx.wear.tiles.builders.TimelineBuilders.TimelineEntry
-import androidx.wear.tiles.readers.RequestReaders
-import androidx.wear.tiles.readers.RequestReaders.TileRequest
+import androidx.wear.tiles.ColorBuilders.argb
+import androidx.wear.tiles.DeviceParametersBuilders
+import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.tiles.DimensionBuilders.dp
+import androidx.wear.tiles.LayoutElementBuilders.Box
+import androidx.wear.tiles.LayoutElementBuilders.Column
+import androidx.wear.tiles.LayoutElementBuilders.FontStyles
+import androidx.wear.tiles.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
+import androidx.wear.tiles.LayoutElementBuilders.Image
+import androidx.wear.tiles.LayoutElementBuilders.Layout
+import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
+import androidx.wear.tiles.LayoutElementBuilders.Row
+import androidx.wear.tiles.LayoutElementBuilders.Spacer
+import androidx.wear.tiles.LayoutElementBuilders.TEXT_ALIGN_CENTER
+import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.ModifiersBuilders.Background
+import androidx.wear.tiles.ModifiersBuilders.Corner
+import androidx.wear.tiles.ModifiersBuilders.Modifiers
+import androidx.wear.tiles.ResourceBuilders
+import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
+import androidx.wear.tiles.ResourceBuilders.ImageResource
+import androidx.wear.tiles.ResourceBuilders.InlineImageResource
+import androidx.wear.tiles.ResourceBuilders.Resources
+import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.TimelineBuilders.Timeline
+import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.RequestBuilders.*
 import com.example.wear.tiles.R
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
@@ -92,7 +95,6 @@ class MessagingTileService : TileProviderService() {
     override fun onTileRequest(
         requestParams: TileRequest
     ): ListenableFuture<Tile> = serviceScope.future {
-        val fontStyles = FontStyles.withDeviceParameters(requestParams.deviceParameters)
         val contacts = MessagingRepo.getFavoriteContacts().take(4)
         Tile.builder()
             .setResourcesVersion(RESOURCES_VERSION)
@@ -100,16 +102,16 @@ class MessagingTileService : TileProviderService() {
             .setTimeline(
                 Timeline.builder().addTimelineEntry(
                     TimelineEntry.builder().setLayout(
-                        Layout.builder().setRoot(layout(contacts, fontStyles))
+                        Layout.builder().setRoot(layout(contacts, requestParams.deviceParameters!!))
                     )
                 )
             ).build()
     }
 
     override fun onResourcesRequest(
-        requestParams: RequestReaders.ResourcesRequest
+        requestParams: ResourcesRequest
     ): ListenableFuture<Resources> = serviceScope.future {
-        val density = requestParams.deviceParameters.screenDensity
+        val density = requestParams.deviceParameters!!.screenDensity
         val circleSizePx = (CIRCLE_SIZE * density).roundToInt()
         val contacts = MessagingRepo.getFavoriteContacts()
         Resources.builder()
@@ -148,7 +150,7 @@ class MessagingTileService : TileProviderService() {
             }
             .addIdToImageMapping(
                 ID_IC_SEARCH,
-                ImageResource.builder().setAndroidResourceByResid(
+                ImageResource.builder().setAndroidResourceByResId(
                     AndroidImageResourceByResId.builder()
                         .setResourceId(R.drawable.ic_search)
                 )
@@ -164,13 +166,13 @@ class MessagingTileService : TileProviderService() {
 
     private fun layout(
         contacts: List<Contact>,
-        fontStyles: FontStyles
+        deviceParameters: DeviceParameters
     ): LayoutElement = Column.builder()
         .addContent(
             Text.builder()
                 .setText(resources.getString(R.string.messaging_tile_title))
                 .setFontStyle(
-                    fontStyles.title3().setColor(
+                    FontStyles.title3(deviceParameters).setColor(
                         argb(ContextCompat.getColor(baseContext, R.color.primary))
                     )
                 )
@@ -180,7 +182,7 @@ class MessagingTileService : TileProviderService() {
             Text.builder()
                 .setText(resources.getString(R.string.messaging_tile_subtitle))
                 .setFontStyle(
-                    fontStyles.caption1().setColor(
+                    FontStyles.caption1(deviceParameters).setColor(
                         argb(ContextCompat.getColor(baseContext, R.color.onSecondary))
                     )
                 )
@@ -188,26 +190,26 @@ class MessagingTileService : TileProviderService() {
         .addContent(Spacer.builder().setHeight(SPACING_SUBTITLE_CONTACTS))
         .addContent(
             Row.builder()
-                .addContent(contactLayout(contacts[0], fontStyles))
+                .addContent(contactLayout(contacts[0], deviceParameters))
                 .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
-                .addContent(contactLayout(contacts[1], fontStyles))
+                .addContent(contactLayout(contacts[1], deviceParameters))
                 .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
-                .addContent(contactLayout(contacts[2], fontStyles))
+                .addContent(contactLayout(contacts[2], deviceParameters))
         )
         .addContent(
             Row.builder()
-                .addContent(contactLayout(contacts[3], fontStyles))
+                .addContent(contactLayout(contacts[3], deviceParameters))
                 .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
                 .addContent(searchLayout())
         )
         .build()
 
-    private fun contactLayout(contact: Contact, fontStyles: FontStyles) = Box.builder().apply {
+    private fun contactLayout(contact: Contact, deviceParameters: DeviceParameters) = Box.builder().apply {
         if (contact.avatarRes == null) {
             // Create an avatar based on the contact's initials
             setWidth(dp(CIRCLE_SIZE))
             setHeight(dp(CIRCLE_SIZE))
-            setHorizontalAlignment(TEXT_ALIGN_CENTER)
+            setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
             setModifiers(
                 Modifiers.builder()
                     .setBackground(
@@ -225,7 +227,7 @@ class MessagingTileService : TileProviderService() {
                 Text.builder()
                     .setText(contact.initials)
                     .setFontStyle(
-                        fontStyles.button().setColor(
+                        FontStyles.button(deviceParameters).setColor(
                             argb(ContextCompat.getColor(baseContext, R.color.primary))
                         )
                     )

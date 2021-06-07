@@ -17,23 +17,25 @@ package com.example.wear.tiles.media
 
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.TileProviderService
-import androidx.wear.tiles.builders.ColorBuilders.argb
-import androidx.wear.tiles.builders.DimensionBuilders.dp
-import androidx.wear.tiles.builders.LayoutElementBuilders
-import androidx.wear.tiles.builders.LayoutElementBuilders.Column
-import androidx.wear.tiles.builders.LayoutElementBuilders.FontStyles
-import androidx.wear.tiles.builders.LayoutElementBuilders.Layout
-import androidx.wear.tiles.builders.LayoutElementBuilders.Row
-import androidx.wear.tiles.builders.LayoutElementBuilders.Spacer
-import androidx.wear.tiles.builders.LayoutElementBuilders.Text
-import androidx.wear.tiles.builders.ResourceBuilders.AndroidImageResourceByResId
-import androidx.wear.tiles.builders.ResourceBuilders.ImageResource
-import androidx.wear.tiles.builders.ResourceBuilders.Resources
-import androidx.wear.tiles.builders.TileBuilders.Tile
-import androidx.wear.tiles.builders.TimelineBuilders.Timeline
-import androidx.wear.tiles.builders.TimelineBuilders.TimelineEntry
-import androidx.wear.tiles.readers.RequestReaders.ResourcesRequest
-import androidx.wear.tiles.readers.RequestReaders.TileRequest
+import androidx.wear.tiles.ColorBuilders.argb
+import androidx.wear.tiles.DeviceParametersBuilders
+import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.tiles.DimensionBuilders.dp
+import androidx.wear.tiles.LayoutElementBuilders
+import androidx.wear.tiles.LayoutElementBuilders.Column
+import androidx.wear.tiles.LayoutElementBuilders.FontStyles
+import androidx.wear.tiles.LayoutElementBuilders.Layout
+import androidx.wear.tiles.LayoutElementBuilders.Row
+import androidx.wear.tiles.LayoutElementBuilders.Spacer
+import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
+import androidx.wear.tiles.ResourceBuilders.ImageResource
+import androidx.wear.tiles.ResourceBuilders.Resources
+import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.TimelineBuilders.Timeline
+import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import androidx.wear.tiles.RequestBuilders.ResourcesRequest
+import androidx.wear.tiles.RequestBuilders.TileRequest
 import com.example.wear.tiles.R
 import com.example.wear.tiles.components.IconButton
 import kotlinx.coroutines.CoroutineScope
@@ -73,21 +75,20 @@ class PlayNextSongTileService : TileProviderService() {
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
     override fun onTileRequest(request: TileRequest) = serviceScope.future {
-        val fontStyles = FontStyles.withDeviceParameters(request.deviceParameters)
         Tile.builder().apply {
             setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             setTimeline(
                 Timeline.builder().addTimelineEntry(
                     TimelineEntry.builder().setLayout(
-                        Layout.builder().setRoot(tileLayout(fontStyles))
+                        Layout.builder().setRoot(tileLayout(request.deviceParameters!!))
                     )
                 )
             )
         }.build()
     }
 
-    private fun tileLayout(fontStyles: FontStyles) = Column.builder()
+    private fun tileLayout(deviceParameters: DeviceParameters) = Column.builder()
         .addContent(
             LayoutElementBuilders.Image.builder()
                 .setResourceId(ID_AVATAR)
@@ -98,14 +99,14 @@ class PlayNextSongTileService : TileProviderService() {
         .addContent(
             Text.builder().setText(getString(R.string.tile_media_artist_name))
                 .setFontStyle(
-                    fontStyles.title3().setColor(
+                    FontStyles.title3(deviceParameters).setColor(
                         argb(ContextCompat.getColor(baseContext, R.color.primary))
                     )
                 )
         )
         .addContent(
             Text.builder().setText(getString(R.string.tile_media_song_name))
-                .setFontStyle(fontStyles.title2())
+                .setFontStyle(FontStyles.title2(deviceParameters))
         )
         .addContent(Spacer.builder().setHeight(SPACING_ARTIST_SONG))
         .addContent(
@@ -140,7 +141,7 @@ class PlayNextSongTileService : TileProviderService() {
                     addIdToImageMapping(
                         name,
                         ImageResource.builder()
-                            .setAndroidResourceByResid(
+                            .setAndroidResourceByResId(
                                 AndroidImageResourceByResId.builder()
                                     .setResourceId(resId)
                             )

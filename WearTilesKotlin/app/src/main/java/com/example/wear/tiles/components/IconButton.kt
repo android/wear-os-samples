@@ -18,17 +18,14 @@ package com.example.wear.tiles.components
 import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import androidx.wear.tiles.builders.ColorBuilders
-import androidx.wear.tiles.builders.ColorBuilders.argb
-import androidx.wear.tiles.builders.DimensionBuilders
-import androidx.wear.tiles.builders.LayoutElementBuilders
-import androidx.wear.tiles.builders.LayoutElementBuilders.CONTENT_SCALE_MODE_FILL_BOUNDS
-import androidx.wear.tiles.builders.LayoutElementBuilders.Image
-import androidx.wear.tiles.builders.ModifiersBuilders
-import androidx.wear.tiles.builders.ModifiersBuilders.Background
-import androidx.wear.tiles.builders.ModifiersBuilders.Corner
-import androidx.wear.tiles.builders.ModifiersBuilders.Modifiers
-import androidx.wear.tiles.builders.ModifiersBuilders.Padding
+import androidx.wear.tiles.ColorBuilders.argb
+import androidx.wear.tiles.DimensionBuilders
+import androidx.wear.tiles.LayoutElementBuilders.CONTENT_SCALE_MODE_FILL_BOUNDS
+import androidx.wear.tiles.LayoutElementBuilders.Image
+import androidx.wear.tiles.ModifiersBuilders.Background
+import androidx.wear.tiles.ModifiersBuilders.Corner
+import androidx.wear.tiles.ModifiersBuilders.Modifiers
+import androidx.wear.tiles.ModifiersBuilders.Padding
 
 private val CIRCLE_SIZE = DimensionBuilders.dp(48f)
 private val PADDING = DimensionBuilders.dp(12f)

@@ -17,26 +17,27 @@ package com.example.wear.tiles.fitness
 
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.TileProviderService
-import androidx.wear.tiles.builders.ColorBuilders.argb
-import androidx.wear.tiles.builders.DimensionBuilders.degrees
-import androidx.wear.tiles.builders.DimensionBuilders.dp
-import androidx.wear.tiles.builders.DimensionBuilders.sp
-import androidx.wear.tiles.builders.LayoutElementBuilders.ARC_ANCHOR_START
-import androidx.wear.tiles.builders.LayoutElementBuilders.Arc
-import androidx.wear.tiles.builders.LayoutElementBuilders.ArcLine
-import androidx.wear.tiles.builders.LayoutElementBuilders.Box
-import androidx.wear.tiles.builders.LayoutElementBuilders.Column
-import androidx.wear.tiles.builders.LayoutElementBuilders.FontStyle
-import androidx.wear.tiles.builders.LayoutElementBuilders.FontStyles
-import androidx.wear.tiles.builders.LayoutElementBuilders.Layout
-import androidx.wear.tiles.builders.LayoutElementBuilders.Spacer
-import androidx.wear.tiles.builders.LayoutElementBuilders.Text
-import androidx.wear.tiles.builders.ResourceBuilders.Resources
-import androidx.wear.tiles.builders.TileBuilders.Tile
-import androidx.wear.tiles.builders.TimelineBuilders.Timeline
-import androidx.wear.tiles.builders.TimelineBuilders.TimelineEntry
-import androidx.wear.tiles.readers.RequestReaders.ResourcesRequest
-import androidx.wear.tiles.readers.RequestReaders.TileRequest
+import androidx.wear.tiles.ColorBuilders.argb
+import androidx.wear.tiles.DeviceParametersBuilders
+import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.tiles.DimensionBuilders.degrees
+import androidx.wear.tiles.DimensionBuilders.dp
+import androidx.wear.tiles.DimensionBuilders.sp
+import androidx.wear.tiles.LayoutElementBuilders.ARC_ANCHOR_START
+import androidx.wear.tiles.LayoutElementBuilders.Arc
+import androidx.wear.tiles.LayoutElementBuilders.ArcLine
+import androidx.wear.tiles.LayoutElementBuilders.Box
+import androidx.wear.tiles.LayoutElementBuilders.Column
+import androidx.wear.tiles.LayoutElementBuilders.FontStyle
+import androidx.wear.tiles.LayoutElementBuilders.FontStyles
+import androidx.wear.tiles.LayoutElementBuilders.Layout
+import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.ResourceBuilders.Resources
+import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.TimelineBuilders.Timeline
+import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import androidx.wear.tiles.RequestBuilders.ResourcesRequest
+import androidx.wear.tiles.RequestBuilders.TileRequest
 import com.example.wear.tiles.R
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
@@ -73,7 +74,6 @@ class FitnessTileService : TileProviderService() {
         requestParams: TileRequest
     ): ListenableFuture<Tile> = serviceScope.future {
         val goalProgress = FitnessRepo.getGoalProgress()
-        val fontStyles = FontStyles.withDeviceParameters(requestParams.deviceParameters)
         Tile.builder()
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
@@ -81,7 +81,7 @@ class FitnessTileService : TileProviderService() {
                 Timeline.builder().addTimelineEntry(
                     TimelineEntry.builder().setLayout(
                         Layout.builder().setRoot(
-                            layout(goalProgress, fontStyles)
+                            layout(goalProgress, requestParams.deviceParameters!!)
                         )
                     )
                 )
@@ -99,7 +99,7 @@ class FitnessTileService : TileProviderService() {
         serviceJob.cancel()
     }
 
-    private fun layout(goalProgress: GoalProgress, fontStyles: FontStyles) =
+    private fun layout(goalProgress: GoalProgress, deviceParameters: DeviceParameters) =
         Box.builder()
             .addContent(
                 Arc.builder()
@@ -121,7 +121,7 @@ class FitnessTileService : TileProviderService() {
                             .setFontStyle(
                                 FontStyle.builder().setSize(sp(44f)).build()
                             )
-                            .setFontStyle(fontStyles.display2())
+                            .setFontStyle(FontStyles.display2(deviceParameters))
                     )
                     .addContent(
                         Text.builder()
@@ -129,7 +129,7 @@ class FitnessTileService : TileProviderService() {
                             .setFontStyle(
                                 FontStyle.builder().setSize(sp(44f)).build()
                             )
-                            .setFontStyle(fontStyles.title3())
+                            .setFontStyle(FontStyles.title3(deviceParameters))
                     )
             )
 }
