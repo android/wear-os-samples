@@ -30,10 +30,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.wear.ambient.AmbientModeSupport
 import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
 import java.lang.ref.WeakReference
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 /**
  * IMPORTANT NOTE: Most apps shouldn't use always on ambient mode, as it drains battery life. Unless
@@ -100,7 +101,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     private lateinit var binding: ActivityMainBinding
 
-    private val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.US)
+    private val dateFormat = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US)
 
     @Volatile
     private var drawCount = 0
@@ -187,47 +188,54 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      */
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
-        val timeMs = System.currentTimeMillis()
+        val instant = Instant.now()
         if (ambientController.isAmbient) {
-            /* Calculate next trigger time (based on state). */
-            val delayMs = AMBIENT_INTERVAL_MS - timeMs % AMBIENT_INTERVAL_MS
-            val triggerTimeMs = timeMs + delayMs
+            val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
             ambientUpdateAlarmManager.setExact(
-                AlarmManager.RTC_WAKEUP, triggerTimeMs, ambientUpdatePendingIntent
+                AlarmManager.RTC_WAKEUP, triggerTime.toEpochMilli(), ambientUpdatePendingIntent
             )
         } else {
-            /* Calculate next trigger time (based on state). */
-            val delayMs = ACTIVE_INTERVAL_MS - timeMs % ACTIVE_INTERVAL_MS
+            val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)
             activeModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
-            activeModeUpdateHandler.sendEmptyMessageDelayed(MSG_UPDATE_SCREEN, delayMs)
+            activeModeUpdateHandler.sendEmptyMessageDelayed(MSG_UPDATE_SCREEN, delay.toMillis())
         }
     }
+
+    /**
+     * Returns the delay from this [Instant] to the next one that is aligned with the given [interval].
+     */
+    private fun Instant.getDelayToNextInstantWithInterval(interval: Duration): Duration =
+        Duration.ofMillis(interval.toMillis() - toEpochMilli() % interval.toMillis())
+
+    /**
+     * Returns the next [Instant] that is aligned with the given [interval].
+     */
+    private fun Instant.getNextInstantWithInterval(interval: Duration): Instant =
+        plus(getDelayToNextInstantWithInterval(interval))
 
     /** Updates display based on Ambient state. If you need to pull data, you should do it here.  */
     private fun loadDataAndUpdateScreen() {
         drawCount += 1
-        val currentTimeMs = System.currentTimeMillis()
+
+        val currentInstant = Instant.now()
+
         Log.d(
             TAG,
-            "loadDataAndUpdateScreen(): "
-                + currentTimeMs
-                + "("
-                + ambientController.isAmbient
-                + ")"
+            "loadDataAndUpdateScreen(): ${currentInstant.toEpochMilli()} (${ambientController.isAmbient})"
         )
+
+        val currentTime = LocalTime.now()
+
+        binding.time.text = dateFormat.format(currentTime)
+        binding.timeStamp.text = getString(R.string.timestamp_label, currentInstant.toEpochMilli())
+
         if (ambientController.isAmbient) {
-            binding.time.text = dateFormat.format(Date())
-            binding.timeStamp.text = getString(R.string.timestamp_label, currentTimeMs)
             binding.state.text = getString(R.string.mode_ambient_label)
-            binding.updateRate.text =
-                getString(R.string.update_rate_label, AMBIENT_INTERVAL_MS / 1000)
+            binding.updateRate.text = getString(R.string.update_rate_label, AMBIENT_INTERVAL.seconds)
             binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
         } else {
-            binding.time.text = dateFormat.format(Date())
-            binding.timeStamp.text = getString(R.string.timestamp_label, currentTimeMs)
             binding.state.text = getString(R.string.mode_active_label)
-            binding.updateRate.text =
-                getString(R.string.update_rate_label, ACTIVE_INTERVAL_MS / 1000)
+            binding.updateRate.text = getString(R.string.update_rate_label, ACTIVE_INTERVAL.seconds)
             binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
         }
     }
@@ -339,9 +347,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         /** Custom 'what' for Message sent to Handler.  */
         private const val MSG_UPDATE_SCREEN = 0
 
-        /** Milliseconds between updates based on state.  */
-        private val ACTIVE_INTERVAL_MS = TimeUnit.SECONDS.toMillis(1)
-        private val AMBIENT_INTERVAL_MS = TimeUnit.SECONDS.toMillis(10)
+        /** Duration between updates based on state.  */
+        private val ACTIVE_INTERVAL = Duration.ofSeconds(1)
+        private val AMBIENT_INTERVAL = Duration.ofSeconds(10)
 
         /** Action for updating the display in ambient mode, per our custom refresh cycle.  */
         private const val AMBIENT_UPDATE_ACTION =
