@@ -19,9 +19,6 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <!--If you want your app to run on pre-22, then set required to false -->
-        <uses-library android:name="com.google.android.wearable" android:required="false" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

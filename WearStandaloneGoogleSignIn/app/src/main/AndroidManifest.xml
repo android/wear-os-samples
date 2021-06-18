@@ -30,10 +30,6 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="false" />
-
         <activity
             android:name=".GoogleSignInActivity"
             android:label="@string/app_name">
