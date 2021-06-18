@@ -87,7 +87,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * Ambient mode controller attached to this display. Used by Activity to see if it is in ambient
      * mode.
      */
-    private var ambientController: AmbientModeSupport.AmbientController? = null
+    private lateinit var ambientController: AmbientModeSupport.AmbientController
 
     /** If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.  */
     private var isLowBitAmbient = false
@@ -188,7 +188,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
         val timeMs = System.currentTimeMillis()
-        if (ambientController!!.isAmbient) {
+        if (ambientController.isAmbient) {
             /* Calculate next trigger time (based on state). */
             val delayMs = AMBIENT_INTERVAL_MS - timeMs % AMBIENT_INTERVAL_MS
             val triggerTimeMs = timeMs + delayMs
@@ -212,10 +212,10 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             "loadDataAndUpdateScreen(): "
                 + currentTimeMs
                 + "("
-                + ambientController!!.isAmbient
+                + ambientController.isAmbient
                 + ")"
         )
-        if (ambientController!!.isAmbient) {
+        if (ambientController.isAmbient) {
             binding.time.text = dateFormat.format(Date())
             binding.timeStamp.text = getString(R.string.timestamp_label, currentTimeMs)
             binding.state.text = getString(R.string.mode_ambient_label)
