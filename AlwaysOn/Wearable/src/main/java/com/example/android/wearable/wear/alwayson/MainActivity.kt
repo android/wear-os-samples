@@ -234,16 +234,22 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
         binding.time.text = dateFormat.format(currentTime)
         binding.timeStamp.text = getString(R.string.timestamp_label, currentInstant.toEpochMilli())
-
-        if (ambientController.isAmbient) {
-            binding.state.text = getString(R.string.mode_ambient_label)
-            binding.updateRate.text = getString(R.string.update_rate_label, AMBIENT_INTERVAL.seconds)
-            binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
-        } else {
-            binding.state.text = getString(R.string.mode_active_label)
-            binding.updateRate.text = getString(R.string.update_rate_label, ACTIVE_INTERVAL.seconds)
-            binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
-        }
+        binding.state.text = getString(
+            if (ambientController.isAmbient) {
+                R.string.mode_ambient_label
+            } else {
+                R.string.mode_active_label
+            }
+        )
+        binding.updateRate.text = getString(
+            R.string.update_rate_label,
+            if (ambientController.isAmbient) {
+                AMBIENT_INTERVAL.seconds
+            } else {
+                ACTIVE_INTERVAL.seconds
+            }
+        )
+        binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
     }
 
     override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
