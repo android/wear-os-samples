@@ -24,6 +24,7 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.getSystemService
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
@@ -125,7 +126,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         setContentView(binding.root)
 
         ambientController = AmbientModeSupport.attach(this)
-        ambientUpdateAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        ambientUpdateAlarmManager = getSystemService()!!
 
         /*
          * Create a PendingIntent which we'll give to the AlarmManager to send ambient mode updates
