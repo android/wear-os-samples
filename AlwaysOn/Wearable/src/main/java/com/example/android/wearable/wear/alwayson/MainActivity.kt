@@ -24,20 +24,25 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.ambient.AmbientModeSupport
 import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
+import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.random.Random
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * IMPORTANT NOTE: Most apps shouldn't use always on ambient mode, as it drains battery life. Unless
@@ -174,7 +179,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      */
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
-        val instant = Instant.now()
+        val instant = Instant.now(clock)
         if (ambientController.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
             ambientUpdateAlarmManager.setExact(
@@ -184,7 +189,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)
             activeUpdateJob.cancel()
             activeUpdateJob = lifecycleScope.launch {
-                delay(delay.toMillis())
+                withContext(activeDispatcher) {
+                    // Delay on the active dispatcher for testability
+                    delay(delay.toMillis())
+                }
+
                 refreshDisplayAndSetNextUpdate()
             }
         }
@@ -208,14 +217,14 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private fun loadDataAndUpdateScreen() {
         drawCount += 1
 
-        val currentInstant = Instant.now()
+        val currentInstant = Instant.now(clock)
 
         Log.d(
             TAG,
             "loadDataAndUpdateScreen(): ${currentInstant.toEpochMilli()} (${ambientController.isAmbient})"
         )
 
-        val currentTime = LocalTime.now()
+        val currentTime = LocalTime.now(clock)
 
         binding.time.text = dateFormat.format(currentTime)
         binding.timeStamp.text = getString(R.string.timestamp_label, currentInstant.toEpochMilli())
@@ -355,7 +364,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         /**
          * Action for updating the display in ambient mode, per our custom refresh cycle.
          */
-        private const val AMBIENT_UPDATE_ACTION =
+        const val AMBIENT_UPDATE_ACTION =
             "com.example.android.wearable.wear.alwayson.action.AMBIENT_UPDATE"
 
         /**
@@ -364,3 +373,15 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         private const val BURN_IN_OFFSET_PX = 10
     }
 }
+
+/**
+ * The [Clock] driving the time information. Overridable only for testing.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal var clock: Clock = Clock.systemDefaultZone()
+
+/**
+ * The dispatcher used for delaying in active mode. Overridable only for testing.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal var activeDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate
