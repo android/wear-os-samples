@@ -23,21 +23,22 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.wear.ambient.AmbientModeSupport
 import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
-import java.lang.ref.WeakReference
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.random.Random
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * IMPORTANT NOTE: Most apps shouldn't use always on ambient mode, as it drains battery life. Unless
@@ -56,18 +57,18 @@ import kotlin.random.Random
  *
  *
  * There are two modes: *ambient* and *active*. To trigger future display updates, we
- * use a custom Handler for active mode and an Alarm for ambient mode.
+ * use coroutines for active mode and an Alarm for ambient mode.
  *
  *
- * Why not use just one or the other? Handlers are generally less battery intensive and can be
+ * Why not use just one or the other? Coroutines are generally less battery intensive and can be
  * triggered every second. However, they can not wake up the processor (common in ambient mode).
  *
  *
  * Alarms can wake up the processor (what we need for ambient move), but they are less efficient
- * compared to Handlers when it comes to quick update frequencies.
+ * compared to coroutines when it comes to quick update frequencies.
  *
  *
- * Therefore, we use Handler for active mode (can trigger every second and are better on the
+ * Therefore, we use coroutines for active mode (can trigger every second and are better on the
  * battery), and we use an Alarm for ambient mode (only need to update once every 10 seconds and
  * they can wake up a sleeping processor).
  *
@@ -110,7 +111,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private var drawCount = 0
 
     /**
-     * Since the handler (used in active mode) can't wake up the processor when the device is in
+     * Since the coroutine-based update (used in active mode) can't wake up the processor when the device is in
      * ambient mode and undocked, we use an Alarm to cover ambient mode updates when we need them
      * more frequently than every minute. Remember, if getting updates once a minute in ambient mode
      * is enough, you can do away with the Alarm code and just rely on the onUpdateAmbient()
@@ -121,10 +122,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private lateinit var ambientUpdateBroadcastReceiver: BroadcastReceiver
 
     /**
-     * This custom handler is used for updates in "Active" mode. We use a separate static class to
-     * help us avoid memory leaks.
+     * The [Job] associated with the updates performed while in active mode
      */
-    private val activeModeUpdateHandler: Handler = ActiveModeUpdateHandler(this)
+    private var activeUpdateJob: Job = Job().apply { complete() }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate()")
@@ -181,13 +181,13 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(TAG, "onPause()")
         super.onPause()
         unregisterReceiver(ambientUpdateBroadcastReceiver)
-        activeModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
+        activeUpdateJob.cancel()
         ambientUpdateAlarmManager.cancel(ambientUpdatePendingIntent)
     }
 
     /**
      * Loads data/updates screen (via method), but most importantly, sets up the next refresh
-     * (active mode = Handler and ambient mode = Alarm).
+     * (active mode = coroutine and ambient mode = Alarm).
      */
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
@@ -199,8 +199,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             )
         } else {
             val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)
-            activeModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
-            activeModeUpdateHandler.sendEmptyMessageDelayed(MSG_UPDATE_SCREEN, delay.toMillis())
+            activeUpdateJob.cancel()
+            activeUpdateJob = lifecycleScope.launch {
+                delay(delay.toMillis())
+                refreshDisplayAndSetNextUpdate()
+            }
         }
     }
 
@@ -255,10 +258,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             doBurnInProtection =
                 ambientDetails.getBoolean(AmbientModeSupport.EXTRA_BURN_IN_PROTECTION, false)
 
-            /* Clears Handler queue (only needed for updates in active mode). */
-            activeModeUpdateHandler.removeMessages(
-                MSG_UPDATE_SCREEN
-            )
+            // Cancel any active updates
+            activeUpdateJob.cancel()
 
             /*
              * Following best practices outlined in WatchFaces API (keeping most pixels black,
@@ -332,24 +333,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         }
     }
 
-    /** Handler separated into static class to avoid memory leaks.  */
-    private class ActiveModeUpdateHandler(reference: MainActivity) : Handler() {
-        private val mMainActivityWeakReference: WeakReference<MainActivity> = WeakReference(reference)
-        override fun handleMessage(message: Message) {
-            val mainActivity = mMainActivityWeakReference.get()
-            if (mainActivity != null) {
-                if (message.what == MSG_UPDATE_SCREEN) {
-                    mainActivity.refreshDisplayAndSetNextUpdate()
-                }
-            }
-        }
-    }
-
     companion object {
         private const val TAG = "MainActivity"
-
-        /** Custom 'what' for Message sent to Handler.  */
-        private const val MSG_UPDATE_SCREEN = 0
 
         /** Duration between updates based on state.  */
         private val ACTIVE_INTERVAL = Duration.ofSeconds(1)
