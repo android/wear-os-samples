@@ -26,6 +26,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import androidx.core.view.setPadding
+import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
 import androidx.wear.ambient.AmbientModeSupport
 import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
@@ -35,6 +37,7 @@ import java.time.Instant
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.random.Random
 
 /**
  * IMPORTANT NOTE: Most apps shouldn't use always on ambient mode, as it drains battery life. Unless
@@ -297,9 +300,10 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
              * to true.
              */
             if (doBurnInProtection) {
-                val x = (Math.random() * 2 * BURN_IN_OFFSET_PX - BURN_IN_OFFSET_PX).toInt()
-                val y = (Math.random() * 2 * BURN_IN_OFFSET_PX - BURN_IN_OFFSET_PX).toInt()
-                binding.container.setPadding(x, y, 0, 0)
+                binding.container.updatePadding(
+                    left = Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1),
+                    right = Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1)
+                )
             }
         }
 
@@ -322,7 +326,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
             /* Reset any random offset applied for burn-in protection. */
             if (doBurnInProtection) {
-                binding.container.setPadding(0, 0, 0, 0)
+                binding.container.setPadding(0)
             }
             refreshDisplayAndSetNextUpdate()
         }
