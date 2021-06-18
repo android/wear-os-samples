@@ -88,26 +88,26 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * Ambient mode controller attached to this display. Used by Activity to see if it is in ambient
      * mode.
      */
-    private var mAmbientController: AmbientModeSupport.AmbientController? = null
+    private var ambientController: AmbientModeSupport.AmbientController? = null
 
     /** If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.  */
-    private var mIsLowBitAmbient = false
+    private var isLowBitAmbient = false
 
     /**
      * If the display requires burn-in protection in ambient mode, rendered pixels need to be
      * intermittently offset to avoid screen burn-in.
      */
-    private var mDoBurnInProtection = false
-    private var mContentView: View? = null
-    private var mTimeTextView: TextView? = null
-    private var mTimeStampTextView: TextView? = null
-    private var mStateTextView: TextView? = null
-    private var mUpdateRateTextView: TextView? = null
-    private var mDrawCountTextView: TextView? = null
-    private val sDateFormat = SimpleDateFormat("HH:mm:ss", Locale.US)
+    private var doBurnInProtection = false
+    private var containerView: View? = null
+    private var timeTextView: TextView? = null
+    private var timeStampTextView: TextView? = null
+    private var stateTextView: TextView? = null
+    private var updateRateTextView: TextView? = null
+    private var drawCountTextView: TextView? = null
+    private val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.US)
 
     @Volatile
-    private var mDrawCount = 0
+    private var drawCount = 0
 
     /**
      * Since the handler (used in active mode) can't wake up the processor when the device is in
@@ -116,73 +116,76 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * is enough, you can do away with the Alarm code and just rely on the onUpdateAmbient()
      * callback.
      */
-    private var mAmbientUpdateAlarmManager: AlarmManager? = null
-    private var mAmbientUpdatePendingIntent: PendingIntent? = null
-    private var mAmbientUpdateBroadcastReceiver: BroadcastReceiver? = null
+    private lateinit var ambientUpdateAlarmManager: AlarmManager
+    private lateinit var ambientUpdatePendingIntent: PendingIntent
+    private lateinit var ambientUpdateBroadcastReceiver: BroadcastReceiver
 
     /**
      * This custom handler is used for updates in "Active" mode. We use a separate static class to
      * help us avoid memory leaks.
      */
-    private val mActiveModeUpdateHandler: Handler = ActiveModeUpdateHandler(this)
+    private val activeModeUpdateHandler: Handler = ActiveModeUpdateHandler(this)
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mAmbientController = AmbientModeSupport.attach(this)
-        mAmbientUpdateAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        ambientController = AmbientModeSupport.attach(this)
+        ambientUpdateAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
         /*
-             * Create a PendingIntent which we'll give to the AlarmManager to send ambient mode updates
-             * on an interval which we've define.
-             */
+         * Create a PendingIntent which we'll give to the AlarmManager to send ambient mode updates
+         * on an interval which we've define.
+         */
         val ambientUpdateIntent = Intent(AMBIENT_UPDATE_ACTION)
 
         /*
-             * Retrieves a PendingIntent that will perform a broadcast. You could also use getActivity()
-             * to retrieve a PendingIntent that will start a new activity, but be aware that actually
-             * triggers onNewIntent() which causes lifecycle changes (onPause() and onResume()) which
-             * might trigger code to be re-executed more often than you want.
-             *
-             * If you do end up using getActivity(), also make sure you have set activity launchMode to
-             * singleInstance in the manifest.
-             *
-             * Otherwise, it is easy for the AlarmManager launch Intent to open a new activity
-             * every time the Alarm is triggered rather than reusing this Activity.
-             */mAmbientUpdatePendingIntent = PendingIntent.getBroadcast(
+         * Retrieves a PendingIntent that will perform a broadcast. You could also use getActivity()
+         * to retrieve a PendingIntent that will start a new activity, but be aware that actually
+         * triggers onNewIntent() which causes lifecycle changes (onPause() and onResume()) which
+         * might trigger code to be re-executed more often than you want.
+         *
+         * If you do end up using getActivity(), also make sure you have set activity launchMode to
+         * singleInstance in the manifest.
+         *
+         * Otherwise, it is easy for the AlarmManager launch Intent to open a new activity
+         * every time the Alarm is triggered rather than reusing this Activity.
+         */
+        ambientUpdatePendingIntent = PendingIntent.getBroadcast(
             this, 0, ambientUpdateIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         /*
-             * An anonymous broadcast receiver which will receive ambient update requests and trigger
-             * display refresh.
-             */mAmbientUpdateBroadcastReceiver = object : BroadcastReceiver() {
+         * An anonymous broadcast receiver which will receive ambient update requests and trigger
+         * display refresh.
+         */
+        ambientUpdateBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 refreshDisplayAndSetNextUpdate()
             }
         }
-        mContentView = findViewById(R.id.content_view)
-        mTimeTextView = findViewById(R.id.time)
-        mTimeStampTextView = findViewById(R.id.time_stamp)
-        mStateTextView = findViewById(R.id.state)
-        mUpdateRateTextView = findViewById(R.id.update_rate)
-        mDrawCountTextView = findViewById(R.id.draw_count)
+        containerView = findViewById(R.id.container)
+        timeTextView = findViewById(R.id.time)
+        timeStampTextView = findViewById(R.id.time_stamp)
+        stateTextView = findViewById(R.id.state)
+        updateRateTextView = findViewById(R.id.update_rate)
+        drawCountTextView = findViewById(R.id.draw_count)
     }
 
     public override fun onResume() {
         Log.d(TAG, "onResume()")
         super.onResume()
         val filter = IntentFilter(AMBIENT_UPDATE_ACTION)
-        registerReceiver(mAmbientUpdateBroadcastReceiver, filter)
+        registerReceiver(ambientUpdateBroadcastReceiver, filter)
         refreshDisplayAndSetNextUpdate()
     }
 
     public override fun onPause() {
         Log.d(TAG, "onPause()")
         super.onPause()
-        unregisterReceiver(mAmbientUpdateBroadcastReceiver)
-        mActiveModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
-        mAmbientUpdateAlarmManager!!.cancel(mAmbientUpdatePendingIntent)
+        unregisterReceiver(ambientUpdateBroadcastReceiver)
+        activeModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
+        ambientUpdateAlarmManager.cancel(ambientUpdatePendingIntent)
     }
 
     /**
@@ -192,47 +195,47 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
         val timeMs = System.currentTimeMillis()
-        if (mAmbientController!!.isAmbient) {
+        if (ambientController!!.isAmbient) {
             /* Calculate next trigger time (based on state). */
             val delayMs = AMBIENT_INTERVAL_MS - timeMs % AMBIENT_INTERVAL_MS
             val triggerTimeMs = timeMs + delayMs
-            mAmbientUpdateAlarmManager!!.setExact(
-                AlarmManager.RTC_WAKEUP, triggerTimeMs, mAmbientUpdatePendingIntent
+            ambientUpdateAlarmManager.setExact(
+                AlarmManager.RTC_WAKEUP, triggerTimeMs, ambientUpdatePendingIntent
             )
         } else {
             /* Calculate next trigger time (based on state). */
             val delayMs = ACTIVE_INTERVAL_MS - timeMs % ACTIVE_INTERVAL_MS
-            mActiveModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
-            mActiveModeUpdateHandler.sendEmptyMessageDelayed(MSG_UPDATE_SCREEN, delayMs)
+            activeModeUpdateHandler.removeMessages(MSG_UPDATE_SCREEN)
+            activeModeUpdateHandler.sendEmptyMessageDelayed(MSG_UPDATE_SCREEN, delayMs)
         }
     }
 
     /** Updates display based on Ambient state. If you need to pull data, you should do it here.  */
     private fun loadDataAndUpdateScreen() {
-        mDrawCount += 1
+        drawCount += 1
         val currentTimeMs = System.currentTimeMillis()
         Log.d(
             TAG,
             "loadDataAndUpdateScreen(): "
                 + currentTimeMs
                 + "("
-                + mAmbientController!!.isAmbient
+                + ambientController!!.isAmbient
                 + ")"
         )
-        if (mAmbientController!!.isAmbient) {
-            mTimeTextView!!.text = sDateFormat.format(Date())
-            mTimeStampTextView!!.text = getString(R.string.timestamp_label, currentTimeMs)
-            mStateTextView!!.text = getString(R.string.mode_ambient_label)
-            mUpdateRateTextView!!.text =
+        if (ambientController!!.isAmbient) {
+            timeTextView!!.text = dateFormat.format(Date())
+            timeStampTextView!!.text = getString(R.string.timestamp_label, currentTimeMs)
+            stateTextView!!.text = getString(R.string.mode_ambient_label)
+            updateRateTextView!!.text =
                 getString(R.string.update_rate_label, AMBIENT_INTERVAL_MS / 1000)
-            mDrawCountTextView!!.text = getString(R.string.draw_count_label, mDrawCount)
+            drawCountTextView!!.text = getString(R.string.draw_count_label, drawCount)
         } else {
-            mTimeTextView!!.text = sDateFormat.format(Date())
-            mTimeStampTextView!!.text = getString(R.string.timestamp_label, currentTimeMs)
-            mStateTextView!!.text = getString(R.string.mode_active_label)
-            mUpdateRateTextView!!.text =
+            timeTextView!!.text = dateFormat.format(Date())
+            timeStampTextView!!.text = getString(R.string.timestamp_label, currentTimeMs)
+            stateTextView!!.text = getString(R.string.mode_active_label)
+            updateRateTextView!!.text =
                 getString(R.string.update_rate_label, ACTIVE_INTERVAL_MS / 1000)
-            mDrawCountTextView!!.text = getString(R.string.draw_count_label, mDrawCount)
+            drawCountTextView!!.text = getString(R.string.draw_count_label, drawCount)
         }
     }
 
@@ -244,27 +247,29 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         /** Prepares the UI for ambient mode.  */
         override fun onEnterAmbient(ambientDetails: Bundle) {
             super.onEnterAmbient(ambientDetails)
-            mIsLowBitAmbient = ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
-            mDoBurnInProtection =
+            isLowBitAmbient = ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
+            doBurnInProtection =
                 ambientDetails.getBoolean(AmbientModeSupport.EXTRA_BURN_IN_PROTECTION, false)
 
-            /* Clears Handler queue (only needed for updates in active mode). */mActiveModeUpdateHandler.removeMessages(
+            /* Clears Handler queue (only needed for updates in active mode). */
+            activeModeUpdateHandler.removeMessages(
                 MSG_UPDATE_SCREEN
             )
 
             /*
-                   * Following best practices outlined in WatchFaces API (keeping most pixels black,
-                   * avoiding large blocks of white pixels, using only black and white, and disabling
-                   * anti-aliasing, etc.)
-                   */mStateTextView!!.setTextColor(Color.WHITE)
-            mUpdateRateTextView!!.setTextColor(Color.WHITE)
-            mDrawCountTextView!!.setTextColor(Color.WHITE)
-            if (mIsLowBitAmbient) {
-                mTimeTextView!!.paint.isAntiAlias = false
-                mTimeStampTextView!!.paint.isAntiAlias = false
-                mStateTextView!!.paint.isAntiAlias = false
-                mUpdateRateTextView!!.paint.isAntiAlias = false
-                mDrawCountTextView!!.paint.isAntiAlias = false
+             * Following best practices outlined in WatchFaces API (keeping most pixels black,
+             * avoiding large blocks of white pixels, using only black and white, and disabling
+             * anti-aliasing, etc.)
+             */
+            stateTextView!!.setTextColor(Color.WHITE)
+            updateRateTextView!!.setTextColor(Color.WHITE)
+            drawCountTextView!!.setTextColor(Color.WHITE)
+            if (isLowBitAmbient) {
+                timeTextView!!.paint.isAntiAlias = false
+                timeStampTextView!!.paint.isAntiAlias = false
+                stateTextView!!.paint.isAntiAlias = false
+                updateRateTextView!!.paint.isAntiAlias = false
+                drawCountTextView!!.paint.isAntiAlias = false
             }
             refreshDisplayAndSetNextUpdate()
         }
@@ -279,20 +284,21 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             super.onUpdateAmbient()
 
             /*
-                   * If the screen requires burn-in protection, views must be shifted around periodically
-                   * in ambient mode. To ensure that content isn't shifted off the screen, avoid placing
-                   * content within 10 pixels of the edge of the screen.
-                   *
-                   * Since we're potentially applying negative padding, we have ensured
-                   * that the containing view is sufficiently padded (see res/layout/activity_main.xml).
-                   *
-                   * Activities should also avoid solid white areas to prevent pixel burn-in. Both of
-                   * these requirements only apply in ambient mode, and only when this property is set
-                   * to true.
-                   */if (mDoBurnInProtection) {
+             * If the screen requires burn-in protection, views must be shifted around periodically
+             * in ambient mode. To ensure that content isn't shifted off the screen, avoid placing
+             * content within 10 pixels of the edge of the screen.
+             *
+             * Since we're potentially applying negative padding, we have ensured
+             * that the containing view is sufficiently padded (see res/layout/activity_main.xml).
+             *
+             * Activities should also avoid solid white areas to prevent pixel burn-in. Both of
+             * these requirements only apply in ambient mode, and only when this property is set
+             * to true.
+             */
+            if (doBurnInProtection) {
                 val x = (Math.random() * 2 * BURN_IN_OFFSET_PX - BURN_IN_OFFSET_PX).toInt()
                 val y = (Math.random() * 2 * BURN_IN_OFFSET_PX - BURN_IN_OFFSET_PX).toInt()
-                mContentView!!.setPadding(x, y, 0, 0)
+                containerView!!.setPadding(x, y, 0, 0)
             }
         }
 
@@ -300,30 +306,30 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         override fun onExitAmbient() {
             super.onExitAmbient()
 
-            /* Clears out Alarms since they are only used in ambient mode. */mAmbientUpdateAlarmManager!!.cancel(
-                mAmbientUpdatePendingIntent
-            )
-            mStateTextView!!.setTextColor(Color.GREEN)
-            mUpdateRateTextView!!.setTextColor(Color.GREEN)
-            mDrawCountTextView!!.setTextColor(Color.GREEN)
-            if (mIsLowBitAmbient) {
-                mTimeTextView!!.paint.isAntiAlias = true
-                mTimeStampTextView!!.paint.isAntiAlias = true
-                mStateTextView!!.paint.isAntiAlias = true
-                mUpdateRateTextView!!.paint.isAntiAlias = true
-                mDrawCountTextView!!.paint.isAntiAlias = true
+            /* Clears out Alarms since they are only used in ambient mode. */
+            ambientUpdateAlarmManager.cancel(ambientUpdatePendingIntent)
+            stateTextView!!.setTextColor(Color.GREEN)
+            updateRateTextView!!.setTextColor(Color.GREEN)
+            drawCountTextView!!.setTextColor(Color.GREEN)
+            if (isLowBitAmbient) {
+                timeTextView!!.paint.isAntiAlias = true
+                timeStampTextView!!.paint.isAntiAlias = true
+                stateTextView!!.paint.isAntiAlias = true
+                updateRateTextView!!.paint.isAntiAlias = true
+                drawCountTextView!!.paint.isAntiAlias = true
             }
 
-            /* Reset any random offset applied for burn-in protection. */if (mDoBurnInProtection) {
-                mContentView!!.setPadding(0, 0, 0, 0)
+            /* Reset any random offset applied for burn-in protection. */
+            if (doBurnInProtection) {
+                containerView!!.setPadding(0, 0, 0, 0)
             }
             refreshDisplayAndSetNextUpdate()
         }
     }
 
     /** Handler separated into static class to avoid memory leaks.  */
-    private class ActiveModeUpdateHandler internal constructor(reference: MainActivity) : Handler() {
-        private val mMainActivityWeakReference: WeakReference<MainActivity>
+    private class ActiveModeUpdateHandler(reference: MainActivity) : Handler() {
+        private val mMainActivityWeakReference: WeakReference<MainActivity> = WeakReference(reference)
         override fun handleMessage(message: Message) {
             val mainActivity = mMainActivityWeakReference.get()
             if (mainActivity != null) {
@@ -331,10 +337,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                     mainActivity.refreshDisplayAndSetNextUpdate()
                 }
             }
-        }
-
-        init {
-            mMainActivityWeakReference = WeakReference(reference)
         }
     }
 
