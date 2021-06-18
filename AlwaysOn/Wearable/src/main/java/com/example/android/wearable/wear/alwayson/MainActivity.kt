@@ -94,15 +94,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      */
     private lateinit var ambientController: AmbientModeSupport.AmbientController
 
-    /** If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.  */
-    private var isLowBitAmbient = false
-
-    /**
-     * If the display requires burn-in protection in ambient mode, rendered pixels need to be
-     * intermittently offset to avoid screen burn-in.
-     */
-    private var doBurnInProtection = false
-
     private lateinit var binding: ActivityMainBinding
 
     private val dateFormat = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US)
@@ -257,6 +248,16 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     }
 
     private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
+
+        /** If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.  */
+        private var isLowBitAmbient = false
+
+        /**
+         * If the display requires burn-in protection in ambient mode, rendered pixels need to be
+         * intermittently offset to avoid screen burn-in.
+         */
+        private var doBurnInProtection = false
+
         /** Prepares the UI for ambient mode.  */
         override fun onEnterAmbient(ambientDetails: Bundle) {
             super.onEnterAmbient(ambientDetails)
