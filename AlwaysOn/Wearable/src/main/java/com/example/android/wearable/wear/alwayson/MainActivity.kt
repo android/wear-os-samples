@@ -89,18 +89,14 @@ import kotlinx.coroutines.launch
  * only black and white, disabling anti-aliasing, etc.
  */
 class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
+
+    private lateinit var binding: ActivityMainBinding
+
     /**
      * Ambient mode controller attached to this display. Used by Activity to see if it is in ambient
      * mode.
      */
     private lateinit var ambientController: AmbientModeSupport.AmbientController
-
-    private lateinit var binding: ActivityMainBinding
-
-    private val dateFormat = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US)
-
-    @Volatile
-    private var drawCount = 0
 
     /**
      * Since the coroutine-based update (used in active mode) can't wake up the processor when the device is in
@@ -113,8 +109,13 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private lateinit var ambientUpdatePendingIntent: PendingIntent
     private lateinit var ambientUpdateBroadcastReceiver: BroadcastReceiver
 
+    private val dateFormat = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.US)
+
+    @Volatile
+    private var drawCount = 0
+
     /**
-     * The [Job] associated with the updates performed while in active mode
+     * The [Job] associated with the updates performed while in active mode.
      */
     private var activeUpdateJob: Job = Job().apply { complete() }
 
@@ -179,7 +180,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     /**
      * Loads data/updates screen (via method), but most importantly, sets up the next refresh
-     * (active mode = coroutine and ambient mode = Alarm).
+     * (active mode = coroutines and ambient mode = Alarm).
      */
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
@@ -244,9 +245,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
     }
 
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
-        return MyAmbientCallback()
-    }
+    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = MyAmbientCallback()
 
     private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
 
