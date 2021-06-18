@@ -26,10 +26,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.wear.ambient.AmbientModeSupport
+import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -98,12 +97,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * intermittently offset to avoid screen burn-in.
      */
     private var doBurnInProtection = false
-    private var containerView: View? = null
-    private var timeTextView: TextView? = null
-    private var timeStampTextView: TextView? = null
-    private var stateTextView: TextView? = null
-    private var updateRateTextView: TextView? = null
-    private var drawCountTextView: TextView? = null
+
+    private lateinit var binding: ActivityMainBinding
+
     private val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.US)
 
     @Volatile
@@ -129,7 +125,10 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     public override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         ambientController = AmbientModeSupport.attach(this)
         ambientUpdateAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
@@ -164,12 +163,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                 refreshDisplayAndSetNextUpdate()
             }
         }
-        containerView = findViewById(R.id.container)
-        timeTextView = findViewById(R.id.time)
-        timeStampTextView = findViewById(R.id.time_stamp)
-        stateTextView = findViewById(R.id.state)
-        updateRateTextView = findViewById(R.id.update_rate)
-        drawCountTextView = findViewById(R.id.draw_count)
     }
 
     public override fun onResume() {
@@ -223,19 +216,19 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                 + ")"
         )
         if (ambientController!!.isAmbient) {
-            timeTextView!!.text = dateFormat.format(Date())
-            timeStampTextView!!.text = getString(R.string.timestamp_label, currentTimeMs)
-            stateTextView!!.text = getString(R.string.mode_ambient_label)
-            updateRateTextView!!.text =
+            binding.time.text = dateFormat.format(Date())
+            binding.timeStamp.text = getString(R.string.timestamp_label, currentTimeMs)
+            binding.state.text = getString(R.string.mode_ambient_label)
+            binding.updateRate.text =
                 getString(R.string.update_rate_label, AMBIENT_INTERVAL_MS / 1000)
-            drawCountTextView!!.text = getString(R.string.draw_count_label, drawCount)
+            binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
         } else {
-            timeTextView!!.text = dateFormat.format(Date())
-            timeStampTextView!!.text = getString(R.string.timestamp_label, currentTimeMs)
-            stateTextView!!.text = getString(R.string.mode_active_label)
-            updateRateTextView!!.text =
+            binding.time.text = dateFormat.format(Date())
+            binding.timeStamp.text = getString(R.string.timestamp_label, currentTimeMs)
+            binding.state.text = getString(R.string.mode_active_label)
+            binding.updateRate.text =
                 getString(R.string.update_rate_label, ACTIVE_INTERVAL_MS / 1000)
-            drawCountTextView!!.text = getString(R.string.draw_count_label, drawCount)
+            binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
         }
     }
 
@@ -261,15 +254,15 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
              * avoiding large blocks of white pixels, using only black and white, and disabling
              * anti-aliasing, etc.)
              */
-            stateTextView!!.setTextColor(Color.WHITE)
-            updateRateTextView!!.setTextColor(Color.WHITE)
-            drawCountTextView!!.setTextColor(Color.WHITE)
+            binding.state.setTextColor(Color.WHITE)
+            binding.updateRate.setTextColor(Color.WHITE)
+            binding.drawCount.setTextColor(Color.WHITE)
             if (isLowBitAmbient) {
-                timeTextView!!.paint.isAntiAlias = false
-                timeStampTextView!!.paint.isAntiAlias = false
-                stateTextView!!.paint.isAntiAlias = false
-                updateRateTextView!!.paint.isAntiAlias = false
-                drawCountTextView!!.paint.isAntiAlias = false
+                binding.time.paint.isAntiAlias = false
+                binding.timeStamp.paint.isAntiAlias = false
+                binding.state.paint.isAntiAlias = false
+                binding.updateRate.paint.isAntiAlias = false
+                binding.drawCount.paint.isAntiAlias = false
             }
             refreshDisplayAndSetNextUpdate()
         }
@@ -298,7 +291,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             if (doBurnInProtection) {
                 val x = (Math.random() * 2 * BURN_IN_OFFSET_PX - BURN_IN_OFFSET_PX).toInt()
                 val y = (Math.random() * 2 * BURN_IN_OFFSET_PX - BURN_IN_OFFSET_PX).toInt()
-                containerView!!.setPadding(x, y, 0, 0)
+                binding.container.setPadding(x, y, 0, 0)
             }
         }
 
@@ -308,20 +301,20 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
             /* Clears out Alarms since they are only used in ambient mode. */
             ambientUpdateAlarmManager.cancel(ambientUpdatePendingIntent)
-            stateTextView!!.setTextColor(Color.GREEN)
-            updateRateTextView!!.setTextColor(Color.GREEN)
-            drawCountTextView!!.setTextColor(Color.GREEN)
+            binding.state.setTextColor(Color.GREEN)
+            binding.updateRate.setTextColor(Color.GREEN)
+            binding.drawCount.setTextColor(Color.GREEN)
             if (isLowBitAmbient) {
-                timeTextView!!.paint.isAntiAlias = true
-                timeStampTextView!!.paint.isAntiAlias = true
-                stateTextView!!.paint.isAntiAlias = true
-                updateRateTextView!!.paint.isAntiAlias = true
-                drawCountTextView!!.paint.isAntiAlias = true
+                binding.time.paint.isAntiAlias = true
+                binding.timeStamp.paint.isAntiAlias = true
+                binding.state.paint.isAntiAlias = true
+                binding.updateRate.paint.isAntiAlias = true
+                binding.drawCount.paint.isAntiAlias = true
             }
 
             /* Reset any random offset applied for burn-in protection. */
             if (doBurnInProtection) {
-                containerView!!.setPadding(0, 0, 0, 0)
+                binding.container.setPadding(0, 0, 0, 0)
             }
             refreshDisplayAndSetNextUpdate()
         }
