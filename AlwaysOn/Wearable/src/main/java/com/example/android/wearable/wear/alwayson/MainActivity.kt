@@ -48,39 +48,31 @@ import kotlinx.coroutines.launch
  * and listening for ambient mode updates (onEnterAmbient, onUpdateAmbient, and onExitAmbient) via a
  * named AmbientCallback subclass.
  *
- *
  * Also demonstrates how to update the display more frequently than every 60 seconds, which is
  * the default frequency, using an AlarmManager. The Alarm code is only necessary for the custom
  * refresh frequency; it can be ignored for basic ambient mode support where you can simply rely on
  * calls to onUpdateAmbient() by the system.
  *
- *
  * There are two modes: *ambient* and *active*. To trigger future display updates, we
  * use coroutines for active mode and an Alarm for ambient mode.
- *
  *
  * Why not use just one or the other? Coroutines are generally less battery intensive and can be
  * triggered every second. However, they can not wake up the processor (common in ambient mode).
  *
- *
  * Alarms can wake up the processor (what we need for ambient move), but they are less efficient
  * compared to coroutines when it comes to quick update frequencies.
- *
  *
  * Therefore, we use coroutines for active mode (can trigger every second and are better on the
  * battery), and we use an Alarm for ambient mode (only need to update once every 10 seconds and
  * they can wake up a sleeping processor).
- *
  *
  * The activity waits 10 seconds between doing any processing (getting data, updating display
  * etc.) while in ambient mode to conserving battery life (processor allowed to sleep). If your app
  * can wait 60 seconds for display updates, you can disregard the Alarm code and simply use
  * onUpdateAmbient() to save even more battery life.
  *
- *
  * As always, you will still want to apply the performance guidelines outlined in the Watch Faces
  * documentation to your app.
- *
  *
  * Finally, in ambient mode, this activity follows the same best practices outlined in the Watch
  * Faces API documentation: keeping most pixels black, avoiding large blocks of white pixels, using
@@ -210,7 +202,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private fun Instant.getNextInstantWithInterval(interval: Duration): Instant =
         plus(getDelayToNextInstantWithInterval(interval))
 
-    /** Updates display based on Ambient state. If you need to pull data, you should do it here.  */
+    /**
+     * Updates display based on Ambient state. If you need to pull data, you should do it here.
+     */
     private fun loadDataAndUpdateScreen() {
         drawCount += 1
 
@@ -247,7 +241,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
 
-        /** If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.  */
+        /**
+         * If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.
+         */
         private var isLowBitAmbient = false
 
         /**
@@ -256,7 +252,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          */
         private var doBurnInProtection = false
 
-        /** Prepares the UI for ambient mode.  */
+        /**
+         * Prepares the UI for ambient mode.
+         */
         override fun onEnterAmbient(ambientDetails: Bundle) {
             super.onEnterAmbient(ambientDetails)
             isLowBitAmbient = ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
@@ -313,7 +311,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             }
         }
 
-        /** Restores the UI to active (non-ambient) mode.  */
+        /**
+         * Restores the UI to active (non-ambient) mode.
+         */
         override fun onExitAmbient() {
             super.onExitAmbient()
 
@@ -342,15 +342,25 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     companion object {
         private const val TAG = "MainActivity"
 
-        /** Duration between updates based on state.  */
+        /**
+         * Duration between updates while in active mode.
+         */
         private val ACTIVE_INTERVAL = Duration.ofSeconds(1)
+
+        /**
+         * Duration between updates while in ambient mode.
+         */
         private val AMBIENT_INTERVAL = Duration.ofSeconds(10)
 
-        /** Action for updating the display in ambient mode, per our custom refresh cycle.  */
+        /**
+         * Action for updating the display in ambient mode, per our custom refresh cycle.
+         */
         private const val AMBIENT_UPDATE_ACTION =
             "com.example.android.wearable.wear.alwayson.action.AMBIENT_UPDATE"
 
-        /** Number of pixels to offset the content rendered in the display to prevent screen burn-in.  */
+        /**
+         * Number of pixels to offset the content rendered in the display to prevent screen burn-in.
+         */
         private const val BURN_IN_OFFSET_PX = 10
     }
 }
