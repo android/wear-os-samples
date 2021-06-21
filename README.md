@@ -9,7 +9,7 @@ Read below for a description of each sample.
 Samples
 ----------
 
-* **[AlwaysOn](AlwaysOn)** (Java) - Demonstrates keeping the app visible in ambient mode. Note: While this is valuable for some specific use cases, most use cases won't need this, because when the watch goes into ambient mode (and shows watch face), if the user interacts with the watch again within several minutes, it will bring the app back up when it transitions out of ambient mode. [Guide](https://developer.android.com/training/wearables/apps/always-on)
+* **[AlwaysOn](AlwaysOn)** (Kotlin) - Demonstrates keeping the app visible in ambient mode. Note: While this is valuable for some specific use cases, most use cases won't need this, because when the watch goes into ambient mode (and shows watch face), if the user interacts with the watch again within several minutes, it will bring the app back up when it transitions out of ambient mode. [Guide](https://developer.android.com/training/wearables/apps/always-on)
 
 * **[DataLayer](DataLayer)** (Java) - Demonstrates communicating via the data layer between the watch and the phone. [Guide](https://developer.android.com/training/wearables/data-layer)
 
