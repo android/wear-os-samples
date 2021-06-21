@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
+<!--
+     Copyright (C) 2021 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Always On Example</string>
     <string name="timestamp_label">Timestamp: %1$d</string>
-    <string name="mode_active_label">Active Mode (Handler)</string>
+    <string name="mode_active_label">Active Mode (Coroutines)</string>
     <string name="mode_ambient_label">Ambient Mode (Alarm)</string>
     <string name="update_rate_label">Update rate: %1$d sec</string>
     <string name="draw_count_label">Draw count: %1$d</string>
