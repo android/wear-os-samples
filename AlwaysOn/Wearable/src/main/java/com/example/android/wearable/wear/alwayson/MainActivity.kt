@@ -25,8 +25,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.getSystemService
-import androidx.core.view.setPadding
-import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.ambient.AmbientModeSupport
@@ -308,10 +306,10 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
              * to true.
              */
             if (doBurnInProtection) {
-                binding.container.updatePadding(
-                    left = Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1),
-                    right = Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1)
-                )
+                binding.container.translationX =
+                    Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1).toFloat()
+                binding.container.translationY =
+                    Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1).toFloat()
             }
         }
 
@@ -334,7 +332,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
             /* Reset any random offset applied for burn-in protection. */
             if (doBurnInProtection) {
-                binding.container.setPadding(0)
+                binding.container.translationX = 0f
+                binding.container.translationY = 0f
             }
             refreshDisplayAndSetNextUpdate()
         }
