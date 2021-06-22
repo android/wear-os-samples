@@ -12,7 +12,7 @@ The [AmbientModeSupport][1] class offers methods for supporting your native app 
 This example implements the [AmbientCallbackProvider][2] interface and provides behavior for onEnterAmbient, onUpdateAmbient, and onExitAmbient to allow the simple native Wear app to support ambient mode.
 In ambient mode, this app follows best practices by keeping most pixels black, avoiding large blocks of white pixels, using only black and white, and disabling anti-aliasing (following the [design guidelines for Watch Faces][3]).
 
-In addition and most importantly, the app sleeps while in ambient mode for 20 seconds between any updates to conserve battery life (processor allowed to sleep). If you can hold off on updates for a full minute, you can throw away the Handler and just use onUpdateAmbient to save even more battery life.
+In addition and most importantly, the app sleeps while in ambient mode for 10 seconds between any updates to conserve battery life (processor allowed to sleep). If you can hold off on updates for a full minute, you can avoid `AlarmManager` and just use onUpdateAmbient to save even more battery life.
 
 As always, you will still want to apply the [performance guidelines][4] outlined in the Watch Face documentation to your app.
 
@@ -30,8 +30,7 @@ That is, by default (without this API), the system will go into system ambient m
 Pre-requisites
 --------------
 
-- Android SDK 28
-- Android Build Tools v29.0.2
+- Android SDK 30
 
 Screenshots
 -------------
