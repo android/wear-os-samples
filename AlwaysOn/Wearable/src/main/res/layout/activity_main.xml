@@ -44,14 +44,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="24sp"
-            android:text="Hello, time!"/>
+            tools:text="Hello, time!"/>
 
         <TextView
             android:id="@+id/time_stamp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Hello, timestamp!"/>
+            tools:text="Hello, timestamp!"/>
 
         <TextView
             android:id="@+id/state"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/green"
-            android:text="Hello, state!"/>
+            tools:text="Hello, state!"/>
 
         <TextView
             android:id="@+id/update_rate"
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/green"
-            android:text="Hello, update rate!"/>
+            tools:text="Hello, update rate!"/>
 
         <TextView
             android:id="@+id/draw_count"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/green"
-            android:text="Hello, draw count!"/>
+            tools:text="Hello, draw count!"/>
 
     </LinearLayout>
 </androidx.wear.widget.BoxInsetLayout>
