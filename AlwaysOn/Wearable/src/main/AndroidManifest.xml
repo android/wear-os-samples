@@ -31,6 +31,10 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="false" />
+
         <!--
             To update the screen more than once per minute in ambient mode, developers should set
             the launch mode for the activity to single instance. Otherwise, the AlarmManager launch
