@@ -1,5 +1,5 @@
 
-Android AlwaysOn Sample
+Android AlwaysOn Sample (Kotlin)
 =======================
 
 A basic sample showing how to support ambient mode for native Wear apps.
