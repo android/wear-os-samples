@@ -19,14 +19,13 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_LARGE_IMAGE] and cycles
  * between a couple of images on tap.
  */
-class LargeImageProviderService : ComplicationProviderService() {
-    override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
+class LargeImageProviderService : SuspendingComplicationProviderService() {
+    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
         if (type != ComplicationData.TYPE_LARGE_IMAGE) {
             manager.noUpdateRequired(complicationId)
             return
@@ -49,7 +48,7 @@ class LargeImageProviderService : ComplicationProviderService() {
         val data: ComplicationData = ComplicationData.Builder(type)
             .setTapAction(complicationTogglePendingIntent)
             .apply {
-                when (state % 2) {
+                when (state.mod(2)) {
                     0 -> {
                         setLargeImage(Icon.createWithResource(this@LargeImageProviderService, R.drawable.aquarium))
                     }

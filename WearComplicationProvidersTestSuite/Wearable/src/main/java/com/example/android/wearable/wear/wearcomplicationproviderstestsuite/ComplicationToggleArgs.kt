@@ -1,8 +1,9 @@
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
 import android.content.ComponentName
-import android.content.Context
 import android.os.Parcelable
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -15,16 +16,7 @@ data class ComplicationToggleArgs(
 ) : Parcelable
 
 /**
- * Returns the key for the shared preference used to hold the current state of a given
- * complication.
+ * Returns the key for the preference used to hold the current state of a given complication.
  */
-fun ComplicationToggleArgs.getPreferenceKey(): String =
-    "${providerComponent.className}$complicationId"
-
-/**
- * Returns the current state for a given complication.
- */
-fun ComplicationToggleArgs.getState(context: Context): Int {
-    val preferences = context.getSharedPreferences(ComplicationToggleReceiver.PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return preferences.getInt(getPreferenceKey(), 0)
-}
+fun ComplicationToggleArgs.getStatePreferenceKey(): Preferences.Key<Long> =
+    longPreferencesKey("${providerComponent.className}$complicationId")

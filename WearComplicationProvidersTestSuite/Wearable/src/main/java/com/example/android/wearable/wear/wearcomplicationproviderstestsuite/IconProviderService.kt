@@ -19,14 +19,13 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_ICON] and cycles through
  * a few different icons on each tap.
  */
-class IconProviderService : ComplicationProviderService() {
-    override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
+class IconProviderService : SuspendingComplicationProviderService() {
+    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
         if (type != ComplicationData.TYPE_ICON) {
             manager.noUpdateRequired(complicationId)
             return
@@ -40,11 +39,11 @@ class IconProviderService : ComplicationProviderService() {
                 context = this,
                 args = args
             )
-        val state = args.getState(this)
+        val state = args.getState(this@IconProviderService)
         val data = ComplicationData.Builder(type)
             .setTapAction(complicationTogglePendingIntent)
             .apply {
-                when (state % 3) {
+                when (state.mod(3)) {
                     0 -> {
                         setIcon(Icon.createWithResource(this@IconProviderService, R.drawable.ic_face_vd_theme_24))
                     }

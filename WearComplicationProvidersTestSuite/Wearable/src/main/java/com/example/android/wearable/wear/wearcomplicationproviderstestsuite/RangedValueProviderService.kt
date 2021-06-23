@@ -19,7 +19,6 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 import android.support.wearable.complications.ComplicationText
 import kotlin.random.Random
 
@@ -27,8 +26,8 @@ import kotlin.random.Random
  * A complication provider that supports only [ComplicationData.TYPE_RANGED_VALUE] and cycles
  * through the possible configurations on tap. The value is randomised on each update.
  */
-class RangedValueProviderService : ComplicationProviderService() {
-    override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
+class RangedValueProviderService : SuspendingComplicationProviderService() {
+    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
         if (type != ComplicationData.TYPE_RANGED_VALUE) {
             manager.noUpdateRequired(complicationId)
             return
@@ -43,7 +42,7 @@ class RangedValueProviderService : ComplicationProviderService() {
                 args = args
             )
         val state = args.getState(this)
-        val caseValue = state % 4
+        val caseValue = state.mod(4)
         val minValue = MIN_VALUES[caseValue]
         val maxValue = MAX_VALUES[caseValue]
         val value = Random.nextDouble(minValue.toDouble(), maxValue.toDouble()).toFloat()

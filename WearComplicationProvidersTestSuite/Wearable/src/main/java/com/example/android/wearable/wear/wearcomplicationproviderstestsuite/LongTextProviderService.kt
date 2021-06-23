@@ -19,15 +19,14 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 import android.support.wearable.complications.ComplicationText
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_LONG_TEXT] and cycles
  * through the possible configurations on tap.
  */
-class LongTextProviderService : ComplicationProviderService() {
-    override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
+class LongTextProviderService : SuspendingComplicationProviderService() {
+    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
         if (type != ComplicationData.TYPE_LONG_TEXT) {
             manager.noUpdateRequired(complicationId)
             return
@@ -45,7 +44,7 @@ class LongTextProviderService : ComplicationProviderService() {
         val data = ComplicationData.Builder(type)
             .setTapAction(complicationTogglePendingIntent)
             .apply {
-                when (state % 6) {
+                when (state.mod(6)) {
                     0 -> {
                         setLongText(ComplicationText.plainText(getString(R.string.long_text_only)))
                     }

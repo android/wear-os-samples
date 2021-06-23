@@ -20,28 +20,30 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.support.wearable.complications.ProviderUpdateRequester
-import androidx.core.content.edit
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * Receives intents on tap and causes complication states to be toggled and updated.
  */
 class ComplicationToggleReceiver : BroadcastReceiver() {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
     override fun onReceive(context: Context, intent: Intent) {
         val args = intent.getArgs()
-        val preferenceKey = args.getPreferenceKey()
-        val pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-        val value = pref.getInt(preferenceKey, 0)
-        pref.edit {
-            putInt(preferenceKey, value + 1) // Increase value by 1
-        }
 
-        // Request an update for the complication that has just been toggled.
-        ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationId)
+        scope.launch {
+            args.updateState(context)
+
+            // Request an update for the complication that has just been toggled.
+            ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationId)
+        }
     }
 
     companion object {
         private const val EXTRA_ARGS = "arguments"
-        const val PREFERENCES_NAME = "ComplicationTestSuite"
 
         /**
          * Returns a pending intent, suitable for use as a tap intent, that causes a complication to be

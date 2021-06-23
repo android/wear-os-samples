@@ -19,14 +19,13 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_SMALL_IMAGE] and cycles
  * between the different image styles on tap.
  */
-class SmallImageProviderService : ComplicationProviderService() {
-    override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
+class SmallImageProviderService : SuspendingComplicationProviderService() {
+    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
         if (type != ComplicationData.TYPE_SMALL_IMAGE) {
             manager.noUpdateRequired(complicationId)
             return
@@ -44,7 +43,7 @@ class SmallImageProviderService : ComplicationProviderService() {
         val data = ComplicationData.Builder(type)
             .setTapAction(complicationTogglePendingIntent)
             .apply {
-                when (state % 2) {
+                when (state.mod(2)) {
                     0 -> {
                         // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
                         setSmallImage(Icon.createWithResource(this@SmallImageProviderService, R.drawable.aquarium))
