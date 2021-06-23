@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
@@ -32,29 +31,34 @@ class LargeImageProviderService : ComplicationProviderService() {
             manager.noUpdateRequired(complicationId)
             return
         }
-        val thisProvider = ComponentName(this, javaClass)
+        val args = ComplicationToggleArgs(
+            providerComponent = ComponentName(this, javaClass),
+            complicationId = complicationId
+        )
 
         // On many watch faces a large image complication might not respond to taps as the
         // complication is used to provide the background for the watch. Providers should not rely
         // on tap functionality for large image complications, but the tap action is still included
         // here in case it is supported.
-        val complicationTogglePendingIntent: PendingIntent =
-            ComplicationToggleReceiver.Companion.getToggleIntent(this, thisProvider, complicationId)
-        val preferences = getSharedPreferences(ComplicationToggleReceiver.Companion.PREFERENCES_NAME, 0)
-        val state = preferences.getInt(
-            ComplicationToggleReceiver.Companion.getPreferenceKey(thisProvider, complicationId),
-            0)
-        var data: ComplicationData? = null
-        when (state % 2) {
-            0 -> data = ComplicationData.Builder(type)
-                .setLargeImage(Icon.createWithResource(this, R.drawable.aquarium))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            1 -> data = ComplicationData.Builder(type)
-                .setLargeImage(Icon.createWithResource(this, R.drawable.outdoors))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-        }
+        val complicationTogglePendingIntent =
+            ComplicationToggleReceiver.getComplicationToggleIntent(
+                context = this,
+                args = args
+            )
+        val state = args.getState(this)
+        val data: ComplicationData = ComplicationData.Builder(type)
+            .setTapAction(complicationTogglePendingIntent)
+            .apply {
+                when (state % 2) {
+                    0 -> {
+                        setLargeImage(Icon.createWithResource(this@LargeImageProviderService, R.drawable.aquarium))
+                    }
+                    1 -> {
+                        setLargeImage(Icon.createWithResource(this@LargeImageProviderService, R.drawable.outdoors))
+                    }
+                }
+            }
+            .build()
         manager.updateComplicationData(complicationId, data)
     }
 }

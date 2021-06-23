@@ -17,57 +17,52 @@ package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.support.wearable.complications.ProviderUpdateRequester
+import androidx.core.content.edit
 
-/** Receives intents on tap and causes complication states to be toggled and updated.  */
+/**
+ * Receives intents on tap and causes complication states to be toggled and updated.
+ */
 class ComplicationToggleReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val extras = intent.extras
-        val provider = extras!!.getParcelable<ComponentName>(EXTRA_PROVIDER_COMPONENT)
-        val complicationId = extras.getInt(EXTRA_COMPLICATION_ID)
-        val preferenceKey = getPreferenceKey(provider, complicationId)
-        val pref = context.getSharedPreferences(PREFERENCES_NAME, 0)
+        val args = intent.getArgs()
+        val preferenceKey = args.getPreferenceKey()
+        val pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         val value = pref.getInt(preferenceKey, 0)
-        val editor = pref.edit()
-        editor.putInt(preferenceKey, value + 1) // Increase value by 1
-        editor.apply()
+        pref.edit {
+            putInt(preferenceKey, value + 1) // Increase value by 1
+        }
 
         // Request an update for the complication that has just been toggled.
-        val requester = ProviderUpdateRequester(context, provider)
-        requester.requestUpdate(complicationId)
+        ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationId)
     }
 
     companion object {
-        private const val EXTRA_PROVIDER_COMPONENT = "providerComponent"
-        private const val EXTRA_COMPLICATION_ID = "complicationId"
+        private const val EXTRA_ARGS = "arguments"
         const val PREFERENCES_NAME = "ComplicationTestSuite"
 
         /**
          * Returns a pending intent, suitable for use as a tap intent, that causes a complication to be
          * toggled and updated.
          */
-        fun getToggleIntent(
-            context: Context?, provider: ComponentName?, complicationId: Int
+        fun getComplicationToggleIntent(
+            context: Context,
+            args: ComplicationToggleArgs
         ): PendingIntent {
-            val intent = Intent(context, ComplicationToggleReceiver::class.java)
-            intent.putExtra(EXTRA_PROVIDER_COMPONENT, provider)
-            intent.putExtra(EXTRA_COMPLICATION_ID, complicationId)
+            val intent = Intent(context, ComplicationToggleReceiver::class.java).apply {
+                putExtra(EXTRA_ARGS, args)
+            }
 
             // Pass complicationId as the requestCode to ensure that different complications get
             // different intents.
-            return PendingIntent.getBroadcast(
-                context, complicationId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            return PendingIntent.getBroadcast(context, args.complicationId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         /**
-         * Returns the key for the shared preference used to hold the current state of a given
-         * complication.
+         * Returns the [ComplicationToggleArgs] from the [Intent] sent to the [ComplicationToggleArgs].
          */
-        fun getPreferenceKey(provider: ComponentName?, complicationId: Int): String {
-            return provider!!.className + complicationId
-        }
+        private fun Intent.getArgs(): ComplicationToggleArgs = requireNotNull(extras?.getParcelable(EXTRA_ARGS))
     }
 }

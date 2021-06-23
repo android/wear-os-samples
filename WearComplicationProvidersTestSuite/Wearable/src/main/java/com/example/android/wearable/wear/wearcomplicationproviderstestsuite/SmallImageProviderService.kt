@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
@@ -32,30 +31,38 @@ class SmallImageProviderService : ComplicationProviderService() {
             manager.noUpdateRequired(complicationId)
             return
         }
-        val thisProvider = ComponentName(this, javaClass)
-        val complicationTogglePendingIntent: PendingIntent =
-            ComplicationToggleReceiver.Companion.getToggleIntent(this, thisProvider, complicationId)
-        val preferences = getSharedPreferences(ComplicationToggleReceiver.Companion.PREFERENCES_NAME, 0)
-        val state = preferences.getInt(
-            ComplicationToggleReceiver.Companion.getPreferenceKey(thisProvider, complicationId),
-            0)
-        var data: ComplicationData? = null
-        when (state % 2) {
-            0 ->                 // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
-                data = ComplicationData.Builder(type)
-                    .setSmallImage(Icon.createWithResource(this, R.drawable.aquarium))
-                    .setImageStyle(ComplicationData.IMAGE_STYLE_PHOTO)
-                    .setTapAction(complicationTogglePendingIntent)
-                    .build()
-            1 ->                 // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
-                // space given to it.
-                data = ComplicationData.Builder(type)
-                    .setSmallImage(
-                        Icon.createWithResource(this, R.drawable.ic_launcher))
-                    .setImageStyle(ComplicationData.IMAGE_STYLE_ICON)
-                    .setTapAction(complicationTogglePendingIntent)
-                    .build()
-        }
+        val args = ComplicationToggleArgs(
+            providerComponent = ComponentName(this, javaClass),
+            complicationId = complicationId
+        )
+        val complicationTogglePendingIntent =
+            ComplicationToggleReceiver.getComplicationToggleIntent(
+                context = this,
+                args = args
+            )
+        val state = args.getState(this)
+        val data = ComplicationData.Builder(type)
+            .setTapAction(complicationTogglePendingIntent)
+            .apply {
+                when (state % 2) {
+                    0 -> {
+                        // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
+                        setSmallImage(Icon.createWithResource(this@SmallImageProviderService, R.drawable.aquarium))
+                    }
+                    1 -> {
+                        // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
+                        // space given to it.
+                        setSmallImage(
+                            Icon.createWithResource(
+                                this@SmallImageProviderService,
+                                R.drawable.ic_launcher
+                            )
+                        )
+                        setImageStyle(ComplicationData.IMAGE_STYLE_ICON)
+                    }
+                }
+            }
+            .build()
         manager.updateComplicationData(complicationId, data)
     }
 }

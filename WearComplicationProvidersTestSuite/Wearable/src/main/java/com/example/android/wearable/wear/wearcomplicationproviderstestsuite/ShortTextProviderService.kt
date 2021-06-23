@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
@@ -33,52 +32,51 @@ class ShortTextProviderService : ComplicationProviderService() {
             manager.noUpdateRequired(complicationId)
             return
         }
-        val thisProvider = ComponentName(this, javaClass)
-        val complicationTogglePendingIntent: PendingIntent =
-            ComplicationToggleReceiver.Companion.getToggleIntent(this, thisProvider, complicationId)
-        val preferences = getSharedPreferences(ComplicationToggleReceiver.Companion.PREFERENCES_NAME, 0)
-        val state = preferences.getInt(
-            ComplicationToggleReceiver.Companion.getPreferenceKey(thisProvider, complicationId),
-            0)
-        var data: ComplicationData? = null
-        when (state % 4) {
-            0 -> data = ComplicationData.Builder(type)
-                .setShortText(
-                    ComplicationText.plainText(
-                        getString(R.string.short_text_only)))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            1 -> data = ComplicationData.Builder(type)
-                .setShortText(
-                    ComplicationText.plainText(
-                        getString(R.string.short_text_with_icon)))
-                .setIcon(
-                    Icon.createWithResource(
-                        this, R.drawable.ic_face_vd_theme_24))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            2 -> data = ComplicationData.Builder(type)
-                .setShortText(
-                    ComplicationText.plainText(
-                        getString(R.string.short_text_with_title)))
-                .setShortTitle(
-                    ComplicationText.plainText(getString(R.string.short_title)))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            3 ->                 // When short text includes both short title and icon, the watch face should only
-                // display one of those fields.
-                data = ComplicationData.Builder(type)
-                    .setShortText(
-                        ComplicationText.plainText(
-                            getString(R.string.short_text_with_both)))
-                    .setShortTitle(
-                        ComplicationText.plainText(getString(R.string.short_title)))
-                    .setIcon(
-                        Icon.createWithResource(
-                            this, R.drawable.ic_face_vd_theme_24))
-                    .setTapAction(complicationTogglePendingIntent)
-                    .build()
-        }
+        val args = ComplicationToggleArgs(
+            providerComponent = ComponentName(this, javaClass),
+            complicationId = complicationId
+        )
+        val complicationTogglePendingIntent =
+            ComplicationToggleReceiver.getComplicationToggleIntent(
+                context = this,
+                args = args
+            )
+        val state = args.getState(this)
+        val data = ComplicationData.Builder(type)
+            .setTapAction(complicationTogglePendingIntent)
+            .apply {
+                when (state % 4) {
+                    0 -> {
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_only)))
+                    }
+                    1 -> {
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_icon)))
+                        setIcon(
+                            Icon.createWithResource(
+                                this@ShortTextProviderService,
+                                R.drawable.ic_face_vd_theme_24
+                            )
+                        )
+                    }
+                    2 -> {
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_title)))
+                        setShortTitle(ComplicationText.plainText(getString(R.string.short_title)))
+                    }
+                    3 -> {
+                        // When short text includes both short title and icon, the watch face should only
+                        // display one of those fields.
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_both)))
+                        setShortTitle(ComplicationText.plainText(getString(R.string.short_title)))
+                        setIcon(
+                            Icon.createWithResource(
+                                this@ShortTextProviderService,
+                                R.drawable.ic_face_vd_theme_24
+                            )
+                        )
+                    }
+                }
+            }
+            .build()
         manager.updateComplicationData(complicationId, data)
     }
 }

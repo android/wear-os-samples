@@ -15,13 +15,13 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
 import android.support.wearable.complications.ComplicationProviderService
 import android.support.wearable.complications.ComplicationText
+import kotlin.random.Random
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_RANGED_VALUE] and cycles
@@ -33,62 +33,51 @@ class RangedValueProviderService : ComplicationProviderService() {
             manager.noUpdateRequired(complicationId)
             return
         }
-        val thisProvider = ComponentName(this, javaClass)
-        val complicationTogglePendingIntent: PendingIntent =
-            ComplicationToggleReceiver.Companion.getToggleIntent(this, thisProvider, complicationId)
-        val preferences = getSharedPreferences(ComplicationToggleReceiver.Companion.PREFERENCES_NAME, 0)
-        val state = preferences.getInt(
-            ComplicationToggleReceiver.Companion.getPreferenceKey(thisProvider, complicationId),
-            0)
-        var data: ComplicationData? = null
+        val args = ComplicationToggleArgs(
+            providerComponent = ComponentName(this, javaClass),
+            complicationId = complicationId
+        )
+        val complicationTogglePendingIntent =
+            ComplicationToggleReceiver.getComplicationToggleIntent(
+                context = this,
+                args = args
+            )
+        val state = args.getState(this)
         val caseValue = state % 4
         val minValue = MIN_VALUES[caseValue]
         val maxValue = MAX_VALUES[caseValue]
-        val value = Math.random().toFloat() * (maxValue - minValue) + minValue
-        when (caseValue) {
-            0 -> data = ComplicationData.Builder(type)
-                .setMinValue(minValue)
-                .setMaxValue(maxValue)
-                .setValue(value)
-                .setShortText(
-                    ComplicationText.plainText(
-                        getString(R.string.short_text_only)))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            1 -> data = ComplicationData.Builder(type)
-                .setMinValue(minValue)
-                .setMaxValue(maxValue)
-                .setValue(value)
-                .setShortText(
-                    ComplicationText.plainText(
-                        getString(R.string.short_text_with_icon)))
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_battery))
-                .setBurnInProtectionIcon(
-                    Icon.createWithResource(
-                        this, R.drawable.ic_battery_burn_protect))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            2 -> data = ComplicationData.Builder(type)
-                .setMinValue(minValue)
-                .setMaxValue(maxValue)
-                .setValue(value)
-                .setShortText(
-                    ComplicationText.plainText(
-                        getString(R.string.short_text_with_title)))
-                .setShortTitle(
-                    ComplicationText.plainText(getString(R.string.short_title)))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            3 -> data = ComplicationData.Builder(type)
-                .setMinValue(minValue)
-                .setMaxValue(maxValue)
-                .setValue(value)
-                .setIcon(
-                    Icon.createWithResource(
-                        this, R.drawable.ic_event_vd_theme_24))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-        }
+        val value = Random.nextDouble(minValue.toDouble(), maxValue.toDouble()).toFloat()
+
+        val data = ComplicationData.Builder(type)
+            .setMinValue(minValue)
+            .setMaxValue(maxValue)
+            .setValue(value)
+            .setTapAction(complicationTogglePendingIntent)
+            .apply {
+                when (caseValue) {
+                    0 -> {
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_only)))
+                    }
+                    1 -> {
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_icon)))
+                        setIcon(Icon.createWithResource(this@RangedValueProviderService, R.drawable.ic_battery))
+                        setBurnInProtectionIcon(
+                            Icon.createWithResource(
+                                this@RangedValueProviderService,
+                                R.drawable.ic_battery_burn_protect
+                            )
+                        )
+                    }
+                    2 -> {
+                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_title)))
+                        setShortTitle(ComplicationText.plainText(getString(R.string.short_title)))
+                    }
+                    3 -> {
+                        setIcon(Icon.createWithResource(this@RangedValueProviderService, R.drawable.ic_event_vd_theme_24))
+                    }
+                }
+            }
+            .build()
         manager.updateComplicationData(complicationId, data)
     }
 

@@ -19,7 +19,9 @@ import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
 import android.support.wearable.complications.ComplicationProviderService
 
-/** A complication provider that always returns [ComplicationData.TYPE_NO_DATA].  */
+/**
+ * A complication provider that always returns [ComplicationData.TYPE_NO_DATA].
+ */
 class NoDataProviderService : ComplicationProviderService() {
     override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
         val data = ComplicationData.Builder(ComplicationData.TYPE_NO_DATA).build()

@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
@@ -32,38 +31,43 @@ class IconProviderService : ComplicationProviderService() {
             manager.noUpdateRequired(complicationId)
             return
         }
-        val thisProvider = ComponentName(this, javaClass)
-        val complicationTogglePendingIntent: PendingIntent =
-            ComplicationToggleReceiver.Companion.getToggleIntent(this, thisProvider, complicationId)
-        val preferences = getSharedPreferences(ComplicationToggleReceiver.Companion.PREFERENCES_NAME, 0)
-        val state = preferences.getInt(
-            ComplicationToggleReceiver.Companion.getPreferenceKey(thisProvider, complicationId),
-            0)
-        var data: ComplicationData? = null
-        when (state % 3) {
-            0 -> data = ComplicationData.Builder(type)
-                .setIcon(
-                    Icon.createWithResource(
-                        this, R.drawable.ic_face_vd_theme_24))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            1 ->                 // This case includes a burn-in protection icon. If the screen uses burn-in
-                // protection, that icon (which avoids solid blocks of color) should be shown in
-                // ambient mode.
-                data = ComplicationData.Builder(type)
-                    .setIcon(Icon.createWithResource(this, R.drawable.ic_battery))
-                    .setBurnInProtectionIcon(
-                        Icon.createWithResource(
-                            this, R.drawable.ic_battery_burn_protect))
-                    .setTapAction(complicationTogglePendingIntent)
-                    .build()
-            2 -> data = ComplicationData.Builder(type)
-                .setIcon(
-                    Icon.createWithResource(
-                        this, R.drawable.ic_event_vd_theme_24))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-        }
+        val args = ComplicationToggleArgs(
+            providerComponent = ComponentName(this, javaClass),
+            complicationId = complicationId
+        )
+        val complicationTogglePendingIntent =
+            ComplicationToggleReceiver.getComplicationToggleIntent(
+                context = this,
+                args = args
+            )
+        val state = args.getState(this)
+        val data = ComplicationData.Builder(type)
+            .setTapAction(complicationTogglePendingIntent)
+            .apply {
+                when (state % 3) {
+                    0 -> {
+                        setIcon(Icon.createWithResource(this@IconProviderService, R.drawable.ic_face_vd_theme_24))
+                    }
+                    1 -> {
+                        setIcon(Icon.createWithResource(this@IconProviderService, R.drawable.ic_battery))
+                        setBurnInProtectionIcon(
+                            Icon.createWithResource(
+                                this@IconProviderService,
+                                R.drawable.ic_battery_burn_protect
+                            )
+                        )
+                    }
+                    2 -> {
+                        setIcon(
+                            Icon.createWithResource(
+                                this@IconProviderService,
+                                R.drawable.ic_event_vd_theme_24
+                            )
+                        )
+                    }
+                }
+            }
+            .build()
         manager.updateComplicationData(complicationId, data)
     }
 }

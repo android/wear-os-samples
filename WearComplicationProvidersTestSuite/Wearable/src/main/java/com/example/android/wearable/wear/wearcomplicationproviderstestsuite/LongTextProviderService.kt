@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
@@ -33,70 +32,62 @@ class LongTextProviderService : ComplicationProviderService() {
             manager.noUpdateRequired(complicationId)
             return
         }
-        val thisProvider = ComponentName(this, javaClass)
-        val complicationTogglePendingIntent: PendingIntent =
-            ComplicationToggleReceiver.Companion.getToggleIntent(this, thisProvider, complicationId)
-        val preferences = getSharedPreferences(ComplicationToggleReceiver.Companion.PREFERENCES_NAME, 0)
-        val state = preferences.getInt(
-            ComplicationToggleReceiver.Companion.getPreferenceKey(thisProvider, complicationId),
-            0)
-        var data: ComplicationData? = null
-        when (state % 6) {
-            0 -> data = ComplicationData.Builder(type)
-                .setLongText(
-                    ComplicationText.plainText(
-                        getString(R.string.long_text_only)))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            1 -> data = ComplicationData.Builder(type)
-                .setLongText(
-                    ComplicationText.plainText(
-                        getString(R.string.long_text_with_icon)))
-                .setIcon(
-                    Icon.createWithResource(
-                        this, R.drawable.ic_face_vd_theme_24))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            2 ->                 // Unlike for short text complications, if the long title field is supplied then it
-                // should always be displayed by the watch face. This means that when a long text
-                // provider supplies both title and icon, it is expected that both are displayed.
-                data = ComplicationData.Builder(type)
-                    .setLongText(
-                        ComplicationText.plainText(
-                            getString(R.string.long_text_with_icon_and_title)))
-                    .setLongTitle(
-                        ComplicationText.plainText(getString(R.string.long_title)))
-                    .setIcon(Icon.createWithResource(this, R.drawable.ic_battery))
-                    .setBurnInProtectionIcon(
-                        Icon.createWithResource(
-                            this, R.drawable.ic_battery_burn_protect))
-                    .setTapAction(complicationTogglePendingIntent)
-                    .build()
-            3 -> data = ComplicationData.Builder(type)
-                .setLongText(
-                    ComplicationText.plainText(
-                        getString(R.string.long_text_with_title)))
-                .setLongTitle(
-                    ComplicationText.plainText(getString(R.string.long_title)))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            4 -> data = ComplicationData.Builder(type)
-                .setLongText(
-                    ComplicationText.plainText(
-                        getString(R.string.long_text_with_image)))
-                .setSmallImage(Icon.createWithResource(this, R.drawable.outdoors))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-            5 -> data = ComplicationData.Builder(type)
-                .setLongText(
-                    ComplicationText.plainText(
-                        getString(R.string.long_text_with_image_and_title)))
-                .setLongTitle(
-                    ComplicationText.plainText(getString(R.string.long_title)))
-                .setSmallImage(Icon.createWithResource(this, R.drawable.aquarium))
-                .setTapAction(complicationTogglePendingIntent)
-                .build()
-        }
+        val args = ComplicationToggleArgs(
+            providerComponent = ComponentName(this, javaClass),
+            complicationId = complicationId
+        )
+        val complicationTogglePendingIntent =
+            ComplicationToggleReceiver.getComplicationToggleIntent(
+                context = this,
+                args = args
+            )
+        val state = args.getState(this)
+        val data = ComplicationData.Builder(type)
+            .setTapAction(complicationTogglePendingIntent)
+            .apply {
+                when (state % 6) {
+                    0 -> {
+                        setLongText(ComplicationText.plainText(getString(R.string.long_text_only)))
+                    }
+                    1 -> {
+                        setLongText(ComplicationText.plainText(getString(R.string.long_text_with_icon)))
+                        setIcon(Icon.createWithResource(this@LongTextProviderService, R.drawable.ic_face_vd_theme_24))
+                    }
+                    2 -> {
+                        // Unlike for short text complications, if the long title field is supplied then it
+                        // should always be displayed by the watch face. This means that when a long text
+                        // provider supplies both title and icon, it is expected that both are displayed.
+                        setLongText(ComplicationText.plainText(getString(R.string.long_text_with_icon_and_title)))
+                        setLongTitle(ComplicationText.plainText(getString(R.string.long_title)))
+                        setIcon(
+                            Icon.createWithResource(
+                                this@LongTextProviderService,
+                                R.drawable.ic_battery
+                            )
+                        )
+                        setBurnInProtectionIcon(
+                            Icon.createWithResource(
+                                this@LongTextProviderService,
+                                R.drawable.ic_battery_burn_protect
+                            )
+                        )
+                    }
+                    3 -> {
+                        setLongText(ComplicationText.plainText(getString(R.string.long_text_with_title)))
+                        setLongTitle(ComplicationText.plainText(getString(R.string.long_title)))
+                    }
+                    4 -> {
+                        setLongText(ComplicationText.plainText(getString(R.string.long_text_with_image)))
+                        setSmallImage(Icon.createWithResource(this@LongTextProviderService, R.drawable.outdoors))
+                    }
+                    5 -> {
+                        setLongText(ComplicationText.plainText(getString(R.string.long_text_with_image_and_title)))
+                        setLongTitle(ComplicationText.plainText(getString(R.string.long_title)))
+                        setSmallImage(Icon.createWithResource(this@LongTextProviderService, R.drawable.aquarium))
+                    }
+                }
+            }
+            .build()
         manager.updateComplicationData(complicationId, data)
     }
 }
