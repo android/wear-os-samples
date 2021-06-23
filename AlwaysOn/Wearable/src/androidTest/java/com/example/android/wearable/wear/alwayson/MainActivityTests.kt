@@ -55,7 +55,7 @@ class MainActivityTests {
      *
      * This ensures the real alarm manager won't actually trigger.
      */
-    private var instant = Instant.ofEpochMilli(YEAR_2200)
+    private var instant = YEAR_2200_INSTANT
 
     private lateinit var scenario: ActivityScenario<MainActivity>
 
@@ -86,7 +86,17 @@ class MainActivityTests {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.time)).check(matches(withText(ZERO_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp)).check(matches(withText(context.getString(R.string.timestamp_label, YEAR_2200))))
+        onView(withId(R.id.time_stamp))
+            .check(
+                matches(
+                    withText(
+                        context.getString(
+                            R.string.timestamp_label,
+                            YEAR_2200_INSTANT.toEpochMilli()
+                        )
+                    )
+                )
+            )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 1))))
     }
@@ -101,7 +111,17 @@ class MainActivityTests {
         }
 
         onView(withId(R.id.time)).check(matches(withText(FIVE_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp)).check(matches(withText(context.getString(R.string.timestamp_label, YEAR_2200 + 5000L))))
+        onView(withId(R.id.time_stamp))
+            .check(
+                matches(
+                    withText(
+                        context.getString(
+                            R.string.timestamp_label,
+                            YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
+                        )
+                    )
+                )
+            )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 6))))
     }
@@ -120,7 +140,17 @@ class MainActivityTests {
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(FIVE_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp)).check(matches(withText(context.getString(R.string.timestamp_label, YEAR_2200 + 5000L))))
+        onView(withId(R.id.time_stamp))
+            .check(
+                matches(
+                    withText(
+                        context.getString(
+                            R.string.timestamp_label,
+                            YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
+                        )
+                    )
+                )
+            )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 7))))
     }
@@ -151,7 +181,17 @@ class MainActivityTests {
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(TEN_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp)).check(matches(withText(context.getString(R.string.timestamp_label, YEAR_2200 + 10500L))))
+        onView(withId(R.id.time_stamp))
+            .check(
+                matches(
+                    withText(
+                        context.getString(
+                            R.string.timestamp_label,
+                            YEAR_2200_INSTANT.plusSeconds(10).plusMillis(500).toEpochMilli()
+                        )
+                    )
+                )
+            )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 8))))
     }
@@ -190,7 +230,17 @@ class MainActivityTests {
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(TWELVE_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp)).check(matches(withText(context.getString(R.string.timestamp_label, YEAR_2200 + 12500L))))
+        onView(withId(R.id.time_stamp))
+            .check(
+                matches(
+                    withText(
+                        context.getString(
+                            R.string.timestamp_label,
+                            YEAR_2200_INSTANT.plusSeconds(12).plusMillis(500).toEpochMilli()
+                        )
+                    )
+                )
+            )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 9))))
     }
@@ -214,7 +264,7 @@ class MainActivityTests {
     }
 }
 
-private const val YEAR_2200 = 7258118400000L
+private val YEAR_2200_INSTANT = Instant.ofEpochMilli(7258118400000L)
 
 private const val ZERO_SEC_DISPLAY = "00:00:00"
 private const val FIVE_SEC_DISPLAY = "00:00:05"
