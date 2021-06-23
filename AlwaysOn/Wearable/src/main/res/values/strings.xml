@@ -14,11 +14,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Always On Example</string>
     <string name="timestamp_label">Timestamp: %1$d</string>
     <string name="mode_active_label">Active Mode (Coroutines)</string>
     <string name="mode_ambient_label">Ambient Mode (Alarm)</string>
-    <string name="update_rate_label">Update rate: %1$d sec</string>
+    <string name="update_rate_label" tools:ignore="PluralsCandidate">Update rate: %1$d sec</string>
     <string name="draw_count_label">Draw count: %1$d</string>
 </resources>
