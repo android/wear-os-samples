@@ -30,8 +30,11 @@ import android.widget.ImageView
  * main UI.
  */
 class UIAnimation(
-    private val mContainerView: View, private val mThumbs: Array<ImageView?>, private val expandedImageView: ImageView,
-    private val mAnimationDurationTime: Int, private val mListener: UIStateListener?
+    private val containerView: View,
+    private val thumbs: Array<ImageView>,
+    private val expandedImageView: ImageView,
+    private val animationDurationTime: Int,
+    private val mListener: UIStateListener
 ) {
     private var mCurrentAnimator: AnimatorSet? = null
     private val mLargeDrawables = intArrayOf(R.drawable.ic_mic_120dp,
@@ -39,7 +42,7 @@ class UIAnimation(
     private var mState: UIState? = UIState.HOME
     private fun zoomImageFromThumb(index: Int) {
         val imageResId = mLargeDrawables[index]
-        val thumbView = mThumbs[index]
+        val thumbView = thumbs[index]
         if (mCurrentAnimator != null) {
             return
         }
@@ -48,7 +51,7 @@ class UIAnimation(
         val finalBounds = Rect()
         val globalOffset = Point()
         thumbView!!.getGlobalVisibleRect(startBounds)
-        mContainerView.getGlobalVisibleRect(finalBounds, globalOffset)
+        containerView.getGlobalVisibleRect(finalBounds, globalOffset)
         startBounds.offset(-globalOffset.x, -globalOffset.y)
         finalBounds.offset(-globalOffset.x, -globalOffset.y)
         val startScale: Float
@@ -68,7 +71,7 @@ class UIAnimation(
             startBounds.bottom += deltaHeight.toInt()
         }
         for (k in 0..2) {
-            mThumbs[k]!!.alpha = 0f
+            thumbs[k]!!.alpha = 0f
         }
         expandedImageView.visibility = View.VISIBLE
         expandedImageView.pivotX = 0f
@@ -83,7 +86,7 @@ class UIAnimation(
             .with(
                 ObjectAnimator.ofFloat(expandedImageView, View.SCALE_X, startScale, 1f))
             .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_Y, startScale, 1f))
-        zommInAnimator.duration = mAnimationDurationTime.toLong()
+        zommInAnimator.duration = animationDurationTime.toLong()
         zommInAnimator.interpolator = DecelerateInterpolator()
         zommInAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
@@ -116,12 +119,12 @@ class UIAnimation(
                 .with(ObjectAnimator
                           .ofFloat(expandedImageView,
                                    View.SCALE_Y, startScale))
-            zoomOutAnimator.duration = mAnimationDurationTime.toLong()
+            zoomOutAnimator.duration = animationDurationTime.toLong()
             zoomOutAnimator.interpolator = DecelerateInterpolator()
             zoomOutAnimator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     for (k in 0..2) {
-                        mThumbs[k]!!.alpha = 1f
+                        thumbs[k]!!.alpha = 1f
                     }
                     expandedImageView.visibility = View.GONE
                     mCurrentAnimator = null
@@ -169,8 +172,8 @@ class UIAnimation(
     }
 
     init {
-        mThumbs[0]!!.setOnClickListener { zoomImageFromThumb(0) }
-        mThumbs[1]!!.setOnClickListener { zoomImageFromThumb(1) }
-        mThumbs[2]!!.setOnClickListener { zoomImageFromThumb(2) }
+        thumbs[0]!!.setOnClickListener { zoomImageFromThumb(0) }
+        thumbs[1]!!.setOnClickListener { zoomImageFromThumb(1) }
+        thumbs[2]!!.setOnClickListener { zoomImageFromThumb(2) }
     }
 }
