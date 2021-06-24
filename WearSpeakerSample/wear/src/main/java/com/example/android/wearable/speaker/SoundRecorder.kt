@@ -37,7 +37,8 @@ import java.lang.ref.WeakReference
  * and to playback the same recorded audio file.
  */
 class SoundRecorder(
-    context: Context, private val mOutputFileName: String,
+    context: Context,
+    private val mOutputFileName: String,
     private val mListener: OnVoicePlaybackStateChangedListener?
 ) {
     private val mAudioManager: AudioManager

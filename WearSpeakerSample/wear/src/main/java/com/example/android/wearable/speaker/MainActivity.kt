@@ -21,7 +21,6 @@ import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.MediaPlayer.OnCompletionListener
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -46,20 +45,20 @@ import java.util.concurrent.TimeUnit
 class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider, UIStateListener,
                      OnVoicePlaybackStateChangedListener {
 
-    private lateinit var binding: MainActivityBinding
-
-    private var mMediaPlayer: MediaPlayer? = null
-    private var mState = AppState.READY
-    private var mUiState = UIState.HOME
-    private var mSoundRecorder: SoundRecorder? = null
-    private var mUIAnimation: UIAnimation? = null
-    private var mCountDownTimer: CountDownTimer? = null
-
     /**
      * Ambient mode controller attached to this display. Used by Activity to see if it is in
      * ambient mode.
      */
-    private var mAmbientController: AmbientModeSupport.AmbientController? = null
+    private lateinit var ambientController: AmbientModeSupport.AmbientController
+
+    private lateinit var binding: MainActivityBinding
+
+    private var mediaPlayer: MediaPlayer? = null
+    private var state = AppState.READY
+    private var uiState = UIState.HOME
+    private var soundRecorder: SoundRecorder? = null
+    private var uiAnimation: UIAnimation? = null
+    private var countDownTimer: CountDownTimer? = null
 
     internal enum class AppState {
         READY, PLAYING_VOICE, PLAYING_MUSIC, RECORDING
@@ -72,7 +71,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         setContentView(binding.root)
 
         // Enables Ambient mode.
-        mAmbientController = AmbientModeSupport.attach(this)
+        ambientController = AmbientModeSupport.attach(this)
     }
 
     private fun setProgressBar(progressInMillis: Long) {
@@ -81,21 +80,21 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     override fun onUIStateChanged(state: UIState?) {
         Log.d(TAG, "UI State is: $state")
-        if (mUiState == state) {
+        if (uiState == state) {
             return
         }
         when (state) {
             UIState.MUSIC_UP -> {
-                mState = AppState.PLAYING_MUSIC
-                mUiState = state
+                this.state = AppState.PLAYING_MUSIC
+                uiState = state
                 playMusic()
             }
             UIState.MIC_UP -> {
-                mState = AppState.RECORDING
-                mUiState = state
-                mSoundRecorder!!.startRecording()
+                this.state = AppState.RECORDING
+                uiState = state
+                soundRecorder!!.startRecording()
                 setProgressBar(COUNT_DOWN_MS)
-                mCountDownTimer = object : CountDownTimer(COUNT_DOWN_MS, MILLIS_IN_SECOND) {
+                countDownTimer = object : CountDownTimer(COUNT_DOWN_MS, MILLIS_IN_SECOND) {
                     override fun onTick(millisUntilFinished: Long) {
                         binding.progressBar.visibility = View.VISIBLE
                         setProgressBar(millisUntilFinished)
@@ -105,39 +104,39 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                     override fun onFinish() {
                         binding.progressBar.progress = 0
                         binding.progressBar.visibility = View.INVISIBLE
-                        mSoundRecorder!!.stopRecording()
-                        mUIAnimation!!.transitionToHome()
-                        mUiState = UIState.HOME
-                        mState = AppState.READY
-                        mCountDownTimer = null
+                        soundRecorder!!.stopRecording()
+                        uiAnimation!!.transitionToHome()
+                        uiState = UIState.HOME
+                        this@MainActivity.state = AppState.READY
+                        countDownTimer = null
                     }
                 }.apply {
                     start()
                 }
             }
             UIState.SOUND_UP -> {
-                mState = AppState.PLAYING_VOICE
-                mUiState = state
-                mSoundRecorder!!.startPlay()
+                this.state = AppState.PLAYING_VOICE
+                uiState = state
+                soundRecorder!!.startPlay()
             }
-            UIState.HOME -> when (mState) {
+            UIState.HOME -> when (this.state) {
                 AppState.PLAYING_MUSIC -> {
-                    mState = AppState.READY
-                    mUiState = state
+                    this.state = AppState.READY
+                    uiState = state
                     stopMusic()
                 }
                 AppState.PLAYING_VOICE -> {
-                    mState = AppState.READY
-                    mUiState = state
-                    mSoundRecorder!!.stopPlaying()
+                    this.state = AppState.READY
+                    uiState = state
+                    soundRecorder!!.stopPlaying()
                 }
                 AppState.RECORDING -> {
-                    mState = AppState.READY
-                    mUiState = state
-                    mSoundRecorder!!.stopRecording()
-                    if (mCountDownTimer != null) {
-                        mCountDownTimer!!.cancel()
-                        mCountDownTimer = null
+                    this.state = AppState.READY
+                    uiState = state
+                    soundRecorder!!.stopRecording()
+                    if (countDownTimer != null) {
+                        countDownTimer!!.cancel()
+                        countDownTimer = null
                     }
                     binding.progressBar.visibility = View.INVISIBLE
                     setProgressBar(COUNT_DOWN_MS)
@@ -150,25 +149,25 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * Plays back the MP3 file embedded in the application
      */
     private fun playMusic() {
-        if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(this, R.raw.sound).apply {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.sound).apply {
                 setOnCompletionListener(OnCompletionListener { // we need to transition to the READY/Home state
                     Log.d(TAG, "Music Finished")
-                    mUIAnimation!!.transitionToHome()
+                    uiAnimation!!.transitionToHome()
                 })
             }
         }
-        mMediaPlayer!!.start()
+        mediaPlayer!!.start()
     }
 
     /**
      * Stops the playback of the MP3 file.
      */
     private fun stopMusic() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.stop()
-            mMediaPlayer!!.release()
-            mMediaPlayer = null
+        if (mediaPlayer != null) {
+            mediaPlayer!!.stop()
+            mediaPlayer!!.release()
+            mediaPlayer = null
         }
     }
 
@@ -209,9 +208,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * Starts the main flow of the application.
      */
     private fun start() {
-        mSoundRecorder = SoundRecorder(this, VOICE_FILE_NAME, this)
+        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME, this)
         val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-        mUIAnimation = UIAnimation(
+        uiAnimation = UIAnimation(
             binding.container,
             arrayOf(binding.mic, binding.play, binding.music),
             binding.expanded,
@@ -233,47 +232,34 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     }
 
     override fun onStop() {
-        if (mSoundRecorder != null) {
-            mSoundRecorder!!.cleanup()
-            mSoundRecorder = null
-        }
-        if (mCountDownTimer != null) {
-            mCountDownTimer!!.cancel()
-        }
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.release()
-            mMediaPlayer = null
-        }
+        soundRecorder?.cleanup()
+        soundRecorder = null
+        countDownTimer?.cancel()
+        countDownTimer = null
+        mediaPlayer?.release()
+        mediaPlayer = null
+
         super.onStop()
     }
 
     override fun onPlaybackStopped() {
-        mUIAnimation!!.transitionToHome()
-        mUiState = UIState.HOME
-        mState = AppState.READY
+        uiAnimation!!.transitionToHome()
+        uiState = UIState.HOME
+        state = AppState.READY
     }
 
     /**
-     * Determines if the wear device has a built-in speaker and if it is supported. Speaker, even if
-     * physically present, is only supported in Android M+ on a wear device..
+     * Determines if the wear device has a built-in speaker and if it is supported.
      */
-    fun speakerIsSupported(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val packageManager = packageManager
-            // The results from AudioManager.getDevices can't be trusted unless the device
-            // advertises FEATURE_AUDIO_OUTPUT.
-            if (!packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)) {
-                return false
-            }
-            val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-            val devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
-            for (device in devices) {
-                if (device.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER) {
-                    return true
-                }
-            }
+    private fun speakerIsSupported(): Boolean {
+        // The results from AudioManager.getDevices can't be trusted unless the device
+        // advertises FEATURE_AUDIO_OUTPUT.
+        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)) {
+            return false
         }
-        return false
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        val devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+        return devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
     }
 
     override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
