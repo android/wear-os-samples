@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Google Inc. All Rights Reserved.
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,39 +14,47 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.application'
-
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-parcelize"
+}
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.example.android.wearable.speaker"
-        minSdkVersion 23
-        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        minSdkVersion 26
+        targetSdkVersion 30
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
+    implementation "androidx.wear:wear:1.1.0"
+    implementation "androidx.vectordrawable:vectordrawable-animated:1.1.0"
+    implementation "androidx.media:media:1.2.0"
 
-    implementation 'androidx.wear:wear:1.1.0'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation 'androidx.media:media:1.2.0'
+    implementation "androidx.percentlayout:percentlayout:1.0.0"
 
-    implementation 'androidx.percentlayout:percentlayout:1.0.0'
+    implementation "com.google.android.gms:play-services-wearable:17.0.0"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
-    compileOnly 'com.google.android.wearable:wearable:2.8.1'
-    implementation 'com.google.android.support:wearable:2.8.1'
+    compileOnly "com.google.android.wearable:wearable:2.8.1"
+    implementation "com.google.android.support:wearable:2.8.1"
 }
