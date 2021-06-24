@@ -26,9 +26,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,6 +34,7 @@ import androidx.wear.ambient.AmbientModeSupport
 import com.example.android.wearable.speaker.SoundRecorder.OnVoicePlaybackStateChangedListener
 import com.example.android.wearable.speaker.UIAnimation.UIState
 import com.example.android.wearable.speaker.UIAnimation.UIStateListener
+import com.example.android.wearable.speaker.databinding.MainActivityBinding
 import java.util.concurrent.TimeUnit
 
 /**
@@ -47,14 +45,14 @@ import java.util.concurrent.TimeUnit
  */
 class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider, UIStateListener,
                      OnVoicePlaybackStateChangedListener {
+
+    private lateinit var binding: MainActivityBinding
+
     private var mMediaPlayer: MediaPlayer? = null
     private var mState = AppState.READY
     private var mUiState = UIState.HOME
     private var mSoundRecorder: SoundRecorder? = null
-    private var mOuterCircle: RelativeLayout? = null
-    private var mInnerCircle: View? = null
     private var mUIAnimation: UIAnimation? = null
-    private var mProgressBar: ProgressBar? = null
     private var mCountDownTimer: CountDownTimer? = null
 
     /**
@@ -69,17 +67,16 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
-        mOuterCircle = findViewById(R.id.outer_circle)
-        mInnerCircle = findViewById(R.id.inner_circle)
-        mProgressBar = findViewById(R.id.progress_bar)
+
+        binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Enables Ambient mode.
         mAmbientController = AmbientModeSupport.attach(this)
     }
 
     private fun setProgressBar(progressInMillis: Long) {
-        mProgressBar!!.progress = (progressInMillis / MILLIS_IN_SECOND).toInt()
+        binding.progressBar.progress = (progressInMillis / MILLIS_IN_SECOND).toInt()
     }
 
     override fun onUIStateChanged(state: UIState?) {
@@ -100,14 +97,14 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                 setProgressBar(COUNT_DOWN_MS)
                 mCountDownTimer = object : CountDownTimer(COUNT_DOWN_MS, MILLIS_IN_SECOND) {
                     override fun onTick(millisUntilFinished: Long) {
-                        mProgressBar!!.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.VISIBLE
                         setProgressBar(millisUntilFinished)
                         Log.d(TAG, "Time Left: " + millisUntilFinished / MILLIS_IN_SECOND)
                     }
 
                     override fun onFinish() {
-                        mProgressBar!!.progress = 0
-                        mProgressBar!!.visibility = View.INVISIBLE
+                        binding.progressBar.progress = 0
+                        binding.progressBar.visibility = View.INVISIBLE
                         mSoundRecorder!!.stopRecording()
                         mUIAnimation!!.transitionToHome()
                         mUiState = UIState.HOME
@@ -142,7 +139,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                         mCountDownTimer!!.cancel()
                         mCountDownTimer = null
                     }
-                    mProgressBar!!.visibility = View.INVISIBLE
+                    binding.progressBar.visibility = View.INVISIBLE
                     setProgressBar(COUNT_DOWN_MS)
                 }
             }
@@ -213,16 +210,14 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      */
     private fun start() {
         mSoundRecorder = SoundRecorder(this, VOICE_FILE_NAME, this)
-        val thumbResources = intArrayOf(R.id.mic, R.id.play, R.id.music)
-        val thumbs = arrayOfNulls<ImageView>(3)
-        for (i in 0..2) {
-            thumbs[i] = findViewById(thumbResources[i])
-        }
-        val containerView = findViewById<View>(R.id.container)
-        val expandedView = findViewById<ImageView>(R.id.expanded)
         val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-        mUIAnimation = UIAnimation(containerView, thumbs, expandedView, animationDuration,
-                                   this)
+        mUIAnimation = UIAnimation(
+            binding.container,
+            arrayOf(binding.mic, binding.play, binding.music),
+            binding.expanded,
+            animationDuration,
+            this
+        )
     }
 
     override fun onStart() {
@@ -230,7 +225,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         if (speakerIsSupported()) {
             checkPermissions()
         } else {
-            mOuterCircle!!.setOnClickListener {
+            binding.outerCircle.setOnClickListener {
                 Toast.makeText(this@MainActivity, R.string.no_speaker_supported,
                                Toast.LENGTH_SHORT).show()
             }
@@ -294,11 +289,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             // Changes views to grey scale.
             val context = applicationContext
             val resources = context.resources
-            mOuterCircle!!.setBackgroundColor(
+            binding.outerCircle.setBackgroundColor(
                 ContextCompat.getColor(context, R.color.light_grey))
-            mInnerCircle!!.background = ContextCompat.getDrawable(context, R.drawable.grey_circle)
-            mProgressBar!!.progressTintList = resources.getColorStateList(R.color.white, context.theme)
-            mProgressBar!!.progressBackgroundTintList = resources.getColorStateList(R.color.black, context.theme)
+            binding.innerCircle.background = ContextCompat.getDrawable(context, R.drawable.grey_circle)
+            binding.progressBar.progressTintList = resources.getColorStateList(R.color.white, context.theme)
+            binding.progressBar.progressBackgroundTintList = resources.getColorStateList(R.color.black, context.theme)
         }
 
         /** Restores the UI to active (non-ambient) mode.  */
@@ -309,11 +304,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             // Changes views to color.
             val context = applicationContext
             val resources = context.resources
-            mOuterCircle!!.setBackgroundColor(
+            binding.outerCircle.setBackgroundColor(
                 ContextCompat.getColor(context, R.color.background_color))
-            mInnerCircle!!.background = ContextCompat.getDrawable(context, R.drawable.color_circle)
-            mProgressBar!!.progressTintList = resources.getColorStateList(R.color.progressbar_tint, context.theme)
-            mProgressBar!!.progressBackgroundTintList = resources.getColorStateList(
+            binding.innerCircle.background = ContextCompat.getDrawable(context, R.drawable.color_circle)
+            binding.progressBar.progressTintList = resources.getColorStateList(R.color.progressbar_tint, context.theme)
+            binding.progressBar.progressBackgroundTintList = resources.getColorStateList(
                 R.color.progressbar_background_tint, context.theme)
         }
     }
