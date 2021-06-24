@@ -34,11 +34,18 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val args = intent.getArgs()
 
-        scope.launch {
-            args.updateState(context)
+        val result = goAsync()
 
-            // Request an update for the complication that has just been toggled.
-            ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationId)
+        scope.launch {
+            try {
+                args.updateState(context)
+
+                // Request an update for the complication that has just been toggled.
+                ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationId)
+            } finally {
+                // Always call finish, even if cancelled
+                result.finish()
+            }
         }
     }
 
