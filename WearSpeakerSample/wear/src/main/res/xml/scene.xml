@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/toMicExpanded"
+        app:constraintSetStart="@id/allMinimized"
+        app:constraintSetEnd="@id/micExpanded" />
+
+    <Transition
+        android:id="@+id/toPlayExpanded"
+        app:constraintSetStart="@id/allMinimized"
+        app:constraintSetEnd="@id/playExpanded" />
+
+    <Transition
+        android:id="@+id/toMusicExpanded"
+        app:constraintSetStart="@id/allMinimized"
+        app:constraintSetEnd="@id/musicExpanded" />
+
+    <ConstraintSet android:id="@+id/allMinimized">
+
+        <Constraint
+            android:id="@+id/mic"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="32dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/play"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="240"
+                app:layout_constraintCircleRadius="32dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/music"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="120"
+                app:layout_constraintCircleRadius="32dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@id/progress_bar_container">
+            <PropertySet
+                android:visibility="invisible" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/micExpanded">
+
+        <Constraint
+            android:id="@+id/mic"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="136dp"
+                android:layout_height="136dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="0dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/play"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="240"
+                app:layout_constraintCircleRadius="32dp" />
+
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/music"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="120"
+                app:layout_constraintCircleRadius="32dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@id/progress_bar_container">
+            <PropertySet
+                android:visibility="visible" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/playExpanded">
+
+        <Constraint
+            android:id="@+id/mic"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="32dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/play"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="136dp"
+                android:layout_height="136dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="240"
+                app:layout_constraintCircleRadius="0dp" />
+
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/music">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="120"
+                app:layout_constraintCircleRadius="32dp" />
+
+            <PropertySet
+                android:visibility="invisible" />
+        </Constraint>
+
+        <Constraint
+            android:id="@id/progress_bar_container">
+            <PropertySet
+                android:visibility="invisible" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/musicExpanded">
+
+        <Constraint
+            android:id="@+id/mic"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="32dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/play"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="240"
+                app:layout_constraintCircleRadius="32dp" />
+
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/music"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="136dp"
+                android:layout_height="136dp"
+                app:layout_constraintCircle="@id/inner_circle"
+                app:layout_constraintCircleAngle="120"
+                app:layout_constraintCircleRadius="0dp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@id/progress_bar_container">
+            <PropertySet
+                android:visibility="invisible" />
+        </Constraint>
+
+    </ConstraintSet>
+
+</MotionScene>
