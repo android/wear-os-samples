@@ -20,21 +20,26 @@ import android.content.pm.PackageManager
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.wear.ambient.AmbientModeSupport
-import com.example.android.wearable.speaker.SoundRecorder.OnVoicePlaybackStateChangedListener
-import com.example.android.wearable.speaker.UIAnimation.UIState
-import com.example.android.wearable.speaker.UIAnimation.UIStateListener
 import com.example.android.wearable.speaker.databinding.MainActivityBinding
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import java.time.Duration
+import kotlin.coroutines.resume
 
 /**
  * We first get the required permission to use the MIC. If it is granted, then we continue with
@@ -42,8 +47,7 @@ import java.util.concurrent.TimeUnit
  * to 10 seconds), a Play icon (if clicked, it wil playback the recorded audio file) and a music
  * note icon (if clicked, it plays an MP3 file that is included in the app).
  */
-class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider, UIStateListener,
-                     OnVoicePlaybackStateChangedListener {
+class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
 
     /**
      * Ambient mode controller attached to this display. Used by Activity to see if it is in
@@ -53,15 +57,56 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     private lateinit var binding: MainActivityBinding
 
-    private var mediaPlayer: MediaPlayer? = null
-    private var state = AppState.READY
-    private var uiState = UIState.HOME
     private var soundRecorder: SoundRecorder? = null
-    private var uiAnimation: UIAnimation? = null
-    private var countDownTimer: CountDownTimer? = null
 
-    internal enum class AppState {
-        READY, PLAYING_VOICE, PLAYING_MUSIC, RECORDING
+    private var appState: AppState = AppState.AtSteadyState(SteadyState.READY)
+
+    private var ongoingWork: Job = Job().apply { complete() }
+
+    /**
+     * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
+     */
+    enum class SteadyState {
+        READY,
+        PLAYING_VOICE,
+        PLAYING_MUSIC,
+        RECORDING,
+    }
+
+    /**
+     * The overall state of the application.
+     *
+     * This either consists of being at a steady state, or transitioning to one of the steady states.
+     */
+    sealed class AppState {
+
+        /**
+         * The app is not transitioning, and is at the given [SteadyState].
+         */
+        data class AtSteadyState(
+            val steadyState: SteadyState,
+        ) : AppState()
+
+        /**
+         * The app is transitioning to the given [SteadyState].
+         */
+        data class TransitioningTo(
+            val steadyState: SteadyState,
+        ) : AppState()
+    }
+
+    /**
+     * One of the actions the app interprets. This can either be direct user actions (clicking one of the buttons),
+     * or programmatic actions (finishing playback or recording, or transition finishing).
+     */
+    sealed class AppAction {
+        object MicClicked : AppAction()
+        object PlayClicked : AppAction()
+        object MusicClicked : AppAction()
+        object RecordingFinished : AppAction()
+        object PlayRecordingFinished : AppAction()
+        object PlayMusicFinished : AppAction()
+        data class TransitionedTo(val steadyState: SteadyState) : AppAction()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,102 +117,151 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
         // Enables Ambient mode.
         ambientController = AmbientModeSupport.attach(this)
+
+        binding.mic.setOnClickListener { onAction(AppAction.MicClicked) }
+        binding.play.setOnClickListener { onAction(AppAction.PlayClicked) }
+        binding.music.setOnClickListener { onAction(AppAction.MusicClicked) }
     }
 
-    private fun setProgressBar(progressInMillis: Long) {
-        binding.progressBar.progress = (progressInMillis / MILLIS_IN_SECOND).toInt()
+    private fun onAction(action: AppAction) {
+        val oldState = appState
+        val newState = when (action) {
+            AppAction.MicClicked -> when (oldState) {
+                is AppState.AtSteadyState -> when (oldState.steadyState) {
+                    SteadyState.READY,
+                    SteadyState.PLAYING_VOICE,
+                    SteadyState.PLAYING_MUSIC -> AppState.TransitioningTo(SteadyState.RECORDING)
+                    SteadyState.RECORDING -> AppState.TransitioningTo(SteadyState.READY)
+                }
+                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+            }
+            AppAction.MusicClicked -> when (oldState) {
+                is AppState.AtSteadyState -> when (oldState.steadyState) {
+                    SteadyState.READY,
+                    SteadyState.PLAYING_VOICE,
+                    SteadyState.RECORDING -> AppState.TransitioningTo(SteadyState.PLAYING_MUSIC)
+                    SteadyState.PLAYING_MUSIC -> AppState.TransitioningTo(SteadyState.READY)
+                }
+                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+            }
+            AppAction.PlayClicked -> when (oldState) {
+                is AppState.AtSteadyState -> when (oldState.steadyState) {
+                    SteadyState.READY,
+                    SteadyState.RECORDING,
+                    SteadyState.PLAYING_MUSIC -> AppState.TransitioningTo(SteadyState.PLAYING_VOICE)
+                    SteadyState.PLAYING_VOICE -> AppState.TransitioningTo(SteadyState.READY)
+                }
+                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+            }
+            is AppAction.TransitionedTo -> AppState.AtSteadyState(action.steadyState)
+            AppAction.PlayMusicFinished,
+            AppAction.PlayRecordingFinished,
+            AppAction.RecordingFinished -> when (oldState) {
+                is AppState.AtSteadyState -> when (oldState.steadyState) {
+                    SteadyState.READY -> AppState.AtSteadyState(SteadyState.READY)
+                    SteadyState.RECORDING,
+                    SteadyState.PLAYING_MUSIC,
+                    SteadyState.PLAYING_VOICE -> AppState.TransitioningTo(SteadyState.READY)
+                }
+                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+            }
+        }
+
+        onNewState(newState)
     }
 
-    override fun onUIStateChanged(state: UIState?) {
-        Log.d(TAG, "UI State is: $state")
-        if (uiState == state) {
+    private fun onNewState(newState: AppState) {
+        val oldState = appState
+
+        Log.d(TAG, "New app state is: $newState")
+
+        // Short-circuit if we're in the same state
+        if (oldState == newState) {
             return
         }
-        when (state) {
-            UIState.MUSIC_UP -> {
-                this.state = AppState.PLAYING_MUSIC
-                uiState = state
-                playMusic()
-            }
-            UIState.MIC_UP -> {
-                this.state = AppState.RECORDING
-                uiState = state
-                soundRecorder!!.startRecording()
-                setProgressBar(COUNT_DOWN_MS)
-                countDownTimer = object : CountDownTimer(COUNT_DOWN_MS, MILLIS_IN_SECOND) {
-                    override fun onTick(millisUntilFinished: Long) {
-                        binding.progressBar.visibility = View.VISIBLE
-                        setProgressBar(millisUntilFinished)
-                        Log.d(TAG, "Time Left: " + millisUntilFinished / MILLIS_IN_SECOND)
-                    }
 
-                    override fun onFinish() {
+        appState = newState
+
+        // Clean up any ongoing work (playing, recording, transitioning)
+        ongoingWork.cancel()
+        ongoingWork = lifecycleScope.launch {
+            when (newState) {
+                is AppState.AtSteadyState -> when (newState.steadyState) {
+                    SteadyState.READY -> Unit
+                    SteadyState.PLAYING_VOICE -> {
+                        soundRecorder!!.play()
+
+                        // Don't call onAction directly here or below, since we are in the job that ongoingWork is
+                        // tracking.
+                        // If we call onAction directly (or with Dispatchers.Main.immediate), we will cancel ourselves,
+                        // causing strange effects.
+                        lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayRecordingFinished) }
+                    }
+                    SteadyState.PLAYING_MUSIC -> {
+                        playMusic()
+
+                        lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayMusicFinished) }
+                    }
+                    SteadyState.RECORDING -> {
+                        coroutineScope {
+                            val recordingJob = launch { soundRecorder!!.record() }
+
+                            val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
+                            val startTime = System.currentTimeMillis()
+
+                            repeat(NUMBER_TICKS) { index ->
+                                binding.progressBar.progress = (100f * index / NUMBER_TICKS).toInt()
+                                delay(startTime + delayPerTickMs * (index + 1) - System.currentTimeMillis())
+                            }
+                            // Update the progress bar to be complete
+                            binding.progressBar.progress = 100
+
+                            recordingJob.cancel()
+                        }
+
+                        lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.RecordingFinished) }
+                    }
+                }
+                is AppState.TransitioningTo -> {
+                    // Only reset the progress bar if we are transitioning to recording. This allows for a nicer
+                    // transition away from recording
+                    if (newState.steadyState == SteadyState.RECORDING) {
                         binding.progressBar.progress = 0
-                        binding.progressBar.visibility = View.INVISIBLE
-                        soundRecorder!!.stopRecording()
-                        uiAnimation!!.transitionToHome()
-                        uiState = UIState.HOME
-                        this@MainActivity.state = AppState.READY
-                        countDownTimer = null
                     }
-                }.apply {
-                    start()
-                }
-            }
-            UIState.SOUND_UP -> {
-                this.state = AppState.PLAYING_VOICE
-                uiState = state
-                soundRecorder!!.startPlay()
-            }
-            UIState.HOME -> when (this.state) {
-                AppState.PLAYING_MUSIC -> {
-                    this.state = AppState.READY
-                    uiState = state
-                    stopMusic()
-                }
-                AppState.PLAYING_VOICE -> {
-                    this.state = AppState.READY
-                    uiState = state
-                    soundRecorder!!.stopPlaying()
-                }
-                AppState.RECORDING -> {
-                    this.state = AppState.READY
-                    uiState = state
-                    soundRecorder!!.stopRecording()
-                    if (countDownTimer != null) {
-                        countDownTimer!!.cancel()
-                        countDownTimer = null
+
+                    val motionLayoutState = when (newState.steadyState) {
+                        SteadyState.READY -> R.id.allMinimized
+                        SteadyState.PLAYING_VOICE -> R.id.playExpanded
+                        SteadyState.PLAYING_MUSIC -> R.id.musicExpanded
+                        SteadyState.RECORDING -> R.id.micExpanded
                     }
-                    binding.progressBar.visibility = View.INVISIBLE
-                    setProgressBar(COUNT_DOWN_MS)
+
+                    binding.outerCircle.transitionToState(motionLayoutState)
+                    binding.outerCircle.awaitState(motionLayoutState)
+
+                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.TransitionedTo(newState.steadyState)) }
                 }
             }
         }
     }
 
     /**
-     * Plays back the MP3 file embedded in the application
+     * Plays the MP3 file embedded in the application.
      */
-    private fun playMusic() {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.sound).apply {
-                setOnCompletionListener(OnCompletionListener { // we need to transition to the READY/Home state
+    private suspend fun playMusic() {
+        val mediaPlayer = MediaPlayer.create(this, R.raw.sound)
+
+        try {
+            suspendCancellableCoroutine<Unit> { cont ->
+                mediaPlayer.setOnCompletionListener { // we need to transition to the READY/Home state
                     Log.d(TAG, "Music Finished")
-                    uiAnimation!!.transitionToHome()
-                })
+                    cont.resume(Unit)
+                }
+                mediaPlayer.start()
             }
-        }
-        mediaPlayer!!.start()
-    }
-
-    /**
-     * Stops the playback of the MP3 file.
-     */
-    private fun stopMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer!!.stop()
-            mediaPlayer!!.release()
-            mediaPlayer = null
+        } finally {
+            mediaPlayer.stop()
+            mediaPlayer.release()
         }
     }
 
@@ -195,7 +289,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
                 start()
             } else {
                 // Permission has been denied before. At this point we should show a dialog to
-                // user and explain why this permission is needed and direct him to go to the
+                // user and explain why this permission is needed and direct them to go to the
                 // Permissions settings for the app in the System settings. For this sample, we
                 // simply exit to get to the important part.
                 Toast.makeText(this, R.string.exiting_for_permissions, Toast.LENGTH_LONG).show()
@@ -208,15 +302,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * Starts the main flow of the application.
      */
     private fun start() {
-        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME, this)
-        val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-        uiAnimation = UIAnimation(
-            binding.container,
-            arrayOf(binding.mic, binding.play, binding.music),
-            binding.expanded,
-            animationDuration,
-            this
-        )
+        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME)
     }
 
     override fun onStart() {
@@ -232,20 +318,10 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     }
 
     override fun onStop() {
-        soundRecorder?.cleanup()
+        ongoingWork.cancel()
         soundRecorder = null
-        countDownTimer?.cancel()
-        countDownTimer = null
-        mediaPlayer?.release()
-        mediaPlayer = null
 
         super.onStop()
-    }
-
-    override fun onPlaybackStopped() {
-        uiAnimation!!.transitionToHome()
-        uiState = UIState.HOME
-        state = AppState.READY
     }
 
     /**
@@ -257,14 +333,12 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)) {
             return false
         }
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        val devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
-        return devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
+        return getSystemService<AudioManager>()!!
+            .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+            .any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
     }
 
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
-        return MyAmbientCallback()
-    }
+    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = MyAmbientCallback()
 
     private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
         /** Prepares the UI for ambient mode.  */
@@ -273,13 +347,14 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             Log.d(TAG, "onEnterAmbient() $ambientDetails")
 
             // Changes views to grey scale.
-            val context = applicationContext
-            val resources = context.resources
             binding.outerCircle.setBackgroundColor(
-                ContextCompat.getColor(context, R.color.light_grey))
-            binding.innerCircle.background = ContextCompat.getDrawable(context, R.drawable.grey_circle)
-            binding.progressBar.progressTintList = resources.getColorStateList(R.color.white, context.theme)
-            binding.progressBar.progressBackgroundTintList = resources.getColorStateList(R.color.black, context.theme)
+                ContextCompat.getColor(this@MainActivity, R.color.light_grey)
+            )
+            binding.innerCircle.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.grey_circle)
+            binding.progressBar.progressTintList =
+                AppCompatResources.getColorStateList(this@MainActivity, R.color.white)
+            binding.progressBar.progressBackgroundTintList =
+                AppCompatResources.getColorStateList(this@MainActivity, R.color.black)
         }
 
         /** Restores the UI to active (non-ambient) mode.  */
@@ -288,22 +363,22 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             Log.d(TAG, "onExitAmbient()")
 
             // Changes views to color.
-            val context = applicationContext
-            val resources = context.resources
             binding.outerCircle.setBackgroundColor(
-                ContextCompat.getColor(context, R.color.background_color))
-            binding.innerCircle.background = ContextCompat.getDrawable(context, R.drawable.color_circle)
-            binding.progressBar.progressTintList = resources.getColorStateList(R.color.progressbar_tint, context.theme)
-            binding.progressBar.progressBackgroundTintList = resources.getColorStateList(
-                R.color.progressbar_background_tint, context.theme)
+                ContextCompat.getColor(this@MainActivity, R.color.background_color)
+            )
+            binding.innerCircle.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.color_circle)
+            binding.progressBar.progressTintList =
+                AppCompatResources.getColorStateList(this@MainActivity, R.color.progressbar_tint)
+            binding.progressBar.progressBackgroundTintList =
+                AppCompatResources.getColorStateList(this@MainActivity, R.color.progressbar_background_tint)
         }
     }
 
     companion object {
         private const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_CODE = 100
-        private val COUNT_DOWN_MS = TimeUnit.SECONDS.toMillis(10)
-        private val MILLIS_IN_SECOND = TimeUnit.SECONDS.toMillis(1)
+        private val MAX_RECORDING_DURATION = Duration.ofSeconds(10)
+        private val NUMBER_TICKS = 10
         private const val VOICE_FILE_NAME = "audiorecord.pcm"
     }
 }

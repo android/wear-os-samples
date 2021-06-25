@@ -16,247 +16,142 @@
 package com.example.android.wearable.speaker
 
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.AudioTrack
 import android.media.MediaRecorder
-import android.os.AsyncTask
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
+import androidx.core.content.getSystemService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.lang.ref.WeakReference
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
  * and to playback the same recorded audio file.
  */
 class SoundRecorder(
-    context: Context,
-    private val mOutputFileName: String,
-    private val mListener: OnVoicePlaybackStateChangedListener?
+    private val context: Context,
+    private val outputFileName: String,
 ) {
-    private val mAudioManager: AudioManager
-    private val mHandler: Handler
-    private val mContext: Context
-    private var mState = State.IDLE
-    private var mRecordingAsyncTask: AsyncTask<Void?, Void?, Void?>? = null
-    private var mPlayingAsyncTask: AsyncTask<Void?, Void?, Void?>? = null
+    private val audioManager: AudioManager = context.getSystemService()!!
+    private var state = State.IDLE
 
-    internal enum class State {
+    private enum class State {
         IDLE, RECORDING, PLAYING
     }
 
     /**
-     * Starts recording from the MIC.
+     * Plays the recorded file, if any.
+     *
+     * Returns when playing the file is finished.
+     *
+     * This is cancellable, and cancelling it will stop playback.
      */
-    fun startRecording() {
-        if (mState != State.IDLE) {
-            Log.w(TAG, "Requesting to start recording while state was not IDLE")
-            return
-        }
-        mRecordingAsyncTask = RecordAudioAsyncTask(this).apply {
-            execute()
-        }
-    }
-
-    fun stopRecording() {
-        if (mRecordingAsyncTask != null) {
-            mRecordingAsyncTask!!.cancel(true)
-        }
-    }
-
-    fun stopPlaying() {
-        if (mPlayingAsyncTask != null) {
-            mPlayingAsyncTask!!.cancel(true)
-        }
-    }
-
-    /**
-     * Starts playback of the recorded audio file.
-     */
-    fun startPlay() {
-        if (mState != State.IDLE) {
+    suspend fun play() {
+        if (state != State.IDLE) {
             Log.w(TAG, "Requesting to play while state was not IDLE")
             return
         }
-        if (!File(mContext.filesDir, mOutputFileName).exists()) {
-            // there is no recording to play
-            if (mListener != null) {
-                mHandler.post { mListener.onPlaybackStopped() }
-            }
-            return
-        }
-        val intSize = AudioTrack.getMinBufferSize(RECORDING_RATE, CHANNELS_OUT, FORMAT)
-        mPlayingAsyncTask = PlayAudioAsyncTask(this, intSize).apply {
-            execute()
-        }
-    }
 
-    interface OnVoicePlaybackStateChangedListener {
-        /**
-         * Called when the playback of the audio file ends. This should be called on the UI thread.
-         */
-        fun onPlaybackStopped()
+        // Check if there isn't a recording to play
+        if (!File(context.filesDir, outputFileName).exists()) return
+
+        state = State.PLAYING
+
+        val intSize = AudioTrack.getMinBufferSize(RECORDING_RATE, CHANNELS_OUT, FORMAT)
+
+        audioManager.setStreamVolume(
+            AudioManager.STREAM_MUSIC,
+            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+            0 /* flags */,
+        )
+
+        val audioTrack = AudioTrack.Builder()
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            )
+            .setBufferSizeInBytes(intSize)
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setSampleRate(RECORDING_RATE)
+                    .setChannelMask(CHANNELS_OUT)
+                    .setEncoding(FORMAT)
+                    .build()
+            )
+            .setTransferMode(AudioTrack.MODE_STREAM)
+            .build()
+
+        val buffer = ByteArray(intSize * 2)
+
+        audioTrack.setVolume(AudioTrack.getMaxVolume())
+        audioTrack.play()
+
+        try {
+            withContext(Dispatchers.IO) {
+                context.openFileInput(outputFileName).buffered().use { bufferedInputStream ->
+                    while (isActive) {
+                        val read = bufferedInputStream.read(buffer, 0, buffer.size)
+                        if (read < 0) break
+                        audioTrack.write(buffer, 0, read)
+                    }
+                }
+            }
+        } finally {
+            audioTrack.release()
+            state = State.IDLE
+        }
     }
 
     /**
-     * Cleans up some resources related to [AudioTrack] and [AudioRecord]
+     * Records from the microphone.
+     *
+     * This method is cancellable, and cancelling it will stop recording.
      */
-    fun cleanup() {
-        Log.d(TAG, "cleanup() is called")
-        stopPlaying()
-        stopRecording()
-    }
-
-    private class PlayAudioAsyncTask(context: SoundRecorder, intSize: Int) :
-        AsyncTask<Void?, Void?, Void?>() {
-        private val mSoundRecorderWeakReference: WeakReference<SoundRecorder>
-        private var mAudioTrack: AudioTrack? = null
-        private val mIntSize: Int
-        override fun onPreExecute() {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            if (soundRecorder != null) {
-                soundRecorder.mAudioManager.setStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    soundRecorder.mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-                    0 /* flags */)
-                soundRecorder.mState = State.PLAYING
-            }
+    suspend fun record() {
+        if (state != State.IDLE) {
+            Log.w(TAG, "Requesting to start recording while state was not IDLE")
+            return
         }
 
-        override fun doInBackground(vararg params: Void?): Void? {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            try {
-                mAudioTrack = AudioTrack(AudioManager.STREAM_MUSIC, RECORDING_RATE,
-                                         CHANNELS_OUT, FORMAT, mIntSize, AudioTrack.MODE_STREAM)
-                val buffer = ByteArray(mIntSize * 2)
-                var `in`: FileInputStream? = null
-                var bis: BufferedInputStream? = null
-                mAudioTrack!!.setVolume(AudioTrack.getMaxVolume())
-                mAudioTrack!!.play()
-                try {
-                    `in` = soundRecorder!!.mContext.openFileInput(soundRecorder.mOutputFileName)
-                    bis = BufferedInputStream(`in`)
-                    var read = 0
-                    while (!isCancelled && bis.read(buffer, 0, buffer.size).also { read = it } > 0) {
-                        mAudioTrack!!.write(buffer, 0, read)
-                    }
-                } catch (e: IOException) {
-                    Log.e(TAG, "Failed to read the sound file into a byte array", e)
-                } finally {
-                    try {
-                        `in`?.close()
-                        bis?.close()
-                    } catch (e: IOException) { /* ignore */
-                    }
-                    mAudioTrack!!.release()
-                }
-            } catch (e: IllegalStateException) {
-                Log.e(TAG, "Failed to start playback", e)
-            }
-            return null
-        }
+        state = State.RECORDING
 
-        override fun onPostExecute(aVoid: Void?) {
-            cleanup()
-        }
+        val intSize = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT)
 
-        override fun onCancelled() {
-            cleanup()
-        }
+        val audioRecord = AudioRecord.Builder()
+            .setAudioSource(MediaRecorder.AudioSource.MIC)
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setSampleRate(RECORDING_RATE)
+                    .setChannelMask(CHANNEL_IN)
+                    .setEncoding(FORMAT)
+                    .build()
+            )
+            .setBufferSizeInBytes(intSize * 3)
+            .build()
 
-        private fun cleanup() {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            if (soundRecorder != null) {
-                if (soundRecorder.mListener != null) {
-                    soundRecorder.mListener.onPlaybackStopped()
-                }
-                soundRecorder.mState = State.IDLE
-                soundRecorder.mPlayingAsyncTask = null
-            }
-        }
+        val buffer = ByteArray(intSize)
 
-        init {
-            mSoundRecorderWeakReference = WeakReference(context)
-            mIntSize = intSize
-        }
-    }
+        audioRecord.startRecording()
 
-    private class RecordAudioAsyncTask(context: SoundRecorder) : AsyncTask<Void?, Void?, Void?>() {
-        private val mSoundRecorderWeakReference: WeakReference<SoundRecorder>
-        private var mAudioRecord: AudioRecord? = null
-        override fun onPreExecute() {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            if (soundRecorder != null) {
-                soundRecorder.mState = State.RECORDING
-            }
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            mAudioRecord = AudioRecord(MediaRecorder.AudioSource.MIC,
-                                       RECORDING_RATE, CHANNEL_IN, FORMAT, BUFFER_SIZE * 3)
-            var bufferedOutputStream: BufferedOutputStream? = null
-            try {
-                bufferedOutputStream = BufferedOutputStream(
-                    soundRecorder!!.mContext.openFileOutput(
-                        soundRecorder.mOutputFileName,
-                        Context.MODE_PRIVATE))
-                val buffer = ByteArray(BUFFER_SIZE)
-                mAudioRecord!!.startRecording()
-                while (!isCancelled) {
-                    val read = mAudioRecord!!.read(buffer, 0, buffer.size)
-                    bufferedOutputStream.write(buffer, 0, read)
-                }
-            } catch (e: IOException) {
-                Log.e(TAG, "Failed to record data: $e")
-            } catch (e: NullPointerException) {
-                Log.e(TAG, "Failed to record data: $e")
-            } catch (e: IndexOutOfBoundsException) {
-                Log.e(TAG, "Failed to record data: $e")
-            } finally {
-                if (bufferedOutputStream != null) {
-                    try {
-                        bufferedOutputStream.close()
-                    } catch (e: IOException) {
-                        // ignore
+        try {
+            withContext(Dispatchers.IO) {
+                context.openFileOutput(outputFileName, Context.MODE_PRIVATE).buffered().use { bufferedOutputStream ->
+                    while (isActive) {
+                        val read = audioRecord.read(buffer, 0, buffer.size)
+                        bufferedOutputStream.write(buffer, 0, read)
                     }
                 }
-                mAudioRecord!!.release()
-                mAudioRecord = null
             }
-            return null
-        }
-
-        override fun onPostExecute(aVoid: Void?) {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            if (soundRecorder != null) {
-                soundRecorder.mState = State.IDLE
-                soundRecorder.mRecordingAsyncTask = null
-            }
-        }
-
-        override fun onCancelled() {
-            val soundRecorder = mSoundRecorderWeakReference.get()
-            if (soundRecorder != null) {
-                if (soundRecorder.mState == State.RECORDING) {
-                    Log.d(TAG, "Stopping the recording ...")
-                    soundRecorder.mState = State.IDLE
-                } else {
-                    Log.w(TAG, "Requesting to stop recording while state was not RECORDING")
-                }
-                soundRecorder.mRecordingAsyncTask = null
-            }
-        }
-
-        init {
-            mSoundRecorderWeakReference = WeakReference(context)
+        } finally {
+            audioRecord.release()
+            state = State.IDLE
         }
     }
 
@@ -266,13 +161,5 @@ class SoundRecorder(
         private const val CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO
         private const val CHANNELS_OUT = AudioFormat.CHANNEL_OUT_MONO
         private const val FORMAT = AudioFormat.ENCODING_PCM_16BIT
-        private val BUFFER_SIZE = AudioRecord
-            .getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT)
-    }
-
-    init {
-        mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        mHandler = Handler(Looper.getMainLooper())
-        mContext = context
     }
 }
