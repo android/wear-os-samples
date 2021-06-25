@@ -15,36 +15,40 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
-import android.support.wearable.complications.ComplicationData
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
-import android.support.wearable.complications.ComplicationText
 import androidx.datastore.core.DataStore
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationText
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.MonochromaticImage
+import androidx.wear.complications.data.PlainComplicationText
+import androidx.wear.complications.data.ShortTextComplicationData
 
 /**
- * A complication provider that supports only [ComplicationData.TYPE_SHORT_TEXT] and cycles
+ * A complication provider that supports only [ComplicationType.SHORT_TEXT] and cycles
  * through the possible configurations on tap.
  *
  * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationUpdate].
+ * [onComplicationRequest].
  * See [SuspendingComplicationProviderService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * [ComplicationProviderService] and override [onComplicationRequest] directly.
  * (see [NoDataProviderService] for an example)
  */
 class ShortTextProviderService : SuspendingComplicationProviderService() {
-    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
-        if (type != ComplicationData.TYPE_SHORT_TEXT) {
-            manager.noUpdateRequired(complicationId)
-            return
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        if (request.complicationType != ComplicationType.SHORT_TEXT) {
+            return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complicationId = complicationId
+            complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
@@ -53,41 +57,95 @@ class ShortTextProviderService : SuspendingComplicationProviderService() {
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
-        val data = ComplicationData.Builder(type)
-            .setTapAction(complicationTogglePendingIntent)
-            .apply {
-                when (state.mod(4)) {
-                    0 -> {
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_only)))
-                    }
-                    1 -> {
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_icon)))
-                        setIcon(
-                            Icon.createWithResource(
-                                this@ShortTextProviderService,
-                                R.drawable.ic_face_vd_theme_24
-                            )
-                        )
-                    }
-                    2 -> {
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_title)))
-                        setShortTitle(ComplicationText.plainText(getString(R.string.short_title)))
-                    }
-                    3 -> {
-                        // When short text includes both short title and icon, the watch face should only
-                        // display one of those fields.
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_both)))
-                        setShortTitle(ComplicationText.plainText(getString(R.string.short_title)))
-                        setIcon(
-                            Icon.createWithResource(
-                                this@ShortTextProviderService,
-                                R.drawable.ic_face_vd_theme_24
-                            )
-                        )
-                    }
-                }
+        val case = Case.values()[state.mod(Case.values().size)]
+        return getComplicationData(
+            tapAction = complicationTogglePendingIntent,
+            case = case
+        )
+    }
+
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        getComplicationData(
+            tapAction = null,
+            case = Case.TEXT_WITH_ICON_AND_TITLE
+        )
+
+    private fun getComplicationData(
+        tapAction: PendingIntent?,
+        case: Case
+    ): ComplicationData {
+        val text: ComplicationText
+        val title: ComplicationText?
+        val monochromaticImage: MonochromaticImage?
+        val contentDescription: ComplicationText
+
+        when (case) {
+            Case.TEXT_ONLY -> {
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_only)
+                ).build()
+                title = null
+                monochromaticImage = null
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_only_content_description)
+                ).build()
             }
+            Case.TEXT_WITH_ICON -> {
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_icon)
+                ).build()
+                title = null
+                monochromaticImage = MonochromaticImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                ).build()
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_icon_content_description)
+                ).build()
+            }
+            Case.TEXT_WITH_TITLE -> {
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_title)
+                ).build()
+                title = PlainComplicationText.Builder(
+                    text = getText(R.string.short_title)
+                ).build()
+                monochromaticImage = null
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_title_content_description)
+                ).build()
+            }
+            Case.TEXT_WITH_ICON_AND_TITLE -> {
+                // When short text includes both short title and icon, the watch face should only
+                // display one of those fields.
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_both)
+                ).build()
+                title = PlainComplicationText.Builder(
+                    text = getText(R.string.short_title)
+                ).build()
+                monochromaticImage = MonochromaticImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                ).build()
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_both_content_description)
+                ).build()
+            }
+        }
+
+        return ShortTextComplicationData.Builder(
+            text = text,
+            contentDescription = contentDescription
+        )
+            .setTitle(title)
+            .setMonochromaticImage(monochromaticImage)
+            .setTapAction(tapAction)
             .build()
-        manager.updateComplicationData(complicationId, data)
+    }
+
+    private enum class Case {
+        TEXT_ONLY,
+        TEXT_WITH_ICON,
+        TEXT_WITH_TITLE,
+        TEXT_WITH_ICON_AND_TITLE
     }
 }

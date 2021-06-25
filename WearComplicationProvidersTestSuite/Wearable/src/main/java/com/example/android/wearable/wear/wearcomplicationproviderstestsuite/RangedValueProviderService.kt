@@ -15,37 +15,42 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
-import android.support.wearable.complications.ComplicationData
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
-import android.support.wearable.complications.ComplicationText
 import androidx.datastore.core.DataStore
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationText
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.MonochromaticImage
+import androidx.wear.complications.data.PlainComplicationText
+import androidx.wear.complications.data.RangedValueComplicationData
 import kotlin.random.Random
 
 /**
- * A complication provider that supports only [ComplicationData.TYPE_RANGED_VALUE] and cycles
+ * A complication provider that supports only [ComplicationType.RANGED_VALUE] and cycles
  * through the possible configurations on tap. The value is randomised on each update.
  *
  * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationUpdate].
+ * [onComplicationRequest].
  * See [SuspendingComplicationProviderService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * [ComplicationProviderService] and override [onComplicationRequest] directly.
  * (see [NoDataProviderService] for an example)
  */
 class RangedValueProviderService : SuspendingComplicationProviderService() {
-    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
-        if (type != ComplicationData.TYPE_RANGED_VALUE) {
-            manager.noUpdateRequired(complicationId)
-            return
+
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        if (request.complicationType != ComplicationType.RANGED_VALUE) {
+            return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complicationId = complicationId
+            complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
@@ -54,46 +59,115 @@ class RangedValueProviderService : SuspendingComplicationProviderService() {
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
-        val caseValue = state.mod(4)
-        val minValue = MIN_VALUES[caseValue]
-        val maxValue = MAX_VALUES[caseValue]
-        val value = Random.nextDouble(minValue.toDouble(), maxValue.toDouble()).toFloat()
+        val case = Case.values()[state.mod(Case.values().size)]
 
-        val data = ComplicationData.Builder(type)
-            .setMinValue(minValue)
-            .setMaxValue(maxValue)
-            .setValue(value)
-            .setTapAction(complicationTogglePendingIntent)
-            .apply {
-                when (caseValue) {
-                    0 -> {
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_only)))
-                    }
-                    1 -> {
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_icon)))
-                        setIcon(Icon.createWithResource(this@RangedValueProviderService, R.drawable.ic_battery))
-                        setBurnInProtectionIcon(
-                            Icon.createWithResource(
-                                this@RangedValueProviderService,
-                                R.drawable.ic_battery_burn_protect
-                            )
-                        )
-                    }
-                    2 -> {
-                        setShortText(ComplicationText.plainText(getString(R.string.short_text_with_title)))
-                        setShortTitle(ComplicationText.plainText(getString(R.string.short_title)))
-                    }
-                    3 -> {
-                        setIcon(Icon.createWithResource(this@RangedValueProviderService, R.drawable.ic_event_vd_theme_24))
-                    }
-                }
-            }
-            .build()
-        manager.updateComplicationData(complicationId, data)
+        return getComplicationData(
+            tapAction = complicationTogglePendingIntent,
+            case = case
+        )
     }
 
-    companion object {
-        private val MIN_VALUES = floatArrayOf(0f, -20f, 57.5f, 10045f)
-        private val MAX_VALUES = floatArrayOf(100f, 20f, 824.2f, 100000f)
+    override fun getPreviewData(type: ComplicationType): ComplicationData? =
+        getComplicationData(
+            tapAction = null,
+            case = Case.TEXT_WITH_ICON
+        )
+
+    private fun getComplicationData(
+        tapAction: PendingIntent?,
+        case: Case
+    ): ComplicationData {
+        val text: ComplicationText?
+        val monochromaticImage: MonochromaticImage?
+        val title: ComplicationText?
+        val caseContentDescription: String
+
+        val minValue = case.minValue
+        val maxValue = case.maxValue
+        val value = Random.nextDouble(minValue.toDouble(), maxValue.toDouble()).toFloat()
+        val percentage = (value - minValue) / (maxValue - minValue)
+
+        when (case) {
+            Case.TEXT_ONLY -> {
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_only)
+                ).build()
+                monochromaticImage = null
+                title = null
+                caseContentDescription = getString(R.string.ranged_value_text_only_content_description)
+            }
+            Case.TEXT_WITH_ICON -> {
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_icon)
+                ).build()
+                monochromaticImage = MonochromaticImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.ic_battery)
+                )
+                    .setAmbientImage(
+                        ambientImage = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                    )
+                    .build()
+                title = null
+                caseContentDescription = getString(R.string.ranged_value_text_with_icon_content_description)
+            }
+            Case.TEXT_WITH_TITLE -> {
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.short_text_with_title)
+                ).build()
+                monochromaticImage = null
+                title = PlainComplicationText.Builder(
+                    text = getText(R.string.short_title)
+                ).build()
+
+                caseContentDescription = getString(R.string.ranged_value_text_with_title_content_description)
+            }
+            Case.ICON_ONLY -> {
+                text = null
+                monochromaticImage = MonochromaticImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
+                ).build()
+                title = null
+                caseContentDescription = getString(R.string.ranged_value_icon_only_content_description)
+            }
+        }
+
+        // Create a content description that includes the value information
+        val contentDescription = PlainComplicationText.Builder(
+            text = getString(
+                R.string.ranged_value_content_description,
+                caseContentDescription,
+                value,
+                percentage,
+                minValue,
+                maxValue
+            )
+        )
+            .build()
+
+        return RangedValueComplicationData.Builder(
+            value = value,
+            min = minValue,
+            max = maxValue,
+            contentDescription = contentDescription
+        )
+            .setText(text)
+            .setMonochromaticImage(monochromaticImage)
+            .setTitle(title)
+            .setTapAction(tapAction)
+            .build()
+    }
+
+    private enum class Case(
+        val minValue: Float,
+        val maxValue: Float
+    ) {
+        TEXT_ONLY(0f, 100f),
+        TEXT_WITH_ICON(-20f, 20f),
+        TEXT_WITH_TITLE(57.5f, 824.2f),
+        ICON_ONLY(10_045f, 100_000f);
+
+        init {
+            require(minValue < maxValue) { "Minimum value was greater than maximum value!" }
+        }
     }
 }

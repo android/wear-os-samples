@@ -15,8 +15,9 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,22 +26,34 @@ import kotlinx.coroutines.launch
 
 /**
  * A simple subclass of [ComplicationProviderService] that controls a [CoroutineScope] so that
- * [onComplicationUpdateImpl] can be suspending. This allows the complication update to be asynchronous, so that
+ * [onComplicationRequest] can be suspending. This allows the complication update to be asynchronous, so that
  * suspending functions can be called to drive the update.
  */
 abstract class SuspendingComplicationProviderService : ComplicationProviderService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    final override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
+    final override fun onComplicationRequest(request: ComplicationRequest, listener: ComplicationRequestListener) {
         scope.launch {
-            onComplicationUpdateImpl(complicationId, type, manager)
+            var result: ComplicationData? = null
+            try {
+                result = onComplicationRequest(request)
+            } finally {
+                listener.onComplicationData(result)
+            }
         }
     }
 
     /**
-     * @see ComplicationProviderService.onComplicationUpdate
+     * Computes the [ComplicationData] for the given [request].
+     *
+     * The [ComplicationData] returned from this method will be passed to the
+     * [ComplicationProviderService.ComplicationRequestListener] provided to [onComplicationRequest].
+     * Return `null` to indicate that the previous complication data shouldn't be overwritten.
+     *
+     * @see ComplicationProviderService.onComplicationRequest
+     * @see ComplicationProviderService.ComplicationRequestListener.onComplicationData
      */
-    abstract suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager)
+    abstract suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData?
 
     override fun onDestroy() {
         scope.cancel()

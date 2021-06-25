@@ -15,35 +15,41 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
-import android.support.wearable.complications.ComplicationData
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 import androidx.datastore.core.DataStore
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationText
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.PlainComplicationText
+import androidx.wear.complications.data.SmallImage
+import androidx.wear.complications.data.SmallImageComplicationData
+import androidx.wear.complications.data.SmallImageType
 
 /**
- * A complication provider that supports only [ComplicationData.TYPE_SMALL_IMAGE] and cycles
+ * A complication provider that supports only [ComplicationType.SMALL_IMAGE] and cycles
  * between the different image styles on tap.
  *
  * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationUpdate].
+ * [onComplicationRequest].
  * See [SuspendingComplicationProviderService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * [ComplicationProviderService] and override [onComplicationRequest] directly.
  * (see [NoDataProviderService] for an example)
  */
 class SmallImageProviderService : SuspendingComplicationProviderService() {
-    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
-        if (type != ComplicationData.TYPE_SMALL_IMAGE) {
-            manager.noUpdateRequired(complicationId)
-            return
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        if (request.complicationType != ComplicationType.SMALL_IMAGE) {
+            return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complicationId = complicationId
+            complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
@@ -52,28 +58,61 @@ class SmallImageProviderService : SuspendingComplicationProviderService() {
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
-        val data = ComplicationData.Builder(type)
-            .setTapAction(complicationTogglePendingIntent)
-            .apply {
-                when (state.mod(2)) {
-                    0 -> {
-                        // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
-                        setSmallImage(Icon.createWithResource(this@SmallImageProviderService, R.drawable.aquarium))
-                    }
-                    1 -> {
-                        // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
-                        // space given to it.
-                        setSmallImage(
-                            Icon.createWithResource(
-                                this@SmallImageProviderService,
-                                R.drawable.ic_launcher
-                            )
-                        )
-                        setImageStyle(ComplicationData.IMAGE_STYLE_ICON)
-                    }
-                }
+        val case = Case.values()[state.mod(Case.values().size)]
+        return getComplicationData(
+            tapAction = complicationTogglePendingIntent,
+            case = case
+        )
+    }
+
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        getComplicationData(
+            tapAction = null,
+            case = Case.PHOTO
+        )
+
+    private fun getComplicationData(
+        tapAction: PendingIntent?,
+        case: Case
+    ): ComplicationData {
+        val smallImage: SmallImage
+        val contentDescription: ComplicationText
+
+        when (case) {
+            Case.PHOTO -> {
+                // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
+                smallImage = SmallImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.aquarium),
+                    type = SmallImageType.PHOTO
+                ).build()
+
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.small_image_photo_content_description)
+                ).build()
             }
+            Case.ICON -> {
+                // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
+                // space given to it.
+                smallImage = SmallImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.ic_launcher),
+                    type = SmallImageType.ICON
+                ).build()
+
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.small_image_icon_content_description)
+                ).build()
+            }
+        }
+
+        return SmallImageComplicationData.Builder(
+            smallImage = smallImage,
+            contentDescription = contentDescription
+        )
+            .setTapAction(tapAction)
             .build()
-        manager.updateComplicationData(complicationId, data)
+    }
+
+    private enum class Case {
+        PHOTO, ICON
     }
 }
