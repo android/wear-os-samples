@@ -59,7 +59,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     private var soundRecorder: SoundRecorder? = null
 
-    private var appState: AppState = AppState.AtSteadyState(SteadyState.READY)
+    private var appState: AppState = AppState.READY
 
     private var ongoingWork: Job = Job().apply { complete() }
 
@@ -79,7 +79,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     /**
      * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
      */
-    enum class SteadyState {
+    enum class AppState {
         READY,
         PLAYING_VOICE,
         PLAYING_MUSIC,
@@ -87,30 +87,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     }
 
     /**
-     * The overall state of the application.
-     *
-     * This either consists of being at a steady state, or transitioning to one of the steady states.
-     */
-    sealed class AppState {
-
-        /**
-         * The app is not transitioning, and is at the given [SteadyState].
-         */
-        data class AtSteadyState(
-            val steadyState: SteadyState,
-        ) : AppState()
-
-        /**
-         * The app is transitioning to the given [SteadyState].
-         */
-        data class TransitioningTo(
-            val steadyState: SteadyState,
-        ) : AppState()
-    }
-
-    /**
      * One of the actions the app interprets. This can either be direct user actions (clicking one of the buttons),
-     * or programmatic actions (finishing playback or recording, or transition finishing).
+     * or programmatic actions (finishing playback or recording).
      */
     sealed class AppAction {
         object MicClicked : AppAction()
@@ -119,7 +97,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         object RecordingFinished : AppAction()
         object PlayRecordingFinished : AppAction()
         object PlayMusicFinished : AppAction()
-        data class TransitionedTo(val steadyState: SteadyState) : AppAction()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,56 +117,36 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         val oldState = appState
         val newState = when (action) {
             AppAction.MicClicked -> when (oldState) {
-                is AppState.AtSteadyState -> when (oldState.steadyState) {
-                    SteadyState.READY,
-                    SteadyState.PLAYING_VOICE,
-                    SteadyState.PLAYING_MUSIC -> AppState.TransitioningTo(SteadyState.RECORDING)
-                    SteadyState.RECORDING -> AppState.TransitioningTo(SteadyState.READY)
-                }
-                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+                AppState.READY,
+                AppState.PLAYING_VOICE,
+                AppState.PLAYING_MUSIC -> AppState.RECORDING
+                AppState.RECORDING -> AppState.READY
             }
             AppAction.MusicClicked -> when (oldState) {
-                is AppState.AtSteadyState -> when (oldState.steadyState) {
-                    SteadyState.READY,
-                    SteadyState.PLAYING_VOICE,
-                    SteadyState.RECORDING -> AppState.TransitioningTo(SteadyState.PLAYING_MUSIC)
-                    SteadyState.PLAYING_MUSIC -> AppState.TransitioningTo(SteadyState.READY)
-                }
-                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+                AppState.READY,
+                AppState.PLAYING_VOICE,
+                AppState.RECORDING -> AppState.PLAYING_MUSIC
+                AppState.PLAYING_MUSIC -> AppState.READY
             }
             AppAction.PlayClicked -> when (oldState) {
-                is AppState.AtSteadyState -> when (oldState.steadyState) {
-                    SteadyState.READY,
-                    SteadyState.RECORDING,
-                    SteadyState.PLAYING_MUSIC -> AppState.TransitioningTo(SteadyState.PLAYING_VOICE)
-                    SteadyState.PLAYING_VOICE -> AppState.TransitioningTo(SteadyState.READY)
-                }
-                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
+                AppState.READY,
+                AppState.PLAYING_MUSIC,
+                AppState.RECORDING -> AppState.PLAYING_VOICE
+                AppState.PLAYING_VOICE -> AppState.READY
             }
-            is AppAction.TransitionedTo -> AppState.AtSteadyState(action.steadyState)
             AppAction.PlayMusicFinished,
             AppAction.PlayRecordingFinished,
-            AppAction.RecordingFinished -> when (oldState) {
-                is AppState.AtSteadyState -> when (oldState.steadyState) {
-                    SteadyState.READY -> AppState.AtSteadyState(SteadyState.READY)
-                    SteadyState.RECORDING,
-                    SteadyState.PLAYING_MUSIC,
-                    SteadyState.PLAYING_VOICE -> AppState.TransitioningTo(SteadyState.READY)
-                }
-                is AppState.TransitioningTo -> AppState.TransitioningTo(SteadyState.READY)
-            }
+            AppAction.RecordingFinished -> AppState.READY
         }
 
         onNewState(newState)
     }
 
     private fun onNewState(newState: AppState) {
-        val oldState = appState
-
         Log.d(TAG, "New app state is: $newState")
 
         // Short-circuit if we're in the same state
-        if (oldState == newState) {
+        if (appState == newState) {
             return
         }
 
@@ -198,61 +155,58 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         // Clean up any ongoing work (playing, recording, transitioning)
         ongoingWork.cancel()
         ongoingWork = lifecycleScope.launch {
+            // Only reset the progress bar if we are transitioning to recording. This allows for a nicer
+            // transition away from recording
+            if (newState == AppState.RECORDING) {
+                binding.progressBar.progress = 0
+            }
+
+            val motionLayoutState = when (newState) {
+                AppState.READY -> R.id.allMinimized
+                AppState.PLAYING_VOICE -> R.id.playExpanded
+                AppState.PLAYING_MUSIC -> R.id.musicExpanded
+                AppState.RECORDING -> R.id.micExpanded
+            }
+
+            binding.outerCircle.transitionToState(motionLayoutState)
+            binding.outerCircle.awaitState(motionLayoutState)
+
             when (newState) {
-                is AppState.AtSteadyState -> when (newState.steadyState) {
-                    SteadyState.READY -> Unit
-                    SteadyState.PLAYING_VOICE -> {
-                        soundRecorder!!.play()
+                AppState.READY -> Unit
+                AppState.PLAYING_VOICE -> {
+                    soundRecorder!!.play()
 
-                        // Don't call onAction directly here or below, since we are in the job that ongoingWork is
-                        // tracking.
-                        // If we call onAction directly (or with Dispatchers.Main.immediate), we will cancel ourselves,
-                        // causing strange effects.
-                        lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayRecordingFinished) }
-                    }
-                    SteadyState.PLAYING_MUSIC -> {
-                        playMusic()
-
-                        lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayMusicFinished) }
-                    }
-                    SteadyState.RECORDING -> {
-                        coroutineScope {
-                            val recordingJob = launch { soundRecorder!!.record() }
-
-                            val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
-                            val startTime = System.currentTimeMillis()
-
-                            repeat(NUMBER_TICKS) { index ->
-                                binding.progressBar.progress = (100f * index / NUMBER_TICKS).toInt()
-                                delay(startTime + delayPerTickMs * (index + 1) - System.currentTimeMillis())
-                            }
-                            // Update the progress bar to be complete
-                            binding.progressBar.progress = 100
-
-                            recordingJob.cancel()
-                        }
-
-                        lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.RecordingFinished) }
-                    }
+                    // Don't call onAction directly here or below, since we are in the job that ongoingWork is
+                    // tracking.
+                    // If we call onAction directly (or with Dispatchers.Main.immediate), we will cancel ourselves,
+                    // causing strange effects.
+                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayRecordingFinished) }
                 }
-                is AppState.TransitioningTo -> {
-                    // Only reset the progress bar if we are transitioning to recording. This allows for a nicer
-                    // transition away from recording
-                    if (newState.steadyState == SteadyState.RECORDING) {
-                        binding.progressBar.progress = 0
+                AppState.PLAYING_MUSIC -> {
+                    playMusic()
+
+                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayMusicFinished) }
+                }
+                AppState.RECORDING -> {
+                    coroutineScope {
+                        // Kick off a parallel job to record
+                        val recordingJob = launch { soundRecorder!!.record() }
+
+                        val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
+                        val startTime = System.currentTimeMillis()
+
+                        repeat(NUMBER_TICKS) { index ->
+                            binding.progressBar.progress = (100f * index / NUMBER_TICKS).toInt()
+                            delay(startTime + delayPerTickMs * (index + 1) - System.currentTimeMillis())
+                        }
+                        // Update the progress bar to be complete
+                        binding.progressBar.progress = 100
+
+                        // Stop recording
+                        recordingJob.cancel()
                     }
 
-                    val motionLayoutState = when (newState.steadyState) {
-                        SteadyState.READY -> R.id.allMinimized
-                        SteadyState.PLAYING_VOICE -> R.id.playExpanded
-                        SteadyState.PLAYING_MUSIC -> R.id.musicExpanded
-                        SteadyState.RECORDING -> R.id.micExpanded
-                    }
-
-                    binding.outerCircle.transitionToState(motionLayoutState)
-                    binding.outerCircle.awaitState(motionLayoutState)
-
-                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.TransitionedTo(newState.steadyState)) }
+                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.RecordingFinished) }
                 }
             }
         }
