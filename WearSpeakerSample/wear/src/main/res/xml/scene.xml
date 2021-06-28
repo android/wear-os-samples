@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2021 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Transition
         android:id="@+id/toMicExpanded"
-        app:constraintSetStart="@id/allMinimized"
-        app:constraintSetEnd="@id/micExpanded" />
+        app:constraintSetEnd="@id/micExpanded"
+        app:constraintSetStart="@id/allMinimized" />
 
     <Transition
         android:id="@+id/toPlayExpanded"
-        app:constraintSetStart="@id/allMinimized"
-        app:constraintSetEnd="@id/playExpanded" />
+        app:constraintSetEnd="@id/playExpanded"
+        app:constraintSetStart="@id/allMinimized" />
 
     <Transition
         android:id="@+id/toMusicExpanded"
-        app:constraintSetStart="@id/allMinimized"
-        app:constraintSetEnd="@id/musicExpanded" />
+        app:constraintSetEnd="@id/musicExpanded"
+        app:constraintSetStart="@id/allMinimized" />
 
     <ConstraintSet android:id="@+id/allMinimized">
 
@@ -52,10 +67,8 @@
                 app:layout_constraintCircleRadius="32dp" />
         </Constraint>
 
-        <Constraint
-            android:id="@id/progress_bar_container">
-            <PropertySet
-                android:visibility="invisible" />
+        <Constraint android:id="@id/progress_bar_container">
+            <PropertySet android:visibility="invisible" />
         </Constraint>
 
     </ConstraintSet>
@@ -96,10 +109,8 @@
                 app:layout_constraintCircleRadius="32dp" />
         </Constraint>
 
-        <Constraint
-            android:id="@id/progress_bar_container">
-            <PropertySet
-                android:visibility="visible" />
+        <Constraint android:id="@id/progress_bar_container">
+            <PropertySet android:visibility="visible" />
         </Constraint>
 
     </ConstraintSet>
@@ -129,8 +140,7 @@
 
         </Constraint>
 
-        <Constraint
-            android:id="@+id/music">
+        <Constraint android:id="@+id/music">
             <Layout
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -138,14 +148,11 @@
                 app:layout_constraintCircleAngle="120"
                 app:layout_constraintCircleRadius="32dp" />
 
-            <PropertySet
-                android:visibility="invisible" />
+            <PropertySet android:visibility="invisible" />
         </Constraint>
 
-        <Constraint
-            android:id="@id/progress_bar_container">
-            <PropertySet
-                android:visibility="invisible" />
+        <Constraint android:id="@id/progress_bar_container">
+            <PropertySet android:visibility="invisible" />
         </Constraint>
 
     </ConstraintSet>
@@ -186,10 +193,8 @@
                 app:layout_constraintCircleRadius="0dp" />
         </Constraint>
 
-        <Constraint
-            android:id="@id/progress_bar_container">
-            <PropertySet
-                android:visibility="invisible" />
+        <Constraint android:id="@id/progress_bar_container">
+            <PropertySet android:visibility="invisible" />
         </Constraint>
 
     </ConstraintSet>

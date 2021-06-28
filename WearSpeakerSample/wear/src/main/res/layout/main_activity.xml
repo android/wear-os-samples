@@ -40,7 +40,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/record"
             android:padding="8dp"
-            android:src="@drawable/ic_mic_32dp"
+            android:src="@drawable/ic_mic"
             app:layout_constraintCircle="@id/inner_circle"
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="32dp" />
@@ -51,7 +51,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/play_recording"
             android:padding="8dp"
-            android:src="@drawable/ic_play_arrow_32dp"
+            android:src="@drawable/ic_play_arrow"
             app:layout_constraintCircle="@id/inner_circle"
             app:layout_constraintCircleAngle="240"
             app:layout_constraintCircleRadius="32dp" />
@@ -62,7 +62,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/play_music"
             android:padding="8dp"
-            android:src="@drawable/ic_audiotrack_32dp"
+            android:src="@drawable/ic_audiotrack"
             app:layout_constraintCircle="@id/inner_circle"
             app:layout_constraintCircleAngle="120"
             app:layout_constraintCircleRadius="32dp" />
