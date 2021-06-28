@@ -23,9 +23,9 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -62,6 +62,19 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private var appState: AppState = AppState.AtSteadyState(SteadyState.READY)
 
     private var ongoingWork: Job = Job().apply { complete() }
+
+    private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
+        if (isGranted) {
+            start()
+        } else {
+            // Permission has been denied before. At this point we should show a dialog to
+            // user and explain why this permission is needed and direct them to go to the
+            // Permissions settings for the app in the System settings. For this sample, we
+            // simply exit to get to the important part.
+            Toast.makeText(this, R.string.exiting_for_permissions, Toast.LENGTH_LONG).show()
+            finish()
+        }
+    }
 
     /**
      * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
@@ -270,31 +283,13 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * prompt the user to grant it, otherwise it shuts down the app.
      */
     private fun checkPermissions() {
-        val recordAudioPermissionGranted = (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            == PackageManager.PERMISSION_GRANTED)
+        val recordAudioPermissionGranted =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
+                PackageManager.PERMISSION_GRANTED
         if (recordAudioPermissionGranted) {
             start()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO),
-                                              PERMISSIONS_REQUEST_CODE)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                start()
-            } else {
-                // Permission has been denied before. At this point we should show a dialog to
-                // user and explain why this permission is needed and direct them to go to the
-                // Permissions settings for the app in the System settings. For this sample, we
-                // simply exit to get to the important part.
-                Toast.makeText(this, R.string.exiting_for_permissions, Toast.LENGTH_LONG).show()
-                finish()
-            }
+            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
 
@@ -376,9 +371,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
     companion object {
         private const val TAG = "MainActivity"
-        private const val PERMISSIONS_REQUEST_CODE = 100
         private val MAX_RECORDING_DURATION = Duration.ofSeconds(10)
-        private val NUMBER_TICKS = 10
+        private const val NUMBER_TICKS = 10
         private const val VOICE_FILE_NAME = "audiorecord.pcm"
     }
 }
