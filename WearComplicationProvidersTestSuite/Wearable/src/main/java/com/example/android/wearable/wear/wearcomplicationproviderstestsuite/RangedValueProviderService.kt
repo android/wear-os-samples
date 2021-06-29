@@ -19,12 +19,23 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
+import android.support.wearable.complications.ComplicationProviderService
 import android.support.wearable.complications.ComplicationText
+import androidx.datastore.core.DataStore
 import kotlin.random.Random
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_RANGED_VALUE] and cycles
  * through the possible configurations on tap. The value is randomised on each update.
+ *
+ * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
+ * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
+ * [onComplicationUpdate].
+ * See [SuspendingComplicationProviderService] for the implementation details.
+ *
+ * If you don't perform any suspending operations to update your complications, you can subclass
+ * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * (see [NoDataProviderService] for an example)
  */
 class RangedValueProviderService : SuspendingComplicationProviderService() {
     override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
@@ -41,6 +52,7 @@ class RangedValueProviderService : SuspendingComplicationProviderService() {
                 context = this,
                 args = args
             )
+        // Suspending function to retrieve the complication's state
         val state = args.getState(this)
         val caseValue = state.mod(4)
         val minValue = MIN_VALUES[caseValue]

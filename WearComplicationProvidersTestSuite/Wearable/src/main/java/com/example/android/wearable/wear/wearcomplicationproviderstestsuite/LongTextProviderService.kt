@@ -19,11 +19,22 @@ import android.content.ComponentName
 import android.graphics.drawable.Icon
 import android.support.wearable.complications.ComplicationData
 import android.support.wearable.complications.ComplicationManager
+import android.support.wearable.complications.ComplicationProviderService
 import android.support.wearable.complications.ComplicationText
+import androidx.datastore.core.DataStore
 
 /**
  * A complication provider that supports only [ComplicationData.TYPE_LONG_TEXT] and cycles
  * through the possible configurations on tap.
+ *
+ * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
+ * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
+ * [onComplicationUpdate].
+ * See [SuspendingComplicationProviderService] for the implementation details.
+ *
+ * If you don't perform any suspending operations to update your complications, you can subclass
+ * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * (see [NoDataProviderService] for an example)
  */
 class LongTextProviderService : SuspendingComplicationProviderService() {
     override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
@@ -40,6 +51,7 @@ class LongTextProviderService : SuspendingComplicationProviderService() {
                 context = this,
                 args = args
             )
+        // Suspending function to retrieve the complication's state
         val state = args.getState(this)
         val data = ComplicationData.Builder(type)
             .setTapAction(complicationTogglePendingIntent)

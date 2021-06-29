@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 
 /**
  * A simple subclass of [ComplicationProviderService] that controls a [CoroutineScope] so that
- * [onComplicationUpdateImpl] can be suspending.
+ * [onComplicationUpdateImpl] can be suspending. This allows the complication update to be asynchronous, so that
+ * suspending functions can be called to drive the update.
  */
 abstract class SuspendingComplicationProviderService : ComplicationProviderService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
