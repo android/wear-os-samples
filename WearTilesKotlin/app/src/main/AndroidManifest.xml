@@ -29,7 +29,7 @@
 
         <service
             android:name="com.example.wear.tiles.fitness.FitnessTileService"
-            android:label="@string/fitness_tile_label"
+            android:label="@string/tile_fitness_label"
             android:description="@string/tile_description"
             android:icon="@drawable/ic_run"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
@@ -44,7 +44,7 @@
         </service>
         <service
             android:name="com.example.wear.tiles.media.PlayNextSongTileService"
-            android:label="@string/media_tile_label"
+            android:label="@string/tile_media_label"
             android:description="@string/tile_description"
             android:icon="@drawable/ic_play"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
@@ -58,7 +58,7 @@
         </service>
         <service
             android:name="com.example.wear.tiles.messaging.MessagingTileService"
-            android:label="@string/messaging_tile_label"
+            android:label="@string/tile_messaging_label"
             android:description="@string/tile_description"
             android:icon="@drawable/ic_person"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">

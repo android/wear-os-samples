@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 data class Contact(
     val id: Long,
     val initials: String,
+    val name: String,
     @DrawableRes val avatarRes: Int?
 )
 
@@ -30,12 +31,42 @@ object MessagingRepo {
     suspend fun getFavoriteContacts(): List<Contact> {
         delay(200)
         return listOf(
-            Contact(0, "JV", null),
-            Contact(1, "AC", R.drawable.ali),
-            Contact(2, "FS", null),
-            Contact(3, "TB", R.drawable.taylor),
-            Contact(3, "JG", null),
-            Contact(3, "AO", null),
+            Contact(
+                id = 0,
+                initials = "JV",
+                name = "Jyoti V",
+                avatarRes = null
+            ),
+            Contact(
+                id = 1,
+                initials = "AC",
+                name = "Ali C",
+                avatarRes = R.drawable.ali
+            ),
+            Contact(
+                id = 2,
+                initials = "FS",
+                name = "Felipe S",
+                avatarRes = null
+            ),
+            Contact(
+                id = 3,
+                initials = "TB",
+                name = "Taylor B",
+                avatarRes = R.drawable.taylor
+            ),
+            Contact(
+                id = 4,
+                initials = "JG",
+                name = "Judith G",
+                avatarRes = null
+            ),
+            Contact(
+                id = 5,
+                initials = "AO",
+                name = "Andrew O",
+                avatarRes = null
+            ),
         )
     }
 }

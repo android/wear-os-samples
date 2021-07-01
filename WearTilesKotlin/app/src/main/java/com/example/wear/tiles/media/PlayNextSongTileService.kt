@@ -16,9 +16,9 @@
 package com.example.wear.tiles.media
 
 import androidx.core.content.ContextCompat
+import androidx.wear.tiles.ActionBuilders
 import androidx.wear.tiles.TileProviderService
 import androidx.wear.tiles.ColorBuilders.argb
-import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.DimensionBuilders.dp
 import androidx.wear.tiles.LayoutElementBuilders
@@ -28,6 +28,9 @@ import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
 import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.ModifiersBuilders.Clickable
+import androidx.wear.tiles.ModifiersBuilders.Modifiers
+import androidx.wear.tiles.ModifiersBuilders.Semantics
 import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
@@ -97,7 +100,8 @@ class PlayNextSongTileService : TileProviderService() {
         )
         .addContent(Spacer.builder().setHeight(SPACING_AVATAR_ARTIST))
         .addContent(
-            Text.builder().setText(getString(R.string.tile_media_artist_name))
+            Text.builder()
+                .setText(getString(R.string.tile_media_artist_name))
                 .setFontStyle(
                     FontStyles.title3(deviceParameters).setColor(
                         argb(ContextCompat.getColor(baseContext, R.color.primary))
@@ -115,7 +119,11 @@ class PlayNextSongTileService : TileProviderService() {
                     IconButton(
                         context = this@PlayNextSongTileService,
                         resourceId = ID_IC_LIBRARY_MUSIC,
-                        backgroundColor = R.color.primaryDark
+                        backgroundColor = R.color.primaryDark,
+                        contentDescription = getString(R.string.tile_media_library),
+                        clickable = Clickable.builder()
+                            .setOnClick(ActionBuilders.LoadAction.builder())
+                            .build()
                     )
                 )
                 .addContent(Spacer.builder().setWidth(SPACING_LIBRARY_PLAY))
@@ -123,8 +131,25 @@ class PlayNextSongTileService : TileProviderService() {
                     IconButton(
                         context = this@PlayNextSongTileService,
                         resourceId = ID_IC_PLAY,
-                        backgroundColor = R.color.primaryDark
+                        backgroundColor = R.color.primaryDark,
+                        contentDescription = getString(R.string.tile_media_play),
+                        clickable = Clickable.builder()
+                            .setOnClick(ActionBuilders.LoadAction.builder())
+                            .build()
                     )
+                )
+        )
+        .setModifiers(
+            Modifiers.builder()
+                .setSemantics(
+                    Semantics.builder()
+                        .setContentDescription(
+                            getString(
+                                R.string.tile_media_content_description,
+                                getString(R.string.tile_media_song_name),
+                                getString(R.string.tile_media_artist_name)
+                            )
+                        )
                 )
         )
 

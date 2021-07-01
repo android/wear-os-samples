@@ -23,9 +23,9 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.ContextCompat
+import androidx.wear.tiles.ActionBuilders
 import androidx.wear.tiles.TileProviderService
 import androidx.wear.tiles.ColorBuilders.argb
-import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.DimensionBuilders.dp
 import androidx.wear.tiles.LayoutElementBuilders.Box
@@ -37,11 +37,12 @@ import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
-import androidx.wear.tiles.LayoutElementBuilders.TEXT_ALIGN_CENTER
 import androidx.wear.tiles.LayoutElementBuilders.Text
 import androidx.wear.tiles.ModifiersBuilders.Background
+import androidx.wear.tiles.ModifiersBuilders.Clickable
 import androidx.wear.tiles.ModifiersBuilders.Corner
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
+import androidx.wear.tiles.ModifiersBuilders.Semantics
 import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
 import androidx.wear.tiles.ResourceBuilders.ImageResource
@@ -50,7 +51,6 @@ import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
-import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.RequestBuilders.*
 import com.example.wear.tiles.R
 import com.google.common.util.concurrent.ListenableFuture
@@ -170,7 +170,7 @@ class MessagingTileService : TileProviderService() {
     ): LayoutElement = Column.builder()
         .addContent(
             Text.builder()
-                .setText(resources.getString(R.string.messaging_tile_title))
+                .setText(resources.getString(R.string.tile_messaging_title))
                 .setFontStyle(
                     FontStyles.title3(deviceParameters).setColor(
                         argb(ContextCompat.getColor(baseContext, R.color.primary))
@@ -180,7 +180,7 @@ class MessagingTileService : TileProviderService() {
         .addContent(Spacer.builder().setHeight(SPACING_TITLE_SUBTITLE))
         .addContent(
             Text.builder()
-                .setText(resources.getString(R.string.messaging_tile_subtitle))
+                .setText(resources.getString(R.string.tile_messaging_subtitle))
                 .setFontStyle(
                     FontStyles.caption1(deviceParameters).setColor(
                         argb(ContextCompat.getColor(baseContext, R.color.onSecondary))
@@ -190,39 +190,87 @@ class MessagingTileService : TileProviderService() {
         .addContent(Spacer.builder().setHeight(SPACING_SUBTITLE_CONTACTS))
         .addContent(
             Row.builder()
-                .addContent(contactLayout(contacts[0], deviceParameters))
+                .addContent(
+                    contactLayout(
+                        contact = contacts[0],
+                        deviceParameters = deviceParameters,
+                        clickable = Clickable.builder()
+                            .setOnClick(ActionBuilders.LoadAction.builder())
+                            .build()
+                    )
+                )
                 .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
-                .addContent(contactLayout(contacts[1], deviceParameters))
+                .addContent(
+                    contactLayout(
+                        contact = contacts[1],
+                        deviceParameters = deviceParameters,
+                        clickable = Clickable.builder()
+                            .setOnClick(ActionBuilders.LoadAction.builder())
+                            .build()
+                    )
+                )
                 .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
-                .addContent(contactLayout(contacts[2], deviceParameters))
+                .addContent(
+                    contactLayout(
+                        contact = contacts[2],
+                        deviceParameters = deviceParameters,
+                        clickable = Clickable.builder()
+                            .setOnClick(ActionBuilders.LoadAction.builder())
+                            .build()
+                    )
+                )
         )
         .addContent(
             Row.builder()
-                .addContent(contactLayout(contacts[3], deviceParameters))
+                .addContent(
+                    contactLayout(
+                        contact = contacts[3],
+                        deviceParameters = deviceParameters,
+                        clickable = Clickable.builder()
+                            .setOnClick(ActionBuilders.LoadAction.builder())
+                            .build()
+                    )
+                )
                 .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
                 .addContent(searchLayout())
         )
+        .setModifiers(
+            Modifiers.builder()
+                .setSemantics(
+                    Semantics.builder()
+                        .setContentDescription(getString(R.string.tile_messaging_label))
+                )
+        )
         .build()
 
-    private fun contactLayout(contact: Contact, deviceParameters: DeviceParameters) = Box.builder().apply {
+    private fun contactLayout(
+        contact: Contact,
+        deviceParameters: DeviceParameters,
+        clickable: Clickable
+    ) = Box.builder().apply {
+        val modifiersBuilder = Modifiers.builder()
+            .setClickable(clickable)
+            .setSemantics(
+                Semantics.builder()
+                    .setContentDescription(contact.name)
+            )
+
         if (contact.avatarRes == null) {
             // Create an avatar based on the contact's initials
             setWidth(dp(CIRCLE_SIZE))
             setHeight(dp(CIRCLE_SIZE))
             setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
-            setModifiers(
-                Modifiers.builder()
-                    .setBackground(
-                        Background.builder()
-                            .setColor(
-                                argb(ContextCompat.getColor(baseContext, R.color.secondary))
-                            )
-                            .setCorner(
-                                Corner.builder()
-                                    .setRadius(dp(CIRCLE_SIZE / 2))
-                            )
-                    )
-            )
+            modifiersBuilder
+                .setBackground(
+                    Background.builder()
+                        .setColor(
+                            argb(ContextCompat.getColor(baseContext, R.color.secondary))
+                        )
+                        .setCorner(
+                            Corner.builder()
+                                .setRadius(dp(CIRCLE_SIZE / 2))
+                        )
+                )
             addContent(
                 Text.builder()
                     .setText(contact.initials)
@@ -241,6 +289,8 @@ class MessagingTileService : TileProviderService() {
                     .setHeight(dp(CIRCLE_SIZE))
             )
         }
+
+        setModifiers(modifiersBuilder)
     }
 
     private fun searchLayout() = Box.builder()
@@ -257,6 +307,11 @@ class MessagingTileService : TileProviderService() {
                             Corner.builder().setRadius(dp(CIRCLE_SIZE / 2))
                         )
                 )
+                .setSemantics(
+                    Semantics.builder()
+                        .setContentDescription(getString(R.string.tile_messaging_search))
+                )
+                .setClickable(Clickable.builder().setOnClick(ActionBuilders.LoadAction.builder()))
         )
         .addContent(
             Image.builder()
