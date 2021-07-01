@@ -43,7 +43,9 @@
             android:src="@drawable/ic_mic"
             app:layout_constraintCircle="@id/inner_circle"
             app:layout_constraintCircleAngle="0"
-            app:layout_constraintCircleRadius="32dp" />
+            app:layout_constraintCircleRadius="32dp"
+            app:tint="@color/icon_button_tint"
+            app:tintMode="src_in" />
 
         <ImageView
             android:id="@+id/play"
@@ -54,7 +56,9 @@
             android:src="@drawable/ic_play_arrow"
             app:layout_constraintCircle="@id/inner_circle"
             app:layout_constraintCircleAngle="240"
-            app:layout_constraintCircleRadius="32dp" />
+            app:layout_constraintCircleRadius="32dp"
+            app:tint="@color/icon_button_tint"
+            app:tintMode="src_in" />
 
         <ImageView
             android:id="@+id/music"
@@ -65,7 +69,9 @@
             android:src="@drawable/ic_audiotrack"
             app:layout_constraintCircle="@id/inner_circle"
             app:layout_constraintCircleAngle="120"
-            app:layout_constraintCircleRadius="32dp" />
+            app:layout_constraintCircleRadius="32dp"
+            app:tint="@color/icon_button_tint"
+            app:tintMode="src_in" />
 
         <FrameLayout
             android:id="@+id/progress_bar_container"

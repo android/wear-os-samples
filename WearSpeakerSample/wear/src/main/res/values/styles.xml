@@ -15,15 +15,7 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">Wear Speaker Sample</string>
-    <string name="rationale_for_microphone_permission">Recording requires permission to access the microphone</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="no_speaker_supported">No speaker available</string>
-    <string name="record">Record</string>
-    <string name="play_recording">Play Recording</string>
-    <string name="play_music">Play Music</string>
-    <string name="stop_recording">Stop Recording</string>
-    <string name="stop_playing_recording">Stop Playing Recording</string>
-    <string name="stop_playing_music">Stop Playing Music</string>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/black</item>
+    </style>
 </resources>
