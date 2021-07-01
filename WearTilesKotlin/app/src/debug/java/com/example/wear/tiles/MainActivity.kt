@@ -38,14 +38,22 @@ class MainActivity : ComponentActivity() {
     // Change into 1 or 2 to render another sample tile.
     private val tileToShow = sampleTiles[0]
 
+    private lateinit var tileUiClient: TileUiClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val rootLayout = findViewById<FrameLayout>(R.id.tile_container)
-        TileUiClient(
+        tileUiClient = TileUiClient(
             context = this,
             component = ComponentName(this, tileToShow),
             parentView = rootLayout
-        ).connect()
+        )
+        tileUiClient.connect()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        tileUiClient.close()
     }
 }
