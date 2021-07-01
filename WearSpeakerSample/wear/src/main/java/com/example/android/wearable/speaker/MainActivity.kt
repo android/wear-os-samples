@@ -24,13 +24,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.wear.ambient.AmbientModeSupport
 import com.example.android.wearable.speaker.databinding.MainActivityBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -47,13 +45,7 @@ import kotlin.coroutines.resume
  * to 10 seconds), a Play icon (if clicked, it will playback the recorded audio file) and a music
  * note icon (if clicked, it plays an MP3 file that is included in the app).
  */
-class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
-
-    /**
-     * Ambient mode controller attached to this display. Used by Activity to see if it is in
-     * ambient mode.
-     */
-    private lateinit var ambientController: AmbientModeSupport.AmbientController
+class MainActivity : FragmentActivity() {
 
     private lateinit var binding: MainActivityBinding
 
@@ -104,9 +96,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Enables Ambient mode.
-        ambientController = AmbientModeSupport.attach(this)
 
         binding.mic.setOnClickListener { onAction(AppAction.MicClicked) }
         binding.play.setOnClickListener { onAction(AppAction.PlayClicked) }
@@ -285,42 +274,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         return getSystemService<AudioManager>()!!
             .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
             .any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
-    }
-
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = MyAmbientCallback()
-
-    private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
-        /** Prepares the UI for ambient mode.  */
-        override fun onEnterAmbient(ambientDetails: Bundle) {
-            super.onEnterAmbient(ambientDetails)
-            Log.d(TAG, "onEnterAmbient() $ambientDetails")
-
-            // Changes views to grey scale.
-            binding.outerCircle.setBackgroundColor(
-                ContextCompat.getColor(this@MainActivity, R.color.light_grey)
-            )
-            binding.innerCircle.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.grey_circle)
-            binding.progressBar.progressTintList =
-                AppCompatResources.getColorStateList(this@MainActivity, R.color.white)
-            binding.progressBar.progressBackgroundTintList =
-                AppCompatResources.getColorStateList(this@MainActivity, R.color.black)
-        }
-
-        /** Restores the UI to active (non-ambient) mode.  */
-        override fun onExitAmbient() {
-            super.onExitAmbient()
-            Log.d(TAG, "onExitAmbient()")
-
-            // Changes views to color.
-            binding.outerCircle.setBackgroundColor(
-                ContextCompat.getColor(this@MainActivity, R.color.background_color)
-            )
-            binding.innerCircle.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.color_circle)
-            binding.progressBar.progressTintList =
-                AppCompatResources.getColorStateList(this@MainActivity, R.color.progressbar_tint)
-            binding.progressBar.progressBackgroundTintList =
-                AppCompatResources.getColorStateList(this@MainActivity, R.color.progressbar_background_tint)
-        }
     }
 
     companion object {

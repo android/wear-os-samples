@@ -16,7 +16,6 @@
 -->
 <resources>
     <color name="small_icons_color">#FFF3E0</color>
-    <color name="large_icons_color">#FFF3E0</color>
     <color name="background_color">#FF9100</color>
     <color name="circle_color">#E65100</color>
     <color name="progressbar_tint">#FFD180</color>
