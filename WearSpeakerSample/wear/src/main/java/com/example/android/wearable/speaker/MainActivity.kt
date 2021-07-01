@@ -16,24 +16,28 @@
 package com.example.android.wearable.speaker
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.media.AudioDeviceInfo
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.activity.viewModels
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
-import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.android.wearable.speaker.MainViewModel.AppAction
+import com.example.android.wearable.speaker.MainViewModel.AppState
 import com.example.android.wearable.speaker.databinding.MainActivityBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.time.Duration
@@ -45,50 +49,19 @@ import kotlin.coroutines.resume
  * to 10 seconds), a Play icon (if clicked, it will playback the recorded audio file) and a music
  * note icon (if clicked, it plays an MP3 file that is included in the app).
  */
-class MainActivity : FragmentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private val viewModel by viewModels<MainViewModel>()
 
     private lateinit var binding: MainActivityBinding
 
     private var soundRecorder: SoundRecorder? = null
 
-    private var appState: AppState = AppState.READY
-
     private var ongoingWork: Job = Job().apply { complete() }
 
-    private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
-        if (isGranted) {
-            start()
-        } else {
-            // Permission has been denied before. At this point we should show a dialog to
-            // user and explain why this permission is needed and direct them to go to the
-            // Permissions settings for the app in the System settings. For this sample, we
-            // simply exit to get to the important part.
-            Toast.makeText(this, R.string.exiting_for_permissions, Toast.LENGTH_LONG).show()
-            finish()
-        }
-    }
-
-    /**
-     * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
-     */
-    enum class AppState {
-        READY,
-        PLAYING_VOICE,
-        PLAYING_MUSIC,
-        RECORDING,
-    }
-
-    /**
-     * One of the actions the app interprets. This can either be direct user actions (clicking one of the buttons),
-     * or programmatic actions (finishing playback or recording).
-     */
-    sealed class AppAction {
-        object MicClicked : AppAction()
-        object PlayClicked : AppAction()
-        object MusicClicked : AppAction()
-        object RecordingFinished : AppAction()
-        object PlayRecordingFinished : AppAction()
-        object PlayMusicFinished : AppAction()
+    private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) {
+        // We ignore the direct result here, since we're going to check anyway.
+        viewModel.onAction(AppAction.PermissionResultReturned)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,106 +70,160 @@ class MainActivity : FragmentActivity() {
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mic.setOnClickListener { onAction(AppAction.MicClicked) }
-        binding.play.setOnClickListener { onAction(AppAction.PlayClicked) }
-        binding.music.setOnClickListener { onAction(AppAction.MusicClicked) }
-    }
-
-    private fun onAction(action: AppAction) {
-        val oldState = appState
-        val newState = when (action) {
-            AppAction.MicClicked -> when (oldState) {
-                AppState.READY,
-                AppState.PLAYING_VOICE,
-                AppState.PLAYING_MUSIC -> AppState.RECORDING
-                AppState.RECORDING -> AppState.READY
-            }
-            AppAction.MusicClicked -> when (oldState) {
-                AppState.READY,
-                AppState.PLAYING_VOICE,
-                AppState.RECORDING -> AppState.PLAYING_MUSIC
-                AppState.PLAYING_MUSIC -> AppState.READY
-            }
-            AppAction.PlayClicked -> when (oldState) {
-                AppState.READY,
-                AppState.PLAYING_MUSIC,
-                AppState.RECORDING -> AppState.PLAYING_VOICE
-                AppState.PLAYING_VOICE -> AppState.READY
-            }
-            AppAction.PlayMusicFinished,
-            AppAction.PlayRecordingFinished,
-            AppAction.RecordingFinished -> AppState.READY
+        binding.mic.setOnClickListener {
+            viewModel.onAction(
+                AppAction.MicClicked(shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO))
+            )
         }
+        binding.play.setOnClickListener { viewModel.onAction(AppAction.PlayClicked) }
+        binding.music.setOnClickListener { viewModel.onAction(AppAction.MusicClicked) }
 
-        onNewState(newState)
-    }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.appState
+                    .onEach { appState ->
+                        // Handle each appState by canceling work being done to handle the old state (playing,
+                        // recording, transitioning), and then handling the new state.
+                        // It is important that MainViewModel.appState is a StateFlow, which means that we won't
+                        // restart work if the new state is the same as the old state.
 
-    private fun onNewState(newState: AppState) {
-        Log.d(TAG, "New app state is: $newState")
-
-        // Short-circuit if we're in the same state
-        if (appState == newState) {
-            return
-        }
-
-        appState = newState
-
-        // Clean up any ongoing work (playing, recording, transitioning)
-        ongoingWork.cancel()
-        ongoingWork = lifecycleScope.launch {
-            // Only reset the progress bar if we are transitioning to recording. This allows for a nicer
-            // transition away from recording
-            if (newState == AppState.RECORDING) {
-                binding.progressBar.progress = 0
-            }
-
-            val motionLayoutState = when (newState) {
-                AppState.READY -> R.id.allMinimized
-                AppState.PLAYING_VOICE -> R.id.playExpanded
-                AppState.PLAYING_MUSIC -> R.id.musicExpanded
-                AppState.RECORDING -> R.id.micExpanded
-            }
-
-            binding.outerCircle.transitionToState(motionLayoutState)
-            binding.outerCircle.awaitState(motionLayoutState)
-
-            when (newState) {
-                AppState.READY -> Unit
-                AppState.PLAYING_VOICE -> {
-                    soundRecorder!!.play()
-
-                    // Don't call onAction directly here or below, since we are in the job that ongoingWork is
-                    // tracking.
-                    // If we call onAction directly (or with Dispatchers.Main.immediate), we will cancel ourselves,
-                    // causing strange effects.
-                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayRecordingFinished) }
-                }
-                AppState.PLAYING_MUSIC -> {
-                    playMusic()
-
-                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.PlayMusicFinished) }
-                }
-                AppState.RECORDING -> {
-                    coroutineScope {
-                        // Kick off a parallel job to record
-                        val recordingJob = launch { soundRecorder!!.record() }
-
-                        val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
-                        val startTime = System.currentTimeMillis()
-
-                        repeat(NUMBER_TICKS) { index ->
-                            binding.progressBar.progress = (100f * index / NUMBER_TICKS).toInt()
-                            delay(startTime + delayPerTickMs * (index + 1) - System.currentTimeMillis())
+                        ongoingWork.cancel()
+                        ongoingWork = launch {
+                            onAppState(appState = appState)
                         }
-                        // Update the progress bar to be complete
-                        binding.progressBar.progress = 100
-
-                        // Stop recording
-                        recordingJob.cancel()
                     }
+                    .collect()
+            }
+        }
 
-                    lifecycleScope.launch(Dispatchers.Main) { onAction(AppAction.RecordingFinished) }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.isPermissionDenied
+                    .onEach { isPermissionDenied ->
+                        binding.mic.isEnabled = !isPermissionDenied
+                    }
+                    .collect()
+            }
+        }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.appEvents
+                    .onEach { appEvent ->
+                        when (appEvent) {
+                            MainViewModel.AppEvent.RequestPermission ->
+                                requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            MainViewModel.AppEvent.ShowPermissionRationale -> AlertDialog.Builder(this@MainActivity)
+                                .setMessage(R.string.rationale_for_microphone_permission)
+                                .setPositiveButton(R.string.ok) { _, _ ->
+                                    requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                                }
+                                .setNegativeButton(R.string.cancel) { _, _ -> }
+                                .create()
+                                .show()
+                            MainViewModel.AppEvent.ShowSpeakerNotSupported -> AlertDialog.Builder(this@MainActivity)
+                                .setMessage(R.string.no_speaker_supported)
+                                .setPositiveButton(R.string.ok) { _, _ -> }
+                                .create()
+                                .show()
+                        }
+                    }
+                    .collect()
+            }
+        }
+    }
+
+    /**
+     * The primary update method based on the [AppState].
+     *
+     * This method suspends, as we do suspending work based on the [appState].
+     */
+    private suspend fun onAppState(appState: AppState) {
+        Log.d(TAG, "New app state is: $appState")
+
+        // Only reset the progress bar if we are transitioning to recording. This allows for a nicer
+        // transition away from recording
+        if (appState == AppState.Recording) {
+            binding.progressBar.progress = 0
+        }
+
+        @IdRes val motionLayoutState: Int
+        val transitionInstantly: Boolean
+
+        when (appState) {
+            is AppState.Ready -> {
+                motionLayoutState = R.id.allMinimized
+                transitionInstantly = appState.transitionInstantly
+            }
+            AppState.PlayingVoice -> {
+                motionLayoutState = R.id.playExpanded
+                transitionInstantly = false
+            }
+            AppState.PlayingMusic -> {
+                motionLayoutState = R.id.musicExpanded
+                transitionInstantly = false
+            }
+            AppState.Recording -> {
+                motionLayoutState = R.id.micExpanded
+                transitionInstantly = false
+            }
+        }
+
+        binding.outerCircle.transitionToState(motionLayoutState, transitionInstantly)
+        binding.outerCircle.awaitState(motionLayoutState)
+
+        when (appState) {
+            is AppState.Ready -> {
+                binding.mic.contentDescription = getString(R.string.record)
+                binding.play.contentDescription = getString(R.string.play_recording)
+                binding.music.contentDescription = getString(R.string.play_music)
+            }
+            AppState.PlayingVoice -> {
+                binding.play.contentDescription = getString(R.string.stop_playing_recording)
+
+                soundRecorder!!.play()
+
+                // Don't call onAction directly here or below, since we are in the job that ongoingWork is
+                // tracking.
+                // If we call onAction directly (or with Dispatchers.Main.immediate), we will cancel ourselves,
+                // causing strange effects.
+                lifecycleScope.launch(Dispatchers.Main) { viewModel.onAction(AppAction.PlayRecordingFinished) }
+            }
+            AppState.PlayingMusic -> {
+                binding.music.contentDescription = getString(R.string.stop_playing_music)
+
+                playMusic()
+
+                lifecycleScope.launch(Dispatchers.Main) { viewModel.onAction(AppAction.PlayMusicFinished) }
+            }
+            AppState.Recording -> {
+                // This condition is guaranteed via the logic in the view model
+                check(
+                    ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.RECORD_AUDIO) ==
+                        PackageManager.PERMISSION_GRANTED
+                )
+
+                binding.mic.contentDescription = getString(R.string.stop_recording)
+
+                coroutineScope {
+                    // Kick off a parallel job to record
+                    val recordingJob = launch { soundRecorder!!.record() }
+
+                    val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
+                    val startTime = System.currentTimeMillis()
+
+                    repeat(NUMBER_TICKS) { index ->
+                        binding.progressBar.progress = (100f * index / NUMBER_TICKS).toInt()
+                        delay(startTime + delayPerTickMs * (index + 1) - System.currentTimeMillis())
+                    }
+                    // Update the progress bar to be complete
+                    binding.progressBar.progress = 100
+
+                    // Stop recording
+                    recordingJob.cancel()
                 }
+
+                lifecycleScope.launch(Dispatchers.Main) { viewModel.onAction(AppAction.RecordingFinished) }
             }
         }
     }
@@ -209,7 +236,7 @@ class MainActivity : FragmentActivity() {
 
         try {
             suspendCancellableCoroutine<Unit> { cont ->
-                mediaPlayer.setOnCompletionListener { // we need to transition to the READY/Home state
+                mediaPlayer.setOnCompletionListener {
                     Log.d(TAG, "Music Finished")
                     cont.resume(Unit)
                 }
@@ -221,59 +248,16 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    /**
-     * Checks the permission that this app needs and if it has not been granted, it will
-     * prompt the user to grant it, otherwise it shuts down the app.
-     */
-    private fun checkPermissions() {
-        val recordAudioPermissionGranted =
-            ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
-                PackageManager.PERMISSION_GRANTED
-        if (recordAudioPermissionGranted) {
-            start()
-        } else {
-            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-        }
-    }
-
-    /**
-     * Starts the main flow of the application.
-     */
-    private fun start() {
-        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME)
-    }
-
     override fun onStart() {
         super.onStart()
-        if (speakerIsSupported()) {
-            checkPermissions()
-        } else {
-            binding.outerCircle.setOnClickListener {
-                Toast.makeText(this@MainActivity, R.string.no_speaker_supported,
-                               Toast.LENGTH_SHORT).show()
-            }
-        }
+        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME)
+        viewModel.onAction(AppAction.ViewStarted)
     }
 
     override fun onStop() {
         ongoingWork.cancel()
         soundRecorder = null
-
         super.onStop()
-    }
-
-    /**
-     * Determines if the wear device has a built-in speaker and if it is supported.
-     */
-    private fun speakerIsSupported(): Boolean {
-        // The results from AudioManager.getDevices can't be trusted unless the device
-        // advertises FEATURE_AUDIO_OUTPUT.
-        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)) {
-            return false
-        }
-        return getSystemService<AudioManager>()!!
-            .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
-            .any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
     }
 
     companion object {

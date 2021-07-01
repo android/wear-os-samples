@@ -15,15 +15,15 @@
  */
 package com.example.android.wearable.speaker
 
+import android.Manifest
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioFormat
-import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.AudioTrack
 import android.media.MediaRecorder
 import android.util.Log
-import androidx.core.content.getSystemService
+import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -37,7 +37,6 @@ class SoundRecorder(
     private val context: Context,
     private val outputFileName: String,
 ) {
-    private val audioManager: AudioManager = context.getSystemService()!!
     private var state = State.IDLE
 
     private enum class State {
@@ -63,12 +62,6 @@ class SoundRecorder(
         state = State.PLAYING
 
         val intSize = AudioTrack.getMinBufferSize(RECORDING_RATE, CHANNELS_OUT, FORMAT)
-
-        audioManager.setStreamVolume(
-            AudioManager.STREAM_MUSIC,
-            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-            0 /* flags */,
-        )
 
         val audioTrack = AudioTrack.Builder()
             .setAudioAttributes(
@@ -114,6 +107,7 @@ class SoundRecorder(
      *
      * This method is cancellable, and cancelling it will stop recording.
      */
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
     suspend fun record() {
         if (state != State.IDLE) {
             Log.w(TAG, "Requesting to start recording while state was not IDLE")

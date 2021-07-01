@@ -59,3 +59,24 @@ suspend fun MotionLayout.awaitState(
         removeTransitionListener(listener)
     }
 }
+
+/**
+ * A version of [MotionLayout.transitionToState] that allows forcing an instant transition.
+ *
+ * If [transitionInstantly] is `true`, [MotionLayout.setProgress] will be called to directly update the position.
+ */
+fun MotionLayout.transitionToState(
+    @IdRes id: Int,
+    transitionInstantly: Boolean
+) {
+    transitionToState(id)
+    // If we're in a defined transition, the state we are trying to transition to might be the start state or the end
+    // state
+    if (transitionInstantly) {
+        progress = when {
+            startState == id -> 0f
+            endState == id -> 1f
+            else -> throw AssertionError("Desired state was neither the start state nor the end state!")
+        }
+    }
+}
