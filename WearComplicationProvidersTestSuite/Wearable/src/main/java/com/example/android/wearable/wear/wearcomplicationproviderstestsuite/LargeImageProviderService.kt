@@ -22,7 +22,6 @@ import androidx.datastore.core.DataStore
 import androidx.wear.complications.ComplicationProviderService
 import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationText
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.complications.data.PhotoImageComplicationData
 import androidx.wear.complications.data.PlainComplicationText
@@ -78,32 +77,23 @@ class LargeImageProviderService : SuspendingComplicationProviderService() {
     private fun getComplicationData(
         tapAction: PendingIntent?,
         case: Case
-    ): ComplicationData {
-        val photoImage: Icon
-        val contentDescription: ComplicationText
-
+    ): ComplicationData =
         when (case) {
-            Case.AQUARIUM -> {
-                photoImage = Icon.createWithResource(this, R.drawable.aquarium)
+            Case.AQUARIUM -> PhotoImageComplicationData.Builder(
+                photoImage = Icon.createWithResource(this, R.drawable.aquarium),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.photo_image_aquarium_content_description)
                 ).build()
-            }
-            Case.OUTDOORS -> {
-                photoImage = Icon.createWithResource(this, R.drawable.outdoors)
+            )
+            Case.OUTDOORS -> PhotoImageComplicationData.Builder(
+                photoImage = Icon.createWithResource(this, R.drawable.outdoors),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.photo_image_outdoors_content_description)
                 ).build()
-            }
+            )
         }
-
-        return PhotoImageComplicationData.Builder(
-            photoImage = photoImage,
-            contentDescription = contentDescription
-        )
             .setTapAction(tapAction)
             .build()
-    }
 
     private enum class Case {
         AQUARIUM, OUTDOORS

@@ -75,44 +75,37 @@ class IconProviderService : SuspendingComplicationProviderService() {
     private fun getComplicationData(
         tapAction: PendingIntent?,
         case: Case,
-    ): ComplicationData {
-        val icon: Icon
-        val ambientIcon: Icon?
-        val contentDescription: ComplicationText
-
+    ): ComplicationData =
         when (case) {
-            Case.FACE -> {
-                icon = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
-                ambientIcon = null
+            Case.FACE -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.icon_face_content_description)
                 ).build()
-            }
-            Case.BATTERY -> {
-                icon = Icon.createWithResource(this, R.drawable.ic_battery)
-                ambientIcon = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+            )
+            Case.BATTERY -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_battery)
+                )
+                    .setAmbientImage(Icon.createWithResource(this, R.drawable.ic_battery_burn_protect))
+                    .build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.icon_battery_content_description)
                 ).build()
-            }
-            Case.EVENT -> {
-                icon = Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
-                ambientIcon = null
+            )
+            Case.EVENT -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.icon_event_content_description)
                 ).build()
-            }
+            )
         }
-
-        return MonochromaticImageComplicationData.Builder(
-            monochromaticImage = MonochromaticImage.Builder(icon)
-                .setAmbientImage(ambientIcon)
-                .build(),
-            contentDescription = contentDescription,
-        )
             .setTapAction(tapAction)
             .build()
-    }
 
     private enum class Case {
         FACE, BATTERY, EVENT

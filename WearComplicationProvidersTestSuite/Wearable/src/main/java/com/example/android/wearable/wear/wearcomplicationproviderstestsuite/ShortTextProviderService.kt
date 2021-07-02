@@ -22,7 +22,6 @@ import androidx.datastore.core.DataStore
 import androidx.wear.complications.ComplicationProviderService
 import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationText
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.complications.data.MonochromaticImage
 import androidx.wear.complications.data.PlainComplicationText
@@ -74,74 +73,65 @@ class ShortTextProviderService : SuspendingComplicationProviderService() {
     private fun getComplicationData(
         tapAction: PendingIntent?,
         case: Case
-    ): ComplicationData {
-        val text: ComplicationText
-        val title: ComplicationText?
-        val monochromaticImage: MonochromaticImage?
-        val contentDescription: ComplicationText
-
+    ): ComplicationData =
         when (case) {
-            Case.TEXT_ONLY -> {
+            Case.TEXT_ONLY -> ShortTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_only)
-                ).build()
-                title = null
-                monochromaticImage = null
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_only_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_ICON -> {
+            )
+            Case.TEXT_WITH_ICON -> ShortTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_with_icon)
-                ).build()
-                title = null
-                monochromaticImage = MonochromaticImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
-                ).build()
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_with_icon_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_TITLE -> {
+            )
+                .setMonochromaticImage(
+                    MonochromaticImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                    ).build()
+                )
+            Case.TEXT_WITH_TITLE -> ShortTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_with_title)
-                ).build()
-                title = PlainComplicationText.Builder(
-                    text = getText(R.string.short_title)
-                ).build()
-                monochromaticImage = null
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_with_title_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_ICON_AND_TITLE -> {
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.short_title)
+                    ).build()
+                )
+            Case.TEXT_WITH_ICON_AND_TITLE -> ShortTextComplicationData.Builder(
                 // When short text includes both short title and icon, the watch face should only
                 // display one of those fields.
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_with_both)
-                ).build()
-                title = PlainComplicationText.Builder(
-                    text = getText(R.string.short_title)
-                ).build()
-                monochromaticImage = MonochromaticImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
-                ).build()
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.short_text_with_both_content_description)
                 ).build()
-            }
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.short_title)
+                    ).build()
+                )
+                .setMonochromaticImage(
+                    MonochromaticImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                    ).build()
+                )
         }
-
-        return ShortTextComplicationData.Builder(
-            text = text,
-            contentDescription = contentDescription
-        )
-            .setTitle(title)
-            .setMonochromaticImage(monochromaticImage)
             .setTapAction(tapAction)
             .build()
-    }
 
     private enum class Case {
         TEXT_ONLY,

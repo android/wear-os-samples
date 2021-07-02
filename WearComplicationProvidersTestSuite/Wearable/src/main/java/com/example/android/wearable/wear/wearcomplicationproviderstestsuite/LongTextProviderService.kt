@@ -22,7 +22,6 @@ import androidx.datastore.core.DataStore
 import androidx.wear.complications.ComplicationProviderService
 import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationText
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.complications.data.LongTextComplicationData
 import androidx.wear.complications.data.MonochromaticImage
@@ -76,115 +75,103 @@ class LongTextProviderService : SuspendingComplicationProviderService() {
     private fun getComplicationData(
         tapAction: PendingIntent?,
         case: Case
-    ): ComplicationData {
-        val text: ComplicationText
-        val smallImage: SmallImage?
-        val title: ComplicationText?
-        val monochromaticImage: MonochromaticImage?
-        val contentDescription: ComplicationText
-
+    ): ComplicationData =
         when (case) {
-            Case.TEXT_ONLY -> {
+            Case.TEXT_ONLY -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_only)
-                ).build()
-                smallImage = null
-                title = null
-                monochromaticImage = null
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_only_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_ICON -> {
+            )
+            Case.TEXT_WITH_ICON -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_icon)
-                ).build()
-                smallImage = null
-                title = null
-                monochromaticImage = MonochromaticImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
-                ).build()
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_icon_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_ICON_AND_TITLE -> {
-                // Unlike for short text complications, if the long title field is supplied then it
-                // should always be displayed by the watch face. This means that when a long text
-                // provider supplies both title and icon, it is expected that both are displayed.
+            )
+                .setMonochromaticImage(
+                    MonochromaticImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                    ).build()
+                )
+            // Unlike for short text complications, if the long title field is supplied then it
+            // should always be displayed by the watch face. This means that when a long text
+            // provider supplies both title and icon, it is expected that both are displayed.
+            Case.TEXT_WITH_ICON_AND_TITLE -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_icon_and_title)
-                ).build()
-                smallImage = null
-                title = PlainComplicationText.Builder(
-                    text = getText(R.string.long_title)
-                ).build()
-                monochromaticImage = MonochromaticImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_battery)
-                )
-                    .setAmbientImage(
-                        ambientImage = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
-                    )
-                    .build()
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_icon_and_title_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_TITLE -> {
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.long_title)
+                    ).build()
+                )
+                .setMonochromaticImage(
+                    MonochromaticImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.ic_battery)
+                    )
+                        .setAmbientImage(
+                            ambientImage = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                        )
+                        .build()
+                )
+            Case.TEXT_WITH_TITLE -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_title)
-                ).build()
-                smallImage = null
-                title = PlainComplicationText.Builder(
-                    text = getText(R.string.long_title)
-                ).build()
-                monochromaticImage = null
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_title_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_IMAGE -> {
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.long_title)
+                    ).build()
+                )
+            Case.TEXT_WITH_IMAGE -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_image)
-                ).build()
-                smallImage = SmallImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.outdoors),
-                    type = SmallImageType.PHOTO
-                ).build()
-                title = null
-                monochromaticImage = null
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_image_content_description)
                 ).build()
-            }
-            Case.TEXT_WITH_IMAGE_AND_TITLE -> {
+            )
+                .setSmallImage(
+                    SmallImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.outdoors),
+                        type = SmallImageType.PHOTO
+                    ).build()
+                )
+            Case.TEXT_WITH_IMAGE_AND_TITLE -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_image_and_title)
-                ).build()
-                smallImage = SmallImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.aquarium),
-                    type = SmallImageType.PHOTO
-                ).build()
-                title = PlainComplicationText.Builder(
-                    text = getText(R.string.long_title)
-                ).build()
-                monochromaticImage = null
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.long_text_with_image_and_title_content_description)
                 ).build()
-            }
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.long_title)
+                    ).build()
+                )
+                .setSmallImage(
+                    SmallImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.aquarium),
+                        type = SmallImageType.PHOTO
+                    ).build()
+                )
         }
-
-        return LongTextComplicationData.Builder(
-            text = text,
-            contentDescription = contentDescription
-        )
-            .setTitle(title)
-            .setSmallImage(smallImage)
-            .setMonochromaticImage(monochromaticImage)
             .setTapAction(tapAction)
             .build()
-    }
 
     private enum class Case {
         TEXT_ONLY,

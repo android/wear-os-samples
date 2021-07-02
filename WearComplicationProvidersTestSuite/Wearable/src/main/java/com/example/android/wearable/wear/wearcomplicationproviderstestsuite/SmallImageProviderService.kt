@@ -22,7 +22,6 @@ import androidx.datastore.core.DataStore
 import androidx.wear.complications.ComplicationProviderService
 import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationText
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.complications.data.PlainComplicationText
 import androidx.wear.complications.data.SmallImage
@@ -75,43 +74,32 @@ class SmallImageProviderService : SuspendingComplicationProviderService() {
     private fun getComplicationData(
         tapAction: PendingIntent?,
         case: Case
-    ): ComplicationData {
-        val smallImage: SmallImage
-        val contentDescription: ComplicationText
-
+    ): ComplicationData =
         when (case) {
-            Case.PHOTO -> {
+            Case.PHOTO -> SmallImageComplicationData.Builder(
                 // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
                 smallImage = SmallImage.Builder(
                     image = Icon.createWithResource(this, R.drawable.aquarium),
                     type = SmallImageType.PHOTO
-                ).build()
-
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.small_image_photo_content_description)
                 ).build()
-            }
-            Case.ICON -> {
+            )
+            Case.ICON -> SmallImageComplicationData.Builder(
                 // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
                 // space given to it.
                 smallImage = SmallImage.Builder(
                     image = Icon.createWithResource(this, R.drawable.ic_launcher),
                     type = SmallImageType.ICON
-                ).build()
-
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.small_image_icon_content_description)
                 ).build()
-            }
+            )
         }
-
-        return SmallImageComplicationData.Builder(
-            smallImage = smallImage,
-            contentDescription = contentDescription
-        )
             .setTapAction(tapAction)
             .build()
-    }
 
     private enum class Case {
         PHOTO, ICON
