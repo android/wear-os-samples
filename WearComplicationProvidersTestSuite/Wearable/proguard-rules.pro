@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Required to avoid crashing the watchface when obfuscated
+-keep class android.support.wearable.complications.*
