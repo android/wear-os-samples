@@ -48,6 +48,7 @@ class ShortTextProviderService : SuspendingComplicationProviderService() {
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
+            complication = Complication.SHORT_TEXT,
             complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =

@@ -50,6 +50,7 @@ class RangedValueProviderService : SuspendingComplicationProviderService() {
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
+            complication = Complication.RANGED_VALUE,
             complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =

@@ -47,6 +47,7 @@ class LargeImageProviderService : SuspendingComplicationProviderService() {
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
+            complication = Complication.LARGE_IMAGE,
             complicationInstanceId = request.complicationInstanceId
         )
 

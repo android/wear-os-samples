@@ -49,6 +49,7 @@ class SmallImageProviderService : SuspendingComplicationProviderService() {
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
+            complication = Complication.SMALL_IMAGE,
             complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =

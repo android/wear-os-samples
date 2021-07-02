@@ -50,6 +50,7 @@ class LongTextProviderService : SuspendingComplicationProviderService() {
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
+            complication = Complication.LONG_TEXT,
             complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =

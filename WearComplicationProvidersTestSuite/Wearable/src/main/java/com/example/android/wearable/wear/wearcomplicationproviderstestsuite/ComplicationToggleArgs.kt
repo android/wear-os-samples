@@ -26,7 +26,21 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ComplicationToggleArgs(
+
+    /**
+     * The component of the complication being toggled.
+     */
     val providerComponent: ComponentName,
+
+    /**
+     * An app-defined key for different provided complications.
+     */
+    val complication: Complication,
+
+    /**
+     * The system-defined key for the instance of a provided complication.
+     * (it's entirely possible for the same complication to be used multiple times)
+     */
     val complicationInstanceId: Int
 ) : Parcelable
 
@@ -34,4 +48,4 @@ data class ComplicationToggleArgs(
  * Returns the key for the preference used to hold the current state of a given complication.
  */
 fun ComplicationToggleArgs.getStatePreferenceKey(): Preferences.Key<Long> =
-    longPreferencesKey("${providerComponent.className}$complicationInstanceId")
+    longPreferencesKey("${complication.key}_$complicationInstanceId")
