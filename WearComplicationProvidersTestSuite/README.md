@@ -16,9 +16,8 @@ Therefore, you may see an error next to the 'Run' button. To fix, click on the
 "Wearable" dropdown next to the 'Run' button and select 'Edit Configurations'. Under the
 'Launch Options', change the 'Launch' field from 'Default APK' to 'Nothing' and save.
 
-This sample provides dummy data for testing the complications UI in your watch face. After
-selecting a type from your watch face configuration Activity, you can tap on the complications to
-see more options.
+This sample provides dummy data for testing the complications UI in your watch face. To 
+select the type of complication you want to use on your watch face, either double-tap the complication (emulator) or long-press the complication (on a Wear 3 device) to access complication settings. Choose the type of complication you would like from the WearComplicationProviderTestSuite provider's list. Once you choose the complication type(s) you would like, you can tap on the complications to see more options.
 
 The Wear app demonstrates the use of [ComplicationData][1], [ComplicationManager][2],
 [ComplicationProviderService][3], [ComplicationText][4], and [ProviderUpdateRequester][5].
