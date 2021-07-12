@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                     .onEach { appState ->
                         // Handle each appState by canceling work being done to handle the old state (playing,
                         // recording, transitioning), and then handling the new state.
-                        // It is important that MainViewModel.appState is a StateFlow, which means that won't
+                        // It is important that MainViewModel.appState is a StateFlow, which means that we won't
                         // restart work if the new state is the same as the old state.
 
                         ongoingWork.cancel()
