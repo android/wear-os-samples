@@ -15,16 +15,23 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import android.support.wearable.complications.ComplicationData
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.NoDataComplicationData
 
 /**
- * A complication provider that always returns [ComplicationData.TYPE_NO_DATA].
+ * A complication provider that always returns [ComplicationType.NO_DATA].
  */
 class NoDataProviderService : ComplicationProviderService() {
-    override fun onComplicationUpdate(complicationId: Int, type: Int, manager: ComplicationManager) {
-        val data = ComplicationData.Builder(ComplicationData.TYPE_NO_DATA).build()
-        manager.updateComplicationData(complicationId, data)
+    override fun onComplicationRequest(
+        request: ComplicationRequest,
+        listener: ComplicationRequestListener
+    ) {
+        listener.onComplicationData(NoDataComplicationData())
     }
+
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        NoDataComplicationData()
 }

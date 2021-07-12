@@ -15,35 +15,39 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
-import android.support.wearable.complications.ComplicationData
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 import androidx.datastore.core.DataStore
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.PhotoImageComplicationData
+import androidx.wear.complications.data.PlainComplicationText
 
 /**
- * A complication provider that supports only [ComplicationData.TYPE_LARGE_IMAGE] and cycles
+ * A complication provider that supports only [ComplicationType.PHOTO_IMAGE] and cycles
  * between a couple of images on tap.
  *
  * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationUpdate].
+ * [onComplicationRequest].
  * See [SuspendingComplicationProviderService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * [ComplicationProviderService] and override [onComplicationRequest] directly.
  * (see [NoDataProviderService] for an example)
  */
 class LargeImageProviderService : SuspendingComplicationProviderService() {
-    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
-        if (type != ComplicationData.TYPE_LARGE_IMAGE) {
-            manager.noUpdateRequired(complicationId)
-            return
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        if (request.complicationType != ComplicationType.PHOTO_IMAGE) {
+            return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complicationId = complicationId
+            complication = Complication.LARGE_IMAGE,
+            complicationInstanceId = request.complicationInstanceId
         )
 
         // On many watch faces a large image complication might not respond to taps as the
@@ -57,19 +61,41 @@ class LargeImageProviderService : SuspendingComplicationProviderService() {
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
-        val data: ComplicationData = ComplicationData.Builder(type)
-            .setTapAction(complicationTogglePendingIntent)
-            .apply {
-                when (state.mod(2)) {
-                    0 -> {
-                        setLargeImage(Icon.createWithResource(this@LargeImageProviderService, R.drawable.aquarium))
-                    }
-                    1 -> {
-                        setLargeImage(Icon.createWithResource(this@LargeImageProviderService, R.drawable.outdoors))
-                    }
-                }
-            }
+        val case = Case.values()[state.mod(Case.values().size)]
+        return getComplicationData(
+            tapAction = complicationTogglePendingIntent,
+            case = case
+        )
+    }
+
+    override fun getPreviewData(type: ComplicationType): ComplicationData? =
+        getComplicationData(
+            tapAction = null,
+            case = Case.AQUARIUM
+        )
+
+    private fun getComplicationData(
+        tapAction: PendingIntent?,
+        case: Case
+    ): ComplicationData =
+        when (case) {
+            Case.AQUARIUM -> PhotoImageComplicationData.Builder(
+                photoImage = Icon.createWithResource(this, R.drawable.aquarium),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.photo_image_aquarium_content_description)
+                ).build()
+            )
+            Case.OUTDOORS -> PhotoImageComplicationData.Builder(
+                photoImage = Icon.createWithResource(this, R.drawable.outdoors),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.photo_image_outdoors_content_description)
+                ).build()
+            )
+        }
+            .setTapAction(tapAction)
             .build()
-        manager.updateComplicationData(complicationId, data)
+
+    private enum class Case {
+        AQUARIUM, OUTDOORS
     }
 }

@@ -15,35 +15,42 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
-import android.support.wearable.complications.ComplicationData
-import android.support.wearable.complications.ComplicationManager
-import android.support.wearable.complications.ComplicationProviderService
 import androidx.datastore.core.DataStore
+import androidx.wear.complications.ComplicationProviderService
+import androidx.wear.complications.ComplicationRequest
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationText
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.MonochromaticImage
+import androidx.wear.complications.data.MonochromaticImageComplicationData
+import androidx.wear.complications.data.PlainComplicationText
 
 /**
- * A complication provider that supports only [ComplicationData.TYPE_ICON] and cycles through
+ * A complication provider that supports only [ComplicationType.MONOCHROMATIC_IMAGE] and cycles through
  * a few different icons on each tap.
  *
  * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationUpdate].
+ * [onComplicationRequest].
  * See [SuspendingComplicationProviderService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationUpdate] directly.
+ * [ComplicationProviderService] and override [onComplicationRequest] directly.
  * (see [NoDataProviderService] for an example)
  */
 class IconProviderService : SuspendingComplicationProviderService() {
-    override suspend fun onComplicationUpdateImpl(complicationId: Int, type: Int, manager: ComplicationManager) {
-        if (type != ComplicationData.TYPE_ICON) {
-            manager.noUpdateRequired(complicationId)
-            return
+
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        if (request.complicationType != ComplicationType.MONOCHROMATIC_IMAGE) {
+            return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complicationId = complicationId
+            complication = Complication.ICON,
+            complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
@@ -52,33 +59,55 @@ class IconProviderService : SuspendingComplicationProviderService() {
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this@IconProviderService)
-        val data = ComplicationData.Builder(type)
-            .setTapAction(complicationTogglePendingIntent)
-            .apply {
-                when (state.mod(3)) {
-                    0 -> {
-                        setIcon(Icon.createWithResource(this@IconProviderService, R.drawable.ic_face_vd_theme_24))
-                    }
-                    1 -> {
-                        setIcon(Icon.createWithResource(this@IconProviderService, R.drawable.ic_battery))
-                        setBurnInProtectionIcon(
-                            Icon.createWithResource(
-                                this@IconProviderService,
-                                R.drawable.ic_battery_burn_protect
-                            )
-                        )
-                    }
-                    2 -> {
-                        setIcon(
-                            Icon.createWithResource(
-                                this@IconProviderService,
-                                R.drawable.ic_event_vd_theme_24
-                            )
-                        )
-                    }
-                }
-            }
+        val case = Case.values()[state.mod(Case.values().size)]
+        return getComplicationData(
+            tapAction = complicationTogglePendingIntent,
+            case = case
+        )
+    }
+
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        getComplicationData(
+            tapAction = null,
+            case = Case.FACE,
+        )
+
+    private fun getComplicationData(
+        tapAction: PendingIntent?,
+        case: Case,
+    ): ComplicationData =
+        when (case) {
+            Case.FACE -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                ).build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.icon_face_content_description)
+                ).build()
+            )
+            Case.BATTERY -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_battery)
+                )
+                    .setAmbientImage(Icon.createWithResource(this, R.drawable.ic_battery_burn_protect))
+                    .build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.icon_battery_content_description)
+                ).build()
+            )
+            Case.EVENT -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
+                ).build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.icon_event_content_description)
+                ).build()
+            )
+        }
+            .setTapAction(tapAction)
             .build()
-        manager.updateComplicationData(complicationId, data)
+
+    private enum class Case {
+        FACE, BATTERY, EVENT
     }
 }

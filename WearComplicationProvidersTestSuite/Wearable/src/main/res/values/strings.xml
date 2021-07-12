@@ -34,17 +34,43 @@ used to test how different types of complications render on a watch face.
         <string name="small_image_label">Small Image</string>
         <string name="large_image_label">Large Image</string>
 
+        <string name="icon_face_content_description">Face</string>
+        <string name="icon_battery_content_description">Battery</string>
+        <string name="icon_event_content_description">Event</string>
+
+        <string name="small_image_photo_content_description">Photo</string>
+        <string name="small_image_icon_content_description">Icon</string>
+
+        <string name="photo_image_aquarium_content_description">Aquarium</string>
+        <string name="photo_image_outdoors_content_description">Outdoors</string>
+
+        <string name="ranged_value_text_only_content_description">Text only</string>
+        <string name="ranged_value_text_with_icon_content_description">Text with icon</string>
+        <string name="ranged_value_text_with_title_content_description">Text with title</string>
+        <string name="ranged_value_icon_only_content_description">Icon only</string>
+        <string name="ranged_value_content_description">%1$s at %2$.2f, %3$.0f%% between %4$.2f and %5$.2f</string>
+        
         <string name="short_text_only">TxtOnly</string>
+        <string name="short_text_only_content_description">Short Text Only</string>
         <string name="short_text_with_icon">w/Icon</string>
+        <string name="short_text_with_icon_content_description">Short Text with Icon</string>
         <string name="short_text_with_title">w/Title</string>
+        <string name="short_text_with_title_content_description">Short Text with Icon</string>
         <string name="short_text_with_both">w/Both</string>
+        <string name="short_text_with_both_content_description">Short Text with Icon and Title</string>
         <string name="short_title">Title</string>
 
         <string name="long_text_only">Text Only</string>
+        <string name="long_text_only_content_description">@string/long_text_only</string>
         <string name="long_text_with_title">Text w/ Title</string>
+        <string name="long_text_with_title_content_description">Text with Title</string>
         <string name="long_text_with_icon">Text w/ Icon</string>
+        <string name="long_text_with_icon_content_description">Text with Icon</string>
         <string name="long_text_with_icon_and_title">Text w/ Icon &amp; Title</string>
+        <string name="long_text_with_icon_and_title_content_description">Text with Icon and Title</string>
         <string name="long_text_with_image">Text with Image</string>
+        <string name="long_text_with_image_content_description">@string/long_text_with_image</string>
         <string name="long_text_with_image_and_title">Text w/ Image &amp; Title</string>
+        <string name="long_text_with_image_and_title_content_description">Text with Image and Title</string>
         <string name="long_title">Long Title</string>
 </resources>

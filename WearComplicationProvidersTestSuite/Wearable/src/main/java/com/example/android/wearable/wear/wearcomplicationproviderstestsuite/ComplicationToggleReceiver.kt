@@ -19,7 +19,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.wearable.complications.ProviderUpdateRequester
+import androidx.wear.complications.ProviderUpdateRequester
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -41,7 +41,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
                 args.updateState(context)
 
                 // Request an update for the complication that has just been toggled.
-                ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationId)
+                ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationInstanceId)
             } finally {
                 // Always call finish, even if cancelled
                 result.finish()
@@ -58,7 +58,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
          */
         fun getComplicationToggleIntent(
             context: Context,
-            args: ComplicationToggleArgs
+            args: ComplicationToggleArgs,
         ): PendingIntent {
             val intent = Intent(context, ComplicationToggleReceiver::class.java).apply {
                 putExtra(EXTRA_ARGS, args)
@@ -66,7 +66,12 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
 
             // Pass complicationId as the requestCode to ensure that different complications get
             // different intents.
-            return PendingIntent.getBroadcast(context, args.complicationId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            return PendingIntent.getBroadcast(
+                context,
+                args.complicationInstanceId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
         }
 
         /**
