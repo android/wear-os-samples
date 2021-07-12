@@ -22,7 +22,9 @@ import androidx.wear.tiles.ColorBuilders.argb
 import androidx.wear.tiles.DimensionBuilders
 import androidx.wear.tiles.LayoutElementBuilders.CONTENT_SCALE_MODE_FILL_BOUNDS
 import androidx.wear.tiles.LayoutElementBuilders.Image
+import androidx.wear.tiles.ModifiersBuilders
 import androidx.wear.tiles.ModifiersBuilders.Background
+import androidx.wear.tiles.ModifiersBuilders.Clickable
 import androidx.wear.tiles.ModifiersBuilders.Corner
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Padding
@@ -33,7 +35,9 @@ private val PADDING = DimensionBuilders.dp(12f)
 fun IconButton(
     context: Context,
     resourceId: String,
-    @ColorRes backgroundColor: Int
+    @ColorRes backgroundColor: Int,
+    contentDescription: String,
+    clickable: Clickable,
 ) = Image.builder()
     .setResourceId(resourceId)
     .setWidth(CIRCLE_SIZE)
@@ -52,5 +56,10 @@ fun IconButton(
                 Background.builder()
                     .setColor(argb(ContextCompat.getColor(context, backgroundColor)))
                     .setCorner(Corner.builder().setRadius(CIRCLE_SIZE))
+            )
+            .setClickable(clickable)
+            .setSemantics(
+                ModifiersBuilders.Semantics.builder()
+                    .setContentDescription(contentDescription)
             )
     )

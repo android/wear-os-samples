@@ -16,13 +16,20 @@
 <resources>
     <string name="app_name">Sample tiles</string>
     <string name="tile_description">Sample tiles</string>
-    <string name="fitness_tile_label">Step progress</string>
-    <string name="messaging_tile_label">Favorite contacts</string>
-    <string name="goal">/ %d unit</string>
-    <string name="messaging_tile_title">Friends</string>
-    <string name="messaging_tile_subtitle">Favourites</string>
-    <string name="helloworld_tile_label">Hello world</string>
+
+    <string name="tile_fitness_label">Step progress</string>
+    <string name="tile_fitness_goal">/ %d</string>
+    <string name="tile_fitness_content_description">%1$d out of %2$d steps</string>
+
+    <string name="tile_messaging_label">Favorite contacts</string>
+    <string name="tile_messaging_title">Friends</string>
+    <string name="tile_messaging_subtitle">Favourites</string>
+    <string name="tile_messaging_search">Search</string>
+
+    <string name="tile_media_label">Play next</string>
     <string name="tile_media_artist_name">Artist name</string>
     <string name="tile_media_song_name">Song name</string>
-    <string name="media_tile_label">Play next</string>
+    <string name="tile_media_play">Play</string>
+    <string name="tile_media_library">Library</string>
+    <string name="tile_media_content_description">Playing %1$s by %2$s</string>
 </resources>

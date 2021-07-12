@@ -18,20 +18,19 @@ package com.example.wear.tiles.fitness
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.TileProviderService
 import androidx.wear.tiles.ColorBuilders.argb
-import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.DimensionBuilders.degrees
 import androidx.wear.tiles.DimensionBuilders.dp
-import androidx.wear.tiles.DimensionBuilders.sp
 import androidx.wear.tiles.LayoutElementBuilders.ARC_ANCHOR_START
 import androidx.wear.tiles.LayoutElementBuilders.Arc
 import androidx.wear.tiles.LayoutElementBuilders.ArcLine
 import androidx.wear.tiles.LayoutElementBuilders.Box
 import androidx.wear.tiles.LayoutElementBuilders.Column
-import androidx.wear.tiles.LayoutElementBuilders.FontStyle
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
 import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.ModifiersBuilders.Modifiers
+import androidx.wear.tiles.ModifiersBuilders.Semantics
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TimelineBuilders.Timeline
@@ -118,18 +117,25 @@ class FitnessTileService : TileProviderService() {
                     .addContent(
                         Text.builder()
                             .setText(goalProgress.current.toString())
-                            .setFontStyle(
-                                FontStyle.builder().setSize(sp(44f)).build()
-                            )
                             .setFontStyle(FontStyles.display2(deviceParameters))
                     )
                     .addContent(
                         Text.builder()
-                            .setText(resources.getString(R.string.goal, goalProgress.goal))
-                            .setFontStyle(
-                                FontStyle.builder().setSize(sp(44f)).build()
-                            )
+                            .setText(getString(R.string.tile_fitness_goal, goalProgress.goal))
                             .setFontStyle(FontStyles.title3(deviceParameters))
+                    )
+            )
+            .setModifiers(
+                Modifiers.builder()
+                    .setSemantics(
+                        Semantics.builder()
+                            .setContentDescription(
+                                getString(
+                                    R.string.tile_fitness_content_description,
+                                    goalProgress.current,
+                                    goalProgress.goal
+                                )
+                            )
                     )
             )
 }
