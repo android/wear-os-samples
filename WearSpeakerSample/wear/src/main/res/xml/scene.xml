@@ -36,33 +36,33 @@
 
         <Constraint android:id="@+id/mic">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="0"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="visible" />
         </Constraint>
 
         <Constraint android:id="@+id/play">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="240"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="visible" />
         </Constraint>
 
         <Constraint android:id="@+id/music">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="120"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="visible" />
         </Constraint>
@@ -77,8 +77,8 @@
 
         <Constraint android:id="@+id/mic">
             <Layout
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="@dimen/icon_expanded_size"
+                android:layout_height="@dimen/icon_expanded_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="0"
                 app:layout_constraintCircleRadius="0dp" />
@@ -88,22 +88,22 @@
 
         <Constraint android:id="@+id/play">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="240"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="invisible" />
         </Constraint>
 
         <Constraint android:id="@+id/music">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="120"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="invisible" />
         </Constraint>
@@ -118,19 +118,19 @@
 
         <Constraint android:id="@+id/mic">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="0"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="invisible" />
         </Constraint>
 
         <Constraint android:id="@+id/play">
             <Layout
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="@dimen/icon_expanded_size"
+                android:layout_height="@dimen/icon_expanded_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="240"
                 app:layout_constraintCircleRadius="0dp" />
@@ -140,11 +140,11 @@
 
         <Constraint android:id="@+id/music">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="120"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="invisible" />
         </Constraint>
@@ -159,11 +159,11 @@
 
         <Constraint android:id="@+id/mic">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="0"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="invisible" />
         </Constraint>
@@ -172,11 +172,11 @@
             android:id="@+id/play"
             android:visibility="invisible">
             <Layout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/icon_minimized_size"
+                android:layout_height="@dimen/icon_minimized_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="240"
-                app:layout_constraintCircleRadius="32dp" />
+                app:layout_constraintCircleRadius="@dimen/icon_circle_radius" />
 
             <PropertySet android:visibility="invisible" />
         </Constraint>
@@ -185,8 +185,8 @@
             android:id="@+id/music"
             android:visibility="visible">
             <Layout
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="@dimen/icon_expanded_size"
+                android:layout_height="@dimen/icon_expanded_size"
                 app:layout_constraintCircle="@id/inner_circle"
                 app:layout_constraintCircleAngle="120"
                 app:layout_constraintCircleRadius="0dp" />

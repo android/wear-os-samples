@@ -36,40 +36,31 @@
 
         <ImageView
             android:id="@+id/mic"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/icon_minimized_size"
+            android:layout_height="@dimen/icon_minimized_size"
             android:contentDescription="@string/record"
-            android:padding="8dp"
+            android:padding="@dimen/icon_padding"
             android:src="@drawable/ic_mic"
-            app:layout_constraintCircle="@id/inner_circle"
-            app:layout_constraintCircleAngle="0"
-            app:layout_constraintCircleRadius="32dp"
             app:tint="@color/icon_button_tint"
             app:tintMode="src_in" />
 
         <ImageView
             android:id="@+id/play"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/icon_minimized_size"
+            android:layout_height="@dimen/icon_minimized_size"
             android:contentDescription="@string/play_recording"
-            android:padding="8dp"
+            android:padding="@dimen/icon_padding"
             android:src="@drawable/ic_play_arrow"
-            app:layout_constraintCircle="@id/inner_circle"
-            app:layout_constraintCircleAngle="240"
-            app:layout_constraintCircleRadius="32dp"
             app:tint="@color/icon_button_tint"
             app:tintMode="src_in" />
 
         <ImageView
             android:id="@+id/music"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/icon_minimized_size"
+            android:layout_height="@dimen/icon_minimized_size"
             android:contentDescription="@string/play_music"
-            android:padding="8dp"
+            android:padding="@dimen/icon_padding"
             android:src="@drawable/ic_audiotrack"
-            app:layout_constraintCircle="@id/inner_circle"
-            app:layout_constraintCircleAngle="120"
-            app:layout_constraintCircleRadius="32dp"
             app:tint="@color/icon_button_tint"
             app:tintMode="src_in" />
 
