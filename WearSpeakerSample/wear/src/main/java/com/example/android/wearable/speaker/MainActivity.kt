@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: MainActivityBinding
 
-    private var soundRecorder: SoundRecorder? = null
+    private lateinit var soundRecorder: SoundRecorder
 
     private var ongoingWork: Job = Job().apply { complete() }
 
@@ -69,6 +69,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME)
 
         binding.mic.setOnClickListener {
             viewModel.onAction(
@@ -181,7 +183,7 @@ class MainActivity : AppCompatActivity() {
             AppState.PlayingVoice -> {
                 binding.play.contentDescription = getString(R.string.stop_playing_recording)
 
-                soundRecorder!!.play()
+                soundRecorder.play()
 
                 // Don't call onAction directly here or below, since we are in the job that ongoingWork is
                 // tracking.
@@ -207,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 
                 coroutineScope {
                     // Kick off a parallel job to record
-                    val recordingJob = launch { soundRecorder!!.record() }
+                    val recordingJob = launch { soundRecorder.record() }
 
                     val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
                     val startTime = System.currentTimeMillis()
@@ -250,13 +252,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        soundRecorder = SoundRecorder(this, VOICE_FILE_NAME)
         viewModel.onAction(AppAction.ViewStarted)
     }
 
     override fun onStop() {
         ongoingWork.cancel()
-        soundRecorder = null
         super.onStop()
     }
 
