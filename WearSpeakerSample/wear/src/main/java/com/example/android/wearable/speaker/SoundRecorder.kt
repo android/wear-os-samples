@@ -81,14 +81,13 @@ class SoundRecorder(
             .setTransferMode(AudioTrack.MODE_STREAM)
             .build()
 
-        val buffer = ByteArray(intSize * 2)
-
         audioTrack.setVolume(AudioTrack.getMaxVolume())
         audioTrack.play()
 
         try {
             withContext(Dispatchers.IO) {
                 context.openFileInput(outputFileName).buffered().use { bufferedInputStream ->
+                    val buffer = ByteArray(intSize * 2)
                     while (isActive) {
                         val read = bufferedInputStream.read(buffer, 0, buffer.size)
                         if (read < 0) break
@@ -130,13 +129,12 @@ class SoundRecorder(
             .setBufferSizeInBytes(intSize * 3)
             .build()
 
-        val buffer = ByteArray(intSize)
-
         audioRecord.startRecording()
 
         try {
             withContext(Dispatchers.IO) {
                 context.openFileOutput(outputFileName, Context.MODE_PRIVATE).buffered().use { bufferedOutputStream ->
+                    val buffer = ByteArray(intSize)
                     while (isActive) {
                         val read = audioRecord.read(buffer, 0, buffer.size)
                         bufferedOutputStream.write(buffer, 0, read)
