@@ -53,8 +53,8 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
-    implementation "androidx.core:core-ktx:1.5.0"
-    implementation "androidx.datastore:datastore-preferences:1.0.0-beta02"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.datastore:datastore-preferences:1.0.0-rc01"
     implementation "androidx.wear:wear-complications-provider:1.0.0-alpha17"
 }
