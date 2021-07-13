@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <resources>
+    <string name="app_name">WearVerifyRemoteApp</string>
     <string name="message_checking">Welcome to our Mobile app!\n\nChecking for Wear Devices for app…</string>
     <string name="message_no_devices">Welcome to our Mobile app!\n\nYou have no Wear devices linked to your phone at this time.</string>
     <string name="message_missing_all">Welcome to our Mobile app!\n\nYou are missing the Wear app on all your Wear Devices, please click on the button below to install it on those device(s).</string>
