@@ -22,4 +22,6 @@
     <string name="message_some_installed">Welcome to our Mobile app!\n\nWear app installed on some your device(s) (%1$s)!\n\nYou can now use the MessageClient, DataClient, etc.\n\nTo install the Wear app on the other devices, please click on the button below.</string>
     <string name="message_all_installed">Welcome to our Mobile app!\n\nWear app installed on all your devices (%1$s)!\n\nYou can now use the MessageClient, DataClient, etc.</string>
     <string name="install_app">Install App on Wear device(s)</string>
+    <string name="store_request_successful">Play Store Request to Wear device successful.</string>
+    <string name="store_request_unsuccessful">Play Store Request Failed. Wear device(s) may not support Play Store, that is, the Wear device may be version 1.0.</string>
 </resources>

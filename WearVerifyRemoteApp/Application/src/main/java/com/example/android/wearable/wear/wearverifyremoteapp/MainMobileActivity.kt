@@ -186,7 +186,7 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
             }
             else -> {
                 // TODO: Add your code to communicate with the wear app(s) via Wear APIs
-                //       (MessageClient, DataApi, etc.)
+                //       (MessageClient, DataClient, etc.)
                 Log.d(TAG, "Installed on all devices")
                 binding.informationTextView.text =
                     getString(R.string.message_all_installed, wearNodesWithApp.toString())
@@ -221,16 +221,16 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
                         .await()
 
                     Toast.makeText(
-                        applicationContext,
-                        "Play Store Request to Wear device successful.",
+                        this@MainMobileActivity,
+                        getString(R.string.store_request_successful),
                         Toast.LENGTH_SHORT
                     ).show()
                 } catch (cancellationException: CancellationException) {
                     // Request was cancelled normally
                 } catch (throwable: Throwable) {
                     Toast.makeText(
-                        applicationContext, "Play Store Request Failed. Wear device(s) may not support Play Store, "
-                            + " that is, the Wear device may be version 1.0.",
+                        this@MainMobileActivity,
+                        getString(R.string.store_request_unsuccessful),
                         Toast.LENGTH_LONG
                     ).show()
                 }
