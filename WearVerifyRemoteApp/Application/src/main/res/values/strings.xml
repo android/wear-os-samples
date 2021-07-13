@@ -18,7 +18,7 @@
     <string name="message_checking">Welcome to our Mobile app!\n\nChecking for Wear Devices for app…</string>
     <string name="message_no_devices">Welcome to our Mobile app!\n\nYou have no Wear devices linked to your phone at this time.</string>
     <string name="message_missing_all">Welcome to our Mobile app!\n\nYou are missing the Wear app on all your Wear Devices, please click on the button below to install it on those device(s).</string>
-    <string name="message_some_installed">Welcome to our Mobile app!\n\nWear app installed on some your device(s) (%1$s)!\n\nYou can now use the MessageApi, DataApi, etc.\n\nTo install the Wear app on the other devices, please click on the button below.</string>
-    <string name="message_all_installed">Welcome to our Mobile app!\n\nWear app installed on all your devices (%1$s)!\n\nYou can now use the MessageApi, DataApi, etc.</string>
+    <string name="message_some_installed">Welcome to our Mobile app!\n\nWear app installed on some your device(s) (%1$s)!\n\nYou can now use the MessageClient, DataClient, etc.\n\nTo install the Wear app on the other devices, please click on the button below.</string>
+    <string name="message_all_installed">Welcome to our Mobile app!\n\nWear app installed on all your devices (%1$s)!\n\nYou can now use the MessageClient, DataClient, etc.</string>
     <string name="install_app">Install App on Wear device(s)</string>
 </resources>
