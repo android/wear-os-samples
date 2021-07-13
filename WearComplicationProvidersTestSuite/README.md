@@ -20,21 +20,16 @@ This sample provides dummy data for testing the complications UI in your watch f
 selecting a type from your watch face configuration Activity, you can tap on the complications to
 see more options.
 
-The Wear app demonstrates the use of [ComplicationData][1], [ComplicationManager][2],
-[ComplicationProviderService][3], [ComplicationText][4], and [ProviderUpdateRequester][5].
+The Wear app demonstrates the use of [ComplicationData][1], [ComplicationProviderService][2], and [ComplicationText][3].
 
-[1]: https://developer.android.com/reference/android/support/wearable/complications/ComplicationData.html
-[2]: https://developer.android.com/reference/android/support/wearable/complications/ComplicationManager.html
-[3]: https://developer.android.com/reference/android/support/wearable/complications/ComplicationProviderService.html
-[4]: https://developer.android.com/reference/android/support/wearable/complications/ComplicationText.html
-[5]: https://developer.android.com/reference/android/support/wearable/complications/ProviderUpdateRequester.html
+[1]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationData
+[2]: https://developer.android.com/reference/kotlin/androidx/wear/complications/ComplicationProviderService
+[3]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationText
 
 Pre-requisites
 --------------
 
-- Android SDK 28
-- Android Build Tools v29.0.2
-- Android Support Repository
+- Android SDK 30
 
 Screenshots
 -------------
@@ -53,7 +48,7 @@ Support
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
 If you've found an error in this sample, please file an issue:
-https://github.com/googlesamples/android-WearComplicationProvidersTestSuite
+https://github.com/android/wear-os-samples/issues
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
