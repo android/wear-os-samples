@@ -19,8 +19,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.phone.interactions.PhoneTypeHelper
@@ -38,6 +40,8 @@ import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 /**
  * Checks if the phone app is installed on remote device. If it is not, allows user to open app
@@ -67,6 +71,14 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
         binding.informationTextView.text = getString(R.string.message_checking)
         binding.remoteOpenButton.setOnClickListener { 
             openAppInStoreOnPhone()
+        }
+
+        if (resources.configuration.isScreenRound) {
+            binding.scrollingContentContainer.doOnPreDraw {
+                // Calculate the padding necessary to make the scrolling content fit in a square inscribed on a round
+                // screen.
+                it.setPadding((it.width / 2.0 * (1.0 - 1.0 / sqrt(2.0))).roundToInt())
+            }
         }
     }
 
