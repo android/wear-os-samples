@@ -17,14 +17,16 @@ package com.example.android.wearable.alpha.utils
 
 import android.content.Context
 import android.graphics.RectF
-import androidx.wear.complications.ComplicationBounds
+import androidx.wear.complications.ComplicationSlotBounds
 import androidx.wear.complications.DefaultComplicationProviderPolicy
 import androidx.wear.complications.SystemProviders
 import androidx.wear.complications.data.ComplicationType
-import androidx.wear.watchface.CanvasComplicationDrawable
-import androidx.wear.watchface.Complication
-import androidx.wear.watchface.WatchState
+import androidx.wear.watchface.CanvasComplicationFactory
+import androidx.wear.watchface.ComplicationSlot
+import androidx.wear.watchface.ComplicationSlotsManager
+import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
+import androidx.wear.watchface.style.CurrentUserStyleRepository
 import com.example.android.wearable.alpha.R
 
 // Information needed for complications.
@@ -40,7 +42,7 @@ private const val LEFT_COMPLICATION_RIGHT_BOUND = 0.4f
 private const val RIGHT_COMPLICATION_LEFT_BOUND = 0.6f
 private const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.8f
 
-private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_white_style
+private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_red_style
 
 // Unique IDs for each complication. The settings activity that supports allowing users
 // to select their complication data provider requires numbers to be >= 0.
@@ -72,27 +74,30 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
 }
 
 // Utility function that initializes default complication slots (left and right).
-fun createComplicationList(
+fun createComplicationSlotManager(
     context: Context,
-    watchState: WatchState,
+    currentUserStyleRepository: CurrentUserStyleRepository,
     drawableId: Int = DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID
-): List<Complication> {
-    // Create left Complication:
-    // If not a valid drawable (XML complication color style), return empty list.
-    val leftComplicationDrawable: ComplicationDrawable =
-        ComplicationDrawable.getDrawable(context, drawableId) ?: return emptyList()
+): ComplicationSlotsManager {
 
-    val leftCanvasComplicationDrawable = CanvasComplicationDrawable(
-        leftComplicationDrawable,
-        watchState
-    )
+    val defaultComplicationDrawable = ComplicationDrawable.getDrawable(context, drawableId)
 
-    val leftComplication = Complication.createRoundRectComplicationBuilder(
+    val canvasComplicationFactory =
+        CanvasComplicationFactory { watchState, listener ->
+            CanvasComplicationDrawable(
+                defaultComplicationDrawable!!,
+                watchState,
+                listener
+            )
+        }
+
+    val leftComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Left.id,
-        renderer = leftCanvasComplicationDrawable,
+        canvasComplicationFactory = canvasComplicationFactory,
         supportedTypes = ComplicationConfig.Left.supportedTypes,
-        defaultProviderPolicy = DefaultComplicationProviderPolicy(SystemProviders.DAY_OF_WEEK),
-        complicationBounds = ComplicationBounds(
+        defaultProviderPolicy =
+            DefaultComplicationProviderPolicy(SystemProviders.PROVIDER_DAY_OF_WEEK),
+        bounds = ComplicationSlotBounds(
             RectF(
                 LEFT_COMPLICATION_LEFT_BOUND,
                 LEFT_AND_RIGHT_COMPLICATIONS_TOP_BOUND,
@@ -103,22 +108,13 @@ fun createComplicationList(
     ).setDefaultProviderType(ComplicationType.SHORT_TEXT)
         .build()
 
-    // Create right Complication:
-    // If not a valid drawable (XML complication color style), return empty list (want both or
-    // none).
-    val rightComplicationDrawable: ComplicationDrawable =
-        ComplicationDrawable.getDrawable(context, drawableId) ?: return emptyList()
-
-    val rightCanvasComplicationDrawable = CanvasComplicationDrawable(
-        rightComplicationDrawable,
-        watchState
-    )
-    val rightComplication = Complication.createRoundRectComplicationBuilder(
+    val rightComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Right.id,
-        renderer = rightCanvasComplicationDrawable,
+        canvasComplicationFactory = canvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
-        defaultProviderPolicy = DefaultComplicationProviderPolicy(SystemProviders.STEP_COUNT),
-        complicationBounds = ComplicationBounds(
+        defaultProviderPolicy =
+        DefaultComplicationProviderPolicy(SystemProviders.PROVIDER_STEP_COUNT),
+        bounds = ComplicationSlotBounds(
             RectF(
                 RIGHT_COMPLICATION_LEFT_BOUND,
                 LEFT_AND_RIGHT_COMPLICATIONS_TOP_BOUND,
@@ -128,6 +124,8 @@ fun createComplicationList(
         )
     ).setDefaultProviderType(ComplicationType.SHORT_TEXT)
         .build()
-
-    return listOf(leftComplication, rightComplication)
+    return ComplicationSlotsManager(
+        listOf(leftComplication, rightComplication),
+        currentUserStyleRepository
+    )
 }

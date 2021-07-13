@@ -101,4 +101,7 @@
     <!-- Menu option within the complications configuration widget that lets us select only the
     right complication for rendering. [CHAR LIMIT=20] -->
     <string name="watchface_complications_setting_right">Right</string>
+
+    <!-- Title for config activity for watch face (settings). -->
+    <string name="title_activity_watch_face_config">Config</string>
 </resources>
