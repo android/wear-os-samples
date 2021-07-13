@@ -18,54 +18,56 @@ package com.example.android.wearable.wear.wearverifyremoteapp
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.ResultReceiver
-import android.support.wearable.view.ConfirmationOverlay
 import android.util.Log
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import androidx.wear.ambient.AmbientModeSupport
+import androidx.lifecycle.lifecycleScope
 import androidx.wear.phone.interactions.PhoneTypeHelper
-import com.example.android.wearable.wear.wearverifyremoteapp.MainWearActivity
+import androidx.wear.remote.interactions.RemoteIntentHelper
+import androidx.wear.widget.ConfirmationOverlay
+import com.example.android.wearable.wear.wearverifyremoteapp.databinding.ActivityMainBinding
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.NodeClient
 import com.google.android.gms.wearable.Wearable
-import com.google.android.wearable.intent.RemoteIntent
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 /**
  * Checks if the phone app is installed on remote device. If it is not, allows user to open app
  * listing on the phone's Play or App Store.
  */
 class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChangedListener {
-    // Result from sending RemoteIntent to phone to open app in play/app store.
-    private val mResultReceiver: ResultReceiver = object : ResultReceiver(Handler()) {
-        override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
-            if (resultCode == RemoteIntent.RESULT_OK) {
-                ConfirmationOverlay().showOn(this@MainWearActivity)
-            } else if (resultCode == RemoteIntent.RESULT_FAILED) {
-                ConfirmationOverlay()
-                    .setType(ConfirmationOverlay.FAILURE_ANIMATION)
-                    .showOn(this@MainWearActivity)
-            } else {
-                throw IllegalStateException("Unexpected result $resultCode")
-            }
-        }
-    }
-    private var mInformationTextView: TextView? = null
-    private var mRemoteOpenButton: Button? = null
-    private var mAndroidPhoneNodeWithApp: Node? = null
+
+    private lateinit var binding: ActivityMainBinding
+
+    private lateinit var capabilityClient: CapabilityClient
+    private lateinit var nodeClient: NodeClient
+    private lateinit var remoteIntentHelper: RemoteIntentHelper
+
+    private var androidPhoneNodeWithApp: Node? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        mInformationTextView = findViewById(R.id.information_text_view)
-        mRemoteOpenButton = findViewById(R.id.remote_open_button)
-        mInformationTextView!!.setText(CHECKING_MESSAGE)
-        mRemoteOpenButton!!.setOnClickListener(View.OnClickListener { openAppInStoreOnPhone() })
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        capabilityClient = Wearable.getCapabilityClient(this)
+        nodeClient = Wearable.getNodeClient(this)
+        remoteIntentHelper = RemoteIntentHelper(this)
+
+        binding.informationTextView.text = getString(R.string.message_checking)
+        binding.remoteOpenButton.setOnClickListener { 
+            openAppInStoreOnPhone()
+        }
     }
 
     override fun onPause() {
@@ -78,7 +80,9 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
         Log.d(TAG, "onResume()")
         super.onResume()
         Wearable.getCapabilityClient(this).addListener(this, CAPABILITY_PHONE_APP)
-        checkIfPhoneHasApp()
+        lifecycleScope.launch {
+            checkIfPhoneHasApp()
+        }
     }
 
     /*
@@ -86,103 +90,94 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
      */
     override fun onCapabilityChanged(capabilityInfo: CapabilityInfo) {
         Log.d(TAG, "onCapabilityChanged(): $capabilityInfo")
-        mAndroidPhoneNodeWithApp = pickBestNodeId(capabilityInfo.nodes)
-        verifyNodeAndUpdateUI()
+        // There should only ever be one phone in a node set (much less w/ the correct capability), so
+        // I am just grabbing the first one (which should be the only one).
+        androidPhoneNodeWithApp = capabilityInfo.nodes.firstOrNull()
+        updateUi()
     }
 
-    private fun checkIfPhoneHasApp() {
+    private suspend fun checkIfPhoneHasApp() {
         Log.d(TAG, "checkIfPhoneHasApp()")
-        val capabilityInfoTask = Wearable.getCapabilityClient(this)
-            .getCapability(CAPABILITY_PHONE_APP, CapabilityClient.FILTER_ALL)
-        capabilityInfoTask.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d(TAG, "Capability request succeeded.")
-                val capabilityInfo = task.result
-                mAndroidPhoneNodeWithApp = pickBestNodeId(capabilityInfo!!.nodes)
-            } else {
-                Log.d(TAG, "Capability request failed to return any results.")
+
+        try {
+            val capabilityInfo = capabilityClient
+                .getCapability(CAPABILITY_PHONE_APP, CapabilityClient.FILTER_ALL)
+                .await()
+
+            Log.d(TAG, "Capability request succeeded.")
+
+            withContext(Dispatchers.Main) {
+                // There should only ever be one phone in a node set (much less w/ the correct capability), so
+                // I am just grabbing the first one (which should be the only one).
+                androidPhoneNodeWithApp = capabilityInfo.nodes.firstOrNull()
+                updateUi()
             }
-            verifyNodeAndUpdateUI()
+        } catch (cancellationException: CancellationException) {
+            // Request was cancelled normally
+        } catch (throwable: Throwable) {
+            Log.d(TAG, "Capability request failed to return any results.")
         }
     }
 
-    private fun verifyNodeAndUpdateUI() {
-        if (mAndroidPhoneNodeWithApp != null) {
+    private fun updateUi() {
+        val androidPhoneNodeWithApp = androidPhoneNodeWithApp
 
+        if (androidPhoneNodeWithApp != null) {
             // TODO: Add your code to communicate with the phone app via
-            // Wear APIs (MessageApi, DataApi, etc.)
-            val installMessage = String.format(INSTALLED_MESSAGE, mAndroidPhoneNodeWithApp!!.displayName)
-            Log.d(TAG, installMessage)
-            mInformationTextView!!.text = installMessage
-            mRemoteOpenButton!!.visibility = View.INVISIBLE
+            //       Wear APIs (MessageClient, DataClient, etc.)
+            Log.d(TAG, "Installed")
+            binding.informationTextView.text =
+                getString(R.string.message_installed, androidPhoneNodeWithApp.displayName)
+            binding.remoteOpenButton.isInvisible = true
         } else {
-            Log.d(TAG, MISSING_MESSAGE)
-            mInformationTextView!!.text = MISSING_MESSAGE
-            mRemoteOpenButton!!.visibility = View.VISIBLE
+            Log.d(TAG, "Missing")
+            binding.informationTextView.text = getString(R.string.message_missing)
+            binding.remoteOpenButton.isVisible = true
         }
     }
 
     private fun openAppInStoreOnPhone() {
         Log.d(TAG, "openAppInStoreOnPhone()")
-        val phoneDeviceType = PhoneTypeHelper.getPhoneDeviceType(applicationContext)
-        when (phoneDeviceType) {
+
+        val intent = when (PhoneTypeHelper.getPhoneDeviceType(applicationContext)) {
             PhoneTypeHelper.DEVICE_TYPE_ANDROID -> {
                 Log.d(TAG, "\tDEVICE_TYPE_ANDROID")
                 // Create Remote Intent to open Play Store listing of app on remote device.
-                val intentAndroid = Intent(Intent.ACTION_VIEW)
+                Intent(Intent.ACTION_VIEW)
                     .addCategory(Intent.CATEGORY_BROWSABLE)
                     .setData(Uri.parse(ANDROID_MARKET_APP_URI))
-                RemoteIntent.startRemoteActivity(
-                    applicationContext,
-                    intentAndroid,
-                    mResultReceiver
-                )
             }
             PhoneTypeHelper.DEVICE_TYPE_IOS -> {
                 Log.d(TAG, "\tDEVICE_TYPE_IOS")
 
                 // Create Remote Intent to open App Store listing of app on iPhone.
-                val intentIOS = Intent(Intent.ACTION_VIEW)
+                Intent(Intent.ACTION_VIEW)
                     .addCategory(Intent.CATEGORY_BROWSABLE)
                     .setData(Uri.parse(APP_STORE_APP_URI))
-                RemoteIntent.startRemoteActivity(
-                    applicationContext,
-                    intentIOS,
-                    mResultReceiver
-                )
             }
-            PhoneTypeHelper.DEVICE_TYPE_ERROR or PhoneTypeHelper.DEVICE_TYPE_UNKNOWN -> Log.d(
-                TAG,
-                "\tDEVICE_TYPE_ERROR_UNKNOWN"
-            )
+            else -> {
+                Log.d(TAG, "\tDEVICE_TYPE_ERROR_UNKNOWN")
+                return
+            }
         }
-    }
 
-    /*
-     * There should only ever be one phone in a node set (much less w/ the correct capability), so
-     * I am just grabbing the first one (which should be the only one).
-     */
-    private fun pickBestNodeId(nodes: Set<Node>): Node? {
-        Log.d(TAG, "pickBestNodeId(): $nodes")
-        var bestNodeId: Node? = null
-        // Find a nearby node/phone or pick one arbitrarily. Realistically, there is only one phone.
-        for (node in nodes) {
-            bestNodeId = node
+        lifecycleScope.launch {
+            try {
+                remoteIntentHelper.startRemoteActivity(intent).await()
+
+                ConfirmationOverlay().showOn(this@MainWearActivity)
+            } catch (cancellationException: CancellationException) {
+                // Request was cancelled normally
+            } catch (throwable: Throwable) {
+                ConfirmationOverlay()
+                    .setType(ConfirmationOverlay.FAILURE_ANIMATION)
+                    .showOn(this@MainWearActivity)
+            }
         }
-        return bestNodeId
     }
 
     companion object {
         private const val TAG = "MainWearActivity"
-        private const val WELCOME_MESSAGE = "Welcome to our Wear app!\n\n"
-        private const val CHECKING_MESSAGE = """${WELCOME_MESSAGE}Checking for Mobile app...
-"""
-        private const val MISSING_MESSAGE =
-            """${WELCOME_MESSAGE}You are missing the required phone app, please click on the button below to install it on your phone.
-"""
-        private const val INSTALLED_MESSAGE = """${WELCOME_MESSAGE}Mobile app installed on your %s!
-
-You can now use MessageApi, DataApi, etc."""
 
         // Name of capability listed in Phone app's wear.xml.
         // IMPORTANT NOTE: This should be named differently than your Wear app's capability.

@@ -37,15 +37,19 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
-
 dependencies {
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.1"
     implementation "androidx.activity:activity-ktx:1.2.3"
     implementation "androidx.core:core-ktx:1.6.0"
     implementation 'androidx.wear:wear:1.1.0'
-    implementation 'androidx.wear:wear-phone-interactions:1.0.0-alpha01'
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
-    compileOnly 'com.google.android.wearable:wearable:2.8.1'
-    implementation 'com.google.android.support:wearable:2.8.1'
+    implementation 'androidx.wear:wear-phone-interactions:1.0.0-alpha05'
+    implementation 'androidx.wear:wear-remote-interactions:1.0.0-SNAPSHOT'
+    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
 }

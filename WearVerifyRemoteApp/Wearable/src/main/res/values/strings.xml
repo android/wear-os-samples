@@ -16,4 +16,7 @@
   -->
 <resources>
     <string name="app_name">Wear Verify Remote App</string>
+    <string name="message_checking">Welcome to our Wear app!\n\nChecking for Mobile app…</string>
+    <string name="message_missing">Welcome to our Wear app!\n\nYou are missing the required phone app, please click on the button below to install it on your phone.</string>
+    <string name="message_installed">Welcome to our Wear app!\n\nMobile app installed on your %s!\n\nYou can now use MessageClient, DataClient, etc.</string>
 </resources>
