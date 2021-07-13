@@ -16,18 +16,9 @@
 -->
 <resources>
         <string name="app_name">WearComplicationProvidersTestSuite</string>
-        <string name="intro_message">
-        <![CDATA[
-Complication Test Suite is a set of complication providers that provide dummy data and it can be
-used to test how different types of complications render on a watch face.
-        ]]>
-        </string>
-        <string name="application_label">Complication Test Suite</string>
 
         <string name="no_data_label">No Data</string>
         <string name="short_text_label">Short Text</string>
-        <string name="emoji_label">Short Text w/ Emoji</string>
-        <string name="time_text_label">Time Dependent Text</string>
         <string name="ranged_value_label">Ranged Value</string>
         <string name="long_text_label">Long Text</string>
         <string name="icon_label">Icon</string>
