@@ -21,14 +21,16 @@ import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.complications.data.ComplicationType
-import androidx.wear.complications.data.PhotoImageComplicationData
 import androidx.wear.complications.data.PlainComplicationText
+import androidx.wear.complications.data.SmallImage
+import androidx.wear.complications.data.SmallImageComplicationData
+import androidx.wear.complications.data.SmallImageType
 import androidx.wear.complications.datasource.ComplicationDataSourceService
 import androidx.wear.complications.datasource.ComplicationRequest
 
 /**
- * A complication provider that supports only [ComplicationType.PHOTO_IMAGE] and cycles
- * between a couple of images on tap.
+ * A complication provider that supports only [ComplicationType.SMALL_IMAGE] and cycles
+ * between the different image styles on tap.
  *
  * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
@@ -37,23 +39,18 @@ import androidx.wear.complications.datasource.ComplicationRequest
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
  * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
- * (see [NoDataProviderService] for an example)
+ * (see [NoDataDataSourceService] for an example)
  */
-class LargeImageProviderService : SuspendingComplicationDataSourceService() {
+class SmallImageDataSourceService : SuspendingComplicationDataSourceService() {
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
-        if (request.complicationType != ComplicationType.PHOTO_IMAGE) {
+        if (request.complicationType != ComplicationType.SMALL_IMAGE) {
             return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complication = Complication.LARGE_IMAGE,
+            complication = Complication.SMALL_IMAGE,
             complicationInstanceId = request.complicationInstanceId
         )
-
-        // On many watch faces a large image complication might not respond to taps as the
-        // complication is used to provide the background for the watch. Providers should not rely
-        // on tap functionality for large image complications, but the tap action is still included
-        // here in case it is supported.
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
                 context = this,
@@ -68,10 +65,10 @@ class LargeImageProviderService : SuspendingComplicationDataSourceService() {
         )
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData? =
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
         getComplicationData(
             tapAction = null,
-            case = Case.AQUARIUM
+            case = Case.PHOTO
         )
 
     private fun getComplicationData(
@@ -79,16 +76,25 @@ class LargeImageProviderService : SuspendingComplicationDataSourceService() {
         case: Case
     ): ComplicationData =
         when (case) {
-            Case.AQUARIUM -> PhotoImageComplicationData.Builder(
-                photoImage = Icon.createWithResource(this, R.drawable.aquarium),
+            Case.PHOTO -> SmallImageComplicationData.Builder(
+                // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
+                smallImage = SmallImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.aquarium),
+                    type = SmallImageType.PHOTO
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.photo_image_aquarium_content_description)
+                    text = getText(R.string.small_image_photo_content_description)
                 ).build()
             )
-            Case.OUTDOORS -> PhotoImageComplicationData.Builder(
-                photoImage = Icon.createWithResource(this, R.drawable.outdoors),
+            Case.ICON -> SmallImageComplicationData.Builder(
+                // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
+                // space given to it.
+                smallImage = SmallImage.Builder(
+                    image = Icon.createWithResource(this, R.drawable.ic_launcher),
+                    type = SmallImageType.ICON
+                ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.photo_image_outdoors_content_description)
+                    text = getText(R.string.small_image_icon_content_description)
                 ).build()
             )
         }
@@ -96,6 +102,6 @@ class LargeImageProviderService : SuspendingComplicationDataSourceService() {
             .build()
 
     private enum class Case {
-        AQUARIUM, OUTDOORS
+        PHOTO, ICON
     }
 }

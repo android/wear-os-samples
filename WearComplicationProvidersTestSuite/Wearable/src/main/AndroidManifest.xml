@@ -40,7 +40,7 @@
         <service
             android:icon="@drawable/ic_not_interested_vd_theme_24"
             android:label="@string/no_data_label"
-            android:name=".NoDataProviderService"
+            android:name=".NoDataDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
@@ -57,7 +57,7 @@
         <service
             android:icon="@drawable/ic_title_vd_theme_24"
             android:label="@string/short_text_label"
-            android:name=".ShortTextProviderService"
+            android:name=".ShortTextDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
@@ -74,7 +74,7 @@
         <service
             android:icon="@drawable/ic_image_vd_theme_24"
             android:label="@string/small_image_label"
-            android:name=".SmallImageProviderService"
+            android:name=".SmallImageDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
@@ -91,7 +91,7 @@
         <service
             android:icon="@drawable/ic_landscape_vd_theme_24"
             android:label="@string/large_image_label"
-            android:name=".LargeImageProviderService"
+            android:name=".LargeImageDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
@@ -108,7 +108,7 @@
         <service
             android:icon="@drawable/ic_face_vd_theme_24"
             android:label="@string/icon_label"
-            android:name=".IconProviderService"
+            android:name=".IconDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
@@ -125,7 +125,7 @@
         <service
             android:icon="@drawable/ic_short_text_vd_theme_24"
             android:label="@string/long_text_label"
-            android:name=".LongTextProviderService"
+            android:name=".LongTextDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
@@ -142,7 +142,7 @@
         <service
             android:icon="@drawable/ic_data_usage_vd_theme_24"
             android:label="@string/ranged_value_label"
-            android:name=".RangedValueProviderService"
+            android:name=".RangedValueDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>

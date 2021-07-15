@@ -40,9 +40,9 @@ import kotlin.random.Random
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
  * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
- * (see [NoDataProviderService] for an example)
+ * (see [NoDataDataSourceService] for an example)
  */
-class RangedValueProviderService : SuspendingComplicationDataSourceService() {
+class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         if (request.complicationType != ComplicationType.RANGED_VALUE) {

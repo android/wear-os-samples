@@ -21,14 +21,16 @@ import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.LongTextComplicationData
 import androidx.wear.complications.data.MonochromaticImage
 import androidx.wear.complications.data.PlainComplicationText
-import androidx.wear.complications.data.ShortTextComplicationData
+import androidx.wear.complications.data.SmallImage
+import androidx.wear.complications.data.SmallImageType
 import androidx.wear.complications.datasource.ComplicationDataSourceService
 import androidx.wear.complications.datasource.ComplicationRequest
 
 /**
- * A complication provider that supports only [ComplicationType.SHORT_TEXT] and cycles
+ * A complication provider that supports only [ComplicationType.LONG_TEXT] and cycles
  * through the possible configurations on tap.
  *
  * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
@@ -38,16 +40,16 @@ import androidx.wear.complications.datasource.ComplicationRequest
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
  * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
- * (see [NoDataProviderService] for an example)
+ * (see [NoDataDataSourceService] for an example)
  */
-class ShortTextProviderService : SuspendingComplicationDataSourceService() {
+class LongTextDataSourceService : SuspendingComplicationDataSourceService() {
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
-        if (request.complicationType != ComplicationType.SHORT_TEXT) {
+        if (request.complicationType != ComplicationType.LONG_TEXT) {
             return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complication = Complication.SHORT_TEXT,
+            complication = Complication.LONG_TEXT,
             complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =
@@ -75,20 +77,20 @@ class ShortTextProviderService : SuspendingComplicationDataSourceService() {
         case: Case
     ): ComplicationData =
         when (case) {
-            Case.TEXT_ONLY -> ShortTextComplicationData.Builder(
+            Case.TEXT_ONLY -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_only)
+                    text = getText(R.string.long_text_only)
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_only_content_description)
+                    text = getText(R.string.long_text_only_content_description)
                 ).build()
             )
-            Case.TEXT_WITH_ICON -> ShortTextComplicationData.Builder(
+            Case.TEXT_WITH_ICON -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_icon)
+                    text = getText(R.string.long_text_with_icon)
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_icon_content_description)
+                    text = getText(R.string.long_text_with_icon_content_description)
                 ).build()
             )
                 .setMonochromaticImage(
@@ -96,37 +98,75 @@ class ShortTextProviderService : SuspendingComplicationDataSourceService() {
                         image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
                     ).build()
                 )
-            Case.TEXT_WITH_TITLE -> ShortTextComplicationData.Builder(
+            // Unlike for short text complications, if the long title field is supplied then it
+            // should always be displayed by the watch face. This means that when a long text
+            // provider supplies both title and icon, it is expected that both are displayed.
+            Case.TEXT_WITH_ICON_AND_TITLE -> LongTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_title)
+                    text = getText(R.string.long_text_with_icon_and_title)
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_title_content_description)
+                    text = getText(R.string.long_text_with_icon_and_title_content_description)
                 ).build()
             )
                 .setTitle(
                     PlainComplicationText.Builder(
-                        text = getText(R.string.short_title)
-                    ).build()
-                )
-            Case.TEXT_WITH_ICON_AND_TITLE -> ShortTextComplicationData.Builder(
-                // When short text includes both short title and icon, the watch face should only
-                // display one of those fields.
-                text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_both)
-                ).build(),
-                contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_both_content_description)
-                ).build()
-            )
-                .setTitle(
-                    PlainComplicationText.Builder(
-                        text = getText(R.string.short_title)
+                        text = getText(R.string.long_title)
                     ).build()
                 )
                 .setMonochromaticImage(
                     MonochromaticImage.Builder(
-                        image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                        image = Icon.createWithResource(this, R.drawable.ic_battery)
+                    )
+                        .setAmbientImage(
+                            ambientImage = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                        )
+                        .build()
+                )
+            Case.TEXT_WITH_TITLE -> LongTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.long_text_with_title)
+                ).build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.long_text_with_title_content_description)
+                ).build()
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.long_title)
+                    ).build()
+                )
+            Case.TEXT_WITH_IMAGE -> LongTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.long_text_with_image)
+                ).build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.long_text_with_image_content_description)
+                ).build()
+            )
+                .setSmallImage(
+                    SmallImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.outdoors),
+                        type = SmallImageType.PHOTO
+                    ).build()
+                )
+            Case.TEXT_WITH_IMAGE_AND_TITLE -> LongTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(
+                    text = getText(R.string.long_text_with_image_and_title)
+                ).build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.long_text_with_image_and_title_content_description)
+                ).build()
+            )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = getText(R.string.long_title)
+                    ).build()
+                )
+                .setSmallImage(
+                    SmallImage.Builder(
+                        image = Icon.createWithResource(this, R.drawable.aquarium),
+                        type = SmallImageType.PHOTO
                     ).build()
                 )
         }
@@ -136,7 +176,9 @@ class ShortTextProviderService : SuspendingComplicationDataSourceService() {
     private enum class Case {
         TEXT_ONLY,
         TEXT_WITH_ICON,
+        TEXT_WITH_ICON_AND_TITLE,
         TEXT_WITH_TITLE,
-        TEXT_WITH_ICON_AND_TITLE
+        TEXT_WITH_IMAGE,
+        TEXT_WITH_IMAGE_AND_TITLE
     }
 }
