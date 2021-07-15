@@ -29,17 +29,19 @@ import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
+import androidx.wear.watchface.style.UserStyle
+import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
-import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource
-import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource.WatchFaceUserChanges
 import com.example.android.wearable.alpha.data.watchface.ColorStyleIdAndResourceIds
 import com.example.android.wearable.alpha.data.watchface.WatchFaceColorPalette.Companion.convertToWatchFaceColorPalette
 import com.example.android.wearable.alpha.data.watchface.WatchFaceData
+import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
+import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
+import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
 import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -52,14 +54,13 @@ private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L
  * Renders watch face via data in Room database. Also, updates watch face state based on setting
  * changes by user via [userStyleRepository.addUserStyleListener()].
  */
-@ExperimentalCoroutinesApi
 class AnalogWatchCanvasRenderer(
     private val context: Context,
     surfaceHolder: SurfaceHolder,
-    private val watchState: WatchState,
+    watchState: WatchState,
     private val complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
-    analogWatchFaceViewModel: AnalogWatchFaceViewModel,
+    private val analogWatchFaceViewModel: AnalogWatchFaceViewModel,
     canvasType: Int
 ) : Renderer.CanvasRenderer(
     surfaceHolder,
@@ -117,8 +118,12 @@ class AnalogWatchCanvasRenderer(
         scope.launch {
             analogWatchFaceViewModel.uiState.collect { uiState ->
                 when (uiState) {
+                    is AnalogWatchFaceViewModel.UserChangesUiState.Loading -> {
+                        Log.d(TAG, "StateFlow Loading: ${uiState.message}")
+                    }
                     is AnalogWatchFaceViewModel.UserChangesUiState.Success -> {
-                        updateWatchFace(uiState.userChangesUserSettingChanges)
+                        Log.d(TAG, "StateFlow Success.")
+                        updateWatchFaceData(uiState.userStyle)
                     }
                     is AnalogWatchFaceViewModel.UserChangesUiState.Error -> {
                         Log.e(TAG, "Flow error: ${uiState.exception}")
@@ -132,33 +137,68 @@ class AnalogWatchCanvasRenderer(
      * Triggered when the user makes changes to the watch face through the settings activity. The
      * function is called by a flow.
      */
-    private fun updateWatchFace(userChangesUserSettingChanges: WatchFaceUserChanges) {
-        Log.d(TAG, "updateWatchFace(): $userChangesUserSettingChanges")
+    private fun updateWatchFaceData(userStyle: UserStyle) {
+        Log.d(TAG, "updateWatchFace(): $userStyle")
 
-        // Updates length of minute hand based on edits from user.
-        val newMinuteHandDimensions = watchFaceData.minuteHandDimensions.copy(
-            lengthFraction = userChangesUserSettingChanges.minuteHandLength
-        )
+        var newWatchFaceData: WatchFaceData = watchFaceData
 
-        // Applies user changes to the watch face.
-        watchFaceData = watchFaceData.copy(
-            activeColorStyle = ColorStyleIdAndResourceIds.getColorStyleConfig(userChangesUserSettingChanges.colorId),
-            drawHourPips = userChangesUserSettingChanges.pipsEnabled,
-            minuteHandDimensions = newMinuteHandDimensions
-        )
+        // Loops through user style and applies new values to watchFaceData.
+        for (options in userStyle.selectedOptions) {
+            when (options.key.id.toString()) {
+                COLOR_STYLE_SETTING -> {
+                    val listOption = options.value as
+                            UserStyleSetting.ListUserStyleSetting.ListOption
 
-        // Recreates Color and ComplicationDrawable from resource ids.
-        watchFaceColors = convertToWatchFaceColorPalette(
-            context,
-            watchFaceData.activeColorStyle,
-            watchFaceData.ambientColorStyle
-        )
+                    newWatchFaceData = newWatchFaceData.copy(
+                        activeColorStyle = ColorStyleIdAndResourceIds.getColorStyleConfig(
+                            listOption.id.toString()
+                        )
+                    )
+                }
+                DRAW_HOUR_PIPS_STYLE_SETTING -> {
+                    val booleanValue = options.value as
+                            UserStyleSetting.BooleanUserStyleSetting.BooleanOption
 
-        // Applies the user chosen complication color scheme changes. ComplicationDrawables for each
-        // of the styles are defined in XML so we need to replace the complication's drawables.
-        for ((_, complication) in complicationSlotsManager.complicationSlots) {
-            (complication.renderer as CanvasComplicationDrawable).drawable =
-                watchFaceColors.complicationStyleDrawable
+                    newWatchFaceData = newWatchFaceData.copy(
+                        drawHourPips = booleanValue.value
+                    )
+                }
+                WATCH_HAND_LENGTH_STYLE_SETTING -> {
+                    val doubleValue = options.value as
+                            UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+
+                    // Updates length of minute hand based on edits from user.
+                    val newMinuteHandDimensions = newWatchFaceData.minuteHandDimensions.copy(
+                        lengthFraction = doubleValue.value.toFloat()
+                    )
+
+                    newWatchFaceData = newWatchFaceData.copy(
+                        minuteHandDimensions = newMinuteHandDimensions
+                    )
+                }
+                // TODO (codingjeremy): Add complication change support if settings activity
+                // PR doesn't cover it. Otherwise, remove comment.
+            }
+        }
+
+        // Only updates if something changed.
+        if (watchFaceData != newWatchFaceData) {
+            watchFaceData = newWatchFaceData
+
+            // Recreates Color and ComplicationDrawable from resource ids.
+            watchFaceColors = convertToWatchFaceColorPalette(
+                context,
+                watchFaceData.activeColorStyle,
+                watchFaceData.ambientColorStyle
+            )
+
+            // Applies the user chosen complication color scheme changes. ComplicationDrawables for
+            // each of the styles are defined in XML so we need to replace the complication's
+            // drawables.
+            for ((_, complication) in complicationSlotsManager.complicationSlots) {
+                (complication.renderer as CanvasComplicationDrawable).drawable =
+                    watchFaceColors.complicationStyleDrawable
+            }
         }
     }
 

@@ -15,52 +15,46 @@
  */
 package com.example.android.wearable.alpha.viewmodels
 
+import androidx.wear.watchface.style.UserStyle
 import com.example.android.wearable.alpha.AnalogWatchFaceService
 import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource
-import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource.WatchFaceUserChanges
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 /**
  * View model used for [AnalogWatchFaceService]. Uses flow to receive changes in the data source and
  * because the renderer is a service without LifeCycle support, handles canceling scope when no
  * longer needed.
  */
-@ExperimentalCoroutinesApi
 class AnalogWatchFaceViewModel(
     watchFaceUserSettingChangesDataSource: WatchFaceUserSettingChangesDataSource
 ) {
     // Used to launch coroutines/flow.
     private val scope: CoroutineScope = MainScope()
 
-    private val _uiState = MutableStateFlow(UserChangesUiState.Success(WatchFaceUserChanges()))
     // The UI collects from this StateFlow to get its state updates
-    val uiState: StateFlow<UserChangesUiState> = _uiState.asStateFlow()
-
-    init {
-        scope.launch {
-            watchFaceUserSettingChangesDataSource.getUserWatchFaceChanges().collect {
-                    watchFaceUserChanges: WatchFaceUserChanges ->
-                _uiState.value = UserChangesUiState.Success(watchFaceUserChanges)
-            }
-        }
-    }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<UserChangesUiState> =
+        watchFaceUserSettingChangesDataSource.getUserWatchFaceChanges()
+            .map(UserChangesUiState::Success)
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Eagerly,
+                initialValue = UserChangesUiState.Loading("Initializing..."))
 
     fun clear() {
         scope.cancel("AnalogWatchFaceViewModel scope.clear() request")
     }
 
     sealed class UserChangesUiState {
-        data class Success(
-            val userChangesUserSettingChanges: WatchFaceUserChanges
-        ) : UserChangesUiState()
+        data class Success(val userStyle: UserStyle) : UserChangesUiState()
+        data class Loading(val message: String) : UserChangesUiState()
         data class Error(val exception: Throwable) : UserChangesUiState()
     }
 }
