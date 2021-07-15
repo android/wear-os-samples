@@ -15,9 +15,9 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import androidx.wear.complications.ComplicationProviderService
-import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.datasource.ComplicationDataSourceService
+import androidx.wear.complications.datasource.ComplicationRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,11 +25,11 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 /**
- * A simple subclass of [ComplicationProviderService] that controls a [CoroutineScope] so that
+ * A simple subclass of [ComplicationDataSourceService] that controls a [CoroutineScope] so that
  * [onComplicationRequest] can be suspending. This allows the complication update to be asynchronous, so that
  * suspending functions can be called to drive the update.
  */
-abstract class SuspendingComplicationProviderService : ComplicationProviderService() {
+abstract class SuspendingComplicationDataSourceService : ComplicationDataSourceService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     final override fun onComplicationRequest(request: ComplicationRequest, listener: ComplicationRequestListener) {
@@ -47,11 +47,11 @@ abstract class SuspendingComplicationProviderService : ComplicationProviderServi
      * Computes the [ComplicationData] for the given [request].
      *
      * The [ComplicationData] returned from this method will be passed to the
-     * [ComplicationProviderService.ComplicationRequestListener] provided to [onComplicationRequest].
+     * [ComplicationDataSourceService.ComplicationRequestListener] provided to [onComplicationRequest].
      * Return `null` to indicate that the previous complication data shouldn't be overwritten.
      *
-     * @see ComplicationProviderService.onComplicationRequest
-     * @see ComplicationProviderService.ComplicationRequestListener.onComplicationData
+     * @see ComplicationDataSourceService.onComplicationRequest
+     * @see ComplicationDataSourceService.ComplicationRequestListener.onComplicationData
      */
     abstract suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData?
 

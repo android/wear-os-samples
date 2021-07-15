@@ -19,7 +19,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.wear.complications.ProviderUpdateRequester
+import androidx.wear.complications.datasource.ComplicationDataSourceUpdateRequester
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -41,7 +41,10 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
                 args.updateState(context)
 
                 // Request an update for the complication that has just been toggled.
-                ProviderUpdateRequester(context, args.providerComponent).requestUpdate(args.complicationInstanceId)
+                ComplicationDataSourceUpdateRequester(
+                    context = context,
+                    complicationDataSourceComponent = args.providerComponent
+                ).requestUpdate(args.complicationInstanceId)
             } finally {
                 // Always call finish, even if cancelled
                 result.finish()
