@@ -16,30 +16,15 @@
 package com.example.android.wearable.alpha.utils
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
 import com.example.android.wearable.alpha.R
-import com.example.android.wearable.alpha.data.watchface.AMBIENT_COLOR_STYLE_ICON_ID
-import com.example.android.wearable.alpha.data.watchface.AMBIENT_COLOR_STYLE_ID
-import com.example.android.wearable.alpha.data.watchface.AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID
-import com.example.android.wearable.alpha.data.watchface.BLUE_COLOR_STYLE_ICON_ID
-import com.example.android.wearable.alpha.data.watchface.BLUE_COLOR_STYLE_ID
-import com.example.android.wearable.alpha.data.watchface.BLUE_COLOR_STYLE_NAME_RESOURCE_ID
+import com.example.android.wearable.alpha.data.watchface.ColorStyleIdAndResourceIds
 import com.example.android.wearable.alpha.data.watchface.DRAW_HOUR_PIPS_DEFAULT
-import com.example.android.wearable.alpha.data.watchface.GREEN_COLOR_STYLE_ICON_ID
-import com.example.android.wearable.alpha.data.watchface.GREEN_COLOR_STYLE_ID
-import com.example.android.wearable.alpha.data.watchface.GREEN_COLOR_STYLE_NAME_RESOURCE_ID
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MAXIMUM
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
-import com.example.android.wearable.alpha.data.watchface.RED_COLOR_STYLE_ICON_ID
-import com.example.android.wearable.alpha.data.watchface.RED_COLOR_STYLE_ID
-import com.example.android.wearable.alpha.data.watchface.RED_COLOR_STYLE_NAME_RESOURCE_ID
-import com.example.android.wearable.alpha.data.watchface.WHITE_COLOR_STYLE_ICON_ID
-import com.example.android.wearable.alpha.data.watchface.WHITE_COLOR_STYLE_ID
-import com.example.android.wearable.alpha.data.watchface.WHITE_COLOR_STYLE_NAME_RESOURCE_ID
 
 // Keys to matched content in the  the user style settings. We listen for changes to these
 // values in the renderer and if new, we will update the database and update the watch face
@@ -70,33 +55,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
             displayName = context.getString(R.string.colors_style_setting),
             description = context.getString(R.string.colors_style_setting_description),
             icon = null,
-            options = listOf(
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    id = UserStyleSetting.Option.Id(RED_COLOR_STYLE_ID),
-                    displayName = context.getString(RED_COLOR_STYLE_NAME_RESOURCE_ID),
-                    icon = Icon.createWithResource(context, RED_COLOR_STYLE_ICON_ID)
-                ),
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    id = UserStyleSetting.Option.Id(GREEN_COLOR_STYLE_ID),
-                    displayName = context.getString(GREEN_COLOR_STYLE_NAME_RESOURCE_ID),
-                    icon = Icon.createWithResource(context, GREEN_COLOR_STYLE_ICON_ID)
-                ),
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    id = UserStyleSetting.Option.Id(BLUE_COLOR_STYLE_ID),
-                    displayName = context.getString(BLUE_COLOR_STYLE_NAME_RESOURCE_ID),
-                    icon = Icon.createWithResource(context, BLUE_COLOR_STYLE_ICON_ID)
-                ),
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    id = UserStyleSetting.Option.Id(WHITE_COLOR_STYLE_ID),
-                    displayName = context.getString(WHITE_COLOR_STYLE_NAME_RESOURCE_ID),
-                    icon = Icon.createWithResource(context, WHITE_COLOR_STYLE_ICON_ID)
-                ),
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    id = UserStyleSetting.Option.Id(AMBIENT_COLOR_STYLE_ID),
-                    displayName = context.getString(AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID),
-                    icon = Icon.createWithResource(context, AMBIENT_COLOR_STYLE_ICON_ID)
-                )
-            ),
+            options = ColorStyleIdAndResourceIds.toOptionList(context),
             affectsWatchFaceLayers = listOf(
                 WatchFaceLayer.BASE,
                 WatchFaceLayer.COMPLICATIONS,

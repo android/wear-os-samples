@@ -19,8 +19,10 @@ import android.util.Log
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 
 /**
@@ -31,7 +33,7 @@ class WatchFaceUserSettingChangesDataSource(
     private val currentUserStyleRepository: CurrentUserStyleRepository
 ) {
     @ExperimentalCoroutinesApi
-    fun getUserWatchFaceChanges(): Flow<UserStyle> = callbackFlow {
+    fun getUserWatchFaceChanges(): Flow<UserStyle> = callbackFlow<UserStyle> {
         val userStyleChangeListener = object : CurrentUserStyleRepository.UserStyleChangeListener {
             override fun onUserStyleChanged(userStyle: UserStyle) {
                 Log.d(TAG, "onUserStyleChanged(): userStyle: $userStyle")
@@ -48,7 +50,7 @@ class WatchFaceUserSettingChangesDataSource(
             Log.d(TAG, "awaitClose{ }")
             currentUserStyleRepository.removeUserStyleChangeListener(userStyleChangeListener)
         }
-    }
+    }.buffer(Channel.CONFLATED)
 
     companion object {
         const val TAG = "UserConfigurableWatchFaceDataSource"

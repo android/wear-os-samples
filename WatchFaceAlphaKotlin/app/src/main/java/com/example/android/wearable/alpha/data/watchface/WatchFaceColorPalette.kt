@@ -36,7 +36,9 @@ data class WatchFaceColorPalette(
     val ambientOuterElementColor: Int
 ) {
     companion object {
-        // Converts [ColorStyleIdAndResourceIds] to [WatchFaceColorPalette].
+        /**
+         * Converts [ColorStyleIdAndResourceIds] to [WatchFaceColorPalette].
+         */
         fun convertToWatchFaceColorPalette(
             context: Context,
             activeColorStyle: ColorStyleIdAndResourceIds,

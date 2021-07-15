@@ -15,6 +15,10 @@
  */
 package com.example.android.wearable.alpha.data.watchface
 
+import android.content.Context
+import android.graphics.drawable.Icon
+import androidx.wear.watchface.style.UserStyleSetting
+import androidx.wear.watchface.style.UserStyleSetting.ListUserStyleSetting
 import com.example.android.wearable.alpha.R
 
 // Defaults for all styles.
@@ -22,24 +26,24 @@ import com.example.android.wearable.alpha.R
 // X_COLOR_STYLE_NAME_RESOURCE_ID - String name to display in the user settings UI for the style.
 // X_COLOR_STYLE_ICON_ID - Icon to display in the user settings UI for the style.
 const val AMBIENT_COLOR_STYLE_ID = "ambient_style_id"
-const val AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID = R.string.ambient_style_name
-const val AMBIENT_COLOR_STYLE_ICON_ID = R.drawable.white_style
+private const val AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID = R.string.ambient_style_name
+private const val AMBIENT_COLOR_STYLE_ICON_ID = R.drawable.white_style
 
 const val RED_COLOR_STYLE_ID = "red_style_id"
-const val RED_COLOR_STYLE_NAME_RESOURCE_ID = R.string.red_style_name
-const val RED_COLOR_STYLE_ICON_ID = R.drawable.red_style
+private const val RED_COLOR_STYLE_NAME_RESOURCE_ID = R.string.red_style_name
+private const val RED_COLOR_STYLE_ICON_ID = R.drawable.red_style
 
 const val GREEN_COLOR_STYLE_ID = "green_style_id"
-const val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
-const val GREEN_COLOR_STYLE_ICON_ID = R.drawable.green_style
+private const val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
+private const val GREEN_COLOR_STYLE_ICON_ID = R.drawable.green_style
 
 const val BLUE_COLOR_STYLE_ID = "blue_style_id"
-const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
-const val BLUE_COLOR_STYLE_ICON_ID = R.drawable.blue_style
+private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
+private const val BLUE_COLOR_STYLE_ICON_ID = R.drawable.blue_style
 
 const val WHITE_COLOR_STYLE_ID = "white_style_id"
-const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
-const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
+private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
+private const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
 
 /**
  * Represents the id (in the watch face database) and the resource ids for the color styles in the
@@ -114,7 +118,9 @@ sealed class ColorStyleIdAndResourceIds(
     )
 
     companion object {
-        // Translates the string id to the correct ColorStyleIdAndResourceIds object.
+        /**
+         * Translates the string id to the correct ColorStyleIdAndResourceIds object.
+         */
         fun getColorStyleConfig(id: String): ColorStyleIdAndResourceIds {
             return when (id) {
                 Ambient.id -> Ambient
@@ -124,6 +130,38 @@ sealed class ColorStyleIdAndResourceIds(
                 White.id -> White
                 else -> White
             }
+        }
+
+        /**
+         * Returns a list of [UserStyleSetting.ListUserStyleSetting.ListOption] for all sealed
+         * ColorStyleIdAndResourceIds objects. The watch face settings APIs use this to set up
+         * options for the user to select a style.
+         *
+         * IMPORTANT: To avoid reflection, the full list of ColorStyleIdAndResourceIds are manually
+         * included below (you need to use reflection to get full list of sealed classes which I did
+         * not want to do). If you add a new style, add it to the list below. Otherwise, it will not
+         * show up to the user!
+         */
+        fun toOptionList(context: Context): List<ListUserStyleSetting.ListOption> {
+            // Hardcoded list of all ColorStyleIdAndResourceIds. If you add a new one, add it here
+            // as well.
+            val colorStyleIdAndResourceIdsList = listOf(Red, Green, Blue, White, Ambient)
+
+            val result = mutableListOf<ListUserStyleSetting.ListOption>()
+
+            for (colorStyleIdAndResourceIds in colorStyleIdAndResourceIdsList) {
+                result.add(
+                    ListUserStyleSetting.ListOption(
+                        id = UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
+                        displayName = context.getString(colorStyleIdAndResourceIds.name),
+                        icon = Icon.createWithResource(
+                            context,
+                            colorStyleIdAndResourceIds.iconResourceId
+                        )
+                    )
+                )
+            }
+            return result
         }
     }
 }
