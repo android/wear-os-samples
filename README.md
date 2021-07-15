@@ -21,7 +21,7 @@ Samples
 
 * **[WearAccessibilityApp](WearAccessibilityApp)** (Java) - Sample demonstrates how to include accessibility support for your wearable app. [Guide](https://developer.android.com/guide/topics/ui/accessibility)
 
-* **[WearComplicationProvidersTestSuite](WearComplicationProvidersTestSuite)** (Kotlin) - If you are writing a watch face with complications, this app gives you a full suite of data sources to test against your implementation of complications to make sure it looks good. [Complication Guide](https://developer.android.com/training/wearables/watch-faces/adding-complications)
+* **[WearComplicationDataSourcesTestSuite](WearComplicationDataSourcesTestSuite)** (Kotlin) - If you are writing a watch face with complications, this app gives you a full suite of data sources to test against your implementation of complications to make sure it looks good. [Complication Guide](https://developer.android.com/training/wearables/watch-faces/adding-complications)
 
 * **[WearDrawers](WearDrawers)** (Java) - Demonstrates Navigation (Top) and Action (Bottom) Drawers, part of Material Design for Wear. [Guide](https://developer.android.com/training/wearables/ui/ui-nav-actions)
 
