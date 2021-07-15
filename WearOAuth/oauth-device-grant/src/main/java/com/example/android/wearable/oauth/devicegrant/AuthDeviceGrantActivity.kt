@@ -1,0 +1,86 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.example.android.wearable.oauth.devicegrant
+
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import com.google.android.wearable.intent.RemoteIntent
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+
+/**
+ * Demonstrates the OAuth 2.0 flow on Wear OS using Device Authorization Grant, as described in
+ * [RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628).
+ *
+ * This sample currently directly polls the Google OAuth 2.0 API, which means the client id and
+ * client secret are included in the app. In practice you would use an intermediary server that
+ * holds these values for you.
+ *
+ * The sample uses the Google OAuth 2.0 APIs, but can be easily extended for any other
+ * OAuth 2.0 provider.
+ *
+ * See [AuthDeviceGrantViewModel] for the implementation of the authorization flow.
+ */
+class AuthDeviceGrantActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_auth)
+        // In a real world situation you would use some form of Dependency Injection here.
+        val viewModel = AuthDeviceGrantViewModel()
+
+        // Start the OAuth flow when the user presses the button
+        findViewById<View>(R.id.authenticateButton).setOnClickListener {
+            viewModel.startAuthFlow()
+        }
+
+        // Show current status on the screen
+        viewModel.status.observe(this) { statusText ->
+            findViewById<TextView>(R.id.text_view).text = statusText
+        }
+
+        // Fire a Remote Intent when the verification Uri is retrieved from the OAuth API
+        viewModel.fireRemoteIntentFlow
+            .onEach { verificationUri -> fireRemoteIntent(verificationUri) }
+            .launchIn(lifecycleScope)
+    }
+
+    /**
+     * Opens the verification URL on the paired device.
+     *
+     * When the user has the corresponding app installed on their paired Android device, the Data
+     * Layer can be used instead, see https://developer.android.com/training/wearables/data-layer.
+     *
+     * When the user has the corresponding app installed on their paired iOS device, it should
+     * use [Universal Links](https://developer.apple.com/ios/universal-links/) to intercept the
+     * intent.
+     */
+    private fun fireRemoteIntent(verificationUri: String) {
+        RemoteIntent.startRemoteActivity(
+            this,
+            Intent(Intent.ACTION_VIEW)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setData(Uri.parse(verificationUri)),
+            null
+        )
+    }
+}
