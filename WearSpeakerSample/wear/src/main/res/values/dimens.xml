@@ -14,13 +14,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <size
-        android:width="100dp"
-        android:height="100dp" />
-    <stroke
-        android:width="3dp"
-        android:color="@color/circle_color" />
-    <solid android:color="@color/circle_color" />
-</shape>
+<resources>
+    <dimen name="icon_circle_radius">32dp</dimen>
+    <dimen name="icon_minimized_size">48dp</dimen>
+    <dimen name="icon_expanded_size">136dp</dimen>
+    <dimen name="icon_padding">8dp</dimen>
+</resources>

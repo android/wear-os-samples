@@ -11,79 +11,77 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <RelativeLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/outer_circle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_color">
+        android:background="@color/background_color"
+        app:layoutDescription="@xml/scene">
 
         <View
             android:id="@+id/inner_circle"
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/color_circle" />
-
-        <View
-            android:id="@+id/center"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            android:layout_centerInParent="true"
-            android:visibility="invisible" />
+            android:background="@drawable/color_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/mic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="13dp"
-            android:src="@drawable/ic_mic_32dp" />
+            android:layout_width="@dimen/icon_minimized_size"
+            android:layout_height="@dimen/icon_minimized_size"
+            android:contentDescription="@string/record"
+            android:padding="@dimen/icon_padding"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/icon_button_tint"
+            app:tintMode="src_in" />
 
         <ImageView
             android:id="@+id/play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/center"
-            android:layout_marginRight="13dp"
-            android:layout_marginTop="12dp"
-            android:layout_toLeftOf="@+id/center"
-            android:src="@drawable/ic_play_arrow_32dp" />
+            android:layout_width="@dimen/icon_minimized_size"
+            android:layout_height="@dimen/icon_minimized_size"
+            android:contentDescription="@string/play_recording"
+            android:padding="@dimen/icon_padding"
+            android:src="@drawable/ic_play_arrow"
+            app:tint="@color/icon_button_tint"
+            app:tintMode="src_in" />
 
         <ImageView
             android:id="@+id/music"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/center"
-            android:layout_marginLeft="13dp"
-            android:layout_marginTop="12dp"
-            android:layout_toRightOf="@+id/center"
-            android:src="@drawable/ic_audiotrack_32dp" />
+            android:layout_width="@dimen/icon_minimized_size"
+            android:layout_height="@dimen/icon_minimized_size"
+            android:contentDescription="@string/play_music"
+            android:padding="@dimen/icon_padding"
+            android:src="@drawable/ic_audiotrack"
+            app:tint="@color/icon_button_tint"
+            app:tintMode="src_in" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/progress_bar_container"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/inner_circle"
-            android:layout_alignEnd="@+id/inner_circle"
-            android:layout_below="@+id/inner_circle"
-            android:progressTint="@color/progressbar_tint"
-            android:progressBackgroundTint="@color/progressbar_background_tint"
             android:layout_marginTop="5dp"
-            android:visibility="invisible" />
-    </RelativeLayout>
+            app:layout_constraintEnd_toEndOf="@id/inner_circle"
+            app:layout_constraintStart_toStartOf="@id/inner_circle"
+            app:layout_constraintTop_toBottomOf="@id/inner_circle">
 
-    <ImageView
-        android:id="@+id/expanded"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="center"
-        android:visibility="invisible" />
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="@color/progressbar_background_tint"
+                android:progressTint="@color/progressbar_tint" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </FrameLayout>

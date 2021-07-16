@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright 2015 Google Inc. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-       http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
+     Copyright (C) 2021 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources>
     <string name="app_name">Wear Speaker Sample</string>
-    <string name="exiting_for_permissions">Recording Audio permission is required, exiting now!</string>
-    <string name="no_speaker_supported">Speaker is not supported</string>
+    <string name="rationale_for_microphone_permission">Recording requires permission to access the microphone</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_speaker_supported">No speaker available</string>
+    <string name="record">Record</string>
+    <string name="play_recording">Play Recording</string>
+    <string name="play_music">Play Music</string>
+    <string name="stop_recording">Stop Recording</string>
+    <string name="stop_playing_recording">Stop Playing Recording</string>
+    <string name="stop_playing_music">Stop Playing Music</string>
 </resources>

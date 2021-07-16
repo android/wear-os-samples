@@ -14,13 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <size
-        android:width="100dp"
-        android:height="100dp" />
-    <stroke
-        android:width="3dp"
-        android:color="@color/circle_color" />
-    <solid android:color="@color/circle_color" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/small_icons_color" android:state_enabled="true" />
+    <item android:color="@color/small_icons_disabled_color" />
+</selector>
