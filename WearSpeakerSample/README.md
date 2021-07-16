@@ -3,17 +3,16 @@ Android WearSpeakerSample Sample
 ================================
 
 A sample that shows how you can record voice using the microphone on a wearable and
-play the recorded voice or an mp3 file, if the wearable device has a built-in speaker.
+play the recorded voice or an mp3 file, if the wearable device is connected to a speaker
+(bluetooth or built-in).
 
 This sample doesn't have any companion phone app so you need to install this directly
-on your watch (using "adb").
+on your watch using `adb` or Android Studio.
 
 Pre-requisites
 --------------
 
-- Android SDK v28
-- Android Build Tools v29.0.2
-- Android Support Repository
+- Android SDK 30
 
 Getting Started
 ---------------
@@ -27,7 +26,7 @@ Support
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
 If you've found an error in this sample, please file an issue:
-https://github.com/googlesamples/android-WearSpeakerSample
+https://github.com/android/wear-os-samples/issues
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
