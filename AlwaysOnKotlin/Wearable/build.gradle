@@ -62,7 +62,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
     implementation "androidx.activity:activity-ktx:1.2.3"
     implementation "androidx.core:core-ktx:1.6.0"
-    implementation 'androidx.wear:wear:1.2.0-alpha11'
+    implementation 'androidx.wear:wear:1.2.0-alpha12'
 
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1"
     androidTestImplementation "androidx.test:core:1.4.0"
