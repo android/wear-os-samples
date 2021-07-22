@@ -113,14 +113,15 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
             .setClientId(CLIENT_ID)
             .build()
 
-        Log.d(TAG, "Authorization requested. Request URL: ${request.getRequestUrl()}")
+        Log.d(TAG, "Authorization requested. Request URL: ${request.requestUrl}")
 
         // Wrap the callback-based request inside a coroutine wrapper
         return suspendCoroutine { c ->
             client.sendAuthorizationRequest(
-                request,
-                object : RemoteAuthClient.Callback() {
-                    override fun onAuthorizationError(errorCode: Int) {
+                request = request,
+                executor = { command -> command?.run() },
+                clientCallback = object : RemoteAuthClient.Callback() {
+                    override fun onAuthorizationError(request: OAuthRequest, errorCode: Int) {
                         Log.w(TAG, "Authorization failed with errorCode $errorCode")
                         c.resume(Result.failure(IOException("Authorization failed")))
                     }
@@ -129,7 +130,7 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
                         request: OAuthRequest,
                         response: OAuthResponse
                     ) {
-                        val responseUrl = response.getResponseUrl()
+                        val responseUrl = response.responseUrl
                         Log.d(TAG, "Authorization success. ResponseUrl: $responseUrl")
                         val code = responseUrl?.getQueryParameter("code")
                         if (code.isNullOrBlank()) {
@@ -166,7 +167,7 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
                 "client_id" to CLIENT_ID,
                 "client_secret" to CLIENT_SECRET,
                 "code" to code,
-                "code_verifier" to codeVerifier.getValue(),
+                "code_verifier" to codeVerifier.value,
                 "grant_type" to "authorization_code",
                 "redirect_uri" to "https://wear.googleapis.com/3p_auth/$packageName",
             )

@@ -16,16 +16,11 @@
 
 package com.example.android.wearable.oauth.devicegrant
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.lifecycleScope
-import com.google.android.wearable.intent.RemoteIntent
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import androidx.wear.remote.interactions.RemoteIntentHelper
 
 /**
  * Demonstrates the OAuth 2.0 flow on Wear OS using Device Authorization Grant, as described in
@@ -46,7 +41,7 @@ class AuthDeviceGrantActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         // In a real world situation you would use some form of Dependency Injection here.
-        val viewModel = AuthDeviceGrantViewModel()
+        val viewModel = AuthDeviceGrantViewModel(RemoteIntentHelper(this))
 
         // Start the OAuth flow when the user presses the button
         findViewById<View>(R.id.authenticateButton).setOnClickListener {
@@ -57,30 +52,5 @@ class AuthDeviceGrantActivity : ComponentActivity() {
         viewModel.status.observe(this) { statusText ->
             findViewById<TextView>(R.id.text_view).text = statusText
         }
-
-        // Fire a Remote Intent when the verification Uri is retrieved from the OAuth API
-        viewModel.fireRemoteIntentFlow
-            .onEach { verificationUri -> fireRemoteIntent(verificationUri) }
-            .launchIn(lifecycleScope)
-    }
-
-    /**
-     * Opens the verification URL on the paired device.
-     *
-     * When the user has the corresponding app installed on their paired Android device, the Data
-     * Layer can be used instead, see https://developer.android.com/training/wearables/data-layer.
-     *
-     * When the user has the corresponding app installed on their paired iOS device, it should
-     * use [Universal Links](https://developer.apple.com/ios/universal-links/) to intercept the
-     * intent.
-     */
-    private fun fireRemoteIntent(verificationUri: String) {
-        RemoteIntent.startRemoteActivity(
-            this,
-            Intent(Intent.ACTION_VIEW)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
-                .setData(Uri.parse(verificationUri)),
-            null
-        )
     }
 }
