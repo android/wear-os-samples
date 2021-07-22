@@ -58,7 +58,6 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
     private var androidPhoneNodeWithApp: Node? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -83,13 +82,11 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
     }
 
     override fun onPause() {
-        Log.d(TAG, "onPause()")
         super.onPause()
         Wearable.getCapabilityClient(this).removeListener(this, CAPABILITY_PHONE_APP)
     }
 
     override fun onResume() {
-        Log.d(TAG, "onResume()")
         super.onResume()
         Wearable.getCapabilityClient(this).addListener(this, CAPABILITY_PHONE_APP)
         lifecycleScope.launch {
