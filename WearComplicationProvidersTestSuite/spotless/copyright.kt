@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright $YEAR The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
-
-/**
- * The enumerated list of all complications provided by this app.
- */
-enum class Complication(
-
-    /**
-     * A stable key that can be used to distinguish between this app's complications.
-     */
-    val key: String
-) {
-    ICON("Icon"),
-    LARGE_IMAGE("LargeImage"),
-    LONG_TEXT("LongText"),
-    RANGED_VALUE("RangedValue"),
-    SHORT_TEXT("ShortText"),
-    SMALL_IMAGE("SmallImage")
-}
