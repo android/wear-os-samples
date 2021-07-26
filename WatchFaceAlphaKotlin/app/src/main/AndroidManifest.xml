@@ -28,14 +28,10 @@
 
     <application
         android:allowBackup="true"
-        android:fullBackupContent="@xml/my_backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
-        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
 
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -75,7 +71,7 @@
                 android:resource="@drawable/watch_preview" />
             <meta-data
                 android:name="com.google.android.wearable.watchface.wearableConfigurationAction"
-                android:value="com.google.android.clockwork.watchfaces.complication.CONFIG_DIGITAL" />
+                android:value="androidx.wear.watchface.editor.action.WATCH_FACE_EDITOR" />
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face" />
@@ -92,7 +88,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
 
             <intent-filter>
-                <action android:name="com.google.android.clockwork.watchfaces.complication.CONFIG_DIGITAL" />
+                <action android:name="androidx.wear.watchface.editor.action.WATCH_FACE_EDITOR" />
 
                 <category android:name="com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION" />
                 <category android:name="android.intent.category.DEFAULT" />

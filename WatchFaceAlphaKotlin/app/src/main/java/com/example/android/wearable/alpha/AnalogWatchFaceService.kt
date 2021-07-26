@@ -54,8 +54,11 @@ class AnalogWatchFaceService : WatchFaceService() {
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
 
-        // Cancels scope used for retrieving watch face style changes via callbackFlow.
-        analogWatchFaceViewModel.clear()
+        // Cancels scope used for retrieving watch face style changes via callbackFlow if the
+        // variable has been initialized.
+        if (::analogWatchFaceViewModel.isInitialized) {
+            analogWatchFaceViewModel.clear()
+        }
 
         super.onDestroy()
     }

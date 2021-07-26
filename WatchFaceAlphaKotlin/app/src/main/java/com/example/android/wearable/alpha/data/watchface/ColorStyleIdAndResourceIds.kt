@@ -147,21 +147,16 @@ sealed class ColorStyleIdAndResourceIds(
             // as well.
             val colorStyleIdAndResourceIdsList = listOf(Red, Green, Blue, White, Ambient)
 
-            val result = mutableListOf<ListUserStyleSetting.ListOption>()
-
-            for (colorStyleIdAndResourceIds in colorStyleIdAndResourceIdsList) {
-                result.add(
-                    ListUserStyleSetting.ListOption(
-                        id = UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
-                        displayName = context.getString(colorStyleIdAndResourceIds.name),
-                        icon = Icon.createWithResource(
-                            context,
-                            colorStyleIdAndResourceIds.iconResourceId
-                        )
+            return colorStyleIdAndResourceIdsList.map { colorStyleIdAndResourceIds ->
+                ListUserStyleSetting.ListOption(
+                    id = UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
+                    displayName = context.getString(colorStyleIdAndResourceIds.name),
+                    icon = Icon.createWithResource(
+                        context,
+                        colorStyleIdAndResourceIds.iconResourceId
                     )
                 )
             }
-            return result
         }
     }
 }
