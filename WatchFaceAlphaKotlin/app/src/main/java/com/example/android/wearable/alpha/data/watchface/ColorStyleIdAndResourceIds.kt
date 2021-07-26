@@ -46,15 +46,17 @@ private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
 private const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
 
 /**
- * Represents the id (in the watch face database) and the resource ids for the color styles in the
- * watch face (including the complication color style).
+ * Represents watch face color style options the user can select (includes the unique id, the
+ * complication style resource id, and general watch face color style resource ids).
  *
- * The watch face renderer (with the context), will translate these into the actual colors and
- * ComplicationDrawables to use for rendering.
+ * The companion object offers helper functions to translate a unique string id to the correct enum
+ * and convert all the resource ids to their correct resources (with the Context passed in). The
+ * renderer will use these resources to render the actual colors and ComplicationDrawables of the
+ * watch face.
  */
-sealed class ColorStyleIdAndResourceIds(
+enum class ColorStyleIdAndResourceIds(
     val id: String,
-    val name: Int,
+    val nameResourceId: Int,
     val iconResourceId: Int,
     val complicationStyleDrawableId: Int,
     val primaryColorId: Int,
@@ -62,60 +64,60 @@ sealed class ColorStyleIdAndResourceIds(
     val backgroundColorId: Int,
     val outerElementColorId: Int
 ) {
-    object Ambient : ColorStyleIdAndResourceIds(
+    AMBIENT(
         id = AMBIENT_COLOR_STYLE_ID,
-        name = AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID,
+        nameResourceId = AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID,
         iconResourceId = AMBIENT_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.ambient_primary_color,
         secondaryColorId = R.color.ambient_secondary_color,
         backgroundColorId = R.color.ambient_background_color,
         outerElementColorId = R.color.ambient_outer_element_color
-    )
+    ),
 
-    object Red : ColorStyleIdAndResourceIds(
+    RED(
         id = RED_COLOR_STYLE_ID,
-        name = RED_COLOR_STYLE_NAME_RESOURCE_ID,
+        nameResourceId = RED_COLOR_STYLE_NAME_RESOURCE_ID,
         iconResourceId = RED_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_red_style,
         primaryColorId = R.color.red_primary_color,
         secondaryColorId = R.color.red_secondary_color,
         backgroundColorId = R.color.red_background_color,
         outerElementColorId = R.color.red_outer_element_color
-    )
+    ),
 
-    object Green : ColorStyleIdAndResourceIds(
+    GREEN(
         id = GREEN_COLOR_STYLE_ID,
-        name = GREEN_COLOR_STYLE_NAME_RESOURCE_ID,
+        nameResourceId = GREEN_COLOR_STYLE_NAME_RESOURCE_ID,
         iconResourceId = GREEN_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_green_style,
         primaryColorId = R.color.green_primary_color,
         secondaryColorId = R.color.green_secondary_color,
         backgroundColorId = R.color.green_background_color,
         outerElementColorId = R.color.green_outer_element_color
-    )
+    ),
 
-    object Blue : ColorStyleIdAndResourceIds(
+    BLUE(
         id = BLUE_COLOR_STYLE_ID,
-        name = BLUE_COLOR_STYLE_NAME_RESOURCE_ID,
+        nameResourceId = BLUE_COLOR_STYLE_NAME_RESOURCE_ID,
         iconResourceId = BLUE_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_blue_style,
         primaryColorId = R.color.blue_primary_color,
         secondaryColorId = R.color.blue_secondary_color,
         backgroundColorId = R.color.blue_background_color,
         outerElementColorId = R.color.blue_outer_element_color
-    )
+    ),
 
-    object White : ColorStyleIdAndResourceIds(
+    WHITE(
         id = WHITE_COLOR_STYLE_ID,
-        name = WHITE_COLOR_STYLE_NAME_RESOURCE_ID,
+        nameResourceId = WHITE_COLOR_STYLE_NAME_RESOURCE_ID,
         iconResourceId = WHITE_COLOR_STYLE_ICON_ID,
         complicationStyleDrawableId = R.drawable.complication_white_style,
         primaryColorId = R.color.white_primary_color,
         secondaryColorId = R.color.white_secondary_color,
         backgroundColorId = R.color.white_background_color,
         outerElementColorId = R.color.white_outer_element_color
-    )
+    );
 
     companion object {
         /**
@@ -123,34 +125,27 @@ sealed class ColorStyleIdAndResourceIds(
          */
         fun getColorStyleConfig(id: String): ColorStyleIdAndResourceIds {
             return when (id) {
-                Ambient.id -> Ambient
-                Red.id -> Red
-                Green.id -> Green
-                Blue.id -> Blue
-                White.id -> White
-                else -> White
+                AMBIENT.id -> AMBIENT
+                RED.id -> RED
+                GREEN.id -> GREEN
+                BLUE.id -> BLUE
+                WHITE.id -> WHITE
+                else -> WHITE
             }
         }
 
         /**
-         * Returns a list of [UserStyleSetting.ListUserStyleSetting.ListOption] for all sealed
-         * ColorStyleIdAndResourceIds objects. The watch face settings APIs use this to set up
+         * Returns a list of [UserStyleSetting.ListUserStyleSetting.ListOption] for all
+         * ColorStyleIdAndResourceIds enums. The watch face settings APIs use this to set up
          * options for the user to select a style.
-         *
-         * IMPORTANT: To avoid reflection, the full list of ColorStyleIdAndResourceIds are manually
-         * included below (you need to use reflection to get full list of sealed classes which I did
-         * not want to do). If you add a new style, add it to the list below. Otherwise, it will not
-         * show up to the user!
          */
         fun toOptionList(context: Context): List<ListUserStyleSetting.ListOption> {
-            // Hardcoded list of all ColorStyleIdAndResourceIds. If you add a new one, add it here
-            // as well.
-            val colorStyleIdAndResourceIdsList = listOf(Red, Green, Blue, White, Ambient)
+            val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
 
             return colorStyleIdAndResourceIdsList.map { colorStyleIdAndResourceIds ->
                 ListUserStyleSetting.ListOption(
                     id = UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
-                    displayName = context.getString(colorStyleIdAndResourceIds.name),
+                    displayName = context.getString(colorStyleIdAndResourceIds.nameResourceId),
                     icon = Icon.createWithResource(
                         context,
                         colorStyleIdAndResourceIds.iconResourceId
