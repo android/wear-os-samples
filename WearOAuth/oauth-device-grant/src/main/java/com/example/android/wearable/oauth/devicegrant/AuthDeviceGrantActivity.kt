@@ -20,6 +20,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.wear.remote.interactions.RemoteIntentHelper
 
 /**
@@ -40,8 +43,7 @@ class AuthDeviceGrantActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        // In a real world situation you would use some form of Dependency Injection here.
-        val viewModel = AuthDeviceGrantViewModel(RemoteIntentHelper(this))
+        val viewModel by viewModels<AuthDeviceGrantViewModel>()
 
         // Start the OAuth flow when the user presses the button
         findViewById<View>(R.id.authenticateButton).setOnClickListener {

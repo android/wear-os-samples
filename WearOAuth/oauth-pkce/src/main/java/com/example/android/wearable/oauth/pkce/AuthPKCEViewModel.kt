@@ -16,8 +16,10 @@
 
 package com.example.android.wearable.oauth.pkce
 
+import android.app.Application
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -45,7 +47,7 @@ private const val CLIENT_SECRET = ""
  * different steps of the flow. It first retrieves the OAuth code, uses it to exchange it for an
  * access token, and uses the token to retrieve the user's name.
  */
-class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
+class AuthPKCEViewModel(application: Application) : AndroidViewModel(application) {
     // Status to show on the Wear OS display
     val status: MutableLiveData<String> by lazy { MutableLiveData<String>() }
     private fun showStatus(statusString: String) = status.postValue(statusString)
@@ -117,7 +119,7 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
 
         // Wrap the callback-based request inside a coroutine wrapper
         return suspendCoroutine { c ->
-            client.sendAuthorizationRequest(
+            RemoteAuthClient.create(getApplication()).sendAuthorizationRequest(
                 request = request,
                 executor = { command -> command?.run() },
                 clientCallback = object : RemoteAuthClient.Callback() {
@@ -149,7 +151,7 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
         }
     }
 
-    private fun retrieveToken(
+    private suspend fun retrieveToken(
         code: String,
         packageName: String,
         codeVerifier: CodeVerifier
@@ -157,22 +159,26 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
         // In this sample, we're using a basic implementation of a POST request to retrieve the
         // token. Normally you would probably move this code into a repository and use a library
         // for making such a request.
-        Log.d(TAG, "Requesting token...")
-        return doPostRequest(
-            // We request the token from the Google OAuth server. You can replace this with any OAuth
-            // server that supports the PKCE authentication flow.
-            url = "https://oauth2.googleapis.com/token",
-            // See https://developers.google.com/identity/protocols/oauth2/native-app#exchange-authorization-code
-            params = mapOf(
-                "client_id" to CLIENT_ID,
-                "client_secret" to CLIENT_SECRET,
-                "code" to code,
-                "code_verifier" to codeVerifier.value,
-                "grant_type" to "authorization_code",
-                "redirect_uri" to "https://wear.googleapis.com/3p_auth/$packageName",
+        return try {
+            Log.d(TAG, "Requesting token...")
+            val responseJson = doPostRequest(
+                // We request the token from the Google OAuth server. You can replace this with any OAuth
+                // server that supports the PKCE authentication flow.
+                url = "https://oauth2.googleapis.com/token",
+                // See https://developers.google.com/identity/protocols/oauth2/native-app#exchange-authorization-code
+                params = mapOf(
+                    "client_id" to CLIENT_ID,
+                    "client_secret" to CLIENT_SECRET,
+                    "code" to code,
+                    "code_verifier" to codeVerifier.value,
+                    "grant_type" to "authorization_code",
+                    "redirect_uri" to "https://wear.googleapis.com/3p_auth/$packageName",
+                )
             )
-        ).map { jsonObject ->
-            jsonObject.getString("access_token")
+            Result.success(responseJson.getString("access_token"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
         }
     }
 
@@ -180,14 +186,18 @@ class AuthPKCEViewModel(private val client: RemoteAuthClient) : ViewModel() {
      * Using the access token, make an authorized request to the Auth server to retrieve the user's
      * profile.
      */
-    private fun retrieveUserProfile(token: String): Result<String> {
-        return doGetRequest(
-            url = "https://www.googleapis.com/oauth2/v2/userinfo",
-            requestHeaders = mapOf(
-                "Authorization" to "Bearer $token"
+    private suspend fun retrieveUserProfile(token: String): Result<String> {
+        return try {
+            val responseJson = doGetRequest(
+                url = "https://www.googleapis.com/oauth2/v2/userinfo",
+                requestHeaders = mapOf(
+                    "Authorization" to "Bearer $token"
+                )
             )
-        ).map { responseJson ->
-            responseJson.getString("name")
+            Result.success(responseJson.getString("name"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
         }
     }
 }

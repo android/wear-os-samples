@@ -16,9 +16,11 @@
 
 package com.example.android.wearable.oauth.devicegrant
 
+import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,7 +42,7 @@ private const val CLIENT_SECRET = ""
  * different steps of the flow. It first retrieves the URL that should be opened on the paired
  * device, then polls for the access token, and uses it to retrieve the user's name.
  */
-class AuthDeviceGrantViewModel(private val remoteIntentHelper: RemoteIntentHelper) : ViewModel() {
+class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(application) {
     // Status to show on the Wear OS display
     val status: MutableLiveData<String> by lazy { MutableLiveData<String>() }
     private fun showStatus(statusString: String) = status.postValue(statusString)
@@ -84,21 +86,27 @@ class AuthDeviceGrantViewModel(private val remoteIntentHelper: RemoteIntentHelpe
      * generates a user & device code pair. The user code is shown to the user and opened on the
      * paired device. The device code is passed while polling the OAuth server.
      */
-    private fun retrieveVerificationInfo(): Result<VerificationInfo> {
-        Log.d(TAG, "Retrieving verification info...")
-        return doPostRequest(
-            url = "https://oauth2.googleapis.com/device/code",
-            params = mapOf(
-                "client_id" to CLIENT_ID,
-                "scope" to "https://www.googleapis.com/auth/userinfo.profile"
+    private suspend fun retrieveVerificationInfo(): Result<VerificationInfo> {
+        return try {
+            Log.d(TAG, "Retrieving verification info...")
+            val responseJson = doPostRequest(
+                url = "https://oauth2.googleapis.com/device/code",
+                params = mapOf(
+                    "client_id" to CLIENT_ID,
+                    "scope" to "https://www.googleapis.com/auth/userinfo.profile"
+                )
             )
-        ).map { responseJson ->
-            VerificationInfo(
-                verificationUri = responseJson.getString("verification_url"),
-                userCode = responseJson.getString("user_code"),
-                deviceCode = responseJson.getString("device_code"),
-                interval = responseJson.getInt("interval")
+            Result.success(
+                VerificationInfo(
+                    verificationUri = responseJson.getString("verification_url"),
+                    userCode = responseJson.getString("user_code"),
+                    deviceCode = responseJson.getString("device_code"),
+                    interval = responseJson.getInt("interval")
+                )
             )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
         }
     }
 
@@ -113,8 +121,9 @@ class AuthDeviceGrantViewModel(private val remoteIntentHelper: RemoteIntentHelpe
      * intent.
      */
     private fun fireRemoteIntent(verificationUri: String) {
-        remoteIntentHelper.startRemoteActivity(
+        RemoteIntentHelper(getApplication()).startRemoteActivity(
             Intent(Intent.ACTION_VIEW).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
                 data = Uri.parse(verificationUri)
             },
             null
@@ -136,9 +145,9 @@ class AuthDeviceGrantViewModel(private val remoteIntentHelper: RemoteIntentHelpe
         }
     }
 
-    private fun fetchToken(deviceCode: String): Result<String> {
+    private suspend fun fetchToken(deviceCode: String): Result<String> {
         return try {
-            doPostRequest(
+            val responseJson = doPostRequest(
                 url = "https://oauth2.googleapis.com/token",
                 params = mapOf(
                     "client_id" to CLIENT_ID,
@@ -146,12 +155,12 @@ class AuthDeviceGrantViewModel(private val remoteIntentHelper: RemoteIntentHelpe
                     "device_code" to deviceCode,
                     "grant_type" to "urn:ietf:params:oauth:grant-type:device_code"
                 )
-            ).map { responseJson ->
-                if (!responseJson.has("access_token")) throw Exception("No token yet!")
-                responseJson.getString("access_token")
-            }
-        } catch (e: Throwable) {
-            return Result.failure(Exception("No token yet!"))
+            )
+
+            Result.success(responseJson.getString("access_token"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
         }
     }
 
@@ -159,14 +168,18 @@ class AuthDeviceGrantViewModel(private val remoteIntentHelper: RemoteIntentHelpe
      * Using the access token, make an authorized request to the Auth server to retrieve the user's
      * profile.
      */
-    private fun retrieveUserProfile(token: String): Result<String> {
-        return doGetRequest(
-            url = "https://www.googleapis.com/oauth2/v2/userinfo",
-            requestHeaders = mapOf(
-                "Authorization" to "Bearer $token"
+    private suspend fun retrieveUserProfile(token: String): Result<String> {
+        return try {
+            val responseJson = doGetRequest(
+                url = "https://www.googleapis.com/oauth2/v2/userinfo",
+                requestHeaders = mapOf(
+                    "Authorization" to "Bearer $token"
+                )
             )
-        ).map { responseJson ->
-            responseJson.getString("name")
+            Result.success(responseJson.getString("name"))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
         }
     }
 }

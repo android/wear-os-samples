@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
+@file:Suppress("BlockingMethodInNonBlockingContext")
+
 package com.example.android.wearable.oauth.util
 
 import android.util.Log
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -27,9 +32,13 @@ import java.net.URLEncoder
 /**
  * Simple implementation of a POST request. Normally you'd use a library to do these requests.
  */
-fun doPostRequest(url: String, params: Map<String, String>): Result<JSONObject> {
-    val conn = URL(url).openConnection() as HttpURLConnection
-    try {
+suspend fun doPostRequest(
+    url: String,
+    params: Map<String, String>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+): JSONObject {
+    return withContext(dispatcher) {
+        val conn = (URL(url).openConnection() as HttpURLConnection)
         val postData = StringBuilder()
         for ((key, value) in params) {
             if (postData.isNotEmpty()) postData.append('&')
@@ -39,29 +48,33 @@ fun doPostRequest(url: String, params: Map<String, String>): Result<JSONObject> 
         }
         val postDataBytes = postData.toString().toByteArray(charset("UTF-8"))
 
-        conn.requestMethod = "POST"
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-        conn.setRequestProperty("Content-Length", postDataBytes.size.toString())
-        conn.doOutput = true
-        conn.outputStream.write(postDataBytes)
+        conn.apply {
+            requestMethod = "POST"
+            setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            setRequestProperty("Content-Length", postDataBytes.size.toString())
+            doOutput = true
+            outputStream.write(postDataBytes)
+        }
 
         val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))
         val response = inputReader.readText()
 
         Log.d("PostRequestUtil", "Response: $response")
 
-        return Result.success(JSONObject(response))
-    } finally {
-        conn.disconnect()
+        JSONObject(response)
     }
 }
 
 /**
  * Simple implementation of a GET request. Normally you'd use a library to do these requests.
  */
-fun doGetRequest(url: String, requestHeaders: Map<String, String>): Result<JSONObject> {
-    val conn = URL(url).openConnection() as HttpURLConnection
-    try {
+suspend fun doGetRequest(
+    url: String,
+    requestHeaders: Map<String, String>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+): JSONObject {
+    return withContext(dispatcher) {
+        val conn = (URL(url).openConnection() as HttpURLConnection)
         requestHeaders.forEach { (key, value) ->
             conn.setRequestProperty(key, value)
         }
@@ -70,8 +83,6 @@ fun doGetRequest(url: String, requestHeaders: Map<String, String>): Result<JSONO
 
         Log.d("RequestUtil", "Response: $response")
 
-        return Result.success(JSONObject(response))
-    } finally {
-        conn.disconnect()
+        JSONObject(response)
     }
 }

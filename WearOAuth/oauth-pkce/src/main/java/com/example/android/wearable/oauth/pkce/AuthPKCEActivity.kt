@@ -20,6 +20,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 
 /**
@@ -37,8 +40,7 @@ class AuthPKCEActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        // In a real world situation you would use some form of Dependency Injection here.
-        val viewModel = AuthPKCEViewModel(RemoteAuthClient.create(applicationContext))
+        val viewModel by viewModels<AuthPKCEViewModel>()
 
         // Show current status on the screen
         viewModel.status.observe(this) { statusText ->
