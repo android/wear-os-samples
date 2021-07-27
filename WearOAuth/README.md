@@ -7,7 +7,8 @@ Introduction
 Sample demonstrating various forms of OAuth 2.0 authentication on Wear OS.
 
 The sample demonstrates two possible flows between a Wear OS app and the Android Wear companion app
-for handling OAuth 2.0 authentication. The sample uses the Google OAuth 2.0 server, b
+for handling OAuth 2.0 authentication. The sample uses the Google OAuth 2.0 server, but you can use
+any OAuth server instead.
 
 ## Device Authorization Grant OAuth ([RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628)]
 
