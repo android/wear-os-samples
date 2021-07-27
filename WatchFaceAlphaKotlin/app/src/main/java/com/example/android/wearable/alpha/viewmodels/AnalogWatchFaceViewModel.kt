@@ -15,123 +15,46 @@
  */
 package com.example.android.wearable.alpha.viewmodels
 
-import androidx.lifecycle.asLiveData
 import androidx.wear.watchface.style.UserStyle
 import com.example.android.wearable.alpha.AnalogWatchFaceService
-import com.example.android.wearable.alpha.data.WatchFaceRepository
-import com.example.android.wearable.alpha.data.db.AnalogWatchFaceEntity
-import com.example.android.wearable.alpha.data.db.WatchFaceArmDimensionsEntity
-import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
-import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
-import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
+import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 /**
- * View model used for [AnalogWatchFaceService].
+ * View model used for [AnalogWatchFaceService]. Uses flow to receive changes in the data source and
+ * because the renderer is a service without LifeCycle support, handles canceling scope when no
+ * longer needed.
  */
-class AnalogWatchFaceViewModel(private val repository: WatchFaceRepository) {
-
-    // Used to launch coroutines (non-blocking way to insert data).
+class AnalogWatchFaceViewModel(
+    watchFaceUserSettingChangesDataSource: WatchFaceUserSettingChangesDataSource
+) {
+    // Used to launch coroutines/flow.
     private val scope: CoroutineScope = MainScope()
 
-    // [AnalogWatchFaceEntity] operations:
-    fun getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId: Int) =
-        repository.getAnalogWatchFaceAndStylesAndDimensions(analogWatchFaceId).asLiveData()
-
-    private suspend fun getAnalogWatchFace(analogWatchFaceId: Int) =
-        repository.getAnalogWatchFace(analogWatchFaceId)
-
-    // Launches a new coroutine to insert the data in a non-blocking way
-    private fun updateAnalogWatchFace(analogWatchFaceEntity: AnalogWatchFaceEntity) = scope.launch {
-        repository.updateAnalogWatchFace(analogWatchFaceEntity)
-    }
-
-    // [WatchFaceColorStyleEntity] operations:
-    suspend fun getAllWatchFaceColorStyles() =
-        repository.getAllWatchFaceColorStyles()
-
-    // [WatchFaceArmDimensionsEntity] operations:
-    private suspend fun getWatchFaceArmDimensions(watchFaceArmDimensionsId: String) =
-        repository.getWatchFaceArmDimensions(watchFaceArmDimensionsId)
-
-    // Launches a new coroutine to insert the data in a non-blocking way
-    private fun updateWatchFaceArmDimensions(watchFaceArmDimensionsEntity: WatchFaceArmDimensionsEntity) = scope.launch {
-        repository.updateWatchFaceArmDimensions(watchFaceArmDimensionsEntity)
-    }
-
-    // Updates multiple table entries if the user changes something in the settings.
-    fun updateUserStylesInDatabase(analogWatchFaceId: Int, userStyle: UserStyle) = scope.launch {
-        // Returns if a valid [AnalogWatchFaceEntity] isn't returned for the id.
-        val analogWatchFaceEntity = getAnalogWatchFace(analogWatchFaceId) ?: return@launch
-
-        updateColorStyleAndHourPips(userStyle, analogWatchFaceEntity)
-        updateMinuteArmLength(userStyle, analogWatchFaceEntity.minuteHandDimensionsId)
-    }
-
-    // Updates the color style and hour hand pips (ticks on the outside of the watch) in the
-    // associated [AnalogWatchFaceEntity] in the database.
-    private suspend fun updateColorStyleAndHourPips(
-        userStyle: UserStyle,
-        analogWatchFaceEntity: AnalogWatchFaceEntity
-    ) {
-        var revisedAnalogWatchFaceEntity = analogWatchFaceEntity
-
-        // 1. Updates color style associated with the watch face.
-        val newColorStyleSetting: String =
-            userStyle.toMap()[COLOR_STYLE_SETTING]
-                ?: revisedAnalogWatchFaceEntity.activeColorStyleId
-
-        if (revisedAnalogWatchFaceEntity.activeColorStyleId != newColorStyleSetting) {
-            revisedAnalogWatchFaceEntity =
-                revisedAnalogWatchFaceEntity.copy(activeColorStyleId = newColorStyleSetting)
-        }
-
-        // 2. Updates Hour Pips (dashes around the outside of the watch).
-        val newHoursPipsSettingStringVersion: String =
-            userStyle.toMap()[DRAW_HOUR_PIPS_STYLE_SETTING] ?: ""
-
-        val newHoursPipsSetting =
-            if (newHoursPipsSettingStringVersion.isEmpty()) {
-                revisedAnalogWatchFaceEntity.drawHourPips
-            } else {
-                newHoursPipsSettingStringVersion.toBoolean()
-            }
-
-        if (revisedAnalogWatchFaceEntity.drawHourPips != newHoursPipsSetting) {
-            revisedAnalogWatchFaceEntity =
-                revisedAnalogWatchFaceEntity.copy(drawHourPips = newHoursPipsSetting)
-        }
-
-        updateAnalogWatchFace(revisedAnalogWatchFaceEntity)
-    }
-
-    // Updates the length of the minute hand arm dimensions in the associated
-    // [WatchFaceArmDimensionsEntity] in the database.
-    private suspend fun updateMinuteArmLength(
-        userStyle: UserStyle,
-        minuteHandDimensionsId: String
-    ) {
-        val newHandLengthSettingStringVersion =
-            userStyle.toMap()[WATCH_HAND_LENGTH_STYLE_SETTING] ?: ""
-
-        if (newHandLengthSettingStringVersion.isNotEmpty()) {
-            val newMinuteHandLength = newHandLengthSettingStringVersion.toFloat()
-
-            val minuteWatchFaceArmDimensions: WatchFaceArmDimensionsEntity =
-                getWatchFaceArmDimensions(minuteHandDimensionsId)
-
-            if (minuteWatchFaceArmDimensions.lengthFraction != newMinuteHandLength) {
-                updateWatchFaceArmDimensions(
-                    minuteWatchFaceArmDimensions.copy(lengthFraction = newMinuteHandLength)
-                )
-            }
-        }
-    }
+    // The UI collects from this StateFlow to get its state updates
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<UserChangesUiState> =
+        watchFaceUserSettingChangesDataSource.getUserWatchFaceChanges()
+            .map(UserChangesUiState::Success)
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Eagerly,
+                initialValue = UserChangesUiState.Loading("Initializing..."))
 
     fun clear() {
-        scope.cancel("AnalogWatchFaceViewModel.clear() request")
+        scope.cancel("AnalogWatchFaceViewModel scope.clear() request")
+    }
+
+    sealed class UserChangesUiState {
+        data class Success(val userStyle: UserStyle) : UserChangesUiState()
+        data class Loading(val message: String) : UserChangesUiState()
+        data class Error(val exception: Throwable) : UserChangesUiState()
     }
 }

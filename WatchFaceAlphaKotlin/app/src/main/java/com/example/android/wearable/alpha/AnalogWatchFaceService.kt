@@ -15,25 +15,20 @@
  */
 package com.example.android.wearable.alpha
 
+import android.util.Log
 import android.view.SurfaceHolder
-import androidx.wear.watchface.Complication
+import androidx.wear.watchface.CanvasType
+import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.WatchFace
 import androidx.wear.watchface.WatchFaceService
+import androidx.wear.watchface.WatchFaceType
 import androidx.wear.watchface.WatchState
+import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
-import androidx.wear.watchface.style.UserStyleSetting
-import com.example.android.wearable.alpha.data.db.WatchFaceColorStyleEntity
-import com.example.android.wearable.alpha.data.db.analogWatchFaceKeyId
-import com.example.android.wearable.alpha.utils.FRAME_PERIOD_MS_DEFAULT
-import com.example.android.wearable.alpha.utils.createAnalogWatchFace
-import com.example.android.wearable.alpha.utils.createComplicationList
-import com.example.android.wearable.alpha.utils.createUserStyleRepositoryWithCallback
-import com.example.android.wearable.alpha.utils.createUserStyleSettingsList
+import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource
+import com.example.android.wearable.alpha.utils.createComplicationSlotManager
+import com.example.android.wearable.alpha.utils.createUserStyleSchema
 import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
 /**
  * Handles much of the boilerplate needed to implement a watch face (minus rendering code; see
@@ -41,69 +36,64 @@ import kotlinx.coroutines.launch
  * the watch face).
  */
 class AnalogWatchFaceService : WatchFaceService() {
-    // Used to launch coroutines (non-blocking way to pull watch face color styles data [only
-    // needed on the initial load of the user color style options]).
-    private val scope: CoroutineScope = MainScope()
-
     private lateinit var analogWatchFaceViewModel: AnalogWatchFaceViewModel
 
-    private var colorStylesList: List<WatchFaceColorStyleEntity>? = null
+    // Used by Watch Face APIs to construct user setting options and repository.
+    override fun createUserStyleSchema(): UserStyleSchema =
+        createUserStyleSchema(context = applicationContext)
 
-    override fun onCreate() {
-        super.onCreate()
-
-        analogWatchFaceViewModel =
-            AnalogWatchFaceViewModel((application as MainApplication).repository)
-
-        // Preloading color styles from database.
-        // TODO: Move to createWatchFace() once it's a suspend function (future alpha).
-        scope.launch {
-            colorStylesList =
-                analogWatchFaceViewModel.getAllWatchFaceColorStyles()
-        }
-    }
+    // Creates all complication user settings and adds them to the existing user settings
+    // repository.
+    override fun createComplicationSlotsManager(
+        currentUserStyleRepository: CurrentUserStyleRepository
+    ): ComplicationSlotsManager = createComplicationSlotManager(
+        context = applicationContext,
+        currentUserStyleRepository = currentUserStyleRepository
+    )
 
     override fun onDestroy() {
-        analogWatchFaceViewModel.clear()
-        // Cancels scope used for retrieving watch face styles.
-        scope.cancel("AnalogWatchFaceService.onDestroy()")
+        Log.d(TAG, "onDestroy()")
+
+        // Cancels scope used for retrieving watch face style changes via callbackFlow if the
+        // variable has been initialized.
+        if (::analogWatchFaceViewModel.isInitialized) {
+            analogWatchFaceViewModel.clear()
+        }
+
         super.onDestroy()
     }
 
-    override fun createWatchFace(surfaceHolder: SurfaceHolder, watchState: WatchState): WatchFace {
-        // Creates user styles. User styles are in memory storage for user style choices which
-        // allows listeners to be registered to observe style changes.
-        // In our case, we have a list of color styles (populated by the database), toggling the
-        // hour ticks around the watch face on/off, and adjusting the length of the minute hand.
-        // Edit the util method if you want to change the UserStyleSettings.
-        val userStyleSettings: List<UserStyleSetting> = createUserStyleSettingsList(
-            context = this,
-            colorStylesList
+    override suspend fun createWatchFace(
+        surfaceHolder: SurfaceHolder,
+        watchState: WatchState,
+        complicationSlotsManager: ComplicationSlotsManager,
+        currentUserStyleRepository: CurrentUserStyleRepository
+    ): WatchFace {
+        Log.d(TAG, "createWatchFace()")
+
+        analogWatchFaceViewModel = AnalogWatchFaceViewModel(
+            WatchFaceUserSettingChangesDataSource(currentUserStyleRepository)
         )
 
-        // Creates a set of complications for the watch face.
-        // Edit the util method if you want to change the complications.
-        val complications: List<Complication> = createComplicationList(
+        // Creates class that renders the watch face.
+        val renderer = AnalogWatchCanvasRenderer(
             context = applicationContext,
-            watchState = watchState
+            surfaceHolder = surfaceHolder,
+            watchState = watchState,
+            complicationSlotsManager = complicationSlotsManager,
+            currentUserStyleRepository = currentUserStyleRepository,
+            analogWatchFaceViewModel = analogWatchFaceViewModel,
+            canvasType = CanvasType.HARDWARE
         )
 
-        // Creates UserStyleRepository and adds a callback for any changes to the style to
-        // trigger updates to data layer via ViewModel for the analogWatchFaceKeyId.
-        val userStyleRepository = createUserStyleRepositoryWithCallback(
-            UserStyleSchema(userStyleSettings.toList()),
-            analogWatchFaceKeyId,
-            analogWatchFaceViewModel
+        // Creates the watch face.
+        return WatchFace(
+            watchFaceType = WatchFaceType.ANALOG,
+            renderer = renderer
         )
+    }
 
-        return WatchFace.createAnalogWatchFace(
-            surfaceHolder,
-            watchState,
-            applicationContext,
-            analogWatchFaceViewModel,
-            userStyleRepository,
-            complications,
-            FRAME_PERIOD_MS_DEFAULT
-        )
+    companion object {
+        const val TAG = "AnalogWatchFaceService"
     }
 }
