@@ -38,7 +38,13 @@
             android:text="@string/start_auth_flow" />
 
         <TextView
-            android:id="@+id/text_view"
+            android:id="@+id/status_text_view"
+            android:paddingHorizontal="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/result_text_view"
             android:paddingHorizontal="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

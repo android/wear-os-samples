@@ -21,7 +21,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.wear.phone.interactions.authentication.CodeChallenge
 import androidx.wear.phone.interactions.authentication.CodeVerifier
@@ -30,7 +29,7 @@ import androidx.wear.phone.interactions.authentication.OAuthResponse
 import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import com.example.android.wearable.oauth.util.doGetRequest
 import com.example.android.wearable.oauth.util.doPostRequest
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlin.coroutines.resume
@@ -49,8 +48,14 @@ private const val CLIENT_SECRET = ""
  */
 class AuthPKCEViewModel(application: Application) : AndroidViewModel(application) {
     // Status to show on the Wear OS display
-    val status: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private fun showStatus(statusString: String) = status.postValue(statusString)
+    val status: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    // Dynamic content to show on the Wear OS display
+    val result: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+
+    private fun showStatus(statusString: Int, resultString: String = "") {
+        status.postValue(statusString)
+        result.postValue(resultString)
+    }
 
     /**
      * Start the authentication flow and do an authenticated request. This method implements
@@ -63,31 +68,31 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
      * continue the authorization process.
      */
     fun startAuthFlow(packageName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val codeVerifier = CodeVerifier()
 
             // Step 1: Retrieve the OAuth code
-            showStatus("Starting authorization... Switch to your phone to authenticate.")
+            showStatus(R.string.status_switch_to_phone)
             val code = retrieveOAuthCode(packageName, codeVerifier).getOrElse {
-                showStatus("Authorization failed")
+                showStatus(R.string.status_failed)
                 return@launch
             }
 
             // Step 2: Retrieve the access token
-            showStatus("Retrieving token...")
+            showStatus(R.string.status_retrieving_token)
             val token = retrieveToken(code, packageName, codeVerifier).getOrElse {
-                showStatus("Could not retrieve token")
+                showStatus(R.string.status_failure_token)
                 return@launch
             }
 
             // Step 3: Use token to perform API request
-            showStatus("Retrieving user profile...")
+            showStatus(R.string.status_retrieving_user)
             val userName = retrieveUserProfile(token).getOrElse {
-                showStatus("Could not retrieve user profile")
+                showStatus(R.string.status_failure_user)
                 return@launch
             }
 
-            showStatus("User profile retrieved. Welcome $userName!")
+            showStatus(R.string.status_retrieved, userName)
         }
     }
 
@@ -176,6 +181,8 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
                 )
             )
             Result.success(responseJson.getString("access_token"))
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)
@@ -195,6 +202,8 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
                 )
             )
             Result.success(responseJson.getString("name"))
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)

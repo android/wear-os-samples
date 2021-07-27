@@ -21,9 +21,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.wear.remote.interactions.RemoteIntentHelper
 
 /**
  * Demonstrates the OAuth 2.0 flow on Wear OS using Device Authorization Grant, as described in
@@ -52,7 +49,12 @@ class AuthDeviceGrantActivity : ComponentActivity() {
 
         // Show current status on the screen
         viewModel.status.observe(this) { statusText ->
-            findViewById<TextView>(R.id.text_view).text = statusText
+            findViewById<TextView>(R.id.status_text_view).text = resources.getText(statusText)
+        }
+
+        // Show dynamic content on the screen
+        viewModel.result.observe(this) { resultText ->
+            findViewById<TextView>(R.id.result_text_view).text = resultText
         }
     }
 }

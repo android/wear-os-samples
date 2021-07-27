@@ -22,12 +22,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.wear.remote.interactions.RemoteIntentHelper
 import com.example.android.wearable.oauth.util.doGetRequest
 import com.example.android.wearable.oauth.util.doPostRequest
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -44,20 +43,26 @@ private const val CLIENT_SECRET = ""
  */
 class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(application) {
     // Status to show on the Wear OS display
-    val status: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private fun showStatus(statusString: String) = status.postValue(statusString)
+    val status: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    // Dynamic content to show on the Wear OS display
+    val result: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+
+    private fun showStatus(statusString: Int, resultString: String = "") {
+        status.postValue(statusString)
+        result.postValue(resultString)
+    }
 
     fun startAuthFlow() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             // Step 1: Retrieve the verification URI
-            showStatus("Starting authorization... Switch to your phone to authenticate.")
+            showStatus(R.string.status_switch_to_phone)
             val verificationInfo = retrieveVerificationInfo().getOrElse {
-                showStatus("Authorization failed")
+                showStatus(R.string.status_failed)
                 return@launch
             }
 
             // Step 2: Show the pairing code & open the verification URI on the paired device
-            showStatus("code: ${verificationInfo.userCode}")
+            showStatus(R.string.status_code, verificationInfo.userCode)
             fireRemoteIntent(verificationInfo.verificationUri)
 
             // Step 3: Poll the Auth server for the token
@@ -65,11 +70,11 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
 
             // Step 4: Use the token to make an authorized request
             val userName = retrieveUserProfile(token).getOrElse {
-                showStatus("Authorization failed")
+                showStatus(R.string.status_failed)
                 return@launch
             }
 
-            showStatus("User profile retrieved. Welcome $userName!")
+            showStatus(R.string.status_retrieved, userName)
         }
     }
 
@@ -104,6 +109,8 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
                     interval = responseJson.getInt("interval")
                 )
             )
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)
@@ -158,6 +165,8 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
             )
 
             Result.success(responseJson.getString("access_token"))
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)
@@ -177,6 +186,8 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
                 )
             )
             Result.success(responseJson.getString("name"))
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)
