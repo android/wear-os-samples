@@ -17,6 +17,9 @@ package com.example.android.wearable.alpha.data.watchface
 
 import android.content.Context
 import android.graphics.drawable.Icon
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.UserStyleSetting.ListUserStyleSetting
 import com.example.android.wearable.alpha.R
@@ -56,13 +59,13 @@ private const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
  */
 enum class ColorStyleIdAndResourceIds(
     val id: String,
-    val nameResourceId: Int,
-    val iconResourceId: Int,
-    val complicationStyleDrawableId: Int,
-    val primaryColorId: Int,
-    val secondaryColorId: Int,
-    val backgroundColorId: Int,
-    val outerElementColorId: Int
+    @StringRes val nameResourceId: Int,
+    @DrawableRes val iconResourceId: Int,
+    @DrawableRes val complicationStyleDrawableId: Int,
+    @ColorRes val primaryColorId: Int,
+    @ColorRes val secondaryColorId: Int,
+    @ColorRes val backgroundColorId: Int,
+    @ColorRes val outerElementColorId: Int
 ) {
     AMBIENT(
         id = AMBIENT_COLOR_STYLE_ID,
