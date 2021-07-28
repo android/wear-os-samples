@@ -19,36 +19,36 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
-import androidx.wear.complications.ComplicationProviderService
-import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.MonochromaticImage
+import androidx.wear.complications.data.MonochromaticImageComplicationData
 import androidx.wear.complications.data.PlainComplicationText
-import androidx.wear.complications.data.SmallImage
-import androidx.wear.complications.data.SmallImageComplicationData
-import androidx.wear.complications.data.SmallImageType
+import androidx.wear.complications.datasource.ComplicationDataSourceService
+import androidx.wear.complications.datasource.ComplicationRequest
 
 /**
- * A complication provider that supports only [ComplicationType.SMALL_IMAGE] and cycles
- * between the different image styles on tap.
+ * A complication provider that supports only [ComplicationType.MONOCHROMATIC_IMAGE] and cycles through
+ * a few different icons on each tap.
  *
- * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
+ * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
  * [onComplicationRequest].
- * See [SuspendingComplicationProviderService] for the implementation details.
+ * See [SuspendingComplicationDataSourceService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationRequest] directly.
- * (see [NoDataProviderService] for an example)
+ * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
+ * (see [NoDataDataSourceService] for an example)
  */
-class SmallImageProviderService : SuspendingComplicationProviderService() {
+class IconDataSourceService : SuspendingComplicationDataSourceService() {
+
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
-        if (request.complicationType != ComplicationType.SMALL_IMAGE) {
+        if (request.complicationType != ComplicationType.MONOCHROMATIC_IMAGE) {
             return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complication = Complication.SMALL_IMAGE,
+            complication = Complication.ICON,
             complicationInstanceId = request.complicationInstanceId
         )
         val complicationTogglePendingIntent =
@@ -57,7 +57,7 @@ class SmallImageProviderService : SuspendingComplicationProviderService() {
                 args = args
             )
         // Suspending function to retrieve the complication's state
-        val state = args.getState(this)
+        val state = args.getState(this@IconDataSourceService)
         val case = Case.values()[state.mod(Case.values().size)]
         return getComplicationData(
             tapAction = complicationTogglePendingIntent,
@@ -68,33 +68,38 @@ class SmallImageProviderService : SuspendingComplicationProviderService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData =
         getComplicationData(
             tapAction = null,
-            case = Case.PHOTO
+            case = Case.FACE,
         )
 
     private fun getComplicationData(
         tapAction: PendingIntent?,
-        case: Case
+        case: Case,
     ): ComplicationData =
         when (case) {
-            Case.PHOTO -> SmallImageComplicationData.Builder(
-                // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
-                smallImage = SmallImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.aquarium),
-                    type = SmallImageType.PHOTO
+            Case.FACE -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.small_image_photo_content_description)
+                    text = getText(R.string.icon_face_content_description)
                 ).build()
             )
-            Case.ICON -> SmallImageComplicationData.Builder(
-                // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
-                // space given to it.
-                smallImage = SmallImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_launcher),
-                    type = SmallImageType.ICON
+            Case.BATTERY -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_battery)
+                )
+                    .setAmbientImage(Icon.createWithResource(this, R.drawable.ic_battery_burn_protect))
+                    .build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = getText(R.string.icon_battery_content_description)
+                ).build()
+            )
+            Case.EVENT -> MonochromaticImageComplicationData.Builder(
+                monochromaticImage = MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.small_image_icon_content_description)
+                    text = getText(R.string.icon_event_content_description)
                 ).build()
             )
         }
@@ -102,6 +107,6 @@ class SmallImageProviderService : SuspendingComplicationProviderService() {
             .build()
 
     private enum class Case {
-        PHOTO, ICON
+        FACE, BATTERY, EVENT
     }
 }

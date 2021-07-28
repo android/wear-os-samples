@@ -15,16 +15,16 @@
  */
 package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
-import androidx.wear.complications.ComplicationProviderService
-import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.complications.data.NoDataComplicationData
+import androidx.wear.complications.datasource.ComplicationDataSourceService
+import androidx.wear.complications.datasource.ComplicationRequest
 
 /**
  * A complication provider that always returns [ComplicationType.NO_DATA].
  */
-class NoDataProviderService : ComplicationProviderService() {
+class NoDataDataSourceService : ComplicationDataSourceService() {
     override fun onComplicationRequest(
         request: ComplicationRequest,
         listener: ComplicationRequestListener

@@ -2,7 +2,7 @@
 Android WearComplicationProvidersTestSuite Sample
 =================================================
 
-Complication Test Suite is a set of complication providers that provide dummy data and it can be
+Complication Test Suite is a set of complication data sources that provide dummy data and it can be
 used to test how different types of complications render on a watch face.
 
 Introduction
@@ -20,10 +20,10 @@ This sample provides dummy data for testing the complications UI in your watch f
 selecting a type from your watch face configuration Activity, you can tap on the complications to
 see more options.
 
-The Wear app demonstrates the use of [ComplicationData][1], [ComplicationProviderService][2], and [ComplicationText][3].
+The Wear app demonstrates the use of [ComplicationData][1], [ComplicationDataSourceService][2], and [ComplicationText][3].
 
 [1]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationData
-[2]: https://developer.android.com/reference/kotlin/androidx/wear/complications/ComplicationProviderService
+[2]: https://developer.android.com/reference/kotlin/androidx/wear/complications/datasource/ComplicationDataSourceService
 [3]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationText
 
 Pre-requisites

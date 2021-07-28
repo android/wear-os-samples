@@ -19,8 +19,6 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
-import androidx.wear.complications.ComplicationProviderService
-import androidx.wear.complications.ComplicationRequest
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.complications.data.LongTextComplicationData
@@ -28,21 +26,23 @@ import androidx.wear.complications.data.MonochromaticImage
 import androidx.wear.complications.data.PlainComplicationText
 import androidx.wear.complications.data.SmallImage
 import androidx.wear.complications.data.SmallImageType
+import androidx.wear.complications.datasource.ComplicationDataSourceService
+import androidx.wear.complications.datasource.ComplicationRequest
 
 /**
  * A complication provider that supports only [ComplicationType.LONG_TEXT] and cycles
  * through the possible configurations on tap.
  *
- * Note: This subclasses [SuspendingComplicationProviderService] instead of [ComplicationProviderService] to support
+ * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
  * [onComplicationRequest].
- * See [SuspendingComplicationProviderService] for the implementation details.
+ * See [SuspendingComplicationDataSourceService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationProviderService] and override [onComplicationRequest] directly.
- * (see [NoDataProviderService] for an example)
+ * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
+ * (see [NoDataDataSourceService] for an example)
  */
-class LongTextProviderService : SuspendingComplicationProviderService() {
+class LongTextDataSourceService : SuspendingComplicationDataSourceService() {
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         if (request.complicationType != ComplicationType.LONG_TEXT) {
             return null
