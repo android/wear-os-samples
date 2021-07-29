@@ -112,7 +112,7 @@ class IncomingRequestWearService : WearableListenerService() {
             if (task.isSuccessful) {
                 Log.d(TAG, "Capability request succeeded.")
                 val capabilityInfo = task.result
-                val phoneNodeId = pickBestNodeId(capabilityInfo!!.nodes)
+                val phoneNodeId = capabilityInfo!!.nodes.firstOrNull()?.id
                 if (phoneNodeId != null) {
                     // Instantiates clients without member variables, as clients are inexpensive to
                     // create. (They are cached and shared between GoogleApi instances.)
@@ -137,24 +137,6 @@ class IncomingRequestWearService : WearableListenerService() {
                 Log.d(TAG, "Capability request failed to return any results.")
             }
         }
-    }
-
-    /*
-     * There should only ever be one phone in a node set (much less w/ the correct capability), so
-     * I am just grabbing the first one (which should be the only one).
-     */
-    private fun pickBestNodeId(nodes: Set<Node>): String? {
-        Log.d(TAG, "pickBestNodeId: $nodes")
-        var bestNodeId: String? = null
-        /* Find a nearby node or pick one arbitrarily. There should be only one phone connected
-         * that supports this sample.
-         */for (node in nodes) {
-            if (node.isNearby) {
-                return node.id
-            }
-            bestNodeId = node.id
-        }
-        return bestNodeId
     }
 
     companion object {
