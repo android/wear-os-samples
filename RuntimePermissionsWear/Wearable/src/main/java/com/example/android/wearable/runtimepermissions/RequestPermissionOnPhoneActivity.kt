@@ -16,17 +16,16 @@
 package com.example.android.wearable.runtimepermissions
 
 import android.os.Bundle
-import android.support.wearable.activity.WearableActivity
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 
 /**
  * Asks user if they want to open permission screen on their remote device (phone).
  */
-class RequestPermissionOnPhoneActivity : WearableActivity() {
+class RequestPermissionOnPhoneActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_request_permission_on_phone)
-        setAmbientEnabled()
     }
 
     fun onClickPermissionPhoneStorage(view: View?) {
