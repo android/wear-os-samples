@@ -1,1 +1,3 @@
-include ':app'
+include ':oauth-device-grant'
+include ':oauth-pkce'
+include ':util'
