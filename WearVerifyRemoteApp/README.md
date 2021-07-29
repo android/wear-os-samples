@@ -14,7 +14,7 @@ scenario).
 * Compile and install the wearable app onto your Wear device or emulator (for Wear
 scenario).
 
-This sample demonstrate best practices for using PlayStoreAvailability and RemoteIntent to check
+This sample demonstrate best practices for using `PhoneTypeHelper` and `RemoteIntentHelper` to check
 if the mobile version of your app exists from within your Standalone Wear 2.+ app and the other
 way around. Scenarios:
 
@@ -30,9 +30,7 @@ apps/experiences.
 Pre-requisites
 --------------
 
-- Android SDK 28
-- Android Build Tools v29.0.2
-- Android Support Repository
+- Android SDK 30
 
 Screenshots
 -------------
@@ -51,7 +49,7 @@ Support
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
 If you've found an error in this sample, please file an issue:
-https://github.com/googlesamples/android-WearVerifyRemoteApp
+https://github.com/android/wear-os-samples/issues
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
