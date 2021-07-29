@@ -16,24 +16,10 @@
 package com.example.android.wearable.runtimepermissions
 
 import android.Manifest
-import com.example.android.wearable.runtimepermissions.IncomingRequestWearService
 import android.content.pm.PackageManager
 import android.content.Intent
-import com.example.android.wearable.runtimepermissions.MainWearActivity
 import android.hardware.SensorManager
-import com.google.android.gms.tasks.OnCompleteListener
-import androidx.wear.ambient.AmbientModeSupport
-import com.google.android.gms.wearable.CapabilityClient.OnCapabilityChangedListener
-import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
-import android.widget.TextView
-import android.os.Bundle
-import com.example.android.wearable.runtimepermissions.R
-import com.example.android.wearable.runtimepermissions.RequestPermissionOnPhoneActivity
-import android.app.Activity
 import android.hardware.Sensor
-import com.example.android.wearable.runtimepermissions.MainWearActivity.MyAmbientCallback
-import android.os.Looper
-import android.support.wearable.activity.WearableActivity
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.example.android.wearable.runtimepermissions.common.Constants
