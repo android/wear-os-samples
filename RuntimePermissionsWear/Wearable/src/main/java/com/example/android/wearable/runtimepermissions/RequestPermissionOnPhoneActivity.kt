@@ -13,27 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.wearable.runtimepermissions
 
-package com.example.android.wearable.runtimepermissions;
-
-import android.os.Bundle;
-import android.support.wearable.activity.WearableActivity;
-import android.view.View;
+import android.os.Bundle
+import android.support.wearable.activity.WearableActivity
+import android.view.View
 
 /**
  * Asks user if they want to open permission screen on their remote device (phone).
  */
-public class RequestPermissionOnPhoneActivity extends WearableActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_permission_on_phone);
-        setAmbientEnabled();
+class RequestPermissionOnPhoneActivity : WearableActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_request_permission_on_phone)
+        setAmbientEnabled()
     }
 
-    public void onClickPermissionPhoneStorage(View view) {
-        setResult(RESULT_OK);
-        finish();
+    fun onClickPermissionPhoneStorage(view: View?) {
+        setResult(RESULT_OK)
+        finish()
     }
 }
