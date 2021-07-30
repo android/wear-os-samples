@@ -177,6 +177,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
                 ConfirmationOverlay().showOn(this@MainWearActivity)
             } catch (cancellationException: CancellationException) {
                 // Request was cancelled normally
+                throw cancellationException
             } catch (throwable: Throwable) {
                 ConfirmationOverlay()
                     .setType(ConfirmationOverlay.FAILURE_ANIMATION)
