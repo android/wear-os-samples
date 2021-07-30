@@ -133,6 +133,7 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
             }
         } catch (cancellationException: CancellationException) {
             // Request was cancelled normally
+            throw cancellationException
         } catch (throwable: Throwable) {
             Log.d(TAG, "Capability request failed to return any results.")
         }
