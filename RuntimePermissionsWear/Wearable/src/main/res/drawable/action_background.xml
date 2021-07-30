@@ -11,10 +11,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <dimen name="pair_button_diameter">40dp</dimen>
-    <dimen name="circle_border_normal_width">10dp</dimen>
-    <dimen name="circle_padding">5dp</dimen>
-    <dimen name="circle_radius">35dp</dimen>
-    <dimen name="circle_radius_pressed">40dp</dimen>
-</resources>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/action_blue" />
+</shape>

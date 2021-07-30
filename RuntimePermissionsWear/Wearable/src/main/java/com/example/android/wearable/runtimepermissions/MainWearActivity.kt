@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2015 Google Inc. All Rights Reserved.
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,22 +16,31 @@
 package com.example.android.wearable.runtimepermissions
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.content.Intent
-import android.hardware.SensorManager
-import com.google.android.gms.wearable.CapabilityClient.OnCapabilityChangedListener
-import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
-import android.widget.TextView
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.hardware.Sensor
-import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.widget.Button
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.setPadding
+import androidx.lifecycle.lifecycleScope
 import com.example.android.wearable.runtimepermissions.common.Constants
-import com.google.android.gms.wearable.*
+import com.example.android.wearable.runtimepermissions.databinding.ActivityMainBinding
+import com.google.android.gms.wearable.CapabilityClient
+import com.google.android.gms.wearable.CapabilityClient.OnCapabilityChangedListener
+import com.google.android.gms.wearable.CapabilityInfo
+import com.google.android.gms.wearable.DataMap
+import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 /**
  * Displays data that requires runtime permissions both locally (BODY_SENSORS) and remotely on
@@ -42,82 +51,126 @@ import com.google.android.gms.wearable.*
  * this Activity also sends back the results of the permission request to the phone device (and
  * the sensor data if approved).
  */
-class MainWearActivity : FragmentActivity(),
+class MainWearActivity :
+    AppCompatActivity(),
     OnCapabilityChangedListener,
-    OnMessageReceivedListener,
-    ActivityCompat.OnRequestPermissionsResultCallback {
+    OnMessageReceivedListener {
 
-    private var mWearBodySensorsPermissionApproved = false
-    private var mPhoneStoragePermissionApproved = false
-    private var mPhoneRequestingWearSensorPermission = false
-    private var mWearBodySensorsPermissionButton: Button? = null
-    private var mPhoneStoragePermissionButton: Button? = null
-    private var mOutputTextView: TextView? = null
-    private var mPhoneNodeId: String? = null
+    private lateinit var binding: ActivityMainBinding
+
+    /**
+     * True if the remote phone storage permission is approved.
+     */
+    private var phoneStoragePermissionApproved = false
+
+    /**
+     * True if the phone is remotely requesting sensor permissions.
+     */
+    private var isPhoneRequestingPermission = false
+
+    /**
+     * True if we have handled the phone's remote request for sensor permissions.
+     */
+    private var askedForPermissionOnBehalfOfPhone = false
+
+    /**
+     * The id of the phone node, if available.
+     */
+    private var phoneNodeId: String? = null
+
+    /**
+     * The [ActivityResultLauncher] for requesting permissions locally.
+     */
+    private val requestPermissionLauncher = registerForActivityResult(
+        RequestPermission()
+    ) {
+        onPermissionResult()
+    }
+
+    /**
+     * The [ActivityResultLauncher] for informing the user that we are going to make a permission
+     * request remotely on the phone.
+     */
+    private val requestPermissionOnPhoneLauncher = registerForActivityResult(
+        RequestPermissionOnPhoneActivity.Companion.RequestPermissionOnPhone
+    ) { requestMade ->
+        if (requestMade) {
+            logToUi(getString(R.string.requested_remote_permission))
+            lifecycleScope.launch {
+                sendMessage(
+                    DataMap().apply {
+                        putInt(
+                            Constants.KEY_COMM_TYPE,
+                            Constants.COMM_TYPE_REQUEST_PROMPT_PERMISSION
+                        )
+                    }
+                )
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
 
-        /*
-         * Since this is a remote permission, we initialize it to false and then check the remote
-         * permission once the GoogleApiClient is connected.
-         */mPhoneStoragePermissionApproved = false
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Checks if phone app requested wear permission (permission request opens later if true).
-        mPhoneRequestingWearSensorPermission = intent.getBooleanExtra(
-            EXTRA_PROMPT_PERMISSION_FROM_PHONE, false
-        )
-        mWearBodySensorsPermissionButton = findViewById(R.id.wear_body_sensors_permission_button)
-        if (mWearBodySensorsPermissionApproved) {
-            mWearBodySensorsPermissionButton!!.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_permission_approved, 0, 0, 0
+        // Since this is a remote permission, we initialize it to false and then check the remote
+        // permission once the GoogleApiClient is connected.
+        phoneStoragePermissionApproved = false
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            binding.wearBodySensorsPermissionButton.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_very_satisfied, 0, 0, 0
             )
         }
-        mPhoneStoragePermissionButton = findViewById(R.id.phone_storage_permission_button)
-        mOutputTextView = findViewById(R.id.output)
-        if (mPhoneRequestingWearSensorPermission) {
-            launchPermissionDialogForPhone()
+
+        // Restore whether we've already asked the user for permission on behalf of the phone.
+        askedForPermissionOnBehalfOfPhone =
+            savedInstanceState?.getBoolean(
+            ASKED_PERMISSION_ON_BEHALF_OF_PHONE,
+            askedForPermissionOnBehalfOfPhone
+        ) ?: askedForPermissionOnBehalfOfPhone
+
+        checkForRemotePermissionRequest()
+
+        binding.wearBodySensorsPermissionButton.setOnClickListener {
+            logToUi(getString(R.string.requested_local_permission))
+            requestPermissionLauncher.launch(Manifest.permission.BODY_SENSORS)
         }
-    }
 
-    fun onClickWearBodySensors(view: View?) {
-        if (mWearBodySensorsPermissionApproved) {
-
-            // To keep the sample simple, we are only displaying the number of sensors.
-            val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-            val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
-            val numberOfSensorsOnDevice = sensorList.size
-            logToUi("$numberOfSensorsOnDevice sensors on device(s)!")
-        } else {
-            logToUi("Requested local permission.")
-            // On 23+ (M+) devices, GPS permission not granted. Request permission.
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.BODY_SENSORS),
-                PERMISSION_REQUEST_READ_BODY_SENSORS
-            )
+        binding.phoneStoragePermissionButton.setOnClickListener {
+            logToUi(getString(R.string.requested_info_from_phone))
+            lifecycleScope.launch {
+                sendMessage(
+                    DataMap().apply {
+                        putInt(
+                            Constants.KEY_COMM_TYPE,
+                            Constants.COMM_TYPE_REQUEST_DATA
+                        )
+                    }
+                )
+            }
         }
-    }
 
-    fun onClickPhoneStorage(view: View?) {
-        logToUi("Requested info from phone. New approval may be required.")
-        val dataMap = DataMap()
-        dataMap.putInt(
-            Constants.KEY_COMM_TYPE,
-            Constants.COMM_TYPE_REQUEST_DATA
-        )
-        sendMessage(dataMap)
+        if (resources.configuration.isScreenRound) {
+            binding.scrollingContentContainer.doOnPreDraw {
+                // Calculate the padding necessary to make the scrolling content fit in a square
+                // inscribed on a round screen.
+                it.setPadding((it.width / 2.0 * (1.0 - 1.0 / sqrt(2.0))).roundToInt())
+            }
+        }
     }
 
     override fun onPause() {
-        Log.d(TAG, "onPause()")
         super.onPause()
         Wearable.getMessageClient(this).removeListener(this)
         Wearable.getCapabilityClient(this).removeListener(this)
     }
 
     override fun onResume() {
-        Log.d(TAG, "onResume()")
         super.onResume()
 
         // Instantiates clients without member variables, as clients are inexpensive to create and
@@ -127,23 +180,24 @@ class MainWearActivity : FragmentActivity(),
             this, Constants.CAPABILITY_PHONE_APP
         )
 
-        // Initial check of capabilities to find the phone.
-        val capabilityInfoTask = Wearable.getCapabilityClient(this)
-            .getCapability(Constants.CAPABILITY_PHONE_APP, CapabilityClient.FILTER_REACHABLE)
-        capabilityInfoTask.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d(TAG, "Capability request succeeded.")
-                val capabilityInfo = task.result
-                mPhoneNodeId = pickBestNodeId(capabilityInfo!!.nodes)
-            } else {
+        lifecycleScope.launch {
+            // Initial check of capabilities to find the phone.
+            try {
+                val capabilityInfo = Wearable.getCapabilityClient(this@MainWearActivity)
+                    .getCapability(Constants.CAPABILITY_PHONE_APP, CapabilityClient.FILTER_REACHABLE)
+                    .await()
+                phoneNodeId = capabilityInfo.nodes.firstOrNull()?.id
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (throwable: Throwable) {
                 Log.d(TAG, "Capability request failed to return any results.")
             }
         }
+    }
 
-        // Enables app to handle 23+ (M+) style permissions.
-        mWearBodySensorsPermissionApproved =
-            (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
-                    == PackageManager.PERMISSION_GRANTED)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(ASKED_PERMISSION_ON_BEHALF_OF_PHONE, askedForPermissionOnBehalfOfPhone)
     }
 
     /*
@@ -152,77 +206,20 @@ class MainWearActivity : FragmentActivity(),
       * is in the foreground. By overriding onNewIntent, we can cover that use case.
       */
     override fun onNewIntent(intent: Intent) {
-        Log.d(TAG, "onNewIntent()")
         super.onNewIntent(intent)
+        // Update the "origination" intent
+        setIntent(intent)
 
-        // Checks if phone app requested wear permissions (opens up permission request if true).
-        mPhoneRequestingWearSensorPermission = intent.getBooleanExtra(
-            EXTRA_PROMPT_PERMISSION_FROM_PHONE, false
-        )
-        if (mPhoneRequestingWearSensorPermission) {
-            launchPermissionDialogForPhone()
-        }
+        // This must be a new request, mark that we haven't asked for permission on behalf of the
+        // phone yet.
+        askedForPermissionOnBehalfOfPhone = false
+
+        checkForRemotePermissionRequest()
     }
 
     override fun onCapabilityChanged(capabilityInfo: CapabilityInfo) {
         Log.d(TAG, "onCapabilityChanged(): $capabilityInfo")
-        mPhoneNodeId = pickBestNodeId(capabilityInfo.nodes)
-    }
-
-    /*
-     * Callback received when a permissions request has been completed.
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        val permissionResult = ("Request code: " + requestCode + ", Permissions: " + permissions
-                + ", Results: " + grantResults)
-        Log.d(TAG, "onRequestPermissionsResult(): $permissionResult")
-        if (requestCode == PERMISSION_REQUEST_READ_BODY_SENSORS) {
-            if (grantResults.size == 1
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED
-            ) {
-                mWearBodySensorsPermissionApproved = true
-                mWearBodySensorsPermissionButton!!.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_permission_approved, 0, 0, 0
-                )
-
-                // To keep the sample simple, we are only displaying the number of sensors.
-                val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-                val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
-                val numberOfSensorsOnDevice = sensorList.size
-                val sensorSummary = "$numberOfSensorsOnDevice sensors on this device!"
-                logToUi(sensorSummary)
-                if (mPhoneRequestingWearSensorPermission) {
-                    // Resets so this isn't triggered every time permission is changed in app.
-                    mPhoneRequestingWearSensorPermission = false
-
-                    // Send 'approved' message to remote phone since it started Activity.
-                    val dataMap = DataMap()
-                    dataMap.putInt(
-                        Constants.KEY_COMM_TYPE,
-                        Constants.COMM_TYPE_RESPONSE_USER_APPROVED_PERMISSION
-                    )
-                    sendMessage(dataMap)
-                }
-            } else {
-                mWearBodySensorsPermissionApproved = false
-                mWearBodySensorsPermissionButton!!.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_permission_denied, 0, 0, 0
-                )
-                if (mPhoneRequestingWearSensorPermission) {
-                    // Resets so this isn't triggered every time permission is changed in app.
-                    mPhoneRequestingWearSensorPermission = false
-                    // Send 'denied' message to remote phone since it started Activity.
-                    val dataMap = DataMap()
-                    dataMap.putInt(
-                        Constants.KEY_COMM_TYPE,
-                        Constants.COMM_TYPE_RESPONSE_USER_DENIED_PERMISSION
-                    )
-                    sendMessage(dataMap)
-                }
-            }
-        }
+        phoneNodeId = capabilityInfo.nodes.firstOrNull()?.id
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
@@ -231,92 +228,137 @@ class MainWearActivity : FragmentActivity(),
         if (messagePath == Constants.MESSAGE_PATH_WEAR) {
             val dataMap = DataMap.fromByteArray(messageEvent.data)
             val commType = dataMap.getInt(Constants.KEY_COMM_TYPE, 0)
-            if (commType == Constants.COMM_TYPE_RESPONSE_PERMISSION_REQUIRED) {
-                mPhoneStoragePermissionApproved = false
-                updatePhoneButtonOnUiThread()
+            when (commType) {
+                Constants.COMM_TYPE_RESPONSE_PERMISSION_REQUIRED -> {
+                    phoneStoragePermissionApproved = false
+                    updatePhoneButtonOnUiThread()
 
-                /* Because our request for remote data requires a remote permission, we now launch
-                 * a splash activity informing the user we need those permissions (along with
-                 * other helpful information to approve).
-                 */
-                val phonePermissionRationaleIntent =
-                    Intent(this, RequestPermissionOnPhoneActivity::class.java)
-                startActivityForResult(phonePermissionRationaleIntent, REQUEST_PHONE_PERMISSION)
-            } else if (commType == Constants.COMM_TYPE_RESPONSE_USER_APPROVED_PERMISSION) {
-                mPhoneStoragePermissionApproved = true
-                updatePhoneButtonOnUiThread()
-                logToUi("User approved permission on remote device, requesting data again.")
-                val outgoingDataRequestDataMap = DataMap()
-                outgoingDataRequestDataMap.putInt(
-                    Constants.KEY_COMM_TYPE,
-                    Constants.COMM_TYPE_REQUEST_DATA
-                )
-                sendMessage(outgoingDataRequestDataMap)
-            } else if (commType == Constants.COMM_TYPE_RESPONSE_USER_DENIED_PERMISSION) {
-                mPhoneStoragePermissionApproved = false
-                updatePhoneButtonOnUiThread()
-                logToUi("User denied permission on remote device.")
-            } else if (commType == Constants.COMM_TYPE_RESPONSE_DATA) {
-                mPhoneStoragePermissionApproved = true
-                val storageDetails = dataMap.getString(Constants.KEY_PAYLOAD)
-                updatePhoneButtonOnUiThread()
-                logToUi(storageDetails)
+                    // Because our request for remote data requires a remote permission, we now
+                    // launch a splash activity informing the user we need those permissions (along
+                    // with other helpful information to approve).
+                    requestPermissionOnPhoneLauncher.launch(Unit)
+                }
+                Constants.COMM_TYPE_RESPONSE_USER_APPROVED_PERMISSION -> {
+                    phoneStoragePermissionApproved = true
+                    updatePhoneButtonOnUiThread()
+                    logToUi(getString(R.string.user_approved_remote_permission))
+                    lifecycleScope.launch {
+                        sendMessage(
+                            DataMap().apply {
+                                putInt(
+                                    Constants.KEY_COMM_TYPE,
+                                    Constants.COMM_TYPE_REQUEST_DATA
+                                )
+                            }
+                        )
+                    }
+                }
+                Constants.COMM_TYPE_RESPONSE_USER_DENIED_PERMISSION -> {
+                    phoneStoragePermissionApproved = false
+                    updatePhoneButtonOnUiThread()
+                    logToUi(getString(R.string.user_denied_remote_permission))
+                }
+                Constants.COMM_TYPE_RESPONSE_DATA -> {
+                    phoneStoragePermissionApproved = true
+                    val storageDetails = dataMap.getString(Constants.KEY_PAYLOAD)!!
+                    updatePhoneButtonOnUiThread()
+                    logToUi(storageDetails)
+                }
             }
         }
     }
 
-    private fun sendMessage(dataMap: DataMap) {
-        Log.d(TAG, "sendMessage(): $mPhoneNodeId")
-        if (mPhoneNodeId != null) {
-            // Clients are inexpensive to create, so in this case we aren't creating member variables.
-            // (They are cached and shared between GoogleApi instances.)
-            val sendMessageTask = Wearable.getMessageClient(this)
-                .sendMessage(mPhoneNodeId!!, Constants.MESSAGE_PATH_PHONE, dataMap.toByteArray())
-            sendMessageTask.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "Message sent successfully")
-                } else {
-                    Log.d(TAG, "Message failed.")
+    /**
+     * A helper function to launch the permission dialog on behalf of the phone.
+     */
+    private fun checkForRemotePermissionRequest() {
+        isPhoneRequestingPermission = intent.getBooleanExtra(
+            EXTRA_PROMPT_PERMISSION_FROM_PHONE, false
+        )
+
+        // If we've already asked the user on behalf of the phone, don't ask again
+        if (isPhoneRequestingPermission && !askedForPermissionOnBehalfOfPhone) {
+            launchPermissionDialogForPhone()
+        }
+    }
+
+    private fun onPermissionResult() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            // To keep the sample simple, we are only displaying the number of sensors.
+            val sensorSummary = this.sensorSummary()
+
+            binding.wearBodySensorsPermissionButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_very_satisfied, 0, 0, 0
+            )
+
+            logToUi(sensorSummary)
+            if (isPhoneRequestingPermission) {
+                // Resets so this isn't triggered every time permission is changed in app.
+                isPhoneRequestingPermission = false
+                askedForPermissionOnBehalfOfPhone = true
+
+                // Send 'approved' message to remote phone since it started Activity.
+                lifecycleScope.launch {
+                    sendMessage(
+                        DataMap().apply {
+                            putInt(
+                                Constants.KEY_COMM_TYPE,
+                                Constants.COMM_TYPE_RESPONSE_USER_APPROVED_PERMISSION
+                            )
+                        }
+                    )
                 }
             }
         } else {
+            binding.wearBodySensorsPermissionButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_very_dissatisfied, 0, 0, 0
+            )
+            if (isPhoneRequestingPermission) {
+                // Resets so this isn't triggered every time permission is changed in app.
+                isPhoneRequestingPermission = false
+                askedForPermissionOnBehalfOfPhone = true
+
+                // Send 'denied' message to remote phone since it started Activity.
+                lifecycleScope.launch {
+                    sendMessage(
+                        DataMap().apply {
+                            putInt(
+                                Constants.KEY_COMM_TYPE,
+                                Constants.COMM_TYPE_RESPONSE_USER_DENIED_PERMISSION
+                            )
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun sendMessage(dataMap: DataMap) {
+        val phoneNodeId = phoneNodeId
+
+        Log.d(TAG, "sendMessage(): $phoneNodeId")
+        if (phoneNodeId != null) {
+            // Clients are inexpensive to create, so in this case we aren't creating member variables.
+            // (They are cached and shared between GoogleApi instances.)
+            try {
+                Wearable.getMessageClient(this)
+                    .sendMessage(phoneNodeId, Constants.MESSAGE_PATH_PHONE, dataMap.toByteArray())
+                    .await()
+
+                Log.d(TAG, "Message sent successfully")
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (throwable: Throwable) {
+                Log.d(TAG, "Message failed.")
+            }
+        } else {
             // Unable to retrieve node with proper capability
-            mPhoneStoragePermissionApproved = false
+            phoneStoragePermissionApproved = false
             updatePhoneButtonOnUiThread()
-            logToUi("Phone not available to send message.")
+            logToUi(getString(R.string.phone_not_available))
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // Check which request we're responding to
-        if (requestCode == REQUEST_PHONE_PERMISSION) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                logToUi("Requested permission on phone.")
-                val dataMap = DataMap()
-                dataMap.putInt(
-                    Constants.KEY_COMM_TYPE,
-                    Constants.COMM_TYPE_REQUEST_PROMPT_PERMISSION
-                )
-                sendMessage(dataMap)
-            }
-        }
-    }
-
-    /*
-     * There should only ever be one phone in a node set (much less w/ the correct capability), so
-     * I am just grabbing the first one (which should be the only one).
-     */
-    private fun pickBestNodeId(nodes: Set<Node>): String? {
-        var bestNodeId: String? = null
-        // Find a nearby node or pick one arbitrarily.
-        for (node in nodes) {
-            if (node.isNearby) {
-                return node.id
-            }
-            bestNodeId = node.id
-        }
-        return bestNodeId
     }
 
     /*
@@ -325,26 +367,25 @@ class MainWearActivity : FragmentActivity(),
      */
     private fun launchPermissionDialogForPhone() {
         Log.d(TAG, "launchPermissionDialogForPhone()")
-        if (!mWearBodySensorsPermissionApproved) {
-            // On 23+ (M+) devices, GPS permission not granted. Request permission.
-            ActivityCompat.requestPermissions(
-                this@MainWearActivity, arrayOf(Manifest.permission.BODY_SENSORS),
-                PERMISSION_REQUEST_READ_BODY_SENSORS
-            )
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.BODY_SENSORS)
         }
     }
 
     private fun updatePhoneButtonOnUiThread() {
         runOnUiThread {
-            if (mPhoneStoragePermissionApproved) {
-                mPhoneStoragePermissionButton!!.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_permission_approved, 0, 0, 0
-                )
-            } else {
-                mPhoneStoragePermissionButton!!.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_permission_denied, 0, 0, 0
-                )
-            }
+            binding.phoneStoragePermissionButton.setCompoundDrawablesWithIntrinsicBounds(
+                if (phoneStoragePermissionApproved) {
+                    R.drawable.ic_very_satisfied
+                } else {
+                    R.drawable.ic_very_dissatisfied
+                },
+                0,
+                0,
+                0
+            )
         }
     }
 
@@ -353,18 +394,10 @@ class MainWearActivity : FragmentActivity(),
      * on the main thread.
      */
     private fun logToUi(message: String) {
-        val mainUiThread = Looper.myLooper() == Looper.getMainLooper()
-        if (mainUiThread) {
-            if (!message.isEmpty()) {
+        runOnUiThread {
+            if (message.isNotEmpty()) {
                 Log.d(TAG, message)
-                mOutputTextView!!.text = message
-            }
-        } else {
-            runOnUiThread {
-                if (!message.isEmpty()) {
-                    Log.d(TAG, message)
-                    mOutputTextView!!.text = message
-                }
+                binding.output.text = message
             }
         }
     }
@@ -372,11 +405,8 @@ class MainWearActivity : FragmentActivity(),
     companion object {
         private const val TAG = "MainWearActivity"
 
-        /* Id to identify local permission request for body sensors. */
-        private const val PERMISSION_REQUEST_READ_BODY_SENSORS = 1
+        private const val ASKED_PERMISSION_ON_BEHALF_OF_PHONE = "AskedPermissionOnBehalfOfPhone"
 
-        /* Id to identify starting/closing RequestPermissionOnPhoneActivity (startActivityForResult). */
-        private const val REQUEST_PHONE_PERMISSION = 1
         const val EXTRA_PROMPT_PERMISSION_FROM_PHONE =
             "com.example.android.wearable.runtimepermissions.extra.PROMPT_PERMISSION_FROM_PHONE"
     }
