@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.wearable.runtimepermissions
 
-package com.example.android.wearable.runtimepermissions;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import com.example.android.wearable.runtimepermissions.IncomingRequestPhoneService
+import android.content.pm.PackageManager
+import android.content.Intent
+import com.example.android.wearable.runtimepermissions.PhonePermissionRequestActivity
+import com.example.android.wearable.runtimepermissions.MainPhoneActivity
+import android.os.Environment
+import android.widget.TextView
+import android.os.Bundle
+import com.example.android.wearable.runtimepermissions.R
+import android.app.Activity
+import com.example.android.wearable.runtimepermissions.WearPermissionRequestActivity
+import android.os.Looper
+import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 
 /**
  * This is a simple splash screen (activity) for giving more details on why the user should approve
@@ -38,26 +46,26 @@ import androidx.core.app.ActivityCompat;
  * extra (MainPhoneActivity.EXTRA_PROMPT_PERMISSION_FROM_WEAR) to alert MainPhoneActivity to
  * send the results of the user's decision to the wear device.
  */
-public class WearPermissionRequestActivity extends AppCompatActivity implements
-        ActivityCompat.OnRequestPermissionsResultCallback {
-
-    private static final String TAG = "WearRationale";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wear_permission_request);
+class WearPermissionRequestActivity : AppCompatActivity(),
+    ActivityCompat.OnRequestPermissionsResultCallback {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_wear_permission_request)
     }
 
-    public void onClickApprovePermissionRequest(View view) {
-        Log.d(TAG, "onClickApprovePermissionRequest()");
-        setResult(Activity.RESULT_OK);
-        finish();
+    fun onClickApprovePermissionRequest(view: View?) {
+        Log.d(TAG, "onClickApprovePermissionRequest()")
+        setResult(RESULT_OK)
+        finish()
     }
 
-    public void onClickDenyPermissionRequest(View view) {
-        Log.d(TAG, "onClickDenyPermissionRequest()");
-        setResult(Activity.RESULT_CANCELED);
-        finish();
+    fun onClickDenyPermissionRequest(view: View?) {
+        Log.d(TAG, "onClickDenyPermissionRequest()")
+        setResult(RESULT_CANCELED)
+        finish()
+    }
+
+    companion object {
+        private const val TAG = "WearRationale"
     }
 }
