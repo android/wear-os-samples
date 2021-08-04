@@ -17,7 +17,6 @@ package com.example.wear.tiles.media
 
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.ActionBuilders
-import androidx.wear.tiles.TileProviderService
 import androidx.wear.tiles.ColorBuilders.argb
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.DimensionBuilders.dp
@@ -31,14 +30,15 @@ import androidx.wear.tiles.LayoutElementBuilders.Text
 import androidx.wear.tiles.ModifiersBuilders.Clickable
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
+import androidx.wear.tiles.RequestBuilders.ResourcesRequest
+import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.TileProviderService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
-import androidx.wear.tiles.RequestBuilders.ResourcesRequest
-import androidx.wear.tiles.RequestBuilders.TileRequest
 import com.example.wear.tiles.R
 import com.example.wear.tiles.components.IconButton
 import kotlinx.coroutines.CoroutineScope

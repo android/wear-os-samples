@@ -16,7 +16,6 @@
 package com.example.wear.tiles.fitness
 
 import androidx.core.content.ContextCompat
-import androidx.wear.tiles.TileProviderService
 import androidx.wear.tiles.ColorBuilders.argb
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.DimensionBuilders.degrees
@@ -31,12 +30,13 @@ import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Text
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
-import androidx.wear.tiles.ResourceBuilders.Resources
-import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TimelineBuilders.Timeline
-import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
+import androidx.wear.tiles.ResourceBuilders.Resources
+import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.TileProviderService
+import androidx.wear.tiles.TimelineBuilders.Timeline
+import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import com.example.wear.tiles.R
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
