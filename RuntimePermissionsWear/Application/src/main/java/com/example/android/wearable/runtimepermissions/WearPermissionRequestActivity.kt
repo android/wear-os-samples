@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2015 Google Inc. All Rights Reserved.
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,57 +15,49 @@
  */
 package com.example.android.wearable.runtimepermissions
 
-import com.example.android.wearable.runtimepermissions.IncomingRequestPhoneService
-import android.content.pm.PackageManager
-import android.content.Intent
-import com.example.android.wearable.runtimepermissions.PhonePermissionRequestActivity
-import com.example.android.wearable.runtimepermissions.MainPhoneActivity
-import android.os.Environment
-import android.widget.TextView
-import android.os.Bundle
-import com.example.android.wearable.runtimepermissions.R
 import android.app.Activity
-import com.example.android.wearable.runtimepermissions.WearPermissionRequestActivity
-import android.os.Looper
-import android.util.Log
-import android.view.View
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import com.example.android.wearable.runtimepermissions.databinding.ActivityWearPermissionRequestBinding
 
 /**
  * This is a simple splash screen (activity) for giving more details on why the user should approve
- * phone permissions for storage. If they choose to move forward, the permission screen
- * is brought up. Either way (approve or disapprove), this will exit to the MainPhoneActivity after
- * they are finished with their final decision.
- *
- * If this activity is started by our service (IncomingRequestPhoneService) it is marked via an
- * extra (MainPhoneActivity.EXTRA_PROMPT_PERMISSION_FROM_WEAR). That service only starts
- * this activity if the phone permission hasn't been approved for the data wear is trying to access.
- * When the user decides within this Activity what to do with the permission request, it closes and
- * opens the MainPhoneActivity (to maintain the app experience). It also again passes along the same
- * extra (MainPhoneActivity.EXTRA_PROMPT_PERMISSION_FROM_WEAR) to alert MainPhoneActivity to
- * send the results of the user's decision to the wear device.
+ * wear permissions for sensors. This will exit to the [MainPhoneActivity] with the user's choice.
  */
-class WearPermissionRequestActivity : AppCompatActivity(),
-    ActivityCompat.OnRequestPermissionsResultCallback {
+class WearPermissionRequestActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wear_permission_request)
-    }
 
-    fun onClickApprovePermissionRequest(view: View?) {
-        Log.d(TAG, "onClickApprovePermissionRequest()")
-        setResult(RESULT_OK)
-        finish()
-    }
+        val binding = ActivityWearPermissionRequestBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    fun onClickDenyPermissionRequest(view: View?) {
-        Log.d(TAG, "onClickDenyPermissionRequest()")
-        setResult(RESULT_CANCELED)
-        finish()
+        binding.approvePermissionRequest.setOnClickListener {
+            setResult(RESULT_OK)
+            finish()
+        }
+
+        binding.denyPermissionRequest.setOnClickListener {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
     }
 
     companion object {
-        private const val TAG = "WearRationale"
+
+        /**
+         * An [ActivityResultContract] for checking that the user wants to request permission on
+         * their watch.
+         */
+        object RequestPermissionOnWear : ActivityResultContract<Unit, Boolean>() {
+            override fun createIntent(context: Context, input: Unit): Intent =
+                Intent(context, WearPermissionRequestActivity::class.java)
+
+            override fun parseResult(resultCode: Int, intent: Intent?): Boolean =
+                resultCode == Activity.RESULT_OK
+        }
     }
 }
