@@ -20,12 +20,13 @@
     android:versionCode="1"
     android:versionName="1.0">
 
-    <uses-feature android:name="android.hardware.type.watch"/>
+    <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application android:allowBackup="true"
-        android:label="@string/app_name"
+    <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
 
@@ -34,128 +35,135 @@
             android:value="true" />
         <uses-library
             android:name="com.google.android.wearable"
-            android:required="false"/>
+            android:required="false" />
 
 
         <service
+            android:name=".NoDataDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_not_interested_vd_theme_24"
             android:label="@string/no_data_label"
-            android:name=".NoDataDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="SHORT_TEXT,LONG_TEXT,SMALL_IMAGE,ICON,RANGED_VALUE,LARGE_IMAGE"/>
+                android:value="SHORT_TEXT,LONG_TEXT,SMALL_IMAGE,ICON,RANGED_VALUE,LARGE_IMAGE" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
         <service
+            android:name=".ShortTextDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_title_vd_theme_24"
             android:label="@string/short_text_label"
-            android:name=".ShortTextDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="SHORT_TEXT"/>
+                android:value="SHORT_TEXT" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
         <service
+            android:name=".SmallImageDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_image_vd_theme_24"
             android:label="@string/small_image_label"
-            android:name=".SmallImageDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="SMALL_IMAGE"/>
+                android:value="SMALL_IMAGE" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
         <service
+            android:name=".LargeImageDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_landscape_vd_theme_24"
             android:label="@string/large_image_label"
-            android:name=".LargeImageDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="LARGE_IMAGE"/>
+                android:value="LARGE_IMAGE" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
         <service
+            android:name=".IconDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_face_vd_theme_24"
             android:label="@string/icon_label"
-            android:name=".IconDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="ICON"/>
+                android:value="ICON" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
         <service
+            android:name=".LongTextDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_short_text_vd_theme_24"
             android:label="@string/long_text_label"
-            android:name=".LongTextDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="LONG_TEXT"/>
+                android:value="LONG_TEXT" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
         <service
+            android:name=".RangedValueDataSourceService"
+            android:exported="true"
             android:icon="@drawable/ic_data_usage_vd_theme_24"
             android:label="@string/ranged_value_label"
-            android:name=".RangedValueDataSourceService"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
-                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
-                android:value="RANGED_VALUE"/>
+                android:value="RANGED_VALUE" />
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0"/>
+                android:value="0" />
         </service>
 
-        <receiver android:name=".ComplicationToggleReceiver"/>
+        <receiver android:name=".ComplicationToggleReceiver" />
     </application>
 </manifest>
