@@ -25,10 +25,10 @@ Samples
 
 * **[WearDrawers](WearDrawers)** (Java) - Demonstrates Navigation (Top) and Action (Bottom) Drawers, part of Material Design for Wear. [Guide](https://developer.android.com/training/wearables/ui/ui-nav-actions)
 
-* **[WearOAuth](WearOAuth)** (Java) - Demonstrates how developers can authenticate a user on their Wear OS app via the user's mobile/phone device without requiring a mobile app (Wear OS companion app handles the request on the mobile side). The sample uses OAuth. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
+* **[WearOAuth](WearOAuth)** (Kotlin) - Demonstrates how developers can authenticate a user on their Wear OS app via the user's mobile/phone device without requiring a mobile app (Wear OS companion app handles the request on the mobile side). The sample uses OAuth. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
 * **[WearSpeakerSample](WearSpeakerSample)** (Kotlin) - Demonstrates audio recording and playback if the wearable device has a speaker. [Guide](https://developer.android.com/training/wearables/wearable-sounds)
 
 * **[WearStandaloneGoogleSignIn](WearStandaloneGoogleSignIn)** (Java) - Demonstrates using Google sign-in to authenticate user. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
-* **[WearVerifyRemoteApp](WearVerifyRemoteApp)** (Java) - Verify and open your app on another device, and if it isn't installed, open the store listing to allow the user to install it (wear or mobile). [Guide](https://developer.android.com/training/wearables/data-layer/messages#SendMessage)
+* **[WearVerifyRemoteApp](WearVerifyRemoteApp)** (Kotlin) - Verify and open your app on another device, and if it isn't installed, open the store listing to allow the user to install it (wear or mobile). [Guide](https://developer.android.com/training/wearables/data-layer/messages#SendMessage)
