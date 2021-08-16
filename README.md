@@ -31,4 +31,6 @@ Samples
 
 * **[WearStandaloneGoogleSignIn](WearStandaloneGoogleSignIn)** (Java) - Demonstrates using Google sign-in to authenticate user. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
+* **[WearTilesKotlin](WearTilesKotlin)** (Kotlin) - Demonstrates tiles using the new AndroidX alpha library. [Guide](https://developer.android.com/training/articles/wear-tiles)
+
 * **[WearVerifyRemoteApp](WearVerifyRemoteApp)** (Kotlin) - Verify and open your app on another device, and if it isn't installed, open the store listing to allow the user to install it (wear or mobile). [Guide](https://developer.android.com/training/wearables/data-layer/messages#SendMessage)
