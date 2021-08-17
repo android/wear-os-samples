@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/inner_frame_layout_padding"
-        app:boxedEdges="all">
+        app:layout_boxedEdges="all">
 
         <!-- TODO (codingjeremy): Implement this actitivy in next CL -->
         <TextView

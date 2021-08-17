@@ -78,10 +78,6 @@
         </service>
 
         <activity
-            android:name="androidx.wear.complications.ComplicationHelperActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".editor.WatchFaceConfigActivity"
             android:exported="true"
             android:label="@string/title_activity_watch_face_config"
