@@ -19,8 +19,7 @@ buildscript {
         // SDK and tools
         kotlin_version = '1.5.21'
 
-        watchFaceVersion = '1.0.0-alpha18'
-        watchFaceProviderVersion = '1.0.0-alpha17'
+        watchFaceVersion = '1.0.0-alpha19'
 
         coroutines = '1.4.2'
     }

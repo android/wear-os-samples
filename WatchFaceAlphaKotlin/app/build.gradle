@@ -67,7 +67,7 @@ dependencies {
 
     // Watch face specific libraries
     implementation "androidx.wear:wear-complications-data:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-complications-provider:$rootProject.watchFaceProviderVersion"
+    implementation "androidx.wear:wear-complications-data-source:$rootProject.watchFaceVersion"
 
     implementation "androidx.wear:wear-watchface:$rootProject.watchFaceVersion"
     implementation "androidx.wear:wear-watchface-client:$rootProject.watchFaceVersion"
