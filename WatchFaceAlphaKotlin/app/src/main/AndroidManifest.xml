@@ -78,7 +78,7 @@
         </service>
 
         <activity
-            android:name="androidx.wear.complications.ComplicationHelperActivity"
+            android:name="androidx.wear.watchface.ComplicationHelperActivity"
             android:exported="false" />
 
         <activity

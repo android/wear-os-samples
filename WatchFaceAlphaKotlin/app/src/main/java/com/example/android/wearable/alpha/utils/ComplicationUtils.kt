@@ -18,8 +18,8 @@ package com.example.android.wearable.alpha.utils
 import android.content.Context
 import android.graphics.RectF
 import androidx.wear.complications.ComplicationSlotBounds
-import androidx.wear.complications.DefaultComplicationProviderPolicy
-import androidx.wear.complications.SystemProviders
+import androidx.wear.complications.DefaultComplicationDataSourcePolicy
+import androidx.wear.complications.SystemDataSources
 import androidx.wear.complications.data.ComplicationType
 import androidx.wear.watchface.CanvasComplicationFactory
 import androidx.wear.watchface.ComplicationSlot
@@ -95,8 +95,9 @@ fun createComplicationSlotManager(
         id = ComplicationConfig.Left.id,
         canvasComplicationFactory = canvasComplicationFactory,
         supportedTypes = ComplicationConfig.Left.supportedTypes,
-        defaultProviderPolicy =
-            DefaultComplicationProviderPolicy(SystemProviders.PROVIDER_DAY_OF_WEEK),
+        defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
+            SystemDataSources.DATA_SOURCE_DAY_OF_WEEK
+        ),
         bounds = ComplicationSlotBounds(
             RectF(
                 LEFT_COMPLICATION_LEFT_BOUND,
@@ -105,15 +106,16 @@ fun createComplicationSlotManager(
                 LEFT_AND_RIGHT_COMPLICATIONS_BOTTOM_BOUND
             )
         )
-    ).setDefaultProviderType(ComplicationType.SHORT_TEXT)
+    ).setDefaultDataSourceType(ComplicationType.SHORT_TEXT)
         .build()
 
     val rightComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Right.id,
         canvasComplicationFactory = canvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
-        defaultProviderPolicy =
-        DefaultComplicationProviderPolicy(SystemProviders.PROVIDER_STEP_COUNT),
+        defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
+            SystemDataSources.DATA_SOURCE_STEP_COUNT
+        ),
         bounds = ComplicationSlotBounds(
             RectF(
                 RIGHT_COMPLICATION_LEFT_BOUND,
@@ -122,7 +124,7 @@ fun createComplicationSlotManager(
                 LEFT_AND_RIGHT_COMPLICATIONS_BOTTOM_BOUND
             )
         )
-    ).setDefaultProviderType(ComplicationType.SHORT_TEXT)
+    ).setDefaultDataSourceType(ComplicationType.SHORT_TEXT)
         .build()
     return ComplicationSlotsManager(
         listOf(leftComplication, rightComplication),
