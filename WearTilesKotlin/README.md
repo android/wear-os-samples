@@ -1,6 +1,6 @@
 Wear Tiles Sample
 ===============================
-Demonstrates tiles using the new androidX alpha library.
+Demonstrates tiles using the new AndroidX alpha library.
 
 Introduction
 ------------
