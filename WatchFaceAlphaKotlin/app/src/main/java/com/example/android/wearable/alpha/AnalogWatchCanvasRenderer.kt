@@ -115,8 +115,14 @@ class AnalogWatchCanvasRenderer(
     private var currentWatchFaceSize = Rect(0, 0, 0, 0)
 
     init {
+
+        Log.d(TAG, "init { }")
+
         scope.launch {
             analogWatchFaceViewModel.uiState.collect { uiState ->
+
+                Log.d(TAG, "collect worked! : $uiState")
+
                 when (uiState) {
                     is AnalogWatchFaceViewModel.UserChangesUiState.Loading -> {
                         Log.d(TAG, "StateFlow Loading: ${uiState.message}")
@@ -167,6 +173,11 @@ class AnalogWatchCanvasRenderer(
                     val doubleValue = options.value as
                             UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
 
+                    // The arm lengths are usually only calculated the first time the watch face is
+                    // loaded to reduce the ops in the onDraw(). Because we updated the minute hand
+                    // watch length, we need to trigger a recalculation.
+                    armLengthChangedRecalculateClockHands = true
+
                     // Updates length of minute hand based on edits from user.
                     val newMinuteHandDimensions = newWatchFaceData.minuteHandDimensions.copy(
                         lengthFraction = doubleValue.value.toFloat()
@@ -203,6 +214,7 @@ class AnalogWatchCanvasRenderer(
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy()")
         scope.cancel("AnalogWatchCanvasRenderer scope clear() request")
         super.onDestroy()
     }

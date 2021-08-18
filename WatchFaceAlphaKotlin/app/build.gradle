@@ -30,6 +30,10 @@ android {
         versionName "1.0"
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -61,6 +65,13 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
+
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+
+    // Material components
+    api 'com.google.android.material:material:1.4.0'
 
     // Wear libraries
     implementation 'androidx.wear:wear:1.1.0'

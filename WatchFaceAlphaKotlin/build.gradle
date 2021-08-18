@@ -21,7 +21,7 @@ buildscript {
 
         watchFaceVersion = '1.0.0-alpha19'
 
-        coroutines = '1.4.2'
+        coroutines = '1.5.1'
     }
 
     repositories {

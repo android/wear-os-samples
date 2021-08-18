@@ -37,7 +37,7 @@ class WatchFaceUserSettingChangesDataSource(
         val userStyleChangeListener = object : CurrentUserStyleRepository.UserStyleChangeListener {
             override fun onUserStyleChanged(userStyle: UserStyle) {
                 Log.d(TAG, "onUserStyleChanged(): userStyle: $userStyle")
-                trySend(userStyle)
+                trySend(UserStyle(userStyle))
             }
         }
 

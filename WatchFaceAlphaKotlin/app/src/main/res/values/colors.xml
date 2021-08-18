@@ -15,6 +15,12 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Main Style Colors -->
+    <color name="color_primary">#707070</color>
+    <color name="color_secondary">#CCCCCC</color>
+
+    <!-- Button Style Colors -->
+    <color name="color_primary_button">#000000</color>
 
     <!-- Style colors (based on custom colors below). -->
     <!-- Ambient Style (used when wearable in ambient mode. -->
