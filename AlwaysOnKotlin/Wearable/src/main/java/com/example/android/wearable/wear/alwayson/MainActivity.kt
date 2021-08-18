@@ -143,7 +143,10 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          * every time the Alarm is triggered rather than reusing this Activity.
          */
         ambientUpdatePendingIntent = PendingIntent.getBroadcast(
-            this, 0, ambientUpdateIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            this,
+            0,
+            ambientUpdateIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         /*

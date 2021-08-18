@@ -29,6 +29,7 @@
 
         <service
             android:name="com.example.wear.tiles.fitness.FitnessTileService"
+            android:exported="true"
             android:label="@string/tile_fitness_label"
             android:description="@string/tile_description"
             android:icon="@drawable/ic_run"
@@ -44,6 +45,7 @@
         </service>
         <service
             android:name="com.example.wear.tiles.media.PlayNextSongTileService"
+            android:exported="true"
             android:label="@string/tile_media_label"
             android:description="@string/tile_description"
             android:icon="@drawable/ic_play"
@@ -58,6 +60,7 @@
         </service>
         <service
             android:name="com.example.wear.tiles.messaging.MessagingTileService"
+            android:exported="true"
             android:label="@string/tile_messaging_label"
             android:description="@string/tile_description"
             android:icon="@drawable/ic_person"
