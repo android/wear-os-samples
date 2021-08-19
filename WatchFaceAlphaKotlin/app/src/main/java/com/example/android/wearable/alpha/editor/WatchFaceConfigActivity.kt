@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.android.wearable.alpha.data.watchface.ColorStyleIdAndResourceIds
 import com.example.android.wearable.alpha.databinding.ActivityWatchFaceConfigBinding
@@ -34,7 +35,13 @@ import kotlinx.coroutines.launch
  * length) by using the [WatchFaceConfigViewModel]. (All widgets are disabled until data is loaded.)
  */
 class WatchFaceConfigActivity : ComponentActivity() {
-    private lateinit var viewModel: WatchFaceConfigViewModel
+    private val viewModel: WatchFaceConfigViewModel by viewModels {
+        WatchFaceConfigViewModel.WatchFaceConfigViewModelFactory(
+            this@WatchFaceConfigActivity,
+            intent
+        )
+    }
+
     private lateinit var binding: ActivityWatchFaceConfigBinding
 
     private var initialDataLoaded = false
@@ -62,11 +69,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.Main.immediate) {
-            viewModel = WatchFaceConfigViewModel(
-                    activity = this@WatchFaceConfigActivity,
-                    editIntent = intent
-                )
-
             viewModel.uiState.collect { uiState: WatchFaceConfigViewModel.EditWatchFaceUiState ->
                 when (uiState) {
                     is WatchFaceConfigViewModel.EditWatchFaceUiState.Loading -> {

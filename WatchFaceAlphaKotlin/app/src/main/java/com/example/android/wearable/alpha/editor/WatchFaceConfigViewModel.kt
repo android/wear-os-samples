@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.watchface.DrawMode
@@ -109,7 +110,6 @@ class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) 
 
     init {
         viewModelScope.launch(Dispatchers.Main.immediate) {
-
             editorSession = EditorSession.createOnWatchEditorSession(
                 activity = activity,
                 editIntent = editIntent
@@ -150,6 +150,7 @@ class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) 
      * updated values) to the Activity to render.
      */
     private fun updatesWatchFacePreview() {
+
         val bitmap = editorSession.renderWatchFaceToBitmap(
             RenderParameters(
                 DrawMode.INTERACTIVE,
@@ -242,6 +243,22 @@ class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) 
         val minuteHandLength: Float,
         val previewImage: Bitmap
     )
+
+    class WatchFaceConfigViewModelFactory(
+        private val activity: ComponentActivity,
+        private val editIntent: Intent
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(WatchFaceConfigViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return WatchFaceConfigViewModel(
+                    activity = activity,
+                    editIntent = editIntent
+                ) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
 
     companion object {
         private const val TAG = "WatchFaceConfigViewModel"
