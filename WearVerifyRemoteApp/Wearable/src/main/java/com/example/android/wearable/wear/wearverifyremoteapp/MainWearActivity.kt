@@ -26,7 +26,7 @@ import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.phone.interactions.PhoneTypeHelper
-import androidx.wear.remote.interactions.RemoteIntentHelper
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import androidx.wear.widget.ConfirmationOverlay
 import com.example.android.wearable.wear.wearverifyremoteapp.databinding.ActivityMainBinding
 import com.google.android.gms.wearable.CapabilityClient
@@ -53,7 +53,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
 
     private lateinit var capabilityClient: CapabilityClient
     private lateinit var nodeClient: NodeClient
-    private lateinit var remoteIntentHelper: RemoteIntentHelper
+    private lateinit var remoteActivityHelper: RemoteActivityHelper
 
     private var androidPhoneNodeWithApp: Node? = null
 
@@ -65,7 +65,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
 
         capabilityClient = Wearable.getCapabilityClient(this)
         nodeClient = Wearable.getNodeClient(this)
-        remoteIntentHelper = RemoteIntentHelper(this)
+        remoteActivityHelper = RemoteActivityHelper(this)
 
         binding.informationTextView.text = getString(R.string.message_checking)
         binding.remoteOpenButton.setOnClickListener {
@@ -172,7 +172,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
 
         lifecycleScope.launch {
             try {
-                remoteIntentHelper.startRemoteActivity(intent).await()
+                remoteActivityHelper.startRemoteActivity(intent).await()
 
                 ConfirmationOverlay().showOn(this@MainWearActivity)
             } catch (cancellationException: CancellationException) {
