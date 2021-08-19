@@ -23,7 +23,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.wear.remote.interactions.RemoteIntentHelper
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.example.android.wearable.oauth.util.doGetRequest
 import com.example.android.wearable.oauth.util.doPostRequest
 import kotlinx.coroutines.CancellationException
@@ -128,7 +128,7 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
      * intent.
      */
     private fun fireRemoteIntent(verificationUri: String) {
-        RemoteIntentHelper(getApplication()).startRemoteActivity(
+        RemoteActivityHelper(getApplication()).startRemoteActivity(
             Intent(Intent.ACTION_VIEW).apply {
                 addCategory(Intent.CATEGORY_BROWSABLE)
                 data = Uri.parse(verificationUri)
