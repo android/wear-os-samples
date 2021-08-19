@@ -52,13 +52,6 @@
 
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.wearable.libraries.steampack.watchface.MockTime" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
 
             <meta-data
                 android:name="com.google.android.wearable.standalone"
