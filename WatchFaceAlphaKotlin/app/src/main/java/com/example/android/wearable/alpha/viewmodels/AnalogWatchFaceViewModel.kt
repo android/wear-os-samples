@@ -19,8 +19,9 @@ import androidx.wear.watchface.style.UserStyle
 import com.example.android.wearable.alpha.AnalogWatchFaceService
 import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,9 @@ class AnalogWatchFaceViewModel(
     watchFaceUserSettingChangesDataSource: WatchFaceUserSettingChangesDataSource
 ) {
     // Used to launch coroutines/flow.
-    private val scope: CoroutineScope = MainScope()
+    // SupervisorJob
+    private val scope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     // The UI collects from this StateFlow to get its state updates
     @OptIn(ExperimentalCoroutinesApi::class)

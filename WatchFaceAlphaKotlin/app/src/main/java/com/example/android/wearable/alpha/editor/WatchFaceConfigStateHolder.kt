@@ -20,9 +20,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.RenderParameters
@@ -38,6 +35,7 @@ import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
 import java.beans.PropertyChangeListener
 import java.beans.PropertyChangeSupport
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -51,15 +49,27 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * Handles all ops for saving changes from [WatchFaceConfigActivity] to the watch face data layer,
- * that is to the [EditorSession].
+ * Maintains the [WatchFaceConfigActivity] state, i.e., handles reads and writes to the
+ * [EditorSession] which is basically the watch face data layer. This allows the user to edit their
+ * watch face through [WatchFaceConfigActivity].
  *
- * Uses the keys, [UserStyleSetting], for each of our user styles and sets their values
- * [UserStyleSetting.Option]. After a new value is set, creates a new image preview via screenshot
- * class and triggers a listener (which creates new data
- * for the [StateFlow] that feeds back to the Activity).
+ * Note: This doesn't use an Android ViewModel because the [EditorSession]'s constructor requires a
+ * ComponentActivity and Intent (needed for the library's complication editing UI which is triggered
+ * through the [EditorSession]). Generally, Activities and Views shouldn't be passed to Android
+ * ViewModels, so this is named StateHolder to avoid confusion.
+ *
+ * Also, the scope is passed in and we recommend you use the of the lifecycleScope of the Activity.
+ *
+ * For the [EditorSession] itself, this class uses the keys, [UserStyleSetting], for each of our
+ * user styles and sets their values [UserStyleSetting.Option]. After a new value is set, creates a
+ * new image preview via screenshot class and triggers a listener (which creates new data for the
+ * [StateFlow] that feeds back to the Activity).
  */
-class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) : ViewModel() {
+class WatchFaceConfigStateHolder(
+    scope: CoroutineScope,
+    activity: ComponentActivity,
+    editIntent: Intent
+) {
     private val changeSupport = PropertyChangeSupport(this)
 
     private fun addPropertyChangeListener(listener: PropertyChangeListener) {
@@ -103,13 +113,13 @@ class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) 
         .buffer(Channel.CONFLATED)
         .map(EditWatchFaceUiState::Success)
         .stateIn(
-            scope = viewModelScope,
+            scope = scope,
             started = SharingStarted.Eagerly,
             initialValue = EditWatchFaceUiState.Loading("Initializing")
         )
 
     init {
-        viewModelScope.launch(Dispatchers.Main.immediate) {
+        scope.launch(Dispatchers.Main.immediate) {
             editorSession = EditorSession.createOnWatchEditorSession(
                 activity = activity,
                 editIntent = editIntent
@@ -226,9 +236,8 @@ class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) 
         updatesWatchFacePreview()
     }
 
-    override fun onCleared() {
+    fun onCleared() {
         editorSession.close()
-        super.onCleared()
     }
 
     sealed class EditWatchFaceUiState {
@@ -243,22 +252,6 @@ class WatchFaceConfigViewModel(activity: ComponentActivity, editIntent: Intent) 
         val minuteHandLength: Float,
         val previewImage: Bitmap
     )
-
-    class WatchFaceConfigViewModelFactory(
-        private val activity: ComponentActivity,
-        private val editIntent: Intent
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(WatchFaceConfigViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return WatchFaceConfigViewModel(
-                    activity = activity,
-                    editIntent = editIntent
-                ) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
 
     companion object {
         private const val TAG = "WatchFaceConfigViewModel"

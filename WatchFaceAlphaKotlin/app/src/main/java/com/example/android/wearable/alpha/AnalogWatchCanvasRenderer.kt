@@ -42,7 +42,8 @@ import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -69,7 +70,8 @@ class AnalogWatchCanvasRenderer(
     canvasType,
     FRAME_PERIOD_MS_DEFAULT
 ) {
-    private val scope: CoroutineScope = MainScope()
+    private val scope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     // Represents all data needed to render the watch face. All value defaults are constants. Only
     // three values are changeable by the user (color scheme, ticks being rendered, and length of

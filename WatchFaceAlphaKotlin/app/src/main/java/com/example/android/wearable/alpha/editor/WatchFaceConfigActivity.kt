@@ -19,24 +19,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.android.wearable.alpha.data.watchface.ColorStyleIdAndResourceIds
 import com.example.android.wearable.alpha.databinding.ActivityWatchFaceConfigBinding
-import com.example.android.wearable.alpha.editor.WatchFaceConfigViewModel.Companion.MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER
-import com.example.android.wearable.alpha.editor.WatchFaceConfigViewModel.Companion.MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER
-import com.example.android.wearable.alpha.editor.WatchFaceConfigViewModel.Companion.MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER
+import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER
+import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER
+import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * Allows user to edit certain parts of the watch face (color style, ticks displayed, minute arm
- * length) by using the [WatchFaceConfigViewModel]. (All widgets are disabled until data is loaded.)
+ * length) by using the [WatchFaceConfigStateHolder]. (All widgets are disabled until data is loaded.)
  */
 class WatchFaceConfigActivity : ComponentActivity() {
-    private val viewModel: WatchFaceConfigViewModel by viewModels {
-        WatchFaceConfigViewModel.WatchFaceConfigViewModelFactory(
+    private val stateHolder: WatchFaceConfigStateHolder by lazy {
+        WatchFaceConfigStateHolder(
+            lifecycleScope,
             this@WatchFaceConfigActivity,
             intent
         )
@@ -65,20 +65,20 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.minuteHandLengthSlider.addOnChangeListener { slider, value, fromUser ->
             Log.d(TAG, "addOnChangeListener(): $slider, $value, $fromUser")
-            viewModel.setMinuteHandArmLength(value)
+            stateHolder.setMinuteHandArmLength(value)
         }
 
         lifecycleScope.launch(Dispatchers.Main.immediate) {
-            viewModel.uiState.collect { uiState: WatchFaceConfigViewModel.EditWatchFaceUiState ->
+            stateHolder.uiState.collect { uiState: WatchFaceConfigStateHolder.EditWatchFaceUiState ->
                 when (uiState) {
-                    is WatchFaceConfigViewModel.EditWatchFaceUiState.Loading -> {
+                    is WatchFaceConfigStateHolder.EditWatchFaceUiState.Loading -> {
                         Log.d(TAG, "StateFlow Loading: ${uiState.message}")
                     }
-                    is WatchFaceConfigViewModel.EditWatchFaceUiState.Success -> {
+                    is WatchFaceConfigStateHolder.EditWatchFaceUiState.Success -> {
                         Log.d(TAG, "StateFlow Success.")
                         updateWatchFacePreview(uiState.userStylesAndPreview)
                     }
-                    is WatchFaceConfigViewModel.EditWatchFaceUiState.Error -> {
+                    is WatchFaceConfigStateHolder.EditWatchFaceUiState.Error -> {
                         Log.e(TAG, "Flow error: ${uiState.exception}")
                     }
                 }
@@ -87,7 +87,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     }
 
     private fun updateWatchFacePreview(
-        userStylesAndPreview: WatchFaceConfigViewModel.UserStylesAndPreview
+        userStylesAndPreview: WatchFaceConfigStateHolder.UserStylesAndPreview
     ) {
         Log.d(TAG, "updateWatchFacePreview: $userStylesAndPreview")
 
@@ -112,6 +112,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
+        stateHolder.onCleared()
         // Makes sure the activity closes.
         finish()
         super.onDestroy()
@@ -136,12 +137,12 @@ class WatchFaceConfigActivity : ComponentActivity() {
             newColorStyleId
         )
 
-        viewModel.setColorStyle(newColorStyleValue)
+        stateHolder.setColorStyle(newColorStyleValue)
     }
 
     fun onClickTicksEnabledSwitch(view: View) {
         Log.d(TAG, "onClickTicksEnabledSwitch() $view")
-        viewModel.setDrawPips(binding.ticksEnabledSwitch.isChecked)
+        stateHolder.setDrawPips(binding.ticksEnabledSwitch.isChecked)
     }
 
     companion object {
