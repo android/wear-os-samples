@@ -124,17 +124,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
         // TODO (codingjeremy): Replace with a RecyclerView to choose color style (next CL)
         // Selects a random color style from list.
         val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
-        val numbers: IntRange = colorStyleIdAndResourceIdsList.indices
-
-        val random = numbers.random()
-        val newColorStyle = colorStyleIdAndResourceIdsList[random]
-        val newColorStyleId = newColorStyle.id
-
-        Log.d(TAG, "\tnewColorStyleId (random): $newColorStyleId")
+        val newColorStyle:ColorStyleIdAndResourceIds = colorStyleIdAndResourceIdsList.random()
 
         val newColorStyleValue = ColorStyleIdAndResourceIds.toOption(
             applicationContext,
-            newColorStyleId
+            newColorStyle.id
         )
 
         stateHolder.setColorStyle(newColorStyleValue)
