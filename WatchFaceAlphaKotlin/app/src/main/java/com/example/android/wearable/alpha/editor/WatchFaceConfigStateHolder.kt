@@ -82,10 +82,8 @@ class WatchFaceConfigStateHolder(
 
     private lateinit var editorSession: EditorSession
 
-    // Watch Face styles the user can actively edit
-    private lateinit var userStyle: UserStyle
-
-    // Preview of complication data (needed to render screenshots)
+    // Preview of complication data (needed to render screenshots) and must be called in a
+    // coroutine.
     private lateinit var previewComplicationData: Map<Int, ComplicationData>
 
     // Keys from Watch Face Data Structure
@@ -126,17 +124,16 @@ class WatchFaceConfigStateHolder(
             )
 
             previewComplicationData = editorSession.getComplicationsPreviewData()
-            userStyle = editorSession.userStyle
-            Log.d(WatchFaceConfigActivity.TAG, "userStyle: $userStyle")
+            Log.d(WatchFaceConfigActivity.TAG, "userStyle: $editorSession.userStyle")
 
-            extractsUserStyles(userStyle)
+            extractsUserStyles(editorSession.userStyle)
             updatesWatchFacePreview()
         }
     }
 
     private fun extractsUserStyles(newUserStyle: UserStyle) {
         // Loops through user styles and retrieves user editable styles.
-        for (options: Map.Entry<UserStyleSetting, UserStyleSetting.Option> in newUserStyle.selectedOptions) {
+        for (options: Map.Entry<UserStyleSetting, UserStyleSetting.Option> in newUserStyle) {
             when (options.key.id.toString()) {
                 COLOR_STYLE_SETTING -> {
                     colorStyleKey = options.key as UserStyleSetting.ListUserStyleSetting
@@ -176,11 +173,13 @@ class WatchFaceConfigStateHolder(
         )
 
         val colorStyle =
-            userStyle[colorStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
+            editorSession.userStyle[colorStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
         val ticksEnabledStyle =
-            userStyle[drawPipsKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+            editorSession.userStyle[drawPipsKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val minuteHandStyle =
-            userStyle[minuteHandLengthKey] as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+            editorSession.userStyle[minuteHandLengthKey] as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+
+        Log.d(TAG, "/new values: $colorStyle, $ticksEnabledStyle, $minuteHandStyle")
 
         val watchFacePreview = UserStylesAndPreview(
             colorStyleId = colorStyle.id.toString(),
@@ -227,12 +226,9 @@ class WatchFaceConfigStateHolder(
         Log.d(WatchFaceConfigActivity.TAG, "\tuserStyleSetting: $userStyleSetting")
         Log.d(WatchFaceConfigActivity.TAG, "\tuserStyleOption: $userStyleOption")
 
-        // Casts as a [HashMap], so we can update values.
-        val hashmap =
-            userStyle.selectedOptions as HashMap<UserStyleSetting, UserStyleSetting.Option>
-        hashmap[userStyleSetting] = userStyleOption
-
-        editorSession.userStyle = userStyle
+        val mutableUserStyle = editorSession.userStyle.toMutableUserStyle()
+        mutableUserStyle[userStyleSetting] = userStyleOption
+        editorSession.userStyle = mutableUserStyle.toUserStyle()
         updatesWatchFacePreview()
     }
 
@@ -254,7 +250,7 @@ class WatchFaceConfigStateHolder(
     )
 
     companion object {
-        private const val TAG = "WatchFaceConfigViewModel"
+        private const val TAG = "WatchFaceConfigStateHolder"
 
         // To convert the double representing the arm length to valid float value in the range the
         // slider can support, we need to multiply the original value times 1,000.

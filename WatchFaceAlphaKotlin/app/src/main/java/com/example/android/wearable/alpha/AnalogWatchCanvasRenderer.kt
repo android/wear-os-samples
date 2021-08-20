@@ -117,14 +117,8 @@ class AnalogWatchCanvasRenderer(
     private var currentWatchFaceSize = Rect(0, 0, 0, 0)
 
     init {
-
-        Log.d(TAG, "init { }")
-
         scope.launch {
             analogWatchFaceViewModel.uiState.collect { uiState ->
-
-                Log.d(TAG, "collect worked! : $uiState")
-
                 when (uiState) {
                     is AnalogWatchFaceViewModel.UserChangesUiState.Loading -> {
                         Log.d(TAG, "StateFlow Loading: ${uiState.message}")
@@ -151,7 +145,7 @@ class AnalogWatchCanvasRenderer(
         var newWatchFaceData: WatchFaceData = watchFaceData
 
         // Loops through user style and applies new values to watchFaceData.
-        for (options in userStyle.selectedOptions) {
+        for (options in userStyle) {
             when (options.key.id.toString()) {
                 COLOR_STYLE_SETTING -> {
                     val listOption = options.value as
