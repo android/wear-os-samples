@@ -36,7 +36,7 @@ import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TileProviderService
+import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import com.example.wear.tiles.R
@@ -72,77 +72,89 @@ private val SPACING_LIBRARY_PLAY = dp(22f)
  * Resources are provided with the [onResourcesRequest] method, which is triggered when the tile
  * uses an Image.
  */
-class PlayNextSongTileService : TileProviderService() {
+class PlayNextSongTileService : TileService() {
     // For coroutines, use a custom scope we can cancel when the service is destroyed
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
     override fun onTileRequest(request: TileRequest) = serviceScope.future {
-        Tile.builder().apply {
+        Tile.Builder().apply {
             setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             setTimeline(
-                Timeline.builder().addTimelineEntry(
-                    TimelineEntry.builder().setLayout(
-                        Layout.builder().setRoot(tileLayout(request.deviceParameters!!))
+                Timeline.Builder()
+                    .addTimelineEntry(
+                        TimelineEntry.Builder()
+                            .setLayout(
+                                Layout.Builder().setRoot(tileLayout(request.deviceParameters!!)).build()
+                            )
+                            .build()
                     )
-                )
+                    .build()
             )
         }.build()
     }
 
-    private fun tileLayout(deviceParameters: DeviceParameters) = Column.builder()
+    private fun tileLayout(deviceParameters: DeviceParameters) = Column.Builder()
         .addContent(
-            LayoutElementBuilders.Image.builder()
+            LayoutElementBuilders.Image.Builder()
                 .setResourceId(ID_AVATAR)
                 .setWidth(AVATAR_SIZE)
                 .setHeight(AVATAR_SIZE)
+                .build()
         )
-        .addContent(Spacer.builder().setHeight(SPACING_AVATAR_ARTIST))
+        .addContent(Spacer.Builder().setHeight(SPACING_AVATAR_ARTIST).build())
         .addContent(
-            Text.builder()
+            Text.Builder()
                 .setText(getString(R.string.tile_media_artist_name))
                 .setFontStyle(
-                    FontStyles.title3(deviceParameters).setColor(
-                        argb(ContextCompat.getColor(baseContext, R.color.primary))
-                    )
+                    FontStyles
+                        .title3(deviceParameters)
+                        .setColor(
+                            argb(ContextCompat.getColor(baseContext, R.color.primary))
+                        )
+                        .build()
                 )
+                .build()
         )
         .addContent(
-            Text.builder().setText(getString(R.string.tile_media_song_name))
-                .setFontStyle(FontStyles.title2(deviceParameters))
+            Text.Builder()
+                .setText(getString(R.string.tile_media_song_name))
+                .setFontStyle(FontStyles.title2(deviceParameters).build())
+                .build()
         )
-        .addContent(Spacer.builder().setHeight(SPACING_ARTIST_SONG))
+        .addContent(Spacer.Builder().setHeight(SPACING_ARTIST_SONG).build())
         .addContent(
-            Row.builder()
+            Row.Builder()
                 .addContent(
                     IconButton(
                         context = this@PlayNextSongTileService,
                         resourceId = ID_IC_LIBRARY_MUSIC,
                         backgroundColor = R.color.primaryDark,
                         contentDescription = getString(R.string.tile_media_library),
-                        clickable = Clickable.builder()
-                            .setOnClick(ActionBuilders.LoadAction.builder())
+                        clickable = Clickable.Builder()
+                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
                     )
                 )
-                .addContent(Spacer.builder().setWidth(SPACING_LIBRARY_PLAY))
+                .addContent(Spacer.Builder().setWidth(SPACING_LIBRARY_PLAY).build())
                 .addContent(
                     IconButton(
                         context = this@PlayNextSongTileService,
                         resourceId = ID_IC_PLAY,
                         backgroundColor = R.color.primaryDark,
                         contentDescription = getString(R.string.tile_media_play),
-                        clickable = Clickable.builder()
-                            .setOnClick(ActionBuilders.LoadAction.builder())
+                        clickable = Clickable.Builder()
+                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
                     )
                 )
+                .build()
         )
         .setModifiers(
-            Modifiers.builder()
+            Modifiers.Builder()
                 .setSemantics(
-                    Semantics.builder()
+                    Semantics.Builder()
                         .setContentDescription(
                             getString(
                                 R.string.tile_media_content_description,
@@ -150,8 +162,11 @@ class PlayNextSongTileService : TileProviderService() {
                                 getString(R.string.tile_media_artist_name)
                             )
                         )
+                        .build()
                 )
+                .build()
         )
+        .build()
 
     override fun onResourcesRequest(request: ResourcesRequest) = serviceScope.future {
         val resources = listOf(
@@ -159,17 +174,19 @@ class PlayNextSongTileService : TileProviderService() {
             ID_IC_PLAY to R.drawable.ic_play,
             ID_AVATAR to R.drawable.avatar,
         )
-        Resources.builder()
+        Resources.Builder()
             .setVersion(RESOURCES_VERSION)
             .apply {
                 resources.forEach { (name, resId) ->
                     addIdToImageMapping(
                         name,
-                        ImageResource.builder()
+                        ImageResource.Builder()
                             .setAndroidResourceByResId(
-                                AndroidImageResourceByResId.builder()
+                                AndroidImageResourceByResId.Builder()
                                     .setResourceId(resId)
+                                    .build()
                             )
+                            .build()
                     )
                 }
             }

@@ -50,7 +50,7 @@ import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.InlineImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TileProviderService
+import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import com.example.wear.tiles.R
@@ -88,7 +88,7 @@ private const val ID_CONTACT_PREFIX = "contact_"
  * Resources are provided with the [onResourcesRequest] method, which is triggered when the tile
  * uses an Image.
  */
-class MessagingTileService : TileProviderService() {
+class MessagingTileService : TileService() {
     // For coroutines, use a custom scope we can cancel when the service is destroyed
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
@@ -97,15 +97,19 @@ class MessagingTileService : TileProviderService() {
         requestParams: TileRequest
     ): ListenableFuture<Tile> = serviceScope.future {
         val contacts = MessagingRepo.getFavoriteContacts().take(4)
-        Tile.builder()
+        Tile.Builder()
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
-                Timeline.builder().addTimelineEntry(
-                    TimelineEntry.builder().setLayout(
-                        Layout.builder().setRoot(layout(contacts, requestParams.deviceParameters!!))
+                Timeline.Builder()
+                    .addTimelineEntry(
+                        TimelineEntry.Builder()
+                            .setLayout(
+                                Layout.Builder().setRoot(layout(contacts, requestParams.deviceParameters!!)).build()
+                            )
+                            .build()
                     )
-                )
+                    .build()
             ).build()
     }
 
@@ -115,7 +119,7 @@ class MessagingTileService : TileProviderService() {
         val density = requestParams.deviceParameters!!.screenDensity
         val circleSizePx = (CIRCLE_SIZE * density).roundToInt()
         val contacts = MessagingRepo.getFavoriteContacts()
-        Resources.builder()
+        Resources.Builder()
             .setVersion(RESOURCES_VERSION)
             .apply {
                 // Add the scaled & cropped avatar images
@@ -135,14 +139,16 @@ class MessagingTileService : TileProviderService() {
                                 bitmap.copyPixelsToBuffer(this)
                             }.array()
                             // Link the contact's identifier to an image resource
-                            contact.id to ImageResource.builder()
+                            contact.id to ImageResource.Builder()
                                 .setInlineResource(
-                                    InlineImageResource.builder()
+                                    InlineImageResource.Builder()
                                         .setData(bitmapData)
                                         .setWidthPx(circleSizePx)
                                         .setHeightPx(circleSizePx)
                                         .setFormat(ResourceBuilders.IMAGE_FORMAT_RGB_565)
+                                        .build()
                                 )
+                                .build()
                         }
                     }.forEach { (id, imageResource) ->
                         // Add each created image resource to the list
@@ -151,10 +157,13 @@ class MessagingTileService : TileProviderService() {
             }
             .addIdToImageMapping(
                 ID_IC_SEARCH,
-                ImageResource.builder().setAndroidResourceByResId(
-                    AndroidImageResourceByResId.builder()
-                        .setResourceId(R.drawable.ic_search)
-                )
+                ImageResource.Builder()
+                    .setAndroidResourceByResId(
+                        AndroidImageResourceByResId.Builder()
+                            .setResourceId(R.drawable.ic_search)
+                            .build()
+                    )
+                    .build()
             )
             .build()
     }
@@ -168,79 +177,91 @@ class MessagingTileService : TileProviderService() {
     private fun layout(
         contacts: List<Contact>,
         deviceParameters: DeviceParameters
-    ): LayoutElement = Column.builder()
+    ): LayoutElement = Column.Builder()
         .addContent(
-            Text.builder()
+            Text.Builder()
                 .setText(resources.getString(R.string.tile_messaging_title))
                 .setFontStyle(
-                    FontStyles.title3(deviceParameters).setColor(
-                        argb(ContextCompat.getColor(baseContext, R.color.primary))
-                    )
+                    FontStyles
+                        .title3(deviceParameters)
+                        .setColor(
+                            argb(ContextCompat.getColor(baseContext, R.color.primary))
+                        )
+                        .build()
                 )
+                .build()
         )
-        .addContent(Spacer.builder().setHeight(SPACING_TITLE_SUBTITLE))
+        .addContent(Spacer.Builder().setHeight(SPACING_TITLE_SUBTITLE).build())
         .addContent(
-            Text.builder()
+            Text.Builder()
                 .setText(resources.getString(R.string.tile_messaging_subtitle))
                 .setFontStyle(
-                    FontStyles.caption1(deviceParameters).setColor(
-                        argb(ContextCompat.getColor(baseContext, R.color.onSecondary))
-                    )
+                    FontStyles
+                        .caption1(deviceParameters)
+                        .setColor(
+                            argb(ContextCompat.getColor(baseContext, R.color.onSecondary))
+                        )
+                        .build()
                 )
+                .build()
         )
-        .addContent(Spacer.builder().setHeight(SPACING_SUBTITLE_CONTACTS))
+        .addContent(Spacer.Builder().setHeight(SPACING_SUBTITLE_CONTACTS).build())
         .addContent(
-            Row.builder()
+            Row.Builder()
                 .addContent(
                     contactLayout(
                         contact = contacts[0],
                         deviceParameters = deviceParameters,
-                        clickable = Clickable.builder()
-                            .setOnClick(ActionBuilders.LoadAction.builder())
+                        clickable = Clickable.Builder()
+                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
                     )
                 )
-                .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
+                .addContent(Spacer.Builder().setWidth(SPACING_CONTACTS).build())
                 .addContent(
                     contactLayout(
                         contact = contacts[1],
                         deviceParameters = deviceParameters,
-                        clickable = Clickable.builder()
-                            .setOnClick(ActionBuilders.LoadAction.builder())
+                        clickable = Clickable.Builder()
+                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
                     )
                 )
-                .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
+                .addContent(Spacer.Builder().setWidth(SPACING_CONTACTS).build())
                 .addContent(
                     contactLayout(
                         contact = contacts[2],
                         deviceParameters = deviceParameters,
-                        clickable = Clickable.builder()
-                            .setOnClick(ActionBuilders.LoadAction.builder())
+                        clickable = Clickable.Builder()
+                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
                     )
                 )
+                .build()
         )
         .addContent(
-            Row.builder()
+            Row.Builder()
                 .addContent(
                     contactLayout(
                         contact = contacts[3],
                         deviceParameters = deviceParameters,
-                        clickable = Clickable.builder()
-                            .setOnClick(ActionBuilders.LoadAction.builder())
+                        clickable = Clickable.Builder()
+                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
                     )
                 )
-                .addContent(Spacer.builder().setWidth(SPACING_CONTACTS))
+                .addContent(Spacer.Builder().setWidth(SPACING_CONTACTS).build())
                 .addContent(searchLayout())
+                .build()
         )
         .setModifiers(
-            Modifiers.builder()
+            Modifiers.Builder()
                 .setSemantics(
-                    Semantics.builder()
+                    Semantics.Builder()
                         .setContentDescription(getString(R.string.tile_messaging_label))
+                        .build()
                 )
+                .build()
         )
         .build()
 
@@ -248,12 +269,13 @@ class MessagingTileService : TileProviderService() {
         contact: Contact,
         deviceParameters: DeviceParameters,
         clickable: Clickable
-    ) = Box.builder().apply {
-        val modifiersBuilder = Modifiers.builder()
+    ) = Box.Builder().apply {
+        val modifiersBuilder = Modifiers.Builder()
             .setClickable(clickable)
             .setSemantics(
-                Semantics.builder()
+                Semantics.Builder()
                     .setContentDescription(contact.name)
+                    .build()
             )
 
         if (contact.avatarRes == null) {
@@ -263,63 +285,80 @@ class MessagingTileService : TileProviderService() {
             setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
             modifiersBuilder
                 .setBackground(
-                    Background.builder()
+                    Background.Builder()
                         .setColor(
                             argb(ContextCompat.getColor(baseContext, R.color.secondary))
                         )
                         .setCorner(
-                            Corner.builder()
+                            Corner.Builder()
                                 .setRadius(dp(CIRCLE_SIZE / 2))
+                                .build()
                         )
+                        .build()
                 )
             addContent(
-                Text.builder()
+                Text.Builder()
                     .setText(contact.initials)
                     .setFontStyle(
-                        FontStyles.button(deviceParameters).setColor(
-                            argb(ContextCompat.getColor(baseContext, R.color.primary))
-                        )
+                        FontStyles
+                            .button(deviceParameters)
+                            .setColor(
+                                argb(ContextCompat.getColor(baseContext, R.color.primary))
+                            )
+                            .build()
                     )
+                    .build()
             )
         } else {
             // Create an avatar based on the contact's avatar
             addContent(
-                Image.builder()
+                Image.Builder()
                     .setResourceId("$ID_CONTACT_PREFIX${contact.id}")
                     .setWidth(dp(CIRCLE_SIZE))
                     .setHeight(dp(CIRCLE_SIZE))
+                    .build()
             )
         }
 
-        setModifiers(modifiersBuilder)
+        setModifiers(modifiersBuilder.build())
     }
+        .build()
 
-    private fun searchLayout() = Box.builder()
+    private fun searchLayout() = Box.Builder()
         .setWidth(dp(CIRCLE_SIZE))
         .setHeight(dp(CIRCLE_SIZE))
         .setModifiers(
-            Modifiers.builder()
+            Modifiers.Builder()
                 .setBackground(
-                    Background.builder()
+                    Background.Builder()
                         .setColor(
                             argb(ContextCompat.getColor(baseContext, R.color.primaryDark))
                         )
                         .setCorner(
-                            Corner.builder().setRadius(dp(CIRCLE_SIZE / 2))
+                            Corner.Builder().setRadius(dp(CIRCLE_SIZE / 2)).build()
                         )
+                        .build()
                 )
                 .setSemantics(
-                    Semantics.builder()
+                    Semantics.Builder()
                         .setContentDescription(getString(R.string.tile_messaging_search))
+                        .build()
                 )
-                .setClickable(Clickable.builder().setOnClick(ActionBuilders.LoadAction.builder()))
+                .setClickable(
+                    Clickable.Builder()
+                        .setOnClick(ActionBuilders.LoadAction.Builder().build())
+                        .build()
+                )
+                .build()
         )
         .addContent(
-            Image.builder()
+            Image.Builder()
                 .setWidth(ICON_SIZE)
                 .setHeight(ICON_SIZE)
                 .setResourceId(ID_IC_SEARCH)
+                .build()
         )
+        .build()
 }
 
 // Create a scaled and cropped circular image

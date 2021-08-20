@@ -38,28 +38,33 @@ fun IconButton(
     @ColorRes backgroundColor: Int,
     contentDescription: String,
     clickable: Clickable,
-) = Image.builder()
+) = Image.Builder()
     .setResourceId(resourceId)
     .setWidth(CIRCLE_SIZE)
     .setHeight(CIRCLE_SIZE)
     .setContentScaleMode(CONTENT_SCALE_MODE_FILL_BOUNDS)
     .setModifiers(
-        Modifiers.builder()
+        Modifiers.Builder()
             .setPadding(
-                Padding.builder()
+                Padding.Builder()
                     .setBottom(PADDING)
                     .setTop(PADDING)
                     .setStart(PADDING)
                     .setEnd(PADDING)
+                    .build()
             )
             .setBackground(
-                Background.builder()
+                Background.Builder()
                     .setColor(argb(ContextCompat.getColor(context, backgroundColor)))
-                    .setCorner(Corner.builder().setRadius(CIRCLE_SIZE))
+                    .setCorner(Corner.Builder().setRadius(CIRCLE_SIZE).build())
+                    .build()
             )
             .setClickable(clickable)
             .setSemantics(
-                ModifiersBuilders.Semantics.builder()
+                ModifiersBuilders.Semantics.Builder()
                     .setContentDescription(contentDescription)
+                    .build()
             )
+            .build()
     )
+    .build()
