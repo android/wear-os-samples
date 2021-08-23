@@ -126,12 +126,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         val colorStyleIdAndResourceIdsList = enumValues<ColorStyleIdAndResourceIds>()
         val newColorStyle: ColorStyleIdAndResourceIds = colorStyleIdAndResourceIdsList.random()
 
-        val newColorStyleValue = ColorStyleIdAndResourceIds.toOption(
-            applicationContext,
-            newColorStyle.id
-        )
-
-        stateHolder.setColorStyle(newColorStyleValue)
+        stateHolder.setColorStyle(newColorStyle.id)
     }
 
     fun onClickTicksEnabledSwitch(view: View) {
