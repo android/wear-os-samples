@@ -33,19 +33,11 @@ import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRAC
 import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
-import java.beans.PropertyChangeListener
-import java.beans.PropertyChangeSupport
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -70,16 +62,6 @@ class WatchFaceConfigStateHolder(
     activity: ComponentActivity,
     editIntent: Intent
 ) {
-    private val changeSupport = PropertyChangeSupport(this)
-
-    private fun addPropertyChangeListener(listener: PropertyChangeListener) {
-        changeSupport.addPropertyChangeListener(listener)
-    }
-
-    private fun removePropertyChangeListener(listener: PropertyChangeListener) {
-        changeSupport.removePropertyChangeListener(listener)
-    }
-
     private lateinit var editorSession: EditorSession
 
     // Preview of complication data (needed to render screenshots) and must be called in a
@@ -91,30 +73,10 @@ class WatchFaceConfigStateHolder(
     private lateinit var drawPipsKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var minuteHandLengthKey: UserStyleSetting.DoubleRangeUserStyleSetting
 
-    // The UI collects from this StateFlow to get its state updates
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<EditWatchFaceUiState> = callbackFlow {
-        val propertyChangeListener = PropertyChangeListener { event ->
-            Log.d(TAG, "Change listener: ${event.propertyName}")
-            trySend(event.newValue as UserStylesAndPreview)
-        }
-        addPropertyChangeListener(listener = propertyChangeListener)
+    private val mutableUiState: MutableStateFlow<EditWatchFaceUiState> =
+        MutableStateFlow(EditWatchFaceUiState.Loading("Initializing"))
 
-        // The callback inside awaitClose will be executed when the flow is either closed or
-        // cancelled. In this case, remove the CurrentUserStyleRepository.UserStyleChangeListener()
-        // callback.
-        awaitClose {
-            Log.d(TAG, "awaitClose{ }")
-            removePropertyChangeListener(propertyChangeListener)
-        }
-    }
-        .buffer(Channel.CONFLATED)
-        .map(EditWatchFaceUiState::Success)
-        .stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = EditWatchFaceUiState.Loading("Initializing")
-        )
+    val uiState: StateFlow<EditWatchFaceUiState> = mutableUiState.asStateFlow()
 
     init {
         scope.launch(Dispatchers.Main.immediate) {
@@ -188,13 +150,7 @@ class WatchFaceConfigStateHolder(
             previewImage = bitmap
         )
 
-        // Triggers listener that's connected to the flow, so the UI gets the updated values.
-        // Uses null as oldValue, as this is only triggered when something changes and there isn't
-        // a reason the keep a variable of it.
-        changeSupport.firePropertyChange(
-            "newWatchFace",
-            null,
-            watchFacePreview)
+        mutableUiState.value = EditWatchFaceUiState.Success(watchFacePreview)
     }
 
     fun setColorStyle(newColorStyle: UserStyleSetting.ListUserStyleSetting.ListOption) {
