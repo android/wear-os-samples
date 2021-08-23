@@ -23,17 +23,19 @@ import android.media.AudioManager
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.lifecycle.AndroidViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 
 /**
- * An [AndroidViewModel] driving the logic of [MainActivity].
+ * A state holder driving the logic of [MainActivity].
  */
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainStateHolder(
+    private val application: Application,
+    private val requestPermission: () -> Unit,
+    private val showPermissionRationale: () -> Unit,
+    private val showSpeakerNotSupported: () -> Unit
+) {
 
     /**
      * The backing [MutableStateFlow] for the [appState].
@@ -54,16 +56,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * A [StateFlow] of whether we know the user has denied the record audio permission.
      */
     val isPermissionDenied = isPermissionDeniedMutableStateFlow.asStateFlow()
-
-    /**
-     * The backing [Channel] for the [appEvents] flow.
-     */
-    private val appEventsChannel = Channel<AppEvent>(capacity = Channel.UNLIMITED)
-
-    /**
-     * A flow of one-shot events to be consumed by the app.
-     */
-    val appEvents = appEventsChannel.receiveAsFlow()
 
     /**
      * One of the actions the app interprets. This can either be direct user actions (clicking one of the buttons),
@@ -99,15 +91,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * One-shot events to be consumed by [MainActivity].
-     */
-    sealed class AppEvent {
-        object RequestPermission : AppEvent()
-        object ShowPermissionRationale : AppEvent()
-        object ShowSpeakerNotSupported : AppEvent()
-    }
-
-    /**
      * The primary state machine for the app, determining the new [AppState] based on the incoming [AppAction],
      * updating other state and sending out events as appropriate.
      */
@@ -121,19 +104,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     AppState.PlayingVoice,
                     AppState.PlayingMusic ->
                         when {
-                            ContextCompat.checkSelfPermission(getApplication(), Manifest.permission.RECORD_AUDIO) ==
+                            ContextCompat.checkSelfPermission(application, Manifest.permission.RECORD_AUDIO) ==
                                 PackageManager.PERMISSION_GRANTED -> {
                                 // We have the permission, we can start recording now
                                 AppState.Recording
                             }
                             action.shouldShowRationale -> {
                                 // If we should show the rationale prior to requesting the permission, send that event
-                                appEventsChannel.trySend(AppEvent.ShowPermissionRationale)
+                                showPermissionRationale()
                                 AppState.Ready(transitionInstantly = false)
                             }
                             else -> {
                                 // Request the permission
-                                appEventsChannel.trySend(AppEvent.RequestPermission)
+                                requestPermission()
                                 AppState.Ready(transitionInstantly = false)
                             }
                         }
@@ -148,7 +131,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         if (speakerIsSupported()) {
                             AppState.PlayingMusic
                         } else {
-                            appEventsChannel.trySend(AppEvent.ShowSpeakerNotSupported)
+                            showSpeakerNotSupported()
                             AppState.Ready(transitionInstantly = false)
                         }
                     // If we were already playing, transition back to ready
@@ -162,7 +145,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         if (speakerIsSupported()) {
                             AppState.PlayingVoice
                         } else {
-                            appEventsChannel.trySend(AppEvent.ShowSpeakerNotSupported)
+                            showSpeakerNotSupported()
                             AppState.Ready(transitionInstantly = false)
                         }
                     }
@@ -176,7 +159,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             AppAction.PermissionResultReturned ->
                 // Check if the user granted the permission
                 if (
-                    ContextCompat.checkSelfPermission(getApplication(), Manifest.permission.RECORD_AUDIO) ==
+                    ContextCompat.checkSelfPermission(application, Manifest.permission.RECORD_AUDIO) ==
                     PackageManager.PERMISSION_GRANTED
                 ) {
                     // The user granted the permission, continue on to start recording
@@ -197,8 +180,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      */
     private fun speakerIsSupported(): Boolean {
         val hasAudioOutputFeature =
-            getApplication<Application>().packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
-        val devices = getApplication<Application>().getSystemService<AudioManager>()!!
+            application.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
+        val devices = application.getSystemService<AudioManager>()!!
             .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
 
         // We can only trust AudioDeviceInfo.TYPE_BUILTIN_SPEAKER if the device advertises FEATURE_AUDIO_OUTPUT
