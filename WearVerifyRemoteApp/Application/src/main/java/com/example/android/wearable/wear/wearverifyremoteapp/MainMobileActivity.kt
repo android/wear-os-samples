@@ -182,7 +182,8 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
                 // TODO: Add your code to communicate with the wear app(s) via Wear APIs
                 //       (MessageClient, DataClient, etc.)
                 Log.d(TAG, "Installed on some devices")
-                binding.informationTextView.text = getString(R.string.message_some_installed)
+                binding.informationTextView.text =
+                    getString(R.string.message_some_installed, wearNodesWithApp.toString())
                 binding.remoteOpenButton.isVisible = true
             }
             else -> {
