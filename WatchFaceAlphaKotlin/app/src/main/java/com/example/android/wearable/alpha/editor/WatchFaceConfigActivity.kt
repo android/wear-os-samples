@@ -111,7 +111,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "onDestroy()")
         stateHolder.onCleared()
         // Makes sure the activity closes.
         finish()

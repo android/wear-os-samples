@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.example.android.wearable.alpha"
@@ -62,8 +62,8 @@ dependencies {
 
     // Kotlin components
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
     implementation "androidx.activity:activity-ktx:$rootProject.activityKtxVersion"
 

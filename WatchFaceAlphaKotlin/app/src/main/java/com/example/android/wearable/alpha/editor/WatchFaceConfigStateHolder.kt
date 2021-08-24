@@ -192,6 +192,8 @@ class WatchFaceConfigStateHolder(
     }
 
     // Saves User Style Option change back to the back to the EditorSession.
+    // Note: The UI widgets in the Activity that can trigger this method (through the 'set' methods)
+    // will only be enabled after the EditorSession has been initialized.
     private fun setUserStyleOption(
         userStyleSetting: UserStyleSetting,
         userStyleOption: UserStyleSetting.Option
@@ -207,7 +209,9 @@ class WatchFaceConfigStateHolder(
     }
 
     fun onCleared() {
-        editorSession.close()
+        if (::editorSession.isInitialized) {
+            editorSession.close()
+        }
     }
 
     sealed class EditWatchFaceUiState {
