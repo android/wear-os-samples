@@ -41,7 +41,7 @@ class AuthPKCEActivity : ComponentActivity() {
 
         // Start the OAuth flow when the user presses the button
         findViewById<View>(R.id.authenticateButton).setOnClickListener {
-            viewModel.startAuthFlow(applicationContext.packageName)
+            viewModel.startAuthFlow()
         }
 
         // Show current status on the screen

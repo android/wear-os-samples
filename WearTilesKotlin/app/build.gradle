@@ -18,7 +18,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.example.android.wearable.tiles"
@@ -26,6 +26,10 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+    }
+
+    lintOptions {
+        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
     }
 
     buildTypes {
@@ -46,13 +50,13 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.5.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.5.1'
+    implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.wear:wear:1.1.0'
     // Use to implement support for wear tiles
-    implementation "androidx.wear.tiles:tiles:1.0.0-alpha08"
+    implementation "androidx.wear.tiles:tiles:1.0.0-alpha10"
 
     // Use to preview wear tiles in your own app
-    debugImplementation "androidx.wear.tiles:tiles-renderer:1.0.0-alpha08"
+    debugImplementation "androidx.wear.tiles:tiles-renderer:1.0.0-alpha10"
 }

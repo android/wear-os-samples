@@ -1,0 +1,124 @@
+name: AlwaysOnKotlin
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'AlwaysOnKotlin/**'
+  pull_request:
+    paths:
+      - 'AlwaysOnKotlin/**'
+
+env:
+  SAMPLE_PATH: AlwaysOnKotlin
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Generate cache key
+        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Build project
+        working-directory: ${{ env.SAMPLE_PATH }}
+        run: ./gradlew check --stacktrace
+
+      - name: Upload build outputs (APKs)
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-outputs
+          path: ${{ env.SAMPLE_PATH }}/Wearable/build/outputs
+
+      - name: Upload build reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-reports
+          path: ${{ env.SAMPLE_PATH }}/Wearable/build/reports
+
+  android-test:
+    if: false # TODO: Try to enable and avoid flakiness
+    needs: build
+    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [ wear_round, wear_square ]
+        api-level: [ 26, 28, 30 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Generate cache key
+        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      # android-emulator-runner currently doesn't support wear targets (https://github.com/ReactiveCircus/android-emulator-runner/issues/175)
+      # This is a bit if a weird workaround to still use the action, in a roundabout way.
+
+      # Setup the action with a fake emulator (downloads the cmdline-tools, etc.)
+      - name: Setup android-emulator-runner
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          avd-name: fake
+          script: echo "Fake Android Emulator created"
+
+      # Manually download the Wear images that we need (--channel=1 is currently necessary for API 30 until it is released to the stable channel)
+      - name: Manually install Wear images
+        run: $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install 'system-images;android-${{ matrix.api-level }};android-wear;x86' --channel=1
+
+      # Manually create the Wear emulator, using the previously downloaded images
+      - name: Manually create Wear AVD
+        run: $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd --force -n "test" --abi 'android-wear/x86' --package 'system-images;android-${{ matrix.api-level }};android-wear;x86' -d ${{ matrix.profile }}
+
+      # Run the action again, but with force-avd-creation false. This skips some of the normal setup and validation, and uses the emulator we just created above.
+      - name: Run instrumentation tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          force-avd-creation: false
+          avd-name: test
+          disable-animations: true
+          script: ./gradlew connectedCheck --stacktrace
+          working-directory: ${{ env.SAMPLE_PATH }}
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: ${{ env.SAMPLE_PATH }}/Wearable/build/reports

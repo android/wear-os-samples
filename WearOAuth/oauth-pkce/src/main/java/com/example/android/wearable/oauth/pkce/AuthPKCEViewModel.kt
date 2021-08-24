@@ -27,6 +27,7 @@ import androidx.wear.phone.interactions.authentication.CodeVerifier
 import androidx.wear.phone.interactions.authentication.OAuthRequest
 import androidx.wear.phone.interactions.authentication.OAuthResponse
 import androidx.wear.phone.interactions.authentication.RemoteAuthClient
+import androidx.wear.utils.WearTypeHelper
 import com.example.android.wearable.oauth.util.doGetRequest
 import com.example.android.wearable.oauth.util.doPostRequest
 import kotlinx.coroutines.CancellationException
@@ -67,20 +68,20 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
      * the phone. After the user consents on their phone, the wearable app is notified and can
      * continue the authorization process.
      */
-    fun startAuthFlow(packageName: String) {
+    fun startAuthFlow() {
         viewModelScope.launch {
             val codeVerifier = CodeVerifier()
 
             // Step 1: Retrieve the OAuth code
             showStatus(R.string.status_switch_to_phone)
-            val code = retrieveOAuthCode(packageName, codeVerifier).getOrElse {
+            val code = retrieveOAuthCode(codeVerifier).getOrElse {
                 showStatus(R.string.status_failed)
                 return@launch
             }
 
             // Step 2: Retrieve the access token
             showStatus(R.string.status_retrieving_token)
-            val token = retrieveToken(code, packageName, codeVerifier).getOrElse {
+            val token = retrieveToken(code, codeVerifier).getOrElse {
                 showStatus(R.string.status_failure_token)
                 return@launch
             }
@@ -101,7 +102,6 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
      * communication with the paired device, where the user can log in.
      */
     private suspend fun retrieveOAuthCode(
-        packageName: String,
         codeVerifier: CodeVerifier
     ): Result<String> {
         // Create the authorization Uri that will be shown to the user on the phone. This will
@@ -114,7 +114,7 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
 
         // Create the authorization request. Make sure to fill in the CLIENT_ID retrieved from your
         // OAuth server settings.
-        val request = OAuthRequest.Builder(packageName)
+        val request = OAuthRequest.Builder(getApplication())
             .setAuthProviderUrl(uri)
             .setCodeChallenge(CodeChallenge(codeVerifier))
             .setClientId(CLIENT_ID)
@@ -158,7 +158,6 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
 
     private suspend fun retrieveToken(
         code: String,
-        packageName: String,
         codeVerifier: CodeVerifier
     ): Result<String> {
         // In this sample, we're using a basic implementation of a POST request to retrieve the
@@ -166,6 +165,18 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
         // for making such a request.
         return try {
             Log.d(TAG, "Requesting token...")
+            // Construct the redirect URI, which depends on the type of device.
+            val redirectUri = Uri.withAppendedPath(
+                Uri.parse(
+                    if (WearTypeHelper.isChinaBuild(getApplication())) {
+                        OAuthRequest.WEAR_REDIRECT_URL_PREFIX_CN
+                    } else {
+                        OAuthRequest.WEAR_REDIRECT_URL_PREFIX
+                    },
+                ),
+                getApplication<Application>().packageName
+            ).toString()
+
             val responseJson = doPostRequest(
                 // We request the token from the Google OAuth server. You can replace this with any OAuth
                 // server that supports the PKCE authentication flow.
@@ -177,7 +188,7 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
                     "code" to code,
                     "code_verifier" to codeVerifier.value,
                     "grant_type" to "authorization_code",
-                    "redirect_uri" to "https://wear.googleapis.com/3p_auth/$packageName",
+                    "redirect_uri" to redirectUri
                 )
             )
             Result.success(responseJson.getString("access_token"))

@@ -27,6 +27,7 @@ import androidx.wear.complications.data.PlainComplicationText
 import androidx.wear.complications.data.RangedValueComplicationData
 import androidx.wear.complications.datasource.ComplicationDataSourceService
 import androidx.wear.complications.datasource.ComplicationRequest
+import androidx.wear.complications.datasource.SuspendingComplicationDataSourceService
 import kotlin.random.Random
 
 /**
@@ -36,7 +37,6 @@ import kotlin.random.Random
  * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
  * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
  * [onComplicationRequest].
- * See [SuspendingComplicationDataSourceService] for the implementation details.
  *
  * If you don't perform any suspending operations to update your complications, you can subclass
  * [ComplicationDataSourceService] and override [onComplicationRequest] directly.

@@ -41,10 +41,12 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
                 args.updateState(context)
 
                 // Request an update for the complication that has just been toggled.
-                ComplicationDataSourceUpdateRequester(
-                    context = context,
-                    complicationDataSourceComponent = args.providerComponent
-                ).requestUpdate(args.complicationInstanceId)
+                ComplicationDataSourceUpdateRequester
+                    .create(
+                        context = context,
+                        complicationDataSourceComponent = args.providerComponent
+                    )
+                    .requestUpdate(args.complicationInstanceId)
             } finally {
                 // Always call finish, even if cancelled
                 result.finish()

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 Google Inc. All Rights Reserved.
+ * Copyright 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.wear.remote.interactions.RemoteIntentHelper
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.example.android.wearable.wear.wearverifyremoteapp.databinding.ActivityMainBinding
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityClient.OnCapabilityChangedListener
@@ -51,7 +51,7 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
 
     private lateinit var capabilityClient: CapabilityClient
     private lateinit var nodeClient: NodeClient
-    private lateinit var remoteIntentHelper: RemoteIntentHelper
+    private lateinit var remoteActivityHelper: RemoteActivityHelper
 
     private var wearNodesWithApp: Set<Node>? = null
     private var allConnectedNodes: List<Node>? = null
@@ -65,7 +65,7 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
 
         capabilityClient = Wearable.getCapabilityClient(this)
         nodeClient = Wearable.getNodeClient(this)
-        remoteIntentHelper = RemoteIntentHelper(this)
+        remoteActivityHelper = RemoteActivityHelper(this)
 
         binding.remoteOpenButton.setOnClickListener {
             openPlayStoreOnWearDevicesWithoutApp()
@@ -214,10 +214,10 @@ class MainMobileActivity : AppCompatActivity(), OnCapabilityChangedListener {
         nodesWithoutApp.forEach { node ->
             lifecycleScope.launch {
                 try {
-                    remoteIntentHelper
+                    remoteActivityHelper
                         .startRemoteActivity(
-                            intent = intent,
-                            nodeId = node.id
+                            targetIntent = intent,
+                            targetNodeId = node.id
                         )
                         .await()
 
