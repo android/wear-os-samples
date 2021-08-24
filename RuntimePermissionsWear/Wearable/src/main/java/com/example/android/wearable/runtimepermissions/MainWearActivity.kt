@@ -44,7 +44,7 @@ import kotlin.math.sqrt
 
 /**
  * Displays data that requires runtime permissions both locally (BODY_SENSORS) and remotely on
- * the phone (READ_EXTERNAL_STORAGE).
+ * the phone (READ_PHONE).
  *
  * The class is also launched by IncomingRequestWearService when the permission for the data the
  * phone is trying to access hasn't been granted (wear's sensors). If granted in that scenario,
@@ -59,9 +59,9 @@ class MainWearActivity :
     private lateinit var binding: ActivityMainBinding
 
     /**
-     * True if the remote phone storage permission is approved.
+     * True if the remote phone info permission is approved.
      */
-    private var phoneStoragePermissionApproved = false
+    private var phoneInfoPermissionApproved = false
 
     /**
      * True if the phone is remotely requesting sensor permissions.
@@ -117,7 +117,7 @@ class MainWearActivity :
 
         // Since this is a remote permission, we initialize it to false and then check the remote
         // permission once the GoogleApiClient is connected.
-        phoneStoragePermissionApproved = false
+        phoneInfoPermissionApproved = false
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) ==
             PackageManager.PERMISSION_GRANTED
@@ -141,7 +141,7 @@ class MainWearActivity :
             requestPermissionLauncher.launch(Manifest.permission.BODY_SENSORS)
         }
 
-        binding.phoneStoragePermissionButton.setOnClickListener {
+        binding.phoneInfoPermissionButton.setOnClickListener {
             logToUi(getString(R.string.requested_info_from_phone))
             lifecycleScope.launch {
                 sendMessage(
@@ -200,11 +200,11 @@ class MainWearActivity :
         outState.putBoolean(ASKED_PERMISSION_ON_BEHALF_OF_PHONE, askedForPermissionOnBehalfOfPhone)
     }
 
-    /*
-      * Because this wear activity is marked "android:launchMode='singleInstance'" in the manifest,
-      * we need to allow the permissions dialog to be opened up from the phone even if the wear app
-      * is in the foreground. By overriding onNewIntent, we can cover that use case.
-      */
+    /**
+     * Because this wear activity is marked "android:launchMode='singleInstance'" in the manifest,
+     * we need to allow the permissions dialog to be opened up from the phone even if the wear app
+     * is in the foreground. By overriding onNewIntent, we can cover that use case.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         // Update the "origination" intent
@@ -230,7 +230,7 @@ class MainWearActivity :
             val commType = dataMap.getInt(Constants.KEY_COMM_TYPE, 0)
             when (commType) {
                 Constants.COMM_TYPE_RESPONSE_PERMISSION_REQUIRED -> {
-                    phoneStoragePermissionApproved = false
+                    phoneInfoPermissionApproved = false
                     updatePhoneButtonOnUiThread()
 
                     // Because our request for remote data requires a remote permission, we now
@@ -239,7 +239,7 @@ class MainWearActivity :
                     requestPermissionOnPhoneLauncher.launch(Unit)
                 }
                 Constants.COMM_TYPE_RESPONSE_USER_APPROVED_PERMISSION -> {
-                    phoneStoragePermissionApproved = true
+                    phoneInfoPermissionApproved = true
                     updatePhoneButtonOnUiThread()
                     logToUi(getString(R.string.user_approved_remote_permission))
                     lifecycleScope.launch {
@@ -254,15 +254,15 @@ class MainWearActivity :
                     }
                 }
                 Constants.COMM_TYPE_RESPONSE_USER_DENIED_PERMISSION -> {
-                    phoneStoragePermissionApproved = false
+                    phoneInfoPermissionApproved = false
                     updatePhoneButtonOnUiThread()
                     logToUi(getString(R.string.user_denied_remote_permission))
                 }
                 Constants.COMM_TYPE_RESPONSE_DATA -> {
-                    phoneStoragePermissionApproved = true
-                    val storageDetails = dataMap.getString(Constants.KEY_PAYLOAD)!!
+                    phoneInfoPermissionApproved = true
+                    val phoneSummary = dataMap.getString(Constants.KEY_PAYLOAD)!!
                     updatePhoneButtonOnUiThread()
-                    logToUi(storageDetails)
+                    logToUi(phoneSummary)
                 }
             }
         }
@@ -355,7 +355,7 @@ class MainWearActivity :
             }
         } else {
             // Unable to retrieve node with proper capability
-            phoneStoragePermissionApproved = false
+            phoneInfoPermissionApproved = false
             updatePhoneButtonOnUiThread()
             logToUi(getString(R.string.phone_not_available))
         }
@@ -376,8 +376,8 @@ class MainWearActivity :
 
     private fun updatePhoneButtonOnUiThread() {
         runOnUiThread {
-            binding.phoneStoragePermissionButton.setCompoundDrawablesWithIntrinsicBounds(
-                if (phoneStoragePermissionApproved) {
+            binding.phoneInfoPermissionButton.setCompoundDrawablesWithIntrinsicBounds(
+                if (phoneInfoPermissionApproved) {
                     R.drawable.ic_very_satisfied
                 } else {
                     R.drawable.ic_very_dissatisfied

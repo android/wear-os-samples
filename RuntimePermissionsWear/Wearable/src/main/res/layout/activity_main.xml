@@ -35,7 +35,7 @@
                 android:textSize="8sp" />
 
             <Button
-                android:id="@+id/phone_storage_permission_button"
+                android:id="@+id/phone_info_permission_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

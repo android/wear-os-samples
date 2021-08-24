@@ -23,6 +23,8 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
+        // NOTE: This must be the same in the phone app and the wear app for the capabilities API
+        applicationId "com.example.android.wearable.runtimepermissions"
         versionCode 1
         versionName "1.0"
         minSdkVersion 26

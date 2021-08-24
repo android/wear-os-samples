@@ -16,7 +16,7 @@
 
     <string name="hello_wear_activity_main">Happy equals approved, sad equals denied.\n\nTo see results or request permissions, click on the buttons above.</string>
     <string name="button_wear_label_activity_main">Wear Sensors</string>
-    <string name="button_phone_label_activity_main">Phone Storage</string>
+    <string name="button_phone_label_activity_main">Phone Information</string>
     <string name="phone_not_available">Phone not available to send message.</string>
     <string name="user_denied_remote_permission">User denied permission on remote device.</string>
     <string name="user_approved_remote_permission">User approved permission on remote device, requesting data again.</string>
@@ -26,6 +26,6 @@
     <string name="sensor_summary">%1$d sensors on wear device(s)!</string>
 
     <string name="title_activity_request_permission_on_phone">PhonePermissionRationale</string>
-    <string name="permission_message_activity_request_permission_on_phone">App requires access to your phone\'s storage.</string>
+    <string name="permission_message_activity_request_permission_on_phone">App requires access to your phone\'s information.</string>
     <string name="open_on_phone_message_activity_request_permission_on_phone">Open on phone</string>
 </resources>
