@@ -44,8 +44,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityWatchFaceConfigBinding
 
-    private var initialDataLoaded = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate()")
@@ -98,10 +96,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.minuteHandLengthSlider.value = userStylesAndPreview.minuteHandLength
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
 
-        if (!initialDataLoaded) {
-            initialDataLoaded = true
-            enabledWidgets()
-        }
+        enabledWidgets()
     }
 
     private fun enabledWidgets() {

@@ -22,7 +22,7 @@ import androidx.wear.watchface.style.WatchFaceLayer
 import com.example.android.wearable.alpha.R
 import com.example.android.wearable.alpha.data.watchface.ColorStyleIdAndResourceIds
 import com.example.android.wearable.alpha.data.watchface.DRAW_HOUR_PIPS_DEFAULT
-import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION
+import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_DEFAULT
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MAXIMUM
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
 
@@ -51,12 +51,13 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
     // 1. Allows user to change the color styles of the watch face (if any are available).
     val colorStyleSetting =
         UserStyleSetting.ListUserStyleSetting(
-            id = UserStyleSetting.Id(COLOR_STYLE_SETTING),
-            displayName = context.getString(R.string.colors_style_setting),
-            description = context.getString(R.string.colors_style_setting_description),
-            icon = null,
-            options = ColorStyleIdAndResourceIds.toOptionList(context),
-            affectsWatchFaceLayers = listOf(
+            UserStyleSetting.Id(COLOR_STYLE_SETTING),
+            context.resources,
+            R.string.colors_style_setting,
+            R.string.colors_style_setting_description,
+            null,
+            ColorStyleIdAndResourceIds.toOptionList(context),
+            listOf(
                 WatchFaceLayer.BASE,
                 WatchFaceLayer.COMPLICATIONS,
                 WatchFaceLayer.COMPLICATIONS_OVERLAY
@@ -66,24 +67,26 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
     // 2. Allows user to toggle on/off the hour pips (dashes around the outer edge of the watch
     // face).
     val drawHourPipsStyleSetting = UserStyleSetting.BooleanUserStyleSetting(
-        id = UserStyleSetting.Id(DRAW_HOUR_PIPS_STYLE_SETTING),
-        displayName = context.getString(R.string.watchface_pips_setting),
-        description = context.getString(R.string.watchface_pips_setting_description),
-        icon = null,
-        defaultValue = DRAW_HOUR_PIPS_DEFAULT,
-        affectsWatchFaceLayers = listOf(WatchFaceLayer.BASE)
+        UserStyleSetting.Id(DRAW_HOUR_PIPS_STYLE_SETTING),
+        context.resources,
+        R.string.watchface_pips_setting,
+        R.string.watchface_pips_setting_description,
+        null,
+        listOf(WatchFaceLayer.BASE),
+        DRAW_HOUR_PIPS_DEFAULT,
     )
 
     // 3. Allows user to change the length of the minute hand.
     val watchHandLengthStyleSetting = UserStyleSetting.DoubleRangeUserStyleSetting(
-        id = UserStyleSetting.Id(WATCH_HAND_LENGTH_STYLE_SETTING),
-        displayName = context.getString(R.string.watchface_hand_length_setting),
-        description = context.getString(R.string.watchface_hand_length_setting_description),
-        icon = null,
-        minimumValue = MINUTE_HAND_LENGTH_FRACTION_MINIMUM.toDouble(),
-        defaultValue = MINUTE_HAND_LENGTH_FRACTION.toDouble(),
-        maximumValue = MINUTE_HAND_LENGTH_FRACTION_MAXIMUM.toDouble(),
-        affectsWatchFaceLayers = listOf(WatchFaceLayer.COMPLICATIONS_OVERLAY)
+        UserStyleSetting.Id(WATCH_HAND_LENGTH_STYLE_SETTING),
+        context.resources,
+        R.string.watchface_hand_length_setting,
+        R.string.watchface_hand_length_setting_description,
+        null,
+        MINUTE_HAND_LENGTH_FRACTION_MINIMUM.toDouble(),
+        MINUTE_HAND_LENGTH_FRACTION_MAXIMUM.toDouble(),
+        listOf(WatchFaceLayer.COMPLICATIONS_OVERLAY),
+        MINUTE_HAND_LENGTH_FRACTION_DEFAULT.toDouble()
     )
 
     // 4. These are style overrides applied on top of the complicationSlots passed into
@@ -91,13 +94,15 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
     val complicationsStyleSetting =
         UserStyleSetting.ComplicationSlotsUserStyleSetting(
             UserStyleSetting.Id(COMPLICATIONS_STYLE_SETTING),
-            context.getString(R.string.watchface_complications_setting),
-            context.getString(R.string.watchface_complications_setting_description),
-            icon = null,
-            complicationConfig = listOf(
+            context.resources,
+            R.string.watchface_complications_setting,
+            R.string.watchface_complications_setting_description,
+            null,
+            listOf(
                 UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
                     UserStyleSetting.Option.Id(LEFT_AND_RIGHT_COMPLICATIONS),
-                    context.getString(R.string.watchface_complications_setting_both),
+                    context.resources,
+                    R.string.watchface_complications_setting_both,
                     null,
                     // NB this list is empty because each [ComplicationSlotOverlay] is applied on
                     // top of the initial config.
@@ -105,7 +110,8 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
                 ),
                 UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
                     UserStyleSetting.Option.Id(NO_COMPLICATIONS),
-                    context.getString(R.string.watchface_complications_setting_none),
+                    context.resources,
+                    R.string.watchface_complications_setting_none,
                     null,
                     listOf(
                         UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
@@ -120,7 +126,8 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
                 ),
                 UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
                     UserStyleSetting.Option.Id(LEFT_COMPLICATION),
-                    context.getString(R.string.watchface_complications_setting_left),
+                    context.resources,
+                    R.string.watchface_complications_setting_left,
                     null,
                     listOf(
                         UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
@@ -131,7 +138,8 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
                 ),
                 UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
                     UserStyleSetting.Option.Id(RIGHT_COMPLICATION),
-                    context.getString(R.string.watchface_complications_setting_right),
+                    context.resources,
+                    R.string.watchface_complications_setting_right,
                     null,
                     listOf(
                         UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(

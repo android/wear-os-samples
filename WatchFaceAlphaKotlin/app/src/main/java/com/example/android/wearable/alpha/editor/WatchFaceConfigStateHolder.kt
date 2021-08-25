@@ -27,7 +27,7 @@ import androidx.wear.watchface.editor.EditorSession
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
-import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION
+import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_DEFAULT
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MAXIMUM
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
 import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
@@ -241,7 +241,7 @@ class WatchFaceConfigStateHolder(
             MINUTE_HAND_LENGTH_FRACTION_MAXIMUM * MULTIPLE_FOR_SLIDER
 
         const val MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER =
-            MINUTE_HAND_LENGTH_FRACTION * MULTIPLE_FOR_SLIDER
+            MINUTE_HAND_LENGTH_FRACTION_DEFAULT * MULTIPLE_FOR_SLIDER
 
         private fun multiplyByMultipleForSlider(lengthFraction: Double) =
             lengthFraction * MULTIPLE_FOR_SLIDER
