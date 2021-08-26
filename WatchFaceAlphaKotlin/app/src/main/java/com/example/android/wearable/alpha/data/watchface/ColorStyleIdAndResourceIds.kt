@@ -147,9 +147,10 @@ enum class ColorStyleIdAndResourceIds(
 
             return colorStyleIdAndResourceIdsList.map { colorStyleIdAndResourceIds ->
                 ListUserStyleSetting.ListOption(
-                    id = UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
-                    displayName = context.getString(colorStyleIdAndResourceIds.nameResourceId),
-                    icon = Icon.createWithResource(
+                    UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
+                    context.resources,
+                    colorStyleIdAndResourceIds.nameResourceId,
+                    Icon.createWithResource(
                         context,
                         colorStyleIdAndResourceIds.iconResourceId
                     )

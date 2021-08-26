@@ -19,18 +19,11 @@
 
     <string name="analog_watch_face_name" translatable="false">Alpha Analog</string>
 
-    <string name="digital_watch_face_name" translatable="false">Alpha Digital</string>
+    <!-- Name of watchface style category for selecting the color theme [CHAR LIMIT=20] -->
+    <string name="colors_style_setting">Colors</string>
 
-    <string name="gl_watch_face_name" translatable="false">Alpha OpenGL</string>
-
-    <!-- Name of watchface style [CHAR LIMIT=20] -->
-    <string name="hour_arm_dimension_name">Hour Hand</string>
-
-    <!-- Name of watchface style [CHAR LIMIT=20] -->
-    <string name="minute_arm_dimension_name">Minute Hand</string>
-
-    <!-- Name of watchface style [CHAR LIMIT=20] -->
-    <string name="second_arm_dimension_name">Second Hand</string>
+    <!-- Subtitle for the menu option to select the watch face color theme [CHAR LIMIT=20] -->
+    <string name="colors_style_setting_description">Watchface colorization</string>
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="ambient_style_name">Ambient Style</string>
@@ -46,22 +39,6 @@
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
     <string name="white_style_name">White Style</string>
-
-
-    <!-- Name of watchface style category for selecting the color theme [CHAR LIMIT=20] -->
-    <string name="colors_style_setting">Colors</string>
-
-    <!-- Subtitle for the menu option to select the watch face color theme [CHAR LIMIT=20] -->
-    <string name="colors_style_setting_description">Watchface colorization</string>
-
-    <!-- An option within the watch face color style theme settings [CHAR LIMIT=20] -->
-    <string name="colors_style_red">Red</string>
-
-    <!-- An option within the watch face color style theme settings [CHAR LIMIT=20] -->
-    <string name="colors_style_green">Green</string>
-
-    <!-- An option within the watch face color style theme settings [CHAR LIMIT=20] -->
-    <string name="colors_style_blue">Blue</string>
 
     <!-- An option within the analog watch face to draw pips to mark each hour [CHAR LIMIT=20] -->
     <string name="watchface_pips_setting">Hour Pips</string>
@@ -102,6 +79,18 @@
     right complication for rendering. [CHAR LIMIT=20] -->
     <string name="watchface_complications_setting_right">Right</string>
 
+    <!-- Values for WatchFaceConfigActivity -->
     <!-- Title for config activity for watch face (settings). -->
-    <string name="title_activity_watch_face_config">Config</string>
+    <string name="title_activity_watch_face_config">Configuration</string>
+    <!-- Use of "\n" is to conserve horizontal space in config menu. -->
+    <string name="activity_config_color_style_picker_label">Color\nStyle</string>
+    <string name="activity_config_ticks_enabled_label">Ticks\nEnabled</string>
+    <string name="activity_config_slider_text_label">Minute Hand Size</string>
+    <!-- Content Descriptions -->
+    <string name="activity_config_preview_of_watch_face_content_description">Preview of Watch Face.</string>
+    <string name="activity_config_more_options_icon_content_description">Icon to indicate there are more options if you scroll down.</string>
+    <string name="activity_config_change_color_style_button_content_description">Button to change the color style of the watch face.</string>
+    <string name="activity_config_ticks_enabled_switch_content_description">Displays or hides the outer marks for the watch face.</string>
+    <string name="activity_config_minute_hand_slider_text_label_content_description">Label for hand length slider below.</string>
+    <string name="activity_config_minute_hand_length_slider_content_description">Slider for adjusting the minute hand length.</string>
 </resources>

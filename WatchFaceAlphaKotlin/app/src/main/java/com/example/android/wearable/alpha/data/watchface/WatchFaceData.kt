@@ -25,7 +25,7 @@ private const val HOUR_HAND_WIDTH_FRACTION = 0.02336f
 // Because the minute length is something the user can edit, we make it publicly
 // accessible as a default. We also specify the minimum and maximum values for the user
 // settings as well.
-const val MINUTE_HAND_LENGTH_FRACTION = 0.3783f
+const val MINUTE_HAND_LENGTH_FRACTION_DEFAULT = 0.3783f
 const val MINUTE_HAND_LENGTH_FRACTION_MINIMUM = 0.10000f
 const val MINUTE_HAND_LENGTH_FRACTION_MAXIMUM = 0.40000f
 private const val MINUTE_HAND_WIDTH_FRACTION = 0.0163f
@@ -61,7 +61,7 @@ data class WatchFaceData(
         yRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS
     ),
     val minuteHandDimensions: ArmDimensions = ArmDimensions(
-        lengthFraction = MINUTE_HAND_LENGTH_FRACTION,
+        lengthFraction = MINUTE_HAND_LENGTH_FRACTION_DEFAULT,
         widthFraction = MINUTE_HAND_WIDTH_FRACTION,
         xRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS,
         yRadiusRoundedCorners = ROUNDED_RECTANGLE_CORNERS_RADIUS

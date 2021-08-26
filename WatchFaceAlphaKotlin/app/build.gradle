@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.example.android.wearable.alpha"
@@ -28,6 +28,10 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -53,17 +57,25 @@ android {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlinVersion"
+    implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
 
     // Kotlin components
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
+    implementation "androidx.activity:activity-ktx:$rootProject.activityKtxVersion"
+
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
+
+    // Material components
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
 
     // Wear libraries
-    implementation 'androidx.wear:wear:1.1.0'
+    implementation "androidx.wear:wear:$rootProject.wearVersion"
 
     // Watch face specific libraries
     implementation "androidx.wear:wear-complications-data:$rootProject.watchFaceVersion"

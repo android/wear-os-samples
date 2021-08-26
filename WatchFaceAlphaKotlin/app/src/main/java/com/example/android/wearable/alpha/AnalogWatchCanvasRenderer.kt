@@ -42,7 +42,8 @@ import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -69,7 +70,8 @@ class AnalogWatchCanvasRenderer(
     canvasType,
     FRAME_PERIOD_MS_DEFAULT
 ) {
-    private val scope: CoroutineScope = MainScope()
+    private val scope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     // Represents all data needed to render the watch face. All value defaults are constants. Only
     // three values are changeable by the user (color scheme, ticks being rendered, and length of
@@ -143,7 +145,7 @@ class AnalogWatchCanvasRenderer(
         var newWatchFaceData: WatchFaceData = watchFaceData
 
         // Loops through user style and applies new values to watchFaceData.
-        for (options in userStyle.selectedOptions) {
+        for (options in userStyle) {
             when (options.key.id.toString()) {
                 COLOR_STYLE_SETTING -> {
                     val listOption = options.value as
@@ -166,6 +168,11 @@ class AnalogWatchCanvasRenderer(
                 WATCH_HAND_LENGTH_STYLE_SETTING -> {
                     val doubleValue = options.value as
                             UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+
+                    // The arm lengths are usually only calculated the first time the watch face is
+                    // loaded to reduce the ops in the onDraw(). Because we updated the minute hand
+                    // watch length, we need to trigger a recalculation.
+                    armLengthChangedRecalculateClockHands = true
 
                     // Updates length of minute hand based on edits from user.
                     val newMinuteHandDimensions = newWatchFaceData.minuteHandDimensions.copy(
@@ -203,6 +210,7 @@ class AnalogWatchCanvasRenderer(
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy()")
         scope.cancel("AnalogWatchCanvasRenderer scope clear() request")
         super.onDestroy()
     }
