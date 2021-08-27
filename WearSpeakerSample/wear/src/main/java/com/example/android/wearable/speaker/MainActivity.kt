@@ -22,15 +22,14 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.android.wearable.speaker.MainViewModel.AppAction
-import com.example.android.wearable.speaker.MainViewModel.AppState
+import com.example.android.wearable.speaker.MainStateHolder.AppAction
+import com.example.android.wearable.speaker.MainStateHolder.AppState
 import com.example.android.wearable.speaker.databinding.MainActivityBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -51,7 +50,7 @@ import kotlin.coroutines.resume
  */
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<MainViewModel>()
+    private lateinit var stateHolder: MainStateHolder
 
     private lateinit var binding: MainActivityBinding
 
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) {
         // We ignore the direct result here, since we're going to check anyway.
-        viewModel.onAction(AppAction.PermissionResultReturned)
+        stateHolder.onAction(AppAction.PermissionResultReturned)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,19 +69,43 @@ class MainActivity : AppCompatActivity() {
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        stateHolder = MainStateHolder(
+            application = application,
+            requestPermission = {
+                requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            },
+            showPermissionRationale = {
+                AlertDialog.Builder(this)
+                    .setMessage(R.string.rationale_for_microphone_permission)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                    }
+                    .setNegativeButton(R.string.cancel) { _, _ -> }
+                    .create()
+                    .show()
+            },
+            showSpeakerNotSupported = {
+                AlertDialog.Builder(this)
+                    .setMessage(R.string.no_speaker_supported)
+                    .setPositiveButton(R.string.ok) { _, _ -> }
+                    .create()
+                    .show()
+            }
+        )
+
         soundRecorder = SoundRecorder(this, VOICE_FILE_NAME)
 
         binding.mic.setOnClickListener {
-            viewModel.onAction(
+            stateHolder.onAction(
                 AppAction.MicClicked(shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO))
             )
         }
-        binding.play.setOnClickListener { viewModel.onAction(AppAction.PlayClicked) }
-        binding.music.setOnClickListener { viewModel.onAction(AppAction.MusicClicked) }
+        binding.play.setOnClickListener { stateHolder.onAction(AppAction.PlayClicked) }
+        binding.music.setOnClickListener { stateHolder.onAction(AppAction.MusicClicked) }
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.appState
+                stateHolder.appState
                     .onEach { appState ->
                         // Handle each appState by canceling work being done to handle the old state (playing,
                         // recording, transitioning), and then handling the new state.
@@ -100,35 +123,9 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.isPermissionDenied
+                stateHolder.isPermissionDenied
                     .onEach { isPermissionDenied ->
                         binding.mic.isEnabled = !isPermissionDenied
-                    }
-                    .collect()
-            }
-        }
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.appEvents
-                    .onEach { appEvent ->
-                        when (appEvent) {
-                            MainViewModel.AppEvent.RequestPermission ->
-                                requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                            MainViewModel.AppEvent.ShowPermissionRationale -> AlertDialog.Builder(this@MainActivity)
-                                .setMessage(R.string.rationale_for_microphone_permission)
-                                .setPositiveButton(R.string.ok) { _, _ ->
-                                    requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                                }
-                                .setNegativeButton(R.string.cancel) { _, _ -> }
-                                .create()
-                                .show()
-                            MainViewModel.AppEvent.ShowSpeakerNotSupported -> AlertDialog.Builder(this@MainActivity)
-                                .setMessage(R.string.no_speaker_supported)
-                                .setPositiveButton(R.string.ok) { _, _ -> }
-                                .create()
-                                .show()
-                        }
                     }
                     .collect()
             }
@@ -189,14 +186,14 @@ class MainActivity : AppCompatActivity() {
                 // tracking.
                 // If we call onAction directly (or with Dispatchers.Main.immediate), we will cancel ourselves,
                 // causing strange effects.
-                lifecycleScope.launch(Dispatchers.Main) { viewModel.onAction(AppAction.PlayRecordingFinished) }
+                lifecycleScope.launch(Dispatchers.Main) { stateHolder.onAction(AppAction.PlayRecordingFinished) }
             }
             AppState.PlayingMusic -> {
                 binding.music.contentDescription = getString(R.string.stop_playing_music)
 
                 playMusic()
 
-                lifecycleScope.launch(Dispatchers.Main) { viewModel.onAction(AppAction.PlayMusicFinished) }
+                lifecycleScope.launch(Dispatchers.Main) { stateHolder.onAction(AppAction.PlayMusicFinished) }
             }
             AppState.Recording -> {
                 // This condition is guaranteed via the logic in the view model
@@ -225,7 +222,7 @@ class MainActivity : AppCompatActivity() {
                     recordingJob.cancel()
                 }
 
-                lifecycleScope.launch(Dispatchers.Main) { viewModel.onAction(AppAction.RecordingFinished) }
+                lifecycleScope.launch(Dispatchers.Main) { stateHolder.onAction(AppAction.RecordingFinished) }
             }
         }
     }
@@ -252,7 +249,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.onAction(AppAction.ViewStarted)
+        stateHolder.onAction(AppAction.ViewStarted)
     }
 
     override fun onStop() {
