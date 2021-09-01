@@ -55,8 +55,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.wear:wear:1.1.0'
     // Use to implement support for wear tiles
-    implementation "androidx.wear.tiles:tiles:1.0.0-alpha10"
+    implementation "androidx.wear.tiles:tiles:1.0.0-alpha11"
 
     // Use to preview wear tiles in your own app
-    debugImplementation "androidx.wear.tiles:tiles-renderer:1.0.0-alpha10"
+    debugImplementation "androidx.wear.tiles:tiles-renderer:1.0.0-alpha11"
 }

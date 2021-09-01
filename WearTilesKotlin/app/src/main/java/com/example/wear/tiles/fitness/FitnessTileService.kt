@@ -34,7 +34,7 @@ import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TileProviderService
+import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import com.example.wear.tiles.R
@@ -64,7 +64,7 @@ private val PROGRESS_BAR_THICKNESS = dp(6f)
  * uses an Image. This sample tile does not include any images, so the method has only a minimal
  * implementation.
  */
-class FitnessTileService : TileProviderService() {
+class FitnessTileService : TileService() {
     // For coroutines, use a custom scope we can cancel when the service is destroyed
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
@@ -73,23 +73,30 @@ class FitnessTileService : TileProviderService() {
         requestParams: TileRequest
     ): ListenableFuture<Tile> = serviceScope.future {
         val goalProgress = FitnessRepo.getGoalProgress()
-        Tile.builder()
+        Tile.Builder()
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
-                Timeline.builder().addTimelineEntry(
-                    TimelineEntry.builder().setLayout(
-                        Layout.builder().setRoot(
-                            layout(goalProgress, requestParams.deviceParameters!!)
-                        )
+                Timeline.Builder()
+                    .addTimelineEntry(
+                        TimelineEntry.Builder()
+                            .setLayout(
+                                Layout.Builder()
+                                    .setRoot(
+                                        layout(goalProgress, requestParams.deviceParameters!!)
+                                    )
+                                    .build()
+                            )
+                            .build()
                     )
-                )
-            ).build()
+                    .build()
+            )
+            .build()
     }
 
     override fun onResourcesRequest(requestParams: ResourcesRequest): ListenableFuture<Resources> =
         Futures.immediateFuture(
-            Resources.builder().setVersion(RESOURCES_VERSION).build()
+            Resources.Builder().setVersion(RESOURCES_VERSION).build()
         )
 
     override fun onDestroy() {
@@ -99,36 +106,41 @@ class FitnessTileService : TileProviderService() {
     }
 
     private fun layout(goalProgress: GoalProgress, deviceParameters: DeviceParameters) =
-        Box.builder()
+        Box.Builder()
             .addContent(
-                Arc.builder()
+                Arc.Builder()
                     .addContent(
-                        ArcLine.builder()
+                        ArcLine.Builder()
                             .setLength(degrees(goalProgress.percentage * 360f))
                             .setColor(
                                 argb(ContextCompat.getColor(baseContext, R.color.primary))
                             )
                             .setThickness(PROGRESS_BAR_THICKNESS)
+                            .build()
                     )
                     .setAnchorType(ARC_ANCHOR_START)
+                    .build()
             )
             .addContent(
-                Column.builder()
+                Column.Builder()
                     .addContent(
-                        Text.builder()
+                        Text.Builder()
                             .setText(goalProgress.current.toString())
-                            .setFontStyle(FontStyles.display2(deviceParameters))
+                            .setFontStyle(FontStyles.display2(deviceParameters).build())
+                            .build()
                     )
                     .addContent(
-                        Text.builder()
+                        Text.Builder()
                             .setText(getString(R.string.tile_fitness_goal, goalProgress.goal))
-                            .setFontStyle(FontStyles.title3(deviceParameters))
+                            .setFontStyle(FontStyles.title3(deviceParameters).build())
+                            .build()
                     )
+                    .build()
             )
             .setModifiers(
-                Modifiers.builder()
+                Modifiers.Builder()
                     .setSemantics(
-                        Semantics.builder()
+                        Semantics.Builder()
                             .setContentDescription(
                                 getString(
                                     R.string.tile_fitness_content_description,
@@ -136,6 +148,9 @@ class FitnessTileService : TileProviderService() {
                                     goalProgress.goal
                                 )
                             )
+                            .build()
                     )
+                    .build()
             )
+            .build()
 }
