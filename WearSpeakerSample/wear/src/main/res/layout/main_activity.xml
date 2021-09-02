@@ -19,10 +19,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.android.wearable.timetext.TimeText
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/outer_circle"
         android:layout_width="match_parent"
