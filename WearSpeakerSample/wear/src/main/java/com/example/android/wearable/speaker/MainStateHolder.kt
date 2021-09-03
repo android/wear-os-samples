@@ -16,11 +16,10 @@
 package com.example.android.wearable.speaker
 
 import android.Manifest
-import android.app.Application
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,10 +27,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * A state holder driving the logic of [MainActivity].
+ * A state holder driving the logic of the app.
  */
 class MainStateHolder(
-    private val application: Application,
+    private val activity: Activity,
     private val requestPermission: () -> Unit,
     private val showPermissionRationale: () -> Unit,
     private val showSpeakerNotSupported: () -> Unit
@@ -62,10 +61,8 @@ class MainStateHolder(
      * or programmatic actions (finishing playback or recording).
      */
     sealed class AppAction {
-        object ViewStarted : AppAction()
-        data class MicClicked(
-            val shouldShowRationale: Boolean,
-        ) : AppAction()
+        object Started : AppAction()
+        object MicClicked : AppAction()
         object PlayClicked : AppAction()
         object MusicClicked : AppAction()
         object RecordingFinished : AppAction()
@@ -97,19 +94,19 @@ class MainStateHolder(
     fun onAction(action: AppAction) {
         val oldState = appState.value
         val newState = when (action) {
-            AppAction.ViewStarted -> AppState.Ready(transitionInstantly = true)
+            AppAction.Started -> AppState.Ready(transitionInstantly = true)
             is AppAction.MicClicked ->
                 when (oldState) {
                     is AppState.Ready,
                     AppState.PlayingVoice,
                     AppState.PlayingMusic ->
                         when {
-                            ContextCompat.checkSelfPermission(application, Manifest.permission.RECORD_AUDIO) ==
+                            ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
                                 PackageManager.PERMISSION_GRANTED -> {
                                 // We have the permission, we can start recording now
                                 AppState.Recording
                             }
-                            action.shouldShowRationale -> {
+                            activity.shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
                                 // If we should show the rationale prior to requesting the permission, send that event
                                 showPermissionRationale()
                                 AppState.Ready(transitionInstantly = false)
@@ -159,7 +156,7 @@ class MainStateHolder(
             AppAction.PermissionResultReturned ->
                 // Check if the user granted the permission
                 if (
-                    ContextCompat.checkSelfPermission(application, Manifest.permission.RECORD_AUDIO) ==
+                    ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
                     PackageManager.PERMISSION_GRANTED
                 ) {
                     // The user granted the permission, continue on to start recording
@@ -180,8 +177,8 @@ class MainStateHolder(
      */
     private fun speakerIsSupported(): Boolean {
         val hasAudioOutputFeature =
-            application.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
-        val devices = application.getSystemService<AudioManager>()!!
+            activity.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
+        val devices = activity.getSystemService<AudioManager>()!!
             .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
 
         // We can only trust AudioDeviceInfo.TYPE_BUILTIN_SPEAKER if the device advertises FEATURE_AUDIO_OUTPUT
