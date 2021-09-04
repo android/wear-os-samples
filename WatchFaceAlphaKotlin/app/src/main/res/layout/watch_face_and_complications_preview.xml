@@ -16,21 +16,51 @@
   -->
 <!--
     ImageView to load preview of watch face.
-    TODO (codingjeremy): Add mask for screenshot and buttons to enable editing of complications.
 -->
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/analog_complication_settings_preview_size"
+    android:layout_height="@dimen/analog_complication_settings_preview_size"
+    tools:context=".editor.WatchFaceConfigActivity">
+
+    <Button
+        android:id="@+id/left_complication"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:onClick="onClickLeftComplicationButton"
+        android:contentDescription="@string/activity_config_complication_button_right_content_description"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/right_complication"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:onClick="onClickRightComplicationButton"
+        android:contentDescription="@string/activity_config_complication_button_left_content_description"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <!--     TODO (codingjeremy): Add mask for screenshot and clean up UI. -->
 
     <ImageView
         android:id="@+id/watch_face_background"
-        android:background="@color/black"
-        android:padding="@dimen/watch_face_preview_background_padding"
-        android:scaleType="fitXY"
         android:layout_width="@dimen/analog_complication_settings_preview_size"
         android:layout_height="@dimen/analog_complication_settings_preview_size"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
-
-</RelativeLayout>
+        android:layout_centerVertical="true"
+        android:background="@color/black"
+        android:contentDescription="@string/activity_config_screenshot_content_description"
+        android:padding="@dimen/watch_face_preview_background_padding"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

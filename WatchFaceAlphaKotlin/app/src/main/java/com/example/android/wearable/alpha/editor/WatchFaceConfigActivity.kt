@@ -25,6 +25,8 @@ import com.example.android.wearable.alpha.databinding.ActivityWatchFaceConfigBin
 import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_DEFAULT_FOR_SLIDER
 import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_MAXIMUM_FOR_SLIDER
 import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Companion.MINUTE_HAND_LENGTH_MINIMUM_FOR_SLIDER
+import com.example.android.wearable.alpha.utils.LEFT_COMPLICATION_ID
+import com.example.android.wearable.alpha.utils.RIGHT_COMPLICATION_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -107,8 +109,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
     override fun onDestroy() {
         stateHolder.onCleared()
-        // Makes sure the activity closes.
-        finish()
         super.onDestroy()
     }
 
@@ -121,6 +121,16 @@ class WatchFaceConfigActivity : ComponentActivity() {
         val newColorStyle: ColorStyleIdAndResourceIds = colorStyleIdAndResourceIdsList.random()
 
         stateHolder.setColorStyle(newColorStyle.id)
+    }
+
+    fun onClickLeftComplicationButton(view: View) {
+        Log.d(TAG, "onClickLeftComplicationButton() $view")
+        stateHolder.setComplication(LEFT_COMPLICATION_ID)
+    }
+
+    fun onClickRightComplicationButton(view: View) {
+        Log.d(TAG, "onClickLeftComplicationButton() $view")
+        stateHolder.setComplication(RIGHT_COMPLICATION_ID)
     }
 
     fun onClickTicksEnabledSwitch(view: View) {

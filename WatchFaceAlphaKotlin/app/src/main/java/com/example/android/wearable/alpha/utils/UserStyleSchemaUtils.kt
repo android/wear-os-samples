@@ -73,7 +73,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         R.string.watchface_pips_setting_description,
         null,
         listOf(WatchFaceLayer.BASE),
-        DRAW_HOUR_PIPS_DEFAULT,
+        DRAW_HOUR_PIPS_DEFAULT
     )
 
     // 3. Allows user to change the length of the minute hand.
