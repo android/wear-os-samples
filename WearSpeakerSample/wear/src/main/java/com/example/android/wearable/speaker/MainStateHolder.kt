@@ -20,11 +20,20 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.media.MediaPlayer
+import androidx.annotation.RequiresPermission
+import androidx.compose.foundation.MutatorMutex
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import java.time.Duration
+import kotlin.coroutines.resume
 
 /**
  * A state holder driving the logic of the app.
@@ -35,139 +44,184 @@ class MainStateHolder(
     private val showPermissionRationale: () -> Unit,
     private val showSpeakerNotSupported: () -> Unit
 ) {
+    /**
+     * The [MutatorMutex] that guards the state of the app.
+     *
+     * Due to being a [MutatorMutex], this automatically handles cleanup of any ongoing asynchronous work,
+     * like playing music or recording, ensuring that only one operation is occurring at a time.
+     */
+    private val appStateMutatorMutex = MutatorMutex()
 
     /**
-     * The backing [MutableStateFlow] for the [appState].
+     * The primary app state.
      */
-    private val appStateMutableStateFlow = MutableStateFlow<AppState>(AppState.Ready(transitionInstantly = true))
+    var appState by mutableStateOf<AppState>(AppState.Ready(transitionInstantly = true))
+        private set
 
     /**
-     * A [StateFlow] of the primary app state.
+     * The progress of an ongoing recording.
      */
-    val appState = appStateMutableStateFlow.asStateFlow()
+    var recordingProgress by mutableStateOf(0f)
+        private set
 
     /**
-     * The backing [MutableStateFlow] for the [isPermissionDenied] flow.
+     * `true` if we know the user has denied the record audio permission.
      */
-    private val isPermissionDeniedMutableStateFlow = MutableStateFlow(false)
+    var isPermissionDenied by mutableStateOf(false)
+        private set
 
     /**
-     * A [StateFlow] of whether we know the user has denied the record audio permission.
+     * The [SoundRecorder] for recording and playing audio captured on-device.
      */
-    val isPermissionDenied = isPermissionDeniedMutableStateFlow.asStateFlow()
-
-    /**
-     * One of the actions the app interprets. This can either be direct user actions (clicking one of the buttons),
-     * or programmatic actions (finishing playback or recording).
-     */
-    sealed class AppAction {
-        object Started : AppAction()
-        object MicClicked : AppAction()
-        object PlayClicked : AppAction()
-        object MusicClicked : AppAction()
-        object RecordingFinished : AppAction()
-        object PlayRecordingFinished : AppAction()
-        object PlayMusicFinished : AppAction()
-        object PermissionResultReturned : AppAction()
-    }
-
-    /**
-     * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
-     */
-    sealed class AppState {
-        data class Ready(
-            /**
-             * If true, don't animate to this position
-             */
-            val transitionInstantly: Boolean,
-        ) : AppState()
-
-        object PlayingVoice : AppState()
-        object PlayingMusic : AppState()
-        object Recording : AppState()
-    }
+    private val soundRecorder = SoundRecorder(activity, "audiorecord.pcm")
 
     /**
      * The primary state machine for the app, determining the new [AppState] based on the incoming [AppAction],
      * updating other state and sending out events as appropriate.
      */
-    fun onAction(action: AppAction) {
-        val oldState = appState.value
-        val newState = when (action) {
-            AppAction.Started -> AppState.Ready(transitionInstantly = true)
-            is AppAction.MicClicked ->
-                when (oldState) {
-                    is AppState.Ready,
-                    AppState.PlayingVoice,
-                    AppState.PlayingMusic ->
-                        when {
-                            ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
-                                PackageManager.PERMISSION_GRANTED -> {
-                                // We have the permission, we can start recording now
-                                AppState.Recording
-                            }
-                            activity.shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
-                                // If we should show the rationale prior to requesting the permission, send that event
-                                showPermissionRationale()
-                                AppState.Ready(transitionInstantly = false)
-                            }
-                            else -> {
-                                // Request the permission
-                                requestPermission()
-                                AppState.Ready(transitionInstantly = false)
-                            }
-                        }
-                    // If we were already recording, transition back to ready
-                    AppState.Recording -> AppState.Ready(transitionInstantly = false)
+    suspend fun onAction(action: AppAction) {
+        appStateMutatorMutex.mutate {
+            val oldState = appState
+            when (action) {
+                AppAction.Started -> {
+                    // Upon the view starting, simply reset the state to ready
+                    appState = AppState.Ready(transitionInstantly = true)
                 }
-            AppAction.MusicClicked ->
-                when (oldState) {
-                    is AppState.Ready,
-                    AppState.PlayingVoice,
-                    AppState.Recording ->
-                        if (speakerIsSupported()) {
-                            AppState.PlayingMusic
-                        } else {
-                            showSpeakerNotSupported()
-                            AppState.Ready(transitionInstantly = false)
-                        }
-                    // If we were already playing, transition back to ready
-                    AppState.PlayingMusic -> AppState.Ready(transitionInstantly = false)
-                }
-            AppAction.PlayClicked ->
-                when (oldState) {
-                    is AppState.Ready,
-                    AppState.PlayingMusic,
-                    AppState.Recording -> {
-                        if (speakerIsSupported()) {
-                            AppState.PlayingVoice
-                        } else {
-                            showSpeakerNotSupported()
-                            AppState.Ready(transitionInstantly = false)
+                is AppAction.MicClicked ->
+                    when (oldState) {
+                        is AppState.Ready,
+                        AppState.PlayingVoice,
+                        AppState.PlayingMusic ->
+                            // If we weren't recording, check our permission to start recording.
+                            when {
+                                ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
+                                    PackageManager.PERMISSION_GRANTED -> {
+                                    // We have the permission, we can start recording now
+                                    recordUpdatingState()
+                                }
+                                activity.shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
+                                    // If we should show the rationale prior to requesting the permission, send that
+                                    // event
+                                    showPermissionRationale()
+                                    appState = AppState.Ready(transitionInstantly = false)
+                                }
+                                else -> {
+                                    // Request the permission
+                                    requestPermission()
+                                    appState = AppState.Ready(transitionInstantly = false)
+                                }
+                            }
+                        // If we were already recording, transition back to ready
+                        AppState.Recording -> {
+                            appState = AppState.Ready(transitionInstantly = false)
                         }
                     }
-                    // If we were already playing, transition back to ready
-                    AppState.PlayingVoice -> AppState.Ready(transitionInstantly = false)
-                }
-            // We finished doing something, transition back to ready
-            AppAction.PlayMusicFinished,
-            AppAction.PlayRecordingFinished,
-            AppAction.RecordingFinished -> AppState.Ready(transitionInstantly = false)
-            AppAction.PermissionResultReturned ->
-                // Check if the user granted the permission
-                if (
-                    ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
-                    PackageManager.PERMISSION_GRANTED
-                ) {
-                    // The user granted the permission, continue on to start recording
-                    AppState.Recording
-                } else {
-                    // We have confirmation now that the user denied the permission
-                    isPermissionDeniedMutableStateFlow.value = true
-                    AppState.Ready(transitionInstantly = false)
-                }
+                AppAction.MusicClicked ->
+                    when (oldState) {
+                        is AppState.Ready,
+                        AppState.PlayingVoice,
+                        AppState.Recording ->
+                            if (speakerIsSupported()) {
+                                playMusicUpdatingState()
+                            } else {
+                                showSpeakerNotSupported()
+                                appState = AppState.Ready(transitionInstantly = false)
+                            }
+                        // If we were already playing, transition back to ready
+                        AppState.PlayingMusic -> {
+                            appState = AppState.Ready(transitionInstantly = false)
+                        }
+                    }
+                AppAction.PlayClicked ->
+                    when (oldState) {
+                        is AppState.Ready,
+                        AppState.PlayingMusic,
+                        AppState.Recording -> {
+                            if (speakerIsSupported()) {
+                                appState = AppState.PlayingVoice
+
+                                soundRecorder.play()
+
+                                appState = AppState.Ready(transitionInstantly = false)
+                            } else {
+                                showSpeakerNotSupported()
+                                appState = AppState.Ready(transitionInstantly = false)
+                            }
+                        }
+                        // If we were already playing, transition back to ready
+                        AppState.PlayingVoice -> {
+                            appState = AppState.Ready(transitionInstantly = false)
+                        }
+                    }
+                AppAction.PermissionResultReturned ->
+                    // Check if the user granted the permission
+                    if (
+                        ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        // The user granted the permission, continue on to start recording
+                        recordUpdatingState()
+                    } else {
+                        // We have confirmation now that the user denied the permission
+                        isPermissionDenied = true
+                        appState = AppState.Ready(transitionInstantly = false)
+                    }
+            }
         }
-        appStateMutableStateFlow.value = newState
+    }
+
+    /**
+     * A helper function to record, updating the progress state while recording.
+     *
+     * This requires the [Manifest.permission.RECORD_AUDIO] permission to run.
+     */
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
+    private suspend fun recordUpdatingState() {
+        // We have the permission, we can start recording now
+        appState = AppState.Recording
+
+        coroutineScope {
+            // Kick off a parallel job to record
+            val recordingJob = launch { soundRecorder.record() }
+
+            val delayPerTickMs = MAX_RECORDING_DURATION.toMillis() / NUMBER_TICKS
+            val startTime = System.currentTimeMillis()
+
+            repeat(NUMBER_TICKS) { index ->
+                recordingProgress = index.toFloat() / NUMBER_TICKS
+                delay(startTime + delayPerTickMs * (index + 1) - System.currentTimeMillis())
+            }
+            // Update the progress to be complete
+            recordingProgress = 1f
+
+            // Stop recording
+            recordingJob.cancel()
+        }
+
+        appState = AppState.Ready(transitionInstantly = false)
+    }
+
+    /**
+     * Plays the MP3 file embedded in the application, updating the state to reflect the playing.
+     */
+    private suspend fun playMusicUpdatingState() {
+        appState = AppState.PlayingMusic
+
+        val mediaPlayer = MediaPlayer.create(activity, R.raw.sound)
+
+        try {
+            suspendCancellableCoroutine<Unit> { cont ->
+                mediaPlayer.setOnCompletionListener {
+                    cont.resume(Unit)
+                }
+                mediaPlayer.start()
+            }
+        } finally {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
+
+        appState = AppState.Ready(transitionInstantly = false)
     }
 
     /**
@@ -185,4 +239,37 @@ class MainStateHolder(
         return devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER } && hasAudioOutputFeature ||
             devices.any { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP }
     }
+
+    companion object {
+        private val MAX_RECORDING_DURATION = Duration.ofSeconds(10)
+        private const val NUMBER_TICKS = 10
+    }
+}
+
+/**
+ * One of the actions the app interprets. This can either be direct user actions (clicking one of the buttons),
+ * or programmatic actions (finishing playback or recording).
+ */
+sealed class AppAction {
+    object Started : AppAction()
+    object MicClicked : AppAction()
+    object PlayClicked : AppAction()
+    object MusicClicked : AppAction()
+    object PermissionResultReturned : AppAction()
+}
+
+/**
+ * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
+ */
+sealed class AppState {
+    data class Ready(
+        /**
+         * If true, don't animate to this position
+         */
+        val transitionInstantly: Boolean,
+    ) : AppState()
+
+    object PlayingVoice : AppState()
+    object PlayingMusic : AppState()
+    object Recording : AppState()
 }

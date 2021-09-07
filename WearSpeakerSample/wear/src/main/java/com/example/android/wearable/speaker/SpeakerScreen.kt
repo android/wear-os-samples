@@ -1,3 +1,18 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.android.wearable.speaker
 
 import android.content.res.Configuration
@@ -24,7 +39,7 @@ import androidx.wear.compose.material.Scaffold
  */
 @Composable
 fun SpeakerScreen(
-    appState: MainStateHolder.AppState,
+    appState: AppState,
     isPermissionDenied: Boolean,
     recordingProgress: Float,
     onMicClicked: () -> Unit,
@@ -38,17 +53,17 @@ fun SpeakerScreen(
         // This converts the main app state into a
         val controlDashboardState by derivedStateOf {
             when (appState) {
-                MainStateHolder.AppState.PlayingMusic -> ControlDashboardState(
+                AppState.PlayingMusic -> ControlDashboardState(
                     micState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     playState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     musicState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
                 )
-                MainStateHolder.AppState.PlayingVoice -> ControlDashboardState(
+                AppState.PlayingVoice -> ControlDashboardState(
                     micState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     playState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
                     musicState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                 )
-                is MainStateHolder.AppState.Ready -> ControlDashboardState(
+                is AppState.Ready -> ControlDashboardState(
                     micState = ControlDashboardButtonState(
                         expanded = false,
                         enabled = !isPermissionDenied,
@@ -57,7 +72,7 @@ fun SpeakerScreen(
                     playState = ControlDashboardButtonState(expanded = false, enabled = true, visible = true),
                     musicState = ControlDashboardButtonState(expanded = false, enabled = true, visible = true),
                 )
-                MainStateHolder.AppState.Recording -> ControlDashboardState(
+                AppState.Recording -> ControlDashboardState(
                     micState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
                     playState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     musicState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
@@ -68,10 +83,10 @@ fun SpeakerScreen(
         // The progress bar should only be visible when actively recording
         val isProgressVisible by derivedStateOf {
             when (appState) {
-                MainStateHolder.AppState.PlayingMusic,
-                MainStateHolder.AppState.PlayingVoice,
-                is MainStateHolder.AppState.Ready -> false
-                MainStateHolder.AppState.Recording -> true
+                AppState.PlayingMusic,
+                AppState.PlayingVoice,
+                is AppState.Ready -> false
+                AppState.Recording -> true
             }
         }
 
@@ -80,6 +95,8 @@ fun SpeakerScreen(
         ) {
             val (controlDashboard, progressBar) = createRefs()
 
+            // TODO: Add animation between dashboard states when MotionLayout in Compose supports more
+            //       than two constraint sets.
             ControlDashboard(
                 controlDashboardState = controlDashboardState,
                 onMicClicked = onMicClicked,
@@ -109,21 +126,25 @@ fun SpeakerScreen(
     }
 }
 
-class AppStatePreviewProvider : CollectionPreviewParameterProvider<MainStateHolder.AppState>(
+class AppStatePreviewProvider : CollectionPreviewParameterProvider<AppState>(
     listOf(
-        MainStateHolder.AppState.Ready(
+        AppState.Ready(
             transitionInstantly = true
         ),
-        MainStateHolder.AppState.Recording,
-        MainStateHolder.AppState.PlayingVoice,
-        MainStateHolder.AppState.PlayingMusic
+        AppState.Recording,
+        AppState.PlayingVoice,
+        AppState.PlayingMusic
     )
 )
 
-@Preview(widthDp = 200, heightDp = 200, uiMode = Configuration.UI_MODE_TYPE_WATCH)
+@Preview(
+    widthDp = 200,
+    heightDp = 200,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+)
 @Composable
 fun SpeakerScreenPreview(
-    @PreviewParameter(AppStatePreviewProvider::class) appState: MainStateHolder.AppState
+    @PreviewParameter(AppStatePreviewProvider::class) appState: AppState
 ) {
     SpeakerScreen(
         appState = appState,

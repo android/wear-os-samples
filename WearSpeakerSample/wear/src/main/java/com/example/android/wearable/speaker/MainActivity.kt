@@ -20,10 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
 /**
- * We first get the required permission to use the MIC. If it is granted, then we continue with
- * the application and present the UI with three icons: a MIC icon (if pressed, user can record up
- * to 10 seconds), a Play icon (if clicked, it will playback the recorded audio file) and a music
- * note icon (if clicked, it plays an MP3 file that is included in the app).
+ * A simple activity that just serves as an entry point to [SpeakerApp].
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
