@@ -28,6 +28,7 @@ import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
+import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSetting
@@ -203,8 +204,12 @@ class AnalogWatchCanvasRenderer(
             // each of the styles are defined in XML so we need to replace the complication's
             // drawables.
             for ((_, complication) in complicationSlotsManager.complicationSlots) {
-                (complication.renderer as CanvasComplicationDrawable).drawable =
-                    watchFaceColors.complicationStyleDrawable
+                ComplicationDrawable.getDrawable(
+                    context,
+                    watchFaceColors.complicationStyleDrawableId
+                )?.let {
+                    (complication.renderer as CanvasComplicationDrawable).drawable = it
+                }
             }
         }
     }
