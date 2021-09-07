@@ -28,7 +28,7 @@
     <Button
         android:id="@+id/left_complication"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:onClick="onClickLeftComplicationButton"
         android:contentDescription="@string/activity_config_complication_button_right_content_description"
         android:background="@android:color/transparent"
@@ -40,7 +40,7 @@
     <Button
         android:id="@+id/right_complication"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:onClick="onClickRightComplicationButton"
         android:contentDescription="@string/activity_config_complication_button_left_content_description"
         android:background="@android:color/transparent"
