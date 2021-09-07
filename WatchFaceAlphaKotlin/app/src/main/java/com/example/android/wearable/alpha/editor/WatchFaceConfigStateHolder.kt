@@ -246,7 +246,6 @@ class WatchFaceConfigStateHolder(
         if (::editorSession.isInitialized) {
             editorSession.close()
         }
-        scope.cancel()
     }
 
     sealed class EditWatchFaceUiState {

@@ -107,11 +107,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
         binding.minuteHandLengthSlider.isEnabled = true
     }
 
-    override fun onDestroy() {
-        stateHolder.onCleared()
-        super.onDestroy()
-    }
-
     fun onClickColorStylePickerButton(view: View) {
         Log.d(TAG, "onClickColorStylePickerButton() $view")
 
@@ -129,7 +124,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     }
 
     fun onClickRightComplicationButton(view: View) {
-        Log.d(TAG, "onClickLeftComplicationButton() $view")
+        Log.d(TAG, "onClickRightComplicationButton() $view")
         stateHolder.setComplication(RIGHT_COMPLICATION_ID)
     }
 
