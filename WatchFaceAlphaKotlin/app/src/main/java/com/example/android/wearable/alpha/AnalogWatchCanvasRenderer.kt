@@ -184,8 +184,6 @@ class AnalogWatchCanvasRenderer(
                         minuteHandDimensions = newMinuteHandDimensions
                     )
                 }
-                // TODO (codingjeremy): Add complication change support if settings activity
-                // PR doesn't cover it. Otherwise, remove comment.
             }
         }
 
