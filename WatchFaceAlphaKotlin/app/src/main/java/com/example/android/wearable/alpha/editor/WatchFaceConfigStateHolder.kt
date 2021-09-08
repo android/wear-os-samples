@@ -23,6 +23,7 @@ import androidx.activity.ComponentActivity
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.RenderParameters
+import androidx.wear.watchface.editor.ChosenComplicationDataSource
 import androidx.wear.watchface.editor.EditorSession
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSetting
@@ -32,9 +33,12 @@ import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRAC
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
 import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
+import com.example.android.wearable.alpha.utils.LEFT_COMPLICATION_ID
+import com.example.android.wearable.alpha.utils.RIGHT_COMPLICATION_ID
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -58,7 +62,7 @@ import kotlinx.coroutines.launch
  * [StateFlow] that feeds back to the Activity).
  */
 class WatchFaceConfigStateHolder(
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
     activity: ComponentActivity,
     editIntent: Intent
 ) {
@@ -86,7 +90,9 @@ class WatchFaceConfigStateHolder(
             )
 
             previewComplicationData = editorSession.getComplicationsPreviewData()
-            Log.d(WatchFaceConfigActivity.TAG, "userStyle: $editorSession.userStyle")
+
+            Log.d(TAG, "previewComplicationData: $previewComplicationData")
+            Log.d(TAG, "userStyle: ${editorSession.userStyle}")
 
             extractsUserStyles(editorSession.userStyle)
             updatesWatchFacePreview()
@@ -119,6 +125,7 @@ class WatchFaceConfigStateHolder(
      * updated values) to the Activity to render.
      */
     private fun updatesWatchFacePreview() {
+        Log.d(TAG, "updatesWatchFacePreview()")
 
         val bitmap = editorSession.renderWatchFaceToBitmap(
             RenderParameters(
@@ -151,6 +158,33 @@ class WatchFaceConfigStateHolder(
         )
 
         mutableUiState.value = EditWatchFaceUiState.Success(watchFacePreview)
+    }
+
+    fun setComplication(complicationLocation: Int) {
+        val complicationSlotId = when (complicationLocation) {
+            LEFT_COMPLICATION_ID -> {
+                LEFT_COMPLICATION_ID
+            }
+            RIGHT_COMPLICATION_ID -> {
+                RIGHT_COMPLICATION_ID
+            }
+            else -> {
+                return
+            }
+        }
+        scope.launch(Dispatchers.Main.immediate) {
+            val chosenComplicationDataSource: ChosenComplicationDataSource? =
+                editorSession.openComplicationDataSourceChooser(complicationSlotId)
+
+            chosenComplicationDataSource?.let {
+                Log.d(TAG, "new complication: ${it.complicationSlotId} and ${it.complicationDataSourceInfo}")
+
+                // previewComplicationData needs updated complication information and it needs to
+                // run in a coroutine.
+                previewComplicationData = editorSession.getComplicationsPreviewData()
+                updatesWatchFacePreview()
+            }
+        }
     }
 
     fun setColorStyle(newColorStyleId: String) {
@@ -198,9 +232,9 @@ class WatchFaceConfigStateHolder(
         userStyleSetting: UserStyleSetting,
         userStyleOption: UserStyleSetting.Option
     ) {
-        Log.d(WatchFaceConfigActivity.TAG, "setUserStyleOption()")
-        Log.d(WatchFaceConfigActivity.TAG, "\tuserStyleSetting: $userStyleSetting")
-        Log.d(WatchFaceConfigActivity.TAG, "\tuserStyleOption: $userStyleOption")
+        Log.d(TAG, "setUserStyleOption()")
+        Log.d(TAG, "\tuserStyleSetting: $userStyleSetting")
+        Log.d(TAG, "\tuserStyleOption: $userStyleOption")
 
         val mutableUserStyle = editorSession.userStyle.toMutableUserStyle()
         mutableUserStyle[userStyleSetting] = userStyleOption

@@ -14,7 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -64,7 +65,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/color_style_picker_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/Widget.WatchFace.Button"
             app:icon="@drawable/color_style_icon"
@@ -81,7 +82,7 @@
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/ticks_enabled_switch"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/watch_ticks"
             android:drawablePadding="@dimen/activity_config_ticks_enabled_switch_icon_padding"
@@ -97,7 +98,7 @@
 
         <Space
             android:id="@+id/pre_slider_spacer"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/activity_config_spacer_height_pre_slider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +106,7 @@
 
         <TextView
             android:id="@+id/slider_label"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/activity_config_slider_text_label"
@@ -118,7 +119,7 @@
 
         <com.google.android.material.slider.Slider
             android:id="@+id/minute_hand_length_slider"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:labelBehavior="gone"
             android:contentDescription="@string/activity_config_minute_hand_length_slider_content_description"
@@ -128,7 +129,7 @@
 
         <Space
             android:id="@+id/post_content_spacer"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/activity_config_spacer_height_post_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

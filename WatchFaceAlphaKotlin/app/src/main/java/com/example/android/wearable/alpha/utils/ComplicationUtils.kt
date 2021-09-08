@@ -80,12 +80,10 @@ fun createComplicationSlotManager(
     drawableId: Int = DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID
 ): ComplicationSlotsManager {
 
-    val defaultComplicationDrawable = ComplicationDrawable.getDrawable(context, drawableId)
-
-    val canvasComplicationFactory =
+    val defaultCanvasComplicationFactory =
         CanvasComplicationFactory { watchState, listener ->
             CanvasComplicationDrawable(
-                defaultComplicationDrawable!!,
+                ComplicationDrawable.getDrawable(context, drawableId)!!,
                 watchState,
                 listener
             )
@@ -93,7 +91,7 @@ fun createComplicationSlotManager(
 
     val leftComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Left.id,
-        canvasComplicationFactory = canvasComplicationFactory,
+        canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Left.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
             SystemDataSources.DATA_SOURCE_DAY_OF_WEEK
@@ -111,7 +109,7 @@ fun createComplicationSlotManager(
 
     val rightComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
         id = ComplicationConfig.Right.id,
-        canvasComplicationFactory = canvasComplicationFactory,
+        canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
             SystemDataSources.DATA_SOURCE_STEP_COUNT

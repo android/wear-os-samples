@@ -33,15 +33,6 @@ const val COLOR_STYLE_SETTING = "color_style_setting"
 const val DRAW_HOUR_PIPS_STYLE_SETTING = "draw_hour_pips_style_setting"
 const val WATCH_HAND_LENGTH_STYLE_SETTING = "watch_hand_length_style_setting"
 
-// Setting key for complication display options.
-const val COMPLICATIONS_STYLE_SETTING = "complication_style_setting"
-
-// Complication constants for which complications to display.
-const val NO_COMPLICATIONS = "NO_COMPLICATIONS"
-const val LEFT_COMPLICATION = "LEFT_COMPLICATION"
-const val RIGHT_COMPLICATION = "RIGHT_COMPLICATION"
-const val LEFT_AND_RIGHT_COMPLICATIONS = "LEFT_AND_RIGHT_COMPLICATIONS"
-
 /*
  * Creates user styles in the settings activity associated with the watch face, so users can
  * edit different parts of the watch face. In the renderer (after something has changed), the
@@ -73,7 +64,7 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         R.string.watchface_pips_setting_description,
         null,
         listOf(WatchFaceLayer.BASE),
-        DRAW_HOUR_PIPS_DEFAULT,
+        DRAW_HOUR_PIPS_DEFAULT
     )
 
     // 3. Allows user to change the length of the minute hand.
@@ -89,76 +80,12 @@ fun createUserStyleSchema(context: Context): UserStyleSchema {
         MINUTE_HAND_LENGTH_FRACTION_DEFAULT.toDouble()
     )
 
-    // 4. These are style overrides applied on top of the complicationSlots passed into
-    // complicationSlotsManager below.
-    val complicationsStyleSetting =
-        UserStyleSetting.ComplicationSlotsUserStyleSetting(
-            UserStyleSetting.Id(COMPLICATIONS_STYLE_SETTING),
-            context.resources,
-            R.string.watchface_complications_setting,
-            R.string.watchface_complications_setting_description,
-            null,
-            listOf(
-                UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
-                    UserStyleSetting.Option.Id(LEFT_AND_RIGHT_COMPLICATIONS),
-                    context.resources,
-                    R.string.watchface_complications_setting_both,
-                    null,
-                    // NB this list is empty because each [ComplicationSlotOverlay] is applied on
-                    // top of the initial config.
-                    listOf()
-                ),
-                UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
-                    UserStyleSetting.Option.Id(NO_COMPLICATIONS),
-                    context.resources,
-                    R.string.watchface_complications_setting_none,
-                    null,
-                    listOf(
-                        UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
-                            LEFT_COMPLICATION_ID,
-                            enabled = false
-                        ),
-                        UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
-                            RIGHT_COMPLICATION_ID,
-                            enabled = false
-                        )
-                    )
-                ),
-                UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
-                    UserStyleSetting.Option.Id(LEFT_COMPLICATION),
-                    context.resources,
-                    R.string.watchface_complications_setting_left,
-                    null,
-                    listOf(
-                        UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
-                            RIGHT_COMPLICATION_ID,
-                            enabled = false
-                        )
-                    )
-                ),
-                UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
-                    UserStyleSetting.Option.Id(RIGHT_COMPLICATION),
-                    context.resources,
-                    R.string.watchface_complications_setting_right,
-                    null,
-                    listOf(
-                        UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
-                            LEFT_COMPLICATION_ID,
-                            enabled = false
-                        )
-                    )
-                )
-            ),
-            listOf(WatchFaceLayer.COMPLICATIONS)
-        )
-
-    // 5. Create style settings to hold all options.
+    // 4. Create style settings to hold all options.
     return UserStyleSchema(
         listOf(
             colorStyleSetting,
             drawHourPipsStyleSetting,
-            watchHandLengthStyleSetting,
-            complicationsStyleSetting
+            watchHandLengthStyleSetting
         )
     )
 }
