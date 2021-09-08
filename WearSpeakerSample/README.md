@@ -1,10 +1,13 @@
 
-Android WearSpeakerSample Sample
+WearSpeakerSample
 ================================
 
 A sample that shows how you can record voice using the microphone on a wearable and
 play the recorded voice or an mp3 file, if the wearable device is connected to a speaker
 (bluetooth or built-in).
+
+This sample is also written entirely with Jetpack Compose, using [Wear-specific components provided
+by AndroidX](https://developer.android.com/jetpack/androidx/releases/wear-compose).
 
 This sample doesn't have any companion phone app so you need to install this directly
 on your watch using `adb` or Android Studio.
