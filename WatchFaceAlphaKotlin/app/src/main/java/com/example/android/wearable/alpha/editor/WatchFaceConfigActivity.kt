@@ -86,6 +86,11 @@ class WatchFaceConfigActivity : ComponentActivity() {
         }
     }
 
+    override fun onDestroy() {
+        stateHolder.onCleared()
+        super.onDestroy()
+    }
+
     private fun updateWatchFacePreview(
         userStylesAndPreview: WatchFaceConfigStateHolder.UserStylesAndPreview
     ) {
