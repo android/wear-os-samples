@@ -33,7 +33,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.material.MaterialTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -49,7 +54,7 @@ fun SpeakerApp() {
 
         val context = LocalContext.current
         val activity = context.findActivity()
-        val coroutineScope = rememberCoroutineScope()
+        val scope = rememberCoroutineScope()
 
         val stateHolder = remember(activity) {
             MainStateHolder(
@@ -82,10 +87,11 @@ fun SpeakerApp() {
 
         requestPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) {
             // We ignore the direct result here, since we're going to check anyway.
-            coroutineScope.launch {
-                val job = launch { stateHolder.onAction(AppAction.PermissionResultReturned) }
-                lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP)
-                job.cancel()
+            scope.launch {
+                raceOf(
+                    { stateHolder.onAction(AppAction.PermissionResultReturned) },
+                    { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
+                )
             }
         }
 
@@ -101,27 +107,56 @@ fun SpeakerApp() {
             isPermissionDenied = stateHolder.isPermissionDenied,
             recordingProgress = stateHolder.recordingProgress,
             onMicClicked = {
-                coroutineScope.launch {
-                    val job = launch { stateHolder.onAction(AppAction.MicClicked) }
-                    lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP)
-                    job.cancel()
+                scope.launch {
+                    raceOf(
+                        { stateHolder.onAction(AppAction.MicClicked) },
+                        { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
+                    )
                 }
             },
             onPlayClicked = {
-                coroutineScope.launch {
-                    val job = launch { stateHolder.onAction(AppAction.PlayClicked) }
-                    lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP)
-                    job.cancel()
+                scope.launch {
+                    raceOf(
+                        { stateHolder.onAction(AppAction.PlayClicked) },
+                        { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
+                    )
                 }
             },
             onMusicClicked = {
-                coroutineScope.launch {
-                    val job = launch { stateHolder.onAction(AppAction.MusicClicked) }
-                    lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP)
-                    job.cancel()
+                scope.launch {
+                    raceOf(
+                        { stateHolder.onAction(AppAction.MusicClicked) },
+                        { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
+                    )
                 }
             },
         )
+    }
+}
+
+/**
+ * A helper method to "race" coroutines.
+ *
+ * Each of the racing coroutines is started immediately.
+ *
+ * The result of whichever coroutines finishes first (in other words, whichever one wins the race) will be returned,
+ * and all other racers will be cancelled.
+ */
+private suspend fun <T> raceOf(vararg racers: suspend CoroutineScope.() -> T): T {
+    require(racers.isNotEmpty()) { "Nothing to race!" }
+    return coroutineScope {
+        select {
+            val deferredRacers = racers.map { racer ->
+                async(start = CoroutineStart.UNDISPATCHED) { racer() }
+            }
+            deferredRacers.map { deferred ->
+                deferred.onAwait { result ->
+                    // Cancel all other racing coroutines
+                    deferredRacers.forEach { it.cancel() }
+                    result
+                }
+            }
+        }
     }
 }
 
