@@ -50,7 +50,7 @@ fun SpeakerScreen(
         modifier = Modifier.background(colorResource(id = R.color.black))
     ) {
         // Determine the control dashboard state.
-        // This converts the main app state into a
+        // This converts the main app state into a control dashboard state for rendering
         val controlDashboardState by derivedStateOf {
             when (appState) {
                 AppState.PlayingMusic -> ControlDashboardState(
