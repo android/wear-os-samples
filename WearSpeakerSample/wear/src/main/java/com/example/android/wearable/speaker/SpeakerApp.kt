@@ -20,6 +20,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
@@ -35,11 +36,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.material.MaterialTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 /**
@@ -88,10 +93,9 @@ fun SpeakerApp() {
         requestPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) {
             // We ignore the direct result here, since we're going to check anyway.
             scope.launch {
-                raceOf(
-                    { stateHolder.onAction(AppAction.PermissionResultReturned) },
-                    { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
-                )
+                lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
+                    stateHolder.onAction(AppAction.PermissionResultReturned)
+                }
             }
         }
 
@@ -108,30 +112,53 @@ fun SpeakerApp() {
             recordingProgress = stateHolder.recordingProgress,
             onMicClicked = {
                 scope.launch {
-                    raceOf(
-                        { stateHolder.onAction(AppAction.MicClicked) },
-                        { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
-                    )
+                    lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
+                        stateHolder.onAction(AppAction.MicClicked)
+                    }
                 }
             },
             onPlayClicked = {
                 scope.launch {
-                    raceOf(
-                        { stateHolder.onAction(AppAction.PlayClicked) },
-                        { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
-                    )
+                    lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
+                        stateHolder.onAction(AppAction.PlayClicked)
+                    }
                 }
             },
             onMusicClicked = {
                 scope.launch {
-                    raceOf(
-                        { stateHolder.onAction(AppAction.MusicClicked) },
-                        { lifecycleOwner.lifecycle.awaitEvent(Lifecycle.Event.ON_STOP) }
-                    )
+                    lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
+                        stateHolder.onAction(AppAction.MusicClicked)
+                    }
                 }
             },
         )
     }
+}
+
+/**
+ * A helper method to run the given [block] when the state is at least [state].
+ *
+ * This will wait until the given [state] is achieved, and then will run the block.
+ * If the state drops back down while the [block] is running, the [block] will be cancelled.
+ *
+ * This method resumes successfully when the [block] finishes (either normally, or after being cancelled)
+ */
+private suspend fun Lifecycle.withStateAtLeast(state: Lifecycle.State, block: suspend () -> Unit) {
+    raceOf(
+        {
+            // Wait for the up event, followed by the down event
+            // We do these together here to ensure we don't miss any events in-between the up and the down event.
+            awaitEvents(
+                Lifecycle.Event.upTo(state),
+                Lifecycle.Event.downFrom(state)
+            )
+        },
+        {
+            // Wait for the up event in parallel with the other racer
+            awaitEvents(Lifecycle.Event.upTo(state))
+            block()
+        }
+    )
 }
 
 /**
@@ -161,19 +188,23 @@ private suspend fun <T> raceOf(vararg racers: suspend CoroutineScope.() -> T): T
 }
 
 /**
- * A helper method that waits for given lifecycle [event].
+ * A helper method that waits for the given lifecycle [events] in order.
  *
- * Note that this method may return immediately for lifecycle up events, if transitioning to the current state requires
- * it.
+ * Note that lifecycle up events will be triggered immediately, as the observer will be transitioned up to match the
+ * current state.
  */
-private suspend fun Lifecycle.awaitEvent(event: Lifecycle.Event?) {
+private suspend fun Lifecycle.awaitEvents(vararg events: Lifecycle.Event?) {
     var observer: LifecycleEventObserver? = null
 
     try {
         suspendCancellableCoroutine<Unit> { cont ->
+            var eventIndex = 0
             observer = LifecycleEventObserver { _, lifecycleEvent ->
-                if (lifecycleEvent == event) {
-                    cont.resume(Unit)
+                if (lifecycleEvent == events.getOrNull(eventIndex)) {
+                    eventIndex++
+                    if (eventIndex == events.size) {
+                        cont.resume(Unit)
+                    }
                 }
             }
             addObserver(observer as LifecycleEventObserver)
