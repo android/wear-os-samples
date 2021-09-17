@@ -30,13 +30,16 @@ import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.Scaffold
+import androidx.wear.compose.material.TimeText
 
 /**
  * The composable responsible for displaying the main UI.
  *
  * This composable is stateless, and simply displays the state given to it.
  */
+@OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun SpeakerScreen(
     appState: AppState,
@@ -47,7 +50,10 @@ fun SpeakerScreen(
     onMusicClicked: () -> Unit
 ) {
     Scaffold(
-        modifier = Modifier.background(colorResource(id = R.color.black))
+        modifier = Modifier.background(colorResource(id = R.color.black)),
+        timeText = {
+            TimeText()
+        }
     ) {
         // Determine the control dashboard state.
         // This converts the main app state into a control dashboard state for rendering
