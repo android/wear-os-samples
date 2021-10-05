@@ -43,6 +43,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        useIR = true
     }
     buildFeatures {
         compose true
@@ -60,6 +61,7 @@ android {
 dependencies {
     // General compose dependencies
     implementation "androidx.activity:activity-compose:1.3.1"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.0.3"
 
     // Compose for Wear OS Dependencies
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
