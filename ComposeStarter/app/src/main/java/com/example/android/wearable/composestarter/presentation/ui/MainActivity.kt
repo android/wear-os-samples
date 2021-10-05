@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composestarter.R
@@ -45,7 +44,6 @@ import com.example.android.wearable.composestarter.presentation.theme.WearAppThe
  * back action). For more information, go here:
  * https://developer.android.com/reference/kotlin/androidx/wear/compose/navigation/package-summary
  */
-@ExperimentalWearMaterialApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +54,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@ExperimentalWearMaterialApi
 @Composable
 fun WearApp(greetingName: String) {
 
@@ -86,7 +83,6 @@ fun Greeting(greetingName: String) {
     )
 }
 
-@ExperimentalWearMaterialApi
 @Preview
 @Composable
 // Note: Preview in Android Studio doesn't support the round view yet (coming soon).
