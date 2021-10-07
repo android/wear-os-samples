@@ -1,0 +1,92 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.example.android.wearable.composeadvanced.presentation.ui.watch_list
+
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.wear.compose.material.ExperimentalWearMaterialApi
+import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.ToggleChip
+import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.data.WatchRepository
+import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
+
+@Composable
+@OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
+fun WatchListScreen(
+    scalingLazyListState: ScalingLazyListState,
+    showVignette: Boolean,
+    onClickVignetteToggle: (Boolean) -> Unit,
+    onClickWatch: (Int) -> Unit,
+    watchRepository: WatchRepository,
+    viewModel: WatchListViewModel = viewModel(
+        factory = WatchListViewModelFactory(
+            watchRepository = watchRepository
+        )
+    )
+) {
+    val watches by viewModel.watches.collectAsState()
+
+    ScalingLazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                top = 12.dp,
+                bottom = 12.dp
+            ),
+        contentPadding = PaddingValues(
+            horizontal = 6.dp,
+            vertical = 20.dp
+        ),
+        verticalArrangement = Arrangement.Center,
+        state = scalingLazyListState
+    ) {
+
+        item {
+            ToggleChip(
+                checked = showVignette,
+                onCheckedChange = onClickVignetteToggle,
+                label = {
+                    Text(
+                        text = stringResource(R.string.vignette_toggle_chip_label),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                },
+                modifier = Modifier.height(32.dp)
+            )
+        }
+
+        // Displays all watches.
+        items(watches.size) { index ->
+            WatchAppChip(watch = watches[index], onClickWatch = onClickWatch)
+        }
+    }
+}
