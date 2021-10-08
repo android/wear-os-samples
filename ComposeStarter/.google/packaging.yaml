@@ -25,18 +25,18 @@ solutions:    [Mobile]
 github:       android/wear-os-samples
 level:        INTERMEDIATE
 apiRefs:
-  - android: androidx.activity.compose.setContent
-  - android: androidx.compose.foundation.background
-  - android: androidx.compose.foundation.layout.Arrangement
-  - android: androidx.compose.foundation.layout.Column
-  - android: androidx.compose.foundation.layout.fillMaxSize
-  - android: androidx.compose.foundation.layout.fillMaxWidth
-  - android: androidx.compose.runtime.Composable
-  - android: androidx.compose.ui.Modifier
-  - android: androidx.compose.ui.res.stringResource
-  - android: androidx.compose.ui.text.style.TextAlign
-  - android: androidx.compose.ui.tooling.preview.Preview
-  - android: androidx.wear.compose.material.ExperimentalWearMaterialApi
-  - android: androidx.wear.compose.material.MaterialTheme
-  - android: androidx.wear.compose.material.Text
+  - android:androidx.activity.compose.setContent
+  - android:androidx.compose.foundation.background
+  - android:androidx.compose.foundation.layout.Arrangement
+  - android:androidx.compose.foundation.layout.Column
+  - android:androidx.compose.foundation.layout.fillMaxSize
+  - android:androidx.compose.foundation.layout.fillMaxWidth
+  - android:androidx.compose.runtime.Composable
+  - android:androidx.compose.ui.Modifier
+  - android:androidx.compose.ui.res.stringResource
+  - android:androidx.compose.ui.text.style.TextAlign
+  - android:androidx.compose.ui.tooling.preview.Preview
+  - android:androidx.wear.compose.material.ExperimentalWearMaterialApi
+  - android:androidx.wear.compose.material.MaterialTheme
+  - android:androidx.wear.compose.material.Text
 license: apache2
