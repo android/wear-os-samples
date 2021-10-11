@@ -15,13 +15,14 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.components
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.foundation.BasicCurvedText
+import androidx.wear.compose.material.CurvedText
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
@@ -46,7 +47,7 @@ fun CustomTimeText(
         TimeText(
             leadingCurvedContent = if (showLeadingText) {
                 {
-                    BasicCurvedText(
+                    CurvedText(
                         text = leadingText,
                         style = TimeTextDefaults.timeCurvedTextStyle()
                     )
@@ -64,7 +65,14 @@ fun CustomTimeText(
     }
 }
 
-@Preview
+@Preview(
+    widthDp = 300,
+    heightDp = 300,
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    backgroundColor = 0x000000,
+    showBackground = true
+)
 @Composable
 fun PreviewCustomTimeText() {
     CustomTimeText(

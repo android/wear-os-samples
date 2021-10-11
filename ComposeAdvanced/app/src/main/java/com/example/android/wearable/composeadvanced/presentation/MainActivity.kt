@@ -87,7 +87,6 @@ class MainActivity : ComponentActivity() {
                     vignette = {
                         CustomVignette(
                             visible = vignetteVisible,
-                            scrolling = scalingLazyListState.isScrollInProgress,
                             vignettePosition = VignettePosition.TopAndBottom
                         )
                     },

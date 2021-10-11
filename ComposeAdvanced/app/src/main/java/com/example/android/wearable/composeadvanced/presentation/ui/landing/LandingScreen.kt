@@ -35,10 +35,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.AnchorType
-import androidx.wear.compose.foundation.BasicCurvedText
 import androidx.wear.compose.foundation.CurvedRow
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.material.CompactChip
+import androidx.wear.compose.material.CurvedText
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
@@ -98,7 +98,7 @@ fun LandingPage(
                 anchorType = AnchorType.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                BasicCurvedText(
+                CurvedText(
                     text = stringResource(R.string.watch_shape),
                     clockwise = false,
                     style = CurvedTextStyle(

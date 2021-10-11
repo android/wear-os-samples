@@ -15,11 +15,10 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
+import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
 
@@ -30,16 +29,25 @@ import androidx.wear.compose.material.VignettePosition
 @OptIn(ExperimentalAnimationApi::class)
 fun CustomVignette(
     visible: Boolean,
-    scrolling: Boolean,
     vignettePosition: VignettePosition
 ) {
     if (visible) {
-        AnimatedVisibility(
-            visible = !scrolling,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            Vignette(vignettePosition = vignettePosition)
-        }
+        Vignette(vignettePosition = vignettePosition)
     }
+}
+
+@Preview(
+    widthDp = 300,
+    heightDp = 300,
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    backgroundColor = 0x000000,
+    showBackground = true
+)
+@Composable
+fun PreviewCustomVignette() {
+    CustomVignette(
+        visible = true,
+        vignettePosition = VignettePosition.TopAndBottom
+    )
 }

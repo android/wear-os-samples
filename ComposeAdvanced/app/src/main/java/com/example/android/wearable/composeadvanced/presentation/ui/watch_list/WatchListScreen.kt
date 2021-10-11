@@ -86,7 +86,14 @@ fun WatchListScreen(
 
         // Displays all watches.
         items(watches.size) { index ->
-            WatchAppChip(watch = watches[index], onClickWatch = onClickWatch)
+            val watch = watches[index]
+
+            WatchAppChip(
+                watchModelNumber = watch.modelId,
+                watchName = watch.name,
+                watchIcon = watch.icon,
+                onClickWatch = onClickWatch
+            )
         }
     }
 }
