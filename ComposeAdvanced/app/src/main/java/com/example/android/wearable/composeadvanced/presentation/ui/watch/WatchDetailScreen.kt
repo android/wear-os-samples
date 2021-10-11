@@ -68,39 +68,50 @@ fun WatchDetailScreen(
             ),
         verticalArrangement = Arrangement.Top
     ) {
-        watch?.let { watchNotNull ->
-            Icon(
-                painter = painterResource(id = watchNotNull.icon),
-                tint = MaterialTheme.colors.primary,
-                contentDescription = stringResource(R.string.watch_icon_content_description),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .size(24.dp)
-                    .wrapContentSize(align = Alignment.Center),
-            )
-
-            Spacer(modifier = Modifier.size(4.dp))
-
+        if (watch == null) {
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
-                color = MaterialTheme.colors.primary,
-                textAlign = TextAlign.Center,
-                fontSize = 22.sp,
-                text = watchNotNull.name
-            )
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .align(Alignment.CenterHorizontally),
                 color = Color.White,
                 textAlign = TextAlign.Center,
-                text = watchNotNull.description
+                text = stringResource(R.string.invalid_watch_label)
             )
+        } else {
+            watch?.let { watchNotNull ->
+                Icon(
+                    painter = painterResource(id = watchNotNull.icon),
+                    tint = MaterialTheme.colors.primary,
+                    contentDescription = stringResource(R.string.watch_icon_content_description),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(24.dp)
+                        .wrapContentSize(align = Alignment.Center),
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
+                    color = MaterialTheme.colors.primary,
+                    textAlign = TextAlign.Center,
+                    fontSize = 22.sp,
+                    text = watchNotNull.name
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    text = watchNotNull.description
+                )
+            }
         }
     }
 }

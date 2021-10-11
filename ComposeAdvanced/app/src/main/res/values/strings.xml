@@ -23,4 +23,5 @@
     <string name="watch_icon_content_description">watch icon</string>
     <string name="loading_only_text">Loading...</string>
     <string name="vignette_toggle_chip_label">Show Vignette</string>
+    <string name="invalid_watch_label">Invalid Watch</string>
 </resources>

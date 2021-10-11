@@ -27,13 +27,9 @@ class WatchDetailViewModel(
     watchRepository: WatchRepository
 ) : ViewModel() {
 
-    private val _watch = MutableStateFlow<WatchModel?>(null)
+    private val _watch = MutableStateFlow<WatchModel?>(watchRepository.getWatch(watchId))
     val watch: StateFlow<WatchModel?>
         get() = _watch
-
-    init {
-        _watch.value = watchRepository.getWatch(watchId)
-    }
 }
 
 class WatchDetailViewModelFactory(

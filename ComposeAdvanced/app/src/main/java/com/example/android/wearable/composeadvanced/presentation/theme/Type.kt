@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Typography
 
 // Set of Material typography styles to start with
-val Typography = Typography(
+val WearTypography = Typography(
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,

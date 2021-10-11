@@ -25,9 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.ScalingLazyColumn
@@ -71,16 +73,30 @@ fun WatchListScreen(
 
         item {
             ToggleChip(
+                modifier = Modifier
+                    .height(32.dp)
+                    .padding(
+                        start = if (LocalConfiguration.current.isScreenRound) {
+                            20.dp
+                        } else {
+                            10.dp
+                        },
+                        end = if (LocalConfiguration.current.isScreenRound) {
+                            20.dp
+                        } else {
+                            10.dp
+                        },
+                    ),
                 checked = showVignette,
                 onCheckedChange = onClickVignetteToggle,
                 label = {
                     Text(
                         text = stringResource(R.string.vignette_toggle_chip_label),
                         textAlign = TextAlign.Center,
+                        fontSize = 13.sp,
                         modifier = Modifier.fillMaxSize()
                     )
-                },
-                modifier = Modifier.height(32.dp)
+                }
             )
         }
 
