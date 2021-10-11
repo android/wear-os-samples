@@ -23,7 +23,7 @@ class WatchLocalDataSource {
         WatchModel(
             modelId = 100001,
             name = "Power Watch 1",
-            description = "The Power Watch 1 was fictional watch that was  released in lorem ipsum dolor sit amet."
+            description = "The Power Watch 1 was fictional watch that was released in lorem ipsum dolor sit amet."
         ),
         WatchModel(
             modelId = 100002,

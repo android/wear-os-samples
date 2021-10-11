@@ -63,14 +63,11 @@ dependencies {
     def activity_compose_version = "1.3.1"
     implementation "androidx.activity:activity-compose:$activity_compose_version"
 
-    def ui_tooling_preview_version = "1.0.3"
+    def ui_tooling_preview_version = "1.1.0-alpha05"
     implementation "androidx.compose.ui:ui-tooling-preview:$ui_tooling_preview_version"
 
-    def foundation_version = "1.0.3"
+    def foundation_version = "1.1.0-alpha05"
     implementation "androidx.compose.foundation:foundation:$foundation_version"
-
-    def constraint_compose = "1.0.0-rc01"
-    implementation "androidx.constraintlayout:constraintlayout-compose:$constraint_compose"
 
     def lifecycle_version = "2.4.0-rc01"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"

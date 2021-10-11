@@ -112,7 +112,6 @@ class MainActivity : ComponentActivity() {
                         // Main Window
                         composable(Screen.Landing.route) {
                             LandingPage(
-                                roundScreen = resources.configuration.isScreenRound,
                                 onClickWatchList = {
                                     swipeDismissableNavController.navigate(Screen.WatchList.route)
                                 },

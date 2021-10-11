@@ -1,5 +1,5 @@
 Compose for Wear OS Advanced Sample
-==================================
+===================================
 Demonstrates Compose with the Wear optimized Scaffold, Navigation, curved text, and more!
 
 Introduction
@@ -33,10 +33,20 @@ use the "gradlew build" command or use "Import Project" in Android Studio.
 Support
 -------
 
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
+**Have a feature request for Compose for Wear OS?**
+  - [Submit](https://issuetracker.google.com/issues/new?component=1077552&template=1598429&pli=1)
+    it to our team.
+
+**Want to discuss Compose for Wear OS with us?**
+  - [Join the Slack](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) #compose-wear channel
+    and let us know what you think of Compose for Wear OS.
+
+**General questions**
+  - https://stackoverflow.com/questions/tagged/wear-os
+  - http://stackoverflow.com/questions/tagged/android
 
 If you've found an error in this sample, please file an issue:
-https://github.com/android/wear-os-samples
+https://github.com/android/wear-os-samples/issues/new
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.

@@ -18,6 +18,7 @@ package com.example.android.wearable.composeadvanced.presentation.ui.landing
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,13 +26,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.wear.compose.foundation.AnchorType
 import androidx.wear.compose.foundation.BasicCurvedText
 import androidx.wear.compose.foundation.CurvedRow
@@ -45,10 +47,13 @@ import com.example.android.wearable.composeadvanced.R
 /*
  * Simple landing page with two actions, view a list of watches or toggle on/off text before the
  * time.
+ *
+ * A text label indicates the screen shape and places it at the bottom of the screen.
+ * If it's a round device, it will curve the text along the bottom curve. Otherwise, for a square
+ * device, it's a regular Text composable.
  */
 @Composable
 fun LandingPage(
-    roundScreen: Boolean,
     onClickWatchList: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
@@ -86,11 +91,11 @@ fun LandingPage(
 
         // Places curved text at the bottom of round devices and straight text at the bottom of
         // non-round devices.
-        if (roundScreen) {
+        if (LocalConfiguration.current.isScreenRound) {
             CurvedRow(
+                // 90 degrees is bottom (6 o'clock).
                 anchor = 90F,
                 anchorType = AnchorType.Center,
-                clockwise = false,
                 modifier = Modifier.fillMaxSize()
             ) {
                 BasicCurvedText(
@@ -103,18 +108,14 @@ fun LandingPage(
                 )
             }
         } else {
-            ConstraintLayout(
-                modifier = Modifier.fillMaxSize()
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Bottom
             ) {
-                val squareTextRef = createRef()
-                val bottomGuide = createGuidelineFromBottom(0.05f)
-
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .constrainAs(squareTextRef) {
-                            bottom.linkTo(bottomGuide)
-                        },
+                        .padding(bottom = 2.dp),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.primary,
                     text = stringResource(R.string.watch_shape),

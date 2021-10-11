@@ -12,7 +12,7 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">ComposeAdvanced</string>
+    <string name="app_name">Compose Advanced</string>
     <!--
     This string is used for square devices and overridden by watch_shape in
     values-round/strings.xml for round devices.
