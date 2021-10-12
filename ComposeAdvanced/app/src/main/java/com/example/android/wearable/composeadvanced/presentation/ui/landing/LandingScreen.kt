@@ -70,7 +70,13 @@ fun LandingScreen(
         ) {
             CompactChip(
                 onClick = onClickWatchList,
-                label = { Text(stringResource(R.string.list_of_watches_button_label)) }
+                label = {
+                    Text(
+                        stringResource(R.string.list_of_watches_button_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.size(4.dp))
