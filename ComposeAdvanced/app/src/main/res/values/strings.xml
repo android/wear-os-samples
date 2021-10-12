@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2021 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">Compose Advanced</string>
+    <!--
+    This string is used for square devices and overridden by watch_shape in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="watch_shape">Square Watch</string>
+    <string name="list_of_watches_button_label">List of Watches</string>
+    <string name="proceeding_text_toggle_chip_label">Add to Time</string>
+    <string name="watch_icon_content_description">watch icon</string>
+    <string name="loading_only_text">Loading...</string>
+    <string name="vignette_toggle_chip_label">Vignette</string>
+    <string name="invalid_watch_label">Invalid Watch</string>
+    <string name="leading_time_text">Leading Text...</string>
+</resources>

@@ -13,6 +13,8 @@ Samples
 
 * **[ComposeStarter](ComposeStarter)** (Compose/Kotlin) - Demonstrates simple Compose for Wear OS app devs can use as a starting point for their own Compose app.
 
+* **[ComposeAdvanced](ComposeAdvanced)** (Compose/Kotlin) - Demonstrates an advanced Compose for Wear OS app devs can use to learn about the Wear Scaffold, Navigation, ScalingLazyColumn, CurvedText, and more.
+
 * **[DataLayer](DataLayer)** (Java) - Demonstrates communicating via the data layer between the watch and the phone. [Guide](https://developer.android.com/training/wearables/data-layer)
 
 * **[RuntimePermissionsWear](RuntimePermissionsWear)** (Java) - Demonstrates requesting permissions not only on a Wear OS device and a mobile device, but also across devices, e.g., request permissions on a mobile device from your wear device and the other way around. Note: It does require you having both the Wear and Mobile version of the app installed on both devices. [Guide](https://developer.android.com/training/articles/wear-permissions)
