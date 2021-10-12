@@ -53,7 +53,7 @@ import com.example.android.wearable.composeadvanced.R
  * device, it's a regular Text composable.
  */
 @Composable
-fun LandingPage(
+fun LandingScreen(
     onClickWatchList: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,

@@ -46,7 +46,7 @@ import com.example.android.wearable.composeadvanced.presentation.components.Cust
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
 import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTheme
-import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingPage
+import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch_list.WatchListScreen
 
@@ -124,7 +124,7 @@ fun WearApp(watchRepository: WatchRepository) {
 
                 // Main Window
                 composable(Screen.Landing.route) {
-                    LandingPage(
+                    LandingScreen(
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
