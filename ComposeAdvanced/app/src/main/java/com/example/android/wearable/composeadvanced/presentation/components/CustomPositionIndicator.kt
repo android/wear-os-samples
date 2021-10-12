@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.ScalingLazyListState
 
-/*
+/**
  * Simple PositionIndicator (also known as scroll indicator) that only appears when the user is
  * scrolling the list.
  */

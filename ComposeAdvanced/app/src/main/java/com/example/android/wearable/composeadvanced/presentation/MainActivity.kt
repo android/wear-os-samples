@@ -36,6 +36,7 @@ import androidx.wear.compose.material.rememberScalingLazyListState
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.components.CustomPositionIndicator
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
 import com.example.android.wearable.composeadvanced.presentation.components.CustomVignette
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
                         CustomTimeText(
                             visible = !scalingLazyListState.isScrollInProgress,
                             showLeadingText = showProceedingTextBeforeTime,
-                            leadingText = "Loading..."
+                            leadingText = getString(R.string.leading_time_text)
                         )
                     },
                     vignette = {

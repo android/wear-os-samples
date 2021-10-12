@@ -18,7 +18,9 @@ package com.example.android.wearable.composeadvanced.presentation.navigation
 // Used as a Navigation Argument for the WatchDetail Screen.
 const val WATCH_ID_NAV_ARGUMENT = "watchId"
 
-// Represent all Screens (Composables) in the app.
+/**
+ * Represent all Screens (Composables) in the app.
+ */
 sealed class Screen(
     val route: String
 ) {

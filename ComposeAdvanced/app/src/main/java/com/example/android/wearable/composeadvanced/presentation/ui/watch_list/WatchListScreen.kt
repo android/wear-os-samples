@@ -40,6 +40,10 @@ import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
 
+/**
+ * Displays a list of watches plus a [ToggleChip] at the top to display/hide the Vignette around
+ * the screen. The list is powered using a [ScalingLazyColumn].
+ */
 @Composable
 @OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
 fun WatchListScreen(

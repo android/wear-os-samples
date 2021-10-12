@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
 
-/*
+/**
  * Custom Vignette that hides during scrolling and can be hidden if the use chooses.
  */
 @Composable

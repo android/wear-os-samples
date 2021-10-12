@@ -22,6 +22,9 @@ import com.example.android.wearable.composeadvanced.data.WatchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * ViewModel for the Watch Detail Screen (only needs watch id).
+ */
 class WatchDetailViewModel(
     watchId: Int,
     watchRepository: WatchRepository

@@ -34,7 +34,7 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 
-/*
+/**
  * Simple Chip for displaying the Watch models.
  */
 @Composable

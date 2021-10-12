@@ -44,7 +44,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import com.example.android.wearable.composeadvanced.R
 
-/*
+/**
  * Simple landing page with two actions, view a list of watches or toggle on/off text before the
  * time.
  *

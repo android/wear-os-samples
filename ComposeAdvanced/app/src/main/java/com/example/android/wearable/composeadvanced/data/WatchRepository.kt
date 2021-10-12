@@ -15,7 +15,9 @@
  */
 package com.example.android.wearable.composeadvanced.data
 
-// Simple Watch repository for fake watch models.
+/**
+ * Simple Watch repository for fake watch models.
+ */
 class WatchRepository(
     private val watchLocalDataSource: WatchLocalDataSource
 ) {

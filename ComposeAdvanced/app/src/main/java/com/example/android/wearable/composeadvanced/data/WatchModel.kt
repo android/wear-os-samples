@@ -15,11 +15,11 @@
  */
 package com.example.android.wearable.composeadvanced.data
 
-import androidx.compose.runtime.Immutable
 import com.example.android.wearable.composeadvanced.R
 
-// Simple Model representing fake watch models.
-@Immutable
+/**
+ * Simple Model representing fake watch models.
+ */
 data class WatchModel(
     val modelId: Int,
     val name: String,

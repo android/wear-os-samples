@@ -42,7 +42,7 @@ import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 
-/*
+/**
  * Displays the icon, title, and description of the watch model.
  */
 @Composable
