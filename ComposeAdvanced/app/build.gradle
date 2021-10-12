@@ -48,7 +48,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.2'
+        kotlinCompilerExtensionVersion '1.1.0-alpha05'
     }
     packagingOptions {
         resources {
