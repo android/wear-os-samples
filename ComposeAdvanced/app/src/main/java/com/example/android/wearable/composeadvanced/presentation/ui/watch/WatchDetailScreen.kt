@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +55,7 @@ fun WatchDetailScreen(
         )
     ),
 ) {
-    val watch: WatchModel? by viewModel.watch.collectAsState()
+    val watch: WatchModel? by viewModel.watch
 
     Column(
         modifier = Modifier

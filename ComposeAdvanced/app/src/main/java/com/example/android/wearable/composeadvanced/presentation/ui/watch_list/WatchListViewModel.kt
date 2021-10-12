@@ -15,25 +15,22 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.watch_list
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 /**
  * ViewModel for the Watch List Screen.
  */
 class WatchListViewModel(watchRepository: WatchRepository) : ViewModel() {
 
-    private val _watches = MutableStateFlow<List<WatchModel>>(emptyList())
-    val watches: StateFlow<List<WatchModel>>
+    private val _watches: MutableState<List<WatchModel>> = mutableStateOf(watchRepository.watches)
+    val watches: State<List<WatchModel>>
         get() = _watches
-
-    init {
-        _watches.value = watchRepository.watches
-    }
 }
 
 class WatchListViewModelFactory(
