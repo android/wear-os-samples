@@ -20,11 +20,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
@@ -37,6 +39,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.data.WatchRepository
 import com.example.android.wearable.composeadvanced.presentation.components.CustomPositionIndicator
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
 import com.example.android.wearable.composeadvanced.presentation.components.CustomVignette
@@ -54,106 +57,114 @@ import com.example.android.wearable.composeadvanced.presentation.ui.watch_list.W
  * Displays different text at the bottom of the landing screen depending on shape of the device
  * (round vs. square/rectangular).
  */
-@OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Used to power various ViewModels for different screens.
+        val watchRepository = (application as BaseApplication).watchRepository
+
         setContent {
-            WearAppTheme {
-                // Used to power various ViewModels for different screens.
-                val watchRepository = (application as BaseApplication).watchRepository
+            WearApp(watchRepository = watchRepository)
+        }
+    }
+}
 
-                // The state for the ScalingLazyColumn in other screens is hoisted to this level, so
-                // the Scaffold can properly place the position indicator (also known as the
-                // scroll indicator). We use it for various other things (like hiding the time and
-                // vignette when the user is scrolling).
-                val scalingLazyListState: ScalingLazyListState = rememberScalingLazyListState()
+@OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
+@Composable
+fun WearApp(watchRepository: WatchRepository) {
+    WearAppTheme {
+        // The state for the ScalingLazyColumn in other screen is hoisted to this level, so
+        // the Scaffold can properly place the position indicator (also known as the
+        // scroll indicator). We use it for various other things (like hiding the time when
+        // the user is scrolling).
+        //
+        // This current solution works for one scrolling type Composable, that is, we only
+        // have one Composable capable of scrolling.
+        val scalingLazyListState: ScalingLazyListState = rememberScalingLazyListState()
 
-                val swipeDismissableNavController = rememberSwipeDismissableNavController()
+        val swipeDismissableNavController = rememberSwipeDismissableNavController()
 
-                // Allows user to disable the text before the time and hide the vignette.
-                var showProceedingTextBeforeTime by rememberSaveable { mutableStateOf(false) }
-                var vignetteVisible by rememberSaveable { mutableStateOf(true) }
+        // Allows user to disable the text before the time and hide the vignette.
+        var showProceedingTextBeforeTime by rememberSaveable { mutableStateOf(false) }
+        var vignetteVisible by rememberSaveable { mutableStateOf(true) }
 
-                Scaffold(
-                    // Scaffold places time at top of screen to follow Material Design guidelines.
-                    timeText = {
-                        CustomTimeText(
-                            visible = !scalingLazyListState.isScrollInProgress,
-                            showLeadingText = showProceedingTextBeforeTime,
-                            leadingText = getString(R.string.leading_time_text)
-                        )
-                    },
-                    vignette = {
-                        CustomVignette(
-                            visible = vignetteVisible,
-                            vignettePosition = VignettePosition.TopAndBottom
-                        )
-                    },
-                    positionIndicator = {
-                        CustomPositionIndicator(
-                            visible = scalingLazyListState.isScrollInProgress,
-                            scalingLazyListState = scalingLazyListState
-                        )
-                    }
-                ) {
+        Scaffold(
+            // Scaffold places time at top of screen to follow Material Design guidelines.
+            timeText = {
+                CustomTimeText(
+                    visible = !scalingLazyListState.isScrollInProgress,
+                    showLeadingText = showProceedingTextBeforeTime,
+                    leadingText = stringResource(R.string.leading_time_text)
+                )
+            },
+            vignette = {
+                CustomVignette(
+                    visible = vignetteVisible,
+                    vignettePosition = VignettePosition.TopAndBottom
+                )
+            },
+            positionIndicator = {
+                CustomPositionIndicator(
+                    visible = scalingLazyListState.isScrollInProgress,
+                    scalingLazyListState = scalingLazyListState
+                )
+            }
+        ) {
 
-                    /*
-                     * Wear OS's version of NavHost supports swipe-to-dismiss (similar to back
-                     * gesture on mobile). Otherwise, the code looks very similar.
-                     */
-                    SwipeDismissableNavHost(
-                        navController = swipeDismissableNavController,
-                        startDestination = Screen.Landing.route,
-                        modifier = Modifier.background(MaterialTheme.colors.background)
-                    ) {
+            /*
+             * Wear OS's version of NavHost supports swipe-to-dismiss (similar to back
+             * gesture on mobile). Otherwise, the code looks very similar.
+             */
+            SwipeDismissableNavHost(
+                navController = swipeDismissableNavController,
+                startDestination = Screen.Landing.route,
+                modifier = Modifier.background(MaterialTheme.colors.background)
+            ) {
 
-                        // Main Window
-                        composable(Screen.Landing.route) {
-                            LandingPage(
-                                onClickWatchList = {
-                                    swipeDismissableNavController.navigate(Screen.WatchList.route)
-                                },
-                                proceedingTimeTextEnabled = showProceedingTextBeforeTime,
-                                onClickProceedingTimeText = {
-                                    showProceedingTextBeforeTime = !showProceedingTextBeforeTime
-                                }
+                // Main Window
+                composable(Screen.Landing.route) {
+                    LandingPage(
+                        onClickWatchList = {
+                            swipeDismissableNavController.navigate(Screen.WatchList.route)
+                        },
+                        proceedingTimeTextEnabled = showProceedingTextBeforeTime,
+                        onClickProceedingTimeText = {
+                            showProceedingTextBeforeTime = !showProceedingTextBeforeTime
+                        }
+                    )
+                }
+
+                composable(Screen.WatchList.route) {
+                    WatchListScreen(
+                        scalingLazyListState = scalingLazyListState,
+                        watchRepository = watchRepository,
+                        showVignette = vignetteVisible,
+                        onClickVignetteToggle = { showVignette ->
+                            vignetteVisible = showVignette
+                        },
+                        onClickWatch = { id ->
+                            swipeDismissableNavController.navigate(
+                                route = Screen.WatchDetail.route + "/" + id,
                             )
                         }
+                    )
+                }
 
-                        composable(Screen.WatchList.route) {
-                            WatchListScreen(
-                                scalingLazyListState = scalingLazyListState,
-                                watchRepository = watchRepository,
-                                showVignette = vignetteVisible,
-                                onClickVignetteToggle = { showVignette ->
-                                    vignetteVisible = showVignette
-                                },
-                                onClickWatch = { id ->
-                                    swipeDismissableNavController.navigate(
-                                        route = Screen.WatchDetail.route + "/" + id,
-                                    )
-                                }
-                            )
+                composable(
+                    route = Screen.WatchDetail.route + "/{$WATCH_ID_NAV_ARGUMENT}",
+                    arguments = listOf(
+                        navArgument(WATCH_ID_NAV_ARGUMENT) {
+                            type = NavType.IntType
                         }
-
-                        composable(
-                            route = Screen.WatchDetail.route + "/{$WATCH_ID_NAV_ARGUMENT}",
-                            arguments = listOf(
-                                navArgument(WATCH_ID_NAV_ARGUMENT) {
-                                    type = NavType.IntType
-                                }
-                            )
-                        ) { navBackStackEntry ->
-                            val watchId =
-                                navBackStackEntry.arguments?.getInt(WATCH_ID_NAV_ARGUMENT) ?: -1
-                            WatchDetailScreen(
-                                id = watchId,
-                                watchRepository = watchRepository
-                            )
-                        }
-                    }
+                    )
+                ) { navBackStackEntry ->
+                    val watchId =
+                        navBackStackEntry.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
+                    WatchDetailScreen(
+                        id = watchId,
+                        watchRepository = watchRepository
+                    )
                 }
             }
         }
