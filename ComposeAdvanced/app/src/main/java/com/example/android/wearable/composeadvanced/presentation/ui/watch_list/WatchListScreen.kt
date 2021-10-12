@@ -61,15 +61,12 @@ fun WatchListScreen(
     val watches: List<WatchModel> by viewModel.watches
 
     ScalingLazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                top = 12.dp,
-                bottom = 12.dp
-            ),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
-            horizontal = 6.dp,
-            vertical = 20.dp
+            top = 28.dp,
+            start = 10.dp,
+            end = 10.dp,
+            bottom = 40.dp
         ),
         verticalArrangement = Arrangement.Center,
         state = scalingLazyListState
@@ -97,7 +94,7 @@ fun WatchListScreen(
                     Text(
                         text = stringResource(R.string.vignette_toggle_chip_label),
                         textAlign = TextAlign.Center,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
