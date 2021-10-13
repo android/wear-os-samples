@@ -49,7 +49,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "$compose_alpha_version"
+        kotlinCompilerExtensionVersion "$compose_version"
     }
     packagingOptions {
         resources {
@@ -61,7 +61,7 @@ android {
 dependencies {
     // General compose dependencies
     implementation "androidx.activity:activity-compose:$activity_compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_alpha_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
 
     // Compose for Wear OS Dependencies
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
