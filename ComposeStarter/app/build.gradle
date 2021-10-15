@@ -83,7 +83,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    // Doesn't match compose_version temporarily until
-    // https://issuetracker.google.com/issues/203123014 is fixed.
+    // TODO: Switch to compose_version when
+    //  https://issuetracker.google.com/issues/203123014 is fixed.
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_tooling_version"
 }
