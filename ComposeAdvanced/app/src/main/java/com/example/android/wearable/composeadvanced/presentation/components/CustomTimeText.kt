@@ -76,7 +76,7 @@ fun CustomTimeText(
 @Composable
 fun PreviewCustomTimeText() {
     CustomTimeText(
-        visible = false,
+        visible = true,
         showLeadingText = true,
         leadingText = "Testing Leading Text..."
     )
