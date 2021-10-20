@@ -49,7 +49,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.2'
+        kotlinCompilerExtensionVersion '1.0.4'
     }
 }
 
@@ -59,16 +59,16 @@ dependencies {
     // TODO: Remove direct dependency on androidx.compose.material:material, and only depend on
     //       androidx.wear.compose:compose-material
     //       This is only used for LinearProgressIndicator
-    implementation 'androidx.compose.material:material:1.0.2'
-    implementation 'androidx.compose.material:material-ripple:1.0.2'
-    implementation 'androidx.compose.material:material-icons-extended:1.0.2'
-    implementation 'androidx.compose.ui:ui:1.0.2'
-    implementation 'androidx.compose.ui:ui-tooling:1.0.2'
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+    implementation 'androidx.compose.material:material:1.0.4'
+    implementation 'androidx.compose.material:material-ripple:1.0.4'
+    implementation 'androidx.compose.material:material-icons-extended:1.0.4'
+    implementation 'androidx.compose.ui:ui:1.0.4'
+    implementation 'androidx.compose.ui:ui-tooling:1.0.4'
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     implementation "androidx.media:media:1.4.3"
-    implementation "androidx.wear.compose:compose-foundation:1.0.0-alpha06"
-    implementation "androidx.wear.compose:compose-material:1.0.0-alpha06"
+    implementation "androidx.wear.compose:compose-foundation:1.0.0-alpha08"
+    implementation "androidx.wear.compose:compose-material:1.0.0-alpha08"
     implementation "androidx.wear:wear:1.2.0"
 }
