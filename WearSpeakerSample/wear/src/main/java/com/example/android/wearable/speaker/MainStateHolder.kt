@@ -37,6 +37,9 @@ import kotlin.coroutines.resume
 
 /**
  * A state holder driving the logic of the app.
+ *
+ * This state holder is scoped to the composition (and therefore can be provided an [Activity]) to handle
+ * permission-related logic.
  */
 class MainStateHolder(
     private val activity: Activity,
