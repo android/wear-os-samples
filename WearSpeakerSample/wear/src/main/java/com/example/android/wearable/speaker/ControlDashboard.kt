@@ -168,6 +168,7 @@ private fun ControlDashboardButton(
 ) {
     val iconPadding = dimensionResource(id = R.dimen.icon_padding)
     // TODO: Replace with a version of IconButton?
+    //       https://issuetracker.google.com/issues/203123015
 
     Button(
         modifier = Modifier
