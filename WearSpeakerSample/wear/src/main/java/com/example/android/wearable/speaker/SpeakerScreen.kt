@@ -116,8 +116,6 @@ fun SpeakerScreen(
             if (isProgressVisible) {
                 LinearProgressIndicator(
                     progress = recordingProgress,
-                    color = colorResource(id = R.color.progressbar_tint),
-                    backgroundColor = colorResource(id = R.color.progressbar_background_tint),
                     modifier = Modifier
                         .constrainAs(progressBar) {
                             width = Dimension.fillToConstraints
