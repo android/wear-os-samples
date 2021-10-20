@@ -17,7 +17,6 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "kotlin-parcelize"
 }
 
 android {
@@ -61,6 +60,5 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     implementation "androidx.media:media:1.4.3"
-    implementation "androidx.wear.compose:compose-foundation:1.0.0-alpha08"
     implementation "androidx.wear.compose:compose-material:1.0.0-alpha08"
 }
