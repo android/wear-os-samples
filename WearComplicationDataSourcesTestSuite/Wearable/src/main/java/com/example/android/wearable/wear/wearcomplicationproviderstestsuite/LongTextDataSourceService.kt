@@ -19,16 +19,16 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
-import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationType
-import androidx.wear.complications.data.LongTextComplicationData
-import androidx.wear.complications.data.MonochromaticImage
-import androidx.wear.complications.data.PlainComplicationText
-import androidx.wear.complications.data.SmallImage
-import androidx.wear.complications.data.SmallImageType
-import androidx.wear.complications.datasource.ComplicationDataSourceService
-import androidx.wear.complications.datasource.ComplicationRequest
-import androidx.wear.complications.datasource.SuspendingComplicationDataSourceService
+import androidx.wear.watchface.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.LongTextComplicationData
+import androidx.wear.watchface.complications.data.MonochromaticImage
+import androidx.wear.watchface.complications.data.PlainComplicationText
+import androidx.wear.watchface.complications.data.SmallImage
+import androidx.wear.watchface.complications.data.SmallImageType
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
+import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 
 /**
  * A complication provider that supports only [ComplicationType.LONG_TEXT] and cycles
