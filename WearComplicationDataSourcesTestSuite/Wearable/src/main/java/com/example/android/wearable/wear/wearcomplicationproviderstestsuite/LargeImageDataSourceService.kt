@@ -19,13 +19,13 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
-import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationType
-import androidx.wear.complications.data.PhotoImageComplicationData
-import androidx.wear.complications.data.PlainComplicationText
-import androidx.wear.complications.datasource.ComplicationDataSourceService
-import androidx.wear.complications.datasource.ComplicationRequest
-import androidx.wear.complications.datasource.SuspendingComplicationDataSourceService
+import androidx.wear.watchface.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.PhotoImageComplicationData
+import androidx.wear.watchface.complications.data.PlainComplicationText
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
+import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 
 /**
  * A complication provider that supports only [ComplicationType.PHOTO_IMAGE] and cycles

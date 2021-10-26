@@ -19,15 +19,15 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
 import androidx.datastore.core.DataStore
-import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationText
-import androidx.wear.complications.data.ComplicationType
-import androidx.wear.complications.data.MonochromaticImage
-import androidx.wear.complications.data.PlainComplicationText
-import androidx.wear.complications.data.RangedValueComplicationData
-import androidx.wear.complications.datasource.ComplicationDataSourceService
-import androidx.wear.complications.datasource.ComplicationRequest
-import androidx.wear.complications.datasource.SuspendingComplicationDataSourceService
+import androidx.wear.watchface.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.ComplicationText
+import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.MonochromaticImage
+import androidx.wear.watchface.complications.data.PlainComplicationText
+import androidx.wear.watchface.complications.data.RangedValueComplicationData
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
+import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import kotlin.random.Random
 
 /**
