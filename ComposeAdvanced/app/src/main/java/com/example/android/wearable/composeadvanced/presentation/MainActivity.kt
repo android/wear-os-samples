@@ -48,7 +48,7 @@ import com.example.android.wearable.composeadvanced.presentation.navigation.WATC
 import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTheme
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.watch_list.WatchListScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 
 /**
  * Compose for Wear OS app that demonstrates how to use Wear specific Scaffold, Navigation,
