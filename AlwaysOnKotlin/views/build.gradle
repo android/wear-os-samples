@@ -56,6 +56,47 @@ android {
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
+    testOptions {
+        devices {
+            squareApi26(com.android.build.api.dsl.ManagedVirtualDevice) {
+                device = "wear_square"
+                apiLevel = 26
+                systemImageSource = "android-wear"
+                abi = "x86"
+            }
+            squareApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
+                device = "wear_square"
+                apiLevel = 28
+                systemImageSource = "android-wear"
+                abi = "x86"
+            }
+            squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+                device = "wear_square"
+                apiLevel = 30
+                systemImageSource = "android-wear"
+                abi = "x86"
+            }
+            roundApi26(com.android.build.api.dsl.ManagedVirtualDevice) {
+                device = "wear_round"
+                apiLevel = 26
+                systemImageSource = "android-wear"
+                abi = "x86"
+            }
+            roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
+                device = "wear_round"
+                apiLevel = 28
+                systemImageSource = "android-wear"
+                abi = "x86"
+            }
+            roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+                device = "wear_round"
+                apiLevel = 30
+                systemImageSource = "android-wear"
+                abi = "x86"
+            }
+        }
+    }
+
     buildFeatures {
         viewBinding true
     }

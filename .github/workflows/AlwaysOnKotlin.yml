@@ -74,8 +74,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: [ wear_round, wear_square ]
-        api-level: [ 28 ]
+        device:
+          - roundApi26
+          - roundApi28
+          - roundApi30
+          - squareApi26
+          - squareApi28
+          - squareApi30
 
     steps:
       - name: Checkout
@@ -99,16 +104,8 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          profile: ${{ matrix.profile }}
-          target: android-wear
-          force-avd-creation: false
-          avd-name: test
-          disable-animations: true
-          script: adb emu power ac off; ./gradlew connectedCheck --stacktrace
-          working-directory: ${{ env.SAMPLE_PATH }}
+        working-directory: ${{ env.SAMPLE_PATH }}
+        run: ./gradlew ${{ matrix.device }}Check --stacktrace
 
       - name: Upload views test reports
         uses: actions/upload-artifact@v3
