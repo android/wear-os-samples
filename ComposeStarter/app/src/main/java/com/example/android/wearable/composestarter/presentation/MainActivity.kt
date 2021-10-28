@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.wearable.composestarter.presentation.ui
+package com.example.android.wearable.composestarter.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

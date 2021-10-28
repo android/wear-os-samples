@@ -74,8 +74,8 @@ dependencies {
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
     implementation "androidx.wear.compose:compose-foundation:$wear_compose_version"
 
-    // If you are using Compose Navigation, use the Wear OS version (NOT THE MOBILE ONE), that is,
-    // uncomment the line below and update the version number.
+    // If you are using Compose Navigation, use the Wear OS version (NOT the
+    // androidx.navigation:navigation-compose version), that is, uncomment the line below.
     // implementation "androidx.wear.compose:compose-navigation:$wear_compose_version"
 
     // Testing
@@ -83,7 +83,5 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    // TODO: Switch to compose_version when
-    //  https://issuetracker.google.com/issues/203123014 is fixed.
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_tooling_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 }
