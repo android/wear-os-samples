@@ -15,19 +15,20 @@
  */
 package com.example.android.wearable.alpha.editor
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.wear.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.RenderParameters
-import androidx.wear.watchface.editor.ChosenComplicationDataSource
 import androidx.wear.watchface.editor.EditorSession
 import androidx.wear.watchface.style.UserStyle
+import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
+import com.example.android.wearable.alpha.R
+import com.example.android.wearable.alpha.data.watchface.DRAW_HOUR_PIPS_DEFAULT
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_DEFAULT
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MAXIMUM
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
@@ -38,11 +39,15 @@ import com.example.android.wearable.alpha.utils.RIGHT_COMPLICATION_ID
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
 /**
  * Maintains the [WatchFaceConfigActivity] state, i.e., handles reads and writes to the
@@ -63,57 +68,54 @@ import kotlinx.coroutines.launch
  */
 class WatchFaceConfigStateHolder(
     private val scope: CoroutineScope,
-    activity: ComponentActivity,
-    editIntent: Intent
+    private val activity: ComponentActivity
 ) {
     private lateinit var editorSession: EditorSession
-
-    // Preview of complication data (needed to render screenshots) and must be called in a
-    // coroutine.
-    private lateinit var previewComplicationData: Map<Int, ComplicationData>
 
     // Keys from Watch Face Data Structure
     private lateinit var colorStyleKey: UserStyleSetting.ListUserStyleSetting
     private lateinit var drawPipsKey: UserStyleSetting.BooleanUserStyleSetting
     private lateinit var minuteHandLengthKey: UserStyleSetting.DoubleRangeUserStyleSetting
 
-    private val mutableUiState: MutableStateFlow<EditWatchFaceUiState> =
-        MutableStateFlow(EditWatchFaceUiState.Loading("Initializing"))
-
-    val uiState: StateFlow<EditWatchFaceUiState> = mutableUiState.asStateFlow()
-
-    init {
-        scope.launch(Dispatchers.Main.immediate) {
+    val uiState: StateFlow<EditWatchFaceUiState> =
+        flow<EditWatchFaceUiState> {
             editorSession = EditorSession.createOnWatchEditorSession(
-                activity = activity,
-                editIntent = editIntent
+                activity = activity
             )
 
-            previewComplicationData = editorSession.getComplicationsPreviewData()
+            extractsUserStyles(editorSession.userStyleSchema)
 
-            Log.d(TAG, "previewComplicationData: $previewComplicationData")
-            Log.d(TAG, "userStyle: ${editorSession.userStyle}")
-
-            extractsUserStyles(editorSession.userStyle)
-            updatesWatchFacePreview()
+            emitAll(
+                combine(
+                    editorSession.userStyle,
+                    editorSession.complicationsPreviewData
+                ) { userStyle, complicationsPreviewData ->
+                    EditWatchFaceUiState.Success(
+                        createWatchFacePreview(userStyle, complicationsPreviewData)
+                    )
+                }
+            )
         }
-    }
+            .stateIn(
+                scope + Dispatchers.Main.immediate,
+                SharingStarted.Eagerly,
+                EditWatchFaceUiState.Loading("Initializing")
+            )
 
-    private fun extractsUserStyles(newUserStyle: UserStyle) {
+    private fun extractsUserStyles(userStyleSchema: UserStyleSchema) {
         // Loops through user styles and retrieves user editable styles.
-        for (options: Map.Entry<UserStyleSetting, UserStyleSetting.Option> in newUserStyle) {
-            when (options.key.id.toString()) {
+        for (setting in userStyleSchema.userStyleSettings) {
+            when (setting.id.toString()) {
                 COLOR_STYLE_SETTING -> {
-                    colorStyleKey = options.key as UserStyleSetting.ListUserStyleSetting
+                    colorStyleKey = setting as UserStyleSetting.ListUserStyleSetting
                 }
 
                 DRAW_HOUR_PIPS_STYLE_SETTING -> {
-                    drawPipsKey = options.key as UserStyleSetting.BooleanUserStyleSetting
+                    drawPipsKey = setting as UserStyleSetting.BooleanUserStyleSetting
                 }
 
                 WATCH_HAND_LENGTH_STYLE_SETTING -> {
-                    minuteHandLengthKey =
-                        options.key as UserStyleSetting.DoubleRangeUserStyleSetting
+                    minuteHandLengthKey = setting as UserStyleSetting.DoubleRangeUserStyleSetting
                 }
                 // TODO (codingjeremy): Add complication change support if settings activity
                 // PR doesn't cover it. Otherwise, remove comment.
@@ -124,7 +126,10 @@ class WatchFaceConfigStateHolder(
     /* Creates a new bitmap render of the updated watch face and passes it along (with all the other
      * updated values) to the Activity to render.
      */
-    private fun updatesWatchFacePreview() {
+    private fun createWatchFacePreview(
+        userStyle: UserStyle,
+        complicationsPreviewData: Map<Int, ComplicationData>
+    ): UserStylesAndPreview {
         Log.d(TAG, "updatesWatchFacePreview()")
 
         val bitmap = editorSession.renderWatchFaceToBitmap(
@@ -137,27 +142,25 @@ class WatchFaceConfigStateHolder(
                     Color.argb(128, 0, 0, 0) // Darken everything else.
                 )
             ),
-            editorSession.previewReferenceTimeMillis,
-            previewComplicationData
+            editorSession.previewReferenceInstant,
+            complicationsPreviewData
         )
 
         val colorStyle =
-            editorSession.userStyle[colorStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
+            userStyle[colorStyleKey] as UserStyleSetting.ListUserStyleSetting.ListOption
         val ticksEnabledStyle =
-            editorSession.userStyle[drawPipsKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+            userStyle[drawPipsKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val minuteHandStyle =
-            editorSession.userStyle[minuteHandLengthKey] as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+            userStyle[minuteHandLengthKey] as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
 
         Log.d(TAG, "/new values: $colorStyle, $ticksEnabledStyle, $minuteHandStyle")
 
-        val watchFacePreview = UserStylesAndPreview(
+        return UserStylesAndPreview(
             colorStyleId = colorStyle.id.toString(),
             ticksEnabled = ticksEnabledStyle.value,
             minuteHandLength = multiplyByMultipleForSlider(minuteHandStyle.value).toFloat(),
             previewImage = bitmap
         )
-
-        mutableUiState.value = EditWatchFaceUiState.Success(watchFacePreview)
     }
 
     fun setComplication(complicationLocation: Int) {
@@ -173,17 +176,7 @@ class WatchFaceConfigStateHolder(
             }
         }
         scope.launch(Dispatchers.Main.immediate) {
-            val chosenComplicationDataSource: ChosenComplicationDataSource? =
-                editorSession.openComplicationDataSourceChooser(complicationSlotId)
-
-            chosenComplicationDataSource?.let {
-                Log.d(TAG, "new complication: ${it.complicationSlotId} and ${it.complicationDataSourceInfo}")
-
-                // previewComplicationData needs updated complication information and it needs to
-                // run in a coroutine.
-                previewComplicationData = editorSession.getComplicationsPreviewData()
-                updatesWatchFacePreview()
-            }
+            editorSession.openComplicationDataSourceChooser(complicationSlotId)
         }
     }
 
@@ -236,16 +229,12 @@ class WatchFaceConfigStateHolder(
         Log.d(TAG, "\tuserStyleSetting: $userStyleSetting")
         Log.d(TAG, "\tuserStyleOption: $userStyleOption")
 
-        val mutableUserStyle = editorSession.userStyle.toMutableUserStyle()
+        // TODO: As of watchface 1.0.0-beta01 We can't use MutableStateFlow.compareAndSet, or
+        //       anything that calls through to that (like MutableStateFlow.update) because
+        //       MutableStateFlow.compareAndSet won't properly update the user style.
+        val mutableUserStyle = editorSession.userStyle.value.toMutableUserStyle()
         mutableUserStyle[userStyleSetting] = userStyleOption
-        editorSession.userStyle = mutableUserStyle.toUserStyle()
-        updatesWatchFacePreview()
-    }
-
-    fun onCleared() {
-        if (::editorSession.isInitialized) {
-            editorSession.close()
-        }
+        editorSession.userStyle.value = mutableUserStyle.toUserStyle()
     }
 
     sealed class EditWatchFaceUiState {

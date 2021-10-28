@@ -17,10 +17,10 @@ package com.example.android.wearable.alpha.utils
 
 import android.content.Context
 import android.graphics.RectF
-import androidx.wear.complications.ComplicationSlotBounds
-import androidx.wear.complications.DefaultComplicationDataSourcePolicy
-import androidx.wear.complications.SystemDataSources
-import androidx.wear.complications.data.ComplicationType
+import androidx.wear.watchface.complications.ComplicationSlotBounds
+import androidx.wear.watchface.complications.DefaultComplicationDataSourcePolicy
+import androidx.wear.watchface.complications.SystemDataSources
+import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.CanvasComplicationFactory
 import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager

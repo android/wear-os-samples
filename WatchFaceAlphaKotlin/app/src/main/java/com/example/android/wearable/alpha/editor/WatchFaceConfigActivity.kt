@@ -40,7 +40,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
         WatchFaceConfigStateHolder(
             lifecycleScope,
             this@WatchFaceConfigActivity,
-            intent
         )
     }
 
@@ -84,11 +83,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        stateHolder.onCleared()
-        super.onDestroy()
     }
 
     private fun updateWatchFacePreview(

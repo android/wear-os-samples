@@ -78,13 +78,13 @@ dependencies {
     implementation "androidx.wear:wear:$rootProject.wearVersion"
 
     // Watch face specific libraries
-    implementation "androidx.wear:wear-complications-data:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-complications-data-source:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-complications-data:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-complications-data-source:$rootProject.watchFaceVersion"
 
-    implementation "androidx.wear:wear-watchface:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-watchface-client:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-watchface-complications-rendering:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-watchface-data:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-watchface-editor:$rootProject.watchFaceVersion"
-    implementation "androidx.wear:wear-watchface-style:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-client:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-complications-rendering:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-data:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-editor:$rootProject.watchFaceVersion"
+    implementation "androidx.wear.watchface:watchface-style:$rootProject.watchFaceVersion"
 }
