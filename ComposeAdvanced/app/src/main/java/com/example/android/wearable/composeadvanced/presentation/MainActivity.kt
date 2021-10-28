@@ -18,7 +18,6 @@ package com.example.android.wearable.composeadvanced.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,7 +69,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun WearApp(watchRepository: WatchRepository) {
     WearAppTheme {

@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.watchlist
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,7 +44,7 @@ import com.example.android.wearable.composeadvanced.presentation.components.Watc
  * the screen. The list is powered using a [ScalingLazyColumn].
  */
 @Composable
-@OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalWearMaterialApi::class)
 fun WatchListScreen(
     scalingLazyListState: ScalingLazyListState,
     showVignette: Boolean,
