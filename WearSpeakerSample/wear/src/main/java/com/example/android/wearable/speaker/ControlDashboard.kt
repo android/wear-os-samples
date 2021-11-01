@@ -15,15 +15,17 @@
  */
 package com.example.android.wearable.speaker
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -127,6 +129,27 @@ private fun createConstraintSet(
     val iconMinimizedSize = dimensionResource(id = R.dimen.icon_minimized_size)
     val iconExpandedSize = dimensionResource(id = R.dimen.icon_expanded_size)
 
+    val micSize by animateDpAsState(
+        targetValue = if (controlDashboardState.micState.expanded) iconExpandedSize else iconMinimizedSize
+    )
+    val micRadius by animateDpAsState(
+        targetValue = if (controlDashboardState.micState.expanded) 0.dp else iconCircleRadius
+    )
+
+    val playSize by animateDpAsState(
+        targetValue = if (controlDashboardState.playState.expanded) iconExpandedSize else iconMinimizedSize
+    )
+    val playRadius by animateDpAsState(
+        targetValue = if (controlDashboardState.playState.expanded) 0.dp else iconCircleRadius
+    )
+
+    val musicSize by animateDpAsState(
+        targetValue = if (controlDashboardState.musicState.expanded) iconExpandedSize else iconMinimizedSize
+    )
+    val musicRadius by animateDpAsState(
+        targetValue = if (controlDashboardState.musicState.expanded) 0.dp else iconCircleRadius
+    )
+
     return ConstraintSet {
         val circleRef = createRefFor(circle)
         val micRef = createRefFor(mic)
@@ -135,22 +158,19 @@ private fun createConstraintSet(
 
         constrain(circleRef) { centerTo(parent) }
         constrain(micRef) {
-            val size = if (controlDashboardState.micState.expanded) iconExpandedSize else iconMinimizedSize
-            width = Dimension.value(size)
-            height = Dimension.value(size)
-            circular(circleRef, 0f, if (controlDashboardState.micState.expanded) 0.dp else iconCircleRadius)
+            width = Dimension.value(micSize)
+            height = Dimension.value(micSize)
+            circular(circleRef, 0f, micRadius)
         }
         constrain(playRef) {
-            val size = if (controlDashboardState.playState.expanded) iconExpandedSize else iconMinimizedSize
-            width = Dimension.value(size)
-            height = Dimension.value(size)
-            circular(circleRef, 240f, if (controlDashboardState.playState.expanded) 0.dp else iconCircleRadius)
+            width = Dimension.value(playSize)
+            height = Dimension.value(playSize)
+            circular(circleRef, 240f, playRadius)
         }
         constrain(musicRef) {
-            val size = if (controlDashboardState.musicState.expanded) iconExpandedSize else iconMinimizedSize
-            width = Dimension.value(size)
-            height = Dimension.value(size)
-            circular(circleRef, 120f, if (controlDashboardState.musicState.expanded) 0.dp else iconCircleRadius)
+            width = Dimension.value(musicSize)
+            height = Dimension.value(musicSize)
+            circular(circleRef, 120f, musicRadius)
         }
     }
 }
@@ -170,10 +190,12 @@ private fun ControlDashboardButton(
     // TODO: Replace with a version of IconButton?
     //       https://issuetracker.google.com/issues/203123015
 
+    val alpha by animateFloatAsState(targetValue = if (buttonState.visible) 1f else 0f)
+
     Button(
         modifier = Modifier
             .fillMaxSize()
-            .alpha(if (buttonState.visible) 1f else 0f)
+            .alpha(alpha)
             .layoutId(layoutId),
         enabled = buttonState.enabled && buttonState.visible,
         onClick = onClick

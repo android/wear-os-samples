@@ -16,6 +16,7 @@
 package com.example.android.wearable.speaker
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -100,8 +101,6 @@ fun SpeakerScreen(
         ) {
             val (controlDashboard, progressBar) = createRefs()
 
-            // TODO: Add animation between dashboard states when MotionLayout in Compose supports more
-            //       than two constraint sets.
             ControlDashboard(
                 controlDashboardState = controlDashboardState,
                 onMicClicked = onMicClicked,
@@ -113,16 +112,18 @@ fun SpeakerScreen(
                     }
             )
 
-            if (isProgressVisible) {
+            AnimatedVisibility(
+                visible = isProgressVisible,
+                modifier = Modifier
+                    .constrainAs(progressBar) {
+                        width = Dimension.fillToConstraints
+                        top.linkTo(controlDashboard.bottom, 5.dp)
+                        start.linkTo(controlDashboard.start)
+                        end.linkTo(controlDashboard.end)
+                    }
+            ) {
                 LinearProgressIndicator(
-                    progress = recordingProgress,
-                    modifier = Modifier
-                        .constrainAs(progressBar) {
-                            width = Dimension.fillToConstraints
-                            top.linkTo(controlDashboard.bottom, 5.dp)
-                            start.linkTo(controlDashboard.start)
-                            end.linkTo(controlDashboard.end)
-                        }
+                    progress = recordingProgress
                 )
             }
         }
