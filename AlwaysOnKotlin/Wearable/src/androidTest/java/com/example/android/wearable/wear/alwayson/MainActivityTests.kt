@@ -178,6 +178,7 @@ class MainActivityTests {
             ).send()
         }
 
+        Thread.sleep(1000) // Ugly sleep, without it sometimes the broadcast won't be received
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(TEN_SEC_DISPLAY)))
