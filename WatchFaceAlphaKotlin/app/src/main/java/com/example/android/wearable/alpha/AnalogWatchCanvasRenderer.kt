@@ -277,10 +277,17 @@ class AnalogWatchCanvasRenderer(
         // Retrieve current time to calculate location/rotation of watch arms.
         val secondOfDay = zonedDateTime.toLocalTime().toSecondOfDay()
 
-        // Determines the rotation based on 360 degrees.
+        // Determine the rotation of the hour and minute hand.
+
+        // Determine how many seconds it takes to make a complete rotation for each hand
+        // It takes the hour hand 12 hours to make a complete rotation
         val secondsPerHourHandRotation = Duration.ofHours(12).seconds
+        // It takes the minute hand 1 hour to make a complete rotation
         val secondsPerMinuteHandRotation = Duration.ofHours(1).seconds
 
+        // Determine the angle to draw each hand expressed as an angle in degrees from 0 to 360
+        // Since each hand does more than one cycle a day, we are only interested in the remainder
+        // of the secondOfDay modulo the hand interval
         val hourRotation = secondOfDay.rem(secondsPerHourHandRotation) * 360.0f /
             secondsPerHourHandRotation
         val minuteRotation = secondOfDay.rem(secondsPerMinuteHandRotation) * 360.0f /
