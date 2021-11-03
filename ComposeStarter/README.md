@@ -12,7 +12,7 @@ Displays only a centered [Text] composable, and the actual text varies based on 
 device (round vs. square/rectangular).
 
 For more information on composable options in Compose for Wear OS, check out our
-[documentation](https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary#SwipeToDismissBox(androidx.wear.compose.material.SwipeToDismissBoxState,androidx.compose.ui.Modifier,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,kotlin.Any,kotlin.Any,kotlin.Boolean,kotlin.Function2)).
+[documentation](https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary.html).
 
 Screenshots
 -----------
@@ -33,8 +33,7 @@ Support
 
 - Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
-If you've found an error in this sample, please file an issue:
-https://github.com/android/wear-os-samples
+If you've found an error in this sample, please [create an issue](https://github.com/android/wear-os-samples/issues/new).
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
