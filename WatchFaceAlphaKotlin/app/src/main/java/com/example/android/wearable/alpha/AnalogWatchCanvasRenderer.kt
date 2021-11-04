@@ -20,9 +20,10 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
-import android.icu.util.Calendar
 import android.util.Log
 import android.view.SurfaceHolder
+import androidx.core.graphics.withRotation
+import androidx.core.graphics.withScale
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.Renderer
@@ -39,7 +40,6 @@ import com.example.android.wearable.alpha.data.watchface.WatchFaceData
 import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
-import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
@@ -48,6 +48,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.ZonedDateTime
 
 // Default for how long each frame is displayed at expected frame rate.
 private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L
@@ -62,7 +64,6 @@ class AnalogWatchCanvasRenderer(
     watchState: WatchState,
     private val complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
-    private val analogWatchFaceViewModel: AnalogWatchFaceViewModel,
     canvasType: Int
 ) : Renderer.CanvasRenderer(
     surfaceHolder,
@@ -119,19 +120,8 @@ class AnalogWatchCanvasRenderer(
 
     init {
         scope.launch {
-            analogWatchFaceViewModel.uiState.collect { uiState ->
-                when (uiState) {
-                    is AnalogWatchFaceViewModel.UserChangesUiState.Loading -> {
-                        Log.d(TAG, "StateFlow Loading: ${uiState.message}")
-                    }
-                    is AnalogWatchFaceViewModel.UserChangesUiState.Success -> {
-                        Log.d(TAG, "StateFlow Success.")
-                        updateWatchFaceData(uiState.userStyle)
-                    }
-                    is AnalogWatchFaceViewModel.UserChangesUiState.Error -> {
-                        Log.e(TAG, "Flow error: ${uiState.exception}")
-                    }
-                }
+            currentUserStyleRepository.userStyle.collect { userStyle ->
+                updateWatchFaceData(userStyle)
             }
         }
     }
@@ -218,17 +208,17 @@ class AnalogWatchCanvasRenderer(
         super.onDestroy()
     }
 
-    override fun renderHighlightLayer(canvas: Canvas, bounds: Rect, calendar: Calendar) {
+    override fun renderHighlightLayer(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
         canvas.drawColor(renderParameters.highlightLayer!!.backgroundTint)
 
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
-                complication.renderHighlightLayer(canvas, calendar, renderParameters)
+                complication.renderHighlightLayer(canvas, zonedDateTime, renderParameters)
             }
         }
     }
 
-    override fun render(canvas: Canvas, bounds: Rect, calendar: Calendar) {
+    override fun render(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
         val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
             watchFaceColors.ambientBackgroundColor
         } else {
@@ -238,10 +228,10 @@ class AnalogWatchCanvasRenderer(
         canvas.drawColor(backgroundColor)
 
         // CanvasComplicationDrawable already obeys rendererParameters.
-        drawComplications(canvas, calendar)
+        drawComplications(canvas, zonedDateTime)
 
         if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY)) {
-            drawClockHands(canvas, bounds, calendar)
+            drawClockHands(canvas, bounds, zonedDateTime)
         }
 
         if (renderParameters.drawMode == DrawMode.INTERACTIVE &&
@@ -261,10 +251,10 @@ class AnalogWatchCanvasRenderer(
     }
 
     // ----- All drawing functions -----
-    private fun drawComplications(canvas: Canvas, calendar: Calendar) {
+    private fun drawComplications(canvas: Canvas, zonedDateTime: ZonedDateTime) {
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
             if (complication.enabled) {
-                complication.render(canvas, calendar, renderParameters)
+                complication.render(canvas, zonedDateTime, renderParameters)
             }
         }
     }
@@ -272,7 +262,7 @@ class AnalogWatchCanvasRenderer(
     private fun drawClockHands(
         canvas: Canvas,
         bounds: Rect,
-        calendar: Calendar
+        zonedDateTime: ZonedDateTime
     ) {
         // Only recalculate bounds (watch face size/surface) has changed or the arm of one of the
         // clock hands has changed (via user input in the settings).
@@ -285,68 +275,65 @@ class AnalogWatchCanvasRenderer(
         }
 
         // Retrieve current time to calculate location/rotation of watch arms.
-        val hours = calendar.get(Calendar.HOUR).toFloat()
-        val minutes = calendar.get(Calendar.MINUTE).toFloat()
-        val seconds = calendar.get(Calendar.SECOND).toFloat() +
-                (calendar.get(Calendar.MILLISECOND).toFloat() / 1000f)
+        val secondOfDay = zonedDateTime.toLocalTime().toSecondOfDay()
 
-        // Determines the rotation based on 360 degrees.
-        val hourRotation = (hours + minutes / 60.0f + seconds / 3600.0f) / 12.0f * 360.0f
-        val minuteRotation = (minutes + seconds / 60.0f) / 60.0f * 360.0f
+        // Determine the rotation of the hour and minute hand.
 
-        canvas.save()
+        // Determine how many seconds it takes to make a complete rotation for each hand
+        // It takes the hour hand 12 hours to make a complete rotation
+        val secondsPerHourHandRotation = Duration.ofHours(12).seconds
+        // It takes the minute hand 1 hour to make a complete rotation
+        val secondsPerMinuteHandRotation = Duration.ofHours(1).seconds
 
-        if (renderParameters.drawMode == DrawMode.AMBIENT) {
-            clockHandPaint.style = Paint.Style.STROKE
-            clockHandPaint.color = watchFaceColors.ambientPrimaryColor
+        // Determine the angle to draw each hand expressed as an angle in degrees from 0 to 360
+        // Since each hand does more than one cycle a day, we are only interested in the remainder
+        // of the secondOfDay modulo the hand interval
+        val hourRotation = secondOfDay.rem(secondsPerHourHandRotation) * 360.0f /
+            secondsPerHourHandRotation
+        val minuteRotation = secondOfDay.rem(secondsPerMinuteHandRotation) * 360.0f /
+            secondsPerMinuteHandRotation
 
-            canvas.scale(
-                WATCH_HAND_SCALE,
-                WATCH_HAND_SCALE,
-                bounds.exactCenterX(),
-                bounds.exactCenterY()
-            )
+        canvas.withScale(
+            x = WATCH_HAND_SCALE,
+            y = WATCH_HAND_SCALE,
+            pivotX = bounds.exactCenterX(),
+            pivotY = bounds.exactCenterY()
+        ) {
+            val drawAmbient = renderParameters.drawMode == DrawMode.AMBIENT
 
-            // Rotate hour hand, draw, and rotate back.
-            canvas.rotate(hourRotation, bounds.exactCenterX(), bounds.exactCenterY())
-            canvas.drawPath(hourHandBorder, clockHandPaint)
-            canvas.rotate(-hourRotation, bounds.exactCenterX(), bounds.exactCenterY())
+            clockHandPaint.style = if (drawAmbient) Paint.Style.STROKE else Paint.Style.FILL
+            clockHandPaint.color = if (drawAmbient) {
+                watchFaceColors.ambientPrimaryColor
+            } else {
+                watchFaceColors.activePrimaryColor
+            }
 
-            // Rotate minute hand, draw, and rotate back.
-            canvas.rotate(minuteRotation, bounds.exactCenterX(), bounds.exactCenterY())
-            canvas.drawPath(minuteHandBorder, clockHandPaint)
-            canvas.rotate(-minuteRotation, bounds.exactCenterX(), bounds.exactCenterY())
-        } else {
-            clockHandPaint.style = Paint.Style.FILL
-            clockHandPaint.color = watchFaceColors.activePrimaryColor
-            canvas.scale(
-                WATCH_HAND_SCALE,
-                WATCH_HAND_SCALE,
-                bounds.exactCenterX(),
-                bounds.exactCenterY()
-            )
+            // Draw hour hand.
+            withRotation(hourRotation, bounds.exactCenterX(), bounds.exactCenterY()) {
+                drawPath(hourHandBorder, clockHandPaint)
+            }
 
-            // Rotate hour hand, draw, and rotate back.
-            canvas.rotate(hourRotation, bounds.exactCenterX(), bounds.exactCenterY())
-            canvas.drawPath(hourHandFill, clockHandPaint)
-            canvas.rotate(-hourRotation, bounds.exactCenterX(), bounds.exactCenterY())
+            // Draw minute hand.
+            withRotation(minuteRotation, bounds.exactCenterX(), bounds.exactCenterY()) {
+                drawPath(minuteHandBorder, clockHandPaint)
+            }
 
-            // Rotate minute hand, draw, and rotate back.
-            canvas.rotate(minuteRotation, bounds.exactCenterX(), bounds.exactCenterY())
-            canvas.drawPath(minuteHandFill, clockHandPaint)
-            canvas.rotate(-minuteRotation, bounds.exactCenterX(), bounds.exactCenterY())
+            // Draw second hand if not in ambient mode
+            if (!drawAmbient) {
+                clockHandPaint.color = watchFaceColors.activeSecondaryColor
 
-            // Second hand has a different color style (secondary color) and is only drawn in
-            // active mode, so we calculate it here (not above with others).
-            val secondsRotation = seconds / 60.0f * 360.0f
-            clockHandPaint.color = watchFaceColors.activeSecondaryColor
+                // Second hand has a different color style (secondary color) and is only drawn in
+                // active mode, so we calculate it here (not above with others).
+                val secondsPerSecondHandRotation = Duration.ofMinutes(1).seconds
+                val secondsRotation = secondOfDay.rem(secondsPerSecondHandRotation) * 360.0f /
+                    secondsPerSecondHandRotation
+                clockHandPaint.color = watchFaceColors.activeSecondaryColor
 
-            // Rotate second hand, draw, and rotate back.
-            canvas.rotate(secondsRotation, bounds.exactCenterX(), bounds.exactCenterY())
-            canvas.drawPath(secondHand, clockHandPaint)
-            canvas.rotate(-secondsRotation, bounds.exactCenterX(), bounds.exactCenterY())
+                withRotation(secondsRotation, bounds.exactCenterX(), bounds.exactCenterY()) {
+                    drawPath(secondHand, clockHandPaint)
+                }
+            }
         }
-        canvas.restore()
     }
 
     /*

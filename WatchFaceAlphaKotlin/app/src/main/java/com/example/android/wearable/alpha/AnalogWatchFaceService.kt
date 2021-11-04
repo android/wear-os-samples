@@ -25,10 +25,8 @@ import androidx.wear.watchface.WatchFaceType
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
-import com.example.android.wearable.alpha.data.WatchFaceUserSettingChangesDataSource
 import com.example.android.wearable.alpha.utils.createComplicationSlotManager
 import com.example.android.wearable.alpha.utils.createUserStyleSchema
-import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
 
 /**
  * Handles much of the boilerplate needed to implement a watch face (minus rendering code; see
@@ -36,7 +34,6 @@ import com.example.android.wearable.alpha.viewmodels.AnalogWatchFaceViewModel
  * the watch face).
  */
 class AnalogWatchFaceService : WatchFaceService() {
-    private lateinit var analogWatchFaceViewModel: AnalogWatchFaceViewModel
 
     // Used by Watch Face APIs to construct user setting options and repository.
     override fun createUserStyleSchema(): UserStyleSchema =
@@ -51,18 +48,6 @@ class AnalogWatchFaceService : WatchFaceService() {
         currentUserStyleRepository = currentUserStyleRepository
     )
 
-    override fun onDestroy() {
-        Log.d(TAG, "onDestroy()")
-
-        // Cancels scope used for retrieving watch face style changes via callbackFlow if the
-        // variable has been initialized.
-        if (::analogWatchFaceViewModel.isInitialized) {
-            analogWatchFaceViewModel.clear()
-        }
-
-        super.onDestroy()
-    }
-
     override suspend fun createWatchFace(
         surfaceHolder: SurfaceHolder,
         watchState: WatchState,
@@ -71,10 +56,6 @@ class AnalogWatchFaceService : WatchFaceService() {
     ): WatchFace {
         Log.d(TAG, "createWatchFace()")
 
-        analogWatchFaceViewModel = AnalogWatchFaceViewModel(
-            WatchFaceUserSettingChangesDataSource(currentUserStyleRepository)
-        )
-
         // Creates class that renders the watch face.
         val renderer = AnalogWatchCanvasRenderer(
             context = applicationContext,
@@ -82,7 +63,6 @@ class AnalogWatchFaceService : WatchFaceService() {
             watchState = watchState,
             complicationSlotsManager = complicationSlotsManager,
             currentUserStyleRepository = currentUserStyleRepository,
-            analogWatchFaceViewModel = analogWatchFaceViewModel,
             canvasType = CanvasType.HARDWARE
         )
 
