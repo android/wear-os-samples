@@ -17,6 +17,12 @@ package com.example.android.wearable.speaker
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -124,7 +130,9 @@ fun SpeakerScreen(
                         top.linkTo(controlDashboard.bottom, 5.dp)
                         start.linkTo(controlDashboard.start)
                         end.linkTo(controlDashboard.end)
-                    }
+                    },
+                enter = if (controlDashboardState.transitionInstantly) EnterTransition.None else fadeIn() + expandIn(),
+                exit = if (controlDashboardState.transitionInstantly) ExitTransition.None else shrinkOut() + fadeOut()
             ) {
                 LinearProgressIndicator(
                     progress = recordingProgress
