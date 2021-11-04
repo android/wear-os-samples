@@ -15,8 +15,11 @@
  */
 package com.example.android.wearable.speaker
 
+import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
@@ -76,6 +80,7 @@ fun ControlDashboard(
 
         ControlDashboardButton(
             buttonState = controlDashboardState.micState,
+            transitionInstantly = controlDashboardState.transitionInstantly,
             onClick = onMicClicked,
             layoutId = mic,
             imageVector = Icons.Filled.Mic,
@@ -88,6 +93,7 @@ fun ControlDashboard(
 
         ControlDashboardButton(
             buttonState = controlDashboardState.playState,
+            transitionInstantly = controlDashboardState.transitionInstantly,
             onClick = onPlayClicked,
             layoutId = play,
             imageVector = Icons.Filled.PlayArrow,
@@ -100,6 +106,7 @@ fun ControlDashboard(
 
         ControlDashboardButton(
             buttonState = controlDashboardState.musicState,
+            transitionInstantly = controlDashboardState.transitionInstantly,
             onClick = onMusicClicked,
             layoutId = music,
             imageVector = Icons.Filled.MusicNote,
@@ -129,25 +136,39 @@ private fun createConstraintSet(
     val iconMinimizedSize = dimensionResource(id = R.dimen.icon_minimized_size)
     val iconExpandedSize = dimensionResource(id = R.dimen.icon_expanded_size)
 
+    // Create the animation spec for all of the animateDpAsState animations below
+    // If we transition instantly, we animate with a snap, otherwise we use the default spring animation
+    val animationSpec = if (controlDashboardState.transitionInstantly) {
+        snap()
+    } else {
+        spring(visibilityThreshold = Dp.VisibilityThreshold)
+    }
+
     val micSize by animateDpAsState(
-        targetValue = if (controlDashboardState.micState.expanded) iconExpandedSize else iconMinimizedSize
+        targetValue = if (controlDashboardState.micState.expanded) iconExpandedSize else iconMinimizedSize,
+        animationSpec = animationSpec
     )
     val micRadius by animateDpAsState(
-        targetValue = if (controlDashboardState.micState.expanded) 0.dp else iconCircleRadius
+        targetValue = if (controlDashboardState.micState.expanded) 0.dp else iconCircleRadius,
+        animationSpec = animationSpec
     )
 
     val playSize by animateDpAsState(
-        targetValue = if (controlDashboardState.playState.expanded) iconExpandedSize else iconMinimizedSize
+        targetValue = if (controlDashboardState.playState.expanded) iconExpandedSize else iconMinimizedSize,
+        animationSpec = animationSpec
     )
     val playRadius by animateDpAsState(
-        targetValue = if (controlDashboardState.playState.expanded) 0.dp else iconCircleRadius
+        targetValue = if (controlDashboardState.playState.expanded) 0.dp else iconCircleRadius,
+        animationSpec = animationSpec
     )
 
     val musicSize by animateDpAsState(
-        targetValue = if (controlDashboardState.musicState.expanded) iconExpandedSize else iconMinimizedSize
+        targetValue = if (controlDashboardState.musicState.expanded) iconExpandedSize else iconMinimizedSize,
+        animationSpec = animationSpec
     )
     val musicRadius by animateDpAsState(
-        targetValue = if (controlDashboardState.musicState.expanded) 0.dp else iconCircleRadius
+        targetValue = if (controlDashboardState.musicState.expanded) 0.dp else iconCircleRadius,
+        animationSpec = animationSpec
     )
 
     return ConstraintSet {
@@ -181,6 +202,7 @@ private fun createConstraintSet(
 @Composable
 private fun ControlDashboardButton(
     buttonState: ControlDashboardButtonState,
+    transitionInstantly: Boolean,
     onClick: () -> Unit,
     layoutId: Any,
     imageVector: ImageVector,
@@ -190,7 +212,10 @@ private fun ControlDashboardButton(
     // TODO: Replace with a version of IconButton?
     //       https://issuetracker.google.com/issues/203123015
 
-    val alpha by animateFloatAsState(targetValue = if (buttonState.visible) 1f else 0f)
+    val alpha by animateFloatAsState(
+        targetValue = if (buttonState.visible) 1f else 0f,
+        animationSpec = if (transitionInstantly) snap() else spring(visibilityThreshold = 0.01f)
+    )
 
     Button(
         modifier = Modifier
@@ -226,6 +251,7 @@ data class ControlDashboardState(
     val micState: ControlDashboardButtonState,
     val playState: ControlDashboardButtonState,
     val musicState: ControlDashboardButtonState,
+    val transitionInstantly: Boolean
 ) {
     init {
         // Check that at most one of the buttons is expanded

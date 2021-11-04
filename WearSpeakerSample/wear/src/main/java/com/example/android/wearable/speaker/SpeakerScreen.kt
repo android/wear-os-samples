@@ -63,11 +63,13 @@ fun SpeakerScreen(
                     micState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     playState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     musicState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
+                    transitionInstantly = false
                 )
                 AppState.PlayingVoice -> ControlDashboardState(
                     micState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     playState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
                     musicState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
+                    transitionInstantly = false
                 )
                 is AppState.Ready -> ControlDashboardState(
                     micState = ControlDashboardButtonState(
@@ -77,11 +79,13 @@ fun SpeakerScreen(
                     ),
                     playState = ControlDashboardButtonState(expanded = false, enabled = true, visible = true),
                     musicState = ControlDashboardButtonState(expanded = false, enabled = true, visible = true),
+                    transitionInstantly = appState.transitionInstantly
                 )
                 AppState.Recording -> ControlDashboardState(
                     micState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
                     playState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
                     musicState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
+                    transitionInstantly = false
                 )
             }
         }

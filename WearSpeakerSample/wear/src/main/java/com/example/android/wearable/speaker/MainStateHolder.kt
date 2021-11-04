@@ -262,7 +262,7 @@ sealed class AppAction {
 }
 
 /**
- * The four "resting" states of the application, corresponding to the 4 constraint sets of the [MotionLayout].
+ * The four "resting" states of the application.
  */
 sealed class AppState {
     data class Ready(
