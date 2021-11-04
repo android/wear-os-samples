@@ -21,7 +21,7 @@ buildscript {
         activityKtxVersion = '1.4.0'
         ktxVersion = '1.7.0'
         wearVersion = '1.2.0'
-        watchFaceVersion = '1.0.0-beta01'
+        watchFaceVersion = '1.0.0-rc01'
         coroutines = '1.5.2'
         lifecycleVersion = '2.4.0'
         materialVersion = '1.4.0'
