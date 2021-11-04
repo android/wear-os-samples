@@ -19,15 +19,11 @@ Samples
 
 * **[RuntimePermissionsWear](RuntimePermissionsWear)** (Java) - Demonstrates requesting permissions not only on a Wear OS device and a mobile device, but also across devices, e.g., request permissions on a mobile device from your wear device and the other way around. Note: It does require you having both the Wear and Mobile version of the app installed on both devices. [Guide](https://developer.android.com/training/articles/wear-permissions)
 
-* **[WatchFace](WatchFace)** (Java) - Shows a full implementation of multiple watch faces, complications, and settings (edit watch faces appearance). Also includes implementation of data providers, so developers can share their data to be displayed in complications on any watch face (without writing a watch face). [Watch face guide](https://developer.android.com/training/wearables/watch-faces#guides), [Data Provider Guide](https://developer.android.com/training/wearables/data-providers#guides)
-
 * **[WatchFaceAlphaKotlin](WatchFaceAlphaKotlin)** (Kotlin) - Demos the new alpha AndroidX Watch Face APIs. The analog watch face in the sample is powered by a full Room database and uses the new settings APIs (among many other new APIs). Keep in mind that the APIs can change as the alpha proceeds. This version uses alpha4 and will have some additional updates for the next versions.
 
 * **[WearAccessibilityApp](WearAccessibilityApp)** (Java) - Sample demonstrates how to include accessibility support for your wearable app. [Guide](https://developer.android.com/guide/topics/ui/accessibility)
 
 * **[WearComplicationDataSourcesTestSuite](WearComplicationDataSourcesTestSuite)** (Kotlin) - If you are writing a watch face with complications, this app gives you a full suite of data sources to test against your implementation of complications to make sure it looks good. [Complication Guide](https://developer.android.com/training/wearables/watch-faces/adding-complications)
-
-* **[WearDrawers](WearDrawers)** (Java) - Demonstrates Navigation (Top) and Action (Bottom) Drawers, part of Material Design for Wear. [Guide](https://developer.android.com/training/wearables/ui/ui-nav-actions)
 
 * **[WearOAuth](WearOAuth)** (Kotlin) - Demonstrates how developers can authenticate a user on their Wear OS app via the user's mobile/phone device without requiring a mobile app (Wear OS companion app handles the request on the mobile side). The sample uses OAuth. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
