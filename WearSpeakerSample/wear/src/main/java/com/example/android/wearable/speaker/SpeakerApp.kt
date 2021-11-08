@@ -136,7 +136,10 @@ fun SpeakerApp() {
  * This will wait until the given [state] is achieved, and then will run the block.
  * If the state drops back down while the [block] is running, the [block] will be cancelled.
  *
- * This method resumes successfully when the [block] finishes (either normally, or after being cancelled)
+ * This method resumes successfully when the [block] finishes (either normally, or after being cancelled).
+ *
+ * Feature request for adding this to androidx.lifecycle:
+ * [https://issuetracker.google.com/issues/199443792](https://issuetracker.google.com/issues/199443792)
  */
 private suspend fun Lifecycle.withStateAtLeast(state: Lifecycle.State, block: suspend () -> Unit) {
     raceOf(
