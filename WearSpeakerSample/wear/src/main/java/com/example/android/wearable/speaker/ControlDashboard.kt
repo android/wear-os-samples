@@ -260,9 +260,7 @@ data class ControlDashboardState(
                 micState.expanded,
                 playState.expanded,
                 musicState.expanded
-            ).map {
-                if (it) 1 else 0
-            }.sum() <= 1
+            ).count { it } <= 1
         )
     }
 }
