@@ -66,6 +66,8 @@ fun ControlDashboard(
         music = music,
     )
 
+    // We are using ConstraintLayout here for the circular constraints
+    // In general, ConstraintLayout is less necessary for Compose than it was for Views
     ConstraintLayout(
         constraintSet = constraintSet,
         modifier = modifier

@@ -73,6 +73,8 @@ fun SpeakerScreen(
             }
         }
 
+        // We are using ConstraintLayout here to center the ControlDashboard, and align the progress indicator to it.
+        // In general, ConstraintLayout is less necessary for Compose than it was for Views
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
