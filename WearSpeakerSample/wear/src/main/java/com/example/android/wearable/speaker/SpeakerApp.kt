@@ -24,15 +24,14 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.wear.compose.material.MaterialTheme
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 
 /**
@@ -76,8 +75,6 @@ fun SpeakerApp() {
             )
         }
 
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         requestPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) {
             // We ignore the direct result here, since we're going to check anyway.
             scope.launch {
@@ -85,16 +82,21 @@ fun SpeakerApp() {
             }
         }
 
+        val lifecycleOwner = LocalLifecycleOwner.current
+
         // Notify the state holder whenever we become stopped to reset the state
-        LaunchedEffect(mainState, scope) {
-            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                try {
-                    awaitCancellation()
-                } finally {
-                    scope.launch {
-                        mainState.onStopped()
-                    }
+        DisposableEffect(mainState, scope, lifecycleOwner) {
+            val lifecycleObserver = object : DefaultLifecycleObserver {
+                override fun onStop(owner: LifecycleOwner) {
+                    super.onStop(owner)
+                    scope.launch { mainState.onStopped() }
                 }
+            }
+
+            lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
             }
         }
 

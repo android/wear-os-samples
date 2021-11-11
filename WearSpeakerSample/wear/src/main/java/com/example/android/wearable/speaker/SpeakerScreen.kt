@@ -20,9 +20,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,7 +58,7 @@ fun SpeakerScreen(
     ) {
         // Determine the control dashboard state.
         // This converts the main app state into a control dashboard state for rendering
-        val controlDashboardUiState by createControlDashboardUiState(
+        val controlDashboardUiState = rememberControlDashboardUiState(
             playbackState = playbackState,
             isPermissionDenied = isPermissionDenied
         )
@@ -107,11 +107,12 @@ fun SpeakerScreen(
     }
 }
 
-private fun createControlDashboardUiState(
+@Composable
+private fun rememberControlDashboardUiState(
     playbackState: PlaybackState,
     isPermissionDenied: Boolean
-): State<ControlDashboardUiState> =
-    derivedStateOf {
+): ControlDashboardUiState =
+    remember(playbackState, isPermissionDenied) {
         when (playbackState) {
             PlaybackState.PlayingMusic -> ControlDashboardUiState(
                 micState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),

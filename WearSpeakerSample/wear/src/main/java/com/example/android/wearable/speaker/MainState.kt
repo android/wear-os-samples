@@ -48,12 +48,16 @@ class MainState(
     private val showSpeakerNotSupported: () -> Unit
 ) {
     /**
-     * The [MutatorMutex] that guards the state of the app.
+     * The [MutatorMutex] that guards the playback state of the app.
      *
      * Due to being a [MutatorMutex], this automatically handles cleanup of any ongoing asynchronous work,
      * like playing music or recording, ensuring that only one operation is occurring at a time.
+     *
+     * For example, if the user is currently recording, and they hit the mic button again, the second [onMicClicked]
+     * will cancel the previous [onMicClicked] that was doing the recording, waiting for everything to be cleaned up,
+     * before running its own code.
      */
-    private val appStateMutatorMutex = MutatorMutex()
+    private val playbackStateMutatorMutex = MutatorMutex()
 
     /**
      * The primary playback state.
@@ -82,13 +86,13 @@ class MainState(
     private val soundRecorder = SoundRecorder(activity, "audiorecord.pcm")
 
     suspend fun onStopped() {
-        appStateMutatorMutex.mutate {
+        playbackStateMutatorMutex.mutate {
             playbackState = PlaybackState.Ready
         }
     }
 
     suspend fun onMicClicked() {
-        appStateMutatorMutex.mutate {
+        playbackStateMutatorMutex.mutate {
             when (playbackState) {
                 is PlaybackState.Ready,
                 PlaybackState.PlayingVoice,
@@ -128,7 +132,7 @@ class MainState(
     }
 
     suspend fun onMusicClicked() {
-        appStateMutatorMutex.mutate {
+        playbackStateMutatorMutex.mutate {
             when (playbackState) {
                 is PlaybackState.Ready,
                 PlaybackState.PlayingVoice,
@@ -150,7 +154,7 @@ class MainState(
     }
 
     suspend fun onPlayClicked() {
-        appStateMutatorMutex.mutate {
+        playbackStateMutatorMutex.mutate {
             when (playbackState) {
                 is PlaybackState.Ready,
                 PlaybackState.PlayingMusic,
@@ -173,7 +177,7 @@ class MainState(
     }
 
     suspend fun permissionResultReturned() {
-        appStateMutatorMutex.mutate {
+        playbackStateMutatorMutex.mutate {
             // Check if the user granted the permission
             if (
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
