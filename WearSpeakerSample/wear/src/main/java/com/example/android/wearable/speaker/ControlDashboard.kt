@@ -15,11 +15,8 @@
  */
 package com.example.android.wearable.speaker
 
-import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -35,7 +32,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
@@ -46,12 +42,12 @@ import androidx.wear.compose.material.Icon
 /**
  * The component responsible for drawing the main 3 controls, with their expanded and minimized states.
  *
- * The state for this class is driven by a [ControlDashboardState], which contains a [ControlDashboardButtonState]
+ * The state for this class is driven by a [ControlDashboardUiState], which contains a [ControlDashboardButtonUiState]
  * for each of the three buttons.
  */
 @Composable
 fun ControlDashboard(
-    controlDashboardState: ControlDashboardState,
+    controlDashboardUiState: ControlDashboardUiState,
     onMicClicked: () -> Unit,
     onPlayClicked: () -> Unit,
     onMusicClicked: () -> Unit,
@@ -63,7 +59,7 @@ fun ControlDashboard(
     val music = Any()
 
     val constraintSet = createConstraintSet(
-        controlDashboardState = controlDashboardState,
+        controlDashboardUiState = controlDashboardUiState,
         circle = circle,
         mic = mic,
         play = play,
@@ -79,12 +75,11 @@ fun ControlDashboard(
         )
 
         ControlDashboardButton(
-            buttonState = controlDashboardState.micState,
-            transitionInstantly = controlDashboardState.transitionInstantly,
+            buttonState = controlDashboardUiState.micState,
             onClick = onMicClicked,
             layoutId = mic,
             imageVector = Icons.Filled.Mic,
-            contentDescription = if (controlDashboardState.micState.expanded) {
+            contentDescription = if (controlDashboardUiState.micState.expanded) {
                 stringResource(id = R.string.stop_recording)
             } else {
                 stringResource(id = R.string.record)
@@ -92,12 +87,11 @@ fun ControlDashboard(
         )
 
         ControlDashboardButton(
-            buttonState = controlDashboardState.playState,
-            transitionInstantly = controlDashboardState.transitionInstantly,
+            buttonState = controlDashboardUiState.playState,
             onClick = onPlayClicked,
             layoutId = play,
             imageVector = Icons.Filled.PlayArrow,
-            contentDescription = if (controlDashboardState.playState.expanded) {
+            contentDescription = if (controlDashboardUiState.playState.expanded) {
                 stringResource(id = R.string.stop_playing_recording)
             } else {
                 stringResource(id = R.string.play_recording)
@@ -105,12 +99,11 @@ fun ControlDashboard(
         )
 
         ControlDashboardButton(
-            buttonState = controlDashboardState.musicState,
-            transitionInstantly = controlDashboardState.transitionInstantly,
+            buttonState = controlDashboardUiState.musicState,
             onClick = onMusicClicked,
             layoutId = music,
             imageVector = Icons.Filled.MusicNote,
-            contentDescription = if (controlDashboardState.musicState.expanded) {
+            contentDescription = if (controlDashboardUiState.musicState.expanded) {
                 stringResource(id = R.string.stop_playing_music)
             } else {
                 stringResource(id = R.string.play_music)
@@ -120,13 +113,13 @@ fun ControlDashboard(
 }
 
 /**
- * Creates the [ConstraintSet] for the [controlDashboardState].
+ * Creates the [ConstraintSet] for the [controlDashboardUiState].
  *
  * The [circle], [mic], [play] and [music] are used as keys for the constraints.
  */
 @Composable
 private fun createConstraintSet(
-    controlDashboardState: ControlDashboardState,
+    controlDashboardUiState: ControlDashboardUiState,
     circle: Any,
     mic: Any,
     play: Any,
@@ -136,39 +129,25 @@ private fun createConstraintSet(
     val iconMinimizedSize = dimensionResource(id = R.dimen.icon_minimized_size)
     val iconExpandedSize = dimensionResource(id = R.dimen.icon_expanded_size)
 
-    // Create the animation spec for all of the animateDpAsState animations below
-    // If we transition instantly, we animate with a snap, otherwise we use the default spring animation
-    val animationSpec = if (controlDashboardState.transitionInstantly) {
-        snap()
-    } else {
-        spring(visibilityThreshold = Dp.VisibilityThreshold)
-    }
-
     val micSize by animateDpAsState(
-        targetValue = if (controlDashboardState.micState.expanded) iconExpandedSize else iconMinimizedSize,
-        animationSpec = animationSpec
+        targetValue = if (controlDashboardUiState.micState.expanded) iconExpandedSize else iconMinimizedSize
     )
     val micRadius by animateDpAsState(
-        targetValue = if (controlDashboardState.micState.expanded) 0.dp else iconCircleRadius,
-        animationSpec = animationSpec
+        targetValue = if (controlDashboardUiState.micState.expanded) 0.dp else iconCircleRadius
     )
 
     val playSize by animateDpAsState(
-        targetValue = if (controlDashboardState.playState.expanded) iconExpandedSize else iconMinimizedSize,
-        animationSpec = animationSpec
+        targetValue = if (controlDashboardUiState.playState.expanded) iconExpandedSize else iconMinimizedSize
     )
     val playRadius by animateDpAsState(
-        targetValue = if (controlDashboardState.playState.expanded) 0.dp else iconCircleRadius,
-        animationSpec = animationSpec
+        targetValue = if (controlDashboardUiState.playState.expanded) 0.dp else iconCircleRadius
     )
 
     val musicSize by animateDpAsState(
-        targetValue = if (controlDashboardState.musicState.expanded) iconExpandedSize else iconMinimizedSize,
-        animationSpec = animationSpec
+        targetValue = if (controlDashboardUiState.musicState.expanded) iconExpandedSize else iconMinimizedSize
     )
     val musicRadius by animateDpAsState(
-        targetValue = if (controlDashboardState.musicState.expanded) 0.dp else iconCircleRadius,
-        animationSpec = animationSpec
+        targetValue = if (controlDashboardUiState.musicState.expanded) 0.dp else iconCircleRadius
     )
 
     return ConstraintSet {
@@ -201,8 +180,7 @@ private fun createConstraintSet(
  */
 @Composable
 private fun ControlDashboardButton(
-    buttonState: ControlDashboardButtonState,
-    transitionInstantly: Boolean,
+    buttonState: ControlDashboardButtonUiState,
     onClick: () -> Unit,
     layoutId: Any,
     imageVector: ImageVector,
@@ -214,7 +192,6 @@ private fun ControlDashboardButton(
 
     val alpha by animateFloatAsState(
         targetValue = if (buttonState.visible) 1f else 0f,
-        animationSpec = if (transitionInstantly) snap() else spring(visibilityThreshold = 0.01f)
     )
 
     Button(
@@ -238,7 +215,7 @@ private fun ControlDashboardButton(
 /**
  * The state for a single [ControlDashboardButton].
  */
-data class ControlDashboardButtonState(
+data class ControlDashboardButtonUiState(
     val expanded: Boolean,
     val enabled: Boolean,
     val visible: Boolean
@@ -247,11 +224,10 @@ data class ControlDashboardButtonState(
 /**
  * The state for a [ControlDashboard].
  */
-data class ControlDashboardState(
-    val micState: ControlDashboardButtonState,
-    val playState: ControlDashboardButtonState,
-    val musicState: ControlDashboardButtonState,
-    val transitionInstantly: Boolean
+data class ControlDashboardUiState(
+    val micState: ControlDashboardButtonUiState,
+    val playState: ControlDashboardButtonUiState,
+    val musicState: ControlDashboardButtonUiState,
 ) {
     init {
         // Check that at most one of the buttons is expanded

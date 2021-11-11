@@ -17,15 +17,10 @@ package com.example.android.wearable.speaker
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -48,7 +43,7 @@ import androidx.wear.compose.material.TimeText
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun SpeakerScreen(
-    appState: AppState,
+    playbackState: PlaybackState,
     isPermissionDenied: Boolean,
     recordingProgress: Float,
     onMicClicked: () -> Unit,
@@ -63,46 +58,18 @@ fun SpeakerScreen(
     ) {
         // Determine the control dashboard state.
         // This converts the main app state into a control dashboard state for rendering
-        val controlDashboardState by derivedStateOf {
-            when (appState) {
-                AppState.PlayingMusic -> ControlDashboardState(
-                    micState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
-                    playState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
-                    musicState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
-                    transitionInstantly = false
-                )
-                AppState.PlayingVoice -> ControlDashboardState(
-                    micState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
-                    playState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
-                    musicState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
-                    transitionInstantly = false
-                )
-                is AppState.Ready -> ControlDashboardState(
-                    micState = ControlDashboardButtonState(
-                        expanded = false,
-                        enabled = !isPermissionDenied,
-                        visible = true
-                    ),
-                    playState = ControlDashboardButtonState(expanded = false, enabled = true, visible = true),
-                    musicState = ControlDashboardButtonState(expanded = false, enabled = true, visible = true),
-                    transitionInstantly = appState.transitionInstantly
-                )
-                AppState.Recording -> ControlDashboardState(
-                    micState = ControlDashboardButtonState(expanded = true, enabled = true, visible = true),
-                    playState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
-                    musicState = ControlDashboardButtonState(expanded = false, enabled = false, visible = false),
-                    transitionInstantly = false
-                )
-            }
-        }
+        val controlDashboardUiState by createControlDashboardUiState(
+            playbackState = playbackState,
+            isPermissionDenied = isPermissionDenied
+        )
 
         // The progress bar should only be visible when actively recording
         val isProgressVisible by derivedStateOf {
-            when (appState) {
-                AppState.PlayingMusic,
-                AppState.PlayingVoice,
-                is AppState.Ready -> false
-                AppState.Recording -> true
+            when (playbackState) {
+                PlaybackState.PlayingMusic,
+                PlaybackState.PlayingVoice,
+                is PlaybackState.Ready -> false
+                PlaybackState.Recording -> true
             }
         }
 
@@ -112,7 +79,7 @@ fun SpeakerScreen(
             val (controlDashboard, progressBar) = createRefs()
 
             ControlDashboard(
-                controlDashboardState = controlDashboardState,
+                controlDashboardUiState = controlDashboardUiState,
                 onMicClicked = onMicClicked,
                 onPlayClicked = onPlayClicked,
                 onMusicClicked = onMusicClicked,
@@ -130,9 +97,7 @@ fun SpeakerScreen(
                         top.linkTo(controlDashboard.bottom, 5.dp)
                         start.linkTo(controlDashboard.start)
                         end.linkTo(controlDashboard.end)
-                    },
-                enter = if (controlDashboardState.transitionInstantly) EnterTransition.None else fadeIn() + expandIn(),
-                exit = if (controlDashboardState.transitionInstantly) ExitTransition.None else shrinkOut() + fadeOut()
+                    }
             ) {
                 LinearProgressIndicator(
                     progress = recordingProgress
@@ -142,14 +107,45 @@ fun SpeakerScreen(
     }
 }
 
-class AppStatePreviewProvider : CollectionPreviewParameterProvider<AppState>(
+private fun createControlDashboardUiState(
+    playbackState: PlaybackState,
+    isPermissionDenied: Boolean
+): State<ControlDashboardUiState> =
+    derivedStateOf {
+        when (playbackState) {
+            PlaybackState.PlayingMusic -> ControlDashboardUiState(
+                micState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+                playState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+                musicState = ControlDashboardButtonUiState(expanded = true, enabled = true, visible = true),
+            )
+            PlaybackState.PlayingVoice -> ControlDashboardUiState(
+                micState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+                playState = ControlDashboardButtonUiState(expanded = true, enabled = true, visible = true),
+                musicState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+            )
+            PlaybackState.Ready -> ControlDashboardUiState(
+                micState = ControlDashboardButtonUiState(
+                    expanded = false,
+                    enabled = !isPermissionDenied,
+                    visible = true
+                ),
+                playState = ControlDashboardButtonUiState(expanded = false, enabled = true, visible = true),
+                musicState = ControlDashboardButtonUiState(expanded = false, enabled = true, visible = true),
+            )
+            PlaybackState.Recording -> ControlDashboardUiState(
+                micState = ControlDashboardButtonUiState(expanded = true, enabled = true, visible = true),
+                playState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+                musicState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+            )
+        }
+    }
+
+private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<PlaybackState>(
     listOf(
-        AppState.Ready(
-            transitionInstantly = true
-        ),
-        AppState.Recording,
-        AppState.PlayingVoice,
-        AppState.PlayingMusic
+        PlaybackState.Ready,
+        PlaybackState.Recording,
+        PlaybackState.PlayingVoice,
+        PlaybackState.PlayingMusic
     )
 )
 
@@ -160,10 +156,10 @@ class AppStatePreviewProvider : CollectionPreviewParameterProvider<AppState>(
 )
 @Composable
 fun SpeakerScreenPreview(
-    @PreviewParameter(AppStatePreviewProvider::class) appState: AppState
+    @PreviewParameter(PlaybackStatePreviewProvider::class) playbackState: PlaybackState
 ) {
     SpeakerScreen(
-        appState = appState,
+        playbackState = playbackState,
         isPermissionDenied = true,
         recordingProgress = 0.25f,
         onMicClicked = {},

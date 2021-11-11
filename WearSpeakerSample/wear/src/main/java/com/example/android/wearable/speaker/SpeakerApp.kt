@@ -30,22 +30,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.material.MaterialTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
 
 /**
  * The logic for the speaker sample.
  *
- * The stateful logic is kept by a [MainStateHolder].
+ * The stateful logic is kept by a [MainState].
  */
 @Composable
 fun SpeakerApp() {
@@ -56,8 +49,8 @@ fun SpeakerApp() {
         val activity = context.findActivity()
         val scope = rememberCoroutineScope()
 
-        val stateHolder = remember(activity) {
-            MainStateHolder(
+        val mainState = remember(activity) {
+            MainState(
                 activity = activity,
                 requestPermission = {
                     requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
@@ -88,127 +81,43 @@ fun SpeakerApp() {
         requestPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) {
             // We ignore the direct result here, since we're going to check anyway.
             scope.launch {
-                lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
-                    stateHolder.onAction(AppAction.PermissionResultReturned)
-                }
+                mainState.permissionResultReturned()
             }
         }
 
-        // Notify the state holder whenever we become started to reset the state
-        LaunchedEffect(stateHolder) {
+        // Notify the state holder whenever we become stopped to reset the state
+        LaunchedEffect(mainState, scope) {
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                stateHolder.onAction(AppAction.Started)
+                try {
+                    awaitCancellation()
+                } finally {
+                    scope.launch {
+                        mainState.onStopped()
+                    }
+                }
             }
         }
 
         SpeakerScreen(
-            appState = stateHolder.appState,
-            isPermissionDenied = stateHolder.isPermissionDenied,
-            recordingProgress = stateHolder.recordingProgress,
+            playbackState = mainState.playbackState,
+            isPermissionDenied = mainState.isPermissionDenied,
+            recordingProgress = mainState.recordingProgress,
             onMicClicked = {
                 scope.launch {
-                    lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
-                        stateHolder.onAction(AppAction.MicClicked)
-                    }
+                    mainState.onMicClicked()
                 }
             },
             onPlayClicked = {
                 scope.launch {
-                    lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
-                        stateHolder.onAction(AppAction.PlayClicked)
-                    }
+                    mainState.onPlayClicked()
                 }
             },
             onMusicClicked = {
                 scope.launch {
-                    lifecycleOwner.lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
-                        stateHolder.onAction(AppAction.MusicClicked)
-                    }
+                    mainState.onMusicClicked()
                 }
             },
         )
-    }
-}
-
-/**
- * A helper method to run the given [block] when the state is at least [state].
- *
- * This will wait until the given [state] is achieved, and then will run the block.
- * If the state drops back down while the [block] is running, the [block] will be cancelled.
- *
- * This method resumes successfully when the [block] finishes (either normally, or after being cancelled).
- *
- * Feature request for adding this to androidx.lifecycle:
- * [https://issuetracker.google.com/issues/199443792](https://issuetracker.google.com/issues/199443792)
- */
-private suspend fun Lifecycle.withStateAtLeast(state: Lifecycle.State, block: suspend () -> Unit) {
-    raceOf(
-        {
-            // Wait for the up event, followed by the down event
-            // We do these together here to ensure we don't miss any events in-between the up and the down event.
-            awaitEvents(
-                Lifecycle.Event.upTo(state),
-                Lifecycle.Event.downFrom(state)
-            )
-        },
-        {
-            // Wait for the up event in parallel with the other racer
-            awaitEvents(Lifecycle.Event.upTo(state))
-            block()
-        }
-    )
-}
-
-/**
- * A helper method to "race" coroutines.
- *
- * Each of the racing coroutines is started immediately.
- *
- * The result of whichever coroutines finishes first (in other words, whichever one wins the race) will be returned,
- * and all other racers will be cancelled.
- */
-private suspend fun <T> raceOf(vararg racers: suspend CoroutineScope.() -> T): T {
-    require(racers.isNotEmpty()) { "Nothing to race!" }
-    return coroutineScope {
-        select {
-            val deferredRacers = racers.map { racer ->
-                async(start = CoroutineStart.UNDISPATCHED) { racer() }
-            }
-            deferredRacers.map { deferred ->
-                deferred.onAwait { result ->
-                    // Cancel all other racing coroutines
-                    deferredRacers.forEach { it.cancel() }
-                    result
-                }
-            }
-        }
-    }
-}
-
-/**
- * A helper method that waits for the given lifecycle [events] in order.
- *
- * Note that lifecycle up events will be triggered immediately, as the observer will be transitioned up to match the
- * current state.
- */
-private suspend fun Lifecycle.awaitEvents(vararg events: Lifecycle.Event?) {
-    var observer: LifecycleEventObserver? = null
-
-    try {
-        suspendCancellableCoroutine<Unit> { cont ->
-            var eventIndex = 0
-            observer = LifecycleEventObserver { _, lifecycleEvent ->
-                if (lifecycleEvent == events.getOrNull(eventIndex)) {
-                    eventIndex++
-                    if (eventIndex == events.size) {
-                        cont.resume(Unit)
-                    }
-                }
-            }
-            addObserver(observer as LifecycleEventObserver)
-        }
-    } finally {
-        observer?.let { removeObserver(it) }
     }
 }
 
