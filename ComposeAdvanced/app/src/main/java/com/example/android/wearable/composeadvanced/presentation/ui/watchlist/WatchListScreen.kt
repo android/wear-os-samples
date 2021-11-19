@@ -34,6 +34,7 @@ import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
+import androidx.wear.compose.material.items
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
@@ -101,9 +102,7 @@ fun WatchListScreen(
         }
 
         // Displays all watches.
-        items(watches.size) { index ->
-            val watch = watches[index]
-
+        items(watches) { watch ->
             WatchAppChip(
                 watchModelNumber = watch.modelId,
                 watchName = watch.name,
