@@ -18,9 +18,9 @@ buildscript {
     ext {
         // Dependency versions.
         activity_compose_version = '1.4.0'
-        compose_version = '1.1.0-beta02'
+        compose_version = '1.1.0-beta03'
         lifecycle_version = '2.4.0'
-        wear_compose_version = '1.0.0-alpha10'
+        wear_compose_version = '1.0.0-alpha11'
 
         junit_version = '4.13.2'
         androidx_test_ext_junit_version = '1.1.3'
