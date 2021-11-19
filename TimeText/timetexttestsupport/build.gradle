@@ -44,7 +44,3 @@ android {
         viewBinding true
     }
 }
-
-dependencies {
-    implementation project(":timetext")
-}
