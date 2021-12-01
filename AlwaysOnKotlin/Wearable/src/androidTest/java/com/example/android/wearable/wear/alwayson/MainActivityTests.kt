@@ -32,8 +32,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -48,7 +50,7 @@ import java.time.ZoneId
 class MainActivityTests {
     private val context = ApplicationProvider.getApplicationContext<Application>()
 
-    private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestScope()
 
     /**
      * A timestamp in the relatively far, far future (year 2200).
@@ -66,11 +68,10 @@ class MainActivityTests {
         uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         // Ensure we are starting in active mode
-        uiDevice.pressKeyCode(KeyEvent.KEYCODE_WAKEUP)
+        pressKeyCodeWithWait(KeyEvent.KEYCODE_WAKEUP)
 
-        // Override the active dispatcher with a paused test one.
-        testDispatcher.pauseDispatcher()
-        activeDispatcher = testDispatcher
+        // Override the active dispatcher with a test one that we can control the time for
+        activeDispatcher = StandardTestDispatcher(testScope.testScheduler)
 
         updateClock()
         scenario = launchActivity()
@@ -82,7 +83,7 @@ class MainActivityTests {
     }
 
     @Test
-    fun initialTextIsCorrect(): Unit = runBlocking {
+    fun initialTextIsCorrect(): Unit = testScope.runTest {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.time)).check(matches(withText(ZERO_SEC_DISPLAY)))
@@ -99,10 +100,12 @@ class MainActivityTests {
             )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 1))))
+
+        scenario.moveToState(Lifecycle.State.STARTED)
     }
 
     @Test
-    fun textIsCorrectAfterFiveSeconds(): Unit = runBlocking {
+    fun textIsCorrectAfterFiveSeconds(): Unit = testScope.runTest {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         // Advance 5 seconds, one at a time
@@ -124,10 +127,12 @@ class MainActivityTests {
             )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 6))))
+
+        scenario.moveToState(Lifecycle.State.STARTED)
     }
 
     @Test
-    fun textIsCorrectAfterGoingIntoAmbientMode(): Unit = runBlocking {
+    fun textIsCorrectAfterGoingIntoAmbientMode(): Unit = testScope.runTest {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         // Advance 5 seconds, one at a time
@@ -135,8 +140,7 @@ class MainActivityTests {
             advanceTime(Duration.ofSeconds(1))
         }
 
-        uiDevice.pressKeyCode(KeyEvent.KEYCODE_SLEEP)
-        Thread.sleep(1000) // Ugly sleep, without it sometimes ambient mode won't be entered
+        pressKeyCodeWithWait(KeyEvent.KEYCODE_SLEEP)
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(FIVE_SEC_DISPLAY)))
@@ -153,10 +157,12 @@ class MainActivityTests {
             )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 7))))
+
+        scenario.moveToState(Lifecycle.State.STARTED)
     }
 
     @Test
-    fun textIsCorrectAfterGoingIntoAmbientModeAndReceivingIntent(): Unit = runBlocking {
+    fun textIsCorrectAfterGoingIntoAmbientModeAndReceivingIntent(): Unit = testScope.runTest {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         // Advance 5 seconds, one at a time
@@ -166,8 +172,7 @@ class MainActivityTests {
 
         advanceTime(Duration.ofMillis(500))
 
-        uiDevice.pressKeyCode(KeyEvent.KEYCODE_SLEEP)
-        Thread.sleep(1000) // Ugly sleep, without it sometimes ambient mode won't be entered
+        pressKeyCodeWithWait(KeyEvent.KEYCODE_SLEEP)
         Espresso.onIdle()
 
         // Simulate a sent broadcast
@@ -195,10 +200,12 @@ class MainActivityTests {
             )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 8))))
+
+        scenario.moveToState(Lifecycle.State.STARTED)
     }
 
     @Test
-    fun textIsCorrectAfterReturningToActiveMode(): Unit = runBlocking {
+    fun textIsCorrectAfterReturningToActiveMode(): Unit = testScope.runTest {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         // Advance 5 seconds, one at a time
@@ -209,8 +216,7 @@ class MainActivityTests {
         advanceTime(Duration.ofMillis(500))
 
         // Enter ambient mode
-        uiDevice.pressKeyCode(KeyEvent.KEYCODE_SLEEP)
-        Thread.sleep(1000) // Ugly sleep, without it sometimes ambient mode won't be entered
+        pressKeyCodeWithWait(KeyEvent.KEYCODE_SLEEP)
         Espresso.onIdle()
 
         // Simulate a sent broadcast
@@ -226,8 +232,7 @@ class MainActivityTests {
         advanceTime(Duration.ofSeconds(2))
 
         // Exit ambient mode
-        uiDevice.pressKeyCode(KeyEvent.KEYCODE_WAKEUP)
-        Thread.sleep(1000) // Ugly sleep, without it sometimes ambient mode won't be exited
+        pressKeyCodeWithWait(KeyEvent.KEYCODE_WAKEUP)
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(TWELVE_SEC_DISPLAY)))
@@ -244,16 +249,19 @@ class MainActivityTests {
             )
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 9))))
+
+        scenario.moveToState(Lifecycle.State.STARTED)
     }
 
     /**
-     * Advances the simulated time by the given [duration], updating the [testDispatcher], the [clock] and running
-     * any updates due to those changes.
+     * Advances the simulated time by the given [duration], updating the [TestCoroutineScheduler],
+     * the [clock] and running any updates due to those changes.
      */
     private fun advanceTime(duration: Duration) {
         instant += duration
         updateClock()
-        testDispatcher.advanceTimeBy(duration.toMillis())
+        testScope.testScheduler.advanceTimeBy(duration.toMillis())
+        testScope.testScheduler.runCurrent()
         Espresso.onIdle()
     }
 
@@ -262,6 +270,15 @@ class MainActivityTests {
      */
     private fun updateClock() {
         clock = Clock.fixed(instant, ZoneId.of("UTC"))
+    }
+
+    /**
+     * Presses the given key with an ugly sleep, without it sometimes ambient mode won't be entered
+     * or exited.
+     */
+    private fun pressKeyCodeWithWait(keyCode: Int) {
+        uiDevice.pressKeyCode(keyCode)
+        Thread.sleep(1000)
     }
 }
 
