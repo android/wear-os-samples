@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = "1.5.31"
+    ext.kotlin_version = "1.6.0"
     repositories {
         google()
         mavenCentral()
@@ -27,7 +27,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '5.7.0'
+    id 'com.diffplug.spotless' version '6.0.1'
 }
 
 subprojects {
