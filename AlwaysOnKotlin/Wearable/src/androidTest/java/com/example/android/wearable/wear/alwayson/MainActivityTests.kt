@@ -101,6 +101,7 @@ class MainActivityTests {
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 1))))
 
+        // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
@@ -128,6 +129,7 @@ class MainActivityTests {
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 6))))
 
+        // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
@@ -158,6 +160,7 @@ class MainActivityTests {
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 7))))
 
+        // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
@@ -201,6 +204,7 @@ class MainActivityTests {
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 8))))
 
+        // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
@@ -250,6 +254,7 @@ class MainActivityTests {
         onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
         onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 9))))
 
+        // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
