@@ -17,7 +17,6 @@ package com.example.android.wearable.speaker
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -29,10 +28,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.booleanResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.wear.compose.material.AlertDialog
+import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.ConfirmationDialog
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Text
 import kotlinx.coroutines.launch
 
 /**
@@ -54,24 +57,6 @@ fun SpeakerApp() {
                 activity = activity,
                 requestPermission = {
                     requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                },
-                showPermissionRationale = {
-                    // TODO: Refactor away from normal AlertDialog to a Compose-specific dialog
-                    AlertDialog.Builder(activity)
-                        .setMessage(R.string.rationale_for_microphone_permission)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                        }
-                        .setNegativeButton(R.string.cancel) { _, _ -> }
-                        .create()
-                        .show()
-                },
-                showSpeakerNotSupported = {
-                    AlertDialog.Builder(activity)
-                        .setMessage(R.string.no_speaker_supported)
-                        .setPositiveButton(R.string.ok) { _, _ -> }
-                        .create()
-                        .show()
                 }
             )
         }
@@ -121,6 +106,41 @@ fun SpeakerApp() {
                 }
             },
         )
+
+        if (mainState.showPermissionRationale) {
+            AlertDialog(
+                title = {
+                    Text(text = stringResource(id = R.string.rationale_for_microphone_permission))
+                },
+                positiveButton = {
+                    Button(
+                        onClick = {
+                            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            mainState.showPermissionRationale = false
+                        }
+                    ) {
+                        Text(text = stringResource(id = R.string.ok))
+                    }
+                },
+                negativeButton = {
+                    Button(
+                        onClick = {
+                            mainState.showPermissionRationale = false
+                        }
+                    ) {
+                        Text(text = stringResource(id = R.string.cancel))
+                    }
+                }
+            )
+        }
+
+        if (mainState.showSpeakerNotSupported) {
+            ConfirmationDialog(
+                onTimeout = { mainState.showSpeakerNotSupported = false }
+            ) {
+                Text(text = stringResource(id = R.string.no_speaker_supported))
+            }
+        }
     }
 }
 

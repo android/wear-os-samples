@@ -43,9 +43,7 @@ import kotlin.coroutines.resume
  */
 class MainState(
     private val activity: Activity,
-    private val requestPermission: () -> Unit,
-    private val showPermissionRationale: () -> Unit,
-    private val showSpeakerNotSupported: () -> Unit
+    private val requestPermission: () -> Unit
 ) {
     /**
      * The [MutatorMutex] that guards the playback state of the app.
@@ -81,6 +79,16 @@ class MainState(
         private set
 
     /**
+     * `true` if we the permission rationale should be shown.
+     */
+    var showPermissionRationale by mutableStateOf(false)
+
+    /**
+     * `true` if we the speaker not supported rationale should be shown.
+     */
+    var showSpeakerNotSupported by mutableStateOf(false)
+
+    /**
      * The [SoundRecorder] for recording and playing audio captured on-device.
      */
     private val soundRecorder = SoundRecorder(activity, "audiorecord.pcm")
@@ -114,7 +122,7 @@ class MainState(
                         activity.shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
                             // If we should show the rationale prior to requesting the permission, send that
                             // event
-                            showPermissionRationale()
+                            showPermissionRationale = true
                             playbackState = PlaybackState.Ready
                         }
                         else -> {
@@ -142,7 +150,7 @@ class MainState(
                         playMusic(activity)
                         playbackState = PlaybackState.Ready
                     } else {
-                        showSpeakerNotSupported()
+                        showSpeakerNotSupported = true
                         playbackState = PlaybackState.Ready
                     }
                 // If we were already playing, transition back to ready
@@ -164,7 +172,7 @@ class MainState(
                         soundRecorder.play()
                         playbackState = PlaybackState.Ready
                     } else {
-                        showSpeakerNotSupported()
+                        showSpeakerNotSupported = true
                         playbackState = PlaybackState.Ready
                     }
                 }
