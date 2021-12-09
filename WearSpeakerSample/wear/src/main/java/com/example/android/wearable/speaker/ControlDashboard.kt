@@ -127,9 +127,9 @@ private fun createConstraintSet(
     play: Any,
     music: Any,
 ): ConstraintSet {
-    val iconCircleRadius = dimensionResource(id = R.dimen.icon_circle_radius)
-    val iconMinimizedSize = dimensionResource(id = R.dimen.icon_minimized_size)
-    val iconExpandedSize = dimensionResource(id = R.dimen.icon_expanded_size)
+    val iconCircleRadius = 32.dp
+    val iconMinimizedSize = 48.dp
+    val iconExpandedSize = 136.dp
 
     val micSize by animateDpAsState(
         targetValue = if (controlDashboardUiState.micState.expanded) iconExpandedSize else iconMinimizedSize
@@ -188,7 +188,7 @@ private fun ControlDashboardButton(
     imageVector: ImageVector,
     contentDescription: String
 ) {
-    val iconPadding = dimensionResource(id = R.dimen.icon_padding)
+    val iconPadding = 8.dp
     // TODO: Replace with a version of IconButton?
     //       https://issuetracker.google.com/issues/203123015
 
