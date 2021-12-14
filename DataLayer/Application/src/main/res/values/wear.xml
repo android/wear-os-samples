@@ -20,7 +20,6 @@
         translatable="false"
         tools:ignore="UnusedResources">
         <!-- declaring the provided capabilities -->
-        <item tools:ignore="Typos">capability_1</item>
-        <item>capability_2</item>
+        <item>mobile</item>
     </string-array>
 </resources>

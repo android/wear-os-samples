@@ -18,15 +18,16 @@ buildscript {
     ext {
         // SDK and tools
         activityVersion = '1.4.0'
-        composeVersion = '1.1.0-beta04'
+        composeVersion = '1.1.0-rc01'
+        composeCompilerVersion = "1.1.0-rc02"
         coreVersion = '1.7.0'
         coroutinesVersion = '1.6.0-RC'
         fragmentVersion = "1.4.0"
-        kotlinVersion = '1.6.0'
+        kotlinVersion = '1.6.10'
         lifecycleVersion = '2.4.0'
         playServicesWearableVersion = "17.1.0"
         watchFaceVersion = '1.0.0'
-        wearComposeVersion = "1.0.0-alpha12"
+        wearComposeVersion = "1.0.0-alpha13"
     }
 
     repositories {
@@ -35,7 +36,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
