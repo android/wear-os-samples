@@ -14,7 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<androidx.wear.watchface.complications.rendering.ComplicationDrawable
+<drawable
+    class="androidx.wear.watchface.complications.rendering.ComplicationDrawable"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:borderColor="@color/light_blue_50"
     app:borderStyle="solid"
@@ -35,4 +36,4 @@
       app:titleColor="@color/white_70"
       app:rangedValuePrimaryColor="@color/white"
       app:rangedValueSecondaryColor="@color/transparent" />
-</androidx.wear.watchface.complications.rendering.ComplicationDrawable>
+</drawable>
