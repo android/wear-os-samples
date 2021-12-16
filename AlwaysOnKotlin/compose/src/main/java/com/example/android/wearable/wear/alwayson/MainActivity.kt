@@ -26,6 +26,19 @@ import androidx.wear.ambient.AmbientModeSupport
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.time.Clock
+import java.time.Instant
+
+/**
+ * The [Clock] driving the time information. Overridable only for testing.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal var clock: Clock = Clock.systemDefaultZone()
+
+/**
+ * The dispatcher used for delaying in active mode. Overridable only for testing.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal var activeDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate
 
 /**
  * IMPORTANT NOTE: Most apps shouldn't use always on ambient mode, as it drains battery life. Unless
@@ -78,7 +91,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         setContent {
             AlwaysOnApp(
                 ambientState = ambientCallbackState.ambientState,
-                ambientPing = ambientCallbackState.ambientPing,
+                ambientUpdateTimestamp = ambientCallbackState.ambientUpdateTimestamp,
                 clock = clock,
                 activeDispatcher = activeDispatcher
             )
@@ -93,7 +106,7 @@ private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
     /**
      * A ticker state that increase whenever we get a call to `onUpdateAmbient`
      */
-    var ambientPing by mutableStateOf(0L)
+    var ambientUpdateTimestamp by mutableStateOf(Instant.now(clock))
 
     /**
      * The current [AmbientState].
@@ -128,7 +141,7 @@ private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
      */
     override fun onUpdateAmbient() {
         super.onUpdateAmbient()
-        ambientPing++
+        ambientUpdateTimestamp = Instant.now(clock)
     }
 
     /**
@@ -139,15 +152,3 @@ private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
         ambientState = AmbientState.Interactive
     }
 }
-
-/**
- * The [Clock] driving the time information. Overridable only for testing.
- */
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal var clock: Clock = Clock.systemDefaultZone()
-
-/**
- * The dispatcher used for delaying in active mode. Overridable only for testing.
- */
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal var activeDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate

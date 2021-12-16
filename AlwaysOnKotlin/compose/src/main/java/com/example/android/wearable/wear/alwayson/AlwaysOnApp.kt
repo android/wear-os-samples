@@ -66,7 +66,7 @@ private val ambientUpdateIntent = Intent(AMBIENT_UPDATE_ACTION)
 @Composable
 fun AlwaysOnApp(
     ambientState: AmbientState,
-    ambientPing: Long,
+    ambientUpdateTimestamp: Instant,
     clock: Clock,
     activeDispatcher: CoroutineDispatcher
 ) {
@@ -98,7 +98,7 @@ fun AlwaysOnApp(
     /**
      * A ping used to set up a loopback side-effect loop, to continuously update the time.
      */
-    var updateDataPing by remember { mutableStateOf(0L) }
+    var updateDataTrigger by remember { mutableStateOf(0L) }
 
     /**
      * The current instant to display
@@ -116,7 +116,7 @@ fun AlwaysOnApp(
     var drawCount by remember { mutableStateOf(0) }
 
     fun updateData() {
-        updateDataPing++
+        updateDataTrigger++
         currentInstant = Instant.now(clock)
         currentTime = LocalTime.now(clock)
         drawCount++
@@ -162,7 +162,7 @@ fun AlwaysOnApp(
 
         // Then, setup a ping to refresh data again: either via the alarm manager, or simply
         // after a delay
-        LaunchedEffect(updateDataPing, ambientState) {
+        LaunchedEffect(updateDataTrigger, ambientState) {
             when (ambientState) {
                 is AmbientState.Ambient -> {
                     val triggerTime = currentInstant.getNextInstantWithInterval(
@@ -191,7 +191,7 @@ fun AlwaysOnApp(
     MaterialTheme {
         AlwaysOnScreen(
             ambientState = ambientState,
-            ambientPing = ambientPing,
+            ambientUpdateTimestamp = ambientUpdateTimestamp,
             drawCount = drawCount,
             currentInstant = currentInstant,
             currentTime = currentTime

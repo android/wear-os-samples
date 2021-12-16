@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -57,7 +58,7 @@ const val BURN_IN_OFFSET_PX = 10
 @Composable
 fun AlwaysOnScreen(
     ambientState: AmbientState,
-    ambientPing: Long,
+    ambientUpdateTimestamp: Instant,
     drawCount: Int,
     currentInstant: Instant,
     currentTime: LocalTime
@@ -83,19 +84,21 @@ fun AlwaysOnScreen(
             .verticalScroll(rememberScrollState())
             .fillMaxRectangle()
             .padding(with(LocalDensity.current) { BURN_IN_OFFSET_PX.toDp() })
-            .burnInTranslation(ambientState, ambientPing)
+            .burnInTranslation(ambientState, ambientUpdateTimestamp)
     ) {
         Text(
+            modifier = Modifier.testTag("time"),
             text = dateFormat.format(currentTime),
             style = MaterialTheme.typography.title1,
-            modifier = Modifier.testTag("time")
+            textAlign = TextAlign.Center
         )
         Text(
+            modifier = Modifier.testTag("timestamp"),
             text = stringResource(id = R.string.timestamp_label, currentInstant.toEpochMilli()),
             style = MaterialTheme.typography.body2,
-            modifier = Modifier.testTag("timestamp")
         )
         Text(
+            modifier = Modifier.testTag("mode"),
             text = stringResource(
                 id = when (ambientState) {
                     AmbientState.Interactive -> R.string.mode_active_label
@@ -104,9 +107,10 @@ fun AlwaysOnScreen(
             ),
             style = MaterialTheme.typography.body2,
             color = stateColor,
-            modifier = Modifier.testTag("mode")
+            textAlign = TextAlign.Center
         )
         Text(
+            modifier = Modifier.testTag("rate"),
             text = stringResource(
                 id = R.string.update_rate_label,
                 when (ambientState) {
@@ -116,20 +120,26 @@ fun AlwaysOnScreen(
             ),
             style = MaterialTheme.typography.body2,
             color = stateColor,
-            modifier = Modifier.testTag("rate")
+            textAlign = TextAlign.Center
         )
         Text(
+            modifier = Modifier.testTag("drawCount"),
             text = stringResource(id = R.string.draw_count_label, drawCount),
             style = MaterialTheme.typography.body2,
             color = stateColor,
-            modifier = Modifier.testTag("drawCount")
+            textAlign = TextAlign.Center
         )
     }
 }
 
 /**
- * A [Modifier] version of `BoxInsetLayout`. This method assumes that the layout will fill the
- * entire screen, and that there are no oval devices.
+ * A [Modifier] for adding padding for round devices for rectangular content.
+ *
+ * If the device is round, an equal amount of padding required to inset the content inside the
+ * circle.
+ *
+ * This method assumes that the layout will fill the entire screen, and that there are no oval
+ * devices.
  */
 private fun Modifier.fillMaxRectangle(): Modifier = composed {
     val currentWindowMetrics = rememberCurrentWindowMetrics()
@@ -165,10 +175,10 @@ private fun rememberCurrentWindowMetrics(): Rect {
  */
 private fun Modifier.burnInTranslation(
     ambientState: AmbientState,
-    ambientPing: Long
+    ambientUpdateTimestamp: Instant
 ): Modifier = composed {
-    val translationX = rememberBurnInTranslation(ambientState, ambientPing)
-    val translationY = rememberBurnInTranslation(ambientState, ambientPing)
+    val translationX = rememberBurnInTranslation(ambientState, ambientUpdateTimestamp)
+    val translationY = rememberBurnInTranslation(ambientState, ambientUpdateTimestamp)
 
     this
         .graphicsLayer {
@@ -178,8 +188,11 @@ private fun Modifier.burnInTranslation(
 }
 
 @Composable
-private fun rememberBurnInTranslation(ambientState: AmbientState, ambientPing: Long): Float =
-    remember(ambientState, ambientPing) {
+private fun rememberBurnInTranslation(
+    ambientState: AmbientState,
+    ambientUpdateTimestamp: Instant
+): Float =
+    remember(ambientState, ambientUpdateTimestamp) {
         when (ambientState) {
             AmbientState.Interactive -> 0f
             is AmbientState.Ambient -> if (ambientState.doBurnInProtection) {
@@ -205,7 +218,7 @@ fun AlwaysOnScreenInteractivePreview() {
     MaterialTheme {
         AlwaysOnScreen(
             ambientState = AmbientState.Interactive,
-            ambientPing = 0,
+            ambientUpdateTimestamp = Instant.now(),
             drawCount = 4,
             currentInstant = Instant.now(),
             currentTime = LocalTime.now()
@@ -222,7 +235,7 @@ fun AlwaysOnScreenAmbientPreview() {
                 isLowBitAmbient = true,
                 doBurnInProtection = true
             ),
-            ambientPing = 0,
+            ambientUpdateTimestamp = Instant.now(),
             drawCount = 4,
             currentInstant = Instant.now(),
             currentTime = LocalTime.now()
