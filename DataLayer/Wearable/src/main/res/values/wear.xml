@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
+<!-- Copyright (C) 2021 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
      limitations under the License.
 -->
 
-<resources>
-    <string-array name="android_wear_capabilities" translatable="false">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="android_wear_capabilities" tools:ignore="UnusedResources" translatable="false">
         <!-- declaring the provided capabilities -->
-        <item>capability_1</item>
+        <item>wear</item>
     </string-array>
 </resources>

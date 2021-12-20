@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<!-- Copyright (C) 2021 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,11 +14,18 @@
      limitations under the License.
 -->
 
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="app_name">Data Layer Sample Wearable App</string>
-    <string name="intro">Waiting for data to arrive\u2026</string>
-    <string name="capability_2_notification">Capability 2</string>
-    <string name="capabilities_1_and_2_notification">Capabilities 1 and 2</string>
+    <string name="waiting">Waiting for data to arrive\u2026</string>
+    <string name="query_other_devices">Query for other devices</string>
+    <string name="query_mobile_camera">Query for mobile camera</string>
     <string name="no_device">No device provides the requested capabilities</string>
     <string name="connected_nodes">Nodes: %1$s</string>
+    <string name="message">Message</string>
+    <string name="capability_changed">Capability changed</string>
+    <string name="photo_placeholder">Photo placeholder</string>
+    <string name="captured_photo">Captured photo</string>
+    <string name="data_item_changed">DataItem changed</string>
+    <string name="data_item_deleted">DataItem deleted</string>
+    <string name="data_item_unknown">Unknown DataItem type</string>
 </resources>

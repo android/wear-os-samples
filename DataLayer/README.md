@@ -13,7 +13,7 @@ using the [DataClient][2].
 It does this by sending a picture between connected devices.
 
 An Activity is being used for both the connected devices which implement their parts of
-the required interfaces.
+the required interfaces using Jetpack Compose.
 
 It showcases how to use an [WearableListenerService][1] to consume DataEvents
 as well as implementations for various required listeners when using the [DataClient][2],
@@ -27,9 +27,7 @@ as well as implementations for various required listeners when using the [DataCl
 Pre-requisites
 --------------
 
-- Android SDK 28
-- Android Build Tools v29.0.2
-- Android Support Repository
+- Android SDK 32
 
 Screenshots
 -------------

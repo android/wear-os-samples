@@ -37,6 +37,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
@@ -128,6 +129,18 @@ class MainActivity : ComponentActivity() {
             Uri.parse("wear://"),
             CapabilityClient.FILTER_REACHABLE
         )
+
+        if (isCameraSupported) {
+            lifecycleScope.launch {
+                try {
+                    capabilityClient.addLocalCapability(CAMERA_CAPABILITY).await()
+                } catch (cancellationException: CancellationException) {
+                    throw cancellationException
+                } catch (exception: Exception) {
+                    Log.e(TAG, "Could not add capability: $exception")
+                }
+            }
+        }
     }
 
     override fun onPause() {
@@ -135,6 +148,20 @@ class MainActivity : ComponentActivity() {
         dataClient.removeListener(clientDataViewModel)
         messageClient.removeListener(clientDataViewModel)
         capabilityClient.removeListener(clientDataViewModel)
+
+        lifecycleScope.launch {
+            // This is a judicious use of NonCancellable.
+            // This is asynchronous clean-up, since the capability is no longer available.
+            // If we allow this to be cancelled, we may leave the capability in-place for other
+            // nodes to see.
+            withContext(NonCancellable) {
+                try {
+                    capabilityClient.removeLocalCapability(CAMERA_CAPABILITY).await()
+                } catch (exception: Exception) {
+                    Log.e(TAG, "Could not remove capability: $exception")
+                }
+            }
+        }
     }
 
     private fun startWearableActivity() {
@@ -225,6 +252,7 @@ class MainActivity : ComponentActivity() {
         private const val IMAGE_KEY = "photo"
         private const val TIME_KEY = "time"
         private const val COUNT_KEY = "count"
+        private const val CAMERA_CAPABILITY = "camera"
 
         private val countInterval = Duration.ofSeconds(5)
     }
