@@ -42,17 +42,29 @@ jobs:
         working-directory: ${{ env.SAMPLE_PATH }}
         run: ./gradlew check --stacktrace
 
-      - name: Upload build outputs (APKs)
+      - name: Upload views build outputs (APKs)
         uses: actions/upload-artifact@v2
         with:
           name: build-outputs
-          path: ${{ env.SAMPLE_PATH }}/Wearable/build/outputs
+          path: ${{ env.SAMPLE_PATH }}/views/build/outputs
 
-      - name: Upload build reports
+      - name: Upload views build reports
         uses: actions/upload-artifact@v2
         with:
           name: build-reports
-          path: ${{ env.SAMPLE_PATH }}/Wearable/build/reports
+          path: ${{ env.SAMPLE_PATH }}/views/build/reports
+
+      - name: Upload compose build outputs (APKs)
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-outputs
+          path: ${{ env.SAMPLE_PATH }}/compose/build/outputs
+
+      - name: Upload compose build reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-reports
+          path: ${{ env.SAMPLE_PATH }}/compose/build/reports
 
   android-test:
     needs: build
@@ -96,8 +108,14 @@ jobs:
           script: ./gradlew connectedCheck --stacktrace
           working-directory: ${{ env.SAMPLE_PATH }}
 
-      - name: Upload test reports
+      - name: Upload views test reports
         uses: actions/upload-artifact@v2
         with:
           name: test-reports
-          path: ${{ env.SAMPLE_PATH }}/Wearable/build/reports
+          path: ${{ env.SAMPLE_PATH }}/views/build/reports
+
+      - name: Upload compose test reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: ${{ env.SAMPLE_PATH }}/compose/build/reports
