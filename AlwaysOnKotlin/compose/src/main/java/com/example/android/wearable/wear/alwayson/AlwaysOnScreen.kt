@@ -96,6 +96,7 @@ fun AlwaysOnScreen(
             modifier = Modifier.testTag("timestamp"),
             text = stringResource(id = R.string.timestamp_label, currentInstant.toEpochMilli()),
             style = MaterialTheme.typography.body2,
+            textAlign = TextAlign.Center
         )
         Text(
             modifier = Modifier.testTag("mode"),
