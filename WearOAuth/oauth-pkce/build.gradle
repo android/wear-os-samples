@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.pkce"
@@ -53,6 +53,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation("androidx.fragment:fragment-ktx:1.4.0")
     implementation("androidx.wear:wear:1.2.0")
-    implementation("androidx.wear:wear-phone-interactions:1.1.0-alpha01")
+    implementation("androidx.wear:wear-phone-interactions:1.1.0-alpha02")
     implementation 'com.google.android.gms:play-services-wearable:17.1.0'
 }
