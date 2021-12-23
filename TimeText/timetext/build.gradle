@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 23
@@ -65,5 +65,5 @@ dependencies {
     testImplementation "androidx.test.ext:truth:1.4.0"
     testImplementation "androidx.test:runner:1.4.0"
     testImplementation "com.google.truth:truth:1.1.2"
-    testImplementation "org.robolectric:robolectric:4.7.2"
+    testImplementation "org.robolectric:robolectric:4.7.3"
 }

@@ -21,7 +21,7 @@ buildscript {
         composeVersion = '1.1.0-rc01'
         composeCompilerVersion = "1.1.0-rc02"
         coreVersion = '1.7.0'
-        coroutinesVersion = '1.6.0-RC'
+        coroutinesVersion = '1.6.0'
         fragmentVersion = "1.4.0"
         kotlinVersion = '1.6.10'
         lifecycleVersion = '2.4.0'
