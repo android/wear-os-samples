@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -84,9 +85,21 @@ fun WearApp(watchRepository: WatchRepository) {
 
         val swipeDismissableNavController = rememberSwipeDismissableNavController()
 
-        // Allows user to disable the text before the time and hide the vignette.
+        // Allows user to disable the text before the time.
         var showProceedingTextBeforeTime by rememberSaveable { mutableStateOf(false) }
-        var vignetteVisible by rememberSaveable { mutableStateOf(true) }
+
+        // Allows user to show/hide the vignette on appropriate screens.
+        // IMPORTANT NOTE: Usually you want to show the vignette all the time on screens with
+        // scrolling content, a rolling side button, or a rotating bezel. This preference is just
+        // to visually demonstrate the vignette for the developer to see it on and off.
+        var vignetteVisiblePreference by rememberSaveable { mutableStateOf(false) }
+
+        // Observes the current back stack entry to show the vignette for the appropriate screens by
+        // checking the destination + route.
+        // TODO: Replace with .currentBackStackEntryAsState() once added to Compose for Wear OS
+        // Navigation Library: https://issuetracker.google.com/issues/212739653
+        val currentBackStackEntry by swipeDismissableNavController
+            .currentBackStackEntryFlow.collectAsState(null)
 
         Scaffold(
             // Scaffold places time at top of screen to follow Material Design guidelines.
@@ -98,10 +111,15 @@ fun WearApp(watchRepository: WatchRepository) {
                 )
             },
             vignette = {
-                CustomVignette(
-                    visible = vignetteVisible,
-                    vignettePosition = VignettePosition.TopAndBottom
-                )
+                val currentRoute = currentBackStackEntry?.destination?.route
+
+                // Only show vignette for screens with scrollable content.
+                if (currentRoute == Screen.WatchList.route) {
+                    CustomVignette(
+                        visible = vignetteVisiblePreference,
+                        vignettePosition = VignettePosition.TopAndBottom
+                    )
+                }
             },
             positionIndicator = {
                 CustomPositionIndicator(
@@ -138,9 +156,9 @@ fun WearApp(watchRepository: WatchRepository) {
                     WatchListScreen(
                         scalingLazyListState = scalingLazyListState,
                         watchRepository = watchRepository,
-                        showVignette = vignetteVisible,
+                        showVignette = vignetteVisiblePreference,
                         onClickVignetteToggle = { showVignette ->
-                            vignetteVisible = showVignette
+                            vignetteVisiblePreference = showVignette
                         },
                         onClickWatch = { id ->
                             swipeDismissableNavController.navigate(
