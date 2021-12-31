@@ -81,7 +81,7 @@ fun WearApp(watchRepository: WatchRepository) {
         // scroll indicator).
         // In our case, the watch list screen uses a ScalingLazyColumn and the watch details
         // screen uses a Column with scrolling enabled.
-        // We also uses the states for various other things (like hiding the time when the user is
+        // We also use the states for various other things (like hiding the time when the user is
         // scrolling).
         // ----------
         // State for the ScalingLazyColumn (watch list screen)
