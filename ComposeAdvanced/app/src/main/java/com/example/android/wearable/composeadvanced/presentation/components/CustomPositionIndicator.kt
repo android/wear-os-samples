@@ -16,6 +16,7 @@
 package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.PositionIndicator
@@ -37,6 +38,18 @@ fun CustomPositionIndicator(
     }
 }
 
+@Composable
+fun CustomPositionIndicator(
+    visible: Boolean,
+    scrollState: ScrollState
+) {
+    if (visible) {
+        PositionIndicator(
+            scrollState = scrollState
+        )
+    }
+}
+
 @Preview(
     widthDp = 300,
     heightDp = 300,
@@ -46,6 +59,19 @@ fun CustomPositionIndicator(
     showBackground = true
 )
 @Composable
-fun PreviewPositionIndicator() {
+fun PreviewPositionIndicatorScalingLazyListState() {
     CustomPositionIndicator(visible = true, scalingLazyListState = ScalingLazyListState())
+}
+
+@Preview(
+    widthDp = 300,
+    heightDp = 300,
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    backgroundColor = 0x000000,
+    showBackground = true
+)
+@Composable
+fun PreviewPositionIndicatorScrollState() {
+    CustomPositionIndicator(visible = true, scrollState = ScrollState(0))
 }

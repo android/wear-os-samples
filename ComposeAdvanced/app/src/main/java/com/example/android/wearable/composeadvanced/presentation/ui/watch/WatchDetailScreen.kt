@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.watch
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,6 +49,7 @@ import com.example.android.wearable.composeadvanced.data.WatchRepository
 @Composable
 fun WatchDetailScreen(
     id: Int,
+    scrollState: ScrollState,
     watchRepository: WatchRepository,
     viewModel: WatchDetailViewModel = viewModel(
         factory = WatchDetailViewModelFactory(
@@ -60,10 +63,12 @@ fun WatchDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(
                 top = 26.dp,
                 start = 8.dp,
-                end = 8.dp
+                end = 8.dp,
+                bottom = 26.dp
             ),
         verticalArrangement = Arrangement.Top
     ) {

@@ -18,7 +18,9 @@ package com.example.android.wearable.composeadvanced.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -74,14 +76,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WearApp(watchRepository: WatchRepository) {
     WearAppTheme {
-        // The state for the ScalingLazyColumn in other screen is hoisted to this level, so
-        // the Scaffold can properly place the position indicator (also known as the
-        // scroll indicator). We use it for various other things (like hiding the time when
-        // the user is scrolling).
-        //
-        // This current solution works for one scrolling type Composable, that is, we only
-        // have one Composable capable of scrolling.
+        // The state for any scrollable content in the composable screens is hoisted to this level,
+        // so the Scaffold can properly place the position indicator (also known as the
+        // scroll indicator).
+        // In our case, the watch list screen uses a ScalingLazyColumn and the watch details
+        // screen uses a Column with scrolling enabled.
+        // We also uses the states for various other things (like hiding the time when the user is
+        // scrolling).
+        // ----------
+        // State for the ScalingLazyColumn (watch list screen)
         val scalingLazyListState: ScalingLazyListState = rememberScalingLazyListState()
+        // State for the Column's vertical scroll modifier (watch detail screen).
+        val watchDetailScrollState: ScrollState = rememberScrollState()
 
         val swipeDismissableNavController = rememberSwipeDismissableNavController()
 
@@ -101,34 +107,46 @@ fun WearApp(watchRepository: WatchRepository) {
         val currentBackStackEntry by swipeDismissableNavController
             .currentBackStackEntryFlow.collectAsState(null)
 
+        val currentRoute = currentBackStackEntry?.destination?.route
+
         Scaffold(
             // Scaffold places time at top of screen to follow Material Design guidelines.
             timeText = {
                 CustomTimeText(
-                    visible = !scalingLazyListState.isScrollInProgress,
+                    visible = !scalingLazyListState.isScrollInProgress &&
+                        !watchDetailScrollState.isScrollInProgress,
                     showLeadingText = showProceedingTextBeforeTime,
                     leadingText = stringResource(R.string.leading_time_text)
                 )
             },
             vignette = {
-                val currentRoute = currentBackStackEntry?.destination?.route
-
                 // Only show vignette for screens with scrollable content.
-                if (currentRoute == Screen.WatchList.route) {
+                if (Screen.WatchList.route in currentRoute) {
                     CustomVignette(
                         visible = vignetteVisiblePreference,
+                        vignettePosition = VignettePosition.TopAndBottom
+                    )
+                } else if (Screen.WatchDetail.route in currentRoute) {
+                    CustomVignette(
+                        visible = true,
                         vignettePosition = VignettePosition.TopAndBottom
                     )
                 }
             },
             positionIndicator = {
-                CustomPositionIndicator(
-                    visible = scalingLazyListState.isScrollInProgress,
-                    scalingLazyListState = scalingLazyListState
-                )
+                if (Screen.WatchList.route in currentRoute) {
+                    CustomPositionIndicator(
+                        visible = scalingLazyListState.isScrollInProgress,
+                        scalingLazyListState = scalingLazyListState
+                    )
+                } else if (Screen.WatchDetail.route in currentRoute) {
+                    CustomPositionIndicator(
+                        visible = watchDetailScrollState.isScrollInProgress,
+                        scrollState = watchDetailScrollState
+                    )
+                }
             }
         ) {
-
             /*
              * Wear OS's version of NavHost supports swipe-to-dismiss (similar to back
              * gesture on mobile). Otherwise, the code looks very similar.
@@ -180,10 +198,27 @@ fun WearApp(watchRepository: WatchRepository) {
                         navBackStackEntry.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
                     WatchDetailScreen(
                         id = watchId,
+                        scrollState = watchDetailScrollState,
                         watchRepository = watchRepository
                     )
                 }
             }
         }
+    }
+}
+
+/**
+ * Used for the 'in' comparisons in the Scaffold section for determining which screen is visible
+ * and what to show (vignette and position indicator). Note, 'in' is translated to the operator
+ * 'contains' fun in Kotlin.
+ */
+operator fun String?.contains(substring: String): Boolean {
+    return if (this is String) {
+        // Need to convert to CharSequence, otherwise keeps calling this 'contains()' in an endless
+        // loop.
+        val charSequence: CharSequence = this
+        charSequence.contains(substring)
+    } else {
+        false
     }
 }
