@@ -121,29 +121,34 @@ fun WearApp(watchRepository: WatchRepository) {
             },
             vignette = {
                 // Only show vignette for screens with scrollable content.
-                if (Screen.WatchList.route in currentRoute) {
-                    CustomVignette(
-                        visible = vignetteVisiblePreference,
-                        vignettePosition = VignettePosition.TopAndBottom
-                    )
-                } else if (Screen.WatchDetail.route in currentRoute) {
-                    CustomVignette(
-                        visible = true,
-                        vignettePosition = VignettePosition.TopAndBottom
-                    )
+                currentRoute?.let {
+                    if (currentRoute.startsWith(Screen.WatchList.route)) {
+                        CustomVignette(
+                            visible = vignetteVisiblePreference,
+                            vignettePosition = VignettePosition.TopAndBottom
+                        )
+                    } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
+                        CustomVignette(
+                            visible = true,
+                            vignettePosition = VignettePosition.TopAndBottom
+                        )
+                    }
                 }
             },
             positionIndicator = {
-                if (Screen.WatchList.route in currentRoute) {
-                    CustomPositionIndicator(
-                        visible = scalingLazyListState.isScrollInProgress,
-                        scalingLazyListState = scalingLazyListState
-                    )
-                } else if (Screen.WatchDetail.route in currentRoute) {
-                    CustomPositionIndicator(
-                        visible = watchDetailScrollState.isScrollInProgress,
-                        scrollState = watchDetailScrollState
-                    )
+                // Only show position indicator for scrollable content.
+                currentRoute?.let {
+                    if (currentRoute.startsWith(Screen.WatchList.route)) {
+                        CustomPositionIndicator(
+                            visible = scalingLazyListState.isScrollInProgress,
+                            scalingLazyListState = scalingLazyListState
+                        )
+                    } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
+                        CustomPositionIndicator(
+                            visible = watchDetailScrollState.isScrollInProgress,
+                            scrollState = watchDetailScrollState
+                        )
+                    }
                 }
             }
         ) {
@@ -204,21 +209,5 @@ fun WearApp(watchRepository: WatchRepository) {
                 }
             }
         }
-    }
-}
-
-/**
- * Used for the 'in' comparisons in the Scaffold section for determining which screen is visible
- * and what to show (vignette and position indicator). Note, 'in' is translated to the operator
- * 'contains' fun in Kotlin.
- */
-operator fun String?.contains(substring: String): Boolean {
-    return if (this is String) {
-        // Need to convert to CharSequence, otherwise keeps calling this 'contains()' in an endless
-        // loop.
-        val charSequence: CharSequence = this
-        charSequence.contains(substring)
-    } else {
-        false
     }
 }
