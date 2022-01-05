@@ -39,10 +39,11 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Icon
 
 /**
- * The component responsible for drawing the main 3 controls, with their expanded and minimized states.
+ * The component responsible for drawing the main 3 controls, with their expanded and minimized
+ * states.
  *
- * The state for this class is driven by a [ControlDashboardUiState], which contains a [ControlDashboardButtonUiState]
- * for each of the three buttons.
+ * The state for this class is driven by a [ControlDashboardUiState], which contains a
+ * [ControlDashboardButtonUiState] for each of the three buttons.
  */
 @Composable
 fun ControlDashboard(
@@ -131,21 +132,33 @@ private fun createConstraintSet(
     val iconExpandedSize = 136.dp
 
     val micSize by animateDpAsState(
-        targetValue = if (controlDashboardUiState.micState.expanded) iconExpandedSize else iconMinimizedSize
+        targetValue = if (controlDashboardUiState.micState.expanded) {
+            iconExpandedSize
+        } else {
+            iconMinimizedSize
+        }
     )
     val micRadius by animateDpAsState(
         targetValue = if (controlDashboardUiState.micState.expanded) 0.dp else iconCircleRadius
     )
 
     val playSize by animateDpAsState(
-        targetValue = if (controlDashboardUiState.playState.expanded) iconExpandedSize else iconMinimizedSize
+        targetValue = if (controlDashboardUiState.playState.expanded) {
+            iconExpandedSize
+        } else {
+            iconMinimizedSize
+        }
     )
     val playRadius by animateDpAsState(
         targetValue = if (controlDashboardUiState.playState.expanded) 0.dp else iconCircleRadius
     )
 
     val musicSize by animateDpAsState(
-        targetValue = if (controlDashboardUiState.musicState.expanded) iconExpandedSize else iconMinimizedSize
+        targetValue = if (controlDashboardUiState.musicState.expanded) {
+            iconExpandedSize
+        } else {
+            iconMinimizedSize
+        }
     )
     val musicRadius by animateDpAsState(
         targetValue = if (controlDashboardUiState.musicState.expanded) 0.dp else iconCircleRadius

@@ -38,8 +38,8 @@ import kotlin.coroutines.resume
 /**
  * A state holder driving the logic of the app.
  *
- * This state holder is scoped to the composition (and therefore can be provided an [Activity]) to handle
- * permission-related logic.
+ * This state holder is scoped to the composition (and therefore can be provided an [Activity]) to
+ * handle permission-related logic.
  */
 class MainState(
     private val activity: Activity,
@@ -48,12 +48,13 @@ class MainState(
     /**
      * The [MutatorMutex] that guards the playback state of the app.
      *
-     * Due to being a [MutatorMutex], this automatically handles cleanup of any ongoing asynchronous work,
-     * like playing music or recording, ensuring that only one operation is occurring at a time.
+     * Due to being a [MutatorMutex], this automatically handles cleanup of any ongoing asynchronous
+     * work, like playing music or recording, ensuring that only one operation is occurring at a
+     * time.
      *
-     * For example, if the user is currently recording, and they hit the mic button again, the second [onMicClicked]
-     * will cancel the previous [onMicClicked] that was doing the recording, waiting for everything to be cleaned up,
-     * before running its own code.
+     * For example, if the user is currently recording, and they hit the mic button again, the
+     * second [onMicClicked] will cancel the previous [onMicClicked] that was doing the recording,
+     * waiting for everything to be cleaned up, before running its own code.
      */
     private val playbackStateMutatorMutex = MutatorMutex()
 
@@ -66,8 +67,9 @@ class MainState(
     /**
      * The progress of an ongoing recording.
      *
-     * Note that this value can be read even when recording is not occuring, in which case it corresponds to the last
-     * known value of recording progress (or 0), where that value is useful for animations.
+     * Note that this value can be read even when recording is not occurring, in which case it
+     * corresponds to the last known value of recording progress (or 0), where that value is useful
+     * for animations.
      */
     var recordingProgress by mutableStateOf(0f)
         private set
@@ -107,8 +109,10 @@ class MainState(
                 PlaybackState.PlayingMusic ->
                     // If we weren't recording, check our permission to start recording.
                     when {
-                        ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) ==
-                            PackageManager.PERMISSION_GRANTED -> {
+                        ContextCompat.checkSelfPermission(
+                            activity,
+                            Manifest.permission.RECORD_AUDIO
+                        ) == PackageManager.PERMISSION_GRANTED -> {
                             // We have the permission, we can start recording now
                             playbackState = PlaybackState.Recording
                             record(
@@ -119,9 +123,11 @@ class MainState(
                             )
                             playbackState = PlaybackState.Ready
                         }
-                        activity.shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
-                            // If we should show the rationale prior to requesting the permission, send that
-                            // event
+                        activity.shouldShowRequestPermissionRationale(
+                            Manifest.permission.RECORD_AUDIO
+                        ) -> {
+                            // If we should show the rationale prior to requesting the permission,
+                            // send that event
                             showPermissionRationale = true
                             playbackState = PlaybackState.Ready
                         }
@@ -230,9 +236,14 @@ private fun speakerIsSupported(activity: Activity): Boolean {
     val devices = activity.getSystemService<AudioManager>()!!
         .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
 
-    // We can only trust AudioDeviceInfo.TYPE_BUILTIN_SPEAKER if the device advertises FEATURE_AUDIO_OUTPUT
-    return devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER } && hasAudioOutputFeature ||
-        devices.any { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP }
+    // We can only trust AudioDeviceInfo.TYPE_BUILTIN_SPEAKER if the device advertises
+    // FEATURE_AUDIO_OUTPUT
+    val hasBuiltInSpeaker = devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER } &&
+        hasAudioOutputFeature
+
+    val hasBluetoothSpeaker = devices.any { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP }
+
+    return hasBuiltInSpeaker || hasBluetoothSpeaker
 }
 
 /**

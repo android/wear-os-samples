@@ -66,7 +66,8 @@ fun SpeakerScreen(
                 PlaybackState.Recording -> true
             }
 
-        // We are using ConstraintLayout here to center the ControlDashboard, and align the progress indicator to it.
+        // We are using ConstraintLayout here to center the ControlDashboard, and align the progress
+        // indicator to it.
         // In general, ConstraintLayout is less necessary for Compose than it was for Views
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
@@ -108,14 +109,38 @@ private fun computeControlDashboardUiState(
 ): ControlDashboardUiState =
     when (playbackState) {
         PlaybackState.PlayingMusic -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
-            playState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
-            musicState = ControlDashboardButtonUiState(expanded = true, enabled = true, visible = true),
+            micState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = false,
+                visible = false
+            ),
+            playState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = false,
+                visible = false
+            ),
+            musicState = ControlDashboardButtonUiState(
+                expanded = true,
+                enabled = true,
+                visible = true
+            ),
         )
         PlaybackState.PlayingVoice -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
-            playState = ControlDashboardButtonUiState(expanded = true, enabled = true, visible = true),
-            musicState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+            micState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = false,
+                visible = false
+            ),
+            playState = ControlDashboardButtonUiState(
+                expanded = true,
+                enabled = true,
+                visible = true
+            ),
+            musicState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = false,
+                visible = false
+            ),
         )
         PlaybackState.Ready -> ControlDashboardUiState(
             micState = ControlDashboardButtonUiState(
@@ -123,13 +148,33 @@ private fun computeControlDashboardUiState(
                 enabled = !isPermissionDenied,
                 visible = true
             ),
-            playState = ControlDashboardButtonUiState(expanded = false, enabled = true, visible = true),
-            musicState = ControlDashboardButtonUiState(expanded = false, enabled = true, visible = true),
+            playState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = true,
+                visible = true
+            ),
+            musicState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = true,
+                visible = true
+            ),
         )
         PlaybackState.Recording -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(expanded = true, enabled = true, visible = true),
-            playState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
-            musicState = ControlDashboardButtonUiState(expanded = false, enabled = false, visible = false),
+            micState = ControlDashboardButtonUiState(
+                expanded = true,
+                enabled = true,
+                visible = true
+            ),
+            playState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = false,
+                visible = false
+            ),
+            musicState = ControlDashboardButtonUiState(
+                expanded = false,
+                enabled = false,
+                visible = false
+            ),
         )
     }
 

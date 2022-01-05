@@ -151,5 +151,7 @@ private tailrec fun Context.findActivity(): Activity =
     when (this) {
         is Activity -> this
         is ContextWrapper -> baseContext.findActivity()
-        else -> throw IllegalStateException("findActivity should be called in the context of an Activity")
+        else -> throw IllegalStateException(
+            "findActivity should be called in the context of an Activity"
+        )
     }
