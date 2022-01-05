@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2021 The Android Open Source Project
+     Copyright (C) 2022 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
     android:id="@+id/timeArcLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="4dp"
     app:anchorPosition="center">
 
     <androidx.wear.widget.CurvedTextView
@@ -28,6 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:ellipsize="end"
+        android:paddingHorizontal="2dp"
+        android:paddingVertical="4dp"
         android:textAppearance="@style/TextAppearanceTime"
         tools:text="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
 
@@ -35,7 +36,8 @@
         android:id="@+id/timeTextDivider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/time_padding_between_text"
+        android:paddingHorizontal="2dp"
+        android:paddingVertical="4dp"
         android:textAppearance="@style/TextAppearanceTime"
         tools:text="·" />
 
@@ -43,6 +45,8 @@
         android:id="@+id/timeTextClock"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="2dp"
+        android:paddingVertical="4dp"
         android:textAppearance="@style/TextAppearanceTime"
         tools:text="01:23" />
 
