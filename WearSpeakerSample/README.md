@@ -8,7 +8,8 @@ play the recorded voice or an mp3 file, if the wearable device is connected to a
 
 This sample is also written entirely with Jetpack Compose, using [Wear-specific components provided
 by AndroidX](https://developer.android.com/jetpack/androidx/releases/wear-compose).
-The Compose UI is fairly advanced, using [ConstraintLayout for Compose](https://developer.android.com/jetpack/compose/layouts/constraintlayout).
+The Compose UI is fairly advanced, using [ConstraintLayout for Compose](https://developer.android.com/jetpack/compose/layouts/constraintlayout) and animations.
+The sample also handles permissions and uses the [effect APIs](https://developer.android.com/jetpack/compose/side-effects) where necessary.
 If you are looking for simpler examples of Compose on [WearOS], refer to [ComposeStarter](../ComposeStarter) and [ComposeAdvanced](../ComposeAdvanced).
 
 This sample doesn't have any companion phone app so you need to install this directly

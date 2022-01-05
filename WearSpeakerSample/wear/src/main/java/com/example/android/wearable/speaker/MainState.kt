@@ -253,6 +253,7 @@ private suspend fun playMusic(activity: Activity) {
     val mediaPlayer = MediaPlayer.create(activity, R.raw.sound)
 
     try {
+        // Convert the asynchronous callback to a suspending coroutine
         suspendCancellableCoroutine<Unit> { cont ->
             mediaPlayer.setOnCompletionListener {
                 cont.resume(Unit)

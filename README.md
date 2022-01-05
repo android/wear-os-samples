@@ -29,7 +29,7 @@ Samples
 
 * **[WearOAuth](WearOAuth)** (Kotlin) - Demonstrates how developers can authenticate a user on their Wear OS app via the user's mobile/phone device without requiring a mobile app (Wear OS companion app handles the request on the mobile side). The sample uses OAuth. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
-* **[WearSpeakerSample](WearSpeakerSample)** (Compose/Kotlin) - Demonstrates audio recording and playback if the wearable device has a speaker. [Guide](https://developer.android.com/training/wearables/wearable-sounds)
+* **[WearSpeakerSample](WearSpeakerSample)** (Compose/Kotlin) - Demonstrates audio recording and playback if the wearable device has a speaker. This is also an advanced Compose sample, handling permissions, use of effects, animations and ConstraintLayout for Compose. [Guide](https://developer.android.com/training/wearables/wearable-sounds)
 
 * **[WearStandaloneGoogleSignIn](WearStandaloneGoogleSignIn)** (Java) - Demonstrates using Google sign-in to authenticate user. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
