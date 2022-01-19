@@ -17,13 +17,12 @@ package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.CurvedText
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
@@ -33,7 +32,6 @@ import androidx.wear.compose.material.TimeTextDefaults
  * scrolling so user can just focus on the list's items.
  */
 @Composable
-@OptIn(ExperimentalWearMaterialApi::class, ExperimentalAnimationApi::class)
 fun CustomTimeText(
     visible: Boolean,
     showLeadingText: Boolean,
@@ -66,12 +64,22 @@ fun CustomTimeText(
 }
 
 @Preview(
-    widthDp = 300,
-    heightDp = 300,
     apiLevel = 26,
     uiMode = Configuration.UI_MODE_TYPE_WATCH,
-    backgroundColor = 0x000000,
-    showBackground = true
+    showSystemUi = true,
+    device = Devices.WEAR_OS_LARGE_ROUND
+)
+@Preview(
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    showSystemUi = true,
+    device = Devices.WEAR_OS_SQUARE
+)
+@Preview(
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    showSystemUi = true,
+    device = Devices.WEAR_OS_SMALL_ROUND
 )
 @Composable
 fun PreviewCustomTimeText() {
