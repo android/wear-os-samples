@@ -16,7 +16,7 @@
 package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -87,7 +87,7 @@ fun WatchAppChip(
 )
 @Composable
 fun PreviewWatchAppChip() {
-    Column {
+    Box {
         WatchAppChip(
             modifier = Modifier.fillMaxWidth(),
             watchModelNumber = 123456,

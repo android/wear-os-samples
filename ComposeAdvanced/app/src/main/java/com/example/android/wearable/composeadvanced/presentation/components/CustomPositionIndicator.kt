@@ -50,6 +50,7 @@ fun CustomPositionIndicator(
     showSystemUi = true,
     device = Devices.WEAR_OS_SQUARE
 )
+// This will only be rendered properly in AS Chipmunk and beyond
 @Preview(
     apiLevel = 26,
     uiMode = Configuration.UI_MODE_TYPE_WATCH,

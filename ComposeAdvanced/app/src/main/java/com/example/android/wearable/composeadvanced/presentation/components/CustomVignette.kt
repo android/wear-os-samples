@@ -53,6 +53,7 @@ fun CustomVignette(
     showSystemUi = true,
     device = Devices.WEAR_OS_SMALL_ROUND
 )
+// This will only be rendered properly in AS Chipmunk and beyond
 @Composable
 fun PreviewCustomVignette() {
     CustomVignette(
