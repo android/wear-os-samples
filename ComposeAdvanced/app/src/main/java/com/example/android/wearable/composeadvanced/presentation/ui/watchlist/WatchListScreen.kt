@@ -18,6 +18,7 @@ package com.example.android.wearable.composeadvanced.presentation.ui.watchlist
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -29,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
@@ -45,7 +45,6 @@ import com.example.android.wearable.composeadvanced.presentation.components.Watc
  * the screen. The list is powered using a [ScalingLazyColumn].
  */
 @Composable
-@OptIn(ExperimentalWearMaterialApi::class)
 fun WatchListScreen(
     scalingLazyListState: ScalingLazyListState,
     showVignette: Boolean,
@@ -104,6 +103,9 @@ fun WatchListScreen(
         // Displays all watches.
         items(watches) { watch ->
             WatchAppChip(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 watchModelNumber = watch.modelId,
                 watchName = watch.name,
                 watchIcon = watch.icon,
