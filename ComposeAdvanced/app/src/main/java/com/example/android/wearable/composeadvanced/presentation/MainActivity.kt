@@ -20,11 +20,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,7 +37,6 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.material.rememberScalingLazyListState
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -84,10 +84,17 @@ fun WearApp(watchRepository: WatchRepository) {
         // We also use the states for various other things (like hiding the time when the user is
         // scrolling).
         // ----------
-        // State for the ScalingLazyColumn (watch list screen)
-        val scalingLazyListState: ScalingLazyListState = rememberScalingLazyListState()
-        // State for the Column's vertical scroll modifier (watch detail screen).
-        val watchDetailScrollState: ScrollState = rememberScrollState()
+
+        // For all scrolling screens, we save their scrolling offset in a remembered map (as a
+        // ScrollableState), so when users return to the screen, they are at the same location as
+        // they left.
+        // We set the default to the watch list screen (ScalingLazyListState) since there is only
+        // one. For the watch detail screens (with many different variations based on the watch id),
+        // we add those dynamically to the map as they are needed (in the navigation section).
+        var currentScrollStateKey: String = remember { Screen.WatchList.route }
+        val scrollStates: MutableMap<String, ScrollableState> = remember {
+            mutableMapOf(currentScrollStateKey to ScalingLazyListState())
+        }
 
         val swipeDismissableNavController = rememberSwipeDismissableNavController()
 
@@ -112,9 +119,11 @@ fun WearApp(watchRepository: WatchRepository) {
         Scaffold(
             // Scaffold places time at top of screen to follow Material Design guidelines.
             timeText = {
+                val activelyScrolling =
+                    scrollStates[currentScrollStateKey]?.isScrollInProgress ?: false
+
                 CustomTimeText(
-                    visible = !scalingLazyListState.isScrollInProgress &&
-                        !watchDetailScrollState.isScrollInProgress,
+                    visible = !activelyScrolling,
                     showLeadingText = showProceedingTextBeforeTime,
                     leadingText = stringResource(R.string.leading_time_text)
                 )
@@ -138,15 +147,20 @@ fun WearApp(watchRepository: WatchRepository) {
             positionIndicator = {
                 // Only show position indicator for scrollable content.
                 currentRoute?.let {
+                    val activelyScrolling =
+                        scrollStates[currentScrollStateKey]?.isScrollInProgress ?: false
+
                     if (currentRoute.startsWith(Screen.WatchList.route)) {
                         CustomPositionIndicator(
-                            visible = scalingLazyListState.isScrollInProgress,
-                            scalingLazyListState = scalingLazyListState
+                            visible = activelyScrolling,
+                            scalingLazyListState = scrollStates[currentScrollStateKey] as ScalingLazyListState
+
                         )
                     } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
                         CustomPositionIndicator(
-                            visible = watchDetailScrollState.isScrollInProgress,
-                            scrollState = watchDetailScrollState
+                            visible = activelyScrolling,
+                            scrollState = scrollStates[currentScrollStateKey] as ScrollState
+
                         )
                     }
                 }
@@ -176,6 +190,10 @@ fun WearApp(watchRepository: WatchRepository) {
                 }
 
                 composable(Screen.WatchList.route) {
+                    currentScrollStateKey = Screen.WatchList.route
+                    val scalingLazyListState =
+                        scrollStates[currentScrollStateKey] as ScalingLazyListState
+
                     WatchListScreen(
                         scalingLazyListState = scalingLazyListState,
                         watchRepository = watchRepository,
@@ -199,11 +217,18 @@ fun WearApp(watchRepository: WatchRepository) {
                         }
                     )
                 ) { navBackStackEntry ->
-                    val watchId =
-                        navBackStackEntry.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
+                    val watchId = navBackStackEntry.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
+                    currentScrollStateKey = Screen.WatchDetail.route + watchId
+
+                    // If this is the first time this scroll state is being captured, we save it
+                    // to the remembered map.
+                    val watchDetailScrollState = scrollStates.getOrPut(currentScrollStateKey) {
+                        ScrollState(0)
+                    }
+
                     WatchDetailScreen(
                         id = watchId,
-                        scrollState = watchDetailScrollState,
+                        scrollState = watchDetailScrollState as ScrollState,
                         watchRepository = watchRepository
                     )
                 }
