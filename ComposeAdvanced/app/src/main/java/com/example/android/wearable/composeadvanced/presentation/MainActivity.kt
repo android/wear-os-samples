@@ -105,7 +105,7 @@ fun WearApp(watchRepository: WatchRepository) {
         // IMPORTANT NOTE: Usually you want to show the vignette all the time on screens with
         // scrolling content, a rolling side button, or a rotating bezel. This preference is just
         // to visually demonstrate the vignette for the developer to see it on and off.
-        var vignetteVisiblePreference by rememberSaveable { mutableStateOf(false) }
+        var vignetteVisiblePreference by rememberSaveable { mutableStateOf(true) }
 
         // Observes the current back stack entry to show the vignette for the appropriate screens by
         // checking the destination + route.
