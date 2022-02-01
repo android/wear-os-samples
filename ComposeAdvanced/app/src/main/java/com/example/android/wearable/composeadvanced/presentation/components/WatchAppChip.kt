@@ -16,8 +16,8 @@
 package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -39,15 +39,14 @@ import com.example.android.wearable.composeadvanced.R
  */
 @Composable
 fun WatchAppChip(
+    modifier: Modifier = Modifier,
     watchModelNumber: Int,
     watchName: String,
     watchIcon: Int,
     onClickWatch: (Int) -> Unit
 ) {
     Chip(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp),
+        modifier = modifier,
         enabled = true,
         icon = {
             Icon(
@@ -83,19 +82,18 @@ fun WatchAppChip(
 }
 
 @Preview(
-    widthDp = 300,
-    heightDp = 80,
     apiLevel = 26,
     uiMode = Configuration.UI_MODE_TYPE_WATCH,
-    backgroundColor = 0x000000,
-    showBackground = true
 )
 @Composable
 fun PreviewWatchAppChip() {
-    WatchAppChip(
-        watchModelNumber = 123456,
-        watchName = "Watch 123456 Name",
-        watchIcon = R.drawable.ic_watch,
-        onClickWatch = { }
-    )
+    Box {
+        WatchAppChip(
+            modifier = Modifier.fillMaxWidth(),
+            watchModelNumber = 123456,
+            watchName = "Watch 123456 Name",
+            watchIcon = R.drawable.ic_watch,
+            onClickWatch = { }
+        )
+    }
 }

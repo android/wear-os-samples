@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.ScalingLazyListState
@@ -72,7 +71,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun WearApp(watchRepository: WatchRepository) {
     WearAppTheme {

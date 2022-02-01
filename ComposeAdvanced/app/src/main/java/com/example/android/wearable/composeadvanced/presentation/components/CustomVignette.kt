@@ -16,8 +16,8 @@
 package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
@@ -26,7 +26,6 @@ import androidx.wear.compose.material.VignettePosition
  * Custom Vignette that hides during scrolling and can be hidden if the use chooses.
  */
 @Composable
-@OptIn(ExperimentalAnimationApi::class)
 fun CustomVignette(
     visible: Boolean,
     vignettePosition: VignettePosition
@@ -37,13 +36,24 @@ fun CustomVignette(
 }
 
 @Preview(
-    widthDp = 300,
-    heightDp = 300,
     apiLevel = 26,
     uiMode = Configuration.UI_MODE_TYPE_WATCH,
-    backgroundColor = 0x000000,
-    showBackground = true
+    showSystemUi = true,
+    device = Devices.WEAR_OS_LARGE_ROUND
 )
+@Preview(
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    showSystemUi = true,
+    device = Devices.WEAR_OS_SQUARE
+)
+@Preview(
+    apiLevel = 26,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    showSystemUi = true,
+    device = Devices.WEAR_OS_SMALL_ROUND
+)
+// This will only be rendered properly in AS Chipmunk and beyond
 @Composable
 fun PreviewCustomVignette() {
     CustomVignette(
