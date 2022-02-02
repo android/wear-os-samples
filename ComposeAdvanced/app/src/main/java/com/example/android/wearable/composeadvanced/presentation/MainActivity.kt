@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.VignettePosition
@@ -41,7 +42,6 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchRepository
-import com.example.android.wearable.composeadvanced.presentation.components.CustomPositionIndicator
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
 import com.example.android.wearable.composeadvanced.presentation.components.CustomVignette
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
@@ -145,18 +145,13 @@ fun WearApp(watchRepository: WatchRepository) {
             positionIndicator = {
                 // Only show position indicator for scrollable content.
                 currentRoute?.let {
-                    val activelyScrolling =
-                        scrollStates[currentScrollStateKey]?.isScrollInProgress ?: false
-
                     if (currentRoute.startsWith(Screen.WatchList.route)) {
-                        CustomPositionIndicator(
-                            visible = activelyScrolling,
+                        PositionIndicator(
                             scalingLazyListState = scrollStates[currentScrollStateKey] as ScalingLazyListState
 
                         )
                     } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
-                        CustomPositionIndicator(
-                            visible = activelyScrolling,
+                        PositionIndicator(
                             scrollState = scrollStates[currentScrollStateKey] as ScrollState
 
                         )
