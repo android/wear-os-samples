@@ -1,15 +1,40 @@
-apply plugin: 'com.android.application'
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+}
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.example.android.wearable.wear.wearstandalonegooglesignin"
-
-        minSdkVersion 25
-        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        minSdkVersion 26
+        targetSdkVersion 30
+    }
+
+    lintOptions {
+        warningsAsErrors true
+        ignore "ObsoleteLintCustomCheck"
+        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
     }
 
     buildTypes {
@@ -18,11 +43,46 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.composeCompilerVersion
+    }
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$rootProject.coroutinesVersion"
+    implementation "androidx.activity:activity-compose:$rootProject.activityVersion"
+    implementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
+    implementation "androidx.compose.compiler:compiler:$rootProject.composeCompilerVersion"
+    implementation "androidx.compose.foundation:foundation:$rootProject.composeVersion"
 
-    compileOnly "com.google.android.wearable:wearable:2.8.1"
-    implementation 'com.google.android.support:wearable:2.8.1'
+    // Compose for Wear OS Dependencies
+    // Developer Preview started with Alpha 07, with new releases coming soon.
+    // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
+    // androidx.wear.compose:compose-material is designed as a replacement not an addition to
+    // androidx.compose.material:material. If there are features from that you feel are missing from
+    // androidx.wear.compose:compose-material please raise a bug to let us know:
+    // https://issuetracker.google.com/issues/new?component=1077552&template=1598429&pli=1
+    implementation "androidx.wear.compose:compose-material:$rootProject.wearComposeVersion"
+
+    // Foundation is additive, so you can use the mobile version in your Wear OS app.
+    implementation "androidx.wear.compose:compose-foundation:$rootProject.wearComposeVersion"
+
+    implementation "com.google.android.gms:play-services-auth:$rootProject.playServicesAuthVersion"
 }

@@ -4,12 +4,7 @@ Android Wear Google Sign-In Sample
 Introduction
 ------------
 
-Sample demonstrating Google Sign-In implementation on Wear 2.0, as well as
-a Google Sign-In button matching Wear material design.
-
-The button included in this sample should be used as throwaway code for all
-Wear integrations until the final version lands in Play Services, and
-maintained there going forward.
+Sample demonstrating Google Sign-In implementation on Wear OS
 
 Pre-requisites
 --------------
@@ -25,7 +20,7 @@ You can find support by posting up on the Android Wear Developers Community
 page at the link below:
 
 If you've found an error in the sample, please file an issue report at:
-https://github.com/android/wear-os/issues
+https://github.com/android/wear-os-samples/issues/new
 
 Getting Started
 ---------------
@@ -42,20 +37,7 @@ Setup steps:
 
 1) Download and install Android Studio if you haven't already.
 
-2) Note that Android Studio should already have the Wear-related
-support libraries and Play Services packages available in the SDK manager
-and should be able to resolve them by doing the following:
-
-a) Right-click on the app module and select Open Module Settings...
-b) Click on the Dependencies tab
-c) Resolve the libraries referenced as compile targets in the
-app/build.gradle file and add them as dependencies to the module
-
-In case you're unable to find the relevant Wear support libraries from
-the Android Studio SDK manager, you can also download and setup the libraries
-from the Wear 2.0 Developer Preview 4 developer docs:
-
-https://developer.android.com/wear/preview/start.html
+2) Import the project into Android Studio.
 
 3) Follow the setup instructions for integrating Google Sign-in into an
 Android app at the link below. Remember to use the package name

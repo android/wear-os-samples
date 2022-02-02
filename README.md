@@ -29,7 +29,7 @@ Samples
 
 * **[WearSpeakerSample](WearSpeakerSample)** (Compose/Kotlin) - Demonstrates audio recording and playback if the wearable device has a speaker. This is also an advanced Compose sample, handling permissions, use of [effects](https://developer.android.com/jetpack/compose/side-effects), animations and [ConstraintLayout for Compose](https://developer.android.com/jetpack/compose/layouts/constraintlayout). [Guide](https://developer.android.com/training/wearables/wearable-sounds)
 
-* **[WearStandaloneGoogleSignIn](WearStandaloneGoogleSignIn)** (Java) - Demonstrates using Google sign-in to authenticate user. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
+* **[WearStandaloneGoogleSignIn](WearStandaloneGoogleSignIn)** (Compose/Kotlin) - Demonstrates using Google sign-in to authenticate user. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
 * **[WearTilesKotlin](WearTilesKotlin)** (Kotlin) - Demonstrates tiles using the new AndroidX alpha library. [Guide](https://developer.android.com/training/articles/wear-tiles)
 
