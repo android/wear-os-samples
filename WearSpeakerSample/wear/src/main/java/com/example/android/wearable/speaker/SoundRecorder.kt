@@ -133,13 +133,15 @@ class SoundRecorder(
 
         try {
             withContext(Dispatchers.IO) {
-                context.openFileOutput(outputFileName, Context.MODE_PRIVATE).buffered().use { bufferedOutputStream ->
-                    val buffer = ByteArray(intSize)
-                    while (isActive) {
-                        val read = audioRecord.read(buffer, 0, buffer.size)
-                        bufferedOutputStream.write(buffer, 0, read)
+                context.openFileOutput(outputFileName, Context.MODE_PRIVATE)
+                    .buffered()
+                    .use { bufferedOutputStream ->
+                        val buffer = ByteArray(intSize)
+                        while (isActive) {
+                            val read = audioRecord.read(buffer, 0, buffer.size)
+                            bufferedOutputStream.write(buffer, 0, read)
+                        }
                     }
-                }
             }
         } finally {
             audioRecord.release()
