@@ -24,7 +24,6 @@ import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -183,13 +182,19 @@ fun WearApp(watchRepository: WatchRepository) {
                 // Only show position indicator for scrollable content.
                 currentRoute?.let {
                     if (currentRoute.startsWith(Screen.WatchList.route)) {
-                        val scalingLazyListState =
-                            scrollStates[currentBackStackEntry?.id] as ScalingLazyListState
-                        PositionIndicator(scalingLazyListState = scalingLazyListState)
-
+                        currentBackStackEntry?.id?.let { currentId ->
+                            val scalingLazyListState = scrollStates[currentId]
+                            if (scalingLazyListState is ScalingLazyListState) {
+                                PositionIndicator(scalingLazyListState = scalingLazyListState)
+                            }
+                        }
                     } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
-                        val scrollState = scrollStates[currentBackStackEntry?.id] as ScrollState
-                        PositionIndicator(scrollState = scrollState)
+                        currentBackStackEntry?.id?.let { currentId ->
+                            val scrollState = scrollStates[currentId]
+                            if (scrollState is ScrollState) {
+                                PositionIndicator(scrollState = scrollState)
+                            }
+                        }
                     }
                 }
             }
@@ -218,7 +223,13 @@ fun WearApp(watchRepository: WatchRepository) {
                 }
 
                 composable(Screen.WatchList.route) {
-                    val scalingLazyListState = scrollStates[it.id] as ScalingLazyListState
+                    val unknownScrollType = scrollStates[it.id]
+                    val scalingLazyListState: ScalingLazyListState =
+                        if (unknownScrollType is ScalingLazyListState) {
+                            unknownScrollType
+                        } else {
+                            ScalingLazyListState()
+                        }
 
                     WatchListScreen(
                         scalingLazyListState = scalingLazyListState,
@@ -242,9 +253,15 @@ fun WearApp(watchRepository: WatchRepository) {
                             type = NavType.IntType
                         }
                     )
-                ) { navBackStackEntry ->
-                    val watchId = navBackStackEntry.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
-                    val scrollState = scrollStates[currentBackStackEntry?.id] as ScrollState
+                ) {
+                    val watchId = it.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
+
+                    val unknownScrollType = scrollStates[it.id]
+                    val scrollState: ScrollState = if (unknownScrollType is ScrollState) {
+                        unknownScrollType
+                    } else {
+                        ScrollState(0)
+                    }
 
                     WatchDetailScreen(
                         id = watchId,
