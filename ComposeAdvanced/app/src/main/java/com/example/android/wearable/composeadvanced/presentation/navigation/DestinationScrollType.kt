@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,8 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.navigation
 
-// Used as a Navigation Argument for the WatchDetail Screen.
-const val WATCH_ID_NAV_ARGUMENT = "watchId"
-
-// Navigation Argument for Screens with scrollable types:
-// 1. WatchList -> ScalingLazyColumn
-// 2. WatchDetail -> Column (with scaling enabled)
-const val SCROLL_TYPE_NAV_ARGUMENT = "scrollType"
-
-/**
- * Represent all Screens (Composables) in the app.
- */
-sealed class Screen(
-    val route: String
-) {
-    object Landing : Screen("landing")
-    object WatchList : Screen("watchList")
-    object WatchDetail : Screen("watchDetail")
+enum class DestinationScrollType {
+    NONE,
+    COLUMN_SCROLLING,
+    SCALING_LAZY_COLUMN_SCROLLING
 }

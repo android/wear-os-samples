@@ -18,30 +18,22 @@ package com.example.android.wearable.composeadvanced.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.material.rememberScalingLazyListState
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -49,9 +41,13 @@ import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
 import com.example.android.wearable.composeadvanced.presentation.components.CustomVignette
+import com.example.android.wearable.composeadvanced.presentation.navigation.DestinationScrollType
+import com.example.android.wearable.composeadvanced.presentation.navigation.SCROLL_TYPE_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
 import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTheme
+import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
+import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
@@ -82,56 +78,6 @@ fun WearApp(watchRepository: WatchRepository) {
         // Navigation controller for navigating the screens.
         val swipeDismissableNavController = rememberSwipeDismissableNavController()
 
-        // The state for any scrollable screen is hoisted to this level, so the Scaffold can
-        // properly place the position indicator (also known as the scroll indicator).
-        // In our case, the watch list screen uses a ScalingLazyColumn (backed by
-        // ScalingLazyListState) and the watch detail screens uses a Column with scrolling enabled
-        // (backed by ScrollState).
-        // We also use these scrolling states for various other things (like hiding the time when
-        // the user is scrolling).
-        //
-        // We dynamically construct a map from the backQueue for all possible Screens with
-        // ScrollableState values. As the backQueue changes, this map changes as well, so we
-        // only keep the ScrollableState values that are contained in the current Screen or a
-        // screen farther up the backQueue.
-        //
-        // That means as you back out of a screen, that ScrollableState will no longer be part of
-        // the map.
-        //
-        // Remember, mobile guidelines specify that if you back navigate out of a screen and then
-        // later navigate into it again, it should be in its initial scroll state (not the last
-        // scroll location it was in before you backed out).
-        //
-        // Constructs the back stack
-        var backStack by remember {
-            mutableStateOf(swipeDismissableNavController.backQueue.toList())
-        }
-
-        // Subscribes to update the back stack when it changes (unsubscribes when the composable
-        // is no longer visible).
-        DisposableEffect(swipeDismissableNavController) {
-            val listener = NavController.OnDestinationChangedListener { _, _, _ ->
-                backStack = swipeDismissableNavController.backQueue.toList()
-            }
-            swipeDismissableNavController.addOnDestinationChangedListener(listener)
-            onDispose {
-                swipeDismissableNavController.removeOnDestinationChangedListener(listener)
-            }
-        }
-
-        // Constructs the scroll states for each scrollable screen from the existing backStack.
-        val scrollStates: Map<String, ScrollableState?> =
-            backStack.associate { backStackEntry ->
-                backStackEntry.id to key(backStackEntry.id) {
-                    val route = backStackEntry.destination.route.orEmpty()
-                    when {
-                        route.startsWith(Screen.WatchList.route) -> rememberScalingLazyListState()
-                        route.startsWith(Screen.WatchDetail.route) -> rememberScrollState()
-                        else -> null
-                    }
-                }
-            }
-
         // Allows user to disable the text before the time.
         var showProceedingTextBeforeTime by rememberSaveable { mutableStateOf(false) }
 
@@ -141,20 +87,56 @@ fun WearApp(watchRepository: WatchRepository) {
         // to visually demonstrate the vignette for the developer to see it on and off.
         var vignetteVisiblePreference by rememberSaveable { mutableStateOf(true) }
 
-        // Observes the current back stack entry to show the vignette for the appropriate screens by
-        // checking the destination + route.
+        // Observes the current back stack entry to pull information and determine if the screen
+        // is scrollable and the scrollable state.
+        //
+        // The main reason the state for any scrollable screen is hoisted to this level is so the
+        // Scaffold can properly place the position indicator (also known as the scroll indicator).
+        //
+        // We save the above scrollable states in the SavedStateHandle and retrieve them
+        // when needed from custom view models (see ScrollingViewModels class).
+        //
+        // Screens with scrollable content:
+        //  1. The watch list screen uses ScalingLazyColumn (backed by ScalingLazyListState)
+        //  2. The watch detail screens uses Column with scrolling enabled (backed by ScrollState).
+        //
+        // We also use these scrolling states for various other things (like hiding the time
+        // when the user is scrolling and only showing the vignette when the screen is
+        // scrollable).
+        //
+        // Remember, mobile guidelines specify that if you back navigate out of a screen and then
+        // later navigate into it again, it should be in its initial scroll state (not the last
+        // scroll location it was in before you backed out).
+
         // TODO: Replace with .currentBackStackEntryAsState() once added to Compose for Wear OS
         // Navigation Library: https://issuetracker.google.com/issues/212739653
         val currentBackStackEntry by swipeDismissableNavController
             .currentBackStackEntryFlow.collectAsState(null)
 
-        val currentRoute = currentBackStackEntry?.destination?.route
+        val scrollType =
+            currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+                ?: DestinationScrollType.NONE
 
         Scaffold(
-            // Scaffold places time at top of screen to follow Material Design guidelines.
             timeText = {
+                // Scaffold places time at top of screen to follow Material Design guidelines.
+                // (Time is hidden while scrolling.)
                 val activelyScrolling =
-                    scrollStates[currentBackStackEntry?.id]?.isScrollInProgress ?: false
+                    when (scrollType) {
+                        DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
+                            val viewModel: ScalingLazyListStateViewModel =
+                                viewModel(currentBackStackEntry!!)
+                            viewModel.scrollState.isScrollInProgress
+                        }
+                        DestinationScrollType.COLUMN_SCROLLING -> {
+                            val viewModel: ScrollStateViewModel =
+                                viewModel(currentBackStackEntry!!)
+                            viewModel.scrollState.isScrollInProgress
+                        }
+                        else -> {
+                            false
+                        }
+                    }
 
                 CustomTimeText(
                     visible = !activelyScrolling,
@@ -164,13 +146,14 @@ fun WearApp(watchRepository: WatchRepository) {
             },
             vignette = {
                 // Only show vignette for screens with scrollable content.
-                currentRoute?.let {
-                    if (currentRoute.startsWith(Screen.WatchList.route)) {
+                when (scrollType) {
+                    DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
                         CustomVignette(
                             visible = vignetteVisiblePreference,
                             vignettePosition = VignettePosition.TopAndBottom
                         )
-                    } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
+                    }
+                    DestinationScrollType.COLUMN_SCROLLING -> {
                         CustomVignette(
                             visible = true,
                             vignettePosition = VignettePosition.TopAndBottom
@@ -179,22 +162,18 @@ fun WearApp(watchRepository: WatchRepository) {
                 }
             },
             positionIndicator = {
-                // Only show position indicator for scrollable content.
-                currentRoute?.let {
-                    if (currentRoute.startsWith(Screen.WatchList.route)) {
-                        currentBackStackEntry?.id?.let { currentId ->
-                            val scalingLazyListState = scrollStates[currentId]
-                            if (scalingLazyListState is ScalingLazyListState) {
-                                PositionIndicator(scalingLazyListState = scalingLazyListState)
-                            }
-                        }
-                    } else if (currentRoute.startsWith(Screen.WatchDetail.route)) {
-                        currentBackStackEntry?.id?.let { currentId ->
-                            val scrollState = scrollStates[currentId]
-                            if (scrollState is ScrollState) {
-                                PositionIndicator(scrollState = scrollState)
-                            }
-                        }
+                // Only displays the position indicator for scrollable content.
+                when (scrollType) {
+                    DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
+                        // Get or create the ViewModel associated with the current back stack entry
+                        val viewModel: ScalingLazyListStateViewModel =
+                            viewModel(currentBackStackEntry!!)
+                        PositionIndicator(scalingLazyListState = viewModel.scrollState)
+                    }
+                    DestinationScrollType.COLUMN_SCROLLING -> {
+                        // Get or create the ViewModel associated with the current back stack entry
+                        val viewModel: ScrollStateViewModel = viewModel(currentBackStackEntry!!)
+                        PositionIndicator(scrollState = viewModel.scrollState)
                     }
                 }
             }
@@ -222,28 +201,36 @@ fun WearApp(watchRepository: WatchRepository) {
                     )
                 }
 
-                composable(Screen.WatchList.route) {
-                    val unknownScrollType = scrollStates[it.id]
-                    val scalingLazyListState: ScalingLazyListState =
-                        if (unknownScrollType is ScalingLazyListState) {
-                            unknownScrollType
-                        } else {
-                            ScalingLazyListState()
-                        }
-
-                    WatchListScreen(
-                        scalingLazyListState = scalingLazyListState,
-                        watchRepository = watchRepository,
-                        showVignette = vignetteVisiblePreference,
-                        onClickVignetteToggle = { showVignette ->
-                            vignetteVisiblePreference = showVignette
-                        },
-                        onClickWatch = { id ->
-                            swipeDismissableNavController.navigate(
-                                route = Screen.WatchDetail.route + "/" + id,
-                            )
+                composable(
+                    route = Screen.WatchList.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
                         }
                     )
+                ) {
+                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+
+                    if (passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING) {
+                        val viewModel: ScalingLazyListStateViewModel = viewModel(it)
+
+                        WatchListScreen(
+                            scalingLazyListState = viewModel.scrollState,
+                            watchRepository = watchRepository,
+                            showVignette = vignetteVisiblePreference,
+                            onClickVignetteToggle = { showVignette ->
+                                vignetteVisiblePreference = showVignette
+                            },
+                            onClickWatch = { id ->
+                                swipeDismissableNavController.navigate(
+                                    route = Screen.WatchDetail.route + "/" + id,
+                                )
+                            }
+                        )
+                    }
                 }
 
                 composable(
@@ -251,23 +238,27 @@ fun WearApp(watchRepository: WatchRepository) {
                     arguments = listOf(
                         navArgument(WATCH_ID_NAV_ARGUMENT) {
                             type = NavType.IntType
+                        },
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.COLUMN_SCROLLING
                         }
                     )
                 ) {
                     val watchId = it.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
+                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
 
-                    val unknownScrollType = scrollStates[it.id]
-                    val scrollState: ScrollState = if (unknownScrollType is ScrollState) {
-                        unknownScrollType
-                    } else {
-                        ScrollState(0)
+                    if (passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
+                        val viewModel: ScrollStateViewModel = viewModel(it)
+
+                        WatchDetailScreen(
+                            id = watchId,
+                            scrollState = viewModel.scrollState,
+                            watchRepository = watchRepository
+                        )
                     }
-
-                    WatchDetailScreen(
-                        id = watchId,
-                        scrollState = scrollState,
-                        watchRepository = watchRepository
-                    )
                 }
             }
         }
