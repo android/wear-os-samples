@@ -20,7 +20,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,6 +35,7 @@ import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.VignettePosition
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.currentBackStackEntryAsState
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchRepository
@@ -107,11 +107,7 @@ fun WearApp(watchRepository: WatchRepository) {
         // Remember, mobile guidelines specify that if you back navigate out of a screen and then
         // later navigate into it again, it should be in its initial scroll state (not the last
         // scroll location it was in before you backed out).
-
-        // TODO: Replace with .currentBackStackEntryAsState() once added to Compose for Wear OS
-        // Navigation Library: https://issuetracker.google.com/issues/212739653
-        val currentBackStackEntry by swipeDismissableNavController
-            .currentBackStackEntryFlow.collectAsState(null)
+        val currentBackStackEntry by swipeDismissableNavController.currentBackStackEntryAsState()
 
         val scrollType =
             currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
@@ -214,23 +210,27 @@ fun WearApp(watchRepository: WatchRepository) {
                 ) {
                     val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
 
-                    if (passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING) {
-                        val viewModel: ScalingLazyListStateViewModel = viewModel(it)
-
-                        WatchListScreen(
-                            scalingLazyListState = viewModel.scrollState,
-                            watchRepository = watchRepository,
-                            showVignette = vignetteVisiblePreference,
-                            onClickVignetteToggle = { showVignette ->
-                                vignetteVisiblePreference = showVignette
-                            },
-                            onClickWatch = { id ->
-                                swipeDismissableNavController.navigate(
-                                    route = Screen.WatchDetail.route + "/" + id,
-                                )
-                            }
-                        )
+                    check(
+                        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+                    ) {
+                        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
                     }
+
+                    val viewModel: ScalingLazyListStateViewModel = viewModel(it)
+
+                    WatchListScreen(
+                        scalingLazyListState = viewModel.scrollState,
+                        watchRepository = watchRepository,
+                        showVignette = vignetteVisiblePreference,
+                        onClickVignetteToggle = { showVignette ->
+                            vignetteVisiblePreference = showVignette
+                        },
+                        onClickWatch = { id ->
+                            swipeDismissableNavController.navigate(
+                                route = Screen.WatchDetail.route + "/" + id,
+                            )
+                        }
+                    )
                 }
 
                 composable(
@@ -250,15 +250,17 @@ fun WearApp(watchRepository: WatchRepository) {
                     val watchId = it.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
                     val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
 
-                    if (passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
-                        val viewModel: ScrollStateViewModel = viewModel(it)
-
-                        WatchDetailScreen(
-                            id = watchId,
-                            scrollState = viewModel.scrollState,
-                            watchRepository = watchRepository
-                        )
+                    check(passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
+                        "Scroll type must be DestinationScrollType.COLUMN_SCROLLING"
                     }
+
+                    val viewModel: ScrollStateViewModel = viewModel(it)
+
+                    WatchDetailScreen(
+                        id = watchId,
+                        scrollState = viewModel.scrollState,
+                        watchRepository = watchRepository
+                    )
                 }
             }
         }
