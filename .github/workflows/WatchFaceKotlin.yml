@@ -1,17 +1,17 @@
-name: WatchFaceAlphaKotlin
+name: WatchFaceKotlin
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'WatchFaceAlphaKotlin/**'
+      - 'WatchFaceKotlin/**'
   pull_request:
     paths:
-      - 'WatchFaceAlphaKotlin/**'
+      - 'WatchFaceKotlin/**'
 
 env:
-  SAMPLE_PATH: WatchFaceAlphaKotlin
+  SAMPLE_PATH: WatchFaceKotlin
 
 jobs:
   build:

@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 include ':app'
-rootProject.name = "WatchFace Alpha (Kotlin)"
+rootProject.name = "WatchFace (Kotlin)"

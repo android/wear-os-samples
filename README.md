@@ -19,7 +19,7 @@ Samples
 
 * **[RuntimePermissionsWear](RuntimePermissionsWear)** (Kotlin) - Demonstrates requesting permissions not only on a Wear OS device and a mobile device, but also across devices, e.g., request permissions on a mobile device from your wear device and the other way around. Note: It does require you having both the Wear and Mobile version of the app installed on both devices. [Guide](https://developer.android.com/training/articles/wear-permissions)
 
-* **[WatchFaceAlphaKotlin](WatchFaceAlphaKotlin)** (Kotlin) - Demos the new alpha AndroidX Watch Face APIs. The analog watch face in the sample is powered by a full Room database and uses the new settings APIs (among many other new APIs). Keep in mind that the APIs can change as the alpha proceeds. This version uses alpha4 and will have some additional updates for the next versions.
+* **[WatchFaceKotlin](WatchFaceKotlin)** (Kotlin) - Demos the new AndroidX Watch Face APIs which provide their own storage mechanism for watch face preference values.
 
 * **[WearAccessibilityApp](WearAccessibilityApp)** (Java) - Sample demonstrates how to include accessibility support for your wearable app. [Guide](https://developer.android.com/guide/topics/ui/accessibility)
 
@@ -31,6 +31,6 @@ Samples
 
 * **[WearStandaloneGoogleSignIn](WearStandaloneGoogleSignIn)** (Compose/Kotlin) - Demonstrates using Google sign-in to authenticate user. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
 
-* **[WearTilesKotlin](WearTilesKotlin)** (Kotlin) - Demonstrates tiles using the new AndroidX alpha library. [Guide](https://developer.android.com/training/articles/wear-tiles)
+* **[WearTilesKotlin](WearTilesKotlin)** (Kotlin) - Demonstrates tiles using the new AndroidX library. [Guide](https://developer.android.com/training/articles/wear-tiles)
 
 * **[WearVerifyRemoteApp](WearVerifyRemoteApp)** (Kotlin) - Verify and open your app on another device, and if it isn't installed, open the store listing to allow the user to install it (wear or mobile). [Guide](https://developer.android.com/training/wearables/data-layer/messages#SendMessage)

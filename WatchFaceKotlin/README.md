@@ -1,10 +1,10 @@
-Alpha WatchFace Sample (Kotlin)
+WatchFace Sample (Kotlin)
 ===============================
-Demonstrates watch faces using the new androidX alpha libraries (Kotlin).
+Demonstrates watch faces using the new androidX libraries (Kotlin).
 
 Introduction
 ------------
-With the release of the androidX alpha watch face libraries (late 2020), Wear OS has simplified
+With the release of the androidX watch face libraries (late 2020), Wear OS has simplified
 watch face development.
 
 This sample gives you an early preview of how you can simplify your development with the new 100%
