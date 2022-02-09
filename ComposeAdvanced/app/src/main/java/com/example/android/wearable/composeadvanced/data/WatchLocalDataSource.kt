@@ -23,17 +23,17 @@ class WatchLocalDataSource {
         WatchModel(
             modelId = 100001,
             name = "Power Watch 1",
-            description = "The Power Watch 1 was fictional watch that was released in lorem ipsum dolor sit amet."
+            description = "The Power Watch 1 was fictional watch that was released in lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Tellus rutrum tellus pellentesque eu. Ullamcorper a lacus vestibulum sed arcu. Malesuada proin libero nunc consequat interdum varius sit amet. Eget nullam non nisi est."
         ),
         WatchModel(
             modelId = 100002,
             name = "Watch 2K",
-            description = "The 2K Watch was fictional watch that was first conceived in lorem ipsum dolor sit amet."
+            description = "The 2K Watch was fictional watch that was first conceived in lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Tellus rutrum tellus pellentesque eu. Ullamcorper a lacus vestibulum sed arcu. Malesuada proin libero nunc consequat interdum varius sit amet. Eget nullam non nisi est"
         ),
         WatchModel(
             modelId = 100003,
             name = "Watch Z3",
-            description = "The Watch Z3 is a fictional square watch in the early days of lorem ipsum dolor sit amet."
+            description = "The Watch Z3 is a fictional square watch in the early days of lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Tellus rutrum tellus pellentesque eu. Ullamcorper a lacus vestibulum sed arcu. Malesuada proin libero nunc consequat interdum varius sit amet. Eget nullam non nisi est"
         ),
         WatchModel(
             modelId = 100004,
@@ -43,12 +43,12 @@ class WatchLocalDataSource {
         WatchModel(
             modelId = 100005,
             name = "Watch C5",
-            description = "The Watch C5 was fictional watch that was first released in lorem ipsum dolor sit amet."
+            description = "The Watch C5 was fictional watch that was first released in lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Tellus rutrum tellus pellentesque eu. Ullamcorper a lacus vestibulum sed arcu. Malesuada proin libero nunc consequat interdum varius sit amet. Eget nullam non nisi est"
         ),
         WatchModel(
             modelId = 100006,
             name = "Super T6 Watch",
-            description = "The Super T6 Watch was fictional watch that was and upgrade over the T5."
+            description = "The Super T6 Watch was fictional watch that was and upgrade over the T5, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Tellus rutrum tellus pellentesque eu. Ullamcorper a lacus vestibulum sed arcu. Malesuada proin libero nunc consequat interdum varius sit amet. Eget nullam non nisi est"
         ),
         WatchModel(
             modelId = 100007,
@@ -58,7 +58,7 @@ class WatchLocalDataSource {
         WatchModel(
             modelId = 100008,
             name = "Final Watch 8",
-            description = "The Final Watch 8 was fictional watch that was first released in lorem ipsum dolor sit amet."
+            description = "The Final Watch 8 was fictional watch that was first released in lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Tellus rutrum tellus pellentesque eu. Ullamcorper a lacus vestibulum sed arcu. Malesuada proin libero nunc consequat interdum varius sit amet. Eget nullam non nisi est"
         )
     )
 }

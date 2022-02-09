@@ -62,10 +62,8 @@ fun WatchListScreen(
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
-            top = 28.dp,
             start = 10.dp,
-            end = 10.dp,
-            bottom = 40.dp
+            end = 10.dp
         ),
         verticalArrangement = Arrangement.Center,
         state = scalingLazyListState
