@@ -142,19 +142,13 @@ fun WearApp(watchRepository: WatchRepository) {
             },
             vignette = {
                 // Only show vignette for screens with scrollable content.
-                when (scrollType) {
-                    DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
-                        CustomVignette(
-                            visible = vignetteVisiblePreference,
-                            vignettePosition = VignettePosition.TopAndBottom
-                        )
-                    }
-                    DestinationScrollType.COLUMN_SCROLLING -> {
-                        CustomVignette(
-                            visible = true,
-                            vignettePosition = VignettePosition.TopAndBottom
-                        )
-                    }
+                if (scrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING ||
+                    scrollType == DestinationScrollType.COLUMN_SCROLLING
+                ) {
+                    CustomVignette(
+                        visible = vignetteVisiblePreference,
+                        vignettePosition = VignettePosition.TopAndBottom
+                    )
                 }
             },
             positionIndicator = {
