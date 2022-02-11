@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +50,9 @@ import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTh
 import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.slider.SliderScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.stepper.StepperScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.valuedisplay.ValueDisplayScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 
@@ -112,6 +116,8 @@ fun WearApp(watchRepository: WatchRepository) {
         val scrollType =
             currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
                 ?: DestinationScrollType.NONE
+
+        var displayValue by remember { mutableStateOf(2) }
 
         Scaffold(
             timeText = {
@@ -184,9 +190,42 @@ fun WearApp(watchRepository: WatchRepository) {
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
+                        onClickValueDisplay = {
+                            swipeDismissableNavController.navigate(Screen.ValueDisplay.route)
+                        },
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
+                        }
+                    )
+                }
+
+                composable(Screen.ValueDisplay.route) {
+                    ValueDisplayScreen(
+                        value = displayValue,
+                        onClickStepper = {
+                            swipeDismissableNavController.navigate(Screen.StepperDisplay.route)
+                        },
+                        onClickSlider = {
+                            swipeDismissableNavController.navigate(Screen.SliderDisplay.route)
+                        }
+                    )
+                }
+
+                composable(Screen.StepperDisplay.route) {
+                    StepperScreen(
+                        displayValue = displayValue,
+                        onValueChange = {
+                            displayValue = it
+                        }
+                    )
+                }
+
+                composable(Screen.SliderDisplay.route) {
+                    SliderScreen(
+                        displayValue = displayValue,
+                        onValueChange = {
+                            displayValue = it
                         }
                     )
                 }

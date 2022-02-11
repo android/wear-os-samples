@@ -20,7 +20,7 @@ buildscript {
         activity_compose_version = '1.4.0'
         compose_version = '1.2.0-alpha02'
         lifecycle_version = '2.4.0'
-        wear_compose_version = '1.0.0-alpha15'
+        wear_compose_version = '1.0.0-alpha16'
 
         junit_version = '4.13.2'
         androidx_test_ext_junit_version = '1.1.3'
