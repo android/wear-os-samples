@@ -29,7 +29,8 @@ fun ValueDisplayScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 10.dp),
+            .padding(top = 10.dp)
+            .padding(horizontal = 10.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Text(

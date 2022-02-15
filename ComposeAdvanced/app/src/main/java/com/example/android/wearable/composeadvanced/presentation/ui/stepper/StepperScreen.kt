@@ -11,7 +11,8 @@ import androidx.wear.compose.material.Stepper
 import androidx.wear.compose.material.Text
 
 /**
- * Displays a Stepper
+ * Displays a Stepper, which allows users to make a selection from a range of values.
+ * https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary#Stepper(kotlin.Int,kotlin.Function1,androidx.compose.ui.Modifier,kotlin.ranges.IntProgression,kotlin.Function0,kotlin.Function0,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,kotlin.Function1)
  */
 @Composable
 fun StepperScreen(
