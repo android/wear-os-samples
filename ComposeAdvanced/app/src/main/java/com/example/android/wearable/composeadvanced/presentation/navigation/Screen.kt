@@ -32,7 +32,7 @@ sealed class Screen(
     object Landing : Screen("landing")
     object WatchList : Screen("watchList")
     object WatchDetail : Screen("watchDetail")
-    object ValueDisplay : Screen("valueDisplay")
-    object StepperDisplay: Screen("stepper")
-    object SliderDisplay: Screen("slider")
+    object UserInputComponents : Screen("userInputComponents")
+    object Stepper: Screen("stepper")
+    object Slider: Screen("slider")
 }

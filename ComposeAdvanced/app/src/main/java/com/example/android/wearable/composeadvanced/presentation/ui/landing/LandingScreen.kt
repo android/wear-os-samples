@@ -46,7 +46,7 @@ import com.example.android.wearable.composeadvanced.R
 
 /**
  * Simple landing page with three actions, view a list of watches, toggle on/off text before the
- * time or display a value using a Stepper or a Slider.
+ * time or view a demo of different user input components.
  *
  * A text label indicates the screen shape and places it at the bottom of the screen.
  * If it's a round device, it will curve the text along the bottom curve. Otherwise, for a square
@@ -55,7 +55,7 @@ import com.example.android.wearable.composeadvanced.R
 @Composable
 fun LandingScreen(
     onClickWatchList: () -> Unit,
-    onClickValueDisplay: () -> Unit,
+    onClickDemoUserInputComponents: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -67,7 +67,7 @@ fun LandingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 10.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
         ) {
             CompactChip(
                 onClick = onClickWatchList,
@@ -79,8 +79,6 @@ fun LandingScreen(
                     )
                 }
             )
-
-            Spacer(modifier = Modifier.size(4.dp))
 
             ToggleChip(
                 modifier = Modifier.height(32.dp),
@@ -95,13 +93,11 @@ fun LandingScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.size(4.dp))
-
             CompactChip(
-                onClick = onClickValueDisplay,
+                onClick = onClickDemoUserInputComponents,
                 label = {
                     Text(
-                        stringResource(R.string.value_display_label),
+                        stringResource(R.string.user_input_components_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

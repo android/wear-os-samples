@@ -50,9 +50,9 @@ import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTh
 import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.slider.SliderScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.stepper.StepperScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.valuedisplay.ValueDisplayScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents.SliderScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents.StepperScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents.UserInputComponentsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 
@@ -117,7 +117,7 @@ fun WearApp(watchRepository: WatchRepository) {
             currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
                 ?: DestinationScrollType.NONE
 
-        var displayValue by remember { mutableStateOf(2) }
+        var displayValueForUserInput by remember { mutableStateOf(2) }
 
         Scaffold(
             timeText = {
@@ -190,8 +190,8 @@ fun WearApp(watchRepository: WatchRepository) {
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
-                        onClickValueDisplay = {
-                            swipeDismissableNavController.navigate(Screen.ValueDisplay.route)
+                        onClickDemoUserInputComponents = {
+                            swipeDismissableNavController.navigate(Screen.UserInputComponents.route)
                         },
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
@@ -200,32 +200,32 @@ fun WearApp(watchRepository: WatchRepository) {
                     )
                 }
 
-                composable(Screen.ValueDisplay.route) {
-                    ValueDisplayScreen(
-                        value = displayValue,
+                composable(Screen.UserInputComponents.route) {
+                    UserInputComponentsScreen(
+                        value = displayValueForUserInput,
                         onClickStepper = {
-                            swipeDismissableNavController.navigate(Screen.StepperDisplay.route)
+                            swipeDismissableNavController.navigate(Screen.Stepper.route)
                         },
                         onClickSlider = {
-                            swipeDismissableNavController.navigate(Screen.SliderDisplay.route)
+                            swipeDismissableNavController.navigate(Screen.Slider.route)
                         }
                     )
                 }
 
-                composable(Screen.StepperDisplay.route) {
+                composable(Screen.Stepper.route) {
                     StepperScreen(
-                        displayValue = displayValue,
+                        displayValue = displayValueForUserInput,
                         onValueChange = {
-                            displayValue = it
+                            displayValueForUserInput = it
                         }
                     )
                 }
 
-                composable(Screen.SliderDisplay.route) {
+                composable(Screen.Slider.route) {
                     SliderScreen(
-                        displayValue = displayValue,
+                        displayValue = displayValueForUserInput,
                         onValueChange = {
-                            displayValue = it
+                            displayValueForUserInput = it
                         }
                     )
                 }
