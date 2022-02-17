@@ -33,6 +33,6 @@ sealed class Screen(
     object WatchList : Screen("watchList")
     object WatchDetail : Screen("watchDetail")
     object UserInputComponents : Screen("userInputComponents")
-    object Stepper: Screen("stepper")
-    object Slider: Screen("slider")
+    object Stepper : Screen("stepper")
+    object Slider : Screen("slider")
 }

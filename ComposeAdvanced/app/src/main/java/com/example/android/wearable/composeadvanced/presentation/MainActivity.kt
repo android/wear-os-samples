@@ -22,9 +22,9 @@ import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -117,6 +117,8 @@ fun WearApp(watchRepository: WatchRepository) {
             currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
                 ?: DestinationScrollType.NONE
 
+        // Display value is passed down to various user input screens, for the slider and stepper
+        // components specifically, to demonstrate how they work.
         var displayValueForUserInput by remember { mutableStateOf(2) }
 
         Scaffold(

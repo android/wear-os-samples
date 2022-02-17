@@ -26,7 +26,6 @@ import androidx.wear.compose.material.InlineSlider
 
 /**
  * Displays a Slider, which allows users to make a selection from a range of values.
- * https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary#InlineSlider(kotlin.Float,kotlin.Function1,kotlin.Int,androidx.compose.ui.Modifier,kotlin.Boolean,kotlin.ranges.ClosedFloatingPointRange,kotlin.Boolean,kotlin.Function0,kotlin.Function0,androidx.wear.compose.material.InlineSliderColors)
  */
 @Composable
 fun SliderScreen(

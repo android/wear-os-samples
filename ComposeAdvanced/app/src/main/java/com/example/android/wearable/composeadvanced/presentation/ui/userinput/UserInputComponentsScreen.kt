@@ -80,6 +80,5 @@ fun UserInputComponentsScreen(
                 )
             }
         )
-
     }
 }
