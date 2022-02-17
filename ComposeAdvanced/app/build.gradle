@@ -64,20 +64,20 @@ android {
 
 dependencies {
     // General compose dependencies
-    implementation "androidx.activity:activity-compose:$activity_compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.compose.compiler:compiler:$compose_version"
-    implementation "androidx.compose.foundation:foundation:$compose_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    implementation libs.androidx.activity.compose
+    implementation libs.compose.ui.tooling.preview
+    implementation libs.compose.compiler
+    implementation libs.compose.foundation
+    implementation libs.androidx.lifecycle.viewmodel.compose
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation libs.androidx.lifecycle.viewmodel.savedstate
 
     // Annotation processor
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation libs.androidx.lifecycle.common.java8
 
 
     // Compose for Wear OS Dependencies
@@ -87,19 +87,19 @@ dependencies {
     // androidx.compose.material:material. If there are features from that you feel are missing from
     // androidx.wear.compose:compose-material please raise a bug to let us know:
     // https://issuetracker.google.com/issues/new?component=1077552&template=1598429&pli=1
-    implementation "androidx.wear.compose:compose-material:$wear_compose_version"
+    implementation libs.wear.compose.material
 
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
-    implementation "androidx.wear.compose:compose-foundation:$wear_compose_version"
+    implementation libs.wear.compose.foundation
 
     // If you are using Compose Navigation, use the Wear OS version (NOT the
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
-    implementation "androidx.wear.compose:compose-navigation:$wear_compose_version"
+    implementation libs.wear.compose.navigation
 
     // Testing
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    testImplementation libs.junit
+    androidTestImplementation libs.test.ext.junit
+    androidTestImplementation libs.test.espresso.core
+    androidTestImplementation libs.compose.ui.test.junit4
+    debugImplementation libs.compose.ui.tooling
 }

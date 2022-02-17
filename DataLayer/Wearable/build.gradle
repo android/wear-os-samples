@@ -27,8 +27,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdk 26
+        targetSdk 30
     }
 
     lintOptions {
@@ -57,15 +57,15 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$rootProject.coroutinesVersion"
-    implementation "androidx.activity:activity-compose:$rootProject.activityVersion"
-    implementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
-    implementation "androidx.compose.compiler:compiler:$rootProject.composeCompilerVersion"
-    implementation "androidx.compose.foundation:foundation:$rootProject.composeVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
+    implementation libs.androidx.activity.compose
+    implementation libs.compose.ui.tooling
+    implementation libs.compose.compiler
+    implementation libs.compose.foundation
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // Compose for Wear OS Dependencies
     // Developer Preview starts with Alpha 07, with new releases coming soon.
@@ -74,10 +74,10 @@ dependencies {
     // androidx.compose.material:material. If there are features from that you feel are missing from
     // androidx.wear.compose:compose-material please raise a bug to let us know:
     // https://issuetracker.google.com/issues/new?component=1077552&template=1598429&pli=1
-    implementation "androidx.wear.compose:compose-material:$rootProject.wearComposeVersion"
+    implementation libs.wear.compose.material
 
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
-    implementation "androidx.wear.compose:compose-foundation:$rootProject.wearComposeVersion"
+    implementation libs.wear.compose.foundation
 
-    implementation "com.google.android.gms:play-services-wearable:$rootProject.playServicesWearableVersion"
+    implementation libs.playservices.wearable
 }

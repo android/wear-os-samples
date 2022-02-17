@@ -17,7 +17,7 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 android-build-gradle = "com.android.tools.build:gradle:7.0.4"
-android-desugar_jdk_libs = "com.android.tools:desugar_jdk_libs:1.1.5"
+android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
 playservices-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"

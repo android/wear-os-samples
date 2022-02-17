@@ -4,8 +4,8 @@ compose-material = "1.1.0-rc01"
 [libraries]
 androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
 compose-compiler = "androidx.compose.compiler:compiler:1.1.0-rc01"
-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidx-compose-material" }
-compose-material-ripple = { module = "androidx.compose.material:material-ripple", version.ref = "androidx-compose-material" }
+compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-material" }
+compose-material-ripple = { module = "androidx.compose.material:material-ripple", version.ref = "compose-material" }
 compose-ui-tooling = "androidx.compose.ui:ui-tooling:1.1.0-rc01"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
