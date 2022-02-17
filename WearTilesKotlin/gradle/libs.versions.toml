@@ -3,16 +3,16 @@ androidx-wear-tiles = "1.0.0"
 org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
-androidx-core-core-ktx = "androidx.core:core-ktx:1.7.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
 androidx-wear = "androidx.wear:wear:1.2.0"
-androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
-androidx-wear-tiles-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
-com-android-tools-build-gradle = "com.android.tools.build:gradle:7.0.4"
-com-android-tools-lint-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
-org-jacoco-org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
-org-jetbrains-kotlin-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
-org-jetbrains-kotlinx-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
-org-jetbrains-kotlinx-kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
+wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
+wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
+android-build-gradle = "com.android.tools.build:gradle:7.0.4"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
 
 [plugins]
 android = "android:7.0.4"

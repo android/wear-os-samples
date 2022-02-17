@@ -2,22 +2,22 @@
 org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
-androidx-activity-activity-ktx = "androidx.activity:activity-ktx:1.4.0"
+androidx-activity-ktx = "androidx.activity:activity-ktx:1.4.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.2"
-androidx-core-core-ktx = "androidx.core:core-ktx:1.7.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.0.4"
-androidx-lifecycle-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 androidx-wear = "androidx.wear:wear:1.2.0"
-androidx-wear-wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.0.1"
-androidx-wear-wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
-com-android-tools-build-gradle = "com.android.tools.build:gradle:7.0.4"
-com-android-tools-lint-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
-com-google-android-gms-play-services-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
-org-jacoco-org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
-org-jetbrains-kotlin-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
-org-jetbrains-kotlinx-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
-org-jetbrains-kotlinx-kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
+wear-wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.0.1"
+wear-wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
+android-build-gradle = "com.android.tools.build:gradle:7.0.4"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
+playservices-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 
 [plugins]
 android = "android:7.0.4"

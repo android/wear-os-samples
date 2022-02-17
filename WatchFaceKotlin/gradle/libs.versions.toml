@@ -5,29 +5,29 @@ org-jetbrains-kotlin = "1.6.0"
 org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
-androidx-activity-activity-ktx = "androidx.activity:activity-ktx:1.4.0"
-androidx-core-core-ktx = "androidx.core:core-ktx:1.7.0"
+androidx-activity-ktx = "androidx.activity:activity-ktx:1.4.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.0.4"
-androidx-lifecycle-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.2.0"
-androidx-wear-watchface = { module = "androidx.wear.watchface:watchface", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-client = { module = "androidx.wear.watchface:watchface-client", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-complications-data = { module = "androidx.wear.watchface:watchface-complications-data", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-complications-data-source = { module = "androidx.wear.watchface:watchface-complications-data-source", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-complications-rendering = { module = "androidx.wear.watchface:watchface-complications-rendering", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-data = { module = "androidx.wear.watchface:watchface-data", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-editor = { module = "androidx.wear.watchface:watchface-editor", version.ref = "androidx-wear-watchface" }
-androidx-wear-watchface-watchface-style = { module = "androidx.wear.watchface:watchface-style", version.ref = "androidx-wear-watchface" }
-com-android-tools-build-gradle = "com.android.tools.build:gradle:7.0.4"
-com-android-tools-lint-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
-com-google-android-material = "com.google.android.material:material:1.4.0"
-org-jacoco-org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
-org-jetbrains-kotlin-kotlin-annotation-processing-gradle = { module = "org.jetbrains.kotlin:kotlin-annotation-processing-gradle", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlinx-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
-org-jetbrains-kotlinx-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
+wear-watchface = { module = "androidx.wear.watchface:watchface", version.ref = "androidx-wear-watchface" }
+wear-watchface-client = { module = "androidx.wear.watchface:watchface-client", version.ref = "androidx-wear-watchface" }
+wear-watchface-complications-data = { module = "androidx.wear.watchface:watchface-complications-data", version.ref = "androidx-wear-watchface" }
+wear-watchface-complications-data-source = { module = "androidx.wear.watchface:watchface-complications-data-source", version.ref = "androidx-wear-watchface" }
+wear-watchface-complications-rendering = { module = "androidx.wear.watchface:watchface-complications-rendering", version.ref = "androidx-wear-watchface" }
+wear-watchface-data = { module = "androidx.wear.watchface:watchface-data", version.ref = "androidx-wear-watchface" }
+wear-watchface-editor = { module = "androidx.wear.watchface:watchface-editor", version.ref = "androidx-wear-watchface" }
+wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", version.ref = "androidx-wear-watchface" }
+android-build-gradle = "com.android.tools.build:gradle:7.0.4"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
+android-material = "com.google.android.material:material:1.4.0"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
+kotlin-annotation-processing-gradle = { module = "org.jetbrains.kotlin:kotlin-annotation-processing-gradle", version.ref = "org-jetbrains-kotlin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
 
 [plugins]
 android = "android:7.0.4"

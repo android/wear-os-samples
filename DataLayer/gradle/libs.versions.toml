@@ -4,27 +4,27 @@ androidx-wear-compose = "1.0.0-alpha13"
 org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
-androidx-activity-activity-compose = "androidx.activity:activity-compose:1.4.0"
-androidx-compose-compiler = "androidx.compose.compiler:compiler:1.1.0-rc02"
-androidx-compose-foundation = "androidx.compose.foundation:foundation:1.1.0-rc01"
-androidx-compose-material = "androidx.compose.material:material:1.1.0-rc01"
-androidx-compose-ui-ui-tooling = "androidx.compose.ui:ui-tooling:1.1.0-rc01"
-androidx-core-core-ktx = "androidx.core:core-ktx:1.7.0"
-androidx-fragment-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0"
-androidx-lifecycle-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
-androidx-wear-compose-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
-androidx-wear-compose-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
-com-android-tools-build-gradle = "com.android.tools.build:gradle:7.0.4"
-com-android-tools-desugar_jdk_libs = "com.android.tools:desugar_jdk_libs:1.1.5"
-com-android-tools-lint-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
-com-google-android-gms-play-services-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
-org-jacoco-org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
-org-jetbrains-kotlin-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-org-jetbrains-kotlinx-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
-org-jetbrains-kotlinx-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
-org-jetbrains-kotlinx-kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
+androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
+compose-compiler = "androidx.compose.compiler:compiler:1.1.0-rc02"
+compose-foundation = "androidx.compose.foundation:foundation:1.1.0-rc01"
+compose-material = "androidx.compose.material:material:1.1.0-rc01"
+compose-ui-tooling = "androidx.compose.ui:ui-tooling:1.1.0-rc01"
+androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0"
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
+wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
+android-build-gradle = "com.android.tools.build:gradle:7.0.4"
+android-desugar_jdk_libs = "com.android.tools:desugar_jdk_libs:1.1.5"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
+playservices-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 
 [plugins]
 android = "android:7.0.4"
