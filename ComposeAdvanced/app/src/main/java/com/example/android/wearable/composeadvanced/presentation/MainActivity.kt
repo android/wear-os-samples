@@ -50,9 +50,9 @@ import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTh
 import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents.SliderScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents.StepperScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents.UserInputComponentsScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 

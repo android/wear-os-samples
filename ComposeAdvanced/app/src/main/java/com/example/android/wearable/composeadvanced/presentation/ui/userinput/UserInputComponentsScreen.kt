@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.wearable.composeadvanced.presentation.ui.userInputComponents
+package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
