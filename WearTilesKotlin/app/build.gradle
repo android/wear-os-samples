@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
 
 android {
     compileSdkVersion 32
@@ -29,13 +29,13 @@ android {
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
@@ -50,10 +50,10 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.0'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.wear:wear:1.2.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.0"
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.wear:wear:1.2.0"
     // Use to implement support for wear tiles
     implementation "androidx.wear.tiles:tiles:1.0.0"
 

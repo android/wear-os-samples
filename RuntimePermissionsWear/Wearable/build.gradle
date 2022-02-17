@@ -34,7 +34,7 @@ android {
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {
@@ -61,5 +61,5 @@ dependencies {
     implementation "androidx.wear:wear:1.2.0"
     implementation "com.google.android.gms:play-services-wearable:17.1.0"
 
-    implementation project(':Shared')
+    implementation project(":Shared")
 }

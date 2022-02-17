@@ -33,7 +33,7 @@ android {
 
     lintOptions {
         warningsAsErrors true
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {
@@ -63,7 +63,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
     implementation "androidx.activity:activity-ktx:1.4.0"
     implementation "androidx.core:core-ktx:1.7.0"
-    implementation 'androidx.wear:wear:1.2.0'
+    implementation "androidx.wear:wear:1.2.0"
 
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
     androidTestImplementation "androidx.test:core:1.4.0"

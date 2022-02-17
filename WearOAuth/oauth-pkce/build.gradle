@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id "com.android.application"
+    id "kotlin-android"
 }
 
 android {
@@ -31,13 +31,13 @@ android {
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     buildFeatures {
@@ -46,13 +46,13 @@ android {
 }
 
 dependencies {
-    implementation project(':util')
+    implementation project(":util")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.appcompat:appcompat:1.4.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation("androidx.fragment:fragment-ktx:1.4.0")
     implementation("androidx.wear:wear:1.2.0")
     implementation("androidx.wear:wear-phone-interactions:1.1.0-alpha02")
-    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
+    implementation "com.google.android.gms:play-services-wearable:17.1.0"
 }

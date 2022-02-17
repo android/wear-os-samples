@@ -17,14 +17,14 @@
 buildscript {
     ext {
         // SDK and tools
-        kotlinVersion = '1.6.0'
-        activityKtxVersion = '1.4.0'
-        ktxVersion = '1.7.0'
-        wearVersion = '1.2.0'
-        watchFaceVersion = '1.0.0'
-        coroutines = '1.6.0'
-        lifecycleVersion = '2.4.0'
-        materialVersion = '1.4.0'
+        kotlinVersion = "1.6.0"
+        activityKtxVersion = "1.4.0"
+        ktxVersion = "1.7.0"
+        wearVersion = "1.2.0"
+        watchFaceVersion = "1.0.0"
+        coroutines = "1.6.0"
+        lifecycleVersion = "2.4.0"
+        materialVersion = "1.4.0"
     }
 
     repositories {
@@ -33,7 +33,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath "com.android.tools.build:gradle:7.0.4"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         // NOTE: Do not place your application dependencies here; they belong

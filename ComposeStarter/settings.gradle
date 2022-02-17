@@ -21,4 +21,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "ComposeStarter"
-include ':app'
+include ":app"

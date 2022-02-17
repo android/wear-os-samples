@@ -1,2 +1,2 @@
 
-include ':Application', ':Wearable'
+include ":Application", ":Wearable"

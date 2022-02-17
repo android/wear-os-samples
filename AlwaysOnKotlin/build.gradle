@@ -28,7 +28,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '6.0.1'
+    id "com.diffplug.spotless" version "6.0.1"
     id "com.github.ben-manes.versions" version "0.41.0"
     id "nl.littlerobots.version-catalog-update" version "0.3.0"
 }
@@ -43,12 +43,12 @@ subprojects {
 
     spotless {
         kotlin {
-            target '**/*.kt'
+            target "**/*.kt"
             targetExclude("$buildDir/**/*.kt")
-            targetExclude('bin/**/*.kt')
+            targetExclude("bin/**/*.kt")
 
             ktlint("0.41.0")
-            licenseHeaderFile rootProject.file('spotless/copyright.kt')
+            licenseHeaderFile rootProject.file("spotless/copyright.kt")
         }
     }
 }

@@ -73,5 +73,5 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion"
     implementation "com.google.android.gms:play-services-wearable:$rootProject.playServicesWearableVersion"
 
-    wearApp project(':Wearable')
+    wearApp project(":Wearable")
 }
