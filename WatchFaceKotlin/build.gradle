@@ -41,6 +41,11 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.ben-manes.versions" version "0.41.0"
+    id "nl.littlerobots.version-catalog-update" version "0.3.0"
+}
+
 allprojects {
     repositories {
         google()
@@ -50,4 +55,17 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        (it.candidate.version ==~ /.*-alpha.*/ && !(it.currentVersion ==~ /.*-alpha.*/)) ||
+                (it.candidate.version ==~ /.*-beta.*/ && !(it.currentVersion ==~ /.*-(beta|alpha).*/))
+    }
+}
+
+versionCatalogUpdate {
+    keep {
+        keepUnusedVersions = true
+    }
 }

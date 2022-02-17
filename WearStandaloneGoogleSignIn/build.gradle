@@ -39,6 +39,8 @@ buildscript {
 
 plugins {
     id 'com.diffplug.spotless' version '6.0.1'
+    id "com.github.ben-manes.versions" version "0.41.0"
+    id "nl.littlerobots.version-catalog-update" version "0.3.0"
 }
 
 subprojects {
@@ -58,5 +60,18 @@ subprojects {
             ktlint("0.41.0")
             licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        (it.candidate.version ==~ /.*-alpha.*/ && !(it.currentVersion ==~ /.*-alpha.*/)) ||
+                (it.candidate.version ==~ /.*-beta.*/ && !(it.currentVersion ==~ /.*-(beta|alpha).*/))
+    }
+}
+
+versionCatalogUpdate {
+    keep {
+        keepUnusedVersions = true
     }
 }
