@@ -54,5 +54,5 @@ dependencies {
     implementation libs.wear.wear.remote.interactions
     implementation libs.playservices.wearable
 
-    wearApp projects.Wearable
+    wearApp projects.wearable
 }

@@ -4,7 +4,7 @@ org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
 androidx-activity-ktx = "androidx.activity:activity-ktx:1.4.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.2"
 androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.0.4"
