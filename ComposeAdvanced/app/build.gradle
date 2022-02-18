@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -41,7 +42,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
         freeCompilerArgs += "-Xjvm-default=compatibility"
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
         // Allow for widescale experimental APIs in Alpha libraries we build upon
@@ -53,7 +53,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "$compose_version"
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
     packagingOptions {
         resources {
@@ -79,9 +79,8 @@ dependencies {
     // Annotation processor
     implementation libs.androidx.lifecycle.common.java8
 
-
     // Compose for Wear OS Dependencies
-    // Developer Preview starts with Alpha 07, with new releases coming soon.
+    // Developer Preview currently Alpha, with new releases coming soon.
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
     // androidx.wear.compose:compose-material is designed as a replacement not an addition to
     // androidx.compose.material:material. If there are features from that you feel are missing from
