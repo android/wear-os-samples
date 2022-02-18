@@ -15,8 +15,8 @@
  */
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -52,7 +52,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion rootProject.composeCompilerVersion
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 }
 
@@ -68,7 +68,7 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // Compose for Wear OS Dependencies
-    // Developer Preview starts with Alpha 07, with new releases coming soon.
+    // Developer Preview currently Alpha 07, with new releases coming soon.
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
     // androidx.wear.compose:compose-material is designed as a replacement not an addition to
     // androidx.compose.material:material. If there are features from that you feel are missing from
