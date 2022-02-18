@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -49,7 +49,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "$compose_version"
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
     packagingOptions {
         resources {
