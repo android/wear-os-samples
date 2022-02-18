@@ -17,14 +17,14 @@
 buildscript {
     ext {
         // SDK and tools
-        kotlinVersion = '1.6.0'
-        activityKtxVersion = '1.4.0'
-        ktxVersion = '1.7.0'
-        wearVersion = '1.2.0'
-        watchFaceVersion = '1.0.0'
-        coroutines = '1.6.0'
-        lifecycleVersion = '2.4.0'
-        materialVersion = '1.4.0'
+        kotlinVersion = "1.6.0"
+        activityKtxVersion = "1.4.0"
+        ktxVersion = "1.7.0"
+        wearVersion = "1.2.0"
+        watchFaceVersion = "1.0.0"
+        coroutines = "1.6.0"
+        lifecycleVersion = "2.4.0"
+        materialVersion = "1.4.0"
     }
 
     repositories {
@@ -33,12 +33,17 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath libs.android.build.gradle
+        classpath libs.kotlin.gradle.plugin
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id "com.github.ben-manes.versions" version "0.41.0"
+    id "nl.littlerobots.version-catalog-update" version "0.3.0"
 }
 
 allprojects {
@@ -50,4 +55,18 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        (it.candidate.version ==~ /.*-alpha.*/ && !(it.currentVersion ==~ /.*-alpha.*/)) ||
+                (it.candidate.version ==~ /.*-beta.*/ && !(it.currentVersion ==~ /.*-(beta|alpha).*/)) ||
+                (it.candidate.version ==~ /.*1.6.20-M.*/)
+    }
+}
+
+versionCatalogUpdate {
+    keep {
+        keepUnusedVersions = true
+    }
 }

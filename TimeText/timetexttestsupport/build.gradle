@@ -23,12 +23,12 @@ android {
     compileSdkVersion 32
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 30
+        minSdk 23
+        targetSdk 30
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {

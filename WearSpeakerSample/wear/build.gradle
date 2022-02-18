@@ -25,12 +25,12 @@ android {
     defaultConfig {
         versionCode 1
         versionName "1.0"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdk 26
+        targetSdk 30
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {
@@ -47,18 +47,18 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.1.0-rc01'
+        kotlinCompilerExtensionVersion "1.1.0-rc01"
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
-    implementation "androidx.activity:activity-compose:1.4.0"
-    implementation 'androidx.compose.material:material-ripple:1.1.0-rc01'
-    implementation 'androidx.compose.material:material-icons-extended:1.1.0-rc01'
-    implementation 'androidx.compose.ui:ui-tooling:1.1.0-rc01'
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
-    implementation "androidx.media:media:1.4.3"
-    implementation "androidx.wear.compose:compose-material:1.0.0-alpha13"
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.androidx.activity.compose
+    implementation libs.compose.material.ripple
+    implementation libs.compose.material.icons.extended
+    implementation libs.compose.ui.tooling
+    implementation libs.androidx.constraintlayout.compose
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.media
+    implementation libs.wear.compose.material
 }

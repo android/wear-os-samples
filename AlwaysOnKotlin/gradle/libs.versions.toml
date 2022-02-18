@@ -1,0 +1,93 @@
+[versions]
+androidx-activity = "1.4.0"
+compose-ui = "1.1.0-rc01"
+androidx-test = "1.4.0"
+androidx-wear-compose = "1.0.0-alpha13"
+org-jetbrains-kotlinx = "1.6.0"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
+compose-compiler = "androidx.compose.compiler:compiler:1.1.0-rc02"
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-ui" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-ui" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
+androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.0.4"
+androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
+test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
+test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
+test-ext-junit = "androidx.test.ext:junit:1.1.3"
+test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.3"
+test-ext-truth = "androidx.test.ext:truth:1.4.0"
+test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
+test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
+androidx-wear = "androidx.wear:wear:1.2.0"
+wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
+wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
+androidx-window = "androidx.window:window:1.0.0-rc01"
+android-build-gradle = "com.android.tools.build:gradle:7.0.4"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.0.4"
+com-google-truth = "com.google.truth:truth:1.1.2"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.3"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
+
+[plugins]
+android = "android:7.0.4"
+android-library = "android-library:7.0.4"
+android-reporting = "android-reporting:7.0.4"
+com-android-application = "com.android.application:7.0.4"
+com-android-asset-pack = "com.android.asset-pack:7.0.4"
+com-android-asset-pack-bundle = "com.android.asset-pack-bundle:7.0.4"
+com-android-base = "com.android.base:7.0.4"
+com-android-dynamic-feature = "com.android.dynamic-feature:7.0.4"
+com-android-internal-application = "com.android.internal.application:7.0.4"
+com-android-internal-asset-pack = "com.android.internal.asset-pack:7.0.4"
+com-android-internal-asset-pack-bundle = "com.android.internal.asset-pack-bundle:7.0.4"
+com-android-internal-dynamic-feature = "com.android.internal.dynamic-feature:7.0.4"
+com-android-internal-library = "com.android.internal.library:7.0.4"
+com-android-internal-reporting = "com.android.internal.reporting:7.0.4"
+com-android-internal-test = "com.android.internal.test:7.0.4"
+com-android-internal-version-check = "com.android.internal.version-check:7.0.4"
+com-android-library = "com.android.library:7.0.4"
+com-android-lint = "com.android.lint:7.0.4"
+com-android-reporting = "com.android.reporting:7.0.4"
+com-android-test = "com.android.test:7.0.4"
+com-diffplug-spotless = "com.diffplug.spotless:6.0.1"
+com-github-ben-manes-versions = "com.github.ben-manes.versions:0.41.0"
+kotlin = "kotlin:1.6.10"
+kotlin-android = "kotlin-android:1.6.10"
+kotlin-android-extensions = "kotlin-android-extensions:1.6.10"
+kotlin-dce-js = "kotlin-dce-js:1.6.10"
+kotlin-kapt = "kotlin-kapt:1.6.10"
+kotlin-multiplatform = "kotlin-multiplatform:1.6.10"
+kotlin-native-cocoapods = "kotlin-native-cocoapods:1.6.10"
+kotlin-native-performance = "kotlin-native-performance:1.6.10"
+kotlin-parcelize = "kotlin-parcelize:1.6.10"
+kotlin-platform-android = "kotlin-platform-android:1.6.10"
+kotlin-platform-common = "kotlin-platform-common:1.6.10"
+kotlin-platform-js = "kotlin-platform-js:1.6.10"
+kotlin-platform-jvm = "kotlin-platform-jvm:1.6.10"
+kotlin-scripting = "kotlin-scripting:1.6.10"
+kotlin2js = "kotlin2js:1.6.10"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.3.0"
+org-jetbrains-kotlin-android = "org.jetbrains.kotlin.android:1.6.10"
+org-jetbrains-kotlin-android-extensions = "org.jetbrains.kotlin.android.extensions:1.6.10"
+org-jetbrains-kotlin-js = "org.jetbrains.kotlin.js:1.6.10"
+org-jetbrains-kotlin-jvm = "org.jetbrains.kotlin.jvm:1.6.10"
+org-jetbrains-kotlin-kapt = "org.jetbrains.kotlin.kapt:1.6.10"
+org-jetbrains-kotlin-multiplatform = "org.jetbrains.kotlin.multiplatform:1.6.10"
+org-jetbrains-kotlin-multiplatform-pm20 = "org.jetbrains.kotlin.multiplatform.pm20:1.6.10"
+org-jetbrains-kotlin-native-cocoapods = "org.jetbrains.kotlin.native.cocoapods:1.6.10"
+org-jetbrains-kotlin-native-performance = "org.jetbrains.kotlin.native.performance:1.6.10"
+org-jetbrains-kotlin-platform-android = "org.jetbrains.kotlin.platform.android:1.6.10"
+org-jetbrains-kotlin-platform-common = "org.jetbrains.kotlin.platform.common:1.6.10"
+org-jetbrains-kotlin-platform-js = "org.jetbrains.kotlin.platform.js:1.6.10"
+org-jetbrains-kotlin-platform-jvm = "org.jetbrains.kotlin.platform.jvm:1.6.10"
+org-jetbrains-kotlin-plugin-parcelize = "org.jetbrains.kotlin.plugin.parcelize:1.6.10"
+org-jetbrains-kotlin-plugin-scripting = "org.jetbrains.kotlin.plugin.scripting:1.6.10"

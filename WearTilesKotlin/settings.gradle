@@ -1,2 +1,5 @@
-include ':app'
-rootProject.name = "Sample Tiles"
+include ":app"
+rootProject.name = "SampleTiles"
+
+// https://docs.gradle.org/7.4/userguide/declaring_dependencies.html#sec:type-safe-project-accessors
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

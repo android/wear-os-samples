@@ -22,13 +22,15 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath libs.android.build.gradle
+        classpath libs.kotlin.gradle.plugin
     }
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '6.0.1'
+    id "com.diffplug.spotless" version "6.0.1"
+    id "com.github.ben-manes.versions" version "0.41.0"
+    id "nl.littlerobots.version-catalog-update" version "0.3.0"
 }
 
 subprojects {
@@ -41,12 +43,26 @@ subprojects {
 
     spotless {
         kotlin {
-            target '**/*.kt'
+            target "**/*.kt"
             targetExclude("$buildDir/**/*.kt")
-            targetExclude('bin/**/*.kt')
+            targetExclude("bin/**/*.kt")
 
             ktlint("0.41.0")
-            licenseHeaderFile rootProject.file('spotless/copyright.kt')
+            licenseHeaderFile rootProject.file("spotless/copyright.kt")
         }
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        (it.candidate.version ==~ /.*-alpha.*/ && !(it.currentVersion ==~ /.*-alpha.*/)) ||
+                (it.candidate.version ==~ /.*-beta.*/ && !(it.currentVersion ==~ /.*-(beta|alpha).*/)) ||
+                (it.candidate.version ==~ /.*1.6.20-M.*/)
+    }
+}
+
+versionCatalogUpdate {
+    keep {
+        keepUnusedVersions = true
     }
 }
