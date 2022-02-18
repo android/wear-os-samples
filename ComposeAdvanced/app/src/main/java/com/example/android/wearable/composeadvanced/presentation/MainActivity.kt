@@ -117,9 +117,11 @@ fun WearApp(watchRepository: WatchRepository) {
             currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
                 ?: DestinationScrollType.NONE
 
+        // TODO: consider moving to ViewModel
         // Display value is passed down to various user input screens, for the slider and stepper
         // components specifically, to demonstrate how they work.
-        var displayValueForUserInput by remember { mutableStateOf(2) }
+        var defaultSelectedValue = 2
+        var displayValueForUserInput by remember { mutableStateOf(defaultSelectedValue) }
 
         Scaffold(
             timeText = {

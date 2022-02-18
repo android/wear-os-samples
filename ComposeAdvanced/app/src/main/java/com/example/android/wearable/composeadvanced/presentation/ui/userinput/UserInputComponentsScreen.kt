@@ -49,13 +49,7 @@ fun UserInputComponentsScreen(
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(1f),
-            text = "Previously selected value: ",
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            modifier = Modifier.fillMaxWidth(1f),
-            text = "$value",
+            text = "${stringResource(R.string.selected_value)}: $value",
             textAlign = TextAlign.Center
         )
 
