@@ -31,9 +31,9 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.wear.compose.material.AlertDialog
+import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ConfirmationDialog
+import androidx.wear.compose.material.dialog.Confirmation
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import kotlinx.coroutines.launch
@@ -108,7 +108,7 @@ fun SpeakerApp() {
         )
 
         if (mainState.showPermissionRationale) {
-            AlertDialog(
+            Alert(
                 title = {
                     Text(text = stringResource(id = R.string.rationale_for_microphone_permission))
                 },
@@ -135,7 +135,7 @@ fun SpeakerApp() {
         }
 
         if (mainState.showSpeakerNotSupported) {
-            ConfirmationDialog(
+            Confirmation(
                 onTimeout = { mainState.showSpeakerNotSupported = false }
             ) {
                 Text(text = stringResource(id = R.string.no_speaker_supported))
