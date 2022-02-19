@@ -15,30 +15,17 @@
  */
 
 buildscript {
-    ext.kotlin_version = "1.6.0"
-    repositories {
-        google()
-        mavenCentral()
-    }
     dependencies {
-        classpath libs.android.build.gradle
         classpath libs.kotlin.gradle.plugin
     }
 }
 
 plugins {
-    id "com.diffplug.spotless" version "6.0.1"
-    id "com.github.ben-manes.versions" version "0.41.0"
-    id "nl.littlerobots.version-catalog-update" version "0.3.0"
+    alias(libs.plugins.com.diffplug.spotless) apply(false)
+    alias(libs.plugins.com.android.application) apply(false)
 }
 
 subprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
-
     apply plugin: "com.diffplug.spotless"
     spotless {
         kotlin {
@@ -49,19 +36,5 @@ subprojects {
             ktlint("0.40.0")
             licenseHeaderFile rootProject.file("spotless/copyright.kt")
         }
-    }
-}
-
-tasks.named("dependencyUpdates").configure {
-    rejectVersionIf {
-        (it.candidate.version ==~ /.*-alpha.*/ && !(it.currentVersion ==~ /.*-alpha.*/)) ||
-                (it.candidate.version ==~ /.*-beta.*/ && !(it.currentVersion ==~ /.*-(beta|alpha).*/)) ||
-                (it.candidate.version ==~ /.*1.6.20-M.*/)
-    }
-}
-
-versionCatalogUpdate {
-    keep {
-        keepUnusedVersions = true
     }
 }
