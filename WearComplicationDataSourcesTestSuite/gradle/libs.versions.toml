@@ -1,26 +1,18 @@
 [versions]
-androidx-test = "1.4.0"
-org-jetbrains-kotlin = "1.6.0"
+org-jetbrains-kotlin = "1.6.10"
 
 [libraries]
 android-build-gradle = "com.android.tools.build:gradle:7.1.1"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.1"
-androidx-activity-ktx = "androidx.activity:activity-ktx:1.4.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
-androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
+android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.1"
 androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.1.1"
-androidx-wear = "androidx.wear:wear:1.2.0"
-com-google-truth = "com.google.truth:truth:1.1.3"
+androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
+androidx-wear-watchface-complications-data-source-ktx = "androidx.wear.watchface:watchface-complications-data-source-ktx:1.0.1"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.7"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "org-jetbrains-kotlin" }
-org-robolectric = "org.robolectric:robolectric:4.7.3"
-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
-test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
-test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.3"
-test-ext-truth = "androidx.test.ext:truth:1.4.0"
-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+kotlin-parcelize-compiler = { module = "org.jetbrains.kotlin:kotlin-parcelize-compiler", version.ref = "org-jetbrains-kotlin" }
+kotlin-parcelize-runtime = { module = "org.jetbrains.kotlin:kotlin-parcelize-runtime", version.ref = "org-jetbrains-kotlin" }
+kotlinx-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
 
 [plugins]
 android = "android:7.1.1"

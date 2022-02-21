@@ -15,8 +15,8 @@
  */
 
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.1.0-rc01"
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 }
 

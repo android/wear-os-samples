@@ -15,25 +15,7 @@
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext {
-        // SDK and tools
-        kotlinVersion = "1.6.0"
-        activityKtxVersion = "1.4.0"
-        ktxVersion = "1.7.0"
-        wearVersion = "1.2.0"
-        watchFaceVersion = "1.0.0"
-        coroutines = "1.6.0"
-        lifecycleVersion = "2.4.0"
-        materialVersion = "1.4.0"
-    }
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     dependencies {
-        classpath libs.android.build.gradle
         classpath libs.kotlin.gradle.plugin
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -42,31 +24,22 @@ buildscript {
 }
 
 plugins {
-    id "com.github.ben-manes.versions" version "0.41.0"
-    id "nl.littlerobots.version-catalog-update" version "0.3.0"
+    alias(libs.plugins.com.diffplug.spotless) apply(false)
+    alias(libs.plugins.com.android.application) apply(false)
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+    apply plugin: "com.diffplug.spotless"
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+    spotless {
+        kotlin {
+            target "**/*.kt"
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude("bin/**/*.kt")
 
-tasks.named("dependencyUpdates").configure {
-    rejectVersionIf {
-        (it.candidate.version ==~ /.*-alpha.*/ && !(it.currentVersion ==~ /.*-alpha.*/)) ||
-                (it.candidate.version ==~ /.*-beta.*/ && !(it.currentVersion ==~ /.*-(beta|alpha).*/)) ||
-                (it.candidate.version ==~ /.*1.6.20-M.*/)
-    }
-}
-
-versionCatalogUpdate {
-    keep {
-        keepUnusedVersions = true
+            // TODO: fix ktlint errors
+            // ktlint("0.41.0")
+            licenseHeaderFile rootProject.file("spotless/copyright.kt")
+        }
     }
 }

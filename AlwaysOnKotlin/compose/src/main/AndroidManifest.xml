@@ -40,7 +40,6 @@
             the same (already active) Activity.
         -->
         <activity android:name="com.example.android.wearable.wear.alwayson.MainActivity"
-            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true">
