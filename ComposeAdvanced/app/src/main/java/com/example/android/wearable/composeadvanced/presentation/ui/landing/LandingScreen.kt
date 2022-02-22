@@ -19,12 +19,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,8 +43,8 @@ import androidx.wear.compose.material.ToggleChip
 import com.example.android.wearable.composeadvanced.R
 
 /**
- * Simple landing page with two actions, view a list of watches or toggle on/off text before the
- * time.
+ * Simple landing page with three actions, view a list of watches, toggle on/off text before the
+ * time or view a demo of different user input components.
  *
  * A text label indicates the screen shape and places it at the bottom of the screen.
  * If it's a round device, it will curve the text along the bottom curve. Otherwise, for a square
@@ -55,6 +53,7 @@ import com.example.android.wearable.composeadvanced.R
 @Composable
 fun LandingScreen(
     onClickWatchList: () -> Unit,
+    onClickDemoUserInputComponents: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -66,7 +65,7 @@ fun LandingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 10.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
         ) {
             CompactChip(
                 onClick = onClickWatchList,
@@ -79,8 +78,6 @@ fun LandingScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.size(4.dp))
-
             ToggleChip(
                 modifier = Modifier.height(32.dp),
                 checked = proceedingTimeTextEnabled,
@@ -88,6 +85,17 @@ fun LandingScreen(
                 label = {
                     Text(
                         text = stringResource(R.string.proceeding_text_toggle_chip_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+
+            CompactChip(
+                onClick = onClickDemoUserInputComponents,
+                label = {
+                    Text(
+                        stringResource(R.string.user_input_components_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

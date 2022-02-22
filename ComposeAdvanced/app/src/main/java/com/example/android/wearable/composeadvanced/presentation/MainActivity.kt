@@ -22,6 +22,7 @@ import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,6 +50,9 @@ import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTh
 import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 
@@ -112,6 +116,12 @@ fun WearApp(watchRepository: WatchRepository) {
         val scrollType =
             currentBackStackEntry?.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
                 ?: DestinationScrollType.NONE
+
+        // TODO: consider moving to ViewModel
+        // Display value is passed down to various user input screens, for the slider and stepper
+        // components specifically, to demonstrate how they work.
+        val defaultSelectedValue = 2
+        var displayValueForUserInput by remember { mutableStateOf(defaultSelectedValue) }
 
         Scaffold(
             timeText = {
@@ -184,9 +194,42 @@ fun WearApp(watchRepository: WatchRepository) {
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
+                        onClickDemoUserInputComponents = {
+                            swipeDismissableNavController.navigate(Screen.UserInputComponents.route)
+                        },
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
+                        }
+                    )
+                }
+
+                composable(Screen.UserInputComponents.route) {
+                    UserInputComponentsScreen(
+                        value = displayValueForUserInput,
+                        onClickStepper = {
+                            swipeDismissableNavController.navigate(Screen.Stepper.route)
+                        },
+                        onClickSlider = {
+                            swipeDismissableNavController.navigate(Screen.Slider.route)
+                        }
+                    )
+                }
+
+                composable(Screen.Stepper.route) {
+                    StepperScreen(
+                        displayValue = displayValueForUserInput,
+                        onValueChange = {
+                            displayValueForUserInput = it
+                        }
+                    )
+                }
+
+                composable(Screen.Slider.route) {
+                    SliderScreen(
+                        displayValue = displayValueForUserInput,
+                        onValueChange = {
+                            displayValueForUserInput = it
                         }
                     )
                 }

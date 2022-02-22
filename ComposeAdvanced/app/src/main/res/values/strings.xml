@@ -25,4 +25,8 @@
     <string name="vignette_toggle_chip_label">Vignette</string>
     <string name="invalid_watch_label">Invalid Watch</string>
     <string name="leading_time_text">Leading Text...</string>
+    <string name="stepper_label">Stepper</string>
+    <string name="slider_label">Slider</string>
+    <string name="user_input_components_label">User Input Components</string>
+    <string name="selected_value">Selected Value</string>
 </resources>
