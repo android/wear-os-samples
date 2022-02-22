@@ -15,8 +15,8 @@
  */
 
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -25,12 +25,12 @@ android {
     defaultConfig {
         versionCode 1
         versionName "1.0"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdk 26
+        targetSdk 30
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {
@@ -48,13 +48,13 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0"
-    implementation "androidx.activity:activity-ktx:1.4.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.2"
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation 'androidx.wear:wear:1.2.0'
-    implementation 'androidx.wear:wear-phone-interactions:1.0.1'
-    implementation 'androidx.wear:wear-remote-interactions:1.0.0'
-    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.wear
+    implementation libs.wear.phone.interactions
+    implementation libs.wear.remote.interactions
+    implementation libs.playservices.wearable
 }

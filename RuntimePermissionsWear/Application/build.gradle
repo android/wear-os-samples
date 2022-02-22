@@ -15,8 +15,8 @@
  */
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -52,14 +52,14 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0"
-    implementation "androidx.activity:activity-ktx:1.4.0"
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.constraintlayout
+    implementation libs.playservices.wearable
 
-    implementation project(':Shared')
-    wearApp project(':Wearable')
+    implementation projects.shared
+    wearApp projects.wearable
 }

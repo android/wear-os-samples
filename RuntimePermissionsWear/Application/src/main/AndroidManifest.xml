@@ -12,6 +12,7 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.wearable.runtimepermissions">
 
     <!-- Permissions for phone. -->
@@ -32,10 +33,10 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light">
+        android:theme="@style/Theme.AppCompat.Light"
+        tools:ignore="DataExtractionRules">
         <activity
             android:name=".MainPhoneActivity"
-            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>

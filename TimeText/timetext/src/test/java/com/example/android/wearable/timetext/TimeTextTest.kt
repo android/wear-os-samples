@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.timetext
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.provider.Settings
@@ -274,6 +275,7 @@ class TimeTextTest {
         onView(withId(R.id.timeTextClock)).check(matches(withText("1722")))
     }
 
+    @SuppressLint("CheckResult")
     @Test
     fun `straight time ellipsizes title`() {
         TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"))

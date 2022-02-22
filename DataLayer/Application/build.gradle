@@ -15,8 +15,8 @@
  */
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -27,8 +27,8 @@ android {
         applicationId "com.example.android.wearable.datalayer"
         versionCode 1
         versionName "1.0"
-        minSdkVersion 21
-        targetSdkVersion 32
+        minSdk 21
+        targetSdk 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,25 +53,25 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion rootProject.composeCompilerVersion
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
 }
 
 dependencies {
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+    coreLibraryDesugaring libs.android.desugarjdklibs
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$rootProject.coroutinesVersion"
-    implementation "androidx.activity:activity-compose:$rootProject.activityVersion"
-    implementation "androidx.compose.material:material:$rootProject.composeVersion"
-    implementation "androidx.compose.ui:ui-tooling:$rootProject.composeVersion"
-    implementation "androidx.compose.compiler:compiler:$rootProject.composeCompilerVersion"
-    implementation "androidx.core:core-ktx:$rootProject.coreVersion"
-    implementation "androidx.fragment:fragment-ktx:$rootProject.fragmentVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion"
-    implementation "com.google.android.gms:play-services-wearable:$rootProject.playServicesWearableVersion"
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
+    implementation libs.androidx.activity.compose
+    implementation libs.compose.material
+    implementation libs.compose.ui.tooling
+    implementation libs.compose.compiler
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.playservices.wearable
 
-    wearApp project(':Wearable')
+    wearApp projects.wearable
 }

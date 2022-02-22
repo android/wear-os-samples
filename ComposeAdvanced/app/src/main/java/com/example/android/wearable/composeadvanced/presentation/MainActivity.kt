@@ -120,7 +120,7 @@ fun WearApp(watchRepository: WatchRepository) {
         // TODO: consider moving to ViewModel
         // Display value is passed down to various user input screens, for the slider and stepper
         // components specifically, to demonstrate how they work.
-        var defaultSelectedValue = 2
+        val defaultSelectedValue = 2
         var displayValueForUserInput by remember { mutableStateOf(defaultSelectedValue) }
 
         Scaffold(

@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
     compileSdkVersion 32
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.devicegrant"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdk 26
+        targetSdk 30
         versionCode 1
         versionName "1.0"
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     // Used to make the direct HTTP call for the token exchange. This will eventually be removed
     // when the sample is updated to use server-side redirects.
-    useLibrary 'org.apache.http.legacy'
+    useLibrary "org.apache.http.legacy"
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -45,17 +47,17 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 dependencies {
-    implementation project(':util')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
-    implementation("androidx.fragment:fragment-ktx:1.4.0")
-    implementation("androidx.wear:wear:1.2.0")
-    implementation("androidx.wear:wear-remote-interactions:1.0.0")
-    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
+    implementation projects.util
+    implementation libs.kotlin.stdlib
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.wear)
+    implementation(libs.wear.remote.interactions)
+    implementation libs.playservices.wearable
 }

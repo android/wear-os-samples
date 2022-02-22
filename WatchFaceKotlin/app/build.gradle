@@ -15,8 +15,8 @@
  */
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
@@ -24,8 +24,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.wearable.alpha"
-        minSdkVersion 28
-        targetSdkVersion 30
+        minSdk 28
+        targetSdk 30
         versionCode 1
         versionName "1.0"
     }
@@ -37,12 +37,12 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
     packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude "META-INF/atomicfu.kotlin_module"
     }
 
     compileOptions {
@@ -56,32 +56,32 @@ android {
 }
 
 dependencies {
-    implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
+    implementation libs.androidx.core.ktx
 
     // Kotlin components
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
 
-    implementation "androidx.activity:activity-ktx:$rootProject.activityKtxVersion"
+    implementation libs.androidx.activity.ktx
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // Material components
-    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation libs.android.material
 
     // Wear libraries
-    implementation "androidx.wear:wear:$rootProject.wearVersion"
+    implementation libs.androidx.wear
 
     // Watch face specific libraries
-    implementation "androidx.wear.watchface:watchface-complications-data:$rootProject.watchFaceVersion"
-    implementation "androidx.wear.watchface:watchface-complications-data-source:$rootProject.watchFaceVersion"
+    implementation libs.wear.watchface.complications.data
+    implementation libs.wear.watchface.complications.data.source
 
-    implementation "androidx.wear.watchface:watchface:$rootProject.watchFaceVersion"
-    implementation "androidx.wear.watchface:watchface-client:$rootProject.watchFaceVersion"
-    implementation "androidx.wear.watchface:watchface-complications-rendering:$rootProject.watchFaceVersion"
-    implementation "androidx.wear.watchface:watchface-data:$rootProject.watchFaceVersion"
-    implementation "androidx.wear.watchface:watchface-editor:$rootProject.watchFaceVersion"
-    implementation "androidx.wear.watchface:watchface-style:$rootProject.watchFaceVersion"
+    implementation libs.wear.watchface
+    implementation libs.wear.watchface.client
+    implementation libs.wear.watchface.complications.rendering
+    implementation libs.wear.watchface.data
+    implementation libs.wear.watchface.editor
+    implementation libs.wear.watchface.style
 }

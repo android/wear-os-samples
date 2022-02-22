@@ -15,48 +15,27 @@
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext {
-        // SDK and tools
-        activityVersion = '1.4.0'
-        composeVersion = '1.2.0-alpha02'
-        composeCompilerVersion = "1.2.0-alpha02"
-        coroutinesVersion = '1.6.0'
-        kotlinVersion = '1.6.10'
-        playServicesAuthVersion = "20.1.0"
-        wearComposeVersion = "1.0.0-alpha15"
-    }
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath libs.kotlin.gradle.plugin
     }
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '6.0.1'
+    alias(libs.plugins.com.diffplug.spotless) apply(false)
+    alias(libs.plugins.com.android.application) apply(false)
 }
 
 subprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     apply plugin: "com.diffplug.spotless"
 
     spotless {
         kotlin {
-            target '**/*.kt'
+            target "**/*.kt"
             targetExclude("$buildDir/**/*.kt")
-            targetExclude('bin/**/*.kt')
+            targetExclude("bin/**/*.kt")
 
             ktlint("0.41.0")
-            licenseHeaderFile rootProject.file('spotless/copyright.kt')
+            licenseHeaderFile rootProject.file("spotless/copyright.kt")
         }
     }
 }

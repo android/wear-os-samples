@@ -15,39 +15,31 @@
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext {
-        // SDK and tools
-        kotlinVersion = '1.6.0'
-        activityKtxVersion = '1.4.0'
-        ktxVersion = '1.7.0'
-        wearVersion = '1.2.0'
-        watchFaceVersion = '1.0.0'
-        coroutines = '1.6.0'
-        lifecycleVersion = '2.4.0'
-        materialVersion = '1.4.0'
-    }
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath libs.kotlin.gradle.plugin
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+plugins {
+    alias(libs.plugins.com.diffplug.spotless) apply(false)
+    alias(libs.plugins.com.android.application) apply(false)
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+allprojects {
+    apply plugin: "com.diffplug.spotless"
+
+    spotless {
+        kotlin {
+            target "**/*.kt"
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude("bin/**/*.kt")
+
+            // TODO: fix ktlint errors
+            // ktlint("0.41.0")
+            licenseHeaderFile rootProject.file("spotless/copyright.kt")
+        }
+    }
 }

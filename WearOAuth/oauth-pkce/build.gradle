@@ -15,7 +15,7 @@
  */
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -23,21 +23,21 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.pkce"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdk 26
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
     }
 
     lintOptions {
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     buildFeatures {
@@ -46,13 +46,13 @@ android {
 }
 
 dependencies {
-    implementation project(':util')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
-    implementation("androidx.fragment:fragment-ktx:1.4.0")
-    implementation("androidx.wear:wear:1.2.0")
-    implementation("androidx.wear:wear-phone-interactions:1.1.0-alpha02")
-    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
+    implementation projects.util
+    implementation libs.kotlin.stdlib
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.wear)
+    implementation(libs.wear.phone.interactions)
+    implementation libs.playservices.wearable
 }

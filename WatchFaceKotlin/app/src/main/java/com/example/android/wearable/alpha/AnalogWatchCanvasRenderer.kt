@@ -46,7 +46,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -91,7 +90,8 @@ class AnalogWatchCanvasRenderer(
     // Initializes paint object for painting the clock hands with default values.
     private val clockHandPaint = Paint().apply {
         isAntiAlias = true
-        strokeWidth = context.resources.getDimensionPixelSize(R.dimen.clock_hand_stroke_width).toFloat()
+        strokeWidth =
+            context.resources.getDimensionPixelSize(R.dimen.clock_hand_stroke_width).toFloat()
     }
 
     private val outerElementPaint = Paint().apply {
@@ -289,9 +289,9 @@ class AnalogWatchCanvasRenderer(
         // Since each hand does more than one cycle a day, we are only interested in the remainder
         // of the secondOfDay modulo the hand interval
         val hourRotation = secondOfDay.rem(secondsPerHourHandRotation) * 360.0f /
-            secondsPerHourHandRotation
+                secondsPerHourHandRotation
         val minuteRotation = secondOfDay.rem(secondsPerMinuteHandRotation) * 360.0f /
-            secondsPerMinuteHandRotation
+                secondsPerMinuteHandRotation
 
         canvas.withScale(
             x = WATCH_HAND_SCALE,
@@ -326,7 +326,7 @@ class AnalogWatchCanvasRenderer(
                 // active mode, so we calculate it here (not above with others).
                 val secondsPerSecondHandRotation = Duration.ofMinutes(1).seconds
                 val secondsRotation = secondOfDay.rem(secondsPerSecondHandRotation) * 360.0f /
-                    secondsPerSecondHandRotation
+                        secondsPerSecondHandRotation
                 clockHandPaint.color = watchFaceColors.activeSecondaryColor
 
                 withRotation(secondsRotation, bounds.exactCenterX(), bounds.exactCenterY()) {

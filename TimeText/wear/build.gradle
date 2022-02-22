@@ -15,8 +15,8 @@
  */
 
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -25,13 +25,13 @@ android {
     defaultConfig {
         versionCode 1
         versionName "1.0"
-        minSdkVersion 26
-        targetSdkVersion 30
+        minSdk 26
+        targetSdk 30
     }
 
     lintOptions {
         warningsAsErrors true
-        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {
@@ -49,7 +49,7 @@ android {
 }
 
 dependencies {
-    implementation "androidx.activity:activity-ktx:1.4.0"
-    implementation "androidx.appcompat:appcompat:1.4.0"
-    implementation project(":timetext")
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.appcompat
+    implementation projects.timetext
 }
