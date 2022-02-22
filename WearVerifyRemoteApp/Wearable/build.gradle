@@ -54,7 +54,7 @@ dependencies {
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.core.ktx
     implementation libs.androidx.wear
-    implementation libs.wear.wear.phone.interactions
-    implementation libs.wear.wear.remote.interactions
+    implementation libs.wear.phone.interactions
+    implementation libs.wear.remote.interactions
     implementation libs.playservices.wearable
 }
