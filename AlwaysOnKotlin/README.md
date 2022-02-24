@@ -31,6 +31,7 @@ Pre-requisites
 --------------
 
 - Android SDK 30
+- Requires AC to be configured off `adb emu power ac off`
 
 Screenshots
 -------------

@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'WatchFaceKotlin/**'
+      - 'gradle/**'
   pull_request:
     paths:
       - 'WatchFaceKotlin/**'
+      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WatchFaceKotlin

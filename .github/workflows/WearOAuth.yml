@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'WearOAuth/**'
+      - 'gradle/**'
   pull_request:
     paths:
       - 'WearOAuth/**'
+      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WearOAuth

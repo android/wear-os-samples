@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'DataLayer/**'
+      - 'gradle/**'
   pull_request:
     paths:
       - 'DataLayer/**'
+      - 'gradle/**'
 
 env:
   SAMPLE_PATH: DataLayer
