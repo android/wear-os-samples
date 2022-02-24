@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'AlwaysOnKotlin/**'
+      - 'gradle/**'
   pull_request:
     paths:
       - 'AlwaysOnKotlin/**'
+      - 'gradle/**'
 
 env:
   SAMPLE_PATH: AlwaysOnKotlin
