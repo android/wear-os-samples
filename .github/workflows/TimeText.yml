@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'TimeText/**'
+      - 'gradle/**'
   pull_request:
     paths:
       - 'TimeText/**'
+      - 'gradle/**'
 
 env:
   SAMPLE_PATH: TimeText
