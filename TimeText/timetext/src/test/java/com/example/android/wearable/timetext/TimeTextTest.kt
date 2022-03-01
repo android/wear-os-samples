@@ -344,8 +344,22 @@ class TimeTextTest {
             activity.setContentView(timeText)
         }
 
-        onView(withId(R.id.timeTextTitle)).check(matches(allOf(isDisplayed(), withCurvedText("Title"))))
-        onView(withId(R.id.timeTextDivider)).check(matches(allOf(isDisplayed(), withCurvedText("·"))))
+        onView(withId(R.id.timeTextTitle)).check(
+            matches(
+                allOf(
+                    isDisplayed(),
+                    withCurvedText("Title")
+                )
+            )
+        )
+        onView(withId(R.id.timeTextDivider)).check(
+            matches(
+                allOf(
+                    isDisplayed(),
+                    withCurvedText("·")
+                )
+            )
+        )
         onView(withId(R.id.timeTextClock)).check(matches(isDisplayed()))
 
         assertThat(timeText.title).isEqualTo("Title")
@@ -374,8 +388,22 @@ class TimeTextTest {
             activity.setContentView(timeText)
         }
 
-        onView(withId(R.id.timeTextTitle)).check(matches(allOf(isDisplayed(), withCurvedText("Title"))))
-        onView(withId(R.id.timeTextDivider)).check(matches(allOf(isDisplayed(), withCurvedText("·"))))
+        onView(withId(R.id.timeTextTitle)).check(
+            matches(
+                allOf(
+                    isDisplayed(),
+                    withCurvedText("Title")
+                )
+            )
+        )
+        onView(withId(R.id.timeTextDivider)).check(
+            matches(
+                allOf(
+                    isDisplayed(),
+                    withCurvedText("·")
+                )
+            )
+        )
         onView(withId(R.id.timeTextClock)).check(matches(isDisplayed()))
 
         assertThat(timeText.title).isEqualTo("Title")
@@ -404,8 +432,22 @@ class TimeTextTest {
 
         timeText.title = "Title"
 
-        onView(withId(R.id.timeTextTitle)).check(matches(allOf(isDisplayed(), withCurvedText("Title"))))
-        onView(withId(R.id.timeTextDivider)).check(matches(allOf(isDisplayed(), withCurvedText("·"))))
+        onView(withId(R.id.timeTextTitle)).check(
+            matches(
+                allOf(
+                    isDisplayed(),
+                    withCurvedText("Title")
+                )
+            )
+        )
+        onView(withId(R.id.timeTextDivider)).check(
+            matches(
+                allOf(
+                    isDisplayed(),
+                    withCurvedText("·")
+                )
+            )
+        )
         onView(withId(R.id.timeTextClock)).check(matches(isDisplayed()))
 
         assertThat(timeText.title).isEqualTo("Title")
@@ -533,7 +575,8 @@ class TimeTextTest {
         assertThat(textToDraw).isNotEqualTo("This is a really long title")
 
         assertThat(
-            timeTextTitle.sweepAngleDegrees + timeTextDivider.sweepAngleDegrees + timeTextClock.sweepAngleDegrees
+            timeTextTitle.sweepAngleDegrees + timeTextDivider.sweepAngleDegrees +
+                timeTextClock.sweepAngleDegrees
         ).isAtMost(90f)
     }
 

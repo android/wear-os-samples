@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Google Inc. All Rights Reserved.
+ * Copyright 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,8 +40,6 @@ import com.example.android.wearable.alpha.data.watchface.WatchFaceData
 import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
-import kotlin.math.cos
-import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -49,6 +47,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.ZonedDateTime
+import kotlin.math.cos
+import kotlin.math.sin
 
 // Default for how long each frame is displayed at expected frame rate.
 private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L
@@ -140,7 +140,7 @@ class AnalogWatchCanvasRenderer(
             when (options.key.id.toString()) {
                 COLOR_STYLE_SETTING -> {
                     val listOption = options.value as
-                            UserStyleSetting.ListUserStyleSetting.ListOption
+                        UserStyleSetting.ListUserStyleSetting.ListOption
 
                     newWatchFaceData = newWatchFaceData.copy(
                         activeColorStyle = ColorStyleIdAndResourceIds.getColorStyleConfig(
@@ -150,7 +150,7 @@ class AnalogWatchCanvasRenderer(
                 }
                 DRAW_HOUR_PIPS_STYLE_SETTING -> {
                     val booleanValue = options.value as
-                            UserStyleSetting.BooleanUserStyleSetting.BooleanOption
+                        UserStyleSetting.BooleanUserStyleSetting.BooleanOption
 
                     newWatchFaceData = newWatchFaceData.copy(
                         drawHourPips = booleanValue.value
@@ -158,7 +158,7 @@ class AnalogWatchCanvasRenderer(
                 }
                 WATCH_HAND_LENGTH_STYLE_SETTING -> {
                     val doubleValue = options.value as
-                            UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+                        UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
 
                     // The arm lengths are usually only calculated the first time the watch face is
                     // loaded to reduce the ops in the onDraw(). Because we updated the minute hand
@@ -289,9 +289,9 @@ class AnalogWatchCanvasRenderer(
         // Since each hand does more than one cycle a day, we are only interested in the remainder
         // of the secondOfDay modulo the hand interval
         val hourRotation = secondOfDay.rem(secondsPerHourHandRotation) * 360.0f /
-                secondsPerHourHandRotation
+            secondsPerHourHandRotation
         val minuteRotation = secondOfDay.rem(secondsPerMinuteHandRotation) * 360.0f /
-                secondsPerMinuteHandRotation
+            secondsPerMinuteHandRotation
 
         canvas.withScale(
             x = WATCH_HAND_SCALE,
@@ -326,7 +326,7 @@ class AnalogWatchCanvasRenderer(
                 // active mode, so we calculate it here (not above with others).
                 val secondsPerSecondHandRotation = Duration.ofMinutes(1).seconds
                 val secondsRotation = secondOfDay.rem(secondsPerSecondHandRotation) * 360.0f /
-                        secondsPerSecondHandRotation
+                    secondsPerSecondHandRotation
                 clockHandPaint.color = watchFaceColors.activeSecondaryColor
 
                 withRotation(secondsRotation, bounds.exactCenterX(), bounds.exactCenterY()) {

@@ -86,7 +86,8 @@ class PlayNextSongTileService : TileService() {
                     .addTimelineEntry(
                         TimelineEntry.Builder()
                             .setLayout(
-                                Layout.Builder().setRoot(tileLayout(request.deviceParameters!!)).build()
+                                Layout.Builder().setRoot(tileLayout(request.deviceParameters!!))
+                                    .build()
                             )
                             .build()
                     )

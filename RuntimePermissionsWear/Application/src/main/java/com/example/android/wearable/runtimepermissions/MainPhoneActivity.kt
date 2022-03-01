@@ -287,7 +287,8 @@ class MainPhoneActivity :
      * A helper function to launch the permission dialog on behalf of the phone.
      */
     private fun checkForRemotePermissionRequest() {
-        isWearRequestingPhonePermission = intent.getBooleanExtra(EXTRA_PROMPT_PERMISSION_FROM_WEAR, false)
+        isWearRequestingPhonePermission =
+            intent.getBooleanExtra(EXTRA_PROMPT_PERMISSION_FROM_WEAR, false)
 
         // If we've already asked the user on behalf of the phone, don't ask again
         if (isWearRequestingPhonePermission && !askedForPermissionOnBehalfOfWear) {

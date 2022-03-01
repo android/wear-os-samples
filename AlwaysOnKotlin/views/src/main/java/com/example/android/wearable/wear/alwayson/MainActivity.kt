@@ -94,11 +94,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private lateinit var ambientController: AmbientModeSupport.AmbientController
 
     /**
-     * Since the coroutine-based update (used in active mode) can't wake up the processor when the device is in
-     * ambient mode and undocked, we use an Alarm to cover ambient mode updates when we need them
-     * more frequently than every minute. Remember, if getting updates once a minute in ambient mode
-     * is enough, you can do away with the Alarm code and just rely on the onUpdateAmbient()
-     * callback.
+     * Since the coroutine-based update (used in active mode) can't wake up the processor when the
+     * device is in ambient mode and undocked, we use an Alarm to cover ambient mode updates when we
+     * need them more frequently than every minute. Remember, if getting updates once a minute in
+     * ambient mode is enough, you can do away with the Alarm code and just rely on the
+     * onUpdateAmbient() callback.
      */
     private lateinit var ambientUpdateAlarmManager: AlarmManager
     private lateinit var ambientUpdatePendingIntent: PendingIntent
@@ -203,7 +203,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     }
 
     /**
-     * Returns the delay from this [Instant] to the next one that is aligned with the given [interval].
+     * Returns the delay from this [Instant] to the next one that is aligned with the given
+     * [interval].
      */
     private fun Instant.getDelayToNextInstantWithInterval(interval: Duration): Duration =
         Duration.ofMillis(interval.toMillis() - toEpochMilli() % interval.toMillis())
@@ -224,7 +225,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
 
         Log.d(
             TAG,
-            "loadDataAndUpdateScreen(): ${currentInstant.toEpochMilli()} (${ambientController.isAmbient})"
+            "loadDataAndUpdateScreen(): " +
+                "${currentInstant.toEpochMilli()} (${ambientController.isAmbient})"
         )
 
         val currentTime = LocalTime.now(clock)
@@ -269,7 +271,8 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          */
         override fun onEnterAmbient(ambientDetails: Bundle) {
             super.onEnterAmbient(ambientDetails)
-            isLowBitAmbient = ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
+            isLowBitAmbient =
+                ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
             doBurnInProtection =
                 ambientDetails.getBoolean(AmbientModeSupport.EXTRA_BURN_IN_PROTECTION, false)
 

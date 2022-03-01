@@ -40,8 +40,10 @@ val phoneSummaryPermission: String
  *
  * To call this, the [phoneSummaryPermission] must be granted.
  *
- * We are only using a hardware id for demonstration purposes, to try toshow the user their phone number.
+ * We are only using a hardware id for demonstration purposes, to try toshow the user their
+ * phone number.
  */
 @Suppress("MissingPermission", "HardwareIds")
 fun Context.getPhoneSummary(): String =
-    getSystemService<TelephonyManager>()?.line1Number ?: getString(R.string.phone_number_not_available)
+    getSystemService<TelephonyManager>()?.line1Number
+        ?: getString(R.string.phone_number_not_available)

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Google Inc. All Rights Reserved.
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,16 +19,14 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.RenderParameters
+import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.editor.EditorSession
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
-import com.example.android.wearable.alpha.R
-import com.example.android.wearable.alpha.data.watchface.DRAW_HOUR_PIPS_DEFAULT
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_DEFAULT
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MAXIMUM
 import com.example.android.wearable.alpha.data.watchface.MINUTE_HAND_LENGTH_FRACTION_MINIMUM
@@ -45,7 +43,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
@@ -151,7 +148,8 @@ class WatchFaceConfigStateHolder(
         val ticksEnabledStyle =
             userStyle[drawPipsKey] as UserStyleSetting.BooleanUserStyleSetting.BooleanOption
         val minuteHandStyle =
-            userStyle[minuteHandLengthKey] as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
+            userStyle[minuteHandLengthKey]
+                as UserStyleSetting.DoubleRangeUserStyleSetting.DoubleRangeOption
 
         Log.d(TAG, "/new values: $colorStyle, $ticksEnabledStyle, $minuteHandStyle")
 

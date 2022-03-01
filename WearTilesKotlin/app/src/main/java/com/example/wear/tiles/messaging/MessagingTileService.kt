@@ -105,7 +105,9 @@ class MessagingTileService : TileService() {
                     .addTimelineEntry(
                         TimelineEntry.Builder()
                             .setLayout(
-                                Layout.Builder().setRoot(layout(contacts, requestParams.deviceParameters!!)).build()
+                                Layout.Builder()
+                                    .setRoot(layout(contacts, requestParams.deviceParameters!!))
+                                    .build()
                             )
                             .build()
                     )

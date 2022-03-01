@@ -87,19 +87,27 @@ class MainActivityTests {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onView(withId(R.id.time)).check(matches(withText(ZERO_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp))
-            .check(
-                matches(
-                    withText(
-                        context.getString(
-                            R.string.timestamp_label,
-                            YEAR_2200_INSTANT.toEpochMilli()
-                        )
+        onView(withId(R.id.time_stamp)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.timestamp_label, YEAR_2200_INSTANT.toEpochMilli()
                     )
                 )
             )
-        onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
-        onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 1))))
+        )
+        onView(withId(R.id.state)).check(
+            matches(withText(context.getString(R.string.mode_active_label)))
+        )
+        onView(withId(R.id.draw_count)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.draw_count_label, 1
+                    )
+                )
+            )
+        )
 
         // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
@@ -115,19 +123,27 @@ class MainActivityTests {
         }
 
         onView(withId(R.id.time)).check(matches(withText(FIVE_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp))
-            .check(
-                matches(
-                    withText(
-                        context.getString(
-                            R.string.timestamp_label,
-                            YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
-                        )
+        onView(withId(R.id.time_stamp)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.timestamp_label, YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
                     )
                 )
             )
-        onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
-        onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 6))))
+        )
+        onView(withId(R.id.state)).check(
+            matches(withText(context.getString(R.string.mode_active_label)))
+        )
+        onView(withId(R.id.draw_count)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.draw_count_label, 6
+                    )
+                )
+            )
+        )
 
         // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
@@ -146,19 +162,27 @@ class MainActivityTests {
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(FIVE_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp))
-            .check(
-                matches(
-                    withText(
-                        context.getString(
-                            R.string.timestamp_label,
-                            YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
-                        )
+        onView(withId(R.id.time_stamp)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.timestamp_label, YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
                     )
                 )
             )
-        onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
-        onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 7))))
+        )
+        onView(withId(R.id.state)).check(
+            matches(withText(context.getString(R.string.mode_ambient_label)))
+        )
+        onView(withId(R.id.draw_count)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.draw_count_label, 7
+                    )
+                )
+            )
+        )
 
         // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
@@ -190,19 +214,28 @@ class MainActivityTests {
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(TEN_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp))
-            .check(
-                matches(
-                    withText(
-                        context.getString(
-                            R.string.timestamp_label,
-                            YEAR_2200_INSTANT.plusSeconds(10).plusMillis(500).toEpochMilli()
-                        )
+        onView(withId(R.id.time_stamp)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.timestamp_label,
+                        YEAR_2200_INSTANT.plusSeconds(10).plusMillis(500).toEpochMilli()
                     )
                 )
             )
-        onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_ambient_label))))
-        onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 8))))
+        )
+        onView(withId(R.id.state)).check(
+            matches(withText(context.getString(R.string.mode_ambient_label)))
+        )
+        onView(withId(R.id.draw_count)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.draw_count_label, 8
+                    )
+                )
+            )
+        )
 
         // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)
@@ -240,19 +273,28 @@ class MainActivityTests {
         Espresso.onIdle()
 
         onView(withId(R.id.time)).check(matches(withText(TWELVE_SEC_DISPLAY)))
-        onView(withId(R.id.time_stamp))
-            .check(
-                matches(
-                    withText(
-                        context.getString(
-                            R.string.timestamp_label,
-                            YEAR_2200_INSTANT.plusSeconds(12).plusMillis(500).toEpochMilli()
-                        )
+        onView(withId(R.id.time_stamp)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.timestamp_label,
+                        YEAR_2200_INSTANT.plusSeconds(12).plusMillis(500).toEpochMilli()
                     )
                 )
             )
-        onView(withId(R.id.state)).check(matches(withText(context.getString(R.string.mode_active_label))))
-        onView(withId(R.id.draw_count)).check(matches(withText(context.getString(R.string.draw_count_label, 9))))
+        )
+        onView(withId(R.id.state)).check(
+            matches(withText(context.getString(R.string.mode_active_label)))
+        )
+        onView(withId(R.id.draw_count)).check(
+            matches(
+                withText(
+                    context.getString(
+                        R.string.draw_count_label, 9
+                    )
+                )
+            )
+        )
 
         // Pause the activity to cancel queued work
         scenario.moveToState(Lifecycle.State.STARTED)

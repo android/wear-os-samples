@@ -31,11 +31,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.dialog.Confirmation
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.dialog.Alert
+import androidx.wear.compose.material.dialog.Confirmation
 import kotlinx.coroutines.launch
 
 /**
