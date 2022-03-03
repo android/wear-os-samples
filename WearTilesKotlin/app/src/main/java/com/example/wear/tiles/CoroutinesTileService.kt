@@ -34,7 +34,7 @@ abstract class CoroutinesTileService : TileService() {
     private val serviceJob = Job()
     protected val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
-    override fun onTileRequest(
+    final override fun onTileRequest(
         requestParams: TileRequest
     ): ListenableFuture<Tile> = serviceScope.future {
         tileRequest(requestParams)
@@ -42,15 +42,16 @@ abstract class CoroutinesTileService : TileService() {
 
     abstract suspend fun tileRequest(requestParams: TileRequest): Tile
 
-    override fun onResourcesRequest(requestParams: ResourcesRequest):
+    final override fun onResourcesRequest(requestParams: ResourcesRequest):
         ListenableFuture<Resources> = serviceScope.future {
             resourcesRequest(requestParams)
         }
 
-    open suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources =
-        Resources.Builder().setVersion(FIXED_RESOURCES_VERSION).build()
+    abstract suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources
 
-    companion object {
-        private const val FIXED_RESOURCES_VERSION = "1"
+    override fun onDestroy() {
+        super.onDestroy()
+        // Cleans up the coroutine
+        serviceJob.cancel()
     }
 }
