@@ -42,10 +42,10 @@ abstract class CoroutinesTileService : TileService() {
 
     abstract suspend fun tileRequest(requestParams: TileRequest): Tile
 
-    override fun onResourcesRequest(requestParams: ResourcesRequest)
-            : ListenableFuture<Resources> = serviceScope.future {
-        resourcesRequest(requestParams)
-    }
+    override fun onResourcesRequest(requestParams: ResourcesRequest):
+        ListenableFuture<Resources> = serviceScope.future {
+            resourcesRequest(requestParams)
+        }
 
     open suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources =
         Resources.Builder().setVersion(FIXED_RESOURCES_VERSION).build()
