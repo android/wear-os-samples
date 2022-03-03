@@ -54,8 +54,11 @@ android {
 dependencies {
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
+    implementation libs.androidx.lifecycle.service
+    implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.core.ktx
     implementation libs.androidx.wear
+
     // Use to implement support for wear tiles
     implementation libs.wear.tiles
 
