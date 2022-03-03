@@ -15,80 +15,40 @@
  */
 package com.example.wear.tiles
 
-import android.content.Intent
-import android.os.IBinder
-import androidx.annotation.CallSuper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ServiceLifecycleDispatcher
-import androidx.lifecycle.lifecycleScope
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TileService
 import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.guava.future
 
 /**
  * Base class for a Kotlin and Coroutines friendly TileService.
  */
-abstract class CoroutinesTileService : TileService(), LifecycleOwner {
-    private val mDispatcher = ServiceLifecycleDispatcher(this)
+abstract class CoroutinesTileService : TileService() {
+    // For coroutines, use a custom scope we can cancel when the service is destroyed
+    private val serviceJob = Job()
+    protected val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     override fun onTileRequest(
         requestParams: TileRequest
-    ): ListenableFuture<Tile> = lifecycleScope.future {
+    ): ListenableFuture<Tile> = serviceScope.future {
         tileRequest(requestParams)
     }
 
     abstract suspend fun tileRequest(requestParams: TileRequest): Tile
 
     override fun onResourcesRequest(requestParams: ResourcesRequest)
-        : ListenableFuture<Resources> = lifecycleScope.future {
+            : ListenableFuture<Resources> = serviceScope.future {
         resourcesRequest(requestParams)
     }
 
     open suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources =
         Resources.Builder().setVersion(FIXED_RESOURCES_VERSION).build()
-
-    @CallSuper
-    override fun onCreate() {
-        mDispatcher.onServicePreSuperOnCreate()
-        super.onCreate()
-    }
-
-    @CallSuper
-    override fun onBind(intent: Intent): IBinder? {
-        mDispatcher.onServicePreSuperOnBind()
-        return null
-    }
-
-    @Suppress("DEPRECATION")
-    @CallSuper
-    override fun onStart(intent: Intent?, startId: Int) {
-        mDispatcher.onServicePreSuperOnStart()
-        super.onStart(intent, startId)
-    }
-
-    // this method is added only to annotate it with @CallSuper.
-    // In usual service super.onStartCommand is no-op, but in LifecycleService
-    // it results in mDispatcher.onServicePreSuperOnStart() call, because
-    // super.onStartCommand calls onStart().
-    @CallSuper
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return super.onStartCommand(intent, flags, startId)
-    }
-
-    @CallSuper
-    override fun onDestroy() {
-        mDispatcher.onServicePreSuperOnDestroy()
-        super.onDestroy()
-    }
-
-    override fun getLifecycle(): Lifecycle {
-        return mDispatcher.lifecycle
-    }
 
     companion object {
         private const val FIXED_RESOURCES_VERSION = "1"
