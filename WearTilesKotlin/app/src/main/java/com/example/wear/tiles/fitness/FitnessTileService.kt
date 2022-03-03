@@ -34,16 +34,10 @@ import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import com.example.wear.tiles.CoroutinesTileService
 import com.example.wear.tiles.R
-import com.google.common.util.concurrent.Futures
-import com.google.common.util.concurrent.ListenableFuture
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.guava.future
 
 // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
 // resources, the contents of which change even though their id stays the same (e.g. a graph).
@@ -64,16 +58,11 @@ private val PROGRESS_BAR_THICKNESS = dp(6f)
  * uses an Image. This sample tile does not include any images, so the method has only a minimal
  * implementation.
  */
-class FitnessTileService : TileService() {
-    // For coroutines, use a custom scope we can cancel when the service is destroyed
-    private val serviceJob = Job()
-    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
+class FitnessTileService : CoroutinesTileService() {
 
-    override fun onTileRequest(
-        requestParams: TileRequest
-    ): ListenableFuture<Tile> = serviceScope.future {
+    override suspend fun tileRequest(requestParams: TileRequest): Tile {
         val goalProgress = FitnessRepo.getGoalProgress()
-        Tile.Builder()
+        return Tile.Builder()
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
@@ -94,16 +83,8 @@ class FitnessTileService : TileService() {
             .build()
     }
 
-    override fun onResourcesRequest(requestParams: ResourcesRequest): ListenableFuture<Resources> =
-        Futures.immediateFuture(
-            Resources.Builder().setVersion(RESOURCES_VERSION).build()
-        )
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Cleans up the coroutine
-        serviceJob.cancel()
-    }
+    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources =
+        Resources.Builder().setVersion(RESOURCES_VERSION).build()
 
     private fun layout(goalProgress: GoalProgress, deviceParameters: DeviceParameters) =
         Box.Builder()

@@ -20,9 +20,9 @@ import androidx.wear.tiles.ActionBuilders
 import androidx.wear.tiles.ColorBuilders.argb
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.DimensionBuilders.dp
-import androidx.wear.tiles.LayoutElementBuilders
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
+import androidx.wear.tiles.LayoutElementBuilders.Image
 import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
@@ -36,15 +36,11 @@ import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import com.example.wear.tiles.CoroutinesTileService
 import com.example.wear.tiles.R
 import com.example.wear.tiles.components.IconButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.guava.future
 
 // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
 // resources, the contents of which change even though their id stays the same (e.g. a graph).
@@ -72,13 +68,10 @@ private val SPACING_LIBRARY_PLAY = dp(22f)
  * Resources are provided with the [onResourcesRequest] method, which is triggered when the tile
  * uses an Image.
  */
-class PlayNextSongTileService : TileService() {
-    // For coroutines, use a custom scope we can cancel when the service is destroyed
-    private val serviceJob = Job()
-    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
+class PlayNextSongTileService : CoroutinesTileService() {
 
-    override fun onTileRequest(request: TileRequest) = serviceScope.future {
-        Tile.Builder().apply {
+    override suspend fun tileRequest(requestParams: TileRequest): Tile {
+        return Tile.Builder().apply {
             setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             setTimeline(
@@ -86,7 +79,8 @@ class PlayNextSongTileService : TileService() {
                     .addTimelineEntry(
                         TimelineEntry.Builder()
                             .setLayout(
-                                Layout.Builder().setRoot(tileLayout(request.deviceParameters!!)).build()
+                                Layout.Builder()
+                                    .setRoot(tileLayout(requestParams.deviceParameters!!)).build()
                             )
                             .build()
                     )
@@ -97,7 +91,7 @@ class PlayNextSongTileService : TileService() {
 
     private fun tileLayout(deviceParameters: DeviceParameters) = Column.Builder()
         .addContent(
-            LayoutElementBuilders.Image.Builder()
+            Image.Builder()
                 .setResourceId(ID_AVATAR)
                 .setWidth(AVATAR_SIZE)
                 .setHeight(AVATAR_SIZE)
@@ -168,13 +162,13 @@ class PlayNextSongTileService : TileService() {
         )
         .build()
 
-    override fun onResourcesRequest(request: ResourcesRequest) = serviceScope.future {
+    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
         val resources = listOf(
             ID_IC_LIBRARY_MUSIC to R.drawable.ic_library_music,
             ID_IC_PLAY to R.drawable.ic_play,
             ID_AVATAR to R.drawable.avatar,
         )
-        Resources.Builder()
+        return Resources.Builder()
             .setVersion(RESOURCES_VERSION)
             .apply {
                 resources.forEach { (name, resId) ->
@@ -191,11 +185,5 @@ class PlayNextSongTileService : TileService() {
                 }
             }
             .build()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Cleans up the coroutine
-        serviceJob.cancel()
     }
 }

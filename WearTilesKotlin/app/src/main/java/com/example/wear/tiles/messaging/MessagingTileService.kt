@@ -44,21 +44,16 @@ import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
-import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
+import androidx.wear.tiles.ResourceBuilders.IMAGE_FORMAT_RGB_565
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.InlineImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import com.example.wear.tiles.CoroutinesTileService
 import com.example.wear.tiles.R
-import com.google.common.util.concurrent.ListenableFuture
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.guava.future
 import java.nio.ByteBuffer
 import kotlin.math.roundToInt
 
@@ -88,16 +83,10 @@ private const val ID_CONTACT_PREFIX = "contact_"
  * Resources are provided with the [onResourcesRequest] method, which is triggered when the tile
  * uses an Image.
  */
-class MessagingTileService : TileService() {
-    // For coroutines, use a custom scope we can cancel when the service is destroyed
-    private val serviceJob = Job()
-    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
-
-    override fun onTileRequest(
-        requestParams: TileRequest
-    ): ListenableFuture<Tile> = serviceScope.future {
+class MessagingTileService : CoroutinesTileService() {
+    override suspend fun tileRequest(requestParams: TileRequest): Tile {
         val contacts = MessagingRepo.getFavoriteContacts().take(4)
-        Tile.Builder()
+        return Tile.Builder()
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
@@ -105,7 +94,9 @@ class MessagingTileService : TileService() {
                     .addTimelineEntry(
                         TimelineEntry.Builder()
                             .setLayout(
-                                Layout.Builder().setRoot(layout(contacts, requestParams.deviceParameters!!)).build()
+                                Layout.Builder()
+                                    .setRoot(layout(contacts, requestParams.deviceParameters!!))
+                                    .build()
                             )
                             .build()
                     )
@@ -113,13 +104,11 @@ class MessagingTileService : TileService() {
             ).build()
     }
 
-    override fun onResourcesRequest(
-        requestParams: ResourcesRequest
-    ): ListenableFuture<Resources> = serviceScope.future {
+    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
         val density = requestParams.deviceParameters!!.screenDensity
         val circleSizePx = (CIRCLE_SIZE * density).roundToInt()
         val contacts = MessagingRepo.getFavoriteContacts()
-        Resources.Builder()
+        return Resources.Builder()
             .setVersion(RESOURCES_VERSION)
             .apply {
                 // Add the scaled & cropped avatar images
@@ -145,7 +134,7 @@ class MessagingTileService : TileService() {
                                         .setData(bitmapData)
                                         .setWidthPx(circleSizePx)
                                         .setHeightPx(circleSizePx)
-                                        .setFormat(ResourceBuilders.IMAGE_FORMAT_RGB_565)
+                                        .setFormat(IMAGE_FORMAT_RGB_565)
                                         .build()
                                 )
                                 .build()
@@ -166,12 +155,6 @@ class MessagingTileService : TileService() {
                     .build()
             )
             .build()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Cleans up the coroutine
-        serviceJob.cancel()
     }
 
     private fun layout(
