@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Google Inc. All Rights Reserved.
+ * Copyright 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,13 +17,13 @@ package com.example.android.wearable.alpha.utils
 
 import android.content.Context
 import android.graphics.RectF
+import androidx.wear.watchface.CanvasComplicationFactory
+import androidx.wear.watchface.ComplicationSlot
+import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.complications.ComplicationSlotBounds
 import androidx.wear.watchface.complications.DefaultComplicationDataSourcePolicy
 import androidx.wear.watchface.complications.SystemDataSources
 import androidx.wear.watchface.complications.data.ComplicationType
-import androidx.wear.watchface.CanvasComplicationFactory
-import androidx.wear.watchface.ComplicationSlot
-import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
@@ -62,6 +62,7 @@ sealed class ComplicationConfig(val id: Int, val supportedTypes: List<Complicati
             ComplicationType.SMALL_IMAGE
         )
     )
+
     object Right : ComplicationConfig(
         RIGHT_COMPLICATION_ID,
         listOf(

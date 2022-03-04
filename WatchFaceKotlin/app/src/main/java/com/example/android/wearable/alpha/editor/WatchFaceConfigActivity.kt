@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Google Inc. All Rights Reserved.
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Allows user to edit certain parts of the watch face (color style, ticks displayed, minute arm
- * length) by using the [WatchFaceConfigStateHolder]. (All widgets are disabled until data is loaded.)
+ * length) by using the [WatchFaceConfigStateHolder]. (All widgets are disabled until data is
+ * loaded.)
  */
 class WatchFaceConfigActivity : ComponentActivity() {
     private val stateHolder: WatchFaceConfigStateHolder by lazy {
@@ -68,20 +69,21 @@ class WatchFaceConfigActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.Main.immediate) {
-            stateHolder.uiState.collect { uiState: WatchFaceConfigStateHolder.EditWatchFaceUiState ->
-                when (uiState) {
-                    is WatchFaceConfigStateHolder.EditWatchFaceUiState.Loading -> {
-                        Log.d(TAG, "StateFlow Loading: ${uiState.message}")
-                    }
-                    is WatchFaceConfigStateHolder.EditWatchFaceUiState.Success -> {
-                        Log.d(TAG, "StateFlow Success.")
-                        updateWatchFacePreview(uiState.userStylesAndPreview)
-                    }
-                    is WatchFaceConfigStateHolder.EditWatchFaceUiState.Error -> {
-                        Log.e(TAG, "Flow error: ${uiState.exception}")
+            stateHolder.uiState
+                .collect { uiState: WatchFaceConfigStateHolder.EditWatchFaceUiState ->
+                    when (uiState) {
+                        is WatchFaceConfigStateHolder.EditWatchFaceUiState.Loading -> {
+                            Log.d(TAG, "StateFlow Loading: ${uiState.message}")
+                        }
+                        is WatchFaceConfigStateHolder.EditWatchFaceUiState.Success -> {
+                            Log.d(TAG, "StateFlow Success.")
+                            updateWatchFacePreview(uiState.userStylesAndPreview)
+                        }
+                        is WatchFaceConfigStateHolder.EditWatchFaceUiState.Error -> {
+                            Log.e(TAG, "Flow error: ${uiState.exception}")
+                        }
                     }
                 }
-            }
         }
     }
 

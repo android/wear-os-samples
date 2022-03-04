@@ -184,7 +184,10 @@ class MainWearActivity :
             // Initial check of capabilities to find the phone.
             try {
                 val capabilityInfo = Wearable.getCapabilityClient(this@MainWearActivity)
-                    .getCapability(Constants.CAPABILITY_PHONE_APP, CapabilityClient.FILTER_REACHABLE)
+                    .getCapability(
+                        Constants.CAPABILITY_PHONE_APP,
+                        CapabilityClient.FILTER_REACHABLE
+                    )
                     .await()
                 phoneNodeId = capabilityInfo.nodes.firstOrNull()?.id
             } catch (cancellationException: CancellationException) {
