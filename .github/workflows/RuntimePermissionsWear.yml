@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'RuntimePermissionsWear/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'RuntimePermissionsWear/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: RuntimePermissionsWear

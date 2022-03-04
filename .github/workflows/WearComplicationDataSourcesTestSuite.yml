@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'WearComplicationDataSourcesTestSuite/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'WearComplicationDataSourcesTestSuite/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WearComplicationDataSourcesTestSuite
