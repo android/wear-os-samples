@@ -69,7 +69,10 @@ class IncomingRequestPhoneService : WearableListenerService() {
 
     private suspend fun promptUserForPhonePermission(nodeId: String) {
         val phoneInfoPermissionApproved =
-            ActivityCompat.checkSelfPermission(this, phoneSummaryPermission) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(
+                this,
+                phoneSummaryPermission
+            ) == PackageManager.PERMISSION_GRANTED
         if (phoneInfoPermissionApproved) {
             sendMessage(
                 nodeId,

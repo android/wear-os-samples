@@ -44,8 +44,8 @@ abstract class CoroutinesTileService : TileService() {
 
     final override fun onResourcesRequest(requestParams: ResourcesRequest):
         ListenableFuture<Resources> = serviceScope.future {
-            resourcesRequest(requestParams)
-        }
+        resourcesRequest(requestParams)
+    }
 
     abstract suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources
 

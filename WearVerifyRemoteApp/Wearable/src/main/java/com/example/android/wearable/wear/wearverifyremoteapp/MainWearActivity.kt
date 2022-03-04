@@ -74,7 +74,8 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
 
         if (resources.configuration.isScreenRound) {
             binding.scrollingContentContainer.doOnPreDraw {
-                // Calculate the padding necessary to make the scrolling content fit in a square inscribed on a round
+                // Calculate the padding necessary to make the scrolling content fit in a
+                // square inscribed on a round
                 // screen.
                 it.setPadding((it.width / 2.0 * (1.0 - 1.0 / sqrt(2.0))).roundToInt())
             }
@@ -99,8 +100,8 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
      */
     override fun onCapabilityChanged(capabilityInfo: CapabilityInfo) {
         Log.d(TAG, "onCapabilityChanged(): $capabilityInfo")
-        // There should only ever be one phone in a node set (much less w/ the correct capability), so
-        // I am just grabbing the first one (which should be the only one).
+        // There should only ever be one phone in a node set (much less w/ the correct
+        // capability), so I am just grabbing the first one (which should be the only one).
         androidPhoneNodeWithApp = capabilityInfo.nodes.firstOrNull()
         updateUi()
     }
@@ -116,8 +117,8 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
             Log.d(TAG, "Capability request succeeded.")
 
             withContext(Dispatchers.Main) {
-                // There should only ever be one phone in a node set (much less w/ the correct capability), so
-                // I am just grabbing the first one (which should be the only one).
+                // There should only ever be one phone in a node set (much less w/ the correct
+                // capability), so I am just grabbing the first one (which should be the only one).
                 androidPhoneNodeWithApp = capabilityInfo.nodes.firstOrNull()
                 updateUi()
             }
@@ -199,6 +200,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
             "market://details?id=com.example.android.wearable.wear.wearverifyremoteapp"
 
         // TODO: Replace with your links/packages.
-        private const val APP_STORE_APP_URI = "https://itunes.apple.com/us/app/android-wear/id986496028?mt=8"
+        private const val APP_STORE_APP_URI =
+            "https://itunes.apple.com/us/app/android-wear/id986496028?mt=8"
     }
 }
