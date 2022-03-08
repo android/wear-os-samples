@@ -76,7 +76,6 @@ dependencies {
     // Saved state module for ViewModel
     implementation libs.androidx.lifecycle.viewmodel.savedstate
 
-    // Annotation processor
     implementation libs.androidx.lifecycle.common.java8
 
     // Compose for Wear OS Dependencies
