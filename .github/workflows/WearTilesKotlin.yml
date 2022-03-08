@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'WearTilesKotlin/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'WearTilesKotlin/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WearTilesKotlin

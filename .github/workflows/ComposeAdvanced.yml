@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'ComposeAdvanced/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'ComposeAdvanced/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: ComposeAdvanced

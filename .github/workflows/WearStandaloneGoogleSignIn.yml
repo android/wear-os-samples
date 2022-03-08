@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'WearStandaloneGoogleSignIn/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'WearStandaloneGoogleSignIn/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WearStandaloneGoogleSignIn

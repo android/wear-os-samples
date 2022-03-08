@@ -15,11 +15,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
-    versionCatalogs {
-        libs {
-            from(files("../gradle/libs.versions.toml"))
-        }
-    }
 }
 
 include ":Application", ":Wearable"

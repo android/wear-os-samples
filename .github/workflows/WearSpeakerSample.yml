@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'WearSpeakerSample/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'WearSpeakerSample/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WearSpeakerSample

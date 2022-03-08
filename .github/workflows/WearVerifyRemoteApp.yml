@@ -6,11 +6,9 @@ on:
       - main
     paths:
       - 'WearVerifyRemoteApp/**'
-      - 'gradle/**'
   pull_request:
     paths:
       - 'WearVerifyRemoteApp/**'
-      - 'gradle/**'
 
 env:
   SAMPLE_PATH: WearVerifyRemoteApp
