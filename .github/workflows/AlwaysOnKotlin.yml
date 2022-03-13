@@ -151,4 +151,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: App
-          path: compose/build/outputs/apk/release/compose-release.apk
+          path: ${{ env.SAMPLE_PATH }}/compose/build/outputs/apk/release/compose-release.apk

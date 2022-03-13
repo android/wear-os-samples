@@ -89,4 +89,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: App
-          path: app/build/outputs/apk/release/app-release.apk
+          path: ${{ env.SAMPLE_PATH }}/app/build/outputs/apk/release/app-release.apk
