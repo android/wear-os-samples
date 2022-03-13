@@ -80,7 +80,7 @@ jobs:
 
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew app:assembleRelease
+        run: ./gradlew wear:assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
