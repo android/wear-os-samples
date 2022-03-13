@@ -54,3 +54,23 @@ jobs:
         with:
           name: build-reports
           path: ${{ env.SAMPLE_PATH }}/app/build/reports
+
+  apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 11
+
+      - name: build release
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: App
+          path: app/build/outputs/apk/release/rememberwear-release.apk
