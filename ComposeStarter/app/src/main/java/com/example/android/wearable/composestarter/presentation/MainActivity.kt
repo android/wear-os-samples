@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -85,9 +86,8 @@ fun Greeting(greetingName: String) {
     )
 }
 
-@Preview
+@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
-// Note: Preview in Android Studio doesn't support the round view yet (coming soon).
 fun DefaultPreview() {
     WearApp("Preview Android")
 }
