@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.wear.tiles.manager.TileUiClient
+import com.example.wear.tiles.databinding.ActivityMainBinding
 import com.example.wear.tiles.fitness.FitnessTileService
 import com.example.wear.tiles.media.PlayNextSongTileService
 import com.example.wear.tiles.messaging.MessagingTileService
@@ -38,16 +39,18 @@ class MainActivity : ComponentActivity() {
     // Change into 1 or 2 to render another sample tile.
     private val tileToShow = sampleTiles[0]
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var tileUiClient: TileUiClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val rootLayout = findViewById<FrameLayout>(R.id.tile_container)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         tileUiClient = TileUiClient(
             context = this,
             component = ComponentName(this, tileToShow),
-            parentView = rootLayout
+            parentView = binding.root
         )
         tileUiClient.connect()
     }
