@@ -17,7 +17,6 @@ package com.example.wear.tiles
 
 import android.content.ComponentName
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.wear.tiles.manager.TileUiClient
 import com.example.wear.tiles.databinding.ActivityMainBinding
