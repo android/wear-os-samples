@@ -63,7 +63,7 @@ android {
 dependencies {
     // General compose dependencies
     implementation libs.androidx.activity.compose
-    implementation libs.compose.ui.tooling
+    debugImplementation libs.compose.ui.tooling
     implementation libs.compose.ui.tooling.preview
 
     // Compose for Wear OS Dependencies
