@@ -34,3 +34,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ComposeAdvanced"
 include ":app"
+include ':benchmark'

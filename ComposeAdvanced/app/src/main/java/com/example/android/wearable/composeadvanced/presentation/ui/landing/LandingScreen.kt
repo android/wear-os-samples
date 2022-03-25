@@ -33,10 +33,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.AnchorType
-import androidx.wear.compose.foundation.CurvedRow
+import androidx.wear.compose.foundation.CurvedLayout
+import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.material.CompactChip
-import androidx.wear.compose.material.CurvedText
+import androidx.wear.compose.material.curvedText
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
@@ -106,20 +107,23 @@ fun LandingScreen(
         // Places curved text at the bottom of round devices and straight text at the bottom of
         // non-round devices.
         if (LocalConfiguration.current.isScreenRound) {
-            CurvedRow(
-                // 90 degrees is bottom (6 o'clock).
+            val watchShape = stringResource(R.string.watch_shape)
+            val primaryColor = MaterialTheme.colors.primary
+            CurvedLayout(
                 anchor = 90F,
                 anchorType = AnchorType.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                CurvedText(
-                    text = stringResource(R.string.watch_shape),
-                    clockwise = false,
-                    style = CurvedTextStyle(
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colors.primary,
+                curvedRow {
+                    curvedText(
+                        text = watchShape,
+                        clockwise = false,
+                        style = CurvedTextStyle(
+                            fontSize = 18.sp,
+                            color = primaryColor,
+                        )
                     )
-                )
+                }
             }
         } else {
             Row(
