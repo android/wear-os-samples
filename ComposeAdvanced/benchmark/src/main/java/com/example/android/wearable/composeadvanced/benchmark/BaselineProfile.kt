@@ -29,6 +29,16 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+// This test generates a baseline profile rules file that can be added to the app to configure
+// the classes and methods that are pre-compiled at installation time, rather than JIT'd at runtime.
+// 1) Run this test on a device
+// 2) Copy the generated file to your workspace - command is output as part of the test:
+// `adb pull "/sdcard/Android/media/com.example.android.wearable.composeadvanced.benchmark/"
+//           "additional_test_output/BaselineProfile_profile-baseline-prof-2022-03-25-16-58-49.txt"
+//           .`
+// 3) Add the rules as androidMain/baseline-prof.txt
+// Note that Compose libraries have profile rules already so the main benefit is to add any
+// rules that are specific to classes and methods in your own app and library code.
 @ExperimentalBaselineProfilesApi
 @RunWith(AndroidJUnit4::class)
 class BaselineProfile {
