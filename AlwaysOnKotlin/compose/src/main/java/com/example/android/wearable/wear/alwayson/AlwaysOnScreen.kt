@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -213,7 +214,7 @@ private tailrec fun Context.findActivity(): Activity =
         )
     }
 
-@Preview
+@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun AlwaysOnScreenInteractivePreview() {
     MaterialTheme {
@@ -227,7 +228,7 @@ fun AlwaysOnScreenInteractivePreview() {
     }
 }
 
-@Preview
+@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun AlwaysOnScreenAmbientPreview() {
     MaterialTheme {

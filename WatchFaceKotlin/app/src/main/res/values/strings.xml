@@ -22,7 +22,7 @@
     <!-- Name of watchface style category for selecting the color theme [CHAR LIMIT=20] -->
     <string name="colors_style_setting">Colors</string>
 
-    <!-- Subtitle for the menu option to select the watch face color theme [CHAR LIMIT=20] -->
+    <!-- Subtitle for the menu option to select the watch face color theme -->
     <string name="colors_style_setting_description">Watchface colorization</string>
 
     <!-- Name of watchface style [CHAR LIMIT=20] -->
@@ -44,7 +44,7 @@
     <string name="watchface_pips_setting">Hour Pips</string>
 
     <!-- Subtitle for the menu option to configure if we should draw pips to mark each hour
-     on the watch face [CHAR LIMIT=20] -->
+     on the watch face -->
     <string name="watchface_pips_setting_description">Whether to draw or not</string>
 
     <!-- A menu option to select a widget that lets us configure the length of the watch hands
@@ -52,7 +52,7 @@
     <string name="watchface_hand_length_setting">Minute Hand length</string>
 
     <!-- Sub title for the menu option to select a widget that lets us configure the length of the
-    watch hands [CHAR LIMIT=20] -->
+    watch hands -->
     <string name="watchface_hand_length_setting_description">Scale of watch hand</string>
 
     <!-- A menu option to select a widget that lets us configure the Complications (a watch

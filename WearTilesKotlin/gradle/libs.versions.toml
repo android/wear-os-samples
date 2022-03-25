@@ -3,7 +3,7 @@ androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
 androidx-test = "1.4.0"
 androidx-wear-compose = "1.0.0-alpha17"
-androidx-wear-tiles = "1.0.1"
+androidx-wear-tiles = "1.1.0-alpha03"
 androidx-wear-watchface = "1.0.1"
 compose = "1.2.0-alpha04"
 org-jetbrains-kotlin = "1.6.10"
@@ -77,6 +77,7 @@ wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation",
 wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha02"
 wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
 wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
+wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
 wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
 wear-watchface = { module = "androidx.wear.watchface:watchface", version.ref = "androidx-wear-watchface" }
 wear-watchface-client = { module = "androidx.wear.watchface:watchface-client", version.ref = "androidx-wear-watchface" }

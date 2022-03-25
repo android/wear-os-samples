@@ -20,6 +20,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
@@ -188,6 +189,8 @@ private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<
 )
 
 @Preview(
+    device = Devices.WEAR_OS_SMALL_ROUND,
+    showSystemUi = true,
     widthDp = 200,
     heightDp = 200,
     uiMode = Configuration.UI_MODE_TYPE_WATCH,
