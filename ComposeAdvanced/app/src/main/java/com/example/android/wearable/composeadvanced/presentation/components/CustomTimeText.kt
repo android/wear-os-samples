@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.foundation.CurvedTextStyle
-import androidx.wear.compose.material.curvedText
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
+import androidx.wear.compose.material.curvedText
 
 /**
  * Custom version of TimeText (Curved Text) that enables leading text (if wanted) and hides while
