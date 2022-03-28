@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.foundation.CurvedTextStyle
-import androidx.wear.compose.material.CurvedText
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
+import androidx.wear.compose.material.curvedText
 
 /**
  * Custom version of TimeText (Curved Text) that enables leading text (if wanted) and hides while
@@ -38,6 +38,7 @@ fun CustomTimeText(
     showLeadingText: Boolean,
     leadingText: String
 ) {
+    val textStyle = TimeTextDefaults.timeTextStyle()
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(),
@@ -46,9 +47,9 @@ fun CustomTimeText(
         TimeText(
             leadingCurvedContent = if (showLeadingText) {
                 {
-                    CurvedText(
+                    curvedText(
                         text = leadingText,
-                        style = CurvedTextStyle(TimeTextDefaults.timeTextStyle())
+                        style = CurvedTextStyle(textStyle)
                     )
                 }
             } else null,
@@ -56,7 +57,7 @@ fun CustomTimeText(
                 {
                     Text(
                         text = leadingText,
-                        style = TimeTextDefaults.timeTextStyle()
+                        style = textStyle
                     )
                 }
             } else null,
