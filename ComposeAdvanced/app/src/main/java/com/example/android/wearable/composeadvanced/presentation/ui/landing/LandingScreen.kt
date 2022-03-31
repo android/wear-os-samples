@@ -42,6 +42,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
 
 /**
  * Simple landing page with three actions, view a list of watches, toggle on/off text before the
@@ -78,6 +79,9 @@ fun LandingScreen(
                     )
                 }
             )
+
+            // Signify we have drawn the content of the first screen
+            ReportFullyDrawn()
 
             ToggleChip(
                 modifier = Modifier.height(32.dp),
