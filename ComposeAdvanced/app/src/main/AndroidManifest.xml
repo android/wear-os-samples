@@ -51,5 +51,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <profileable android:shell="true"/>
     </application>
 </manifest>
