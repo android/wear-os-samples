@@ -42,6 +42,8 @@ class StartupBenchmark(
         startupMode = StartupMode.COLD
     ) {
         startActivityAndWait()
+        // sleep to allow time for report fully drawn
+        Thread.sleep(2000)
     }
 
     companion object {
