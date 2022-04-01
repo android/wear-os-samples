@@ -62,7 +62,7 @@ class JankPrinter {
                     nonJank++
                 }
             }.apply {
-                jankHeuristicMultiplier = 0f
+                jankHeuristicMultiplier = 3f
             }
         }
     }
