@@ -101,6 +101,9 @@ dependencies {
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
     implementation libs.wear.compose.navigation
 
+    // Performance
+    implementation libs.androidx.metrics.performance
+
     // Testing
     testImplementation libs.junit
     androidTestImplementation libs.test.ext.junit
