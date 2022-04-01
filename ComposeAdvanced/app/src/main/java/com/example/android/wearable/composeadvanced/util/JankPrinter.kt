@@ -62,16 +62,20 @@ class JankPrinter {
                     nonJank++
                 }
             }.apply {
+                // 3x isn't very noticeable for a few frames and settles down after the app has
+                // been optimised.
                 jankHeuristicMultiplier = 3f
             }
         }
     }
 
     fun setRouteState(route: String?) {
-        if (route != null) {
-            stateHolder?.state?.addState("route", route)
-        } else {
-            stateHolder?.state?.removeState("route")
+        stateHolder?.state?.let {
+            if (route != null) {
+                it.addState("route", route)
+            } else {
+                it.removeState("route")
+            }
         }
     }
 }
