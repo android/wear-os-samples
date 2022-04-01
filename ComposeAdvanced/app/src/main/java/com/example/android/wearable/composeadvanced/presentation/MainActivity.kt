@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                 watchRepository = watchRepository,
                 swipeDismissableNavController = navController
             )
-            
+
             LaunchedEffect(Unit) {
                 navController.currentBackStackEntryFlow.collect {
                     jankPrinter.setRouteState(route = it.destination.route)
