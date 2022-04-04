@@ -11,6 +11,14 @@ curved text, Chips, and many other composables.
 Displays different text at the bottom of the landing screen depending on shape of the device
 (round vs. square/rectangular).
 
+Debug and Release Builds
+------------------------
+
+Only use the debug builds (launching from within Android Studio) with the emulator.
+
+Measure performance only with your release builds, and never measure your debug builds. 
+Run with R8 optimisation and minification turned on.
+
 Screenshots
 -----------
 
