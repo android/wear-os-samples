@@ -16,7 +16,11 @@
 package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Vignette
@@ -56,8 +60,10 @@ fun CustomVignette(
 // This will only be rendered properly in AS Chipmunk and beyond
 @Composable
 fun PreviewCustomVignette() {
-    CustomVignette(
-        visible = true,
-        vignettePosition = VignettePosition.TopAndBottom
-    )
+    Box(modifier = Modifier.background(Color.LightGray)) {
+        CustomVignette(
+            visible = true,
+            vignettePosition = VignettePosition.TopAndBottom
+        )
+    }
 }
