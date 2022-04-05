@@ -2,7 +2,8 @@
 androidx-activity = "1.4.0"
 androidx-wear-compose = "1.0.0-alpha19"
 compose = "1.2.0-alpha06"
-org-jetbrains-kotlin = "1.6.20"
+org-jetbrains-kotlin = "1.6.10"
+ktlint = "0.41.0"
 
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.1"
