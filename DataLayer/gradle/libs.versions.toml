@@ -5,6 +5,7 @@ androidx-wear-compose = "1.0.0-alpha19"
 compose = "1.2.0-alpha06"
 org-jetbrains-kotlin = "1.6.20"
 org-jetbrains-kotlinx = "1.6.1"
+ktlint = "0.41.0"
 
 [libraries]
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.1.5"
