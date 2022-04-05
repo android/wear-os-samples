@@ -47,7 +47,7 @@ fun CustomTimeText(
         val isEmulator = Build.PRODUCT.startsWith("sdk_gwear")
 
         if (BuildConfig.DEBUG && !isEmulator) {
-            "Debug (Slow) Build"
+            "Debug (slower)"
         } else {
             null
         }
@@ -75,6 +75,7 @@ fun CustomTimeText(
                     )
                 }
             } else null,
+            // Trailing text is against Wear UX guidance, used here just for development.
             trailingCurvedContent = if (showWarning) {
                 {
                     curvedText(
