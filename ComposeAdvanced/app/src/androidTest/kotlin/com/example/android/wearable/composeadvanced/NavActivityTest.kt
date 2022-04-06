@@ -43,16 +43,20 @@ class NavActivityTest {
     }
 
     private fun toListAndBack() {
-        assertEquals(Screen.Landing.route,
-            rule.activity.navController.currentBackStackEntry?.destination?.route)
+        assertEquals(
+            Screen.Landing.route,
+            rule.activity.navController.currentBackStackEntry?.destination?.route
+        )
 
         rule.runOnUiThread {
             rule.activity.navController.navigate(Screen.WatchList.route)
         }
         rule.waitForIdle()
 
-        assertEquals(Screen.WatchList.route,
-            rule.activity.navController.currentBackStackEntry?.destination?.route)
+        assertEquals(
+            Screen.WatchList.route,
+            rule.activity.navController.currentBackStackEntry?.destination?.route
+        )
 
         rule.runOnUiThread {
             rule.activity.navController.navigate(Screen.Landing.route) {
@@ -61,7 +65,9 @@ class NavActivityTest {
         }
         rule.waitForIdle()
 
-        assertEquals(Screen.Landing.route,
-            rule.activity.navController.currentBackStackEntry?.destination?.route)
+        assertEquals(
+            Screen.Landing.route,
+            rule.activity.navController.currentBackStackEntry?.destination?.route
+        )
     }
 }
