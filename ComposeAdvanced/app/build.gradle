@@ -23,11 +23,14 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.android.wearable.composeadvanced"
         minSdk 26
         targetSdk 30
         versionCode 1
         versionName "1.0"
+
+        applicationId "com.example.android.wearable.composeadvanced"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -111,4 +114,9 @@ dependencies {
     debugImplementation libs.androidx.customview
     debugImplementation libs.androidx.customview.pooling
     debugImplementation libs.compose.ui.tooling
+
+    androidTestImplementation libs.androidx.test.ext
+    androidTestImplementation libs.androidx.test.ext.ktx
+    androidTestImplementation libs.androidx.test.espresso.core
+    androidTestImplementation libs.compose.ui.test.junit4
 }
