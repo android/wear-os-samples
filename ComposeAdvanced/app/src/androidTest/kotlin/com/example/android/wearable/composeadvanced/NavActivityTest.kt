@@ -19,7 +19,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.Lifecycle
 import com.example.android.wearable.composeadvanced.presentation.MainActivity
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
