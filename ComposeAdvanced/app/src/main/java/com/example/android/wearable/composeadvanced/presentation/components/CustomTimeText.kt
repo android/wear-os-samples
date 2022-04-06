@@ -17,11 +17,10 @@ package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
 import android.os.Build
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,9 +37,9 @@ import com.example.android.wearable.composeadvanced.BuildConfig
  */
 @Composable
 fun CustomTimeText(
-    visible: Boolean,
     showLeadingText: Boolean,
-    leadingText: String
+    leadingText: String,
+    modifier: Modifier = Modifier
 ) {
     val textStyle = TimeTextDefaults.timeTextStyle()
     val debugWarning = remember {
@@ -53,49 +52,44 @@ fun CustomTimeText(
         }
     }
     val showWarning = debugWarning != null
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        TimeText(
-            leadingCurvedContent = if (showLeadingText) {
-                {
-                    curvedText(
-                        text = leadingText,
-                        style = CurvedTextStyle(textStyle)
-                    )
-                }
-            } else null,
-            leadingLinearContent = if (showLeadingText) {
-                {
-                    Text(
-                        text = leadingText,
-                        style = textStyle
-                    )
-                }
-            } else null,
-            // Trailing text is against Wear UX guidance, used here just for development.
-            trailingCurvedContent = if (showWarning) {
-                {
-                    curvedText(
-                        text = debugWarning!!,
-                        style = CurvedTextStyle(textStyle),
-                        color = Color.Red
-                    )
-                }
-            } else null,
-            trailingLinearContent = if (showWarning) {
-                {
-                    Text(
-                        text = debugWarning!!,
-                        style = textStyle,
-                        color = Color.Red
-                    )
-                }
-            } else null,
-        )
-    }
+    TimeText(
+        modifier = modifier,
+        leadingCurvedContent = if (showLeadingText) {
+            {
+                curvedText(
+                    text = leadingText,
+                    style = CurvedTextStyle(textStyle)
+                )
+            }
+        } else null,
+        leadingLinearContent = if (showLeadingText) {
+            {
+                Text(
+                    text = leadingText,
+                    style = textStyle
+                )
+            }
+        } else null,
+        // Trailing text is against Wear UX guidance, used here just for development.
+        trailingCurvedContent = if (showWarning) {
+            {
+                curvedText(
+                    text = debugWarning!!,
+                    style = CurvedTextStyle(textStyle),
+                    color = Color.Red
+                )
+            }
+        } else null,
+        trailingLinearContent = if (showWarning) {
+            {
+                Text(
+                    text = debugWarning!!,
+                    style = textStyle,
+                    color = Color.Red
+                )
+            }
+        } else null,
+    )
 }
 
 @Preview(
@@ -120,7 +114,6 @@ fun CustomTimeText(
 @Composable
 fun PreviewCustomTimeText() {
     CustomTimeText(
-        visible = true,
         showLeadingText = true,
         leadingText = "Testing Leading Text..."
     )

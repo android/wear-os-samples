@@ -31,10 +31,11 @@ import androidx.wear.compose.material.Text
 @Composable
 fun StepperScreen(
     displayValue: Int,
-    onValueChange: (Int) -> Unit
+    onValueChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(top = 10.dp),
         verticalArrangement = Arrangement.Center

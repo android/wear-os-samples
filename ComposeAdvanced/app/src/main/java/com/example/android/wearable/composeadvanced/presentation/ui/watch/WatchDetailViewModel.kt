@@ -18,10 +18,14 @@ package com.example.android.wearable.composeadvanced.presentation.ui.watch
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
+import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 
 /**
  * ViewModel for the Watch Detail Screen (only needs watch id).
@@ -30,25 +34,8 @@ class WatchDetailViewModel(
     watchId: Int,
     watchRepository: WatchRepository
 ) : ViewModel() {
-
     private val _watch: MutableState<WatchModel?> =
         mutableStateOf(watchRepository.getWatch(watchId))
     val watch: State<WatchModel?>
         get() = _watch
-}
-
-class WatchDetailViewModelFactory(
-    private val watchId: Int,
-    private val watchRepository: WatchRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WatchDetailViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WatchDetailViewModel(
-                watchId = watchId,
-                watchRepository = watchRepository
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }

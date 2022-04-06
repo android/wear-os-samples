@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +40,7 @@ import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
+import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 /**
  * Displays a list of watches plus a [ToggleChip] at the top to display/hide the Vignette around
@@ -51,16 +53,16 @@ fun WatchListScreen(
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit,
     watchRepository: WatchRepository,
-    viewModel: WatchListViewModel = viewModel(
-        factory = WatchListViewModelFactory(
-            watchRepository = watchRepository
-        )
-    )
+    modifier: Modifier = Modifier,
+    focusRequester: FocusRequester,
+    viewModel: WatchListViewModel = viewModel {
+        WatchListViewModel(watchRepository = watchRepository)
+    }
 ) {
     val watches: List<WatchModel> by viewModel.watches
 
     ScalingLazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         contentPadding = PaddingValues(
             start = 10.dp,
             end = 10.dp

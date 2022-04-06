@@ -38,10 +38,11 @@ import com.example.android.wearable.composeadvanced.R
 fun UserInputComponentsScreen(
     value: Int,
     onClickStepper: () -> Unit,
-    onClickSlider: () -> Unit
+    onClickSlider: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(vertical = 10.dp)
             .padding(horizontal = 10.dp),
