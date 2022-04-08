@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.InlineSlider
+import androidx.wear.compose.material.InlineSliderDefaults
 
 /**
  * Displays a Slider, which allows users to make a selection from a range of values.
@@ -42,7 +44,8 @@ fun SliderScreen(
             value = displayValue,
             onValueChange = onValueChange,
             valueProgression = 1..10,
-            segmented = true
+            increaseIcon = { Icon(InlineSliderDefaults.Increase, "Increase") },
+            decreaseIcon = { Icon(InlineSliderDefaults.Decrease, "Decrease") },
         )
     }
 }
