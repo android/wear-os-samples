@@ -33,7 +33,8 @@ import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.BuildConfig
 
 /**
- * Custom version of TimeText (Curved Text) that enables leading text (if wanted).
+ * Custom version of TimeText (Curved Text) that enables leading text (if wanted) and hides while
+ * scrolling so user can just focus on the list's items.
  */
 @Composable
 fun CustomTimeText(

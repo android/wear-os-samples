@@ -124,7 +124,7 @@ fun WearApp(
 
                 CustomTimeText(
                     visible = !activelyScrolling,
-                    showLeadingText = showProceedingTextBeforeTime,
+                    showStartText = showProceedingTextBeforeTime,
                     startText = stringResource(R.string.leading_time_text)
                 )
             },
