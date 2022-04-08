@@ -1,15 +1,14 @@
 [versions]
 androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
-androidx-wear-compose = "1.0.0-alpha19"
-compose = "1.2.0-alpha06"
-org-jetbrains-kotlin = "1.6.10"
-org-jetbrains-kotlinx = "1.6.0"
+androidx-wear-compose = "1.0.0-alpha20"
+compose = "1.2.0-alpha07"
 ktlint = "0.41.0"
+org-jetbrains-kotlin = "1.6.10"
+org-jetbrains-kotlinx = "1.6.1"
 
 [libraries]
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.1.5"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.1"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.1"
@@ -20,7 +19,7 @@ compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref 
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.7"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
@@ -30,8 +29,8 @@ wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation",
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 
 [plugins]
-com-android-application = "com.android.application:7.1.2"
-com-diffplug-spotless = "com.diffplug.spotless:6.4.1"
+com-android-application = "com.android.application:7.1.3"
+com-diffplug-spotless = "com.diffplug.spotless:6.4.2"
 kotlin = "kotlin:1.6.10"
 kotlin-android = "kotlin-android:1.6.10"
 kotlin-android-extensions = "kotlin-android-extensions:1.6.10"
