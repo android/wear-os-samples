@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.InlineSliderDefaults
 import androidx.wear.compose.material.Stepper
 import androidx.wear.compose.material.StepperDefaults
 import androidx.wear.compose.material.Text

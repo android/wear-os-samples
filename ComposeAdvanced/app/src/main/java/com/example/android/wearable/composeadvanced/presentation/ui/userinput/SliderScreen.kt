@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.InlineSlider
 import androidx.wear.compose.material.InlineSliderDefaults
-import androidx.wear.compose.material.StepperDefaults
 
 /**
  * Displays a Slider, which allows users to make a selection from a range of values.
