@@ -32,7 +32,7 @@ import com.example.android.wearable.composeadvanced.util.JankPrinter
  */
 class MainActivity : ComponentActivity() {
     private lateinit var jankPrinter: JankPrinter
-    private lateinit var navController: NavHostController
+    internal lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
