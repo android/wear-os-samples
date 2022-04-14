@@ -19,6 +19,12 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+Properties localProperties = new Properties()
+def localFile = project.rootProject.file('local.properties')
+if (localFile.exists()) {
+    localProperties.load(localFile.newDataInputStream())
+}
+
 android {
     compileSdk 31
 
@@ -28,6 +34,10 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
+
+        def mapsApiKey = localProperties.getProperty("mapsApiKey", "")
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
+        buildConfigField("String", "mapsApiKey", "\"${mapsApiKey}\"")
     }
 
     buildTypes {
@@ -102,6 +112,9 @@ dependencies {
 
     // Performance
     implementation libs.androidx.metrics.performance
+
+    implementation "com.google.maps.android:maps-compose:2.1.0"
+    implementation "com.google.android.gms:play-services-maps:18.0.2"
 
     // Testing
     testImplementation libs.junit

@@ -50,6 +50,8 @@ class MainActivity : ComponentActivity() {
                 swipeDismissableNavController = navController
             )
 
+//            MapScreen()
+
             LaunchedEffect(Unit) {
                 navController.currentBackStackEntryFlow.collect {
                     jankPrinter.setRouteState(route = it.destination.route)
