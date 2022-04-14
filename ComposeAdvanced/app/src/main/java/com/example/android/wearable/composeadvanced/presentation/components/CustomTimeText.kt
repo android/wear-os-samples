@@ -39,8 +39,8 @@ import com.example.android.wearable.composeadvanced.BuildConfig
 @Composable
 fun CustomTimeText(
     visible: Boolean,
-    showLeadingText: Boolean,
-    leadingText: String
+    showStartText: Boolean,
+    startText: String
 ) {
     val textStyle = TimeTextDefaults.timeTextStyle()
     val debugWarning = remember {
@@ -59,24 +59,24 @@ fun CustomTimeText(
         exit = fadeOut(),
     ) {
         TimeText(
-            leadingCurvedContent = if (showLeadingText) {
+            startCurvedContent = if (showStartText) {
                 {
                     curvedText(
-                        text = leadingText,
+                        text = startText,
                         style = CurvedTextStyle(textStyle)
                     )
                 }
             } else null,
-            leadingLinearContent = if (showLeadingText) {
+            startLinearContent = if (showStartText) {
                 {
                     Text(
-                        text = leadingText,
+                        text = startText,
                         style = textStyle
                     )
                 }
             } else null,
             // Trailing text is against Wear UX guidance, used here just for development.
-            trailingCurvedContent = if (showWarning) {
+            endCurvedContent = if (showWarning) {
                 {
                     curvedText(
                         text = debugWarning!!,
@@ -85,7 +85,7 @@ fun CustomTimeText(
                     )
                 }
             } else null,
-            trailingLinearContent = if (showWarning) {
+            endLinearContent = if (showWarning) {
                 {
                     Text(
                         text = debugWarning!!,
@@ -121,7 +121,7 @@ fun CustomTimeText(
 fun PreviewCustomTimeText() {
     CustomTimeText(
         visible = true,
-        showLeadingText = true,
-        leadingText = "Testing Leading Text..."
+        showStartText = true,
+        startText = "Testing Leading Text..."
     )
 }

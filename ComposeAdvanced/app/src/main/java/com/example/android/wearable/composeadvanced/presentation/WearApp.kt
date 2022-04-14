@@ -125,8 +125,8 @@ fun WearApp(
 
                 CustomTimeText(
                     visible = !activelyScrolling,
-                    showLeadingText = showProceedingTextBeforeTime,
-                    leadingText = stringResource(R.string.leading_time_text)
+                    showStartText = showProceedingTextBeforeTime,
+                    startText = stringResource(R.string.leading_time_text)
                 )
             },
             vignette = {
