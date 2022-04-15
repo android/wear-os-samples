@@ -43,7 +43,7 @@ jobs:
         run: ./gradlew check --stacktrace
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-outputs
           path: |
@@ -51,7 +51,7 @@ jobs:
             ${{ env.SAMPLE_PATH }}/Application/build/outputs
 
       - name: Upload build reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-reports
           path: |
