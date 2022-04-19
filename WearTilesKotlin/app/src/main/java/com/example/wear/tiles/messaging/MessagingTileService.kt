@@ -160,7 +160,6 @@ class MessagingTileService : CoroutinesTileService() {
                 .addContent(
                     contactLayout(
                         contact = contacts[0],
-                        deviceParameters = deviceParameters,
                         clickable = Clickable.Builder()
                             .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
@@ -170,7 +169,6 @@ class MessagingTileService : CoroutinesTileService() {
                 .addContent(
                     contactLayout(
                         contact = contacts[1],
-                        deviceParameters = deviceParameters,
                         clickable = Clickable.Builder()
                             .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
@@ -180,7 +178,6 @@ class MessagingTileService : CoroutinesTileService() {
                 .addContent(
                     contactLayout(
                         contact = contacts[2],
-                        deviceParameters = deviceParameters,
                         clickable = Clickable.Builder()
                             .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
@@ -194,7 +191,6 @@ class MessagingTileService : CoroutinesTileService() {
                 .addContent(
                     contactLayout(
                         contact = contacts[3],
-                        deviceParameters = deviceParameters,
                         clickable = Clickable.Builder()
                             .setOnClick(ActionBuilders.LoadAction.Builder().build())
                             .build()
@@ -217,9 +213,8 @@ class MessagingTileService : CoroutinesTileService() {
 
     private fun contactLayout(
         contact: Contact,
-        deviceParameters: DeviceParameters,
         clickable: Clickable
-    ) = Button.Builder(clickable.onClick!!, clickable.id).apply {
+    ) = Button.Builder(this, clickable).apply {
         setContentDescription(contact.name)
         setButtonColors(
             ButtonColors(
@@ -235,7 +230,13 @@ class MessagingTileService : CoroutinesTileService() {
     }
         .build()
 
-    private fun searchLayout() = Button.Builder(ActionBuilders.LoadAction.Builder().build(), "")
+    private fun searchLayout() = Button.Builder(
+        this,
+        Clickable.Builder()
+            .setOnClick(ActionBuilders.LoadAction.Builder().build())
+            .setId("")
+            .build()
+    )
         .setButtonColors(
             ButtonColors(
                 ContextCompat.getColor(baseContext, R.color.primaryDark),
