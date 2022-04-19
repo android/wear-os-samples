@@ -38,7 +38,7 @@ wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation",
 
 [plugins]
 com-android-application = "com.android.application:7.1.3"
-com-android-test = "com.android.test:7.1.2"
+com-android-test = "com.android.test:7.1.3"
 com-diffplug-spotless = "com.diffplug.spotless:6.4.2"
 kotlin = "kotlin:1.6.10"
 kotlin-android = "kotlin-android:1.6.10"
