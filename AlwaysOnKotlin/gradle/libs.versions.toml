@@ -5,7 +5,7 @@ androidx-test = "1.4.0"
 androidx-wear-compose = "1.0.0-alpha20"
 compose = "1.2.0-alpha07"
 ktlint = "0.41.0"
-org-jetbrains-kotlin = "1.6.10"
+org-jetbrains-kotlin = "1.6.21"
 org-jetbrains-kotlinx = "1.6.1"
 
 [libraries]
