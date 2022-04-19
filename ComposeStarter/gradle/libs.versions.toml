@@ -11,7 +11,7 @@ org-jetbrains-kotlin = "1.6.10"
 org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.1"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.3"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
