@@ -57,4 +57,4 @@ org-jetbrains-kotlin-platform-common = "org.jetbrains.kotlin.platform.common:1.6
 org-jetbrains-kotlin-platform-js = "org.jetbrains.kotlin.platform.js:1.6.10"
 org-jetbrains-kotlin-platform-jvm = "org.jetbrains.kotlin.platform.jvm:1.6.10"
 org-jetbrains-kotlin-plugin-parcelize = "org.jetbrains.kotlin.plugin.parcelize:1.6.10"
-org-jetbrains-kotlin-plugin-scripting = "org.jetbrains.kotlin.plugin.scripting:1.6.10"
+org-jetbrains-kotlin-plugin-scripting = "org.jetbrains.kotlin.plugin.scripting:1.6.21"
