@@ -5,7 +5,7 @@
   "packageRules": [
     {
       "groupName": "Compose Dependencies",
-      "matchPackagePrefixes": ["androidx.compose.*"]
+      "matchPackagePrefixes": ["androidx.compose."]
     },
     {
       "groupName": "Kotlin Dependencies",
