@@ -4,8 +4,8 @@ androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
 androidx-wear-compose = "1.0.0-alpha20"
 compose = "1.2.0-alpha07"
-org-jetbrains-kotlin = "1.6.10"
 ktlint = "0.41.0"
+org-jetbrains-kotlin = "1.6.10"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
