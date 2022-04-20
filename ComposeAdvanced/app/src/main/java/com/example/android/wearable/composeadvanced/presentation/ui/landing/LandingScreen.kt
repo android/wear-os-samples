@@ -66,14 +66,18 @@ fun LandingScreen(
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Places both Chips (button and toggle) in the middle of the screen.
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+        ) {
             CompactChip(onClick = onClickWatchList, label = {
-                Text(stringResource(R.string.list_of_watches_button_label),
+                Text(
+                    stringResource(R.string.list_of_watches_button_label),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis)
+                    overflow = TextOverflow.Ellipsis
+                )
             })
 
             // Signify we have drawn the content of the first screen
@@ -84,22 +88,28 @@ fun LandingScreen(
                 checked = proceedingTimeTextEnabled,
                 onCheckedChange = onClickProceedingTimeText,
                 label = {
-                    Text(text = stringResource(R.string.proceeding_text_toggle_chip_label),
+                    Text(
+                        text = stringResource(R.string.proceeding_text_toggle_chip_label),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis)
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 toggleControl = {
                     Icon(
-                        imageVector = ToggleChipDefaults.switchIcon(checked = proceedingTimeTextEnabled),
+                        imageVector = ToggleChipDefaults.switchIcon(
+                            checked = proceedingTimeTextEnabled
+                        ),
                         contentDescription = if (proceedingTimeTextEnabled) "On" else "Off",
                     )
                 },
             )
 
             CompactChip(onClick = onClickDemoUserInputComponents, label = {
-                Text(stringResource(R.string.user_input_components_label),
+                Text(
+                    stringResource(R.string.user_input_components_label),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis)
+                    overflow = TextOverflow.Ellipsis
+                )
             })
         }
 
@@ -108,9 +118,11 @@ fun LandingScreen(
         if (LocalConfiguration.current.isScreenRound) {
             val watchShape = stringResource(R.string.watch_shape)
             val primaryColor = MaterialTheme.colors.primary
-            CurvedLayout(anchor = 90F,
+            CurvedLayout(
+                anchor = 90F,
                 anchorType = AnchorType.Center,
-                modifier = Modifier.fillMaxSize()) {
+                modifier = Modifier.fillMaxSize()
+            ) {
                 curvedRow {
                     curvedText(
                         text = watchShape,
@@ -124,13 +136,15 @@ fun LandingScreen(
             }
         } else {
             Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.Bottom) {
-                Text(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 2.dp),
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 2.dp),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.primary,
                     text = stringResource(R.string.watch_shape),
-                    fontSize = 18.sp)
+                    fontSize = 18.sp
+                )
             }
         }
     }
