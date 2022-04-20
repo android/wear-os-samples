@@ -23,7 +23,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0"
 androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
-androidx-databinding-viewbinding = { module = "androidx.databinding:viewbinding", version.ref = "android-gradle-plugin" }
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.1.3"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.1"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
