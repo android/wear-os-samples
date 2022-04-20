@@ -72,13 +72,16 @@ fun LandingScreen(
                 .padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
         ) {
-            CompactChip(onClick = onClickWatchList, label = {
-                Text(
-                    stringResource(R.string.list_of_watches_button_label),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            })
+            CompactChip(
+                onClick = onClickWatchList,
+                label = {
+                    Text(
+                        stringResource(R.string.list_of_watches_button_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
 
             // Signify we have drawn the content of the first screen
             ReportFullyDrawn()
@@ -104,13 +107,16 @@ fun LandingScreen(
                 },
             )
 
-            CompactChip(onClick = onClickDemoUserInputComponents, label = {
-                Text(
-                    stringResource(R.string.user_input_components_label),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            })
+            CompactChip(
+                onClick = onClickDemoUserInputComponents,
+                label = {
+                    Text(
+                        stringResource(R.string.user_input_components_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
         }
 
         // Places curved text at the bottom of round devices and straight text at the bottom of
