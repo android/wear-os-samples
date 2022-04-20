@@ -1,4 +1,5 @@
 [versions]
+android-gradle-plugin = "7.1.3"
 androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
 androidx-wear-compose = "1.0.0-alpha20"
@@ -22,35 +23,35 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 
 [plugins]
-com-android-application = "com.android.application:7.1.3"
+com-android-application = { module = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:6.4.2"
-kotlin = "kotlin:1.6.10"
-kotlin-android = "kotlin-android:1.6.10"
-kotlin-android-extensions = "kotlin-android-extensions:1.6.10"
-kotlin-dce-js = "kotlin-dce-js:1.6.10"
-kotlin-kapt = "kotlin-kapt:1.6.10"
-kotlin-multiplatform = "kotlin-multiplatform:1.6.10"
-kotlin-native-cocoapods = "kotlin-native-cocoapods:1.6.10"
-kotlin-native-performance = "kotlin-native-performance:1.6.10"
-kotlin-parcelize = "kotlin-parcelize:1.6.10"
-kotlin-platform-android = "kotlin-platform-android:1.6.10"
-kotlin-platform-common = "kotlin-platform-common:1.6.10"
-kotlin-platform-js = "kotlin-platform-js:1.6.10"
-kotlin-platform-jvm = "kotlin-platform-jvm:1.6.10"
-kotlin-scripting = "kotlin-scripting:1.6.10"
-kotlin2js = "kotlin2js:1.6.10"
-org-jetbrains-kotlin-android = "org.jetbrains.kotlin.android:1.6.10"
-org-jetbrains-kotlin-android-extensions = "org.jetbrains.kotlin.android.extensions:1.6.10"
-org-jetbrains-kotlin-js = "org.jetbrains.kotlin.js:1.6.10"
-org-jetbrains-kotlin-jvm = "org.jetbrains.kotlin.jvm:1.6.10"
-org-jetbrains-kotlin-kapt = "org.jetbrains.kotlin.kapt:1.6.10"
-org-jetbrains-kotlin-multiplatform = "org.jetbrains.kotlin.multiplatform:1.6.10"
-org-jetbrains-kotlin-multiplatform-pm20 = "org.jetbrains.kotlin.multiplatform.pm20:1.6.10"
-org-jetbrains-kotlin-native-cocoapods = "org.jetbrains.kotlin.native.cocoapods:1.6.10"
-org-jetbrains-kotlin-native-performance = "org.jetbrains.kotlin.native.performance:1.6.10"
-org-jetbrains-kotlin-platform-android = "org.jetbrains.kotlin.platform.android:1.6.10"
-org-jetbrains-kotlin-platform-common = "org.jetbrains.kotlin.platform.common:1.6.10"
-org-jetbrains-kotlin-platform-js = "org.jetbrains.kotlin.platform.js:1.6.10"
-org-jetbrains-kotlin-platform-jvm = "org.jetbrains.kotlin.platform.jvm:1.6.10"
-org-jetbrains-kotlin-plugin-parcelize = "org.jetbrains.kotlin.plugin.parcelize:1.6.10"
-org-jetbrains-kotlin-plugin-scripting = "org.jetbrains.kotlin.plugin.scripting:1.6.10"
+kotlin = { module = "kotlin", version.ref = "org-jetbrains-kotlin" }
+kotlin-android = { module = "kotlin-android", version.ref = "org-jetbrains-kotlin" }
+kotlin-android-extensions = { module = "kotlin-android-extensions", version.ref = "org-jetbrains-kotlin" }
+kotlin-dce-js = { module = "kotlin-dce-js", version.ref = "org-jetbrains-kotlin" }
+kotlin-kapt = { module = "kotlin-kapt", version.ref = "org-jetbrains-kotlin" }
+kotlin-multiplatform = { module = "kotlin-multiplatform", version.ref = "org-jetbrains-kotlin" }
+kotlin-native-cocoapods = { module = "kotlin-native-cocoapods", version.ref = "org-jetbrains-kotlin" }
+kotlin-native-performance = { module = "kotlin-native-performance", version.ref = "org-jetbrains-kotlin" }
+kotlin-parcelize = { module = "kotlin-parcelize", version.ref = "org-jetbrains-kotlin" }
+kotlin-platform-android = { module = "kotlin-platform-android", version.ref = "org-jetbrains-kotlin" }
+kotlin-platform-common = { module = "kotlin-platform-common", version.ref = "org-jetbrains-kotlin" }
+kotlin-platform-js = { module = "kotlin-platform-js", version.ref = "org-jetbrains-kotlin" }
+kotlin-platform-jvm = { module = "kotlin-platform-jvm", version.ref = "org-jetbrains-kotlin" }
+kotlin-scripting = { module = "kotlin-scripting", version.ref = "org-jetbrains-kotlin" }
+kotlin2js = { module = "kotlin2js", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-android = { module = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-android-extensions = { module = "org.jetbrains.kotlin.android.extensions", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-js = { module = "org.jetbrains.kotlin.js", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-jvm = { module = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-kapt = { module = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-multiplatform = { module = "org.jetbrains.kotlin.multiplatform", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-multiplatform-pm20 = { module = "org.jetbrains.kotlin.multiplatform.pm20", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-native-cocoapods = { module = "org.jetbrains.kotlin.native.cocoapods", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-native-performance = { module = "org.jetbrains.kotlin.native.performance", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-platform-android = { module = "org.jetbrains.kotlin.platform.android", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-platform-common = { module = "org.jetbrains.kotlin.platform.common", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-platform-js = { module = "org.jetbrains.kotlin.platform.js", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-platform-jvm = { module = "org.jetbrains.kotlin.platform.jvm", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-plugin-parcelize = { module = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-plugin-scripting = { module = "org.jetbrains.kotlin.plugin.scripting", version.ref = "org-jetbrains-kotlin" }
