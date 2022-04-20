@@ -1,5 +1,11 @@
 {
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "groupName": "Compose Dependencies",
+      "matchPackagePatterns": "androidx.compose*"
+    }
   ]
 }
