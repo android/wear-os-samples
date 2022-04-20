@@ -33,13 +33,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.AnchorType
+import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.material.CompactChip
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
+import androidx.wear.compose.material.ToggleChipDefaults
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
@@ -93,7 +96,15 @@ fun LandingScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }
+                },
+                toggleControl = {
+                    Icon(
+                        imageVector = ToggleChipDefaults.switchIcon(
+                            checked = proceedingTimeTextEnabled
+                        ),
+                        contentDescription = if (proceedingTimeTextEnabled) "On" else "Off",
+                    )
+                },
             )
 
             CompactChip(
@@ -121,7 +132,7 @@ fun LandingScreen(
                 curvedRow {
                     curvedText(
                         text = watchShape,
-                        clockwise = false,
+                        angularDirection = CurvedDirection.Angular.CounterClockwise,
                         style = CurvedTextStyle(
                             fontSize = 18.sp,
                             color = primaryColor,
@@ -130,10 +141,7 @@ fun LandingScreen(
                 }
             }
         } else {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.Bottom
-            ) {
+            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.Bottom) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
