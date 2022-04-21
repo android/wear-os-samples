@@ -48,7 +48,6 @@ import kotlin.math.sqrt
  * listing on the phone's Play or App Store.
  */
 class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChangedListener {
-
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var capabilityClient: CapabilityClient
