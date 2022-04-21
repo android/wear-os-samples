@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "groupName": "Compose Dependencies",
+      "matchPackagePatterns": "^androidx\\..*compose\\."
+    },
+    {
+      "groupName": "Kotlin Dependencies",
+      "matchPackagePrefixes": ["org.jetbrains.kotlin"]
+    }
+  ]
+}
