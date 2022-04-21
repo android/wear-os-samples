@@ -35,4 +35,5 @@ sealed class Screen(
     object UserInputComponents : Screen("userInputComponents")
     object Stepper : Screen("stepper")
     object Slider : Screen("slider")
+    object Map : Screen("map")
 }

@@ -19,10 +19,17 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+Properties localProperties = new Properties()
+def localFile = project.rootProject.file('local.properties')
+if (localFile.exists()) {
+    localProperties.load(localFile.newDataInputStream())
+}
+
 android {
     compileSdk 31
 
     defaultConfig {
+        applicationId "com.example.android.wearable.composeadvanced"
         minSdk 26
         targetSdk 30
         versionCode 1
@@ -31,6 +38,10 @@ android {
         applicationId "com.example.android.wearable.composeadvanced"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def mapsApiKey = localProperties.getProperty("mapsApiKey", "")
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
+        buildConfigField("String", "mapsApiKey", "\"${mapsApiKey}\"")
     }
 
     buildTypes {
@@ -105,6 +116,10 @@ dependencies {
 
     // Performance
     implementation libs.androidx.metrics.performance
+
+    // Google Maps
+    implementation libs.com.google.maps.compose
+    implementation libs.com.google.play.services.maps
 
     // Testing
     testImplementation libs.junit

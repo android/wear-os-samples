@@ -59,6 +59,7 @@ import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportF
 fun LandingScreen(
     onClickWatchList: () -> Unit,
     onClickDemoUserInputComponents: () -> Unit,
+    onClickDemoMap: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -112,6 +113,17 @@ fun LandingScreen(
                 label = {
                     Text(
                         stringResource(R.string.user_input_components_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+
+            CompactChip(
+                onClick = onClickDemoMap,
+                label = {
+                    Text(
+                        stringResource(R.string.map_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
