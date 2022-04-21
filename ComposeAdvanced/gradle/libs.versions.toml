@@ -27,6 +27,8 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.0"
+com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.0.2"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }

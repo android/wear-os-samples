@@ -117,8 +117,9 @@ dependencies {
     // Performance
     implementation libs.androidx.metrics.performance
 
-    implementation "com.google.maps.android:maps-compose:2.1.0"
-    implementation "com.google.android.gms:play-services-maps:18.0.2"
+    // Google Maps
+    implementation libs.com.google.maps.compose
+    implementation libs.com.google.play.services.maps
 
     // Testing
     testImplementation libs.junit
