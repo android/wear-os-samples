@@ -16,7 +16,6 @@
 package com.example.android.wearable.composeadvanced.presentation.ui.map
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,21 +25,27 @@ import com.example.android.wearable.composeadvanced.BuildConfig
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 /**
- * Displays a Slider, which allows users to make a selection from a range of values.
+ * Displays a Google Map focused on Singapore.
+ *
+ * Get a key with https://developers.google.com/maps/documentation/android-sdk/get-api-key
+ * and put it in local.properties with key `mapsApiKey`.
  */
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,
 ) {
     if (BuildConfig.mapsApiKey.isEmpty()) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(modifier = Modifier.fillMaxWidth(0.7f),
-                text = "Set mapsApiKey in local.properties")
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+            Text(
+                modifier = Modifier.fillMaxWidth(0.7f),
+                text = "Set mapsApiKey in local.properties"
+            )
         }
     } else {
         val singapore = LatLng(1.35, 103.87)
@@ -48,8 +53,11 @@ fun MapScreen(
             position = CameraPosition.fromLatLngZoom(singapore, 10f)
         }
         GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+            modifier = modifier,
+            cameraPositionState = cameraPositionState,
+            // disabled until correct handling is implemented inside a swipe dismissable nav host
+            // possible related to https://github.com/googlemaps/android-maps-compose/issues/78
+            uiSettings = MapUiSettings(scrollGesturesEnabled = false)
         ) {
             Marker(
                 state = MarkerState(position = singapore),
