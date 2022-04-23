@@ -26,5 +26,5 @@ wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.r
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.4.2"
+com-diffplug-spotless = "com.diffplug.spotless:6.5.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
