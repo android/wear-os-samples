@@ -60,7 +60,6 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyL
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.pickers.PickersComponentsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
@@ -195,9 +194,6 @@ fun WearApp(
                         onClickDemoMap = {
                             swipeDismissableNavController.navigate(Screen.Map.route)
                         },
-                        onClickDemoUserPickerComponents = {
-                            swipeDismissableNavController.navigate(Screen.PickerComponents.route)
-                        },
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
@@ -213,12 +209,7 @@ fun WearApp(
                         },
                         onClickSlider = {
                             swipeDismissableNavController.navigate(Screen.Slider.route)
-                        }
-                    )
-                }
-
-                composable(Screen.PickerComponents.route) {
-                    PickersComponentsScreen(
+                        },
                         onClickDemoDatePicker = {
                             swipeDismissableNavController.navigate(Screen.DatePicker.route)
                         },
@@ -340,7 +331,7 @@ fun WearApp(
                     )
                 }
 
-                composable(Screen.Time12hPicker.route) {
+                composable(Screen.Time24hPicker.route) {
                     val context = LocalContext.current
 
                     TimePicker(
@@ -361,7 +352,7 @@ fun WearApp(
                     )
                 }
 
-                composable(Screen.Time24hPicker.route) {
+                composable(Screen.Time12hPicker.route) {
                     val context = LocalContext.current
 
                     TimePickerWith12HourClock(

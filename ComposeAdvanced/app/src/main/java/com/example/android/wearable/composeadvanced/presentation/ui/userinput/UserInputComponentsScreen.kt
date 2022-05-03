@@ -15,19 +15,13 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.CompactChip
+import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 
@@ -38,41 +32,78 @@ import com.example.android.wearable.composeadvanced.R
 fun UserInputComponentsScreen(
     value: Int,
     onClickStepper: () -> Unit,
-    onClickSlider: () -> Unit
+    onClickSlider: () -> Unit,
+    onClickDemoDatePicker: () -> Unit,
+    onClickDemo12hTimePicker: () -> Unit,
+    onClickDemo24hTimePicker: () -> Unit,
 ) {
-    Column(
+    ScalingLazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 10.dp)
-            .padding(horizontal = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+            .fillMaxSize(),
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(1f),
-            text = "${stringResource(R.string.selected_value)}: $value",
-            textAlign = TextAlign.Center
-        )
+        item {
+            CompactChip(
+                onClick = onClickStepper,
+                label = {
+                    Text(
+                        stringResource(R.string.stepper_label, value),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+        }
 
-        CompactChip(
-            onClick = onClickStepper,
-            label = {
-                Text(
-                    stringResource(R.string.stepper_label),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        )
+        item {
+            CompactChip(
+                onClick = onClickSlider,
+                label = {
+                    Text(
+                        stringResource(R.string.slider_label, value),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+        }
 
-        CompactChip(
-            onClick = onClickSlider,
-            label = {
-                Text(
-                    stringResource(R.string.slider_label),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        )
+        item {
+            CompactChip(
+                onClick = onClickDemoDatePicker,
+                label = {
+                    Text(
+                        stringResource(R.string.date_picker_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+        }
+
+        item {
+            CompactChip(
+                onClick = onClickDemo12hTimePicker,
+                label = {
+                    Text(
+                        stringResource(R.string.time_12h_picker_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+        }
+
+        item {
+            CompactChip(
+                onClick = onClickDemo24hTimePicker,
+                label = {
+                    Text(
+                        stringResource(R.string.time_24h_picker_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+        }
     }
 }

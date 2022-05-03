@@ -15,9 +15,7 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.landing
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +38,8 @@ import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
@@ -60,7 +60,6 @@ fun LandingScreen(
     onClickWatchList: () -> Unit,
     onClickDemoUserInputComponents: () -> Unit,
     onClickDemoMap: () -> Unit,
-    onClickDemoUserPickerComponents: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -68,79 +67,74 @@ fun LandingScreen(
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Places both Chips (button and toggle) in the middle of the screen.
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+        ScalingLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = ScalingLazyListState(initialCenterItemIndex = 1)
         ) {
-            CompactChip(
-                onClick = onClickWatchList,
-                label = {
-                    Text(
-                        stringResource(R.string.list_of_watches_button_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            )
+            item {
+                // Signify we have drawn the content of the first screen
+                ReportFullyDrawn()
 
-            // Signify we have drawn the content of the first screen
-            ReportFullyDrawn()
+                CompactChip(
+                    onClick = onClickWatchList,
+                    label = {
+                        Text(
+                            stringResource(R.string.list_of_watches_button_label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                )
+            }
 
-            ToggleChip(
-                modifier = Modifier.height(32.dp),
-                checked = proceedingTimeTextEnabled,
-                onCheckedChange = onClickProceedingTimeText,
-                label = {
-                    Text(
-                        text = stringResource(R.string.proceeding_text_toggle_chip_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                toggleControl = {
-                    Icon(
-                        imageVector = ToggleChipDefaults.switchIcon(
-                            checked = proceedingTimeTextEnabled
-                        ),
-                        contentDescription = if (proceedingTimeTextEnabled) "On" else "Off",
-                    )
-                },
-            )
+            item {
+                CompactChip(
+                    onClick = onClickDemoUserInputComponents,
+                    label = {
+                        Text(
+                            stringResource(R.string.user_input_components_label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                )
+            }
 
-            CompactChip(
-                onClick = onClickDemoUserInputComponents,
-                label = {
-                    Text(
-                        stringResource(R.string.user_input_components_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            )
+            item {
+                CompactChip(
+                    onClick = onClickDemoMap,
+                    label = {
+                        Text(
+                            stringResource(R.string.map_label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                )
+            }
 
-            CompactChip(
-                onClick = onClickDemoUserPickerComponents,
-                label = {
-                    Text(
-                        stringResource(R.string.picker_components_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            )
-
-            CompactChip(
-                onClick = onClickDemoMap,
-                label = {
-                    Text(
-                        stringResource(R.string.map_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            )
+            item {
+                ToggleChip(
+                    modifier = Modifier.height(32.dp),
+                    checked = proceedingTimeTextEnabled,
+                    onCheckedChange = onClickProceedingTimeText,
+                    label = {
+                        Text(
+                            text = stringResource(R.string.proceeding_text_toggle_chip_label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                    toggleControl = {
+                        Icon(
+                            imageVector = ToggleChipDefaults.switchIcon(
+                                checked = proceedingTimeTextEnabled
+                            ),
+                            contentDescription = if (proceedingTimeTextEnabled) "On" else "Off",
+                        )
+                    },
+                )
+            }
         }
 
         // Places curved text at the bottom of round devices and straight text at the bottom of

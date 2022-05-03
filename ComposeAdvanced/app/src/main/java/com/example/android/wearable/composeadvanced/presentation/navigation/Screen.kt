@@ -36,7 +36,6 @@ sealed class Screen(
     object Stepper : Screen("stepper")
     object Slider : Screen("slider")
     object Map : Screen("map")
-    object PickerComponents : Screen("pickerComponents")
     object DatePicker : Screen("date")
     object Time12hPicker : Screen("time12h")
     object Time24hPicker : Screen("time24h")

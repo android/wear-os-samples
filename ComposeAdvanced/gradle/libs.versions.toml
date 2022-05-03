@@ -4,6 +4,7 @@ androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
 androidx-wear-compose = "1.0.0-alpha21"
 compose = "1.2.0-alpha08"
+horologist = "0.0.17"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.6.20"
 
@@ -31,7 +32,8 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.0"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.0.2"
-horologist-composables = "com.google.android.horologist:horologist-composables:0.0.17"
+horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
+horologist-compose-layout = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
