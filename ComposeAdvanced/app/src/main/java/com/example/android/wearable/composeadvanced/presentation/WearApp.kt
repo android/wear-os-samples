@@ -17,7 +17,6 @@
 
 package com.example.android.wearable.composeadvanced.presentation
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -31,7 +30,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -69,6 +67,7 @@ import com.google.android.horologist.composables.DatePicker
 import com.google.android.horologist.composables.ExperimentalComposablesApi
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
+import java.time.LocalDateTime
 
 @Composable
 fun WearApp(
@@ -114,8 +113,8 @@ fun WearApp(
         // TODO: consider moving to ViewModel
         // Display value is passed down to various user input screens, for the slider and stepper
         // components specifically, to demonstrate how they work.
-        val defaultSelectedValue = 2
-        var displayValueForUserInput by remember { mutableStateOf(defaultSelectedValue) }
+        var displayValueForUserInput by remember { mutableStateOf(5) }
+        var dateTimeForUserInput by remember { mutableStateOf(LocalDateTime.now()) }
 
         Scaffold(
             timeText = {
@@ -204,6 +203,7 @@ fun WearApp(
                 composable(Screen.UserInputComponents.route) {
                     UserInputComponentsScreen(
                         value = displayValueForUserInput,
+                        dateTime = dateTimeForUserInput,
                         onClickStepper = {
                             swipeDismissableNavController.navigate(Screen.Stepper.route)
                         },
@@ -311,8 +311,6 @@ fun WearApp(
                 }
 
                 composable(Screen.DatePicker.route) {
-                    val context = LocalContext.current
-
                     DatePicker(
                         buttonIcon = {
                             Icon(
@@ -326,14 +324,13 @@ fun WearApp(
                         },
                         onClick = {
                             swipeDismissableNavController.popBackStack()
-                            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-                        }
+                            dateTimeForUserInput = it.atTime(dateTimeForUserInput.toLocalTime())
+                        },
+                        initial = dateTimeForUserInput.toLocalDate()
                     )
                 }
 
                 composable(Screen.Time24hPicker.route) {
-                    val context = LocalContext.current
-
                     TimePicker(
                         buttonIcon = {
                             Icon(
@@ -347,14 +344,13 @@ fun WearApp(
                         },
                         onClick = {
                             swipeDismissableNavController.popBackStack()
-                            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-                        }
+                            dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
+                        },
+                        initial = dateTimeForUserInput.toLocalTime()
                     )
                 }
 
                 composable(Screen.Time12hPicker.route) {
-                    val context = LocalContext.current
-
                     TimePickerWith12HourClock(
                         buttonIcon = {
                             Icon(
@@ -368,8 +364,9 @@ fun WearApp(
                         },
                         onClick = {
                             swipeDismissableNavController.popBackStack()
-                            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-                        }
+                            dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
+                        },
+                        initial = dateTimeForUserInput.toLocalTime()
                     )
                 }
             }

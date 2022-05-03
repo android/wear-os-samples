@@ -39,7 +39,6 @@ import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
@@ -67,10 +66,7 @@ fun LandingScreen(
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Places both Chips (button and toggle) in the middle of the screen.
-        ScalingLazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = ScalingLazyListState(initialCenterItemIndex = 1)
-        ) {
+        ScalingLazyColumn {
             item {
                 // Signify we have drawn the content of the first screen
                 ReportFullyDrawn()

@@ -15,15 +15,16 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.wear.compose.material.CompactChip
+import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Displays a value by using a Stepper or a Slider
@@ -31,44 +32,52 @@ import com.example.android.wearable.composeadvanced.R
 @Composable
 fun UserInputComponentsScreen(
     value: Int,
+    dateTime: LocalDateTime,
     onClickStepper: () -> Unit,
     onClickSlider: () -> Unit,
     onClickDemoDatePicker: () -> Unit,
     onClickDemo12hTimePicker: () -> Unit,
     onClickDemo24hTimePicker: () -> Unit,
 ) {
-    ScalingLazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
+    ScalingLazyColumn() {
         item {
-            CompactChip(
+            Chip(
                 onClick = onClickStepper,
                 label = {
                     Text(
-                        stringResource(R.string.stepper_label, value),
+                        stringResource(id = R.string.stepper_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
+                    )
+                },
+                secondaryLabel = {
+                    Text(
+                        text = value.toString(),
                     )
                 }
             )
         }
 
         item {
-            CompactChip(
+            Chip(
                 onClick = onClickSlider,
                 label = {
                     Text(
-                        stringResource(R.string.slider_label, value),
+                        stringResource(id = R.string.slider_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
+                    )
+                },
+                secondaryLabel = {
+                    Text(
+                        text = value.toString(),
                     )
                 }
             )
         }
 
         item {
-            CompactChip(
+            Chip(
                 onClick = onClickDemoDatePicker,
                 label = {
                     Text(
@@ -76,12 +85,17 @@ fun UserInputComponentsScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                },
+                secondaryLabel = {
+                    Text(
+                        text = dateTime.toLocalDate().toString(),
+                    )
                 }
             )
         }
 
         item {
-            CompactChip(
+            Chip(
                 onClick = onClickDemo12hTimePicker,
                 label = {
                     Text(
@@ -89,18 +103,30 @@ fun UserInputComponentsScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                },
+                secondaryLabel = {
+                    val formatter = remember { DateTimeFormatter.ofPattern("hh:mm a") }
+                    Text(
+                        text = dateTime.toLocalTime().format(formatter),
+                    )
                 }
             )
         }
 
         item {
-            CompactChip(
+            Chip(
                 onClick = onClickDemo24hTimePicker,
                 label = {
                     Text(
                         stringResource(R.string.time_24h_picker_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
+                    )
+                },
+                secondaryLabel = {
+                    val formatter = remember { DateTimeFormatter.ofPattern("HH:mm:ss") }
+                    Text(
+                        text = dateTime.toLocalTime().format(formatter),
                     )
                 }
             )
