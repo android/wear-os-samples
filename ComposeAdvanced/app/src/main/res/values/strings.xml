@@ -30,4 +30,9 @@
     <string name="user_input_components_label">User Input Components</string>
     <string name="map_label">Map</string>
     <string name="selected_value">Selected Value</string>
+    <string name="date_picker_label">Date Picker</string>
+    <string name="time_12h_picker_label">Time (12h) Picker</string>
+    <string name="time_24h_picker_label">Time (24h) Picker</string>
+    <string name="submit_content_description">Submit</string>
+    <string name="picker_components_label">Picker Components</string>
 </resources>

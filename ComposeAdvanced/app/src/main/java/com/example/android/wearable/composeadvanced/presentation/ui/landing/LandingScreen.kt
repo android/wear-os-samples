@@ -60,6 +60,7 @@ fun LandingScreen(
     onClickWatchList: () -> Unit,
     onClickDemoUserInputComponents: () -> Unit,
     onClickDemoMap: () -> Unit,
+    onClickDemoUserPickerComponents: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -113,6 +114,17 @@ fun LandingScreen(
                 label = {
                     Text(
                         stringResource(R.string.user_input_components_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            )
+
+            CompactChip(
+                onClick = onClickDemoUserPickerComponents,
+                label = {
+                    Text(
+                        stringResource(R.string.picker_components_label),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
