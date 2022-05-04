@@ -17,7 +17,6 @@ package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -30,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 
@@ -47,7 +45,6 @@ fun WatchAppChip(
 ) {
     Chip(
         modifier = modifier,
-        enabled = true,
         icon = {
             Icon(
                 painter = painterResource(id = watchIcon),
@@ -59,8 +56,6 @@ fun WatchAppChip(
         },
         label = {
             Text(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colors.onPrimary,
                 text = watchName,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -68,8 +63,6 @@ fun WatchAppChip(
         },
         secondaryLabel = {
             Text(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colors.onPrimary,
                 text = "id: $watchModelNumber",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -89,7 +82,6 @@ fun WatchAppChip(
 fun PreviewWatchAppChip() {
     Box {
         WatchAppChip(
-            modifier = Modifier.fillMaxWidth(),
             watchModelNumber = 123456,
             watchName = "Watch 123456 Name",
             watchIcon = R.drawable.ic_watch,
