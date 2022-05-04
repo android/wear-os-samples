@@ -40,4 +40,7 @@ sealed class Screen(
     object Time12hPicker : Screen("time12h")
     object Time24hPicker : Screen("time24h")
     object Dialogs : Screen("dialogs")
+    object ProgressIndicators : Screen("progressIndicators")
+    object IndeterminateProgressIndicator : Screen("indeterminateProgressIndicator")
+    object FullScreenProgressIndicator : Screen("fullScreenProgressIndicator")
 }
