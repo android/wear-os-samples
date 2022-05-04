@@ -15,28 +15,40 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.dialog
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.*
+import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.ButtonDefaults
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.Icon
+import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.ScalingLazyListAnchorType
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Alert
-
 import androidx.wear.compose.material.dialog.Confirmation
 import androidx.wear.compose.material.dialog.Dialog
+import androidx.wear.compose.material.rememberScalingLazyListState
 import com.example.android.wearable.composeadvanced.R
 
 @Composable
 fun Dialogs() {
     var confirmationShowDialog by remember { mutableStateOf(false) }
-    var confirmationStatus by remember { mutableStateOf("")}
+    var confirmationStatus by remember { mutableStateOf("") }
     var alertShowDialog by remember { mutableStateOf(false) }
-    var alertStatus by remember { mutableStateOf("")}
+    var alertStatus by remember { mutableStateOf("") }
     val dialogDismissed = stringResource(R.string.dialog_dismissed)
     val dialogTimedOut = stringResource(R.string.dialog_timed_out)
     val dialogNo = stringResource(R.string.confirmation_dialog_no)
@@ -53,7 +65,7 @@ fun Dialogs() {
                 },
                 colors = ChipDefaults.primaryChipColors(),
                 label = { Text(stringResource(R.string.confirmation_dialog_label)) },
-                secondaryLabel =  { Text(confirmationStatus)}
+                secondaryLabel = { Text(confirmationStatus) }
             )
         }
         item {
@@ -64,7 +76,7 @@ fun Dialogs() {
                 },
                 colors = ChipDefaults.primaryChipColors(),
                 label = { Text(stringResource(R.string.alert_dialog_label)) },
-                secondaryLabel =  { Text(alertStatus)}
+                secondaryLabel = { Text(alertStatus) }
             )
         }
     }

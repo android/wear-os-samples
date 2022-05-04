@@ -121,7 +121,6 @@ fun LandingScreen(
                         )
                     }
                 )
-
             }
             item {
                 ToggleChip(
