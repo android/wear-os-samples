@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalConfiguration
@@ -32,8 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
@@ -53,16 +50,13 @@ import com.google.android.horologist.compose.navscaffold.scrollableColumn
  */
 @Composable
 fun WatchListScreen(
+    watches: List<WatchModel>,
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit,
-    viewModelFactory: ViewModelProvider.Factory,
-    viewModel: WatchListViewModel = viewModel(factory = viewModelFactory)
 ) {
-    val watches: List<WatchModel> by viewModel.watches
-
     ScalingLazyColumn(
         modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
         contentPadding = PaddingValues(

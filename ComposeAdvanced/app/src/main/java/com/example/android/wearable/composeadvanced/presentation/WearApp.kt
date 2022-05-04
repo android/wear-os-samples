@@ -64,7 +64,9 @@ import com.example.android.wearable.composeadvanced.presentation.ui.userinput.Sl
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.google.android.horologist.composables.DatePicker
 import com.google.android.horologist.composables.ExperimentalComposablesApi
 import com.google.android.horologist.composables.TimePicker
@@ -129,10 +131,10 @@ fun WearApp(
                 val timeTextModifier =
                     when (scrollType) {
                         DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
-                            val viewModel: ScalingLazyListStateViewModel =
+                            val scrollViewModel: ScalingLazyListStateViewModel =
                                 viewModel(currentBackStackEntry!!)
                             Modifier.fadeAwayScalingLazyList {
-                                viewModel.scrollState
+                                scrollViewModel.scrollState
                             }
                         }
                         DestinationScrollType.COLUMN_SCROLLING -> {
@@ -173,9 +175,9 @@ fun WearApp(
                 when (scrollType) {
                     DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
                         // Get or create the ViewModel associated with the current back stack entry
-                        val viewModel: ScalingLazyListStateViewModel =
+                        val scrollViewModel: ScalingLazyListStateViewModel =
                             viewModel(currentBackStackEntry!!)
-                        PositionIndicator(scalingLazyListState = viewModel.scrollState)
+                        PositionIndicator(scalingLazyListState = scrollViewModel.scrollState)
                     }
                     DestinationScrollType.COLUMN_SCROLLING -> {
                         // Get or create the ViewModel associated with the current back stack entry
@@ -214,12 +216,12 @@ fun WearApp(
                         "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
                     }
 
-                    val viewModel: ScalingLazyListStateViewModel = viewModel(it)
+                    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
 
                     val focusRequester = remember { FocusRequester() }
 
                     LandingScreen(
-                        scalingLazyListState = viewModel.scrollState,
+                        scalingLazyListState = scrollViewModel.scrollState,
                         focusRequester = focusRequester,
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
@@ -256,12 +258,12 @@ fun WearApp(
                         "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
                     }
 
-                    val viewModel: ScalingLazyListStateViewModel = viewModel(it)
+                    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
 
                     val focusRequester = remember { FocusRequester() }
 
                     UserInputComponentsScreen(
-                        scalingLazyListState = viewModel.scrollState,
+                        scalingLazyListState = scrollViewModel.scrollState,
                         focusRequester = focusRequester,
                         value = displayValueForUserInput,
                         dateTime = dateTimeForUserInput,
@@ -320,12 +322,15 @@ fun WearApp(
                         "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
                     }
 
-                    val viewModel: ScalingLazyListStateViewModel = viewModel(it)
-
+                    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
                     val focusRequester = remember { FocusRequester() }
 
+                    val viewModel: WatchListViewModel = viewModel(factory = viewModelFactory)
+                    val watches by viewModel.watches
+
                     WatchListScreen(
-                        scalingLazyListState = viewModel.scrollState,
+                        watches = watches,
+                        scalingLazyListState = scrollViewModel.scrollState,
                         focusRequester = focusRequester,
                         showVignette = vignetteVisiblePreference,
                         onClickVignetteToggle = { showVignette ->
@@ -336,7 +341,6 @@ fun WearApp(
                                 route = Screen.WatchDetail.route + "/" + id,
                             )
                         },
-                        viewModelFactory = viewModelFactory
                     )
                 }
 
@@ -360,15 +364,16 @@ fun WearApp(
                         "Scroll type must be DestinationScrollType.COLUMN_SCROLLING"
                     }
 
-                    val viewModel: ScrollStateViewModel = viewModel(it)
-
+                    val scrollViewModel: ScrollStateViewModel = viewModel(it)
                     val focusRequester = remember { FocusRequester() }
 
+                    val viewModel: WatchDetailViewModel = viewModel(factory = viewModelFactory)
+                    val watch by viewModel.watch
+
                     WatchDetailScreen(
-                        scrollState = viewModel.scrollState,
+                        watch = watch,
+                        scrollState = scrollViewModel.scrollState,
                         focusRequester = focusRequester,
-                        swipeDismissableNavController = swipeDismissableNavController,
-                        viewModelFactory = viewModelFactory
                     )
                 }
 

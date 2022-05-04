@@ -21,7 +21,6 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,7 +28,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -39,11 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -57,14 +50,10 @@ import com.google.android.horologist.compose.navscaffold.scrollableColumn
  */
 @Composable
 fun WatchDetailScreen(
+    watch: WatchModel?,
     scrollState: ScrollState,
     focusRequester: FocusRequester,
-    swipeDismissableNavController: NavHostController,
-    viewModelFactory: ViewModelProvider.Factory,
-    viewModel: WatchDetailViewModel = viewModel(factory = viewModelFactory),
 ) {
-    val watch: WatchModel? by viewModel.watch
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,50 +77,38 @@ fun WatchDetailScreen(
                 text = stringResource(R.string.invalid_watch_label)
             )
         } else {
-            watch?.let { watchNotNull ->
-                Icon(
-                    painter = painterResource(id = watchNotNull.icon),
-                    tint = MaterialTheme.colors.primary,
-                    contentDescription = stringResource(R.string.watch_icon_content_description),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(24.dp)
-                        .wrapContentSize(align = Alignment.Center),
-                )
-
-                Spacer(modifier = Modifier.size(4.dp))
-
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                    color = MaterialTheme.colors.primary,
-                    textAlign = TextAlign.Center,
-                    fontSize = 22.sp,
-                    text = watchNotNull.name
-                )
-
-                Spacer(modifier = Modifier.size(4.dp))
-
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    text = watchNotNull.description
-                )
-            }
-
-            Button(
+            Icon(
+                painter = painterResource(id = watch.icon),
+                tint = MaterialTheme.colors.primary,
+                contentDescription = stringResource(R.string.watch_icon_content_description),
                 modifier = Modifier
-                    .size(ButtonDefaults.ExtraSmallButtonSize)
                     .fillMaxWidth()
-                    .absoluteOffset(52.dp, 30.dp),
-                onClick = { swipeDismissableNavController.popBackStack() }
-            ) {
-                Text("Back")
-            }
+                    .size(24.dp)
+                    .wrapContentSize(align = Alignment.Center),
+            )
+
+            Spacer(modifier = Modifier.size(4.dp))
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colors.primary,
+                textAlign = TextAlign.Center,
+                fontSize = 22.sp,
+                text = watch.name
+            )
+
+            Spacer(modifier = Modifier.size(4.dp))
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                text = watch.description
+            )
         }
     }
 }
