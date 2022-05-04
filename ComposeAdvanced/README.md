@@ -23,9 +23,16 @@ Screenshots
 -----------
 
 <img src="screenshots/landing_round.png" height="372" alt="Round Screenshot"/>
+<img src="screenshots/landing_round_2.png" height="372" alt="Round Screenshot"/>
 <img src="screenshots/watch_list_round.png" height="372" alt="Round Screenshot"/>
 <img src="screenshots/watch_details_round.png" height="372" alt="Round Screenshot"/>
 
+<img src="screenshots/dialogs_round.png" height="372" alt="Round Screenshot"/>
+<img src="screenshots/alert_round.png" height="372" alt="Round Screenshot"/>
+<img src="screenshots/ui_components_round.png" height="372" alt="Round Screenshot"/>
+<img src="screenshots/date_picker_round.png" height="372" alt="Round Screenshot"/>
+<img src="screenshots/time_picker_round.png" height="372" alt="Round Screenshot"/>
+<img src="screenshots/time_picker_24_round.png" height="372" alt="Round Screenshot"/>
 
 <img src="screenshots/landing_square.png" height="349" alt="Square Screenshot"/> 
 <img src="screenshots/watch_list_square.png" height="349" alt="Square Screenshot"/> 
