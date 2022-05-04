@@ -22,6 +22,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,8 +40,8 @@ import com.example.android.wearable.composeadvanced.BuildConfig
 @Composable
 fun CustomTimeText(
     visible: Boolean,
-    showStartText: Boolean,
-    startText: String
+    modifier: Modifier = Modifier,
+    startText: String? = null,
 ) {
     val textStyle = TimeTextDefaults.timeTextStyle()
     val debugWarning = remember {
@@ -58,19 +59,21 @@ fun CustomTimeText(
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
+        val visibleText = startText != null
         TimeText(
-            startCurvedContent = if (showStartText) {
+            modifier = modifier,
+            startCurvedContent = if (visibleText) {
                 {
                     curvedText(
-                        text = startText,
+                        text = startText!!,
                         style = CurvedTextStyle(textStyle)
                     )
                 }
             } else null,
-            startLinearContent = if (showStartText) {
+            startLinearContent = if (visibleText) {
                 {
                     Text(
-                        text = startText,
+                        text = startText!!,
                         style = textStyle
                     )
                 }
@@ -121,7 +124,6 @@ fun CustomTimeText(
 fun PreviewCustomTimeText() {
     CustomTimeText(
         visible = true,
-        showStartText = true,
         startText = "Testing Leading Text..."
     )
 }

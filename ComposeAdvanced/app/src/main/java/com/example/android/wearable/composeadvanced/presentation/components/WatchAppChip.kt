@@ -37,11 +37,11 @@ import com.example.android.wearable.composeadvanced.R
  */
 @Composable
 fun WatchAppChip(
-    modifier: Modifier = Modifier,
     watchModelNumber: Int,
     watchName: String,
     watchIcon: Int,
-    onClickWatch: (Int) -> Unit
+    onClickWatch: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Chip(
         modifier = modifier,
