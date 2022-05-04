@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalComposeLayoutApi::class)
+
 package com.example.android.wearable.composeadvanced.presentation.ui.landing
 
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,12 +42,15 @@ import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
+import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
+import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 /**
  * Simple landing page with three actions, view a list of watches, toggle on/off text before the
@@ -56,17 +62,20 @@ import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportF
  */
 @Composable
 fun LandingScreen(
+    scalingLazyListState: ScalingLazyListState,
+    focusRequester: FocusRequester,
     onClickWatchList: () -> Unit,
     onClickDemoUserInputComponents: () -> Unit,
     onClickDemoMap: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
-
     Box(modifier = Modifier.fillMaxSize()) {
-
         // Places both Chips (button and toggle) in the middle of the screen.
-        ScalingLazyColumn {
+        ScalingLazyColumn(
+            modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+            state = scalingLazyListState
+        ) {
             item {
                 // Signify we have drawn the content of the first screen
                 ReportFullyDrawn()

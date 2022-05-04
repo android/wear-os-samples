@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalComposeLayoutApi::class)
+
 package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
+import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
+import com.google.android.horologist.compose.navscaffold.scrollableColumn
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -31,6 +38,8 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun UserInputComponentsScreen(
+    scalingLazyListState: ScalingLazyListState,
+    focusRequester: FocusRequester,
     value: Int,
     dateTime: LocalDateTime,
     onClickStepper: () -> Unit,
@@ -39,7 +48,10 @@ fun UserInputComponentsScreen(
     onClickDemo12hTimePicker: () -> Unit,
     onClickDemo24hTimePicker: () -> Unit,
 ) {
-    ScalingLazyColumn() {
+    ScalingLazyColumn(
+        modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        state = scalingLazyListState
+    ) {
         item {
             Chip(
                 onClick = onClickStepper,

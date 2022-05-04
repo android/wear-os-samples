@@ -15,6 +15,8 @@
  */
 package com.example.android.wearable.composeadvanced.data
 
+import androidx.lifecycle.viewmodel.CreationExtras
+
 /**
  * Simple Watch repository for fake watch models.
  */
@@ -27,5 +29,9 @@ class WatchRepository(
         return watchLocalDataSource.watches.firstOrNull {
             it.modelId == id
         }
+    }
+
+    companion object {
+        val WATCH_REPOSITORY_KEY = object : CreationExtras.Key<WatchRepository> {}
     }
 }

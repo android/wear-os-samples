@@ -1,11 +1,12 @@
 [versions]
 android-gradle-plugin = "7.1.3"
-androidx-activity = "1.4.0"
-androidx-lifecycle = "2.4.1"
+androidx-activity = "1.5.0-beta01"
+androidx-lifecycle = "2.5.0-beta01"
 androidx-wear-compose = "1.0.0-alpha21"
 compose = "1.2.0-alpha08"
 horologist = "0.0.17"
 ktlint = "0.41.0"
+navigation = "2.5.0-beta01"
 org-jetbrains-kotlin = "1.6.20"
 
 [libraries]
@@ -33,10 +34,12 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.0"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.0.2"
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
-horologist-compose-layout = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
+horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
 test-ext-junit = "androidx.test.ext:junit:1.1.3"
 test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"

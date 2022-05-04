@@ -19,8 +19,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.example.android.wearable.composeadvanced.data.WatchRepository
+import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailViewModel
+import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.example.android.wearable.composeadvanced.util.JankPrinter
 
 /**
@@ -37,17 +46,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Used to power various ViewModels for different screens.
-        val watchRepository = (application as BaseApplication).watchRepository
-
         jankPrinter = JankPrinter()
 
         setContent {
             navController = rememberSwipeDismissableNavController()
 
             WearApp(
-                watchRepository = watchRepository,
-                swipeDismissableNavController = navController
+                swipeDismissableNavController = navController,
+                viewModelFactory = defaultViewModelProviderFactory
             )
 
             LaunchedEffect(Unit) {
@@ -58,5 +64,30 @@ class MainActivity : ComponentActivity() {
         }
 
         jankPrinter.installJankStats(activity = this)
+    }
+
+    override fun getDefaultViewModelCreationExtras(): CreationExtras {
+        return MutableCreationExtras(super.getDefaultViewModelCreationExtras()).apply {
+            set(
+                WatchRepository.WATCH_REPOSITORY_KEY,
+                (application as BaseApplication).watchRepository
+            )
+        }
+    }
+
+    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory {
+        return viewModelFactory {
+            initializer {
+                WatchListViewModel(
+                    watchRepository = (application as BaseApplication).watchRepository
+                )
+            }
+            initializer {
+                WatchDetailViewModel(
+                    savedStateHandle = createSavedStateHandle(),
+                    watchRepository = (application as BaseApplication).watchRepository
+                )
+            }
+        }
     }
 }
