@@ -68,6 +68,9 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateV
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.FullScreenProgressIndicator
+import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.IndeterminateProgressIndicator
+import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.ProgressIndicatorsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
@@ -151,6 +154,9 @@ fun WearApp(
                             Modifier.fadeAway {
                                 viewModel.scrollState
                             }
+                        }
+                        DestinationScrollType.TIME_TEXT_ONLY -> {
+                            Modifier
                         }
                         else -> {
                             null
@@ -239,6 +245,9 @@ fun WearApp(
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
                         },
+                        onClickProgressIndicator = {
+                            swipeDismissableNavController.navigate(Screen.ProgressIndicators.route)
+                        }
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -278,7 +287,7 @@ fun WearApp(
                         },
                         onClickDemo24hTimePicker = {
                             swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
-                        }
+                        },
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -434,6 +443,56 @@ fun WearApp(
 
                 composable(Screen.Dialogs.route) {
                     Dialogs()
+                }
+
+                composable(
+                    route = Screen.ProgressIndicators.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+                        }
+                    )
+                ) {
+                    val scalingLazyListState = scalingLazyListState(it)
+
+                    val focusRequester = remember { FocusRequester() }
+
+                    ProgressIndicatorsScreen(
+                        scalingLazyListState = scalingLazyListState,
+                        focusRequester = focusRequester,
+                        onClickIndeterminateProgressIndicator = {
+                            swipeDismissableNavController.navigate(
+                                Screen.IndeterminateProgressIndicator.route
+                            )
+                        },
+                        onClickGapProgressIndicator = {
+                            swipeDismissableNavController.navigate(
+                                Screen.FullScreenProgressIndicator.route
+                            )
+                        }
+                    )
+                    RequestFocusOnResume(focusRequester)
+                }
+
+                composable(Screen.IndeterminateProgressIndicator.route) {
+                    IndeterminateProgressIndicator()
+                }
+
+                composable(
+                    route = Screen.FullScreenProgressIndicator.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.TIME_TEXT_ONLY
+                        }
+                    )
+                ) {
+                    FullScreenProgressIndicator()
                 }
             }
         }
