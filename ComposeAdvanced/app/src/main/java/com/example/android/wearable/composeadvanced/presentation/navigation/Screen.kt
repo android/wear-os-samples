@@ -39,4 +39,5 @@ sealed class Screen(
     object DatePicker : Screen("date")
     object Time12hPicker : Screen("time12h")
     object Time24hPicker : Screen("time24h")
+    object Dialogs : Screen("dialogs")
 }

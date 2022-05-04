@@ -35,4 +35,16 @@
     <string name="time_24h_picker_label">Time (24h) Picker</string>
     <string name="submit_content_description">Submit</string>
     <string name="picker_components_label">Picker Components</string>
+    <string name="dialogs_label">Dialogs</string>
+    <string name="confirmation_dialog_label">Confirmation Dialog</string>
+    <string name="dialog_dismissed">Dismissed</string>
+    <string name="dialog_timed_out">Timed Out</string>
+    <string name="dialog_sure">Are you sure?</string>
+    <string name="alert_dialog_label">Alert Dialog</string>
+    <string name="confirmation_dialog_tick">Tick</string>
+    <string name="confirmation_dialog_power_off">Power off</string>
+    <string name="confirmation_dialog_no">No</string>
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="confirmation_dialog_success">Success</string>
+
 </resources>
