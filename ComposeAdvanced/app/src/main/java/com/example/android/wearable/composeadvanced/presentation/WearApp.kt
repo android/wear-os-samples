@@ -17,6 +17,7 @@
 
 package com.example.android.wearable.composeadvanced.presentation
 
+import android.content.Intent
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -67,7 +69,7 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyL
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.map.MapActivity
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
@@ -220,6 +222,8 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
+                    val context = LocalContext.current
+
                     LandingScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
@@ -230,7 +234,14 @@ fun WearApp(
                             swipeDismissableNavController.navigate(Screen.UserInputComponents.route)
                         },
                         onClickDemoMap = {
-                            swipeDismissableNavController.navigate(Screen.Map.route)
+                            // Needs to be in a separate activity because of scroll interaction
+                            // issues inside SwipeDismissableNavHost.
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    MapActivity::class.java
+                                )
+                            )
                         },
                         onClickDialogs = {
                             swipeDismissableNavController.navigate(Screen.Dialogs.route)
@@ -366,10 +377,6 @@ fun WearApp(
                     )
 
                     RequestFocusOnResume(focusRequester)
-                }
-
-                composable(Screen.Map.route) {
-                    MapScreen()
                 }
 
                 composable(Screen.DatePicker.route) {

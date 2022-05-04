@@ -18,15 +18,17 @@ package com.example.android.wearable.composeadvanced.presentation.ui.map
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.BuildConfig
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -38,7 +40,10 @@ import com.google.maps.android.compose.rememberCameraPositionState
  * and put it in local.properties with key `mapsApiKey`.
  */
 @Composable
-fun MapScreen() {
+fun MapScreen(
+    modifier: Modifier = Modifier,
+    onClose: (() -> Unit)? = null
+) {
     if (BuildConfig.mapsApiKey.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -51,18 +56,27 @@ fun MapScreen() {
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(singapore, 10f)
         }
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            // disabled until correct handling is implemented inside a swipe dismissable nav host
-            // possible related to https://github.com/googlemaps/android-maps-compose/issues/78
-            uiSettings = MapUiSettings(scrollGesturesEnabled = false)
-        ) {
-            Marker(
-                state = MarkerState(position = singapore),
-                title = "Singapore",
-                snippet = "Marker in Singapore"
-            )
+        Box(modifier = modifier) {
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+            ) {
+                Marker(
+                    state = MarkerState(position = singapore),
+                    title = "Singapore",
+                    snippet = "Marker in Singapore"
+                )
+            }
+            if (onClose != null) {
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .size(ButtonDefaults.SmallButtonSize),
+                    onClick = onClose,
+                ) {
+                    Text(text = "X")
+                }
+            }
         }
     }
 }
