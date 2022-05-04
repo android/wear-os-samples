@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposablesApi::class)
+@file:OptIn(ExperimentalComposablesApi::class, ExperimentalComposeLayoutApi::class)
 
 package com.example.android.wearable.composeadvanced.presentation
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -40,15 +49,15 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
+import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.currentBackStackEntryAsState
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.R
-import com.example.android.wearable.composeadvanced.data.WatchRepository
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
-import com.example.android.wearable.composeadvanced.presentation.components.CustomVignette
 import com.example.android.wearable.composeadvanced.presentation.navigation.DestinationScrollType
 import com.example.android.wearable.composeadvanced.presentation.navigation.SCROLL_TYPE_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
@@ -63,17 +72,22 @@ import com.example.android.wearable.composeadvanced.presentation.ui.userinput.Sl
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.google.android.horologist.composables.DatePicker
 import com.google.android.horologist.composables.ExperimentalComposablesApi
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
+import com.google.android.horologist.compose.layout.fadeAway
+import com.google.android.horologist.compose.layout.fadeAwayScalingLazyList
+import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import java.time.LocalDateTime
 
 @Composable
 fun WearApp(
-    watchRepository: WatchRepository,
     swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
+    viewModelFactory: ViewModelProvider.Factory
 ) {
     WearAppTheme {
         // Allows user to disable the text before the time.
@@ -121,38 +135,47 @@ fun WearApp(
             timeText = {
                 // Scaffold places time at top of screen to follow Material Design guidelines.
                 // (Time is hidden while scrolling.)
-                val activelyScrolling =
+
+                val timeTextModifier =
                     when (scrollType) {
                         DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
-                            val viewModel: ScalingLazyListStateViewModel =
+                            val scrollViewModel: ScalingLazyListStateViewModel =
                                 viewModel(currentBackStackEntry!!)
-                            viewModel.scrollState.isScrollInProgress
+                            Modifier.fadeAwayScalingLazyList {
+                                scrollViewModel.scrollState
+                            }
                         }
                         DestinationScrollType.COLUMN_SCROLLING -> {
                             val viewModel: ScrollStateViewModel =
                                 viewModel(currentBackStackEntry!!)
-                            viewModel.scrollState.isScrollInProgress
+                            Modifier.fadeAway {
+                                viewModel.scrollState
+                            }
                         }
                         else -> {
-                            false
+                            null
                         }
                     }
 
-                CustomTimeText(
-                    visible = !activelyScrolling,
-                    showStartText = showProceedingTextBeforeTime,
-                    startText = stringResource(R.string.leading_time_text)
-                )
+                key(currentBackStackEntry?.destination?.route) {
+                    CustomTimeText(
+                        modifier = timeTextModifier ?: Modifier,
+                        visible = timeTextModifier != null,
+                        startText = if (showProceedingTextBeforeTime)
+                            stringResource(R.string.leading_time_text)
+                        else
+                            null
+                    )
+                }
             },
             vignette = {
                 // Only show vignette for screens with scrollable content.
                 if (scrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING ||
                     scrollType == DestinationScrollType.COLUMN_SCROLLING
                 ) {
-                    CustomVignette(
-                        visible = vignetteVisiblePreference,
-                        vignettePosition = VignettePosition.TopAndBottom
-                    )
+                    if (vignetteVisiblePreference) {
+                        Vignette(vignettePosition = VignettePosition.TopAndBottom)
+                    }
                 }
             },
             positionIndicator = {
@@ -160,9 +183,9 @@ fun WearApp(
                 when (scrollType) {
                     DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
                         // Get or create the ViewModel associated with the current back stack entry
-                        val viewModel: ScalingLazyListStateViewModel =
+                        val scrollViewModel: ScalingLazyListStateViewModel =
                             viewModel(currentBackStackEntry!!)
-                        PositionIndicator(scalingLazyListState = viewModel.scrollState)
+                        PositionIndicator(scalingLazyListState = scrollViewModel.scrollState)
                     }
                     DestinationScrollType.COLUMN_SCROLLING -> {
                         // Get or create the ViewModel associated with the current back stack entry
@@ -181,10 +204,25 @@ fun WearApp(
                 startDestination = Screen.Landing.route,
                 modifier = Modifier.background(MaterialTheme.colors.background)
             ) {
-
                 // Main Window
-                composable(Screen.Landing.route) {
+                composable(
+                    route = Screen.Landing.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+                        }
+                    )
+                ) {
+                    val scalingLazyListState = scalingLazyListState(it)
+
+                    val focusRequester = remember { FocusRequester() }
+
                     LandingScreen(
+                        scalingLazyListState = scalingLazyListState,
+                        focusRequester = focusRequester,
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
@@ -200,12 +238,30 @@ fun WearApp(
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
-                        }
+                        },
                     )
+
+                    RequestFocusOnResume(focusRequester)
                 }
 
-                composable(Screen.UserInputComponents.route) {
+                composable(
+                    route = Screen.UserInputComponents.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+                        }
+                    )
+                ) {
+                    val scalingLazyListState = scalingLazyListState(it)
+
+                    val focusRequester = remember { FocusRequester() }
+
                     UserInputComponentsScreen(
+                        scalingLazyListState = scalingLazyListState,
+                        focusRequester = focusRequester,
                         value = displayValueForUserInput,
                         dateTime = dateTimeForUserInput,
                         onClickStepper = {
@@ -224,9 +280,11 @@ fun WearApp(
                             swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
                         }
                     )
+
+                    RequestFocusOnResume(focusRequester)
                 }
 
-                composable(Screen.Stepper.route) {
+                composable(route = Screen.Stepper.route) {
                     StepperScreen(
                         displayValue = displayValueForUserInput,
                         onValueChange = {
@@ -235,7 +293,7 @@ fun WearApp(
                     )
                 }
 
-                composable(Screen.Slider.route) {
+                composable(route = Screen.Slider.route) {
                     SliderScreen(
                         displayValue = displayValueForUserInput,
                         onValueChange = {
@@ -255,19 +313,17 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+                    val scalingLazyListState = scalingLazyListState(it)
 
-                    check(
-                        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
-                    ) {
-                        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
-                    }
+                    val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: ScalingLazyListStateViewModel = viewModel(it)
+                    val viewModel: WatchListViewModel = viewModel(factory = viewModelFactory)
+                    val watches by viewModel.watches
 
                     WatchListScreen(
-                        scalingLazyListState = viewModel.scrollState,
-                        watchRepository = watchRepository,
+                        watches = watches,
+                        scalingLazyListState = scalingLazyListState,
+                        focusRequester = focusRequester,
                         showVignette = vignetteVisiblePreference,
                         onClickVignetteToggle = { showVignette ->
                             vignetteVisiblePreference = showVignette
@@ -276,8 +332,10 @@ fun WearApp(
                             swipeDismissableNavController.navigate(
                                 route = Screen.WatchDetail.route + "/" + id,
                             )
-                        }
+                        },
                     )
+
+                    RequestFocusOnResume(focusRequester)
                 }
 
                 composable(
@@ -294,20 +352,20 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val watchId = it.arguments?.getInt(WATCH_ID_NAV_ARGUMENT)!!
-                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+                    val scrollState = scrollState(it)
 
-                    check(passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
-                        "Scroll type must be DestinationScrollType.COLUMN_SCROLLING"
-                    }
+                    val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: ScrollStateViewModel = viewModel(it)
+                    val viewModel: WatchDetailViewModel = viewModel(factory = viewModelFactory)
+                    val watch by viewModel.watch
 
                     WatchDetailScreen(
-                        id = watchId,
-                        scrollState = viewModel.scrollState,
-                        watchRepository = watchRepository
+                        watch = watch,
+                        scrollState = scrollState,
+                        focusRequester = focusRequester,
                     )
+
+                    RequestFocusOnResume(focusRequester)
                 }
 
                 composable(Screen.Map.route) {
@@ -378,6 +436,43 @@ fun WearApp(
                     Dialogs()
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun scrollState(it: NavBackStackEntry): ScrollState {
+    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+
+    check(passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
+        "Scroll type must be DestinationScrollType.COLUMN_SCROLLING"
+    }
+
+    val scrollViewModel: ScrollStateViewModel = viewModel(it)
+    return scrollViewModel.scrollState
+}
+
+@Composable
+private fun scalingLazyListState(it: NavBackStackEntry): ScalingLazyListState {
+    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+
+    check(
+        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+    ) {
+        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
+    }
+
+    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
+
+    return scrollViewModel.scrollState
+}
+
+@Composable
+private fun RequestFocusOnResume(focusRequester: FocusRequester) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(Unit) {
+        lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.RESUMED) {
+            focusRequester.requestFocus()
         }
     }
 }

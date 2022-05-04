@@ -116,6 +116,7 @@ dependencies {
     // If you are using Compose Navigation, use the Wear OS version (NOT the
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
     implementation libs.wear.compose.navigation
+    implementation libs.navigation.ui.ktx
 
     // Performance
     implementation libs.androidx.metrics.performance
@@ -126,6 +127,7 @@ dependencies {
 
     // Horologist
     implementation libs.horologist.composables
+    implementation libs.horologist.compose.layout
 
     // Testing
     testImplementation libs.junit

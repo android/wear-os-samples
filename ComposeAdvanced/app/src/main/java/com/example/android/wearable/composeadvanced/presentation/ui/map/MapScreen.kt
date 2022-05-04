@@ -16,6 +16,7 @@
 package com.example.android.wearable.composeadvanced.presentation.ui.map
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,11 +38,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
  * and put it in local.properties with key `mapsApiKey`.
  */
 @Composable
-fun MapScreen(
-    modifier: Modifier = Modifier,
-) {
+fun MapScreen() {
     if (BuildConfig.mapsApiKey.isEmpty()) {
-        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
                 modifier = Modifier.fillMaxWidth(0.7f),
                 text = "Set mapsApiKey in local.properties"
@@ -53,7 +52,7 @@ fun MapScreen(
             position = CameraPosition.fromLatLngZoom(singapore, 10f)
         }
         GoogleMap(
-            modifier = modifier,
+            modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             // disabled until correct handling is implemented inside a swipe dismissable nav host
             // possible related to https://github.com/googlemaps/android-maps-compose/issues/78

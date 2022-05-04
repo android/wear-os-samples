@@ -19,7 +19,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 
@@ -27,22 +26,7 @@ import com.example.android.wearable.composeadvanced.data.WatchRepository
  * ViewModel for the Watch List Screen.
  */
 class WatchListViewModel(watchRepository: WatchRepository) : ViewModel() {
-
     private val _watches: MutableState<List<WatchModel>> = mutableStateOf(watchRepository.watches)
     val watches: State<List<WatchModel>>
         get() = _watches
-}
-
-class WatchListViewModelFactory(
-    private val watchRepository: WatchRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WatchListViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WatchListViewModel(
-                watchRepository = watchRepository
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
