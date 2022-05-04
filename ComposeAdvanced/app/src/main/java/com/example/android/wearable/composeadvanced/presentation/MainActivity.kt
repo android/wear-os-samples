@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.data.WatchRepository
+import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.example.android.wearable.composeadvanced.util.JankPrinter
@@ -83,8 +84,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
             initializer {
+                val savedStateHandle = createSavedStateHandle()
+                val watchId: Int = savedStateHandle[WATCH_ID_NAV_ARGUMENT]!!
                 WatchDetailViewModel(
-                    savedStateHandle = createSavedStateHandle(),
+                    watchId = watchId,
                     watchRepository = (application as BaseApplication).watchRepository
                 )
             }

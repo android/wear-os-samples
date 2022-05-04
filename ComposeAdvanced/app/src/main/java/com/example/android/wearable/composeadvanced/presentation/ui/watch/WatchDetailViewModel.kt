@@ -18,21 +18,17 @@ package com.example.android.wearable.composeadvanced.presentation.ui.watch
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
-import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 
 /**
  * ViewModel for the Watch Detail Screen (only needs watch id).
  */
 class WatchDetailViewModel(
-    savedStateHandle: SavedStateHandle,
+    watchId: Int,
     watchRepository: WatchRepository
 ) : ViewModel() {
-    val watchId: Int = savedStateHandle[WATCH_ID_NAV_ARGUMENT]!!
-
     private val _watch: MutableState<WatchModel?> =
         mutableStateOf(watchRepository.getWatch(watchId))
     val watch: State<WatchModel?>
