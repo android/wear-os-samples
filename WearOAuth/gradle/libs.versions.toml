@@ -15,7 +15,7 @@ ktlint = "0.41.0"
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.3"
-android-material = "com.google.android.material:material:1.5.0"
+android-material = "com.google.android.material:material:1.6.0"
 android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:30.1.3"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
