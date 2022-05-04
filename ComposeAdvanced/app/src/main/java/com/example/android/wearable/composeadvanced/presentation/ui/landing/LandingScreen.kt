@@ -59,6 +59,7 @@ fun LandingScreen(
     onClickWatchList: () -> Unit,
     onClickDemoUserInputComponents: () -> Unit,
     onClickDemoMap: () -> Unit,
+    onClickDialogs: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -109,6 +110,19 @@ fun LandingScreen(
                 )
             }
 
+            item {
+                CompactChip(
+                    onClick = onClickDialogs,
+                    label = {
+                        Text(
+                            stringResource(R.string.dialogs_label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                )
+
+            }
             item {
                 ToggleChip(
                     modifier = Modifier.height(32.dp),

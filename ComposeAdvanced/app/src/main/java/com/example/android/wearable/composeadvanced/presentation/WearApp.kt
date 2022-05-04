@@ -56,6 +56,7 @@ import com.example.android.wearable.composeadvanced.presentation.navigation.WATC
 import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTheme
 import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
+import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
@@ -192,6 +193,9 @@ fun WearApp(
                         },
                         onClickDemoMap = {
                             swipeDismissableNavController.navigate(Screen.Map.route)
+                        },
+                        onClickDialogs = {
+                            swipeDismissableNavController.navigate(Screen.Dialogs.route)
                         },
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
@@ -368,6 +372,10 @@ fun WearApp(
                         },
                         initial = dateTimeForUserInput.toLocalTime()
                     )
+                }
+
+                composable(Screen.Dialogs.route) {
+                    Dialogs()
                 }
             }
         }
