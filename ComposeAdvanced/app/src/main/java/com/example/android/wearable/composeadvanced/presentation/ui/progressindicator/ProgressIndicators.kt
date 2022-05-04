@@ -76,7 +76,6 @@ fun ProgressIndicatorsScreen(
                 },
             )
         }
-
     }
 }
 
@@ -86,7 +85,6 @@ fun IndeterminateProgressIndicator() {
         CircularProgressIndicator()
     }
 }
-
 
 @Composable
 fun FullScreenProgressIndicator() {
