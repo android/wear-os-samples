@@ -117,7 +117,6 @@ dependencies {
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
     implementation libs.wear.compose.navigation
     implementation libs.navigation.ui.ktx
-    implementation libs.navigation.compose
 
     // Performance
     implementation libs.androidx.metrics.performance

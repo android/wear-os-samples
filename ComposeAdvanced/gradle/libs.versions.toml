@@ -39,7 +39,6 @@ jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
 test-ext-junit = "androidx.test.ext:junit:1.1.3"
 test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
