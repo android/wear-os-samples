@@ -464,10 +464,14 @@ fun WearApp(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         onClickIndeterminateProgressIndicator = {
-                            swipeDismissableNavController.navigate(Screen.IndeterminateProgressIndicator.route)
+                            swipeDismissableNavController.navigate(
+                                Screen.IndeterminateProgressIndicator.route
+                            )
                         },
                         onClickGapProgressIndicator = {
-                            swipeDismissableNavController.navigate(Screen.FullScreenProgressIndicator.route)
+                            swipeDismissableNavController.navigate(
+                                Screen.FullScreenProgressIndicator.route
+                            )
                         }
                     )
                     RequestFocusOnResume(focusRequester)
