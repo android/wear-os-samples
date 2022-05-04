@@ -17,6 +17,7 @@
 
 package com.example.android.wearable.composeadvanced.presentation
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -40,6 +41,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -47,6 +49,7 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
+import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -213,20 +216,12 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
-
-                    check(
-                        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
-                    ) {
-                        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
-                    }
-
-                    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
+                    val scalingLazyListState = scalingLazyListState(it)
 
                     val focusRequester = remember { FocusRequester() }
 
                     LandingScreen(
-                        scalingLazyListState = scrollViewModel.scrollState,
+                        scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
@@ -260,20 +255,12 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
-
-                    check(
-                        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
-                    ) {
-                        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
-                    }
-
-                    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
+                    val scalingLazyListState = scalingLazyListState(it)
 
                     val focusRequester = remember { FocusRequester() }
 
                     UserInputComponentsScreen(
-                        scalingLazyListState = scrollViewModel.scrollState,
+                        scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         value = displayValueForUserInput,
                         dateTime = dateTimeForUserInput,
@@ -326,15 +313,8 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+                    val scalingLazyListState = scalingLazyListState(it)
 
-                    check(
-                        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
-                    ) {
-                        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
-                    }
-
-                    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
                     val focusRequester = remember { FocusRequester() }
 
                     val viewModel: WatchListViewModel = viewModel(factory = viewModelFactory)
@@ -342,7 +322,7 @@ fun WearApp(
 
                     WatchListScreen(
                         watches = watches,
-                        scalingLazyListState = scrollViewModel.scrollState,
+                        scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         showVignette = vignetteVisiblePreference,
                         onClickVignetteToggle = { showVignette ->
@@ -372,13 +352,8 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+                    val scrollState = scrollState(it)
 
-                    check(passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
-                        "Scroll type must be DestinationScrollType.COLUMN_SCROLLING"
-                    }
-
-                    val scrollViewModel: ScrollStateViewModel = viewModel(it)
                     val focusRequester = remember { FocusRequester() }
 
                     val viewModel: WatchDetailViewModel = viewModel(factory = viewModelFactory)
@@ -386,7 +361,7 @@ fun WearApp(
 
                     WatchDetailScreen(
                         watch = watch,
-                        scrollState = scrollViewModel.scrollState,
+                        scrollState = scrollState,
                         focusRequester = focusRequester,
                     )
 
@@ -463,6 +438,33 @@ fun WearApp(
             }
         }
     }
+}
+
+@Composable
+private fun scrollState(it: NavBackStackEntry): ScrollState {
+    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+
+    check(passedScrollType == DestinationScrollType.COLUMN_SCROLLING) {
+        "Scroll type must be DestinationScrollType.COLUMN_SCROLLING"
+    }
+
+    val scrollViewModel: ScrollStateViewModel = viewModel(it)
+    return scrollViewModel.scrollState
+}
+
+@Composable
+private fun scalingLazyListState(it: NavBackStackEntry): ScalingLazyListState {
+    val passedScrollType = it.arguments?.getSerializable(SCROLL_TYPE_NAV_ARGUMENT)
+
+    check(
+        passedScrollType == DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+    ) {
+        "Scroll type must be DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING"
+    }
+
+    val scrollViewModel: ScalingLazyListStateViewModel = viewModel(it)
+
+    return scrollViewModel.scrollState
 }
 
 @Composable
