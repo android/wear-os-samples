@@ -21,10 +21,10 @@
     <string name="list_of_watches_button_label">List of Watches</string>
     <string name="proceeding_text_toggle_chip_label">Add to Time</string>
     <string name="watch_icon_content_description">watch icon</string>
-    <string name="loading_only_text">Loading...</string>
+    <string name="loading_only_text">Loading…</string>
     <string name="vignette_toggle_chip_label">Vignette</string>
     <string name="invalid_watch_label">Invalid Watch</string>
-    <string name="leading_time_text">Leading Text...</string>
+    <string name="leading_time_text">Leading Text…</string>
     <string name="stepper_label">Stepper</string>
     <string name="slider_label">Slider</string>
     <string name="user_input_components_label">User Input Components</string>
@@ -46,5 +46,9 @@
     <string name="confirmation_dialog_no">No</string>
     <string name="alert_dialog_yes">Yes</string>
     <string name="confirmation_dialog_success">Success</string>
+    <string name="map_activity_name">Map Demo</string>
+    <string name="progress_indicators_label">Progress Indicators</string>
+    <string name="indeterminate_progress_indicator_label">Indeterminate</string>
+    <string name="full_screen_progress_indicator_label">Full Screen with Gap</string>
 
 </resources>

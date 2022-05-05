@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.activity
 import androidx.navigation.navArgument
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
@@ -67,7 +69,10 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyL
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.map.MapActivity
+import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.FullScreenProgressIndicator
+import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.IndeterminateProgressIndicator
+import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.ProgressIndicatorsScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
@@ -152,6 +157,9 @@ fun WearApp(
                                 viewModel.scrollState
                             }
                         }
+                        DestinationScrollType.TIME_TEXT_ONLY -> {
+                            Modifier
+                        }
                         else -> {
                             null
                         }
@@ -220,6 +228,8 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
+                    val context = LocalContext.current
+
                     LandingScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
@@ -239,6 +249,9 @@ fun WearApp(
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
                         },
+                        onClickProgressIndicator = {
+                            swipeDismissableNavController.navigate(Screen.ProgressIndicators.route)
+                        }
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -278,7 +291,7 @@ fun WearApp(
                         },
                         onClickDemo24hTimePicker = {
                             swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
-                        }
+                        },
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -368,10 +381,6 @@ fun WearApp(
                     RequestFocusOnResume(focusRequester)
                 }
 
-                composable(Screen.Map.route) {
-                    MapScreen()
-                }
-
                 composable(Screen.DatePicker.route) {
                     DatePicker(
                         buttonIcon = {
@@ -434,6 +443,62 @@ fun WearApp(
 
                 composable(Screen.Dialogs.route) {
                     Dialogs()
+                }
+
+                composable(
+                    route = Screen.ProgressIndicators.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+                        }
+                    )
+                ) {
+                    val scalingLazyListState = scalingLazyListState(it)
+
+                    val focusRequester = remember { FocusRequester() }
+
+                    ProgressIndicatorsScreen(
+                        scalingLazyListState = scalingLazyListState,
+                        focusRequester = focusRequester,
+                        onClickIndeterminateProgressIndicator = {
+                            swipeDismissableNavController.navigate(
+                                Screen.IndeterminateProgressIndicator.route
+                            )
+                        },
+                        onClickGapProgressIndicator = {
+                            swipeDismissableNavController.navigate(
+                                Screen.FullScreenProgressIndicator.route
+                            )
+                        }
+                    )
+                    RequestFocusOnResume(focusRequester)
+                }
+
+                composable(Screen.IndeterminateProgressIndicator.route) {
+                    IndeterminateProgressIndicator()
+                }
+
+                composable(
+                    route = Screen.FullScreenProgressIndicator.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.TIME_TEXT_ONLY
+                        }
+                    )
+                ) {
+                    FullScreenProgressIndicator()
+                }
+
+                activity(
+                    route = Screen.Map.route
+                ) {
+                    this.activityClass = MapActivity::class
                 }
             }
         }
