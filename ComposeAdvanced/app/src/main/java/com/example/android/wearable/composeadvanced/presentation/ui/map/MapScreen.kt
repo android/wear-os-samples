@@ -90,7 +90,8 @@ fun MapScreen(
                             )
                         }
                     },
-                    colors = ChipDefaults.chipColors(backgroundColor = MaterialTheme.colors.secondary),
+                    colors = ChipDefaults
+                        .chipColors(backgroundColor = MaterialTheme.colors.secondary),
                     contentPadding = PaddingValues(vertical = 0.dp),
                 )
             }
