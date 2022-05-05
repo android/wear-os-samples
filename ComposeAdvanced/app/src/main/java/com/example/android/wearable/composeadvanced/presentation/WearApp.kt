@@ -46,6 +46,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.activity
 import androidx.navigation.navArgument
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
@@ -70,7 +71,6 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateV
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.map.MapActivity
-import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.FullScreenProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.IndeterminateProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.ProgressIndicatorsScreen
@@ -241,14 +241,7 @@ fun WearApp(
                             swipeDismissableNavController.navigate(Screen.UserInputComponents.route)
                         },
                         onClickDemoMap = {
-                            // Needs to be in a separate activity because of scroll interaction
-                            // issues inside SwipeDismissableNavHost.
-                            context.startActivity(
-                                Intent(
-                                    context,
-                                    MapActivity::class.java
-                                )
-                            )
+                            swipeDismissableNavController.navigate(Screen.Map.route)
                         },
                         onClickDialogs = {
                             swipeDismissableNavController.navigate(Screen.Dialogs.route)
@@ -501,6 +494,12 @@ fun WearApp(
                     )
                 ) {
                     FullScreenProgressIndicator()
+                }
+
+                activity(
+                    route = Screen.Map.route
+                ) {
+                    this.activityClass = MapActivity::class
                 }
             }
         }
