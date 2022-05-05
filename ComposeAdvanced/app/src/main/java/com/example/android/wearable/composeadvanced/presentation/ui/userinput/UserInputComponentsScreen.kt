@@ -34,7 +34,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 /**
- * Displays a value by using a Stepper or a Slider
+ * Shows different input options like Pickers, Steppers and Sliders
  */
 @Composable
 fun UserInputComponentsScreen(

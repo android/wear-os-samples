@@ -68,6 +68,7 @@ fun LandingScreen(
     onClickDemoUserInputComponents: () -> Unit,
     onClickDemoMap: () -> Unit,
     onClickDialogs: () -> Unit,
+    onClickProgressIndicator: () -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -118,13 +119,24 @@ fun LandingScreen(
                     }
                 )
             }
-
             item {
                 CompactChip(
                     onClick = onClickDialogs,
                     label = {
                         Text(
                             stringResource(R.string.dialogs_label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                )
+            }
+            item {
+                CompactChip(
+                    onClick = onClickProgressIndicator,
+                    label = {
+                        Text(
+                            stringResource(R.string.progress_indicators_label),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )

@@ -47,5 +47,8 @@
     <string name="alert_dialog_yes">Yes</string>
     <string name="confirmation_dialog_success">Success</string>
     <string name="map_activity_name">Map Demo</string>
+    <string name="progress_indicators_label">Progress Indicators</string>
+    <string name="indeterminate_progress_indicator_label">Indeterminate</string>
+    <string name="full_screen_progress_indicator_label">Full Screen with Gap</string>
 
 </resources>
