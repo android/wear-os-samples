@@ -32,9 +32,11 @@ class MapActivity : ComponentActivity() {
 
         setContent {
             WearAppTheme {
-                MapScreen(onClose = {
-                    finish()
-                })
+                MapScreen(
+                    onClose = {
+                        finish()
+                    }
+                )
             }
         }
     }

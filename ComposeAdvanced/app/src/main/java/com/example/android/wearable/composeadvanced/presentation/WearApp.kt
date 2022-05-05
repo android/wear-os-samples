@@ -17,7 +17,6 @@
 
 package com.example.android.wearable.composeadvanced.presentation
 
-import android.content.Intent
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
