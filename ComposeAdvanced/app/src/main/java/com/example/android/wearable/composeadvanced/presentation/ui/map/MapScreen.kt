@@ -15,15 +15,21 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.map
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ButtonDefaults
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.CompactChip
+import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.BuildConfig
 import com.google.android.gms.maps.model.CameraPosition
@@ -44,19 +50,17 @@ fun MapScreen(
     modifier: Modifier = Modifier,
     onClose: (() -> Unit)? = null
 ) {
-    if (BuildConfig.mapsApiKey.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        if (BuildConfig.mapsApiKey.isEmpty()) {
             Text(
                 modifier = Modifier.fillMaxWidth(0.7f),
                 text = "Set mapsApiKey in local.properties"
             )
-        }
-    } else {
-        val singapore = LatLng(1.35, 103.87)
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(singapore, 10f)
-        }
-        Box(modifier = modifier) {
+        } else {
+            val singapore = LatLng(1.35, 103.87)
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(singapore, 10f)
+            }
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
@@ -68,14 +72,27 @@ fun MapScreen(
                 )
             }
             if (onClose != null) {
-                Button(
+                CompactChip(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .size(ButtonDefaults.SmallButtonSize),
+                        .padding(bottom = 5.dp)
+                        .size(width = 50.dp, height = 24.dp)
+                        .align(Alignment.BottomCenter),
                     onClick = onClose,
-                ) {
-                    Text(text = "X")
-                }
+                    label = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "X",
+                                color = MaterialTheme.colors.onSecondary,
+                                style = MaterialTheme.typography.button,
+                            )
+                        }
+                    },
+                    colors = ChipDefaults.chipColors(backgroundColor = MaterialTheme.colors.secondary),
+                    contentPadding = PaddingValues(vertical = 0.dp),
+                )
             }
         }
     }
