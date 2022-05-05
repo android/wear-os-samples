@@ -19,7 +19,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.MutableCreationExtras
@@ -49,12 +48,28 @@ class MainActivity : ComponentActivity() {
 
         jankPrinter = JankPrinter()
 
+        val viewModelFactory = viewModelFactory {
+            initializer {
+                WatchListViewModel(
+                    watchRepository = (application as BaseApplication).watchRepository
+                )
+            }
+            initializer {
+                val savedStateHandle = createSavedStateHandle()
+                val watchId: Int = savedStateHandle[WATCH_ID_NAV_ARGUMENT]!!
+                WatchDetailViewModel(
+                    watchId = watchId,
+                    watchRepository = (application as BaseApplication).watchRepository
+                )
+            }
+        }
+
         setContent {
             navController = rememberSwipeDismissableNavController()
 
             WearApp(
                 swipeDismissableNavController = navController,
-                viewModelFactory = defaultViewModelProviderFactory
+                viewModelFactory = viewModelFactory
             )
 
             LaunchedEffect(Unit) {
@@ -73,24 +88,6 @@ class MainActivity : ComponentActivity() {
                 WatchRepository.WATCH_REPOSITORY_KEY,
                 (application as BaseApplication).watchRepository
             )
-        }
-    }
-
-    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory {
-        return viewModelFactory {
-            initializer {
-                WatchListViewModel(
-                    watchRepository = (application as BaseApplication).watchRepository
-                )
-            }
-            initializer {
-                val savedStateHandle = createSavedStateHandle()
-                val watchId: Int = savedStateHandle[WATCH_ID_NAV_ARGUMENT]!!
-                WatchDetailViewModel(
-                    watchId = watchId,
-                    watchRepository = (application as BaseApplication).watchRepository
-                )
-            }
         }
     }
 }

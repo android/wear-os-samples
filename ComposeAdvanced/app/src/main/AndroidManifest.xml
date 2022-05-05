@@ -40,8 +40,7 @@
 
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -50,6 +49,12 @@
                 <action android:name="com.example.android.wearable.composeadvanced.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.ui.map.MapActivity"
+            android:exported="false"
+            android:label="@string/map_activity_name">
         </activity>
 
         <profileable android:shell="true"/>
