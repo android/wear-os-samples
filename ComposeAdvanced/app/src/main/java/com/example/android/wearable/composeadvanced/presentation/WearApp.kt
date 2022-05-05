@@ -226,28 +226,39 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
+                    val menuItemNameToClickHandlerMap = sortedMapOf(
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.user_input_components_label,
+                            screen = Screen.UserInputComponents
+                        ),
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.map_label,
+                            screen = Screen.Map
+                        ),
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.dialogs_label,
+                            screen = Screen.Dialogs
+                        ),
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.progress_indicators_label,
+                            screen = Screen.ProgressIndicators
+                        ),
+                    )
                     LandingScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
-                        onClickDemoUserInputComponents = {
-                            swipeDismissableNavController.navigate(Screen.UserInputComponents.route)
-                        },
-                        onClickDemoMap = {
-                            swipeDismissableNavController.navigate(Screen.Map.route)
-                        },
-                        onClickDialogs = {
-                            swipeDismissableNavController.navigate(Screen.Dialogs.route)
-                        },
+                        menuItemNameToClickHandlerMap = menuItemNameToClickHandlerMap,
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
                         },
-                        onClickProgressIndicator = {
-                            swipeDismissableNavController.navigate(Screen.ProgressIndicators.route)
-                        }
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -498,6 +509,13 @@ fun WearApp(
         }
     }
 }
+
+@Composable
+private fun menuNameAndCallback(
+    navController: NavHostController,
+    menuNameResource: Int,
+    screen: Screen
+) = stringResource(menuNameResource) to { navController.navigate(screen.route) }
 
 @Composable
 private fun scrollState(it: NavBackStackEntry): ScrollState {

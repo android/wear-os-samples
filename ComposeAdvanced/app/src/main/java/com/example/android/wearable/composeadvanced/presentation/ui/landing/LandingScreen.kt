@@ -70,10 +70,7 @@ fun LandingScreen(
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
     onClickWatchList: () -> Unit,
-    onClickDemoUserInputComponents: () -> Unit,
-    onClickDemoMap: () -> Unit,
-    onClickDialogs: () -> Unit,
-    onClickProgressIndicator: () -> Unit,
+    menuItemNameToClickHandlerMap: Map<String, () -> Unit>,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -98,55 +95,19 @@ fun LandingScreen(
                     }
                 )
             }
-
-            item {
-                CompactChip(
-                    onClick = onClickDemoUserInputComponents,
-                    label = {
-                        Text(
-                            stringResource(R.string.user_input_components_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
-            }
-
-            item {
-                CompactChip(
-                    onClick = onClickDemoMap,
-                    label = {
-                        Text(
-                            stringResource(R.string.map_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
-            }
-            item {
-                CompactChip(
-                    onClick = onClickDialogs,
-                    label = {
-                        Text(
-                            stringResource(R.string.dialogs_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
-            }
-            item {
-                CompactChip(
-                    onClick = onClickProgressIndicator,
-                    label = {
-                        Text(
-                            stringResource(R.string.progress_indicators_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
+            for (mapItem in menuItemNameToClickHandlerMap) {
+                item {
+                    CompactChip(
+                        onClick = mapItem.value,
+                        label = {
+                            Text(
+                                mapItem.key,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    )
+                }
             }
             item {
                 ToggleChip(
