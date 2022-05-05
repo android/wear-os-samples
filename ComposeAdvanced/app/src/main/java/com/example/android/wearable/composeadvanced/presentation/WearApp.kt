@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.activity
 import androidx.navigation.navArgument
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
@@ -67,7 +69,7 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyL
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
-import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.map.MapActivity
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.FullScreenProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.IndeterminateProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.ProgressIndicatorsScreen
@@ -226,6 +228,8 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
+                    val context = LocalContext.current
+
                     LandingScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
@@ -377,10 +381,6 @@ fun WearApp(
                     RequestFocusOnResume(focusRequester)
                 }
 
-                composable(Screen.Map.route) {
-                    MapScreen()
-                }
-
                 composable(Screen.DatePicker.route) {
                     DatePicker(
                         buttonIcon = {
@@ -493,6 +493,12 @@ fun WearApp(
                     )
                 ) {
                     FullScreenProgressIndicator()
+                }
+
+                activity(
+                    route = Screen.Map.route
+                ) {
+                    this.activityClass = MapActivity::class
                 }
             }
         }
