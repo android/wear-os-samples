@@ -20,6 +20,7 @@ package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 import android.app.RemoteInput
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import androidx.wear.input.RemoteInputIntentHelper
+import androidx.wear.input.wearableExtender
 import com.example.android.wearable.composeadvanced.R
 import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
@@ -166,18 +168,21 @@ fun UserInputComponentsScreen(
                         textForUserInput = newInputText as String
                     }
                 }
-            val label = stringResource(R.string.manual_text_entry_label)
+
+            val intent: Intent = RemoteInputIntentHelper.createActionRemoteInputIntent()
+            val remoteInputs: List<RemoteInput> = listOf(
+                RemoteInput.Builder("input_text")
+                    .setLabel(stringResource(R.string.manual_text_entry_label))
+                    .wearableExtender {
+                        setEmojisAllowed(true)
+                        setInputActionType(EditorInfo.IME_ACTION_DONE)
+                    }.build()
+            )
+
+            RemoteInputIntentHelper.putRemoteInputsExtra(intent, remoteInputs)
+
             Chip(
                 onClick = {
-                    val intent: Intent = RemoteInputIntentHelper.createActionRemoteInputIntent()
-                    val remoteInputs: List<RemoteInput> = listOf(
-                        RemoteInput.Builder("input_text")
-                            .setLabel(label)
-                            .build()
-                    )
-
-                    RemoteInputIntentHelper.putRemoteInputsExtra(intent, remoteInputs)
-
                     launcher.launch(intent)
                 },
                 label = {
