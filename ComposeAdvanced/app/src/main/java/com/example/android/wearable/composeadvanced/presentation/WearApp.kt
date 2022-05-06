@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -226,8 +225,6 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
-                    val context = LocalContext.current
-
                     LandingScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
@@ -325,7 +322,6 @@ fun WearApp(
                     )
                 ) {
                     val scalingLazyListState = scalingLazyListState(it)
-
                     val focusRequester = remember { FocusRequester() }
 
                     val viewModel: WatchListViewModel = viewModel(factory = WatchListViewModel.Factory)
@@ -362,12 +358,13 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val scrollState = scrollState(it)
-
-                    val focusRequester = remember { FocusRequester() }
+                    val watchId: Int = it.arguments!!.getInt(WATCH_ID_NAV_ARGUMENT)
 
                     val viewModel: WatchDetailViewModel =
-                        viewModel(factory = WatchDetailViewModel.Factory)
+                        viewModel(factory = WatchDetailViewModel.factory(watchId))
+
+                    val scrollState = scrollState(it)
+                    val focusRequester = remember { FocusRequester() }
 
                     WatchDetailScreen(
                         viewModel = viewModel,
