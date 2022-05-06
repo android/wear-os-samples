@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -92,7 +91,6 @@ import java.time.LocalDateTime
 @Composable
 fun WearApp(
     swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
-    viewModelFactory: ViewModelProvider.Factory
 ) {
     WearAppTheme {
         // Allows user to disable the text before the time.
@@ -330,11 +328,10 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: WatchListViewModel = viewModel(factory = viewModelFactory)
-                    val watches by viewModel.watches
+                    val viewModel: WatchListViewModel = viewModel(factory = WatchListViewModel.Factory)
 
                     WatchListScreen(
-                        watches = watches,
+                        viewModel = viewModel,
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         showVignette = vignetteVisiblePreference,
@@ -369,11 +366,11 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: WatchDetailViewModel = viewModel(factory = viewModelFactory)
-                    val watch by viewModel.watch
+                    val viewModel: WatchDetailViewModel =
+                        viewModel(factory = WatchDetailViewModel.Factory)
 
                     WatchDetailScreen(
-                        watch = watch,
+                        viewModel = viewModel,
                         scrollState = scrollState,
                         focusRequester = focusRequester,
                     )

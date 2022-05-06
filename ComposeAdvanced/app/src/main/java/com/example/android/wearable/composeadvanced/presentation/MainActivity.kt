@@ -48,28 +48,11 @@ class MainActivity : ComponentActivity() {
 
         jankPrinter = JankPrinter()
 
-        val viewModelFactory = viewModelFactory {
-            initializer {
-                WatchListViewModel(
-                    watchRepository = (application as BaseApplication).watchRepository
-                )
-            }
-            initializer {
-                val savedStateHandle = createSavedStateHandle()
-                val watchId: Int = savedStateHandle[WATCH_ID_NAV_ARGUMENT]!!
-                WatchDetailViewModel(
-                    watchId = watchId,
-                    watchRepository = (application as BaseApplication).watchRepository
-                )
-            }
-        }
-
         setContent {
             navController = rememberSwipeDismissableNavController()
 
             WearApp(
                 swipeDismissableNavController = navController,
-                viewModelFactory = viewModelFactory
             )
 
             LaunchedEffect(Unit) {

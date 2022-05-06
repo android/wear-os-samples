@@ -19,6 +19,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 
@@ -29,4 +31,14 @@ class WatchListViewModel(watchRepository: WatchRepository) : ViewModel() {
     private val _watches: MutableState<List<WatchModel>> = mutableStateOf(watchRepository.watches)
     val watches: State<List<WatchModel>>
         get() = _watches
+
+    companion object {
+        val Factory = viewModelFactory {
+            initializer {
+                WatchListViewModel(
+                    watchRepository = this[WatchRepository.WATCH_REPOSITORY_KEY]!!
+                )
+            }
+        }
+    }
 }
