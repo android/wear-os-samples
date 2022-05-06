@@ -50,5 +50,7 @@
     <string name="progress_indicators_label">Progress Indicators</string>
     <string name="indeterminate_progress_indicator_label">Indeterminate</string>
     <string name="full_screen_progress_indicator_label">Full Screen with Gap</string>
+    <string name="text_input_label">Text Input</string>
+    <string name="manual_text_entry_label">Manual Text Entry</string>
 
 </resources>
