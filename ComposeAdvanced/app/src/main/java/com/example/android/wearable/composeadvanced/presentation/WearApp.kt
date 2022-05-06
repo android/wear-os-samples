@@ -324,7 +324,9 @@ fun WearApp(
                     val scalingLazyListState = scalingLazyListState(it)
                     val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: WatchListViewModel = viewModel(factory = WatchListViewModel.Factory)
+                    val viewModel: WatchListViewModel = viewModel(
+                        factory = WatchListViewModel.Factory
+                    )
 
                     WatchListScreen(
                         viewModel = viewModel,
