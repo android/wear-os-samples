@@ -53,6 +53,7 @@ import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.presentation.MenuItem
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
 import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
@@ -70,10 +71,7 @@ fun LandingScreen(
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
     onClickWatchList: () -> Unit,
-    onClickDemoUserInputComponents: () -> Unit,
-    onClickDemoMap: () -> Unit,
-    onClickDialogs: () -> Unit,
-    onClickProgressIndicator: () -> Unit,
+    menuItems: List<MenuItem>,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -98,55 +96,19 @@ fun LandingScreen(
                     }
                 )
             }
-
-            item {
-                CompactChip(
-                    onClick = onClickDemoUserInputComponents,
-                    label = {
-                        Text(
-                            stringResource(R.string.user_input_components_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
-            }
-
-            item {
-                CompactChip(
-                    onClick = onClickDemoMap,
-                    label = {
-                        Text(
-                            stringResource(R.string.map_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
-            }
-            item {
-                CompactChip(
-                    onClick = onClickDialogs,
-                    label = {
-                        Text(
-                            stringResource(R.string.dialogs_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
-            }
-            item {
-                CompactChip(
-                    onClick = onClickProgressIndicator,
-                    label = {
-                        Text(
-                            stringResource(R.string.progress_indicators_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                )
+            for (listItem in menuItems) {
+                item {
+                    CompactChip(
+                        onClick = listItem.clickHander,
+                        label = {
+                            Text(
+                                listItem.name,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    )
+                }
             }
             item {
                 ToggleChip(
