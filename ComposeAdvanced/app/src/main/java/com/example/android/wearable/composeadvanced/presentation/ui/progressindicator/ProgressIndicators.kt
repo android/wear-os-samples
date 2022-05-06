@@ -28,15 +28,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.ScalingLazyListAnchorType
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
-import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.presentation.MenuItem
 import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
@@ -45,36 +45,26 @@ import com.google.android.horologist.compose.navscaffold.scrollableColumn
 fun ProgressIndicatorsScreen(
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
-    onClickIndeterminateProgressIndicator: () -> Unit,
-    onClickGapProgressIndicator: () -> Unit,
+    menuItems: List<MenuItem>,
 ) {
     ScalingLazyColumn(
         modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
-        state = scalingLazyListState
+        state = scalingLazyListState,
+        anchorType = ScalingLazyListAnchorType.ItemStart
     ) {
-        item {
-            CompactChip(
-                onClick = onClickIndeterminateProgressIndicator,
-                label = {
-                    Text(
-                        stringResource(R.string.indeterminate_progress_indicator_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-            )
-        }
-        item {
-            CompactChip(
-                onClick = onClickGapProgressIndicator,
-                label = {
-                    Text(
-                        stringResource(R.string.full_screen_progress_indicator_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-            )
+        for (menuItem in menuItems) {
+            item {
+                CompactChip(
+                    onClick = menuItem.clickHander,
+                    label = {
+                        Text(
+                            menuItem.name,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                )
+            }
         }
     }
 }

@@ -53,6 +53,7 @@ import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.presentation.MenuItem
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
 import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
@@ -70,7 +71,7 @@ fun LandingScreen(
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
     onClickWatchList: () -> Unit,
-    menuItemNameToClickHandlerMap: Map<String, () -> Unit>,
+    menuItems: List<MenuItem>,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
 ) {
@@ -95,13 +96,13 @@ fun LandingScreen(
                     }
                 )
             }
-            for (mapItem in menuItemNameToClickHandlerMap) {
+            for (listItem in menuItems) {
                 item {
                     CompactChip(
-                        onClick = mapItem.value,
+                        onClick = listItem.clickHander,
                         label = {
                             Text(
-                                mapItem.key,
+                                listItem.name,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )

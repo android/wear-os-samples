@@ -227,7 +227,7 @@ fun WearApp(
 
                     val focusRequester = remember { FocusRequester() }
 
-                    val menuItemNameToClickHandlerMap = sortedMapOf(
+                    val menuItems = listOf(
                         menuNameAndCallback(
                             navController = swipeDismissableNavController,
                             menuNameResource = R.string.user_input_components_label,
@@ -256,7 +256,7 @@ fun WearApp(
                         onClickWatchList = {
                             swipeDismissableNavController.navigate(Screen.WatchList.route)
                         },
-                        menuItemNameToClickHandlerMap = menuItemNameToClickHandlerMap,
+                        menuItems = menuItems,
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
@@ -468,20 +468,22 @@ fun WearApp(
                     val scalingLazyListState = scalingLazyListState(it)
 
                     val focusRequester = remember { FocusRequester() }
-
+                    val menuItems = listOf(
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.indeterminate_progress_indicator_label,
+                            screen = Screen.IndeterminateProgressIndicator
+                        ),
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.full_screen_progress_indicator_label,
+                            screen = Screen.FullScreenProgressIndicator
+                        ),
+                    )
                     ProgressIndicatorsScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
-                        onClickIndeterminateProgressIndicator = {
-                            swipeDismissableNavController.navigate(
-                                Screen.IndeterminateProgressIndicator.route
-                            )
-                        },
-                        onClickGapProgressIndicator = {
-                            swipeDismissableNavController.navigate(
-                                Screen.FullScreenProgressIndicator.route
-                            )
-                        }
+                        menuItems = menuItems,
                     )
                     RequestFocusOnResume(focusRequester)
                 }
@@ -519,7 +521,7 @@ private fun menuNameAndCallback(
     navController: NavHostController,
     menuNameResource: Int,
     screen: Screen
-) = stringResource(menuNameResource) to { navController.navigate(screen.route) }
+) = MenuItem(stringResource(menuNameResource)) { navController.navigate(screen.route) }
 
 @Composable
 private fun scrollState(it: NavBackStackEntry): ScrollState {
@@ -557,3 +559,5 @@ private fun RequestFocusOnResume(focusRequester: FocusRequester) {
         }
     }
 }
+
+data class MenuItem(val name: String, val clickHander: () -> Unit)
