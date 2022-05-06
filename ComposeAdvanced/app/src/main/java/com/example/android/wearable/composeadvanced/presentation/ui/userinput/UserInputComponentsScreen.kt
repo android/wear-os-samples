@@ -20,6 +20,7 @@ package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 import android.app.RemoteInput
 import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.view.inputmethod.EditorInfo
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,6 +61,30 @@ fun UserInputComponentsScreen(
     onClickDemo24hTimePicker: () -> Unit,
 ) {
     var textForUserInput by remember { mutableStateOf("") }
+    var textForVoiceInput by remember { mutableStateOf("") }
+
+    val inputTextKey = "input_text"
+
+    val launcher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            it.data?.let { data ->
+                val results: Bundle = RemoteInput.getResultsFromIntent(data)
+                val newInputText: CharSequence? = results.getCharSequence(inputTextKey)
+                textForUserInput = newInputText as String
+            }
+        }
+
+    val voiceLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            it.data?.let { data ->
+                val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                textForVoiceInput = results?.get(0) ?: "None"
+            }
+        }
 
     ScalingLazyColumn(
         modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
@@ -158,20 +183,9 @@ fun UserInputComponentsScreen(
         }
 
         item {
-            val launcher =
-                rememberLauncherForActivityResult(
-                    ActivityResultContracts.StartActivityForResult()
-                ) {
-                    it.data?.let { data ->
-                        val results: Bundle = RemoteInput.getResultsFromIntent(data)
-                        val newInputText: CharSequence? = results.getCharSequence("input_text")
-                        textForUserInput = newInputText as String
-                    }
-                }
-
             val intent: Intent = RemoteInputIntentHelper.createActionRemoteInputIntent()
             val remoteInputs: List<RemoteInput> = listOf(
-                RemoteInput.Builder("input_text")
+                RemoteInput.Builder(inputTextKey)
                     .setLabel(stringResource(R.string.manual_text_entry_label))
                     .wearableExtender {
                         setEmojisAllowed(true)
@@ -195,6 +209,38 @@ fun UserInputComponentsScreen(
                 secondaryLabel = {
                     Text(
                         text = textForUserInput,
+                    )
+                }
+            )
+        }
+
+        item {
+            val voiceIntent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                )
+
+                putExtra(
+                    RecognizerIntent.EXTRA_PROMPT,
+                    stringResource(R.string.voice_text_entry_label)
+                )
+            }
+
+            Chip(
+                onClick = {
+                    voiceLauncher.launch(voiceIntent)
+                },
+                label = {
+                    Text(
+                        stringResource(R.string.voice_input_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                secondaryLabel = {
+                    Text(
+                        text = textForVoiceInput,
                     )
                 }
             )
