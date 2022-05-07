@@ -37,10 +37,8 @@ import androidx.wear.compose.material.ScalingLazyListAnchorType
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.presentation.MenuItem
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
-@OptIn(ExperimentalComposeLayoutApi::class)
 @Composable
 fun ProgressIndicatorsScreen(
     scalingLazyListState: ScalingLazyListState,
