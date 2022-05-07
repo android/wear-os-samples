@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 
 import android.app.RemoteInput
@@ -39,7 +37,6 @@ import androidx.wear.compose.material.Text
 import androidx.wear.input.RemoteInputIntentHelper
 import androidx.wear.input.wearableExtender
 import com.example.android.wearable.composeadvanced.R
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -58,11 +55,12 @@ fun UserInputComponentsScreen(
     onClickDemoDatePicker: () -> Unit,
     onClickDemo12hTimePicker: () -> Unit,
     onClickDemo24hTimePicker: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var textForUserInput by remember { mutableStateOf("") }
 
     ScalingLazyColumn(
-        modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         state = scalingLazyListState
     ) {
         item {

@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposablesApi::class, ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation
 
 import androidx.compose.foundation.ScrollState
@@ -80,18 +78,17 @@ import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchD
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.google.android.horologist.composables.DatePicker
-import com.google.android.horologist.composables.ExperimentalComposablesApi
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
 import com.google.android.horologist.compose.layout.fadeAway
 import com.google.android.horologist.compose.layout.fadeAwayScalingLazyList
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import java.time.LocalDateTime
 
 @Composable
 fun WearApp(
+    viewModelFactory: ViewModelProvider.Factory,
+    modifier: Modifier = Modifier,
     swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
-    viewModelFactory: ViewModelProvider.Factory
 ) {
     WearAppTheme {
         // Allows user to disable the text before the time.
@@ -136,6 +133,7 @@ fun WearApp(
         var dateTimeForUserInput by remember { mutableStateOf(LocalDateTime.now()) }
 
         Scaffold(
+            modifier = modifier,
             timeText = {
                 // Scaffold places time at top of screen to follow Material Design guidelines.
                 // (Time is hidden while scrolling.)
