@@ -44,7 +44,9 @@ import androidx.wear.compose.material.rememberScalingLazyListState
 import com.example.android.wearable.composeadvanced.R
 
 @Composable
-fun Dialogs() {
+fun Dialogs(
+    modifier: Modifier = Modifier,
+) {
     var confirmationShowDialog by remember { mutableStateOf(false) }
     var confirmationStatus by remember { mutableStateOf("") }
     var alertShowDialog by remember { mutableStateOf(false) }
@@ -55,6 +57,7 @@ fun Dialogs() {
     val dialogYes = stringResource(R.string.alert_dialog_yes)
 
     ScalingLazyColumn(
+        modifier = modifier,
         anchorType = ScalingLazyListAnchorType.ItemStart
     ) {
         item {

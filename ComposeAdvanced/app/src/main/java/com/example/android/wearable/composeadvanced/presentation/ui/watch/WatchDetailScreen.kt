@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.watch
 
 import androidx.compose.foundation.ScrollState
@@ -42,7 +40,6 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 /**
@@ -53,9 +50,10 @@ fun WatchDetailScreen(
     watch: WatchModel?,
     scrollState: ScrollState,
     focusRequester: FocusRequester,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .scrollableColumn(focusRequester, scrollState)
             .verticalScroll(scrollState)
