@@ -32,10 +32,11 @@ import androidx.wear.compose.material.InlineSliderDefaults
 @Composable
 fun SliderScreen(
     displayValue: Int,
-    onValueChange: (Int) -> Unit
+    onValueChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(top = 10.dp),
         verticalArrangement = Arrangement.Center

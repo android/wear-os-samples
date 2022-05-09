@@ -31,7 +31,7 @@ compose-material-iconsext = { module = "androidx.compose.material:material-icons
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.0"
+com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.1"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.0.2"
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
@@ -45,6 +45,7 @@ test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
+wear-input = "androidx.wear:wear-input:1.2.0-alpha02"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

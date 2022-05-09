@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.watchlist
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +37,6 @@ import androidx.wear.compose.material.items
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 @Composable
@@ -74,9 +71,10 @@ fun WatchListScreen(
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ScalingLazyColumn(
-        modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         state = scalingLazyListState
     ) {
 

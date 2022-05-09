@@ -13,12 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.userinput
 
+import android.app.RemoteInput
+import android.content.Intent
+import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
@@ -27,8 +34,9 @@ import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
+import androidx.wear.input.RemoteInputIntentHelper
+import androidx.wear.input.wearableExtender
 import com.example.android.wearable.composeadvanced.R
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -47,9 +55,12 @@ fun UserInputComponentsScreen(
     onClickDemoDatePicker: () -> Unit,
     onClickDemo12hTimePicker: () -> Unit,
     onClickDemo24hTimePicker: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    var textForUserInput by remember { mutableStateOf("") }
+
     ScalingLazyColumn(
-        modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         state = scalingLazyListState
     ) {
         item {
@@ -139,6 +150,49 @@ fun UserInputComponentsScreen(
                     val formatter = remember { DateTimeFormatter.ofPattern("HH:mm:ss") }
                     Text(
                         text = dateTime.toLocalTime().format(formatter),
+                    )
+                }
+            )
+        }
+
+        item {
+            val launcher =
+                rememberLauncherForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) {
+                    it.data?.let { data ->
+                        val results: Bundle = RemoteInput.getResultsFromIntent(data)
+                        val newInputText: CharSequence? = results.getCharSequence("input_text")
+                        textForUserInput = newInputText as String
+                    }
+                }
+
+            val intent: Intent = RemoteInputIntentHelper.createActionRemoteInputIntent()
+            val remoteInputs: List<RemoteInput> = listOf(
+                RemoteInput.Builder("input_text")
+                    .setLabel(stringResource(R.string.manual_text_entry_label))
+                    .wearableExtender {
+                        setEmojisAllowed(true)
+                        setInputActionType(EditorInfo.IME_ACTION_DONE)
+                    }.build()
+            )
+
+            RemoteInputIntentHelper.putRemoteInputsExtra(intent, remoteInputs)
+
+            Chip(
+                onClick = {
+                    launcher.launch(intent)
+                },
+                label = {
+                    Text(
+                        stringResource(R.string.text_input_label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                secondaryLabel = {
+                    Text(
+                        text = textForUserInput,
                     )
                 }
             )
