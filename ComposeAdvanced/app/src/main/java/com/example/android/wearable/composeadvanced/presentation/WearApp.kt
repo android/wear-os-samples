@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposablesApi::class, ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation
 
 import androidx.compose.foundation.ScrollState
@@ -38,7 +36,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -83,18 +80,16 @@ import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchD
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.google.android.horologist.composables.DatePicker
-import com.google.android.horologist.composables.ExperimentalComposablesApi
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
 import com.google.android.horologist.compose.layout.fadeAway
 import com.google.android.horologist.compose.layout.fadeAwayScalingLazyList
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import java.time.LocalDateTime
 
 @Composable
 fun WearApp(
+    modifier: Modifier = Modifier,
     swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
-    viewModelFactory: ViewModelProvider.Factory
 ) {
     var themeColors by remember { mutableStateOf(initialThemeValues.colors) }
     WearAppTheme(colors = themeColors) {
@@ -140,6 +135,7 @@ fun WearApp(
         var dateTimeForUserInput by remember { mutableStateOf(LocalDateTime.now()) }
 
         Scaffold(
+            modifier = modifier,
             timeText = {
                 // Scaffold places time at top of screen to follow Material Design guidelines.
                 // (Time is hidden while scrolling.)
@@ -345,14 +341,14 @@ fun WearApp(
                     )
                 ) {
                     val scalingLazyListState = scalingLazyListState(it)
-
                     val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: WatchListViewModel = viewModel(factory = viewModelFactory)
-                    val watches by viewModel.watches
+                    val viewModel: WatchListViewModel = viewModel(
+                        factory = WatchListViewModel.Factory
+                    )
 
                     WatchListScreen(
-                        watches = watches,
+                        viewModel = viewModel,
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
                         showVignette = vignetteVisiblePreference,
@@ -383,15 +379,16 @@ fun WearApp(
                         }
                     )
                 ) {
-                    val scrollState = scrollState(it)
+                    val watchId: Int = it.arguments!!.getInt(WATCH_ID_NAV_ARGUMENT)
 
+                    val viewModel: WatchDetailViewModel =
+                        viewModel(factory = WatchDetailViewModel.factory(watchId))
+
+                    val scrollState = scrollState(it)
                     val focusRequester = remember { FocusRequester() }
 
-                    val viewModel: WatchDetailViewModel = viewModel(factory = viewModelFactory)
-                    val watch by viewModel.watch
-
                     WatchDetailScreen(
-                        watch = watch,
+                        viewModel = viewModel,
                         scrollState = scrollState,
                         focusRequester = focusRequester,
                     )

@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.landing
 
 import androidx.compose.foundation.background
@@ -55,7 +53,6 @@ import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.MenuItem
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 /**
@@ -74,8 +71,9 @@ fun LandingScreen(
     menuItems: List<MenuItem>,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         // Places both Chips (button and toggle) in the middle of the screen.
         ScalingLazyColumn(
             modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),

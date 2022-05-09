@@ -19,17 +19,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.MutableCreationExtras
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.data.WatchRepository
-import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
-import com.example.android.wearable.composeadvanced.presentation.ui.watch.WatchDetailViewModel
-import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.WatchListViewModel
 import com.example.android.wearable.composeadvanced.util.JankPrinter
 
 /**
@@ -48,28 +42,11 @@ class MainActivity : ComponentActivity() {
 
         jankPrinter = JankPrinter()
 
-        val viewModelFactory = viewModelFactory {
-            initializer {
-                WatchListViewModel(
-                    watchRepository = (application as BaseApplication).watchRepository
-                )
-            }
-            initializer {
-                val savedStateHandle = createSavedStateHandle()
-                val watchId: Int = savedStateHandle[WATCH_ID_NAV_ARGUMENT]!!
-                WatchDetailViewModel(
-                    watchId = watchId,
-                    watchRepository = (application as BaseApplication).watchRepository
-                )
-            }
-        }
-
         setContent {
             navController = rememberSwipeDismissableNavController()
 
             WearApp(
                 swipeDismissableNavController = navController,
-                viewModelFactory = viewModelFactory
             )
 
             LaunchedEffect(Unit) {

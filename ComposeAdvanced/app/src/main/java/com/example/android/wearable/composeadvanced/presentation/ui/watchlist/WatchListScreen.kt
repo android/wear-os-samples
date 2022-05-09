@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.watchlist
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalConfiguration
@@ -38,8 +37,27 @@ import androidx.wear.compose.material.items
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
+
+@Composable
+fun WatchListScreen(
+    viewModel: WatchListViewModel,
+    scalingLazyListState: ScalingLazyListState,
+    focusRequester: FocusRequester,
+    showVignette: Boolean,
+    onClickVignetteToggle: (Boolean) -> Unit,
+    onClickWatch: (Int) -> Unit,
+) {
+    val watches by viewModel.watches
+    WatchListScreen(
+        watches = watches,
+        scalingLazyListState = scalingLazyListState,
+        focusRequester = focusRequester,
+        showVignette = showVignette,
+        onClickVignetteToggle = onClickVignetteToggle,
+        onClickWatch = onClickWatch,
+    )
+}
 
 /**
  * Displays a list of watches plus a [ToggleChip] at the top to display/hide the Vignette around
@@ -53,9 +71,10 @@ fun WatchListScreen(
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ScalingLazyColumn(
-        modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         state = scalingLazyListState
     ) {
 

@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalComposeLayoutApi::class)
-
 package com.example.android.wearable.composeadvanced.presentation.ui.watch
 
 import androidx.compose.foundation.ScrollState
@@ -28,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -42,8 +41,21 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
+
+@Composable
+fun WatchDetailScreen(
+    viewModel: WatchDetailViewModel,
+    scrollState: ScrollState,
+    focusRequester: FocusRequester,
+) {
+    val watch by viewModel.watch
+    WatchDetailScreen(
+        watch = watch,
+        scrollState = scrollState,
+        focusRequester = focusRequester
+    )
+}
 
 /**
  * Displays the icon, title, and description of the watch model.
@@ -53,9 +65,10 @@ fun WatchDetailScreen(
     watch: WatchModel?,
     scrollState: ScrollState,
     focusRequester: FocusRequester,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .scrollableColumn(focusRequester, scrollState)
             .verticalScroll(scrollState)

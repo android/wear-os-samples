@@ -37,18 +37,17 @@ import androidx.wear.compose.material.ScalingLazyListAnchorType
 import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.presentation.MenuItem
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
-@OptIn(ExperimentalComposeLayoutApi::class)
 @Composable
 fun ProgressIndicatorsScreen(
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
     menuItems: List<MenuItem>,
+    modifier: Modifier = Modifier,
 ) {
     ScalingLazyColumn(
-        modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         state = scalingLazyListState,
         anchorType = ScalingLazyListAnchorType.ItemStart
     ) {
@@ -70,14 +69,18 @@ fun ProgressIndicatorsScreen(
 }
 
 @Composable
-fun IndeterminateProgressIndicator() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun IndeterminateProgressIndicator(
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-fun FullScreenProgressIndicator() {
+fun FullScreenProgressIndicator(
+    modifier: Modifier = Modifier,
+) {
     val transition = rememberInfiniteTransition()
 
     val currentRotation by transition.animateFloat(
@@ -91,7 +94,7 @@ fun FullScreenProgressIndicator() {
             )
         )
     )
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
             startAngle = 315f,
             endAngle = 225f,
