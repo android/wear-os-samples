@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -41,6 +42,20 @@ import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
+
+@Composable
+fun WatchDetailScreen(
+    viewModel: WatchDetailViewModel,
+    scrollState: ScrollState,
+    focusRequester: FocusRequester,
+) {
+    val watch by viewModel.watch
+    WatchDetailScreen(
+        watch = watch,
+        scrollState = scrollState,
+        focusRequester = focusRequester
+    )
+}
 
 /**
  * Displays the icon, title, and description of the watch model.
