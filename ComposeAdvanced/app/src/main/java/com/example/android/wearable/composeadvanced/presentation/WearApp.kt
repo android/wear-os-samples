@@ -61,6 +61,8 @@ import com.example.android.wearable.composeadvanced.presentation.navigation.SCRO
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
 import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTheme
+import com.example.android.wearable.composeadvanced.presentation.theme.initialThemeValues
+import com.example.android.wearable.composeadvanced.presentation.theme.themeValues
 import com.example.android.wearable.composeadvanced.presentation.ui.ScalingLazyListStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateViewModel
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
@@ -69,6 +71,7 @@ import com.example.android.wearable.composeadvanced.presentation.ui.map.MapActiv
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.FullScreenProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.IndeterminateProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.ProgressIndicatorsScreen
+import com.example.android.wearable.composeadvanced.presentation.ui.theme.ThemeScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.SliderScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.StepperScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.userinput.UserInputComponentsScreen
@@ -88,7 +91,8 @@ fun WearApp(
     modifier: Modifier = Modifier,
     swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
 ) {
-    WearAppTheme {
+    var themeColors by remember { mutableStateOf(initialThemeValues.colors) }
+    WearAppTheme(colors = themeColors) {
         // Allows user to disable the text before the time.
         var showProceedingTextBeforeTime by rememberSaveable { mutableStateOf(false) }
 
@@ -243,6 +247,11 @@ fun WearApp(
                             navController = swipeDismissableNavController,
                             menuNameResource = R.string.progress_indicators_label,
                             screen = Screen.ProgressIndicators
+                        ),
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.theme_label,
+                            screen = Screen.Theme
                         ),
                     )
 
@@ -501,6 +510,29 @@ fun WearApp(
                     )
                 ) {
                     FullScreenProgressIndicator()
+                }
+
+                composable(
+                    route = Screen.Theme.route,
+                    arguments = listOf(
+                        // In this case, the argument isn't part of the route, it's just attached
+                        // as information for the destination.
+                        navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
+                            type = NavType.EnumType(DestinationScrollType::class.java)
+                            defaultValue = DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING
+                        }
+                    )
+                ) { it ->
+                    val scalingLazyListState = scalingLazyListState(it)
+                    val focusRequester = remember { FocusRequester() }
+
+                    ThemeScreen(
+                        scalingLazyListState = scalingLazyListState,
+                        focusRequester = focusRequester,
+                        currentlySelectedColors = themeColors,
+                        availableThemes = themeValues
+                    ) { colors -> themeColors = colors }
+                    RequestFocusOnResume(focusRequester)
                 }
 
                 activity(

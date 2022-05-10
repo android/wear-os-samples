@@ -52,6 +52,7 @@
     <string name="full_screen_progress_indicator_label">Full Screen with Gap</string>
     <string name="text_input_label">Text Input</string>
     <string name="manual_text_entry_label">Manual Text Entry</string>
+    <string name="theme_label">Theme</string>
     <string name="voice_text_entry_label">Voice Input</string>
     <string name="voice_input_label">Voice Text Entry</string>
 

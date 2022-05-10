@@ -18,22 +18,37 @@ package com.example.android.wearable.composeadvanced.presentation.theme
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material.Colors
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-val Red400 = Color(0xFFCF6679)
+internal data class ThemeValues(val description: String, val colors: Colors)
 
-/**
- * Custom color palette for Wear App.
- */
-internal val wearColorPalette: Colors = Colors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200,
-    secondaryVariant = Teal200,
-    error = Red400,
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
-    onError = Color.Black
+internal val initialThemeValues = ThemeValues(
+    "Lilac (D0BCFF)",
+    Colors(
+        primary = Color(0xFFD0BCFF),
+        primaryVariant = Color(0xFF9A82DB),
+        secondary = Color(0xFF7FCFFF),
+        secondaryVariant = Color(0xFF3998D3)
+    )
+)
+
+internal val themeValues = listOf(
+    initialThemeValues,
+    ThemeValues("Blue (Default AECBFA)", Colors()),
+    ThemeValues(
+        "Blue 2 (7FCFFF)",
+        Colors(
+            primary = Color(0xFF7FCFFF),
+            primaryVariant = Color(0xFF3998D3),
+            secondary = Color(0xFF6DD58C),
+            secondaryVariant = Color(0xFF1EA446)
+        )
+    ),
+    ThemeValues(
+        "Green (6DD58C)",
+        Colors(
+            primary = Color(0xFF6DD58C),
+            primaryVariant = Color(0xFF1EA446),
+            secondary = Color(0xFFFFBB29),
+            secondaryVariant = Color(0xFFD68400)
+        )
+    ),
 )

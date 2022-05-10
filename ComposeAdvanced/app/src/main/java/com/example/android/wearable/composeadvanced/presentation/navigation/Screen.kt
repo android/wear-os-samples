@@ -43,4 +43,5 @@ sealed class Screen(
     object ProgressIndicators : Screen("progressIndicators")
     object IndeterminateProgressIndicator : Screen("indeterminateProgressIndicator")
     object FullScreenProgressIndicator : Screen("fullScreenProgressIndicator")
+    object Theme : Screen("theme")
 }
