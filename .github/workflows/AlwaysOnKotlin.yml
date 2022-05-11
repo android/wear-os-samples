@@ -75,7 +75,7 @@ jobs:
       fail-fast: false
       matrix:
         profile: [ wear_round, wear_square ]
-        api-level: [ 26, 28, 30 ]
+        api-level: [ 28 ]
 
     steps:
       - name: Checkout
