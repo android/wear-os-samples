@@ -27,10 +27,10 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
 import com.example.android.wearable.composeadvanced.presentation.theme.ThemeValues
-import com.google.android.horologist.compose.navscaffold.ExperimentalComposeLayoutApi
+import com.google.android.horologist.compose.navscaffold.ExperimentalHorologistComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
-@OptIn(ExperimentalComposeLayoutApi::class)
+@OptIn(ExperimentalHorologistComposeLayoutApi::class)
 @Composable
 internal fun ThemeScreen(
     scalingLazyListState: ScalingLazyListState,
