@@ -11,8 +11,8 @@ org-jetbrains-kotlin = "1.6.20"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-benchmark-macro-junit4 = "androidx.benchmark:benchmark-macro-junit4:1.1.0-rc01"
-androidx-benchmark-junit4 = "androidx.benchmark:benchmark-junit4:1.1.0-rc01"
+androidx-benchmark-macro-junit4 = "androidx.benchmark:benchmark-macro-junit4:1.1.0-rc02"
+androidx-benchmark-junit4 = "androidx.benchmark:benchmark-junit4:1.1.0-rc02"
 androidx-customview = "androidx.customview:customview:1.2.0-alpha01"
 androidx-customview-pooling = "androidx.customview:customview-poolingcontainer:1.0.0-beta01"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
