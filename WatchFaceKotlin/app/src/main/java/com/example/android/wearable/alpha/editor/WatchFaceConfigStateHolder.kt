@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import kotlinx.coroutines.yield
 
 /**
  * Maintains the [WatchFaceConfigActivity] state, i.e., handles reads and writes to the
@@ -87,6 +88,7 @@ class WatchFaceConfigStateHolder(
                     editorSession.userStyle,
                     editorSession.complicationsPreviewData
                 ) { userStyle, complicationsPreviewData ->
+                    yield()
                     EditWatchFaceUiState.Success(
                         createWatchFacePreview(userStyle, complicationsPreviewData)
                     )
