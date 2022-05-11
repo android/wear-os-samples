@@ -4,7 +4,7 @@ androidx-activity = "1.4.0"
 androidx-wear-compose = "1.0.0-beta01"
 compose = "1.2.0-beta01"
 ktlint = "0.41.0"
-org-jetbrains-kotlin = "1.6.20"
+org-jetbrains-kotlin = "1.6.21"
 org-jetbrains-kotlinx = "1.6.1"
 
 [libraries]
