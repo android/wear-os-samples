@@ -17,6 +17,7 @@ package com.example.android.wearable.composeadvanced.presentation.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -44,7 +45,7 @@ fun WatchAppChip(
     modifier: Modifier = Modifier,
 ) {
     Chip(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         icon = {
             Icon(
                 painter = painterResource(id = watchIcon),

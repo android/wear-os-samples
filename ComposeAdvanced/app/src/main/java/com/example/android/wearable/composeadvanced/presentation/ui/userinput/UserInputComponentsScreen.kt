@@ -22,6 +22,7 @@ import android.speech.RecognizerIntent
 import android.view.inputmethod.EditorInfo
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -102,7 +103,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = value.toString(),
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -120,7 +122,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = value.toString(),
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -138,7 +141,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = dateTime.toLocalDate().toString(),
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -157,7 +161,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = dateTime.toLocalTime().format(formatter),
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -176,7 +181,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = dateTime.toLocalTime().format(formatter),
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -208,7 +214,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = textForUserInput,
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -240,7 +247,8 @@ fun UserInputComponentsScreen(
                     Text(
                         text = textForVoiceInput,
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

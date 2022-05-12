@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.theme
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -68,6 +69,7 @@ internal fun ThemeScreen(
                     label = {
                         Text(listItem.description)
                     },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
