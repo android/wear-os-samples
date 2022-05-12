@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.dialog
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -68,7 +69,8 @@ fun Dialogs(
                 },
                 colors = ChipDefaults.primaryChipColors(),
                 label = { Text(stringResource(R.string.confirmation_dialog_label)) },
-                secondaryLabel = { Text(confirmationStatus) }
+                secondaryLabel = { Text(confirmationStatus) },
+                modifier = Modifier.fillMaxWidth()
             )
         }
         item {
@@ -79,7 +81,8 @@ fun Dialogs(
                 },
                 colors = ChipDefaults.primaryChipColors(),
                 label = { Text(stringResource(R.string.alert_dialog_label)) },
-                secondaryLabel = { Text(alertStatus) }
+                secondaryLabel = { Text(alertStatus) },
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -91,7 +92,8 @@ fun LandingScreen(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             for (listItem in menuItems) {
@@ -104,13 +106,14 @@ fun LandingScreen(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                        }
+                        },
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
             item {
                 ToggleChip(
-                    modifier = Modifier.height(32.dp),
+                    modifier = Modifier.height(32.dp).fillMaxWidth(),
                     checked = proceedingTimeTextEnabled,
                     onCheckedChange = onClickProceedingTimeText,
                     label = {
