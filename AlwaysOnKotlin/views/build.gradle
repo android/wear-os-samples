@@ -58,24 +58,9 @@ android {
 
     testOptions {
         devices {
-            squareApi26(com.android.build.api.dsl.ManagedVirtualDevice) {
-                device = "wear_square"
-                apiLevel = 26
-                systemImageSource = "android-wear"
-            }
-            squareApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
-                device = "wear_square"
-                apiLevel = 28
-                systemImageSource = "android-wear"
-            }
             squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
                 device = "wear_square"
                 apiLevel = 30
-                systemImageSource = "android-wear"
-            }
-            roundApi26(com.android.build.api.dsl.ManagedVirtualDevice) {
-                device = "wear_round"
-                apiLevel = 26
                 systemImageSource = "android-wear"
             }
             roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
