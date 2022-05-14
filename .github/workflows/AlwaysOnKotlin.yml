@@ -75,11 +75,8 @@ jobs:
       fail-fast: false
       matrix:
         device:
-          - roundApi26
           - roundApi28
           - roundApi30
-          - squareApi26
-          - squareApi28
           - squareApi30
 
     steps:
