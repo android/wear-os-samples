@@ -82,13 +82,11 @@ android {
                 device = "wear_round"
                 apiLevel = 28
                 systemImageSource = "android-wear"
-                abi = "x86"
             }
             roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
                 device = "wear_round"
                 apiLevel = 30
                 systemImageSource = "android-wear"
-                abi = "x86"
             }
         }
     }
