@@ -1,18 +1,22 @@
 [versions]
 android-gradle-plugin = "7.1.3"
 androidx-activity = "1.5.0-rc01"
+androidx-benchmark = "1.1.0-rc02"
 androidx-lifecycle = "2.5.0-rc01"
+androidx-test-espresso = "3.4.0"
+androidx-test-ext = "1.1.3"
+androidx-test-uiautomator = "2.2.0"
 androidx-wear-compose = "1.0.0-beta02"
 compose = "1.2.0-beta02"
-horologist = "0.0.20"
+horologist = "0.0.21"
 ktlint = "0.41.0"
 navigation = "2.5.0-rc01"
 org-jetbrains-kotlin = "1.6.21"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-benchmark-macro-junit4 = "androidx.benchmark:benchmark-macro-junit4:1.1.0-rc02"
-androidx-benchmark-junit4 = "androidx.benchmark:benchmark-junit4:1.1.0-rc02"
+androidx-benchmark-junit4 = { module = "androidx.benchmark:benchmark-junit4", version.ref = "androidx-benchmark" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
 androidx-customview = "androidx.customview:customview:1.2.0-alpha01"
 androidx-customview-pooling = "androidx.customview:customview-poolingcontainer:1.0.0-beta02"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
@@ -20,10 +24,12 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
 androidx-metrics-performance = "androidx.metrics:metrics-performance:1.0.0-alpha01"
-androidx-test-ext = "androidx.test.ext:junit:1.1.3"
-androidx-test-ext-ktx = "androidx.test.ext:junit-ktx:1.1.3"
-androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
-androidx-test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
+androidx-test-ext = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext" }
+androidx-test-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext" }
+androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
+com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.1"
+com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.0.2"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material-iconscore = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
@@ -31,17 +37,15 @@ compose-material-iconsext = { module = "androidx.compose.material:material-icons
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-com-google-maps-compose = "com.google.maps.android:maps-compose:2.1.1"
-com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.0.2"
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
-test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
-test-ext-junit = "androidx.test.ext:junit:1.1.3"
-test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
+test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
+test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext" }
+test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
