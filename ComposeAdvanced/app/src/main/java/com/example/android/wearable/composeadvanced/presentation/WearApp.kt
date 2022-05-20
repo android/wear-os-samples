@@ -398,61 +398,31 @@ fun WearApp(
 
                 composable(Screen.DatePicker.route) {
                     DatePicker(
-                        buttonIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription =
-                                stringResource(id = R.string.submit_content_description),
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .wrapContentSize(align = Alignment.Center),
-                            )
-                        },
-                        onClick = {
+                        onDateConfirm = {
                             swipeDismissableNavController.popBackStack()
                             dateTimeForUserInput = it.atTime(dateTimeForUserInput.toLocalTime())
                         },
-                        initial = dateTimeForUserInput.toLocalDate()
+                        date = dateTimeForUserInput.toLocalDate()
                     )
                 }
 
                 composable(Screen.Time24hPicker.route) {
                     TimePicker(
-                        buttonIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription =
-                                stringResource(id = R.string.submit_content_description),
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .wrapContentSize(align = Alignment.Center),
-                            )
-                        },
-                        onClick = {
+                        onTimeConfirm = {
                             swipeDismissableNavController.popBackStack()
                             dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
                         },
-                        initial = dateTimeForUserInput.toLocalTime()
+                        time = dateTimeForUserInput.toLocalTime()
                     )
                 }
 
                 composable(Screen.Time12hPicker.route) {
                     TimePickerWith12HourClock(
-                        buttonIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription =
-                                stringResource(id = R.string.submit_content_description),
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .wrapContentSize(align = Alignment.Center),
-                            )
-                        },
-                        onClick = {
+                        onTimeConfirm = {
                             swipeDismissableNavController.popBackStack()
                             dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
                         },
-                        initial = dateTimeForUserInput.toLocalTime()
+                        time = dateTimeForUserInput.toLocalTime()
                     )
                 }
 
