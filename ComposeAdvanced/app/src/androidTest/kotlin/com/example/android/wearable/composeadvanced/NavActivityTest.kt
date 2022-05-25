@@ -18,7 +18,6 @@ package com.example.android.wearable.composeadvanced
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavDestination
 import androidx.navigation.NavOptionsBuilder
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.example.android.wearable.composeadvanced.presentation.MainActivity
