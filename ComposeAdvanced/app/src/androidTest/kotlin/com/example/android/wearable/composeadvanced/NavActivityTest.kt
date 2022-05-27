@@ -15,8 +15,11 @@
  */
 package com.example.android.wearable.composeadvanced
 
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptionsBuilder
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.example.android.wearable.composeadvanced.presentation.MainActivity
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
 import org.junit.Assert.assertEquals
@@ -25,49 +28,48 @@ import org.junit.Test
 
 class NavActivityTest {
     @get:Rule
-    var rule = createAndroidComposeRule<MainActivity>()
+    var rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity> =
+        createAndroidComposeRule()
 
     @Test
     fun testEvent() {
         val scenario = rule.activityRule.scenario
 
-        rule.waitForIdle()
+        assertEquals(Screen.Landing.route, rule.activity.route)
 
-        toListAndBack()
+        rule.activity.navigateTo(Screen.WatchList.route)
+        assertEquals(Screen.WatchList.route, rule.activity.route)
+
+        rule.activity.navigateTo(Screen.Landing.route) {
+            popUpTo(Screen.Landing.route)
+        }
+        assertEquals(Screen.Landing.route, rule.activity.route)
 
         scenario.moveToState(Lifecycle.State.STARTED)
 
         scenario.moveToState(Lifecycle.State.RESUMED)
 
-        toListAndBack()
+        assertEquals(Screen.Landing.route, rule.activity.route)
+        rule.activity.navigateTo(Screen.WatchList.route)
+
+        assertEquals(Screen.WatchList.route, rule.activity.route)
+        rule.activity.navigateTo(Screen.Landing.route) {
+            popUpTo(Screen.Landing.route)
+        }
+
+        assertEquals(Screen.Landing.route, rule.activity.route)
     }
 
-    private fun toListAndBack() {
-        assertEquals(
-            Screen.Landing.route,
-            rule.activity.navController.currentBackStackEntry?.destination?.route
-        )
+    private val MainActivity.route: String?
+        get() {
+            rule.waitForIdle()
+            return navController.currentBackStackEntry?.destination?.route
+        }
 
+    private fun MainActivity.navigateTo(route: String, builder: NavOptionsBuilder.() -> Unit = {}) {
         rule.runOnUiThread {
-            rule.activity.navController.navigate(Screen.WatchList.route)
+            navController.navigate(route, builder = builder)
         }
         rule.waitForIdle()
-
-        assertEquals(
-            Screen.WatchList.route,
-            rule.activity.navController.currentBackStackEntry?.destination?.route
-        )
-
-        rule.runOnUiThread {
-            rule.activity.navController.navigate(Screen.Landing.route) {
-                this.popUpTo(Screen.Landing.route)
-            }
-        }
-        rule.waitForIdle()
-
-        assertEquals(
-            Screen.Landing.route,
-            rule.activity.navController.currentBackStackEntry?.destination?.route
-        )
     }
 }
