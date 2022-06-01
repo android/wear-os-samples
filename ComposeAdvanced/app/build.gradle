@@ -26,7 +26,7 @@ if (localFile.exists()) {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.example.android.wearable.composeadvanced"
