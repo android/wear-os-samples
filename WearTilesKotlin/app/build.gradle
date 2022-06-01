@@ -75,4 +75,6 @@ dependencies {
 
     // Use to preview wear tiles in your own app
     debugImplementation libs.androidx.wear.tiles.renderer
+
+    implementation libs.horologist.tiles
 }
