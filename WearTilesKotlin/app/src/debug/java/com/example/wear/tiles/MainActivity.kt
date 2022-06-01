@@ -15,47 +15,78 @@
  */
 package com.example.wear.tiles
 
-import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.wear.tiles.manager.TileUiClient
-import com.example.wear.tiles.databinding.ActivityMainBinding
+import androidx.activity.compose.setContent
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.wear.compose.material.*
+import androidx.wear.tiles.TileService
 import com.example.wear.tiles.fitness.FitnessTileService
 import com.example.wear.tiles.media.PlayNextSongTileService
 import com.example.wear.tiles.messaging.MessagingTileService
 
 /**
- * Renders a tile. It uses the wear-tiles-renderer library to render the tile within
- * the activity. You can change the tile class name to render another tile instead.
+ * Lists the Tile samples.
  */
 class MainActivity : ComponentActivity() {
-    private val sampleTiles = listOf(
-        FitnessTileService::class.java,
-        MessagingTileService::class.java,
-        PlayNextSongTileService::class.java
+
+    private val sampleTiles = mapOf(
+        R.string.tile_fitness_label to FitnessTileService::class.java,
+        R.string.tile_messaging_label to MessagingTileService::class.java,
+        R.string.tile_media_label to PlayNextSongTileService::class.java
     )
-
-    // Change into 1 or 2 to render another sample tile.
-    private val tileToShow = sampleTiles[0]
-
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var tileUiClient: TileUiClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        tileUiClient = TileUiClient(
-            context = this,
-            component = ComponentName(this, tileToShow),
-            parentView = binding.root
-        )
-        tileUiClient.connect()
+        setContent {
+            MaterialTheme {
+                SampleTilesList(this, sampleTiles)
+            }
+        }
     }
+}
 
-    override fun onDestroy() {
-        super.onDestroy()
-        tileUiClient.close()
+@Composable
+private fun SampleTilesList(context: Context, sampleTiles: Map<Int, Class<out TileService>>) {
+    val listState = rememberScalingLazyListState()
+    ScalingLazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = listState
+    ) {
+        item {
+            ListHeader {
+                Text(text = context.getString(R.string.app_name))
+            }
+        }
+        sampleTiles.forEach { (tileLabelRes, tileServiceClass) ->
+            item(tileLabelRes) {
+                TileSample(context, tileLabelRes, tileServiceClass)
+            }
+        }
     }
+}
+
+@Composable
+private fun TileSample(
+    context: Context,
+    @StringRes tileLabelRes: Int,
+    tileServiceClass: Class<out TileService>
+) {
+    val tileLabel = context.getString(tileLabelRes)
+    Chip(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {
+            val intent = Intent(context, TilePreviewActivity::class.java)
+            intent.putExtra(TilePreviewActivity.KEY_LABEL, tileLabel)
+            intent.putExtra(TilePreviewActivity.KEY_COMPONENT_NAME, tileServiceClass.name)
+            context.startActivity(intent)
+        },
+        label = { Text(tileLabel) }
+    )
 }
