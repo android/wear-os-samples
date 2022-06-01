@@ -3,26 +3,26 @@ android-gradle-plugin = "7.2.1"
 androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
 androidx-test = "1.4.0"
-androidx-wear-compose = "1.0.0-alpha21"
+androidx-wear-compose = "1.0.0-beta02"
 androidx-wear-tiles = "1.1.0-alpha07"
-androidx-wear-watchface = "1.0.1"
-compose = "1.2.0-alpha08"
+compose = "1.2.0-beta01"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.6.21"
 org-jetbrains-kotlinx = "1.6.2"
 
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.1"
-androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.2.1"
+androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
 androidx-wear = "androidx.wear:wear:1.2.0"
+androidx-wear-compose = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose"}
+androidx-wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose"}
+androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
+androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
+androidx-wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
-wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

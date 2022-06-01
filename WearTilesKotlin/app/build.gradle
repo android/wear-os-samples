@@ -34,10 +34,6 @@ android {
         ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
-    buildFeatures {
-        viewBinding true
-    }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -53,18 +49,30 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
 }
 
 dependencies {
+    implementation libs.androidx.activity.compose
+
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
-    implementation libs.androidx.core.ktx
+
     implementation libs.androidx.wear
+    implementation libs.androidx.wear.compose
+    implementation libs.androidx.wear.compose.material
 
     // Use to implement support for wear tiles
-    implementation libs.wear.tiles
-    implementation libs.wear.tiles.material
+    implementation libs.androidx.wear.tiles
+    implementation libs.androidx.wear.tiles.material
 
     // Use to preview wear tiles in your own app
-    debugImplementation libs.wear.tiles.renderer
+    debugImplementation libs.androidx.wear.tiles.renderer
 }

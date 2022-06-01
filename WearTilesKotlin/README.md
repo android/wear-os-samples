@@ -1,6 +1,6 @@
 Wear Tiles Sample
 ===============================
-Demonstrates tiles using the new AndroidX alpha library.
+Demonstrates tiles using the [Wear Tiles AndroidX library](https://developer.android.com/jetpack/androidx/releases/wear-tiles).
 
 Introduction
 ------------

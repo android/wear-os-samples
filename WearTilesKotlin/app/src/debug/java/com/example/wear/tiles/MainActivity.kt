@@ -15,47 +15,28 @@
  */
 package com.example.wear.tiles
 
-import android.content.ComponentName
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.wear.tiles.manager.TileUiClient
-import com.example.wear.tiles.databinding.ActivityMainBinding
+import androidx.activity.compose.setContent
 import com.example.wear.tiles.fitness.FitnessTileService
 import com.example.wear.tiles.media.PlayNextSongTileService
 import com.example.wear.tiles.messaging.MessagingTileService
 
 /**
- * Renders a tile. It uses the wear-tiles-renderer library to render the tile within
- * the activity. You can change the tile class name to render another tile instead.
+ * Lists the Tile samples.
  */
 class MainActivity : ComponentActivity() {
-    private val sampleTiles = listOf(
-        FitnessTileService::class.java,
-        MessagingTileService::class.java,
-        PlayNextSongTileService::class.java
+
+    private val sampleTiles = mapOf(
+        R.string.tile_fitness_label to FitnessTileService::class.java,
+        R.string.tile_messaging_label to MessagingTileService::class.java,
+        R.string.tile_media_label to PlayNextSongTileService::class.java
     )
-
-    // Change into 1 or 2 to render another sample tile.
-    private val tileToShow = sampleTiles[0]
-
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var tileUiClient: TileUiClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        tileUiClient = TileUiClient(
-            context = this,
-            component = ComponentName(this, tileToShow),
-            parentView = binding.root
-        )
-        tileUiClient.connect()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        tileUiClient.close()
+        setContent {
+            SampleTilesList(this, sampleTiles)
+        }
     }
 }
