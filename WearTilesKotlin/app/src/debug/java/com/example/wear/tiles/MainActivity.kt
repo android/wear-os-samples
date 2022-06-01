@@ -25,7 +25,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ListHeader
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.rememberScalingLazyListState
 import androidx.wear.tiles.TileService
 import com.example.wear.tiles.fitness.FitnessTileService
 import com.example.wear.tiles.media.PlayNextSongTileService

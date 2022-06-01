@@ -20,7 +20,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.wear.tiles.manager.TileUiClient
 
-
 /**
  * Previews a Tile in an activity, using the TileUiClient from the wear-tiles-renderer library.
  */
