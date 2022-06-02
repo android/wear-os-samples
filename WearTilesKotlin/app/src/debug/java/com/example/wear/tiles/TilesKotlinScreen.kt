@@ -18,23 +18,34 @@ package com.example.wear.tiles
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ListHeader
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.rememberScalingLazyListState
 import androidx.wear.tiles.TileService
+import com.google.android.horologist.compose.navscaffold.ExperimentalHorologistComposeLayoutApi
+import com.google.android.horologist.compose.navscaffold.scrollableColumn
+import com.google.android.horologist.compose.pager.FocusOnResume
 
+@OptIn(ExperimentalHorologistComposeLayoutApi::class)
 @Composable
-internal fun SampleTilesList(context: Context, sampleTiles: Map<Int, Class<out TileService>>) {
+internal fun TilesKotlinScreen(
+    context: Context,
+    sampleTiles: Map<Int, Class<out TileService>>,
+    modifier: Modifier = Modifier
+) {
+    val focusRequester = remember { FocusRequester() }
     TilesKotlinTheme {
         val listState = rememberScalingLazyListState()
         ScalingLazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier
+                .scrollableColumn(focusRequester, listState),
             state = listState
         ) {
             item {
@@ -49,6 +60,7 @@ internal fun SampleTilesList(context: Context, sampleTiles: Map<Int, Class<out T
             }
         }
     }
+    FocusOnResume(focusRequester = focusRequester)
 }
 
 @Composable

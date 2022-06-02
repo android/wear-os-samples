@@ -18,6 +18,8 @@ package com.example.wear.tiles
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import com.example.wear.tiles.fitness.FitnessTileService
 import com.example.wear.tiles.media.PlayNextSongTileService
 import com.example.wear.tiles.messaging.MessagingTileService
@@ -36,7 +38,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SampleTilesList(this, sampleTiles)
+            TilesKotlinScreen(
+                context = this,
+                sampleTiles = sampleTiles,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
