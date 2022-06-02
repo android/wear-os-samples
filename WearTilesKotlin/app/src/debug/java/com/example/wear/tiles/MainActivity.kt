@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SampleTilesList(this, sampleTiles)
+            TilesKotlinScreen(context = this, sampleTiles = sampleTiles)
         }
     }
 }

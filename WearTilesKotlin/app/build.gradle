@@ -48,6 +48,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
     buildFeatures {
@@ -60,10 +61,12 @@ android {
 }
 
 dependencies {
-    implementation libs.androidx.activity.compose
+    implementation libs.android.horologist
 
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
+
+    implementation libs.androidx.activity.compose
 
     implementation libs.androidx.wear
     implementation libs.androidx.wear.compose
