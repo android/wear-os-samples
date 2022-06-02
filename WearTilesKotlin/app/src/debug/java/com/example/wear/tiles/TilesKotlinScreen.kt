@@ -18,7 +18,6 @@ package com.example.wear.tiles
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
