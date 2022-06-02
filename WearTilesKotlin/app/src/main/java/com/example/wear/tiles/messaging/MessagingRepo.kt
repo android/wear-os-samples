@@ -15,57 +15,60 @@
  */
 package com.example.wear.tiles.messaging
 
-import androidx.annotation.DrawableRes
-import com.example.wear.tiles.R
-import kotlinx.coroutines.delay
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-data class Contact(
-    val id: Long,
-    val initials: String,
-    val name: String,
-    @DrawableRes val avatarRes: Int?
-)
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "contacts")
 
-object MessagingRepo {
+class MessagingRepo(private val context: Context) {
+    fun getFavoriteContacts(): Flow<List<Contact>> = context.dataStore.data.map {
+        knownContacts
+    }
 
-    suspend fun getFavoriteContacts(): List<Contact> {
-        delay(200)
-        return listOf(
+    companion object {
+        val avatarPath =
+            "https://github.com/android/wear-os-samples/raw/main/WearTilesKotlin/app/src/main/res/drawable-nodpi"
+
+        val knownContacts = listOf(
             Contact(
                 id = 0,
                 initials = "JV",
                 name = "Jyoti V",
-                avatarRes = null
+                avatarUrl = null
             ),
             Contact(
                 id = 1,
                 initials = "AC",
                 name = "Ali C",
-                avatarRes = R.drawable.ali
+                avatarUrl = "$avatarPath/ali.png"
             ),
             Contact(
                 id = 2,
                 initials = "FS",
                 name = "Felipe S",
-                avatarRes = null
+                avatarUrl = null
             ),
             Contact(
                 id = 3,
                 initials = "TB",
                 name = "Taylor B",
-                avatarRes = R.drawable.taylor
+                avatarUrl = "$avatarPath/taylor.jpg"
             ),
             Contact(
                 id = 4,
                 initials = "JG",
                 name = "Judith G",
-                avatarRes = null
+                avatarUrl = null
             ),
             Contact(
                 id = 5,
                 initials = "AO",
                 name = "Andrew O",
-                avatarRes = null
+                avatarUrl = null
             ),
         )
     }
