@@ -37,16 +37,15 @@ import com.google.android.horologist.compose.pager.FocusOnResume
 @OptIn(ExperimentalHorologistComposeLayoutApi::class)
 @Composable
 internal fun TilesKotlinScreen(
-    modifier: Modifier = Modifier,
     context: Context,
     sampleTiles: Map<Int, Class<out TileService>>,
-    focusRequester: FocusRequester = remember { FocusRequester() }
+    modifier: Modifier = Modifier
 ) {
+    val focusRequester = remember { FocusRequester() }
     TilesKotlinTheme {
         val listState = rememberScalingLazyListState()
         ScalingLazyColumn(
             modifier = modifier
-                .fillMaxSize()
                 .scrollableColumn(focusRequester, listState),
             state = listState
         ) {
