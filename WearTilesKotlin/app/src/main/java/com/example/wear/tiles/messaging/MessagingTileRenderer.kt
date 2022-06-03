@@ -18,12 +18,19 @@ package com.example.wear.tiles.messaging
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.content.ContextCompat
-import androidx.wear.tiles.ActionBuilders
+import androidx.wear.tiles.ActionBuilders.LoadAction
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DimensionBuilders
 import androidx.wear.tiles.LayoutElementBuilders
-import androidx.wear.tiles.ModifiersBuilders
+import androidx.wear.tiles.LayoutElementBuilders.Column
+import androidx.wear.tiles.LayoutElementBuilders.FontStyles
+import androidx.wear.tiles.LayoutElementBuilders.Row
+import androidx.wear.tiles.LayoutElementBuilders.Spacer
+import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.ModifiersBuilders.Clickable
+import androidx.wear.tiles.ModifiersBuilders.Modifiers
+import androidx.wear.tiles.ModifiersBuilders.Semantics
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.TileBuilders
@@ -89,12 +96,12 @@ class MessagingTileRenderer(context: Context) :
         state: MessagingTileState,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
     ): LayoutElementBuilders.LayoutElement {
-        return LayoutElementBuilders.Column.Builder()
+        return Column.Builder()
             .addContent(
-                LayoutElementBuilders.Text.Builder()
+                Text.Builder()
                     .setText(context.resources.getString(R.string.tile_messaging_title))
                     .setFontStyle(
-                        LayoutElementBuilders.FontStyles
+                        FontStyles
                             .title3(deviceParameters)
                             .setColor(
                                 ColorBuilders.argb(ContextCompat.getColor(context, R.color.primary))
@@ -103,81 +110,65 @@ class MessagingTileRenderer(context: Context) :
                     )
                     .build()
             )
-            .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(SPACING_TITLE_SUBTITLE)
-                .build())
             .addContent(
-                LayoutElementBuilders.Text.Builder()
+                Spacer.Builder().setHeight(SPACING_TITLE_SUBTITLE)
+                    .build()
+            )
+            .addContent(
+                Text.Builder()
                     .setText(context.getString(R.string.tile_messaging_subtitle))
                     .setFontStyle(
-                        LayoutElementBuilders.FontStyles
+                        FontStyles
                             .caption1(deviceParameters)
                             .setColor(
-                                ColorBuilders.argb(ContextCompat.getColor(context,
-                                    R.color.onSecondary))
+                                ColorBuilders.argb(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.onSecondary
+                                    )
+                                )
                             )
                             .build()
                     )
                     .build()
             )
-            .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(SPACING_SUBTITLE_CONTACTS)
-                .build())
             .addContent(
-                LayoutElementBuilders.Row.Builder()
-                    .addContent(
-                        contactLayout(
-                            contact = state.contacts[0],
-                            avatar = state.avatars[state.contacts[0].id],
-                            clickable = ModifiersBuilders.Clickable.Builder()
-                                .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                                .build()
-                        )
-                    )
-                    .addContent(LayoutElementBuilders.Spacer.Builder()
-                        .setWidth(SPACING_CONTACTS_HORIZONTAL).build())
-                    .addContent(
-                        contactLayout(
-                            contact = state.contacts[1],
-                            avatar = state.avatars[state.contacts[1].id],
-                            clickable = ModifiersBuilders.Clickable.Builder()
-                                .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                                .build()
-                        )
-                    )
-                    .addContent(LayoutElementBuilders.Spacer.Builder()
-                        .setWidth(SPACING_CONTACTS_HORIZONTAL).build())
-                    .addContent(
-                        contactLayout(
-                            contact = state.contacts[2],
-                            avatar = state.avatars[state.contacts[2].id],
-                            clickable = ModifiersBuilders.Clickable.Builder()
-                                .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                                .build()
-                        )
-                    )
+                Spacer.Builder().setHeight(SPACING_SUBTITLE_CONTACTS)
                     .build()
             )
-            .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(SPACING_CONTACTS_VERTICAL)
-                .build())
             .addContent(
-                LayoutElementBuilders.Row.Builder()
+                Row.Builder()
+                    .addContact(state, 0)
                     .addContent(
-                        contactLayout(
-                            contact = state.contacts[3],
-                            avatar = state.avatars[state.contacts[3].id],
-                            clickable = ModifiersBuilders.Clickable.Builder()
-                                .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                                .build()
-                        )
+                        Spacer.Builder()
+                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
                     )
-                    .addContent(LayoutElementBuilders.Spacer.Builder()
-                        .setWidth(SPACING_CONTACTS_HORIZONTAL).build())
+                    .addContact(state, 1)
+                    .addContent(
+                        Spacer.Builder()
+                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                    )
+                    .addContact(state, 2)
+                    .build()
+            )
+            .addContent(
+                Spacer.Builder().setHeight(SPACING_CONTACTS_VERTICAL)
+                    .build()
+            )
+            .addContent(
+                Row.Builder()
+                    .addContact(state, 3)
+                    .addContent(
+                        Spacer.Builder()
+                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                    )
                     .addContent(searchLayout())
                     .build()
             )
             .setModifiers(
-                ModifiersBuilders.Modifiers.Builder()
+                Modifiers.Builder()
                     .setSemantics(
-                        ModifiersBuilders.Semantics.Builder()
+                        Semantics.Builder()
                             .setContentDescription(context.getString(R.string.tile_messaging_label))
                             .build()
                     )
@@ -189,7 +180,7 @@ class MessagingTileRenderer(context: Context) :
     private fun contactLayout(
         contact: Contact,
         avatar: Bitmap?,
-        clickable: ModifiersBuilders.Clickable,
+        clickable: Clickable,
     ) = Button.Builder(context, clickable).apply {
         setContentDescription(contact.name)
         setButtonColors(
@@ -208,8 +199,8 @@ class MessagingTileRenderer(context: Context) :
 
     private fun searchLayout() = Button.Builder(
         context,
-        ModifiersBuilders.Clickable.Builder()
-            .setOnClick(ActionBuilders.LoadAction.Builder().build())
+        Clickable.Builder()
+            .setOnClick(LoadAction.Builder().build())
             .setId("")
             .build()
     )
@@ -222,6 +213,23 @@ class MessagingTileRenderer(context: Context) :
         .setContentDescription(context.getString(R.string.tile_messaging_search))
         .setIconContent(ID_IC_SEARCH)
         .build()
+
+    private fun Row.Builder.addContact(
+        state: MessagingTileState,
+        i: Int
+    ): Row.Builder = if (state.contacts.size > i) {
+        addContent(
+            contactLayout(
+                contact = state.contacts[i],
+                avatar = state.avatars[state.contacts[i].id],
+                clickable = Clickable.Builder()
+                    .setOnClick(LoadAction.Builder().build())
+                    .build()
+            )
+        )
+    } else {
+        this
+    }
 
     companion object {
         // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic

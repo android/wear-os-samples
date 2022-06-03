@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.wear.tiles.messaging.MessagingRepo
 import com.example.wear.tiles.messaging.MessagingTileRenderer
 import com.example.wear.tiles.messaging.MessagingTileState
-import com.example.wear.tiles.tools.TilePreview
+import com.example.wear.tiles.tools.TileRendererPreview
 import com.example.wear.tiles.tools.WearPreviewDevices
 import com.example.wear.tiles.tools.WearPreviewFontSizes
 
@@ -25,5 +25,5 @@ fun MessagingPreviews() {
     )
     val state = MessagingTileState(MessagingRepo.knownContacts, avatars)
 
-    TilePreview(state, renderer)
+    TileRendererPreview(state, renderer)
 }

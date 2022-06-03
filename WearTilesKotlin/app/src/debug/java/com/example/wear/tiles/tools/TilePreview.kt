@@ -7,31 +7,46 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.StateBuilders.State
+import androidx.wear.tiles.TileBuilders
 import com.example.wear.tiles.util.TileRenderer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlin.math.roundToInt
 
 @Composable
-fun <T> TilePreview(state: T, renderer: TileRenderer<T>) {
+fun <T> TileRendererPreview(state: T, renderer: TileRenderer<T>) {
     val context = LocalContext.current
     val resources = context.resources
 
     val requestParams = remember { requestParams(resources) }
 
+    val tile = remember(state) { renderer.tileRequest(state, requestParams) }
+    val resourceParams =
+        remember(tile.resourcesVersion) { resourceParams(resources, tile.resourcesVersion) }
+    val tileResources = remember(state) { renderer.resourcesRequest(state, resourceParams) }
+
+    TilePreview(tile, tileResources)
+}
+
+@Composable
+fun TilePreview(
+    tile: TileBuilders.Tile,
+    tileResources: ResourceBuilders.Resources
+) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = {
-            FrameLayout(it)
+            FrameLayout(it).apply {
+                this.setBackgroundColor(android.graphics.Color.DKGRAY)
+            }
         }, update = {
-            val tile = renderer.tileRequest(state, requestParams)
-            val resourceParams = resourceParams(resources, tile.resourcesVersion)
-            val tileResources = renderer.resourcesRequest(state, resourceParams)
 
             val tileRenderer = androidx.wear.tiles.renderer.TileRenderer(
                 /* uiContext = */ it.context,

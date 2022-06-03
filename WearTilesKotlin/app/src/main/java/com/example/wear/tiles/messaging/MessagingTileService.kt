@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /**
  * Creates a Messaging Tile, showing your favorite contacts and a button to search other contacts.
@@ -47,6 +48,7 @@ class MessagingTileService : CoroutinesTileService() {
     private lateinit var renderer: MessagingTileRenderer
     private lateinit var repo: MessagingRepo
     private lateinit var imageLoader: ImageLoader
+    private lateinit var updates: Updates
 
     override fun onCreate() {
         super.onCreate()
@@ -55,6 +57,7 @@ class MessagingTileService : CoroutinesTileService() {
         renderer = appContainer.renderer
         repo = appContainer.repo
         imageLoader = ImageLoader(this)
+        updates = appContainer.updates
 
         tileStateFlow = repo.getFavoriteContacts()
             .map {
@@ -82,7 +85,19 @@ class MessagingTileService : CoroutinesTileService() {
 
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
         val tileState = tileStateFlow.filterNotNull().first()
+
+        if (tileState.contacts.isEmpty()) {
+            updateContacts()
+        }
+
         return renderer.tileRequest(tileState, requestParams)
+    }
+
+    private fun updateContacts() {
+        serviceScope.launch {
+            repo.updateContacts(MessagingRepo.knownContacts)
+            updates.forceUpdates()
+        }
     }
 
     override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {

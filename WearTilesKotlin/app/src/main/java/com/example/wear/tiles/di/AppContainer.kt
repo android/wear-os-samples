@@ -19,12 +19,14 @@ import android.content.Context
 import coil.ImageLoader
 import com.example.wear.tiles.messaging.MessagingRepo
 import com.example.wear.tiles.messaging.MessagingTileRenderer
+import com.example.wear.tiles.messaging.Updates
 
 // https://developer.android.com/training/dependency-injection/manual
 class AppContainer(private val application: Context) {
     val imageLoader: ImageLoader = ImageLoader.Builder(application)
         .respectCacheHeaders(false)
         .build()
-    val repo: MessagingRepo = MessagingRepo
+    val repo: MessagingRepo = MessagingRepo(application)
     val renderer: MessagingTileRenderer = MessagingTileRenderer(application)
+    val updates: Updates = Updates(application)
 }

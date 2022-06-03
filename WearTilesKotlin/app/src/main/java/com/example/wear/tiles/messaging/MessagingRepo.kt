@@ -17,16 +17,35 @@ package com.example.wear.tiles.messaging
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.wear.tiles.messaging.Contact.Companion.toContact
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "contacts")
 
 class MessagingRepo(private val context: Context) {
-    fun getFavoriteContacts(): Flow<List<Contact>> = context.dataStore.data.map {
-        knownContacts
+    fun getFavoriteContacts(): Flow<List<Contact>> = context.dataStore.data.map { preferences ->
+        val count = preferences[intPreferencesKey("contact.count")] ?: 0
+
+        (0 until count).mapNotNull {
+            preferences[stringPreferencesKey("contact.$it")]?.toContact()
+        }
+    }
+
+    suspend fun updateContacts(contacts: List<Contact>) {
+        context.dataStore.edit {
+            it.clear()
+            knownContacts.forEachIndexed { index, contact ->
+                it[stringPreferencesKey("contact.$index")] = contact.toPreferenceString()
+            }
+            it[intPreferencesKey("contact.count")] = contacts.size
+        }
     }
 
     companion object {
