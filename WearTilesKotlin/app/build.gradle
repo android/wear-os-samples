@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    implementation libs.android.horologist
+    implementation libs.horologist.compose.layout
 
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
