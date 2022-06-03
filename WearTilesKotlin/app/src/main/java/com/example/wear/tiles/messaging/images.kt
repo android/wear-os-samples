@@ -42,6 +42,7 @@ suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact, size: Int
 }
 
 fun bitmapToImageResource(bitmap: Bitmap): ImageResource {
+    // TODO check if needed
     val safeBitmap = bitmap.toRgb565()
 
     val byteBuffer = ByteBuffer.allocate(safeBitmap.byteCount)

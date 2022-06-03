@@ -22,12 +22,17 @@ import androidx.wear.tiles.ActionBuilders.LoadAction
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DimensionBuilders
+import androidx.wear.tiles.DimensionBuilders.ExpandedDimensionProp
+import androidx.wear.tiles.DimensionBuilders.WrappedDimensionProp
 import androidx.wear.tiles.LayoutElementBuilders
+import androidx.wear.tiles.LayoutElementBuilders.Box
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
+import androidx.wear.tiles.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
 import androidx.wear.tiles.LayoutElementBuilders.Text
+import androidx.wear.tiles.LayoutElementBuilders.VERTICAL_ALIGN_CENTER
 import androidx.wear.tiles.ModifiersBuilders.Clickable
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
@@ -55,7 +60,12 @@ class MessagingTileRenderer(context: Context) :
                         TimelineBuilders.TimelineEntry.Builder()
                             .setLayout(
                                 LayoutElementBuilders.Layout.Builder()
-                                    .setRoot(layout(tileState, requestParams.deviceParameters!!))
+                                    .setRoot(
+                                        tileLayout(
+                                            tileState,
+                                            requestParams.deviceParameters!!
+                                        )
+                                    )
                                     .build()
                             )
                             .build()
@@ -92,84 +102,100 @@ class MessagingTileRenderer(context: Context) :
             .build()
     }
 
-    private fun layout(
+    internal fun tileLayout(
         state: MessagingTileState,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
     ): LayoutElementBuilders.LayoutElement {
-        return Column.Builder()
+        return Box.Builder()
+            .setWidth(ExpandedDimensionProp.Builder().build())
+            .setHeight(ExpandedDimensionProp.Builder().build())
+            .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
+            .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
             .addContent(
-                Text.Builder()
-                    .setText(context.resources.getString(R.string.tile_messaging_title))
-                    .setFontStyle(
-                        FontStyles
-                            .title3(deviceParameters)
-                            .setColor(
-                                ColorBuilders.argb(ContextCompat.getColor(context, R.color.primary))
-                            )
-                            .build()
-                    )
-                    .build()
-            )
-            .addContent(
-                Spacer.Builder().setHeight(SPACING_TITLE_SUBTITLE)
-                    .build()
-            )
-            .addContent(
-                Text.Builder()
-                    .setText(context.getString(R.string.tile_messaging_subtitle))
-                    .setFontStyle(
-                        FontStyles
-                            .caption1(deviceParameters)
-                            .setColor(
-                                ColorBuilders.argb(
-                                    ContextCompat.getColor(
-                                        context,
-                                        R.color.onSecondary
+                Column.Builder()
+                    .setWidth(WrappedDimensionProp.Builder().build())
+                    .setHeight(WrappedDimensionProp.Builder().build())
+                    .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+                    .addContent(
+                        Text.Builder()
+                            .setText(context.resources.getString(R.string.tile_messaging_title))
+                            .setFontStyle(
+                                FontStyles
+                                    .title3(deviceParameters)
+                                    .setColor(
+                                        ColorBuilders.argb(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.primary
+                                            )
+                                        )
                                     )
-                                )
+                                    .build()
                             )
                             .build()
                     )
-                    .build()
-            )
-            .addContent(
-                Spacer.Builder().setHeight(SPACING_SUBTITLE_CONTACTS)
-                    .build()
-            )
-            .addContent(
-                Row.Builder()
-                    .addContact(state, 0)
                     .addContent(
-                        Spacer.Builder()
-                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                        Spacer.Builder().setHeight(SPACING_TITLE_SUBTITLE)
+                            .build()
                     )
-                    .addContact(state, 1)
                     .addContent(
-                        Spacer.Builder()
-                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                        Text.Builder()
+                            .setText(context.getString(R.string.tile_messaging_subtitle))
+                            .setFontStyle(
+                                FontStyles
+                                    .caption1(deviceParameters)
+                                    .setColor(
+                                        ColorBuilders.argb(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.onSecondary
+                                            )
+                                        )
+                                    )
+                                    .build()
+                            )
+                            .build()
                     )
-                    .addContact(state, 2)
-                    .build()
-            )
-            .addContent(
-                Spacer.Builder().setHeight(SPACING_CONTACTS_VERTICAL)
-                    .build()
-            )
-            .addContent(
-                Row.Builder()
-                    .addContact(state, 3)
                     .addContent(
-                        Spacer.Builder()
-                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                        Spacer.Builder().setHeight(SPACING_SUBTITLE_CONTACTS)
+                            .build()
                     )
-                    .addContent(searchLayout())
-                    .build()
-            )
-            .setModifiers(
-                Modifiers.Builder()
-                    .setSemantics(
-                        Semantics.Builder()
-                            .setContentDescription(context.getString(R.string.tile_messaging_label))
+                    .addContent(
+                        Row.Builder()
+                            .addContact(state, 0)
+                            .addContent(
+                                Spacer.Builder()
+                                    .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                            )
+                            .addContact(state, 1)
+                            .addContent(
+                                Spacer.Builder()
+                                    .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                            )
+                            .addContact(state, 2)
+                            .build()
+                    )
+                    .addContent(
+                        Spacer.Builder().setHeight(SPACING_CONTACTS_VERTICAL)
+                            .build()
+                    )
+                    .addContent(
+                        Row.Builder()
+                            .addContact(state, 3)
+                            .addContent(
+                                Spacer.Builder()
+                                    .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                            )
+                            .addContent(searchLayout())
+                            .build()
+                    )
+                    .setModifiers(
+                        Modifiers.Builder()
+                            .setSemantics(
+                                Semantics.Builder()
+                                    .setContentDescription(context.getString(R.string.tile_messaging_label))
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -177,7 +203,7 @@ class MessagingTileRenderer(context: Context) :
             .build()
     }
 
-    private fun contactLayout(
+    fun contactLayout(
         contact: Contact,
         avatar: Bitmap?,
         clickable: Clickable,
@@ -197,7 +223,7 @@ class MessagingTileRenderer(context: Context) :
     }
         .build()
 
-    private fun searchLayout() = Button.Builder(
+    internal fun searchLayout() = Button.Builder(
         context,
         Clickable.Builder()
             .setOnClick(LoadAction.Builder().build())
@@ -235,7 +261,7 @@ class MessagingTileRenderer(context: Context) :
         // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
         // resources, the contents of which change even though their id stays the same (e.g. a graph).
         // In this sample, our resources are all fixed, so we use a constant value.
-        private const val RESOURCES_VERSION = "2"
+        internal const val RESOURCES_VERSION = "2"
 
         // Dimensions
         private val SPACING_TITLE_SUBTITLE = DimensionBuilders.dp(4f)
@@ -244,7 +270,7 @@ class MessagingTileRenderer(context: Context) :
         private val SPACING_CONTACTS_VERTICAL = DimensionBuilders.dp(4f)
 
         // Resource identifiers for images
-        private const val ID_IC_SEARCH = "ic_search"
-        private const val ID_CONTACT_PREFIX = "contact_"
+        internal const val ID_IC_SEARCH = "ic_search"
+        internal const val ID_CONTACT_PREFIX = "contact_"
     }
 }

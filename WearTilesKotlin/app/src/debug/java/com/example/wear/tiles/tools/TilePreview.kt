@@ -7,14 +7,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders
+import androidx.wear.tiles.DimensionBuilders.ExpandedDimensionProp
+import androidx.wear.tiles.LayoutElementBuilders
+import androidx.wear.tiles.LayoutElementBuilders.Box
+import androidx.wear.tiles.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
+import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
+import androidx.wear.tiles.LayoutElementBuilders.VERTICAL_ALIGN_CENTER
+import androidx.wear.tiles.ModifiersBuilders.Background
+import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.StateBuilders.State
 import androidx.wear.tiles.TileBuilders
+import androidx.wear.tiles.TimelineBuilders
+import com.example.wear.tiles.messaging.MessagingTileRenderer
 import com.example.wear.tiles.util.TileRenderer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -59,6 +70,96 @@ fun TilePreview(
             tileRenderer.inflate(it)
         })
 }
+
+@Composable
+fun LayoutPreview(
+    layout: LayoutElement,
+    tileResources: ResourceBuilders.Resources = ResourceBuilders.Resources.Builder().build()
+) {
+    val tile = remember {
+        TileBuilders.Tile.Builder()
+            .setResourcesVersion(MessagingTileRenderer.RESOURCES_VERSION)
+            // Creates a timeline to hold one or more tile entries for a specific time periods.
+            .setTimeline(
+                TimelineBuilders.Timeline.Builder()
+                    .addTimelineEntry(
+                        TimelineBuilders.TimelineEntry.Builder()
+                            .setLayout(
+                                LayoutElementBuilders.Layout.Builder()
+                                    .setRoot(
+                                        Box.Builder()
+                                            .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
+                                            .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
+                                            .setHeight(ExpandedDimensionProp.Builder().build())
+                                            .setWidth(ExpandedDimensionProp.Builder().build())
+                                            .setModifiers(
+                                                Modifiers.Builder()
+                                                    .setBackground(
+                                                        Background.Builder()
+                                                            .setColor(ColorBuilders.argb(android.graphics.Color.DKGRAY))
+                                                            .build()
+                                                    )
+                                                    .build()
+                                            )
+                                            .addContent(
+                                                Box.Builder()
+                                                    .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
+                                                    .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
+                                                    .setModifiers(
+                                                        Modifiers.Builder()
+                                                            .setBackground(
+                                                                Background.Builder()
+                                                                    .setColor(
+                                                                        ColorBuilders.argb(
+                                                                            android.graphics.Color.BLACK
+                                                                        )
+                                                                    )
+                                                                    .build()
+                                                            )
+                                                            .build()
+                                                    )
+//                                                .setHeight(ExpandedDimensionProp.Builder().build())
+//                                                .setWidth(ExpandedDimensionProp.Builder().build())
+                                                    .addContent(layout)
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            ).build()
+    }
+
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = {
+            FrameLayout(it).apply {
+//                this.setBackgroundColor(android.graphics.Color.DKGRAY)
+            }
+        }, update = {
+
+            val tileRenderer = androidx.wear.tiles.renderer.TileRenderer(
+                /* uiContext = */ it.context,
+                /* layout = */ tile.timeline?.timelineEntries?.first()?.layout!!,
+                /* resources = */ tileResources,
+                /* loadActionExecutor = */ Dispatchers.IO.asExecutor(),
+                /* loadActionListener = */ {}
+            )
+
+            tileRenderer.inflate(it)
+        })
+}
+
+@Preview(
+    backgroundColor = 0xff000000,
+    showBackground = true,
+    widthDp = 100,
+    heightDp = 100
+)
+public annotation class IconSizePreview
 
 private fun requestParams(resources: Resources) = RequestBuilders.TileRequest.Builder()
     .setDeviceParameters(buildDeviceParameters(resources))
