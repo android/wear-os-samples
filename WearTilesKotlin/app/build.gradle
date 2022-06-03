@@ -23,7 +23,7 @@ android {
     compileSdkVersion 32
 
     defaultConfig {
-        applicationId "com.example.android.wearable.tiles"
+        applicationId "com.example.wear.tiles"
         minSdk 26
         targetSdk 30
         versionCode 1
@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    implementation libs.android.horologist
+    implementation libs.horologist.compose.layout
 
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
@@ -78,4 +78,6 @@ dependencies {
 
     // Use to preview wear tiles in your own app
     debugImplementation libs.androidx.wear.tiles.renderer
+
+    implementation libs.horologist.tiles
 }

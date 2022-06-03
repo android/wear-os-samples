@@ -40,8 +40,8 @@ import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
-import com.example.wear.tiles.CoroutinesTileService
 import com.example.wear.tiles.R
+import com.google.android.horologist.tiles.CoroutinesTileService
 
 // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
 // resources, the contents of which change even though their id stays the same (e.g. a graph).
