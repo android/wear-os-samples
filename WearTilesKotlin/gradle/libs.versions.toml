@@ -6,6 +6,7 @@ androidx-test = "1.4.0"
 androidx-wear-compose = "1.0.0-beta03"
 androidx-wear-tiles = "1.1.0-alpha08"
 compose = "1.2.0-beta01"
+horologist = "0.0.21"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.6.21"
 org-jetbrains-kotlinx = "1.6.2"
@@ -21,6 +22,8 @@ androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "and
 androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
 androidx-wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
 coil = "io.coil-kt:coil-compose:2.1.0"
+horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
+horologist-tiles = { module = "com.google.android.horologist:horologist-tiles", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
@@ -28,5 +31,5 @@ kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.6.1"
+com-diffplug-spotless = "com.diffplug.spotless:6.7.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
