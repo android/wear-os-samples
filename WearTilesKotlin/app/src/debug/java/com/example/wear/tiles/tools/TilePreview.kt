@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.ColorBuilders.argb
 import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DimensionBuilders.ExpandedDimensionProp
@@ -65,23 +64,29 @@ fun <T> TileRendererPreview(state: T, renderer: TileRenderer<T>) {
 
 @Composable
 fun TilePreview(
-    tile: TileBuilders.Tile, tileResources: ResourceBuilders.Resources
+    tile: TileBuilders.Tile,
+    tileResources: ResourceBuilders.Resources
 ) {
-    AndroidView(modifier = Modifier.fillMaxSize(), factory = {
-        FrameLayout(it).apply {
-            this.setBackgroundColor(android.graphics.Color.DKGRAY)
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = {
+            FrameLayout(it).apply {
+                this.setBackgroundColor(android.graphics.Color.DKGRAY)
+            }
+        },
+        update = {
+
+            val tileRenderer = androidx.wear.tiles.renderer.TileRenderer(
+                /* uiContext = */ it.context,
+                /* layout = */ tile.timeline?.timelineEntries?.first()?.layout!!,
+                /* resources = */ tileResources,
+                /* loadActionExecutor = */ Dispatchers.IO.asExecutor(),
+                /* loadActionListener = */ {}
+            )
+
+            tileRenderer.inflate(it)
         }
-    }, update = {
-
-        val tileRenderer = androidx.wear.tiles.renderer.TileRenderer(
-            /* uiContext = */ it.context,
-            /* layout = */ tile.timeline?.timelineEntries?.first()?.layout!!,
-            /* resources = */ tileResources,
-            /* loadActionExecutor = */ Dispatchers.IO.asExecutor(),
-            /* loadActionListener = */ {})
-
-        tileRenderer.inflate(it)
-    })
+    )
 }
 
 @Composable
@@ -94,51 +99,56 @@ fun LayoutPreview(
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
                 TimelineBuilders.Timeline.Builder().addTimelineEntry(
-                        TimelineBuilders.TimelineEntry.Builder().setLayout(
-                                LayoutElementBuilders.Layout.Builder().setRoot(
-                                        Box.Builder()
-                                            .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
-                                            .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
-                                            .setHeight(ExpandedDimensionProp.Builder().build())
-                                            .setWidth(ExpandedDimensionProp.Builder().build())
-                                            .setModifiers(
-                                                Modifiers.Builder().setBackground(
-                                                        Background.Builder()
-                                                            .setColor(argb(Color.DKGRAY))
-                                                            .build()
-                                                    ).build()
-                                            ).addContent(
-                                                Box.Builder()
-                                                    .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
-                                                    .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
-                                                    .setModifiers(
-                                                        Modifiers.Builder().setBackground(
-                                                                Background.Builder().setColor(
-                                                                        argb(Color.BLACK)
-                                                                    ).build()
-                                                            ).build()
-                                                    )
-                                                    .addContent(layout).build()
-                                            ).build()
+                    TimelineBuilders.TimelineEntry.Builder().setLayout(
+                        LayoutElementBuilders.Layout.Builder().setRoot(
+                            Box.Builder()
+                                .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
+                                .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
+                                .setHeight(ExpandedDimensionProp.Builder().build())
+                                .setWidth(ExpandedDimensionProp.Builder().build())
+                                .setModifiers(
+                                    Modifiers.Builder().setBackground(
+                                        Background.Builder()
+                                            .setColor(argb(Color.DKGRAY))
+                                            .build()
                                     ).build()
-                            ).build()
+                                ).addContent(
+                                    Box.Builder()
+                                        .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
+                                        .setVerticalAlignment(VERTICAL_ALIGN_CENTER)
+                                        .setModifiers(
+                                            Modifiers.Builder().setBackground(
+                                                Background.Builder().setColor(
+                                                    argb(Color.BLACK)
+                                                ).build()
+                                            ).build()
+                                        )
+                                        .addContent(layout).build()
+                                ).build()
+                        ).build()
                     ).build()
+                ).build()
             ).build()
     }
 
-    AndroidView(modifier = Modifier.fillMaxSize(), factory = {
-        FrameLayout(it)
-    }, update = {
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = {
+            FrameLayout(it)
+        },
+        update = {
 
-        val tileRenderer = androidx.wear.tiles.renderer.TileRenderer(
-            /* uiContext = */ it.context,
-            /* layout = */ tile.timeline?.timelineEntries?.first()?.layout!!,
-            /* resources = */ tileResources,
-            /* loadActionExecutor = */ Dispatchers.IO.asExecutor(),
-            /* loadActionListener = */ {})
+            val tileRenderer = androidx.wear.tiles.renderer.TileRenderer(
+                /* uiContext = */ it.context,
+                /* layout = */ tile.timeline?.timelineEntries?.first()?.layout!!,
+                /* resources = */ tileResources,
+                /* loadActionExecutor = */ Dispatchers.IO.asExecutor(),
+                /* loadActionListener = */ {}
+            )
 
-        tileRenderer.inflate(it)
-    })
+            tileRenderer.inflate(it)
+        }
+    )
 }
 
 @Preview(

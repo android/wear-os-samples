@@ -64,17 +64,21 @@ class MessagingTileService : CoroutinesTileService() {
             .map {
                 buildState(it)
             }
-            .stateIn(lifecycleScope,
+            .stateIn(
+                lifecycleScope,
                 started = SharingStarted.WhileSubscribed(5000),
-                initialValue = null)
+                initialValue = null
+            )
     }
 
     private suspend fun buildState(contacts: List<Contact>): MessagingTileState {
         val avatars = coroutineScope {
             contacts.map { contact ->
                 async {
-                    val avatar = imageLoader.loadAvatar(context = this@MessagingTileService,
-                        contact = contact)
+                    val avatar = imageLoader.loadAvatar(
+                        context = this@MessagingTileService,
+                        contact = contact
+                    )
                     avatar?.run {
                         contact.id to avatar
                     }

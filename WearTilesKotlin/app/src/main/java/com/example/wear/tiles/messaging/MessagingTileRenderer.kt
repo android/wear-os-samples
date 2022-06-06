@@ -29,6 +29,7 @@ import androidx.wear.tiles.LayoutElementBuilders.Box
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
 import androidx.wear.tiles.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
+import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
 import androidx.wear.tiles.LayoutElementBuilders.Text
@@ -38,8 +39,11 @@ import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.ResourceBuilders
-import androidx.wear.tiles.TileBuilders
+import androidx.wear.tiles.ResourceBuilders.ImageResource
+import androidx.wear.tiles.ResourceBuilders.Resources
+import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TimelineBuilders
+import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
 import com.example.wear.tiles.R
@@ -50,25 +54,29 @@ class MessagingTileRenderer(context: Context) :
     override fun tileRequest(
         tileState: MessagingTileState,
         requestParams: RequestBuilders.TileRequest,
-    ): TileBuilders.Tile {
-        return TileBuilders.Tile.Builder()
+    ): Tile {
+        val tileLayout = tileLayout(
+            tileState,
+            requestParams.deviceParameters!!
+        )
+
+        val timelineEntry = TimelineEntry.Builder()
+            .setLayout(
+                Layout.Builder()
+                    .setRoot(
+                        tileLayout
+                    )
+                    .build()
+            )
+            .build()
+
+        return Tile.Builder()
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
                 TimelineBuilders.Timeline.Builder()
                     .addTimelineEntry(
-                        TimelineBuilders.TimelineEntry.Builder()
-                            .setLayout(
-                                LayoutElementBuilders.Layout.Builder()
-                                    .setRoot(
-                                        tileLayout(
-                                            tileState,
-                                            requestParams.deviceParameters!!
-                                        )
-                                    )
-                                    .build()
-                            )
-                            .build()
+                        timelineEntry
                     )
                     .build()
             ).build()
@@ -77,8 +85,8 @@ class MessagingTileRenderer(context: Context) :
     override fun resourcesRequest(
         tileState: MessagingTileState,
         requestParams: RequestBuilders.ResourcesRequest,
-    ): ResourceBuilders.Resources {
-        return ResourceBuilders.Resources.Builder()
+    ): Resources {
+        return Resources.Builder()
             .setVersion(RESOURCES_VERSION)
             .apply {
                 // Add the scaled & cropped avatar images
@@ -91,7 +99,7 @@ class MessagingTileRenderer(context: Context) :
             }
             .addIdToImageMapping(
                 ID_IC_SEARCH,
-                ResourceBuilders.ImageResource.Builder()
+                ImageResource.Builder()
                     .setAndroidResourceByResId(
                         ResourceBuilders.AndroidImageResourceByResId.Builder()
                             .setResourceId(R.drawable.ic_search)
@@ -193,7 +201,9 @@ class MessagingTileRenderer(context: Context) :
                         Modifiers.Builder()
                             .setSemantics(
                                 Semantics.Builder()
-                                    .setContentDescription(context.getString(R.string.tile_messaging_label))
+                                    .setContentDescription(
+                                        context.getString(R.string.tile_messaging_label)
+                                    )
                                     .build()
                             )
                             .build()

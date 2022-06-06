@@ -20,7 +20,7 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.example.wear.tiles.di.AppContainer
 
-class TilesApplication: Application(), ImageLoaderFactory {
+class TilesApplication : Application(), ImageLoaderFactory {
     internal lateinit var appContainer: AppContainer
 
     override fun onCreate() {
