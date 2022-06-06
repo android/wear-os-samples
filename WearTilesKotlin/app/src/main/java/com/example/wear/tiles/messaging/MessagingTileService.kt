@@ -15,13 +15,14 @@
  */
 package com.example.wear.tiles.messaging
 
+import androidx.lifecycle.lifecycleScope
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
 import coil.ImageLoader
-import com.example.wear.tiles.CoroutinesTileService
 import com.example.wear.tiles.TilesApplication
+import com.google.android.horologist.tiles.CoroutinesTileService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -63,7 +64,7 @@ class MessagingTileService : CoroutinesTileService() {
             .map {
                 buildState(it)
             }
-            .stateIn(this.serviceScope,
+            .stateIn(lifecycleScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = null)
     }
@@ -94,7 +95,7 @@ class MessagingTileService : CoroutinesTileService() {
     }
 
     private fun updateContacts() {
-        serviceScope.launch {
+        lifecycleScope.launch {
             repo.updateContacts(MessagingRepo.knownContacts)
             updates.forceUpdates()
         }
