@@ -115,7 +115,7 @@ class MessagingTileRenderer(context: Context) :
                 Column.Builder()
                     .setWidth(WrappedDimensionProp.Builder().build())
                     .setHeight(WrappedDimensionProp.Builder().build())
-                    .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+                    .setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
                     .addContent(
                         Text.Builder()
                             .setText(context.resources.getString(R.string.tile_messaging_title))
@@ -258,9 +258,9 @@ class MessagingTileRenderer(context: Context) :
     }
 
     companion object {
-        // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
-        // resources, the contents of which change even though their id stays the same (e.g. a graph).
-        // In this sample, our resources are all fixed, so we use a constant value.
+        // Updating this version triggers a new call to onResourcesRequest(). This is useful for
+        // dynamic resources, the contents of which change even though their id stays the same
+        // (e.g. a graph). In this sample, our resources are all fixed, so we use a constant value.
         internal const val RESOURCES_VERSION = "2"
 
         // Dimensions
