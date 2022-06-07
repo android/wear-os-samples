@@ -14,12 +14,16 @@ org-jetbrains-kotlinx = "1.6.2"
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.1"
 androidx-activity-compose = "androidx.activity:activity-compose:1.4.0"
+androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-wear = "androidx.wear:wear:1.2.0"
 androidx-wear-compose = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose"}
 androidx-wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose"}
 androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
 androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
 androidx-wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
+coil = "io.coil-kt:coil-compose:2.1.0"
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-tiles = { module = "com.google.android.horologist:horologist-tiles", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"

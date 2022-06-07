@@ -76,8 +76,13 @@ dependencies {
     implementation libs.androidx.wear.tiles
     implementation libs.androidx.wear.tiles.material
 
+    implementation libs.coil
+    implementation libs.androidx.datastore
+
     // Use to preview wear tiles in your own app
     debugImplementation libs.androidx.wear.tiles.renderer
 
     implementation libs.horologist.tiles
+    debugImplementation libs.compose.ui.tooling
+    implementation libs.compose.ui.tooling.preview
 }

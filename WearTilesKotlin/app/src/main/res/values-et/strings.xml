@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Näidisplaadid</string>
+    <string name="tile_description">Näidisplaadid</string>
+    <string name="tile_messaging_label">Lemmikkontaktid</string>
+    <string name="tile_messaging_title">Sõbrad</string>
+    <string name="tile_messaging_subtitle">Lemmikud</string>
+    <string name="tile_messaging_search">Otsing</string>
+</resources>
