@@ -27,7 +27,7 @@ import kotlinx.coroutines.cancel
 import java.io.Closeable
 
 // https://developer.android.com/training/dependency-injection/manual
-class AppContainer(application: Context): Closeable {
+class AppContainer(application: Context) : Closeable {
     val imageLoader: ImageLoader = ImageLoader.Builder(application)
         .respectCacheHeaders(false)
         .build()

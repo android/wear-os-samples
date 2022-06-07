@@ -17,7 +17,6 @@ package com.example.wear.tiles.util
 
 import android.content.Context
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders
 
