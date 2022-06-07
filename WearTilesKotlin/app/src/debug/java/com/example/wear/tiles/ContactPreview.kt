@@ -41,7 +41,6 @@ fun ContactPreview() {
 
     val layout = renderer.contactLayout(
         contact = MessagingRepo.knownContacts[0],
-        avatar = null,
         clickable = emptyClickable
     )
 
@@ -59,7 +58,6 @@ fun ContactWithImagePreview() {
 
     val layout = renderer.contactLayout(
         contact = contact,
-        avatar = bitmap,
         clickable = emptyClickable
     )
 
@@ -68,6 +66,26 @@ fun ContactWithImagePreview() {
             "${MessagingTileRenderer.ID_CONTACT_PREFIX}${contact.id}",
             bitmapToImageResource(bitmap)
         )
+        .build()
+
+    LayoutPreview(layout, resources)
+}
+
+// Shows a problem with no fallback if image is missing
+@IconSizePreview
+@Composable
+fun ContactWithMissingImagePreview() {
+    val context = LocalContext.current
+    val renderer = remember { MessagingTileRenderer(context) }
+
+    val contact = MessagingRepo.knownContacts[1]
+
+    val layout = renderer.contactLayout(
+        contact = contact,
+        clickable = emptyClickable
+    )
+
+    val resources = ResourceBuilders.Resources.Builder()
         .build()
 
     LayoutPreview(layout, resources)

@@ -20,13 +20,23 @@ import coil.ImageLoader
 import com.example.wear.tiles.messaging.MessagingRepo
 import com.example.wear.tiles.messaging.MessagingTileRenderer
 import com.example.wear.tiles.messaging.Updates
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import java.io.Closeable
 
 // https://developer.android.com/training/dependency-injection/manual
-class AppContainer(private val application: Context) {
+class AppContainer(application: Context): Closeable {
     val imageLoader: ImageLoader = ImageLoader.Builder(application)
         .respectCacheHeaders(false)
         .build()
     val repo: MessagingRepo = MessagingRepo(application)
     val renderer: MessagingTileRenderer = MessagingTileRenderer(application)
-    val updates: Updates = Updates(application)
+    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val updates: Updates = Updates(application = application, scope = scope, repo = repo)
+
+    override fun close() {
+        scope.cancel()
+    }
 }

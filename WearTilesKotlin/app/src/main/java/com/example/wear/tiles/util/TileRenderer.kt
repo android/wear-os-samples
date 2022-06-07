@@ -18,16 +18,17 @@ package com.example.wear.tiles.util
 import android.content.Context
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.ResourceBuilders
+import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders
 
-abstract class TileRenderer<T>(val context: Context) {
-    abstract fun tileRequest(
+abstract class TileRenderer<T, R>(val context: Context) {
+    abstract fun renderTile(
         tileState: T,
         requestParams: RequestBuilders.TileRequest,
     ): TileBuilders.Tile
 
-    abstract fun resourcesRequest(
-        tileState: T,
+    abstract fun produceRequestedResources(
+        resourceResults: R,
         requestParams: RequestBuilders.ResourcesRequest,
-    ): ResourceBuilders.Resources
+    ): Resources
 }

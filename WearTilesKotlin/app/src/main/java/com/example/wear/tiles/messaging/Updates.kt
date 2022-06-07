@@ -17,11 +17,21 @@ package com.example.wear.tiles.messaging
 
 import android.content.Context
 import androidx.wear.tiles.TileService.getUpdater
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class Updates(
-    val application: Context
+    val application: Context,
+    var repo: MessagingRepo,
+    val scope: CoroutineScope
 ) {
-    fun forceUpdates() {
-        getUpdater(application).requestUpdate(MessagingTileService::class.java)
+    /**
+     * Call to request data and trigger updates to tiles.
+     */
+    fun updateData() {
+        scope.launch {
+            repo.updateContacts(MessagingRepo.knownContacts)
+            getUpdater(application).requestUpdate(MessagingTileService::class.java)
+        }
     }
 }

@@ -15,9 +15,6 @@
  */
 package com.example.wear.tiles.messaging
 
-import android.graphics.Bitmap
-
 data class MessagingTileState(
-    val contacts: List<Contact>,
-    val avatars: Map<Long, Bitmap>
+    val contacts: List<Contact>
 )

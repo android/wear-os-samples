@@ -15,7 +15,6 @@
  */
 package com.example.wear.tiles
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -40,13 +39,13 @@ fun MessagingPreviews() {
     val context = LocalContext.current
     val renderer = remember { MessagingTileRenderer(context) }
 
-    val avatars = mapOf<Long, Bitmap>(
-        1L to BitmapFactory.decodeResource(context.resources, R.drawable.ali),
-        3L to BitmapFactory.decodeResource(context.resources, R.drawable.taylor),
+    val state = MessagingTileState(MessagingRepo.knownContacts)
+    val resourceState = mapOf(
+        state.contacts[1] to BitmapFactory.decodeResource(context.resources, R.drawable.ali),
+        state.contacts[3] to BitmapFactory.decodeResource(context.resources, R.drawable.taylor),
     )
-    val state = MessagingTileState(MessagingRepo.knownContacts, avatars)
 
-    TileRendererPreview(state, renderer)
+    TileRendererPreview(state, resourceState, renderer)
 }
 
 @WearLargeRoundDevicePreview
@@ -57,9 +56,9 @@ fun MessagingPreviewsDifferentNumber(
     val context = LocalContext.current
     val renderer = remember { MessagingTileRenderer(context) }
 
-    val state = MessagingTileState(people, mapOf())
+    val state = MessagingTileState(people)
 
-    TileRendererPreview(state, renderer)
+    TileRendererPreview(state, mapOf(), renderer)
 }
 
 class SampleContactsProvider : PreviewParameterProvider<List<Contact>> {

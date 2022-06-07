@@ -25,7 +25,14 @@ class TilesApplication : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+
         appContainer = AppContainer(this)
+    }
+
+    override fun onTerminate() {
+        appContainer.close()
+
+        super.onTerminate()
     }
 
     // Allows Coil ImageLoader singleton to work from anywhere

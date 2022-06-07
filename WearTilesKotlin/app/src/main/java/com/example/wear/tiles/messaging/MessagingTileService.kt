@@ -15,6 +15,7 @@
  */
 package com.example.wear.tiles.messaging
 
+import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
@@ -32,7 +33,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 /**
  * Creates a Messaging Tile, showing your favorite contacts and a button to search other contacts.
@@ -71,42 +71,60 @@ class MessagingTileService : CoroutinesTileService() {
             )
     }
 
-    private suspend fun buildState(contacts: List<Contact>): MessagingTileState {
-        val avatars = coroutineScope {
-            contacts.map { contact ->
-                async {
-                    val avatar = imageLoader.loadAvatar(
-                        context = this@MessagingTileService,
-                        contact = contact
-                    )
-                    avatar?.run {
-                        contact.id to avatar
-                    }
-                }
-            }
-        }.awaitAll().filterNotNull().toMap()
-        return MessagingTileState(contacts, avatars)
+    private fun buildState(contacts: List<Contact>): MessagingTileState {
+        return MessagingTileState(contacts)
     }
 
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val tileState = tileStateFlow.filterNotNull().first()
+        val tileState = readTileState()
+
+        return renderer.renderTile(tileState, requestParams)
+    }
+
+    private suspend fun readTileState(): MessagingTileState {
+        var tileState = tileStateFlow.filterNotNull().first()
 
         if (tileState.contacts.isEmpty()) {
             updateContacts()
+            tileState = tileStateFlow.filterNotNull().first()
         }
-
-        return renderer.tileRequest(tileState, requestParams)
+        return tileState
     }
 
-    private fun updateContacts() {
-        lifecycleScope.launch {
-            repo.updateContacts(MessagingRepo.knownContacts)
-            updates.forceUpdates()
-        }
+    private suspend fun updateContacts() {
+        repo.updateContacts(MessagingRepo.knownContacts)
     }
 
     override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
-        val tileState = tileStateFlow.filterNotNull().first()
-        return renderer.resourcesRequest(tileState, requestParams)
+        val tileState = readTileState()
+
+        val images = generateRequestedResources(tileState, requestParams)
+
+        return renderer.produceRequestedResources(images, requestParams)
+    }
+
+    suspend fun generateRequestedResources(
+        tileState: MessagingTileState,
+        requestParams: ResourcesRequest,
+    ): Map<Contact, Bitmap> {
+        val requestedAvatars = if (requestParams.resourceIds.isEmpty()) {
+            tileState.contacts
+        } else {
+            tileState.contacts.filter {
+                requestParams.resourceIds.contains(MessagingTileRenderer.ID_CONTACT_PREFIX + it.id)
+            }
+        }
+
+        val images = coroutineScope {
+            requestedAvatars.map { contact ->
+                async {
+                    val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
+
+                    image?.let { contact to it }
+                }
+            }
+        }.awaitAll().filterNotNull().toMap()
+
+        return images
     }
 }

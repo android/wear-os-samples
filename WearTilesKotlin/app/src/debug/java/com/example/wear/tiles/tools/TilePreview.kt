@@ -48,16 +48,16 @@ import kotlinx.coroutines.asExecutor
 import kotlin.math.roundToInt
 
 @Composable
-fun <T> TileRendererPreview(state: T, renderer: TileRenderer<T>) {
+fun <T, R> TileRendererPreview(state: T, resourceState: R, renderer: TileRenderer<T, R>) {
     val context = LocalContext.current
     val resources = context.resources
 
     val requestParams = remember { requestParams(resources) }
 
-    val tile = remember(state) { renderer.tileRequest(state, requestParams) }
+    val tile = remember(state) { renderer.renderTile(state, requestParams) }
     val resourceParams =
         remember(tile.resourcesVersion) { resourceParams(resources, tile.resourcesVersion) }
-    val tileResources = remember(state) { renderer.resourcesRequest(state, resourceParams) }
+    val tileResources = remember(state) { renderer.produceRequestedResources(resourceState, resourceParams) }
 
     TilePreview(tile, tileResources)
 }
@@ -95,7 +95,7 @@ fun LayoutPreview(
     tileResources: ResourceBuilders.Resources = ResourceBuilders.Resources.Builder().build()
 ) {
     val tile = remember {
-        TileBuilders.Tile.Builder().setResourcesVersion(MessagingTileRenderer.RESOURCES_VERSION)
+        TileBuilders.Tile.Builder().setResourcesVersion(MessagingTileRenderer.PERMANENT_RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
                 TimelineBuilders.Timeline.Builder().addTimelineEntry(

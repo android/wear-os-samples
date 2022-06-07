@@ -17,19 +17,18 @@ package com.example.wear.tiles.messaging
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.core.content.ContextCompat
 import androidx.wear.tiles.ActionBuilders.LoadAction
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DimensionBuilders
 import androidx.wear.tiles.DimensionBuilders.ExpandedDimensionProp
 import androidx.wear.tiles.DimensionBuilders.WrappedDimensionProp
-import androidx.wear.tiles.LayoutElementBuilders
 import androidx.wear.tiles.LayoutElementBuilders.Box
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
 import androidx.wear.tiles.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
 import androidx.wear.tiles.LayoutElementBuilders.Layout
+import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
 import androidx.wear.tiles.LayoutElementBuilders.Text
@@ -50,8 +49,8 @@ import com.example.wear.tiles.R
 import com.example.wear.tiles.util.TileRenderer
 
 class MessagingTileRenderer(context: Context) :
-    TileRenderer<MessagingTileState>(context) {
-    override fun tileRequest(
+    TileRenderer<MessagingTileState, Map<Contact, Bitmap>>(context) {
+    override fun renderTile(
         tileState: MessagingTileState,
         requestParams: RequestBuilders.TileRequest,
     ): Tile {
@@ -71,7 +70,7 @@ class MessagingTileRenderer(context: Context) :
             .build()
 
         return Tile.Builder()
-            .setResourcesVersion(RESOURCES_VERSION)
+            .setResourcesVersion(PERMANENT_RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
                 TimelineBuilders.Timeline.Builder()
@@ -82,22 +81,14 @@ class MessagingTileRenderer(context: Context) :
             ).build()
     }
 
-    override fun resourcesRequest(
-        tileState: MessagingTileState,
-        requestParams: RequestBuilders.ResourcesRequest,
+    override fun produceRequestedResources(
+        resourceResults: Map<Contact, Bitmap>,
+        requestParams: RequestBuilders.ResourcesRequest
     ): Resources {
-        return Resources.Builder()
-            .setVersion(RESOURCES_VERSION)
-            .apply {
-                // Add the scaled & cropped avatar images
-                tileState.avatars.map { (id, bitmap) ->
-                    id to bitmapToImageResource(bitmap)
-                }.forEach { (id, imageResource) ->
-                    // Add each created image resource to the list
-                    addIdToImageMapping("$ID_CONTACT_PREFIX$id", imageResource)
-                }
-            }
-            .addIdToImageMapping(
+        val resourcesBuilder = Resources.Builder().setVersion(PERMANENT_RESOURCES_VERSION)
+
+        if (requestParams.resourceRequested(ID_IC_SEARCH)) {
+            resourcesBuilder.addIdToImageMapping(
                 ID_IC_SEARCH,
                 ImageResource.Builder()
                     .setAndroidResourceByResId(
@@ -107,13 +98,29 @@ class MessagingTileRenderer(context: Context) :
                     )
                     .build()
             )
-            .build()
+        }
+
+        // Add the scaled & cropped avatar images
+        resourceResults.forEach { (contact, bitmap) ->
+            val imageResource = bitmapToImageResource(bitmap)
+            // Add each created image resource to the list
+            resourcesBuilder.addIdToImageMapping(
+                "$ID_CONTACT_PREFIX${contact.id}",
+                imageResource
+            )
+        }
+
+        return resourcesBuilder.build()
     }
+
+    private fun RequestBuilders.ResourcesRequest.resourceRequested(
+        searchElement: String
+    ) = resourceIds.isEmpty() || resourceIds.contains(searchElement)
 
     internal fun tileLayout(
         state: MessagingTileState,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
-    ): LayoutElementBuilders.LayoutElement {
+    ): LayoutElement {
         return Box.Builder()
             .setWidth(ExpandedDimensionProp.Builder().build())
             .setHeight(ExpandedDimensionProp.Builder().build())
@@ -132,8 +139,7 @@ class MessagingTileRenderer(context: Context) :
                                     .title3(deviceParameters)
                                     .setColor(
                                         ColorBuilders.argb(
-                                            ContextCompat.getColor(
-                                                context,
+                                            context.getColor(
                                                 R.color.primary
                                             )
                                         )
@@ -154,8 +160,7 @@ class MessagingTileRenderer(context: Context) :
                                     .caption1(deviceParameters)
                                     .setColor(
                                         ColorBuilders.argb(
-                                            ContextCompat.getColor(
-                                                context,
+                                            context.getColor(
                                                 R.color.onSecondary
                                             )
                                         )
@@ -170,17 +175,46 @@ class MessagingTileRenderer(context: Context) :
                     )
                     .addContent(
                         Row.Builder()
-                            .addContact(state, 0)
-                            .addContent(
-                                Spacer.Builder()
-                                    .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
-                            )
-                            .addContact(state, 1)
-                            .addContent(
-                                Spacer.Builder()
-                                    .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
-                            )
-                            .addContact(state, 2)
+                            .apply {
+                                if (state.contacts.size >= 1) {
+                                    addContent(
+                                        contactLayout(
+                                            contact = state.contacts[0],
+                                            clickable = Clickable.Builder()
+                                                .setOnClick(LoadAction.Builder().build())
+                                                .build()
+                                        )
+                                    )
+                                }
+                                if (state.contacts.size >= 2) {
+                                    addContent(
+                                        Spacer.Builder()
+                                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                                    )
+                                    addContent(
+                                        contactLayout(
+                                            contact = state.contacts[1],
+                                            clickable = Clickable.Builder()
+                                                .setOnClick(LoadAction.Builder().build())
+                                                .build()
+                                        )
+                                    )
+                                }
+                                if (state.contacts.size >= 3) {
+                                    addContent(
+                                        Spacer.Builder()
+                                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                                    )
+                                    addContent(
+                                        contactLayout(
+                                            contact = state.contacts[2],
+                                            clickable = Clickable.Builder()
+                                                .setOnClick(LoadAction.Builder().build())
+                                                .build()
+                                        )
+                                    )
+                                }
+                            }
                             .build()
                     )
                     .addContent(
@@ -189,11 +223,22 @@ class MessagingTileRenderer(context: Context) :
                     )
                     .addContent(
                         Row.Builder()
-                            .addContact(state, 3)
-                            .addContent(
-                                Spacer.Builder()
-                                    .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
-                            )
+                            .apply {
+                                if (state.contacts.size >= 4) {
+                                    addContent(
+                                        contactLayout(
+                                            contact = state.contacts[3],
+                                            clickable = Clickable.Builder()
+                                                .setOnClick(LoadAction.Builder().build())
+                                                .build()
+                                        )
+                                    )
+                                    addContent(
+                                        Spacer.Builder()
+                                            .setWidth(SPACING_CONTACTS_HORIZONTAL).build()
+                                    )
+                                }
+                            }
                             .addContent(searchLayout())
                             .build()
                     )
@@ -215,17 +260,16 @@ class MessagingTileRenderer(context: Context) :
 
     fun contactLayout(
         contact: Contact,
-        avatar: Bitmap?,
         clickable: Clickable,
     ) = Button.Builder(context, clickable).apply {
         setContentDescription(contact.name)
         setButtonColors(
             ButtonColors(
-                ContextCompat.getColor(context, R.color.secondary),
-                ContextCompat.getColor(context, R.color.primary)
+                context.getColor(R.color.secondary),
+                context.getColor(R.color.primary)
             )
         )
-        if (avatar == null) {
+        if (contact.avatarUrl == null) {
             setTextContent(contact.initials)
         } else {
             setImageContent("$ID_CONTACT_PREFIX${contact.id}")
@@ -242,36 +286,21 @@ class MessagingTileRenderer(context: Context) :
     )
         .setButtonColors(
             ButtonColors(
-                ContextCompat.getColor(context, R.color.primaryDark),
-                ContextCompat.getColor(context, R.color.primary)
+                context.getColor(R.color.primaryDark),
+                context.getColor(R.color.primary)
             )
         )
         .setContentDescription(context.getString(R.string.tile_messaging_search))
         .setIconContent(ID_IC_SEARCH)
         .build()
 
-    private fun Row.Builder.addContact(
-        state: MessagingTileState,
-        i: Int
-    ): Row.Builder = if (state.contacts.size > i) {
-        addContent(
-            contactLayout(
-                contact = state.contacts[i],
-                avatar = state.avatars[state.contacts[i].id],
-                clickable = Clickable.Builder()
-                    .setOnClick(LoadAction.Builder().build())
-                    .build()
-            )
-        )
-    } else {
-        this
-    }
-
     companion object {
-        // Updating this version triggers a new call to onResourcesRequest(). This is useful for
-        // dynamic resources, the contents of which change even though their id stays the same
-        // (e.g. a graph). In this sample, our resources are all fixed, so we use a constant value.
-        internal const val RESOURCES_VERSION = "2"
+        // Updating this version triggers a new call to onResourcesRequest().
+        // This will flush all resources whether they have changed or not.
+        // For some dynamic content, change the id of the content that changes.
+        // Required resources not already cached will be requested as required.
+        // In this sample, our resources are all fixed, so we use a constant value.
+        internal const val PERMANENT_RESOURCES_VERSION = "0"
 
         // Dimensions
         private val SPACING_TITLE_SUBTITLE = DimensionBuilders.dp(4f)
@@ -281,6 +310,6 @@ class MessagingTileRenderer(context: Context) :
 
         // Resource identifiers for images
         internal const val ID_IC_SEARCH = "ic_search"
-        internal const val ID_CONTACT_PREFIX = "contact_"
+        internal const val ID_CONTACT_PREFIX = "contact:"
     }
 }
