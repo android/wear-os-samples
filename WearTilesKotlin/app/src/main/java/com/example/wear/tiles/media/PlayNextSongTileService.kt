@@ -23,7 +23,6 @@ import androidx.wear.tiles.DimensionBuilders.dp
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
 import androidx.wear.tiles.LayoutElementBuilders.Image
-import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
 import androidx.wear.tiles.LayoutElementBuilders.Text
@@ -36,10 +35,9 @@ import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TimelineBuilders.Timeline
-import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import com.example.wear.tiles.R
 import com.example.wear.tiles.components.IconButton
+import com.example.wear.tiles.singleEntryTimeline
 import com.google.android.horologist.tiles.CoroutinesTileService
 
 // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
@@ -73,18 +71,10 @@ class PlayNextSongTileService : CoroutinesTileService() {
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
         return Tile.Builder().apply {
             setResourcesVersion(RESOURCES_VERSION)
-            // Creates a timeline to hold one or more tile entries for a specific time periods.
             setTimeline(
-                Timeline.Builder()
-                    .addTimelineEntry(
-                        TimelineEntry.Builder()
-                            .setLayout(
-                                Layout.Builder()
-                                    .setRoot(tileLayout(requestParams.deviceParameters!!)).build()
-                            )
-                            .build()
-                    )
-                    .build()
+                singleEntryTimeline(
+                    tileLayout(requestParams.deviceParameters!!)
+                )
             )
         }.build()
     }

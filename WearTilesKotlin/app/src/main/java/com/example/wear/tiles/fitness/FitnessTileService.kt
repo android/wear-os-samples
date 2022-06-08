@@ -26,7 +26,6 @@ import androidx.wear.tiles.LayoutElementBuilders.ArcLine
 import androidx.wear.tiles.LayoutElementBuilders.Box
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
-import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.Text
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
@@ -34,9 +33,8 @@ import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TimelineBuilders.Timeline
-import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import com.example.wear.tiles.R
+import com.example.wear.tiles.singleEntryTimeline
 import com.google.android.horologist.tiles.CoroutinesTileService
 
 // Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
@@ -66,19 +64,9 @@ class FitnessTileService : CoroutinesTileService() {
             .setResourcesVersion(RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
-                Timeline.Builder()
-                    .addTimelineEntry(
-                        TimelineEntry.Builder()
-                            .setLayout(
-                                Layout.Builder()
-                                    .setRoot(
-                                        layout(goalProgress, requestParams.deviceParameters!!)
-                                    )
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
+                singleEntryTimeline(
+                    layout(goalProgress, requestParams.deviceParameters!!)
+                )
             )
             .build()
     }
