@@ -27,7 +27,6 @@ import androidx.wear.tiles.LayoutElementBuilders.Box
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.FontStyles
 import androidx.wear.tiles.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
-import androidx.wear.tiles.LayoutElementBuilders.Layout
 import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
 import androidx.wear.tiles.LayoutElementBuilders.Row
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
@@ -41,11 +40,10 @@ import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TimelineBuilders
-import androidx.wear.tiles.TimelineBuilders.TimelineEntry
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
 import com.example.wear.tiles.R
+import com.example.wear.tiles.singleEntryTimeline
 import com.example.wear.tiles.util.TileRenderer
 
 class MessagingTileRenderer(context: Context) :
@@ -54,30 +52,13 @@ class MessagingTileRenderer(context: Context) :
         tileState: MessagingTileState,
         requestParams: RequestBuilders.TileRequest,
     ): Tile {
-        val tileLayout = tileLayout(
-            tileState,
-            requestParams.deviceParameters!!
-        )
-
-        val timelineEntry = TimelineEntry.Builder()
-            .setLayout(
-                Layout.Builder()
-                    .setRoot(
-                        tileLayout
-                    )
-                    .build()
-            )
-            .build()
-
         return Tile.Builder()
             .setResourcesVersion(PERMANENT_RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
-                TimelineBuilders.Timeline.Builder()
-                    .addTimelineEntry(
-                        timelineEntry
-                    )
-                    .build()
+                singleEntryTimeline(
+                    tileLayout(tileState, requestParams.deviceParameters!!)
+                )
             ).build()
     }
 
@@ -113,9 +94,8 @@ class MessagingTileRenderer(context: Context) :
         return resourcesBuilder.build()
     }
 
-    private fun RequestBuilders.ResourcesRequest.resourceRequested(
-        searchElement: String
-    ) = resourceIds.isEmpty() || resourceIds.contains(searchElement)
+    private fun RequestBuilders.ResourcesRequest.resourceRequested(resourceId: String) =
+        resourceIds.isEmpty() || resourceIds.contains(resourceId)
 
     internal fun tileLayout(
         state: MessagingTileState,
