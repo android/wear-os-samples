@@ -56,9 +56,9 @@ class MessagingTileRenderer(context: Context) :
             .setResourcesVersion(PERMANENT_RESOURCES_VERSION)
             // Creates a timeline to hold one or more tile entries for a specific time periods.
             .setTimeline(
-                singleEntryTimeline {
+                singleEntryTimeline(
                     tileLayout(tileState, requestParams.deviceParameters!!)
-                }
+                )
             ).build()
     }
 
