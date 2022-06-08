@@ -49,7 +49,6 @@ class MessagingTileService : CoroutinesTileService() {
     private lateinit var renderer: MessagingTileRenderer
     private lateinit var repo: MessagingRepo
     private lateinit var imageLoader: ImageLoader
-    private lateinit var updates: Updates
 
     override fun onCreate() {
         super.onCreate()
@@ -58,7 +57,6 @@ class MessagingTileService : CoroutinesTileService() {
         renderer = appContainer.renderer
         repo = appContainer.repo
         imageLoader = ImageLoader(this)
-        updates = appContainer.updates
 
         tileStateFlow = repo.getFavoriteContacts()
             .map {
