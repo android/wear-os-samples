@@ -19,19 +19,24 @@ import android.graphics.BitmapFactory
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.tiles.ActionBuilders
 import androidx.wear.tiles.ModifiersBuilders
 import androidx.wear.tiles.ResourceBuilders
 import com.example.wear.tiles.messaging.MessagingRepo
 import com.example.wear.tiles.messaging.MessagingTileRenderer
 import com.example.wear.tiles.messaging.bitmapToImageResource
-import com.example.wear.tiles.tools.IconSizePreview
-import com.example.wear.tiles.tools.LayoutPreview
+import com.google.android.horologist.compose.tools.LayoutPreview
 
 val emptyClickable = ModifiersBuilders.Clickable.Builder()
     .setOnClick(ActionBuilders.LoadAction.Builder().build())
     .setId("")
     .build()
+
+@Preview(
+    backgroundColor = 0xff000000, showBackground = true, widthDp = 100, heightDp = 100
+)
+annotation class IconSizePreview
 
 @IconSizePreview
 @Composable
@@ -61,14 +66,12 @@ fun ContactWithImagePreview() {
         clickable = emptyClickable
     )
 
-    val resources = ResourceBuilders.Resources.Builder()
-        .addIdToImageMapping(
+    LayoutPreview(layout) {
+        addIdToImageMapping(
             "${MessagingTileRenderer.ID_CONTACT_PREFIX}${contact.id}",
             bitmapToImageResource(bitmap)
         )
-        .build()
-
-    LayoutPreview(layout, resources)
+    }
 }
 
 // Shows a problem with no fallback if image is missing
@@ -85,10 +88,7 @@ fun ContactWithMissingImagePreview() {
         clickable = emptyClickable
     )
 
-    val resources = ResourceBuilders.Resources.Builder()
-        .build()
-
-    LayoutPreview(layout, resources)
+    LayoutPreview(layout)
 }
 
 @IconSizePreview
@@ -99,8 +99,8 @@ fun SearchPreview() {
 
     val layout = renderer.searchLayout()
 
-    val resources = ResourceBuilders.Resources.Builder()
-        .addIdToImageMapping(
+    LayoutPreview(layout) {
+        addIdToImageMapping(
             MessagingTileRenderer.ID_IC_SEARCH,
             ResourceBuilders.ImageResource.Builder()
                 .setAndroidResourceByResId(
@@ -110,7 +110,5 @@ fun SearchPreview() {
                 )
                 .build()
         )
-        .build()
-
-    LayoutPreview(layout, resources)
+    }
 }

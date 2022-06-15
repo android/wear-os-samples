@@ -17,6 +17,7 @@ package com.example.wear.tiles.messaging
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.annotation.DrawableRes
 import androidx.wear.tiles.ActionBuilders.LoadAction
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders
@@ -35,49 +36,33 @@ import androidx.wear.tiles.LayoutElementBuilders.VERTICAL_ALIGN_CENTER
 import androidx.wear.tiles.ModifiersBuilders.Clickable
 import androidx.wear.tiles.ModifiersBuilders.Modifiers
 import androidx.wear.tiles.ModifiersBuilders.Semantics
-import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
-import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
 import com.example.wear.tiles.R
-import com.example.wear.tiles.singleEntryTimeline
-import com.example.wear.tiles.util.TileRenderer
+import com.google.android.horologist.tiles.SingleTileLayoutRenderer
 
 class MessagingTileRenderer(context: Context) :
-    TileRenderer<MessagingTileState, Map<Contact, Bitmap>>(context) {
+    SingleTileLayoutRenderer<MessagingTileState, Map<Contact, Bitmap>>(context) {
+
     override fun renderTile(
-        tileState: MessagingTileState,
-        requestParams: RequestBuilders.TileRequest,
-    ): Tile {
-        return Tile.Builder()
-            .setResourcesVersion(PERMANENT_RESOURCES_VERSION)
-            // Creates a timeline to hold one or more tile entries for a specific time periods.
-            .setTimeline(
-                singleEntryTimeline(
-                    tileLayout(tileState, requestParams.deviceParameters!!)
-                )
-            ).build()
+        singleTileState: MessagingTileState,
+        deviceParameters: DeviceParametersBuilders.DeviceParameters
+    ): LayoutElement {
+        return tileLayout(singleTileState, deviceParameters)
     }
 
-    override fun produceRequestedResources(
+    override fun Resources.Builder.produceRequestedResources(
         resourceResults: Map<Contact, Bitmap>,
-        requestParams: RequestBuilders.ResourcesRequest
-    ): Resources {
-        val resourcesBuilder = Resources.Builder().setVersion(PERMANENT_RESOURCES_VERSION)
-
-        if (requestParams.resourceRequested(ID_IC_SEARCH)) {
-            resourcesBuilder.addIdToImageMapping(
+        deviceParameters: DeviceParametersBuilders.DeviceParameters,
+        resourceIds: MutableList<String>
+    ) {
+        if (resourceIds.isEmpty() || resourceIds.contains(ID_IC_SEARCH)) {
+            addIdToImageMapping(
                 ID_IC_SEARCH,
-                ImageResource.Builder()
-                    .setAndroidResourceByResId(
-                        ResourceBuilders.AndroidImageResourceByResId.Builder()
-                            .setResourceId(R.drawable.ic_search)
-                            .build()
-                    )
-                    .build()
+                imageResourceFrom(R.drawable.ic_search)
             )
         }
 
@@ -85,19 +70,22 @@ class MessagingTileRenderer(context: Context) :
         resourceResults.forEach { (contact, bitmap) ->
             val imageResource = bitmapToImageResource(bitmap)
             // Add each created image resource to the list
-            resourcesBuilder.addIdToImageMapping(
+            addIdToImageMapping(
                 "$ID_CONTACT_PREFIX${contact.id}",
                 imageResource
             )
         }
-
-        return resourcesBuilder.build()
     }
 
-    private fun RequestBuilders.ResourcesRequest.resourceRequested(resourceId: String) =
-        resourceIds.isEmpty() || resourceIds.contains(resourceId)
+    private fun imageResourceFrom(@DrawableRes resourceId: Int) = ImageResource.Builder()
+        .setAndroidResourceByResId(
+            ResourceBuilders.AndroidImageResourceByResId.Builder()
+                .setResourceId(resourceId)
+                .build()
+        )
+        .build()
 
-    internal fun tileLayout(
+    private fun tileLayout(
         state: MessagingTileState,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
     ): LayoutElement {
@@ -238,7 +226,7 @@ class MessagingTileRenderer(context: Context) :
             .build()
     }
 
-    fun contactLayout(
+    internal fun contactLayout(
         contact: Contact,
         clickable: Clickable,
     ) = Button.Builder(context, clickable).apply {

@@ -25,11 +25,11 @@ import com.example.wear.tiles.messaging.Contact
 import com.example.wear.tiles.messaging.MessagingRepo
 import com.example.wear.tiles.messaging.MessagingTileRenderer
 import com.example.wear.tiles.messaging.MessagingTileState
-import com.example.wear.tiles.tools.TileRendererPreview
 import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
 import com.example.wear.tiles.tools.WearPreviewDevices
 import com.example.wear.tiles.tools.WearPreviewFontSizes
 import com.example.wear.tiles.tools.WearPreviewLocales
+import com.google.android.horologist.compose.tools.TileLayoutPreview
 
 @WearPreviewDevices
 @WearPreviewFontSizes
@@ -45,7 +45,7 @@ fun MessagingPreviews() {
         state.contacts[3] to BitmapFactory.decodeResource(context.resources, R.drawable.taylor),
     )
 
-    TileRendererPreview(state, resourceState, renderer)
+    TileLayoutPreview(state = state, resourceState = resourceState, renderer = renderer)
 }
 
 @WearLargeRoundDevicePreview
@@ -58,7 +58,7 @@ fun MessagingPreviewsDifferentNumber(
 
     val state = MessagingTileState(people)
 
-    TileRendererPreview(state, mapOf(), renderer)
+    TileLayoutPreview(state, mapOf(), renderer)
 }
 
 class SampleContactsProvider : PreviewParameterProvider<List<Contact>> {
