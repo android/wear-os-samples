@@ -76,7 +76,7 @@ class MessagingTileService : CoroutinesTileService() {
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
         val tileState = readTileState()
 
-        return renderer.renderTile(tileState, requestParams)
+        return renderer.renderTimeline(tileState, requestParams)
     }
 
     private suspend fun readTileState(): MessagingTileState {
