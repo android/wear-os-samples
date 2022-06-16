@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListAnchorType
 import androidx.wear.compose.material.ScalingLazyListState
@@ -48,13 +50,15 @@ fun ProgressIndicatorsScreen(
     modifier: Modifier = Modifier,
 ) {
     ScalingLazyColumn(
-        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
+        modifier = modifier
+            .scrollableColumn(focusRequester, scalingLazyListState)
+            .fillMaxWidth(),
         state = scalingLazyListState,
         anchorType = ScalingLazyListAnchorType.ItemStart
     ) {
         for (menuItem in menuItems) {
             item {
-                Chip(
+                CompactChip(
                     onClick = menuItem.clickHander,
                     label = {
                         Text(
@@ -63,7 +67,7 @@ fun ProgressIndicatorsScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.wrapContentWidth()
                 )
             }
         }
@@ -101,7 +105,9 @@ fun FullScreenProgressIndicator(
             startAngle = 315f,
             endAngle = 225f,
             progress = currentRotation,
-            modifier = Modifier.fillMaxSize().padding(all = 1.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(all = 1.dp)
         )
     }
 }
