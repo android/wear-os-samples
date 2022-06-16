@@ -81,18 +81,14 @@ fun WatchListScreen(
         item {
             ToggleChip(
                 modifier = Modifier
-                    .height(32.dp)
+                    .height(48.dp)
                     .padding(
-                        start = if (LocalConfiguration.current.isScreenRound) {
+                        horizontal = if (LocalConfiguration.current.isScreenRound) {
                             20.dp
                         } else {
                             10.dp
                         },
-                        end = if (LocalConfiguration.current.isScreenRound) {
-                            20.dp
-                        } else {
-                            10.dp
-                        },
+                        vertical = 8.dp
                     ),
                 checked = showVignette,
                 onCheckedChange = onClickVignetteToggle,
