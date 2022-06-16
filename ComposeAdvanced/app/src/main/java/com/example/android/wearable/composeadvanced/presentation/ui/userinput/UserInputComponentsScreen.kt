@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.wear.compose.material.AutoCenteringParams
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
@@ -87,7 +88,8 @@ fun UserInputComponentsScreen(
 
     ScalingLazyColumn(
         modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
-        state = scalingLazyListState
+        state = scalingLazyListState,
+        autoCentering = AutoCenteringParams(itemIndex = 0)
     ) {
         item {
             Chip(

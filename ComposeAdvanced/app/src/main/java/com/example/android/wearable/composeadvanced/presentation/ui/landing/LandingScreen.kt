@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,7 +41,8 @@ import androidx.wear.compose.foundation.CurvedModifier
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.foundation.radialGradientBackground
-import androidx.wear.compose.material.CompactChip
+import androidx.wear.compose.material.AutoCenteringParams
+import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.ScalingLazyColumn
@@ -78,13 +78,14 @@ fun LandingScreen(
         // Places both Chips (button and toggle) in the middle of the screen.
         ScalingLazyColumn(
             modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
-            state = scalingLazyListState
+            state = scalingLazyListState,
+            autoCentering = AutoCenteringParams(itemIndex = 0)
         ) {
             item {
                 // Signify we have drawn the content of the first screen
                 ReportFullyDrawn()
 
-                CompactChip(
+                Chip(
                     onClick = onClickWatchList,
                     label = {
                         Text(
@@ -98,7 +99,7 @@ fun LandingScreen(
             }
             for (listItem in menuItems) {
                 item {
-                    CompactChip(
+                    Chip(
                         onClick = listItem.clickHander,
                         label = {
                             Text(
@@ -113,7 +114,7 @@ fun LandingScreen(
             }
             item {
                 ToggleChip(
-                    modifier = Modifier.height(32.dp).fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     checked = proceedingTimeTextEnabled,
                     onCheckedChange = onClickProceedingTimeText,
                     label = {
