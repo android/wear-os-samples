@@ -33,7 +33,7 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
 androidx-media = "androidx.media:media:1.6.0"
 androidx-wear = "androidx.wear:wear:1.2.0"
-androidx-wear-watchface-complications-data-source-ktx = "androidx.wear.watchface:watchface-complications-data-source-ktx:1.0.1"
+androidx-wear-watchface-complications-data-source-ktx = "androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.0"
 androidx-window = "androidx.window:window:1.0.0"
 com-google-truth = "com.google.truth:truth:1.1.3"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
