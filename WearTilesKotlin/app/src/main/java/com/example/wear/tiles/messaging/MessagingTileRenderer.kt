@@ -42,16 +42,16 @@ import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
 import com.example.wear.tiles.R
-import com.google.android.horologist.tiles.SingleTileLayoutRenderer
+import com.google.android.horologist.tiles.render.SingleTileLayoutRenderer
 
 class MessagingTileRenderer(context: Context) :
     SingleTileLayoutRenderer<MessagingTileState, Map<Contact, Bitmap>>(context) {
 
     override fun renderTile(
-        singleTileState: MessagingTileState,
+        state: MessagingTileState,
         deviceParameters: DeviceParametersBuilders.DeviceParameters
     ): LayoutElement {
-        return tileLayout(singleTileState, deviceParameters)
+        return tileLayout(state, deviceParameters)
     }
 
     override fun Resources.Builder.produceRequestedResources(
@@ -263,13 +263,6 @@ class MessagingTileRenderer(context: Context) :
         .build()
 
     companion object {
-        // Updating this version triggers a new call to onResourcesRequest().
-        // This will flush all resources whether they have changed or not.
-        // For some dynamic content, change the id of the content that changes.
-        // Required resources not already cached will be requested as required.
-        // In this sample, our resources are all fixed, so we use a constant value.
-        internal const val PERMANENT_RESOURCES_VERSION = "0"
-
         // Dimensions
         private val SPACING_TITLE_SUBTITLE = DimensionBuilders.dp(4f)
         private val SPACING_SUBTITLE_CONTACTS = DimensionBuilders.dp(12f)
