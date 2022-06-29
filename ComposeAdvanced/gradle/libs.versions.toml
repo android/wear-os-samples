@@ -10,7 +10,7 @@ androidx-wear-compose = "1.0.0-rc02"
 compose = "1.2.0-rc02"
 horologist = "0.0.26"
 ktlint = "0.41.0"
-navigation = "2.5.0-rc02"
+navigation = "2.5.0"
 org-jetbrains-kotlin = "1.6.21"
 
 [libraries]
