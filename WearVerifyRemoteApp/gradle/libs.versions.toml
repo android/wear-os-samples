@@ -9,7 +9,7 @@ androidx-wear-watchface = "1.0.1"
 compose = "1.2.0-alpha08"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.7.0"
-org-jetbrains-kotlinx = "1.6.2"
+org-jetbrains-kotlinx = "1.6.3"
 
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.1"
