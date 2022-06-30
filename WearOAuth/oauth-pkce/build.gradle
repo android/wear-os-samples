@@ -27,16 +27,12 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
-
-    }
-
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
