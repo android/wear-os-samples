@@ -9,7 +9,7 @@ compose = "1.2.0-rc03"
 horologist = "0.0.26"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.7.0"
-org-jetbrains-kotlinx = "1.6.2"
+org-jetbrains-kotlinx = "1.6.3"
 
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.1"
