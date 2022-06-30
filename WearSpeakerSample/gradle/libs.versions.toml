@@ -3,7 +3,7 @@ android-gradle-plugin = "7.2.1"
 androidx-activity = "1.4.0"
 androidx-lifecycle = "2.5.0"
 androidx-wear-compose = "1.0.0-rc02"
-compose = "1.2.0"
+compose = "1.2.0-rc03"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.6.21"
 org-jetbrains-kotlinx = "1.6.2"
@@ -13,7 +13,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-media = "androidx.media:media:1.6.0"
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
+compose-compiler = "androidx.compose.compiler:compiler:1.2.0"
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-material-ripple = { module = "androidx.compose.material:material-ripple", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }

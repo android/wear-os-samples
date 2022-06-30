@@ -2,14 +2,14 @@
 android-gradle-plugin = "7.2.1"
 androidx-activity = "1.4.0"
 androidx-wear-compose = "1.0.0-rc02"
-compose = "1.2.0"
+compose = "1.2.0-rc03"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.6.21"
 org-jetbrains-kotlinx = "1.6.2"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
+compose-compiler = "androidx.compose.compiler:compiler:1.2.0"
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
