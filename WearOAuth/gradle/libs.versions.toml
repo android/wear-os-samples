@@ -13,7 +13,7 @@ ktlint = "0.41.0"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.1.5"
+android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.2.0"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.1"
 android-material = "com.google.android.material:material:1.6.1"
 android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.1"
