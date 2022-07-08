@@ -26,7 +26,7 @@ import androidx.wear.tiles.ResourceBuilders
 import com.example.wear.tiles.messaging.MessagingRepo
 import com.example.wear.tiles.messaging.MessagingTileRenderer
 import com.example.wear.tiles.messaging.bitmapToImageResource
-import com.google.android.horologist.compose.tools.LayoutPreview
+import com.google.android.horologist.compose.tools.LayoutElementPreview
 
 val emptyClickable = ModifiersBuilders.Clickable.Builder()
     .setOnClick(ActionBuilders.LoadAction.Builder().build())
@@ -49,7 +49,7 @@ fun ContactPreview() {
         clickable = emptyClickable
     )
 
-    LayoutPreview(layout)
+    LayoutElementPreview(layout)
 }
 
 @IconSizePreview
@@ -66,7 +66,7 @@ fun ContactWithImagePreview() {
         clickable = emptyClickable
     )
 
-    LayoutPreview(layout) {
+    LayoutElementPreview(layout) {
         addIdToImageMapping(
             "${MessagingTileRenderer.ID_CONTACT_PREFIX}${contact.id}",
             bitmapToImageResource(bitmap)
@@ -88,7 +88,7 @@ fun ContactWithMissingImagePreview() {
         clickable = emptyClickable
     )
 
-    LayoutPreview(layout)
+    LayoutElementPreview(layout)
 }
 
 @IconSizePreview
@@ -99,7 +99,7 @@ fun SearchPreview() {
 
     val layout = renderer.searchLayout()
 
-    LayoutPreview(layout) {
+    LayoutElementPreview(layout) {
         addIdToImageMapping(
             MessagingTileRenderer.ID_IC_SEARCH,
             ResourceBuilders.ImageResource.Builder()
