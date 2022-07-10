@@ -22,9 +22,14 @@ import androidx.wear.tiles.DimensionBuilders.dp
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
 import androidx.wear.tiles.ModifiersBuilders.Clickable
+import androidx.wear.tiles.material.Button
+import androidx.wear.tiles.material.ButtonColors
 import androidx.wear.tiles.material.Chip
 import androidx.wear.tiles.material.ChipColors
 import androidx.wear.tiles.material.CompactChip
+import androidx.wear.tiles.material.Text
+import androidx.wear.tiles.material.Typography
+import androidx.wear.tiles.material.layouts.MultiButtonLayout
 import androidx.wear.tiles.material.layouts.PrimaryLayout
 
 object Meditation {
@@ -75,5 +80,50 @@ object Meditation {
 
     }
 
+    fun buttonsLayout(
+        context: Context,
+        deviceParameters: DeviceParameters,
+        timer1: Timer,
+        timer2: Timer,
+        timer3: Timer,
+        clickable: Clickable
+    ) = PrimaryLayout.Builder(deviceParameters)
+        .setPrimaryLabelTextContent(
+            Text.Builder(context, "Minutes")
+                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                .build()
+        )
+        .setContent(
+            MultiButtonLayout.Builder()
+                .addButtonContent(timerButton(context, timer1))
+                .addButtonContent(timerButton(context, timer2))
+                .addButtonContent(timerButton(context, timer3))
+                .build()
+        )
+        .setPrimaryChipContent(
+            CompactChip.Builder(context, "New", clickable, deviceParameters)
+                .setChipColors(
+                    ChipColors(
+                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkPurple),
+                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                    )
+                )
+                .build()
+        )
+        .build()
+
+    private fun timerButton(context: Context, timer: Timer) =
+        Button.Builder(context, timer.clickable)
+            .setTextContent(timer.minutes.toString(), Typography.TYPOGRAPHY_TITLE3)
+            .setButtonColors(
+                ButtonColors(
+                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.LightPurple),
+                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                )
+            )
+            .build()
+
     data class Session(val label: String, val iconId: String, val clickable: Clickable)
+    data class Timer(val minutes: Int, val clickable: Clickable)
 }

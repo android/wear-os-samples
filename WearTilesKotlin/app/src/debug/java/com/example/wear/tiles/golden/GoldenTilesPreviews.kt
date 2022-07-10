@@ -173,7 +173,26 @@ fun MeditationChips() {
 @WearSmallRoundDevicePreview
 @Composable
 fun MeditationButtons() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Meditation.buttonsLayout(
+            context,
+            context.deviceParams(),
+            timer1 = Meditation.Timer(
+                minutes = 5,
+                clickable = emptyClickable
+            ),
+            timer2 = Meditation.Timer(
+                minutes = 10,
+                clickable = emptyClickable
+            ),
+            timer3 = Meditation.Timer(
+                minutes = 15,
+                clickable = emptyClickable
+            ),
+            clickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview
