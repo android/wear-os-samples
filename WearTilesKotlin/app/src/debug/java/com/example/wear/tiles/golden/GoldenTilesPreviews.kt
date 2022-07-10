@@ -96,7 +96,14 @@ fun Run() {
 @WearSmallRoundDevicePreview
 @Composable
 fun Ski() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Ski.layout(
+            context,
+            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+            stat2 = Ski.Stat("Distance", "21.8", "mile")
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview
