@@ -109,19 +109,30 @@ fun Ski() {
 @WearSmallRoundDevicePreview
 @Composable
 fun SleepTracker() {
-    // TODO
+    // TODO: yuri has an example of this one
 }
 
+/**
+ * b/238548541 (internal bug - the spacing doesn't match Figma)
+ */
 @WearSmallRoundDevicePreview
 @Composable
 fun HeartRateSimple() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        HeartRate.simpleLayout(
+            context,
+            context.deviceParams(),
+            heartRateBpm = 86,
+            clickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview
 @Composable
 fun HeartRateGraph() {
-    // TODO
+    // TODO: not trivial, ataul has dibs though please!
 }
 
 @WearSmallRoundDevicePreview
