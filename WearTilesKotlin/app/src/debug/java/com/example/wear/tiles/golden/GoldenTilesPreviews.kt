@@ -135,10 +135,39 @@ fun HeartRateGraph() {
     // TODO: not trivial, ataul has dibs though please!
 }
 
+/**
+ * b/238559060 (internal bug - the icon tint doesn't match Figma)
+ */
 @WearSmallRoundDevicePreview
 @Composable
 fun MeditationChips() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Meditation.chipsLayout(
+            context,
+            context.deviceParams(),
+            session1 = Meditation.Session(
+                label = "Breathe",
+                iconId = Meditation.CHIP_1_ICON_ID,
+                clickable = emptyClickable
+            ),
+            session2 = Meditation.Session(
+                label = "Daily mindfulness",
+                iconId = Meditation.CHIP_2_ICON_ID,
+                clickable = emptyClickable
+            ),
+            browseClickable = emptyClickable
+        )
+    ) {
+        addIdToImageMapping(
+            Meditation.CHIP_1_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_breathe_24)
+        )
+        addIdToImageMapping(
+            Meditation.CHIP_2_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_mindfulness_24)
+        )
+    }
 }
 
 @WearSmallRoundDevicePreview

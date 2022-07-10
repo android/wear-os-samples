@@ -29,9 +29,9 @@ import androidx.wear.tiles.material.layouts.MultiButtonLayout
 import androidx.wear.tiles.material.layouts.PrimaryLayout
 
 object Workout {
-    const val BUTTON_1_ICON_ID = "1"
-    const val BUTTON_2_ICON_ID = "2"
-    const val BUTTON_3_ICON_ID = "3"
+    const val BUTTON_1_ICON_ID = "workout 1"
+    const val BUTTON_2_ICON_ID = "workout 2"
+    const val BUTTON_3_ICON_ID = "workout 3"
 
     fun buttonsLayout(
         context: Context,
