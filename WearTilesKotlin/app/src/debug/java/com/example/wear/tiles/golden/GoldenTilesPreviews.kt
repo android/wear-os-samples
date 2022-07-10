@@ -178,18 +178,9 @@ fun MeditationButtons() {
         Meditation.buttonsLayout(
             context,
             context.deviceParams(),
-            timer1 = Meditation.Timer(
-                minutes = 5,
-                clickable = emptyClickable
-            ),
-            timer2 = Meditation.Timer(
-                minutes = 10,
-                clickable = emptyClickable
-            ),
-            timer3 = Meditation.Timer(
-                minutes = 15,
-                clickable = emptyClickable
-            ),
+            timer1 = Meditation.Timer(minutes = 5, clickable = emptyClickable),
+            timer2 = Meditation.Timer(minutes = 10, clickable = emptyClickable),
+            timer3 = Meditation.Timer(minutes = 15, clickable = emptyClickable),
             clickable = emptyClickable
         )
     )
@@ -198,7 +189,19 @@ fun MeditationButtons() {
 @WearSmallRoundDevicePreview
 @Composable
 fun Timer() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Timer.layout(
+            context,
+            context.deviceParams(),
+            timer1 = Timer.Timer(minutes = "05", clickable = emptyClickable),
+            timer2 = Timer.Timer(minutes = "10", clickable = emptyClickable),
+            timer3 = Timer.Timer(minutes = "15", clickable = emptyClickable),
+            timer4 = Timer.Timer(minutes = "20", clickable = emptyClickable),
+            timer5 = Timer.Timer(minutes = "30", clickable = emptyClickable),
+            clickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview
