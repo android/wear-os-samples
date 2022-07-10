@@ -72,9 +72,7 @@ fun WorkoutLargeChip() {
         Workout.largeChipLayout(
             context,
             context.deviceParams(),
-            emptyClickable,
-            title = "Power Yoga",
-            chipText = "Start",
+            clickable = emptyClickable,
             lastWorkoutSummary = "Last session 45m"
         )
     )
@@ -83,7 +81,16 @@ fun WorkoutLargeChip() {
 @WearSmallRoundDevicePreview
 @Composable
 fun Run() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Run.layout(
+            context,
+            context.deviceParams(),
+            lastRunText = "2 days ago",
+            startRunClickable = emptyClickable,
+            moreChipClickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview

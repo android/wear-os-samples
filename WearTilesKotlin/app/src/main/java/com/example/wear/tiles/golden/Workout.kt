@@ -81,18 +81,16 @@ object Workout {
         context: Context,
         deviceParameters: DeviceParameters,
         clickable: Clickable,
-        title: String,
-        chipText: String,
         lastWorkoutSummary: String
     ) = PrimaryLayout.Builder(deviceParameters)
         .setPrimaryLabelTextContent(
-            Text.Builder(context, title)
+            Text.Builder(context, "Power Yoga")
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                 .setColor(ColorBuilders.argb(GoldenTilesColors.Yellow))
                 .build()
         )
         .setContent(
-            TitleChip.Builder(context, chipText, clickable, deviceParameters)
+            TitleChip.Builder(context, "Start", clickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
                         /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
