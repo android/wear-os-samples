@@ -63,29 +63,25 @@ android {
 }
 
 dependencies {
-    implementation libs.horologist.compose.layout
-
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.kotlinx.coroutines.guava
-
     implementation libs.androidx.activity.compose
+    implementation libs.androidx.datastore
 
     implementation libs.androidx.wear
     implementation libs.androidx.wear.compose
     implementation libs.androidx.wear.compose.material
 
-    // Use to implement support for wear tiles
     implementation libs.androidx.wear.tiles
     implementation libs.androidx.wear.tiles.material
-
-    implementation libs.coil
-    implementation libs.androidx.datastore
-
-    // Use to preview wear tiles in your own app
     debugImplementation libs.androidx.wear.tiles.renderer
 
-    implementation libs.horologist.compose.tools
-    implementation libs.horologist.tiles
+    implementation libs.coil
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.guava
+
     debugImplementation libs.compose.ui.tooling
     implementation libs.compose.ui.tooling.preview
+
+    implementation libs.horologist.compose.layout
+    implementation libs.horologist.compose.tools
+    implementation libs.horologist.tiles
 }

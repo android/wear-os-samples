@@ -80,4 +80,88 @@ fun WorkoutLargeChip() {
     )
 }
 
+@WearSmallRoundDevicePreview
+@Composable
+fun Run() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Ski() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun SleepTracker() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun HeartRateSimple() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun HeartRateGraph() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun MeditationChips() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun MeditationButtons() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Timer() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Alarm() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Weather() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun News() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Calendar() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Social() {
+    // TODO
+}
+
+@WearSmallRoundDevicePreview
+@Composable
+fun Media() {
+    // TODO
+}
+
 private fun Context.deviceParams() = buildDeviceParameters(resources)
