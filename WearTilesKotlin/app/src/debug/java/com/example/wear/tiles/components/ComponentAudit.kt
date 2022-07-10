@@ -1,11 +1,7 @@
-package com.example.wear.tiles
+package com.example.wear.tiles.components
 
 import android.content.Context
-import android.content.res.Resources
-import android.util.DisplayMetrics
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -13,15 +9,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.ColorBuilders.argb
-import androidx.wear.tiles.DeviceParametersBuilders
 import androidx.wear.tiles.DimensionBuilders
 import androidx.wear.tiles.LayoutElementBuilders
 import androidx.wear.tiles.LayoutElementBuilders.Column
-import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
-import androidx.wear.tiles.ModifiersBuilders
-import androidx.wear.tiles.ResourceBuilders
-import androidx.wear.tiles.ResourceBuilders.ImageResource
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
 import androidx.wear.tiles.material.ButtonDefaults
@@ -34,12 +24,16 @@ import androidx.wear.tiles.material.ProgressIndicatorColors
 import androidx.wear.tiles.material.Text
 import androidx.wear.tiles.material.TitleChip
 import androidx.wear.tiles.material.Typography
+import androidx.wear.tiles.material.layouts.EdgeContentLayout
 import androidx.wear.tiles.material.layouts.MultiSlotLayout
 import androidx.wear.tiles.material.layouts.PrimaryLayout
-import androidx.wear.tiles.material.layouts.ProgressIndicatorLayout
-import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
-import com.google.android.horologist.compose.tools.TilePreview
-import kotlin.math.roundToInt
+import com.example.wear.tiles.R
+import com.example.wear.tiles.emptyClickable
+import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
+import com.google.android.horologist.compose.tools.LayoutElementPreview
+import com.google.android.horologist.compose.tools.LayoutRootPreview
+import com.google.android.horologist.compose.tools.buildDeviceParameters
+import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 private const val ICON_CHECK = "check"
 private const val IMAGE_AVATAR = "avatar"
@@ -51,68 +45,7 @@ private fun debugTheme(context: Context) = Colors(
     /* onSurface = */ ContextCompat.getColor(context, R.color.white)
 )
 
-private fun imageResourceFrom(@DrawableRes resourceId: Int) = ImageResource.Builder()
-    .setAndroidResourceByResId(
-        ResourceBuilders.AndroidImageResourceByResId.Builder()
-            .setResourceId(resourceId)
-            .build()
-    )
-    .build()
-
-private fun buildDeviceParameters(resources: Resources): DeviceParametersBuilders.DeviceParameters {
-    val displayMetrics: DisplayMetrics = resources.displayMetrics
-    val isScreenRound: Boolean = resources.configuration.isScreenRound
-    return DeviceParametersBuilders.DeviceParameters.Builder()
-        .setScreenWidthDp((displayMetrics.widthPixels / displayMetrics.density).roundToInt())
-        .setScreenHeightDp((displayMetrics.heightPixels / displayMetrics.density).roundToInt())
-        .setScreenDensity(displayMetrics.density).setScreenShape(
-            if (isScreenRound) DeviceParametersBuilders.SCREEN_SHAPE_ROUND
-            else DeviceParametersBuilders.SCREEN_SHAPE_RECT
-        ).setDevicePlatform(DeviceParametersBuilders.DEVICE_PLATFORM_WEAR_OS).build()
-}
-
-@Composable
-private fun LayoutElementPreview(
-    element: LayoutElement,
-    @ColorInt windowBackgroundColor: Int = android.graphics.Color.BLACK,
-    tileResourcesFn: ResourceBuilders.Resources.Builder.() -> Unit = {}
-) {
-    val root = LayoutElementBuilders.Box.Builder()
-        .setModifiers(
-            ModifiersBuilders.Modifiers.Builder().setBackground(
-                ModifiersBuilders.Background.Builder()
-                    .setColor(ColorBuilders.argb(windowBackgroundColor))
-                    .build()
-            ).build()
-        )
-        .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
-        .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
-        .setHeight(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-        .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-        .addContent(element)
-        .build()
-
-    LayoutRootPreview(root = root, tileResourcesFn)
-}
-
-@Composable
-private fun LayoutRootPreview(
-    root: LayoutElement,
-    tileResourcesFn: ResourceBuilders.Resources.Builder.() -> Unit = {}
-) {
-    val tile = TileBuilders.Tile.Builder()
-        .setResourcesVersion("1")
-        .setTimeline(singleEntryTimeline(root))
-        .build()
-
-    val tileResources = ResourceBuilders.Resources.Builder()
-        .apply(tileResourcesFn)
-        .build()
-
-    TilePreview(tile, tileResources)
-}
-
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ButtonDefaultPrimary() {
     val context = LocalContext.current
@@ -121,27 +54,27 @@ fun ButtonDefaultPrimary() {
             .setIconContent(ICON_CHECK)
             .build()
     ) {
-        addIdToImageMapping(ICON_CHECK, imageResourceFrom(R.drawable.ic_baseline_check_24))
+        addIdToImageMapping(ICON_CHECK, drawableResToImageResource(R.drawable.ic_baseline_check_24))
     }
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ButtonLargeSecondary() {
     val context = LocalContext.current
     LayoutElementPreview(
         Button.Builder(context, emptyClickable)
             .setIconContent(ICON_CHECK)
-            .setSize(ButtonDefaults.LARGE_BUTTON_SIZE)
+            .setSize(ButtonDefaults.LARGE_SIZE)
             // secondary colors from our debug theme
             .setButtonColors(ButtonColors.secondaryButtonColors(debugTheme(context)))
             .build()
     ) {
-        addIdToImageMapping(ICON_CHECK, imageResourceFrom(R.drawable.ic_baseline_check_24))
+        addIdToImageMapping(ICON_CHECK, drawableResToImageResource(R.drawable.ic_baseline_check_24))
     }
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ButtonDefaultImage() {
     val context = LocalContext.current
@@ -150,11 +83,11 @@ fun ButtonDefaultImage() {
             .setImageContent(IMAGE_AVATAR)
             .build()
     ) {
-        addIdToImageMapping(IMAGE_AVATAR, imageResourceFrom(R.drawable.avatar))
+        addIdToImageMapping(IMAGE_AVATAR, drawableResToImageResource(R.drawable.avatar))
     }
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun TextButtonDefault() {
     val context = LocalContext.current
@@ -165,7 +98,7 @@ fun TextButtonDefault() {
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun TextButtonExtraLarge() {
     val context = LocalContext.current
@@ -173,25 +106,25 @@ fun TextButtonExtraLarge() {
         Button.Builder(context, emptyClickable)
             .setTextContent("AZ")
             // default secondary colors (not our theme)
-            .setButtonColors(ButtonDefaults.SECONDARY_BUTTON_COLORS)
-            .setSize(ButtonDefaults.EXTRA_LARGE_BUTTON_SIZE)
+            .setButtonColors(ButtonDefaults.SECONDARY_COLORS)
+            .setSize(ButtonDefaults.EXTRA_LARGE_SIZE)
             .build()
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ChipOneLine() {
     val context = LocalContext.current
     val deviceParameters = buildDeviceParameters(context.resources)
     LayoutElementPreview(
         Chip.Builder(context, emptyClickable, deviceParameters)
-            .setPrimaryTextContent("Primary label")
+            .setPrimaryLabelContent("Primary label")
             .build()
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ChipTwoLineLabel() {
     val context = LocalContext.current
@@ -199,40 +132,44 @@ fun ChipTwoLineLabel() {
     LayoutElementPreview(
         Chip.Builder(context, emptyClickable, deviceParameters)
             .setChipColors(ChipColors.secondaryChipColors(debugTheme(context)))
-            .setPrimaryTextLabelContent("Primary label", "Secondary label")
+            .setPrimaryLabelContent("Primary label")
+            .setSecondaryLabelContent("Secondary label")
             .build()
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ChipIconOneLine() {
     val context = LocalContext.current
     val deviceParameters = buildDeviceParameters(context.resources)
     LayoutElementPreview(
         Chip.Builder(context, emptyClickable, deviceParameters)
-            .setPrimaryTextIconContent("Primary label", ICON_CHECK)
+            .setIconContent(ICON_CHECK)
+            .setPrimaryLabelContent("Primary label")
             .build()
     ) {
-        addIdToImageMapping(ICON_CHECK, imageResourceFrom(R.drawable.ic_baseline_check_24))
+        addIdToImageMapping(ICON_CHECK, drawableResToImageResource(R.drawable.ic_baseline_check_24))
     }
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ChipTwoLineIcon() {
     val context = LocalContext.current
     val deviceParameters = buildDeviceParameters(context.resources)
     LayoutElementPreview(
         Chip.Builder(context, emptyClickable, deviceParameters)
-            .setPrimaryTextLabelIconContent("Primary label", "Secondary label", ICON_CHECK)
+            .setIconContent(ICON_CHECK)
+            .setPrimaryLabelContent("Primary label")
+            .setSecondaryLabelContent("Secondary label")
             .build()
     ) {
-        addIdToImageMapping(ICON_CHECK, imageResourceFrom(R.drawable.ic_baseline_check_24))
+        addIdToImageMapping(ICON_CHECK, drawableResToImageResource(R.drawable.ic_baseline_check_24))
     }
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun CompactChipPrimary() {
     val context = LocalContext.current
@@ -243,7 +180,7 @@ fun CompactChipPrimary() {
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun CompactChipSecondaryColors() {
     val context = LocalContext.current
@@ -255,7 +192,7 @@ fun CompactChipSecondaryColors() {
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun TitleChip() {
     val context = LocalContext.current
@@ -267,7 +204,7 @@ fun TitleChip() {
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun TitleChipSecondaryColors() {
     val context = LocalContext.current
@@ -291,13 +228,13 @@ private fun colorBuildersColorPropFrom(
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun ProgressIndicatorLayout() {
     val context = LocalContext.current
     val deviceParameters = buildDeviceParameters(context.resources)
     LayoutRootPreview(
-        ProgressIndicatorLayout.Builder(deviceParameters)
+        EdgeContentLayout.Builder(deviceParameters)
             .setPrimaryLabelTextContent(
                 Text.Builder(context, "Steps")
                     .setTypography(Typography.TYPOGRAPHY_CAPTION1)
@@ -319,7 +256,7 @@ fun ProgressIndicatorLayout() {
                     )
                     .build()
             )
-            .setProgressIndicatorContent(
+            .setEdgeContent(
                 CircularProgressIndicator.Builder()
                     .setProgress(5168f / 8000)
                     .setCircularProgressIndicatorColors(
@@ -352,7 +289,7 @@ fun ProgressIndicatorLayout() {
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun PrimaryLayout() {
     val context = LocalContext.current
@@ -397,11 +334,10 @@ fun PrimaryLayout() {
     )
 }
 
-@WearLargeRoundDevicePreview
+@WearSmallRoundDevicePreview
 @Composable
 fun MultiSlotLayout() {
     val context = LocalContext.current
-    val deviceParameters = buildDeviceParameters(context.resources)
     LayoutRootPreview(
         LayoutElementBuilders.Box.Builder()
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
