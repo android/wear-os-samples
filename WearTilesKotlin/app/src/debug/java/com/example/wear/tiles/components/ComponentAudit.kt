@@ -38,10 +38,10 @@ private const val ICON_CHECK = "check"
 private const val IMAGE_AVATAR = "avatar"
 
 private fun debugTheme(context: Context) = Colors(
-    /* primary = */ ContextCompat.getColor(context, R.color.yellow),
-    /* onPrimary = */ ContextCompat.getColor(context, R.color.black),
-    /* surface = */ ContextCompat.getColor(context, R.color.dark_gray),
-    /* onSurface = */ ContextCompat.getColor(context, R.color.white)
+    /* primary = */ android.graphics.Color.parseColor("#FFCF48"),
+    /* onPrimary = */ android.graphics.Color.parseColor("#000000"),
+    /* surface = */ android.graphics.Color.parseColor("#414A4C"),
+    /* onSurface = */ android.graphics.Color.parseColor("#FFFFFF")
 )
 
 @WearSmallRoundDevicePreview
