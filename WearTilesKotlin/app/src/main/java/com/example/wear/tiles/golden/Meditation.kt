@@ -54,8 +54,8 @@ object Meditation {
             CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                        /* backgroundColor = */ ColorBuilders.argb(GoldenTilesColors.LightPurple),
+                        /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                     )
                 )
                 .build()
@@ -72,8 +72,10 @@ object Meditation {
             .setPrimaryLabelContent(session.label)
             .setChipColors(
                 ChipColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkPurple),
-                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                    /* backgroundColor = */ ColorBuilders.argb(GoldenTilesColors.DarkPurple),
+                    /* iconColor = */ ColorBuilders.argb(GoldenTilesColors.LightPurple),
+                    /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.White),
+                    /* secondaryContentColor = */ ColorBuilders.argb(GoldenTilesColors.White)
                 )
             )
             .build()
