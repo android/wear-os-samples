@@ -336,7 +336,33 @@ fun Social() {
 @WearLargeRoundDevicePreview
 @Composable
 fun Media() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Media.layout(
+            context,
+            context.deviceParams(),
+            playlist1 = Media.Playlist(
+                label = "Liked songs",
+                iconId = Media.CHIP_1_ICON_ID,
+                clickable = emptyClickable
+            ),
+            playlist2 = Media.Playlist(
+                label = "Podcasts",
+                iconId = Media.CHIP_2_ICON_ID,
+                clickable = emptyClickable
+            ),
+            browseClickable = emptyClickable
+        )
+    ) {
+        addIdToImageMapping(
+            Media.CHIP_1_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_music_queue_24)
+        )
+        addIdToImageMapping(
+            Media.CHIP_2_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_podcasts_24)
+        )
+    }
 }
 
 private fun Context.deviceParams() = buildDeviceParameters(resources)

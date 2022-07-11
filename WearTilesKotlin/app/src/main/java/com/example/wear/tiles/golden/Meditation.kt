@@ -77,7 +77,6 @@ object Meditation {
                 )
             )
             .build()
-
     }
 
     fun buttonsLayout(
