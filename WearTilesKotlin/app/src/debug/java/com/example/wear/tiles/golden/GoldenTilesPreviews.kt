@@ -279,11 +279,24 @@ fun News() {
     )
 }
 
+/**
+ * b/238571095 Alignment doesn't match Figma
+ */
 @WearSmallRoundDevicePreview
 @WearLargeRoundDevicePreview
 @Composable
 fun Calendar() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Calendar.layout(
+            context,
+            context.deviceParams(),
+            eventTime = "6:30-7:30 PM",
+            eventName = "Morning Pilates with Christina Lloyd",
+            eventLocation = "216 Market Street",
+            clickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview

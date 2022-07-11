@@ -72,7 +72,7 @@ object Weather {
                         .addContent(
                             Text.Builder(context, lowTemperature)
                                 .setTypography(Typography.TYPOGRAPHY_TITLE3)
-                                .setColor(ColorBuilders.argb(GoldenTilesColors.LightGray))
+                                .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
                                 .build()
                         )
                         .build()

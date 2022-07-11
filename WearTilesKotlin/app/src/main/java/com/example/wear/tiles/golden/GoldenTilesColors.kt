@@ -28,6 +28,7 @@ object GoldenTilesColors {
     val DarkPurple = android.graphics.Color.parseColor("#1F1C30")
     val DarkYellow = android.graphics.Color.parseColor("#332D1D")
     val LightBlue = android.graphics.Color.parseColor("#C4E7FF")
+    val Gray = android.graphics.Color.parseColor("#BDC1C6")
     val LightGray = android.graphics.Color.parseColor("#DADCE0")
     val LightPurple = android.graphics.Color.parseColor("#998AF2")
     val LightRed = android.graphics.Color.parseColor("#F2B8B5")

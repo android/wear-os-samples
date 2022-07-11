@@ -24,30 +24,37 @@ import androidx.wear.tiles.material.Text
 import androidx.wear.tiles.material.Typography
 import androidx.wear.tiles.material.layouts.PrimaryLayout
 
-object News {
+object Calendar {
 
     fun layout(
         context: Context,
         deviceParameters: DeviceParameters,
-        headline: String,
-        newsVendor: String,
+        eventTime: String,
+        eventName: String,
+        eventLocation: String,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setPrimaryLabelTextContent(
+            Text.Builder(context, eventTime)
+                .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
+                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                .build()
+        )
         .setContent(
-            Text.Builder(context, headline)
+            Text.Builder(context, eventName)
                 .setMaxLines(3)
                 .setColor(ColorBuilders.argb(GoldenTilesColors.White))
                 .setTypography(Typography.TYPOGRAPHY_BODY1)
                 .build()
         )
         .setSecondaryLabelTextContent(
-            Text.Builder(context, newsVendor)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.RichBlue))
+            Text.Builder(context, eventLocation)
+                .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                 .build()
         )
         .setPrimaryChipContent(
-            CompactChip.Builder(context, "News", clickable, deviceParameters).build()
+            CompactChip.Builder(context, "Agenda", clickable, deviceParameters).build()
         )
         .build()
 }
