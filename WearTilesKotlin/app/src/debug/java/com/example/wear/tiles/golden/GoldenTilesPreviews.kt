@@ -303,7 +303,33 @@ fun Calendar() {
 @WearLargeRoundDevicePreview
 @Composable
 fun Social() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Social.layout(
+            context,
+            context.deviceParams(),
+            Social.Contact(
+                initials = "AC",
+                clickable = emptyClickable,
+                avatarId = Social.AVATAR_ID_1
+            ),
+            Social.Contact(initials = "AD", clickable = emptyClickable, avatarId = null),
+            Social.Contact(
+                initials = "BD",
+                color = GoldenTilesColors.Purple,
+                clickable = emptyClickable,
+                avatarId = null
+            ),
+            Social.Contact(
+                initials = "DC",
+                clickable = emptyClickable,
+                avatarId = Social.AVATAR_ID_2
+            )
+        )
+    ) {
+        addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
+        addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
+    }
 }
 
 @WearSmallRoundDevicePreview
