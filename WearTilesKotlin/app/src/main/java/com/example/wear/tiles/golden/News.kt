@@ -19,43 +19,35 @@ import android.content.Context
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.tiles.ModifiersBuilders.Clickable
-import androidx.wear.tiles.material.ChipColors
+import androidx.wear.tiles.material.CompactChip
 import androidx.wear.tiles.material.Text
-import androidx.wear.tiles.material.TitleChip
 import androidx.wear.tiles.material.Typography
 import androidx.wear.tiles.material.layouts.PrimaryLayout
 
-object Alarm {
+object News {
 
     fun layout(
         context: Context,
         deviceParameters: DeviceParameters,
-        timeUntilAlarm: String,
-        alarmTime: String,
-        alarmDays: String,
+        headline: String,
+        newsVendor: String,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, timeUntilAlarm)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        )
         .setContent(
-            TitleChip.Builder(context, alarmTime, clickable, deviceParameters)
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
-                    )
-                )
+            Text.Builder(context, headline)
+                .setMaxLines(3)
+                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                .setTypography(Typography.TYPOGRAPHY_BODY1)
                 .build()
         )
         .setSecondaryLabelTextContent(
-            Text.Builder(context, alarmDays)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.Yellow))
+            Text.Builder(context, newsVendor)
+                .setColor(ColorBuilders.argb(GoldenTilesColors.Blue))
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                 .build()
+        )
+        .setPrimaryChipContent(
+            CompactChip.Builder(context, "News", clickable, deviceParameters).build()
         )
         .build()
 }

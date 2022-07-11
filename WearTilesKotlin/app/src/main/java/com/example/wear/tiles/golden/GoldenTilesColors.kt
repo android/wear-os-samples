@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.toArgb
 object GoldenTilesColors {
     val Black = Color.Black.toArgb()
     val Blue = android.graphics.Color.parseColor("#AECBFA")
+    val RichBlue = android.graphics.Color.parseColor("#6694DE")
     val BlueGray = android.graphics.Color.parseColor("#2B333E")
     val DarkGray = android.graphics.Color.parseColor("#1C1B1F")
     val DarkerGray = android.graphics.Color.parseColor("#202124")

@@ -16,37 +16,21 @@
 package com.example.wear.tiles.components
 
 import android.content.Context
-import androidx.annotation.ColorRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.wear.tiles.ColorBuilders
-import androidx.wear.tiles.ColorBuilders.argb
-import androidx.wear.tiles.DimensionBuilders
-import androidx.wear.tiles.LayoutElementBuilders
-import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ButtonColors
 import androidx.wear.tiles.material.ButtonDefaults
 import androidx.wear.tiles.material.Chip
 import androidx.wear.tiles.material.ChipColors
-import androidx.wear.tiles.material.CircularProgressIndicator
 import androidx.wear.tiles.material.Colors
 import androidx.wear.tiles.material.CompactChip
-import androidx.wear.tiles.material.ProgressIndicatorColors
-import androidx.wear.tiles.material.Text
 import androidx.wear.tiles.material.TitleChip
-import androidx.wear.tiles.material.Typography
-import androidx.wear.tiles.material.layouts.EdgeContentLayout
-import androidx.wear.tiles.material.layouts.MultiSlotLayout
-import androidx.wear.tiles.material.layouts.PrimaryLayout
 import com.example.wear.tiles.R
 import com.example.wear.tiles.emptyClickable
 import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.google.android.horologist.compose.tools.LayoutElementPreview
-import com.google.android.horologist.compose.tools.LayoutRootPreview
 import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
@@ -186,7 +170,7 @@ fun ChipTwoLineIcon() {
 
 @WearSmallRoundDevicePreview
 @Composable
-fun CompactChipPrimary() {
+fun CompactChip() {
     val context = LocalContext.current
     val deviceParameters = buildDeviceParameters(context.resources)
     LayoutElementPreview(
@@ -230,171 +214,3 @@ fun TitleChipSecondaryColors() {
             .build()
     )
 }
-
-private fun colorBuildersColorPropFrom(
-    context: Context,
-    @ColorRes colorRes: Int
-): ColorBuilders.ColorProp {
-    return ColorBuilders.argb(
-        ContextCompat.getColor(
-            context,
-            colorRes
-        )
-    )
-}
-
-@WearSmallRoundDevicePreview
-@Composable
-fun ProgressIndicatorLayout() {
-    val context = LocalContext.current
-    val deviceParameters = buildDeviceParameters(context.resources)
-    LayoutRootPreview(
-        EdgeContentLayout.Builder(deviceParameters)
-            .setPrimaryLabelTextContent(
-                Text.Builder(context, "Steps")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(
-                        colorBuildersColorPropFrom(context, R.color.primary)
-                    )
-                    .build()
-            )
-            .setSecondaryLabelTextContent(
-                Text.Builder(context, "/ 8000")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(
-                        ColorBuilders.argb(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.white
-                            )
-                        )
-                    )
-                    .build()
-            )
-            .setEdgeContent(
-                CircularProgressIndicator.Builder()
-                    .setProgress(5168f / 8000)
-                    .setCircularProgressIndicatorColors(
-                        ProgressIndicatorColors(
-                            /* indicatorColor = */ ColorBuilders.argb(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.primary
-                                )
-                            ),
-                            /* trackColor = */ ColorBuilders.argb(Color(1f, 1f, 1f, 0.1f).toArgb())
-                        )
-                    )
-                    .build()
-            )
-            .setContent(
-                Text.Builder(context, "5168")
-                    .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
-                    .setColor(
-                        ColorBuilders.argb(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.white
-                            )
-                        )
-                    )
-                    .build()
-            )
-            .build()
-    )
-}
-
-@WearSmallRoundDevicePreview
-@Composable
-fun PrimaryLayout() {
-    val context = LocalContext.current
-    val deviceParameters = buildDeviceParameters(context.resources)
-    LayoutRootPreview(
-        PrimaryLayout.Builder(deviceParameters)
-            .setPrimaryLabelTextContent(
-                Text.Builder(context, "Primary label")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(
-                        ColorBuilders.argb(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.white
-                            )
-                        )
-                    )
-                    .build()
-            )
-            .setContent(
-                TitleChip.Builder(context, "Start", emptyClickable, deviceParameters)
-                    .build()
-            )
-            .setSecondaryLabelTextContent(
-                Text.Builder(context, "Secondary label")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(
-                        ColorBuilders.argb(
-                            ContextCompat.getColor(
-                                context,
-                                R.color.white
-                            )
-                        )
-                    )
-                    .build()
-            )
-            .setPrimaryChipContent(
-                CompactChip.Builder(context, "Action", emptyClickable, deviceParameters)
-                    .build()
-            )
-            .build()
-    )
-}
-
-@WearSmallRoundDevicePreview
-@Composable
-fun MultiSlotLayout() {
-    val context = LocalContext.current
-    LayoutRootPreview(
-        LayoutElementBuilders.Box.Builder()
-            .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
-            .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
-            .setHeight(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-            .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-            .addContent(
-                MultiSlotLayout.Builder()
-                    .addSlotContent(
-                        skiThing(context, "Max Spd", "46.5", "mph")
-                    )
-                    .addSlotContent(
-                        skiThing(context, "Distance", "21.8", "miles")
-                    )
-                    .build()
-            )
-            .build()
-    )
-}
-
-private fun skiThing(
-    context: Context,
-    label: String,
-    value: String,
-    unit: String
-) = Column.Builder()
-    .addContent(
-        Text.Builder(context, label)
-            .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-            .setColor(argb(debugTheme(context).primary))
-            .build()
-    )
-    .addContent(
-        Text.Builder(context, value)
-            .setTypography(Typography.TYPOGRAPHY_DISPLAY3)
-            .setColor(argb(Color.White.toArgb()))
-            .build()
-    )
-    .addContent(
-        Text.Builder(context, unit)
-            .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-            .setColor(argb(Color.White.toArgb()))
-            .build()
-    )
-    .build()

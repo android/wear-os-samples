@@ -20,12 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.wear.tiles.R
 import com.example.wear.tiles.emptyClickable
+import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
 import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.google.android.horologist.compose.tools.LayoutRootPreview
 import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Goal() {
     val context = LocalContext.current
@@ -35,6 +37,7 @@ fun Goal() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun WorkoutButtons() {
     val context = LocalContext.current
@@ -65,6 +68,7 @@ fun WorkoutButtons() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun WorkoutLargeChip() {
     val context = LocalContext.current
@@ -79,6 +83,7 @@ fun WorkoutLargeChip() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Run() {
     val context = LocalContext.current
@@ -94,6 +99,7 @@ fun Run() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Ski() {
     val context = LocalContext.current
@@ -107,6 +113,7 @@ fun Ski() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun SleepTracker() {
     // TODO: yuri has an example of this one
@@ -116,6 +123,7 @@ fun SleepTracker() {
  * b/238548541 (internal bug - the spacing doesn't match Figma)
  */
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun HeartRateSimple() {
     val context = LocalContext.current
@@ -130,6 +138,7 @@ fun HeartRateSimple() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun HeartRateGraph() {
     // TODO: not trivial, ataul has dibs though please!
@@ -139,6 +148,7 @@ fun HeartRateGraph() {
  * b/238559060 (internal bug - the icon tint doesn't match Figma)
  */
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun MeditationChips() {
     val context = LocalContext.current
@@ -171,6 +181,7 @@ fun MeditationChips() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun MeditationButtons() {
     val context = LocalContext.current
@@ -187,6 +198,7 @@ fun MeditationButtons() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Timer() {
     val context = LocalContext.current
@@ -205,12 +217,14 @@ fun Timer() {
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Alarm() {
     val context = LocalContext.current
     LayoutRootPreview(
         Alarm.layout(
-            context, context.deviceParams(),
+            context,
+            context.deviceParams(),
             timeUntilAlarm = "Less than 1 min",
             alarmTime = "14:58",
             alarmDays = "Mon, Tue, Wed",
@@ -219,31 +233,68 @@ fun Alarm() {
     )
 }
 
+/**
+ * b/238560022 misaligned because we can't add an offset, small preview is clipped
+ */
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Weather() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Weather.layout(
+            context,
+            context.deviceParams(),
+            location = "San Francisco",
+            weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
+            currentTemperature = "52°",
+            lowTemperature = "48°",
+            highTemperature = "64°",
+            weatherSummary = "Showers"
+        )
+    ) {
+        addIdToImageMapping(
+            Weather.SCATTERED_SHOWERS_ICON_ID,
+            drawableResToImageResource(R.drawable.scattered_showers)
+        )
+    }
 }
 
+/**
+ * b/238556504 alignment doesn't match figma.
+ */
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun News() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        News.layout(
+            context,
+            context.deviceParams(),
+            headline = "Millions still without power as new storm moves across US",
+            newsVendor = "The New York Times",
+            clickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Calendar() {
     // TODO
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Social() {
     // TODO
 }
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 fun Media() {
     // TODO
