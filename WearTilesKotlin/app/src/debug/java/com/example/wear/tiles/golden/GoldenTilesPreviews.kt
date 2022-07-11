@@ -207,7 +207,16 @@ fun Timer() {
 @WearSmallRoundDevicePreview
 @Composable
 fun Alarm() {
-    // TODO
+    val context = LocalContext.current
+    LayoutRootPreview(
+        Alarm.layout(
+            context, context.deviceParams(),
+            timeUntilAlarm = "Less than 1 min",
+            alarmTime = "14:58",
+            alarmDays = "Mon, Tue, Wed",
+            clickable = emptyClickable
+        )
+    )
 }
 
 @WearSmallRoundDevicePreview
