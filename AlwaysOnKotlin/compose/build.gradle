@@ -61,7 +61,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.2.0"
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 
     // Workaround for https://github.com/Kotlin/kotlinx.coroutines/issues/2023
@@ -77,7 +77,6 @@ dependencies {
     implementation libs.androidx.activity.compose
     implementation libs.compose.ui
     implementation libs.compose.ui.tooling
-    implementation libs.compose.compiler
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.wear
