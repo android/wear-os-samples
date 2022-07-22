@@ -61,7 +61,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.2.0"
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
@@ -71,7 +71,6 @@ dependencies {
     implementation libs.kotlinx.coroutines.play.services
     implementation libs.androidx.activity.compose
     implementation libs.compose.ui.tooling
-    implementation libs.compose.compiler
     implementation libs.compose.foundation
 
     // Compose for Wear OS Dependencies
