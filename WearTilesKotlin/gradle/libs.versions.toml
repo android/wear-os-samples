@@ -3,10 +3,11 @@ android-gradle-plugin = "7.2.1"
 androidx-activity = "1.4.0"
 androidx-lifecycle = "2.4.1"
 androidx-test = "1.4.0"
-androidx-wear-compose = "1.0.0-rc03"
+androidx-wear-compose = "1.0.0-rc02"
 # TODO: Remove the snapshot repo from settings.gradle when this is updated to stable
 androidx-wear-tiles = '1.1.0-SNAPSHOT'
 compose = "1.2.0-rc03"
+compose-compiler = "1.2.0"
 horologist = "0.0.29"
 ktlint = "0.41.0"
 org-jetbrains-kotlin = "1.7.0"
