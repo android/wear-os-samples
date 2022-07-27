@@ -2,7 +2,7 @@
 android-gradle-plugin = "7.2.1"
 androidx-activity = "1.5.1"
 androidx-lifecycle = "2.5.1"
-androidx-wear-compose = "1.0.0-rc02"
+androidx-wear-compose = "1.0.0"
 compose = "1.2.0-rc03"
 compose-compiler = "1.2.0"
 ktlint = "0.41.0"
