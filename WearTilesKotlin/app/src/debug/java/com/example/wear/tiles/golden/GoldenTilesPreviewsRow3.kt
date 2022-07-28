@@ -38,11 +38,11 @@ fun Weather() {
         Weather.layout(
             context,
             context.deviceParams(),
-            location = "San Francisco",
+            location = "Furnace Creek",
             weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
-            currentTemperature = "52°",
-            lowTemperature = "48°",
-            highTemperature = "64°",
+            currentTemperature = "128°",
+            lowTemperature = "107°",
+            highTemperature = "134°",
             weatherSummary = "Showers"
         )
     ) {
