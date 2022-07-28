@@ -1,14 +1,14 @@
 [versions]
 android-gradle-plugin = "7.2.1"
-androidx-activity = "1.5.0"
-androidx-lifecycle = "2.5.0"
+androidx-activity = "1.5.1"
+androidx-lifecycle = "2.5.1"
 androidx-test = "1.4.0"
-androidx-wear-compose = "1.0.0-rc02"
+androidx-wear-compose = "1.0.0"
 androidx-wear-tiles = "1.0.1"
 androidx-wear-watchface = "1.1.0"
-compose = "1.2.0-rc03"
+compose = "1.2.0"
 org-jetbrains-kotlin = "1.7.0"
-org-jetbrains-kotlinx = "1.6.3"
+org-jetbrains-kotlinx = "1.6.4"
 ktlint = "0.41.0"
 
 [libraries]
@@ -25,7 +25,7 @@ androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-
 androidx-core-ktx = "androidx.core:core-ktx:1.8.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.2.1"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.0"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.1"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
