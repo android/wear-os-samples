@@ -31,37 +31,6 @@
             android:value="true" />
 
         <service
-            android:name="com.example.wear.tiles.fitness.FitnessTileService"
-            android:exported="true"
-            android:label="@string/tile_fitness_label"
-            android:description="@string/tile_description"
-            android:icon="@drawable/ic_run"
-            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
-            <intent-filter>
-                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
-            </intent-filter>
-
-            <!-- The tile preview shown when configuring tiles on your phone -->
-            <meta-data
-                android:name="androidx.wear.tiles.PREVIEW"
-                android:resource="@drawable/tile_goals" />
-        </service>
-        <service
-            android:name="com.example.wear.tiles.media.PlayNextSongTileService"
-            android:exported="true"
-            android:label="@string/tile_media_label"
-            android:description="@string/tile_description"
-            android:icon="@drawable/ic_play"
-            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
-            <intent-filter>
-                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="androidx.wear.tiles.PREVIEW"
-                android:resource="@drawable/tile_media" />
-        </service>
-        <service
             android:name="com.example.wear.tiles.messaging.MessagingTileService"
             android:exported="true"
             android:label="@string/tile_messaging_label"

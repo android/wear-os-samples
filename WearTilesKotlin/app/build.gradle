@@ -63,16 +63,11 @@ android {
 }
 
 dependencies {
-    implementation libs.androidx.activity.compose
+    implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.datastore
-
-    implementation libs.androidx.wear
-    implementation libs.androidx.wear.compose
-    implementation libs.androidx.wear.compose.material
 
     implementation libs.androidx.wear.tiles
     implementation libs.androidx.wear.tiles.material
-    debugImplementation libs.androidx.wear.tiles.renderer
 
     implementation libs.coil
     implementation libs.kotlinx.coroutines.android
@@ -81,7 +76,6 @@ dependencies {
     debugImplementation libs.compose.ui.tooling
     implementation libs.compose.ui.tooling.preview
 
-    implementation libs.horologist.compose.layout
     implementation libs.horologist.compose.tools
     implementation libs.horologist.tiles
 }
