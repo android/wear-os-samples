@@ -101,7 +101,7 @@ class MessagingTileService : CoroutinesTileService() {
         return renderer.produceRequestedResources(images, requestParams)
     }
 
-    suspend fun generateRequestedResources(
+    private suspend fun generateRequestedResources(
         tileState: MessagingTileState,
         requestParams: ResourcesRequest,
     ): Map<Contact, Bitmap> {
