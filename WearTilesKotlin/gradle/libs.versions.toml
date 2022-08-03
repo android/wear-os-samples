@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "7.2.1"
+android-gradle-plugin = "7.2.2"
 androidx-test = "1.4.0"
 androidx-wear-tiles = "1.1.0-beta01"
 compose = "1.2.0"
