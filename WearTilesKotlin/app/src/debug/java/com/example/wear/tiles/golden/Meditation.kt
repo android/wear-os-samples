@@ -18,6 +18,7 @@ package com.example.wear.tiles.golden
 import android.content.Context
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.tiles.DimensionBuilders
 import androidx.wear.tiles.DimensionBuilders.dp
 import androidx.wear.tiles.LayoutElementBuilders.Column
 import androidx.wear.tiles.LayoutElementBuilders.Spacer
@@ -45,6 +46,10 @@ object Meditation {
     ) = PrimaryLayout.Builder(deviceParameters)
         .setContent(
             Column.Builder()
+                // See the comment on `setWidth` below in `sessionChip()` too. The default width for
+                // column is "wrap", so we need to explicitly set it to "expand" so that we give the
+                // chips enough space to layout
+                .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                 .addContent(sessionChip(context, deviceParameters, session1))
                 .addContent(Spacer.Builder().setHeight(dp(4f)).build())
                 .addContent(sessionChip(context, deviceParameters, session2))
@@ -68,6 +73,10 @@ object Meditation {
         session: Session
     ): Chip {
         return Chip.Builder(context, session.clickable, deviceParameters)
+            // TitleChip/Chip's default width == device width minus some padding
+            // Since PrimaryLayout's content slot already has margin, this leads to clipping
+            // unless we override the width to use the available space
+            .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
             .setIconContent(session.iconId)
             .setPrimaryLabelContent(session.label)
             .setChipColors(
