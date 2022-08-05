@@ -43,6 +43,8 @@ class MessagingTileRenderer(context: Context) :
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
         resourceIds: MutableList<String>
     ) {
+        // If `resourceIds` is empty, it means all resources are being requested so we should add
+        // the Search image resource in both of these cases.
         if (resourceIds.isEmpty() || resourceIds.contains(ID_IC_SEARCH)) {
             addIdToImageMapping(
                 /* id = */ ID_IC_SEARCH,
@@ -50,6 +52,9 @@ class MessagingTileRenderer(context: Context) :
             )
         }
 
+        // We already checked `resourceIds` in `MessagingTileService` because we needed to know
+        // which avatars needed to be fetched from the network; `resourceResults` was already
+        // filtered so it only contains bitmaps for the requested resources.
         resourceResults.forEach { (contact, bitmap) ->
             addIdToImageMapping(
                 /* id = */ "$ID_CONTACT_PREFIX${contact.id}",
