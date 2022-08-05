@@ -19,9 +19,9 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.wear.tiles.R
-import com.example.wear.tiles.emptyClickable
 import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
 import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
+import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.compose.tools.LayoutRootPreview
 import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource

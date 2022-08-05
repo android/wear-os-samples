@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.wear.tiles
+package com.example.wear.tiles.tools
 
-import android.app.Application
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import com.example.wear.tiles.di.AppContainer
+import androidx.wear.tiles.ActionBuilders
+import androidx.wear.tiles.ModifiersBuilders
 
-class TilesApplication : Application(), ImageLoaderFactory {
-    internal lateinit var appContainer: AppContainer
-
-    override fun onCreate() {
-        super.onCreate()
-
-        appContainer = AppContainer(this)
-    }
-
-    // Allows Coil ImageLoader singleton to work from anywhere
-    override fun newImageLoader(): ImageLoader = appContainer.imageLoader
-}
+val emptyClickable = ModifiersBuilders.Clickable.Builder()
+    .setOnClick(ActionBuilders.LoadAction.Builder().build())
+    .setId("")
+    .build()
