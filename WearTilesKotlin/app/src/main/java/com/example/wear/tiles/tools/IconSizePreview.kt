@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.wear.tiles
+package com.example.wear.tiles.tools
 
-import androidx.compose.runtime.Composable
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.tooling.preview.Preview
 
-@Composable
-fun TilesKotlinTheme(content: @Composable () -> Unit) {
-    MaterialTheme {
-        content()
-    }
-}
+@Preview(
+    backgroundColor = 0xff000000,
+    showBackground = true,
+    widthDp = 100,
+    heightDp = 100
+)
+public annotation class IconSizePreview

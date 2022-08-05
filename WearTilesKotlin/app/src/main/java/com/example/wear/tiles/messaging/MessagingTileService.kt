@@ -21,8 +21,8 @@ import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
+import coil.Coil
 import coil.ImageLoader
-import com.example.wear.tiles.TilesApplication
 import com.google.android.horologist.tiles.CoroutinesTileService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -35,33 +35,29 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * Creates a Messaging Tile, showing your favorite contacts and a button to search other contacts.
- * This is a demo tile only, so the buttons don't actually work.
+ * Creates a Messaging tile, showing up to 4 contacts, an icon button and compact chip.
  *
- * The main function, [onTileRequest], is triggered when the system calls for a tile and implements
- * ListenableFuture which allows the Tile to be returned asynchronously.
+ * It extends [CoroutinesTileService], a Coroutine-friendly wrapper around
+ * [androidx.wear.tiles.TileService], and implements [tileRequest] and [resourcesRequest].
  *
- * Resources are provided with the [onResourcesRequest] method, which is triggered when the tile
- * uses an Image.
+ * The main function, [tileRequest], is triggered when the system calls for a tile. Resources are
+ * provided with the [resourcesRequest] method, which is triggered when the tile uses an Image.
  */
 class MessagingTileService : CoroutinesTileService() {
-    private lateinit var tileStateFlow: StateFlow<MessagingTileState?>
-    private lateinit var renderer: MessagingTileRenderer
     private lateinit var repo: MessagingRepo
     private lateinit var imageLoader: ImageLoader
+    private lateinit var renderer: MessagingTileRenderer
+    private lateinit var tileStateFlow: StateFlow<MessagingTileState?>
 
     override fun onCreate() {
         super.onCreate()
 
-        val appContainer = (application as TilesApplication).appContainer
-        renderer = appContainer.renderer
-        repo = appContainer.repo
-        imageLoader = ImageLoader(this)
+        repo = MessagingRepo(this)
+        imageLoader = Coil.imageLoader(this)
+        renderer = MessagingTileRenderer(this)
 
         tileStateFlow = repo.getFavoriteContacts()
-            .map {
-                buildState(it)
-            }
+            .map { contacts -> MessagingTileState(contacts) }
             .stateIn(
                 lifecycleScope,
                 started = SharingStarted.WhileSubscribed(5000),
@@ -69,43 +65,60 @@ class MessagingTileService : CoroutinesTileService() {
             )
     }
 
-    private fun buildState(contacts: List<Contact>): MessagingTileState {
-        return MessagingTileState(contacts)
-    }
-
+    /**
+     * Read the latest data, delegating to the [MessagingTileRenderer] which creates a layout to
+     * which it binds the state.
+     */
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val tileState = readTileState()
-
+        val tileState: MessagingTileState = latestTileState()
         return renderer.renderTimeline(tileState, requestParams)
     }
 
-    private suspend fun readTileState(): MessagingTileState {
+    /**
+     * Reads the latest state from the flow, and updates the data if there isn't any.
+     */
+    private suspend fun latestTileState(): MessagingTileState {
         var tileState = tileStateFlow.filterNotNull().first()
 
+        // see `refreshData()` docs for more information
         if (tileState.contacts.isEmpty()) {
-            updateContacts()
+            refreshData()
             tileState = tileStateFlow.filterNotNull().first()
         }
         return tileState
     }
 
-    private suspend fun updateContacts() {
+    /**
+     * If our data source (the repository) is empty/has stale data, this is where we could perform
+     * an update. For this sample, we're updating the repository with fake data
+     * ([MessagingRepo.knownContacts]).
+     *
+     * In a more complete example, tiles, complications and the main app (/overlay) would
+     * share a common data source so it's less likely that an initial data refresh triggered by the
+     * tile would be necessary.
+     */
+    private suspend fun refreshData() {
         repo.updateContacts(MessagingRepo.knownContacts)
     }
 
+    /**
+     * Downloads bitmaps from the network and passes them to [MessagingTileRenderer] to add as
+     * image resources (alongside any local resources).
+     */
     override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
-        val tileState = readTileState()
-
-        val images = generateRequestedResources(tileState, requestParams)
-
-        return renderer.produceRequestedResources(images, requestParams)
+        val avatars = fetchAvatarsFromNetwork(requestParams)
+        return renderer.produceRequestedResources(avatars, requestParams)
     }
 
-    private suspend fun generateRequestedResources(
-        tileState: MessagingTileState,
+    /**
+     * Each contact in the tile state could have an avatar (represented by image url). We fetch them
+     * from the network in this suspending function, and return the resulting bitmaps.
+     */
+    private suspend fun fetchAvatarsFromNetwork(
         requestParams: ResourcesRequest,
     ): Map<Contact, Bitmap> {
-        val requestedAvatars = if (requestParams.resourceIds.isEmpty()) {
+        val tileState: MessagingTileState = latestTileState()
+        val requestedAvatars: List<Contact> = if (requestParams.resourceIds.isEmpty()) {
             tileState.contacts
         } else {
             tileState.contacts.filter {
@@ -117,7 +130,6 @@ class MessagingTileService : CoroutinesTileService() {
             requestedAvatars.map { contact ->
                 async {
                     val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
-
                     image?.let { contact to it }
                 }
             }
