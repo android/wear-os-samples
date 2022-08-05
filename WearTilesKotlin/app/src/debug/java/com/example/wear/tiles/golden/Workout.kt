@@ -18,6 +18,7 @@ package com.example.wear.tiles.golden
 import android.content.Context
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.tiles.DimensionBuilders.ExpandedDimensionProp
 import androidx.wear.tiles.ModifiersBuilders.Clickable
 import androidx.wear.tiles.material.Button
 import androidx.wear.tiles.material.ChipColors
@@ -91,6 +92,10 @@ object Workout {
         )
         .setContent(
             TitleChip.Builder(context, "Start", clickable, deviceParameters)
+                // TitleChip/Chip's default width == device width minus some padding
+                // Since PrimaryLayout's content slot already has margin, this leads to clipping
+                // unless we override the width to use the available space
+                .setWidth(ExpandedDimensionProp.Builder().build())
                 .setChipColors(
                     ChipColors(
                         /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
