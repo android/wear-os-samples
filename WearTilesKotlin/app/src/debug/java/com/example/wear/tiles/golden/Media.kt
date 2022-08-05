@@ -41,9 +41,9 @@ object Media {
     ) = PrimaryLayout.Builder(deviceParameters)
         .setContent(
             Column.Builder()
-                // See the comment on `setWidth` below in `playlistChip()` too. The default width for
-                // column is "wrap", so we need to explicitly set it to "expand" so that we give the
-                // chips enough space to layout
+                // See the comment on `setWidth` below in `playlistChip()` too. The default width
+                // for column is "wrap", so we need to explicitly set it to "expand" so that we give
+                // the chips enough space to layout
                 .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                 .addContent(playlistChip(context, deviceParameters, playlist1))
                 .addContent(Spacer.Builder().setHeight(dp(4f)).build())
