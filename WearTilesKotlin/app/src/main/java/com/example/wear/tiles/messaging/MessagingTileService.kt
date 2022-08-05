@@ -80,6 +80,7 @@ class MessagingTileService : CoroutinesTileService() {
     private suspend fun latestTileState(): MessagingTileState {
         var tileState = tileStateFlow.filterNotNull().first()
 
+        // see `refreshData()` docs for more information
         if (tileState.contacts.isEmpty()) {
             refreshData()
             tileState = tileStateFlow.filterNotNull().first()
@@ -89,10 +90,12 @@ class MessagingTileService : CoroutinesTileService() {
 
     /**
      * If our data source (the repository) is empty/has stale data, this is where we could perform
-     * an update.
-     *
-     * For this sample, we're updating the repository with fake data
+     * an update. For this sample, we're updating the repository with fake data
      * ([MessagingRepo.knownContacts]).
+     *
+     * In a more complete example, tiles, complications and the main app (/overlay) would
+     * share a common data source so it's less likely that an initial data refresh triggered by the
+     * tile would be necessary.
      */
     private suspend fun refreshData() {
         repo.updateContacts(MessagingRepo.knownContacts)
