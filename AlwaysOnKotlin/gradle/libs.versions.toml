@@ -14,7 +14,7 @@ org-jetbrains-kotlinx = "1.6.4"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.8.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.2.1"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.2.2"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.2.0"
 androidx-window = "androidx.window:window:1.0.0"
