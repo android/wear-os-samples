@@ -15,16 +15,35 @@
  */
 package com.example.wear.tiles.messaging
 
-import android.graphics.Color
-import androidx.wear.tiles.material.Colors
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.wear.compose.material.Colors
 
 object MessagingTileTheme {
-    private val purple = Color.valueOf(0xFFC58AF9.toInt()).toArgb()
-    private val darkBlue = Color.valueOf(0xFF202124.toInt()).toArgb()
-    val colors = Colors(
-        /* primary = */ purple,
-        /* onPrimary = */ darkBlue,
-        /* surface = */ darkBlue,
-        /* onSurface = */ purple
-    )
+    val colors = composeColors.toTileColors()
 }
+
+/**
+ * A Compose-based Colors object.
+ *
+ * This would typically be used in your Wear app too (and include more color overrides). Since it's
+ * being used only for Tiles here, only the primary/surface colors are defined.
+ */
+private val composeColors = Colors(
+    primary = ColorPalette.purple,
+    onPrimary = ColorPalette.darkBlue,
+    surface = ColorPalette.darkBlue,
+    onSurface = ColorPalette.purple,
+)
+
+private object ColorPalette {
+    val purple = Color(0xFFC58AF9)
+    val darkBlue = Color(0xFF202124)
+}
+
+private fun Colors.toTileColors() = androidx.wear.tiles.material.Colors(
+    /* primary = */ primary.toArgb(),
+    /* onPrimary = */ onPrimary.toArgb(),
+    /* surface = */ surface.toArgb(),
+    /* onSurface = */ onSurface.toArgb()
+)
