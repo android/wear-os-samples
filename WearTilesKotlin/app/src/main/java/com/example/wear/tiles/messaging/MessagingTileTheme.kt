@@ -19,8 +19,8 @@ import android.graphics.Color
 import androidx.wear.tiles.material.Colors
 
 object MessagingTileTheme {
-    private val purple = Color.valueOf(0xFFC58AF9).toArgb()
-    private val darkBlue = Color.valueOf(0xFF202124).toArgb()
+    private val purple = Color.valueOf(0xFFC58AF9.toInt()).toArgb()
+    private val darkBlue = Color.valueOf(0xFF202124.toInt()).toArgb()
     val colors = Colors(
         /* primary = */ purple,
         /* onPrimary = */ darkBlue,
