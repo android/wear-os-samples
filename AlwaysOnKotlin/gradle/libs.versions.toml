@@ -6,7 +6,7 @@ androidx-test = "1.4.0"
 androidx-wear-compose = "1.0.0"
 compose = "1.2.0"
 compose-compiler = "1.2.0"
-ktlint = "0.41.0"
+ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.7.0"
 org-jetbrains-kotlinx = "1.6.4"
 
