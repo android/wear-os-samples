@@ -41,7 +41,7 @@ import com.example.android.wearable.composeadvanced.BuildConfig
 fun CustomTimeText(
     visible: Boolean,
     modifier: Modifier = Modifier,
-    startText: String? = null,
+    startText: String? = null
 ) {
     val textStyle = TimeTextDefaults.timeTextStyle()
     val debugWarning = remember {
@@ -57,7 +57,7 @@ fun CustomTimeText(
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(),
-        exit = fadeOut(),
+        exit = fadeOut()
     ) {
         val visibleText = startText != null
         TimeText(
@@ -96,7 +96,7 @@ fun CustomTimeText(
                         color = Color.Red
                     )
                 }
-            } else null,
+            } else null
         )
     }
 }

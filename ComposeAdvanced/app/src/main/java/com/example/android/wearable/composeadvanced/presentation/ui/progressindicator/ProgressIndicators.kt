@@ -46,7 +46,7 @@ fun ProgressIndicatorsScreen(
     scalingLazyListState: ScalingLazyListState,
     focusRequester: FocusRequester,
     menuItems: List<MenuItem>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     ScalingLazyColumn(
         modifier = modifier
@@ -75,7 +75,7 @@ fun ProgressIndicatorsScreen(
 
 @Composable
 fun IndeterminateProgressIndicator(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
@@ -84,7 +84,7 @@ fun IndeterminateProgressIndicator(
 
 @Composable
 fun FullScreenProgressIndicator(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val transition = rememberInfiniteTransition()
 

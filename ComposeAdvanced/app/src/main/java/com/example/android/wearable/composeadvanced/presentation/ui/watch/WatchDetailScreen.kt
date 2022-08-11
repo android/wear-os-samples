@@ -47,7 +47,7 @@ import com.google.android.horologist.compose.navscaffold.scrollableColumn
 fun WatchDetailScreen(
     viewModel: WatchDetailViewModel,
     scrollState: ScrollState,
-    focusRequester: FocusRequester,
+    focusRequester: FocusRequester
 ) {
     val watch by viewModel.watch
     WatchDetailScreen(
@@ -65,7 +65,7 @@ fun WatchDetailScreen(
     watch: WatchModel?,
     scrollState: ScrollState,
     focusRequester: FocusRequester,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -97,7 +97,7 @@ fun WatchDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(24.dp)
-                    .wrapContentSize(align = Alignment.Center),
+                    .wrapContentSize(align = Alignment.Center)
             )
 
             Spacer(modifier = Modifier.size(4.dp))

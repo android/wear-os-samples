@@ -82,7 +82,7 @@ import java.time.LocalDateTime
 @Composable
 fun WearApp(
     modifier: Modifier = Modifier,
-    swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController(),
+    swipeDismissableNavController: NavHostController = rememberSwipeDismissableNavController()
 ) {
     var themeColors by remember { mutableStateOf(initialThemeValues.colors) }
     WearAppTheme(colors = themeColors) {
@@ -161,10 +161,11 @@ fun WearApp(
                     CustomTimeText(
                         modifier = timeTextModifier ?: Modifier,
                         visible = timeTextModifier != null,
-                        startText = if (showProceedingTextBeforeTime)
+                        startText = if (showProceedingTextBeforeTime) {
                             stringResource(R.string.leading_time_text)
-                        else
+                        } else {
                             null
+                        }
                     )
                 }
             },
@@ -245,7 +246,7 @@ fun WearApp(
                             navController = swipeDismissableNavController,
                             menuNameResource = R.string.theme_label,
                             screen = Screen.Theme
-                        ),
+                        )
                     )
 
                     LandingScreen(
@@ -258,7 +259,7 @@ fun WearApp(
                         proceedingTimeTextEnabled = showProceedingTextBeforeTime,
                         onClickProceedingTimeText = {
                             showProceedingTextBeforeTime = !showProceedingTextBeforeTime
-                        },
+                        }
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -298,7 +299,7 @@ fun WearApp(
                         },
                         onClickDemo24hTimePicker = {
                             swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
-                        },
+                        }
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -350,9 +351,9 @@ fun WearApp(
                         },
                         onClickWatch = { id ->
                             swipeDismissableNavController.navigate(
-                                route = Screen.WatchDetail.route + "/" + id,
+                                route = Screen.WatchDetail.route + "/" + id
                             )
-                        },
+                        }
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -383,7 +384,7 @@ fun WearApp(
                     WatchDetailScreen(
                         viewModel = viewModel,
                         scrollState = scrollState,
-                        focusRequester = focusRequester,
+                        focusRequester = focusRequester
                     )
 
                     RequestFocusOnResume(focusRequester)
@@ -447,12 +448,12 @@ fun WearApp(
                             navController = swipeDismissableNavController,
                             menuNameResource = R.string.full_screen_progress_indicator_label,
                             screen = Screen.FullScreenProgressIndicator
-                        ),
+                        )
                     )
                     ProgressIndicatorsScreen(
                         scalingLazyListState = scalingLazyListState,
                         focusRequester = focusRequester,
-                        menuItems = menuItems,
+                        menuItems = menuItems
                     )
                     RequestFocusOnResume(focusRequester)
                 }

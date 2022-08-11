@@ -42,7 +42,7 @@ internal fun ThemeScreen(
 ) {
     ScalingLazyColumn(
         modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
-        state = scalingLazyListState,
+        state = scalingLazyListState
     ) {
         item {
             ListHeader {
@@ -57,7 +57,7 @@ internal fun ThemeScreen(
                     toggleControl = {
                         Icon(
                             imageVector = ToggleChipDefaults.radioIcon(checked = checked),
-                            contentDescription = if (checked) "On" else "Off",
+                            contentDescription = if (checked) "On" else "Off"
                         )
                     },
                     onCheckedChange = { onValueChange(listItem.colors) },

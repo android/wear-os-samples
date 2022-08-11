@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
             navController = rememberSwipeDismissableNavController()
 
             WearApp(
-                swipeDismissableNavController = navController,
+                swipeDismissableNavController = navController
             )
 
             LaunchedEffect(Unit) {

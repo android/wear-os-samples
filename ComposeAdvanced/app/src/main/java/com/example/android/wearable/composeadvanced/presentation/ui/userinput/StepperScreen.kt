@@ -34,7 +34,7 @@ import androidx.wear.compose.material.Text
 fun StepperScreen(
     displayValue: Int,
     onValueChange: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -47,7 +47,7 @@ fun StepperScreen(
             onValueChange = onValueChange,
             valueProgression = 1..10,
             increaseIcon = { Icon(StepperDefaults.Increase, "Increase") },
-            decreaseIcon = { Icon(StepperDefaults.Decrease, "Decrease") },
+            decreaseIcon = { Icon(StepperDefaults.Decrease, "Decrease") }
         ) {
             Text("Value: $displayValue")
         }

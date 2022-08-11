@@ -46,7 +46,7 @@ import com.example.android.wearable.composeadvanced.R
 
 @Composable
 fun Dialogs(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     var confirmationShowDialog by remember { mutableStateOf(false) }
     var confirmationStatus by remember { mutableStateOf("") }
@@ -91,7 +91,7 @@ fun Dialogs(
         onDismissRequest = {
             if (confirmationStatus.isEmpty()) confirmationStatus = dialogDismissed
             confirmationShowDialog = false
-        },
+        }
     ) {
         Confirmation(
             onTimeout = {
@@ -104,7 +104,7 @@ fun Dialogs(
                     contentDescription = stringResource(R.string.confirmation_dialog_tick),
                     modifier = Modifier.size(48.dp)
                 )
-            },
+            }
         ) {
             Text(
                 text = stringResource(R.string.confirmation_dialog_success),
@@ -120,7 +120,7 @@ fun Dialogs(
             if (alertStatus.isEmpty()) alertStatus = dialogDismissed
             alertShowDialog = false
         },
-        scrollState = scrollState,
+        scrollState = scrollState
     ) {
         Alert(
             title = {
@@ -140,7 +140,7 @@ fun Dialogs(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
-                        contentDescription = dialogNo,
+                        contentDescription = dialogNo
                     )
                 }
             },
@@ -154,17 +154,17 @@ fun Dialogs(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Check,
-                        contentDescription = dialogYes,
+                        contentDescription = dialogYes
                     )
                 }
             },
-            scrollState = scrollState,
+            scrollState = scrollState
         ) {
             Text(
                 text = stringResource(R.string.dialog_sure),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground,
+                color = MaterialTheme.colors.onBackground
             )
         }
     }

@@ -33,7 +33,7 @@ import androidx.wear.compose.material.InlineSliderDefaults
 fun SliderScreen(
     displayValue: Int,
     onValueChange: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -46,7 +46,7 @@ fun SliderScreen(
             onValueChange = onValueChange,
             valueProgression = 1..10,
             increaseIcon = { Icon(InlineSliderDefaults.Increase, "Increase") },
-            decreaseIcon = { Icon(InlineSliderDefaults.Decrease, "Decrease") },
+            decreaseIcon = { Icon(InlineSliderDefaults.Decrease, "Decrease") }
         )
     }
 }

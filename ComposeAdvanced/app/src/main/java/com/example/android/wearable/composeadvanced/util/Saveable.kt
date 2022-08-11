@@ -27,7 +27,7 @@ import androidx.lifecycle.SavedStateHandle
 fun <T : Any> SavedStateHandle.saveable(
     key: String,
     saver: Saver<T, out Any> = autoSaver(),
-    init: () -> T,
+    init: () -> T
 ): T {
     @Suppress("UNCHECKED_CAST")
     saver as Saver<T, Any>

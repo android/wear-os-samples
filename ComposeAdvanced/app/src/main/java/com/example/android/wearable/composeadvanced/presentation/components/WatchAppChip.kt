@@ -42,7 +42,7 @@ fun WatchAppChip(
     watchName: String,
     watchIcon: Int,
     onClickWatch: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Chip(
         modifier = modifier.fillMaxWidth(),
@@ -52,21 +52,21 @@ fun WatchAppChip(
                 contentDescription = stringResource(R.string.watch_icon_content_description),
                 modifier = Modifier
                     .size(24.dp)
-                    .wrapContentSize(align = Alignment.Center),
+                    .wrapContentSize(align = Alignment.Center)
             )
         },
         label = {
             Text(
                 text = watchName,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Ellipsis
             )
         },
         secondaryLabel = {
             Text(
                 text = "id: $watchModelNumber",
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Ellipsis
             )
         },
         onClick = {
@@ -77,7 +77,7 @@ fun WatchAppChip(
 
 @Preview(
     apiLevel = 26,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH
 )
 @Composable
 fun PreviewWatchAppChip() {
