@@ -91,7 +91,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.timestamp_label, YEAR_2200_INSTANT.toEpochMilli()
+                        R.string.timestamp_label,
+                        YEAR_2200_INSTANT.toEpochMilli()
                     )
                 )
             )
@@ -103,7 +104,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.draw_count_label, 1
+                        R.string.draw_count_label,
+                        1
                     )
                 )
             )
@@ -127,7 +129,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.timestamp_label, YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
+                        R.string.timestamp_label,
+                        YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
                     )
                 )
             )
@@ -139,7 +142,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.draw_count_label, 6
+                        R.string.draw_count_label,
+                        6
                     )
                 )
             )
@@ -166,7 +170,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.timestamp_label, YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
+                        R.string.timestamp_label,
+                        YEAR_2200_INSTANT.plusSeconds(5).toEpochMilli()
                     )
                 )
             )
@@ -178,7 +183,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.draw_count_label, 7
+                        R.string.draw_count_label,
+                        7
                     )
                 )
             )
@@ -206,7 +212,10 @@ class MainActivityTests {
         advanceTime(Duration.ofSeconds(5))
         scenario.onActivity {
             PendingIntent.getBroadcast(
-                it, 0, Intent(MainActivity.AMBIENT_UPDATE_ACTION), PendingIntent.FLAG_UPDATE_CURRENT
+                it,
+                0,
+                Intent(MainActivity.AMBIENT_UPDATE_ACTION),
+                PendingIntent.FLAG_UPDATE_CURRENT
             ).send()
         }
 
@@ -231,7 +240,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.draw_count_label, 8
+                        R.string.draw_count_label,
+                        8
                     )
                 )
             )
@@ -260,7 +270,10 @@ class MainActivityTests {
         advanceTime(Duration.ofSeconds(5))
         scenario.onActivity {
             PendingIntent.getBroadcast(
-                it, 0, Intent(MainActivity.AMBIENT_UPDATE_ACTION), PendingIntent.FLAG_UPDATE_CURRENT
+                it,
+                0,
+                Intent(MainActivity.AMBIENT_UPDATE_ACTION),
+                PendingIntent.FLAG_UPDATE_CURRENT
             ).send()
         }
 
@@ -290,7 +303,8 @@ class MainActivityTests {
             matches(
                 withText(
                     context.getString(
-                        R.string.draw_count_label, 9
+                        R.string.draw_count_label,
+                        9
                     )
                 )
             )

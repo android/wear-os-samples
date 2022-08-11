@@ -73,7 +73,7 @@ internal fun messagingTileLayout(
 private fun contactLayout(
     context: Context,
     contact: Contact,
-    clickable: ModifiersBuilders.Clickable,
+    clickable: ModifiersBuilders.Clickable
 ) = Button.Builder(context, clickable)
     .setContentDescription(contact.name)
     .apply {
@@ -90,7 +90,7 @@ private fun Contact.imageResourceId() = "${MessagingTileRenderer.ID_CONTACT_PREF
 
 private fun searchLayout(
     context: Context,
-    clickable: ModifiersBuilders.Clickable,
+    clickable: ModifiersBuilders.Clickable
 ) = Button.Builder(context, clickable)
     .setContentDescription(context.getString(R.string.tile_messaging_search))
     .setIconContent(MessagingTileRenderer.ID_IC_SEARCH)
@@ -122,7 +122,8 @@ private fun MessageTilePreview() {
             )
         )
         addIdToImageMapping(
-            MessagingTileRenderer.ID_IC_SEARCH, drawableResToImageResource(R.drawable.ic_search_24)
+            MessagingTileRenderer.ID_IC_SEARCH,
+            drawableResToImageResource(R.drawable.ic_search_24)
         )
     }
 }

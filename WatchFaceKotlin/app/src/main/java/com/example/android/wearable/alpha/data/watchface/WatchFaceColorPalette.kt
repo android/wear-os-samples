@@ -51,7 +51,6 @@ data class WatchFaceColorPalette(
             activeColorStyle: ColorStyleIdAndResourceIds,
             ambientColorStyle: ColorStyleIdAndResourceIds
         ): WatchFaceColorPalette {
-
             return WatchFaceColorPalette(
                 // Active colors
                 activePrimaryColor = context.getColor(activeColorStyle.primaryColorId),

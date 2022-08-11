@@ -33,7 +33,7 @@ private val composeColors = Colors(
     primary = ColorPalette.purple,
     onPrimary = ColorPalette.darkBlue,
     surface = ColorPalette.darkBlue,
-    onSurface = ColorPalette.purple,
+    onSurface = ColorPalette.purple
 )
 
 private object ColorPalette {

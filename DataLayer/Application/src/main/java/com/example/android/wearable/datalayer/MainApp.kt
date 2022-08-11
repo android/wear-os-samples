@@ -51,7 +51,7 @@ fun MainApp(
     isCameraSupported: Boolean,
     onTakePhotoClick: () -> Unit,
     onSendPhotoClick: () -> Unit,
-    onStartWearableActivityClick: () -> Unit,
+    onStartWearableActivityClick: () -> Unit
 ) {
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item {

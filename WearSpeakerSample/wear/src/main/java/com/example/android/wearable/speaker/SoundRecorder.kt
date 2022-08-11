@@ -35,7 +35,7 @@ import java.io.File
  */
 class SoundRecorder(
     private val context: Context,
-    private val outputFileName: String,
+    private val outputFileName: String
 ) {
     private var state = State.IDLE
 

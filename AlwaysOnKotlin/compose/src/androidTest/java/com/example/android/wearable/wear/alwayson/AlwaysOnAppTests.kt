@@ -184,7 +184,10 @@ class AlwaysOnAppTests {
         advanceTime(Duration.ofSeconds(5))
         scenario.onActivity {
             PendingIntent.getBroadcast(
-                it, 0, Intent(AMBIENT_UPDATE_ACTION), PendingIntent.FLAG_UPDATE_CURRENT
+                it,
+                0,
+                Intent(AMBIENT_UPDATE_ACTION),
+                PendingIntent.FLAG_UPDATE_CURRENT
             ).send()
         }
 
@@ -227,7 +230,10 @@ class AlwaysOnAppTests {
         advanceTime(Duration.ofSeconds(5))
         scenario.onActivity {
             PendingIntent.getBroadcast(
-                it, 0, Intent(AMBIENT_UPDATE_ACTION), PendingIntent.FLAG_UPDATE_CURRENT
+                it,
+                0,
+                Intent(AMBIENT_UPDATE_ACTION),
+                PendingIntent.FLAG_UPDATE_CURRENT
             ).send()
         }
 

@@ -43,6 +43,7 @@ private const val CLIENT_SECRET = ""
 class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(application) {
     // Status to show on the Wear OS display
     val status: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+
     // Dynamic content to show on the Wear OS display
     val result: MutableLiveData<String> by lazy { MutableLiveData<String>() }
 

@@ -40,7 +40,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
     private val stateHolder: WatchFaceConfigStateHolder by lazy {
         WatchFaceConfigStateHolder(
             lifecycleScope,
-            this@WatchFaceConfigActivity,
+            this@WatchFaceConfigActivity
         )
     }
 

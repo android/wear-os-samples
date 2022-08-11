@@ -434,7 +434,6 @@ class AnalogWatchCanvasRenderer(
         numberStyleOuterCircleRadiusFraction: Float,
         gapBetweenOuterCircleAndBorderFraction: Float
     ) {
-
         // Draws text hour indicators (12, 3, 6, and 9).
         val textBounds = Rect()
         textPaint.color = outerElementColor

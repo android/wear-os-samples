@@ -23,21 +23,21 @@ import androidx.compose.ui.tooling.preview.Preview
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true,
-    group = "Devices - Large Round",
+    group = "Devices - Large Round"
 )
 @Preview(
     device = Devices.WEAR_OS_SMALL_ROUND,
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true,
-    group = "Devices - Small Round",
+    group = "Devices - Small Round"
 )
 @Preview(
     device = Devices.WEAR_OS_SQUARE,
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true,
-    group = "Devices - Square",
+    group = "Devices - Square"
 )
 public annotation class WearPreviewDevices
 
@@ -46,7 +46,7 @@ public annotation class WearPreviewDevices
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true,
-    group = "Devices - Small Round",
+    group = "Devices - Small Round"
 )
 public annotation class WearSmallRoundDevicePreview
 
@@ -55,7 +55,7 @@ public annotation class WearSmallRoundDevicePreview
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true,
-    group = "Devices - Large Round",
+    group = "Devices - Large Round"
 )
 public annotation class WearLargeRoundDevicePreview
 
@@ -64,6 +64,6 @@ public annotation class WearLargeRoundDevicePreview
     showSystemUi = true,
     backgroundColor = 0xff000000,
     showBackground = true,
-    group = "Devices - Square",
+    group = "Devices - Square"
 )
 public annotation class WearSquareDevicePreview
