@@ -154,9 +154,9 @@ class MainPhoneActivity :
         // Restore whether we've already asked the user for permission on behalf of the watch.
         askedForPermissionOnBehalfOfWear =
             savedInstanceState?.getBoolean(
-            ASKED_PERMISSION_ON_BEHALF_OF_WEAR,
-            askedForPermissionOnBehalfOfWear
-        ) ?: askedForPermissionOnBehalfOfWear
+                ASKED_PERMISSION_ON_BEHALF_OF_WEAR,
+                askedForPermissionOnBehalfOfWear
+            ) ?: askedForPermissionOnBehalfOfWear
 
         checkForRemotePermissionRequest()
     }
@@ -186,7 +186,10 @@ class MainPhoneActivity :
             == PackageManager.PERMISSION_GRANTED
         ) {
             binding.phoneInfoPermissionButton.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_very_satisfied, 0, 0, 0
+                R.drawable.ic_very_satisfied,
+                0,
+                0,
+                0
             )
         }
 
@@ -194,7 +197,8 @@ class MainPhoneActivity :
         // (They are cached and shared between GoogleApi instances.)
         Wearable.getMessageClient(this).addListener(this)
         Wearable.getCapabilityClient(this).addListener(
-            this, Constants.CAPABILITY_WEAR_APP
+            this,
+            Constants.CAPABILITY_WEAR_APP
         )
 
         // Initial check of capabilities to find the phone.
@@ -345,11 +349,17 @@ class MainPhoneActivity :
         runOnUiThread {
             if (wearBodySensorsPermissionApproved) {
                 binding.wearBodySensorsPermissionButton.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_very_satisfied, 0, 0, 0
+                    R.drawable.ic_very_satisfied,
+                    0,
+                    0,
+                    0
                 )
             } else {
                 binding.wearBodySensorsPermissionButton.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_very_dissatisfied, 0, 0, 0
+                    R.drawable.ic_very_dissatisfied,
+                    0,
+                    0,
+                    0
                 )
             }
         }

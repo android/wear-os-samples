@@ -54,23 +54,41 @@ class MessagingRepo(private val context: Context) {
 
         val knownContacts = listOf(
             Contact(
-                id = 0, initials = "JV", name = "Jyoti V", avatarUrl = null
+                id = 0,
+                initials = "JV",
+                name = "Jyoti V",
+                avatarUrl = null
             ),
             Contact(
-                id = 1, initials = "AC", name = "Ali C", avatarUrl = "$avatarPath/ali.png"
+                id = 1,
+                initials = "AC",
+                name = "Ali C",
+                avatarUrl = "$avatarPath/ali.png"
             ),
             Contact(
-                id = 2, initials = "TB", name = "Taylor B", avatarUrl = "$avatarPath/taylor.jpg"
+                id = 2,
+                initials = "TB",
+                name = "Taylor B",
+                avatarUrl = "$avatarPath/taylor.jpg"
             ),
             Contact(
-                id = 3, initials = "FS", name = "Felipe S", avatarUrl = null
+                id = 3,
+                initials = "FS",
+                name = "Felipe S",
+                avatarUrl = null
             ),
             Contact(
-                id = 4, initials = "JG", name = "Judith G", avatarUrl = null
+                id = 4,
+                initials = "JG",
+                name = "Judith G",
+                avatarUrl = null
             ),
             Contact(
-                id = 5, initials = "AO", name = "Andrew O", avatarUrl = null
-            ),
+                id = 5,
+                initials = "AO",
+                name = "Andrew O",
+                avatarUrl = null
+            )
         )
     }
 }

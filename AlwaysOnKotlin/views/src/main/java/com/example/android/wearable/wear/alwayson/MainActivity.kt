@@ -186,7 +186,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         if (ambientController.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
             ambientUpdateAlarmManager.setExact(
-                AlarmManager.RTC_WAKEUP, triggerTime.toEpochMilli(), ambientUpdatePendingIntent
+                AlarmManager.RTC_WAKEUP,
+                triggerTime.toEpochMilli(),
+                ambientUpdatePendingIntent
             )
         } else {
             val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)

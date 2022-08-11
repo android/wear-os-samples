@@ -115,7 +115,7 @@ class MessagingTileService : CoroutinesTileService() {
      * from the network in this suspending function, and return the resulting bitmaps.
      */
     private suspend fun fetchAvatarsFromNetwork(
-        requestParams: ResourcesRequest,
+        requestParams: ResourcesRequest
     ): Map<Contact, Bitmap> {
         val tileState: MessagingTileState = latestTileState()
         val requestedAvatars: List<Contact> = if (requestParams.resourceIds.isEmpty()) {

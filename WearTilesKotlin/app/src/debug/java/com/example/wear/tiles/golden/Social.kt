@@ -63,7 +63,7 @@ object Social {
         .setButtonColors(
             ButtonColors(
                 /* backgroundColor = */ ColorBuilders.argb(contact.color),
-                /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.DarkerGray),
+                /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
             )
         )
         .build()

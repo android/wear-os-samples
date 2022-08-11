@@ -80,7 +80,6 @@ fun createComplicationSlotManager(
     currentUserStyleRepository: CurrentUserStyleRepository,
     drawableId: Int = DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID
 ): ComplicationSlotsManager {
-
     val defaultCanvasComplicationFactory =
         CanvasComplicationFactory { watchState, listener ->
             CanvasComplicationDrawable(

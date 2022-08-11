@@ -72,7 +72,7 @@ fun LandingScreen(
     menuItems: List<MenuItem>,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         // Places both Chips (button and toggle) in the middle of the screen.
@@ -129,9 +129,9 @@ fun LandingScreen(
                             imageVector = ToggleChipDefaults.switchIcon(
                                 checked = proceedingTimeTextEnabled
                             ),
-                            contentDescription = if (proceedingTimeTextEnabled) "On" else "Off",
+                            contentDescription = if (proceedingTimeTextEnabled) "On" else "Off"
                         )
-                    },
+                    }
                 )
             }
         }
@@ -152,7 +152,7 @@ fun LandingScreen(
                         angularDirection = CurvedDirection.Angular.CounterClockwise,
                         style = CurvedTextStyle(
                             fontSize = 18.sp,
-                            color = primaryColor,
+                            color = primaryColor
                         ),
                         modifier = CurvedModifier
                             .radialGradientBackground(

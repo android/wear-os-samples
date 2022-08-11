@@ -46,7 +46,7 @@ fun WatchListScreen(
     focusRequester: FocusRequester,
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
-    onClickWatch: (Int) -> Unit,
+    onClickWatch: (Int) -> Unit
 ) {
     val watches by viewModel.watches
     WatchListScreen(
@@ -55,7 +55,7 @@ fun WatchListScreen(
         focusRequester = focusRequester,
         showVignette = showVignette,
         onClickVignetteToggle = onClickVignetteToggle,
-        onClickWatch = onClickWatch,
+        onClickWatch = onClickWatch
     )
 }
 
@@ -71,13 +71,12 @@ fun WatchListScreen(
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     ScalingLazyColumn(
         modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
         state = scalingLazyListState
     ) {
-
         item {
             ToggleChip(
                 modifier = Modifier
@@ -103,9 +102,9 @@ fun WatchListScreen(
                 toggleControl = {
                     Icon(
                         imageVector = ToggleChipDefaults.switchIcon(checked = showVignette),
-                        contentDescription = if (showVignette) "On" else "Off",
+                        contentDescription = if (showVignette) "On" else "Off"
                     )
-                },
+                }
             )
         }
 

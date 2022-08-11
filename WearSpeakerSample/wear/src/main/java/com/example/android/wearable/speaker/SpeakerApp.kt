@@ -104,7 +104,7 @@ fun SpeakerApp() {
                 scope.launch {
                     mainState.onMusicClicked()
                 }
-            },
+            }
         )
 
         if (mainState.showPermissionRationale) {

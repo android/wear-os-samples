@@ -63,7 +63,7 @@ fun MapScreen(
             }
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState,
+                cameraPositionState = cameraPositionState
             ) {
                 Marker(
                     state = MarkerState(position = singapore),
@@ -86,13 +86,13 @@ fun MapScreen(
                             Text(
                                 text = "X",
                                 color = MaterialTheme.colors.onSecondary,
-                                style = MaterialTheme.typography.button,
+                                style = MaterialTheme.typography.button
                             )
                         }
                     },
                     colors = ChipDefaults
                         .chipColors(backgroundColor = MaterialTheme.colors.secondary),
-                    contentPadding = PaddingValues(vertical = 0.dp),
+                    contentPadding = PaddingValues(vertical = 0.dp)
                 )
             }
         }

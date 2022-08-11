@@ -49,7 +49,7 @@ fun WorkoutButtons() {
             button1Clickable = emptyClickable,
             button2Clickable = emptyClickable,
             button3Clickable = emptyClickable,
-            chipClickable = emptyClickable,
+            chipClickable = emptyClickable
         )
     ) {
         addIdToImageMapping(
