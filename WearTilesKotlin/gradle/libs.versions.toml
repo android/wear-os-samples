@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "7.2.2"
 androidx-test = "1.4.0"
-androidx-wear-tiles = "1.1.0-beta01"
+androidx-wear-tiles = "1.1.0"
 compose = "1.2.1"
 compose-compiler = "1.2.0"
 horologist = "0.1.5"
