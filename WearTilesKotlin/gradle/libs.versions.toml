@@ -15,7 +15,7 @@ androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
 androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
-coil = "io.coil-kt:coil-compose:2.1.0"
+coil = "io.coil-kt:coil-compose:2.2.0"
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 horologist-compose-tools = { module = "com.google.android.horologist:horologist-compose-tools", version.ref = "horologist" }
