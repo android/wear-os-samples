@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         // NOTE: This must be the same in the phone app and the wear app for the capabilities API
