@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.devicegrant"
         minSdk 26
