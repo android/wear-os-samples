@@ -63,7 +63,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
          */
         fun getComplicationToggleIntent(
             context: Context,
-            args: ComplicationToggleArgs,
+            args: ComplicationToggleArgs
         ): PendingIntent {
             val intent = Intent(context, ComplicationToggleReceiver::class.java).apply {
                 putExtra(EXTRA_ARGS, args)
