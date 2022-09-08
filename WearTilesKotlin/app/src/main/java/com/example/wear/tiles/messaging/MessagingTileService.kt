@@ -23,7 +23,7 @@ import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
 import coil.Coil
 import coil.ImageLoader
-import com.google.android.horologist.tiles.CoroutinesTileService
+import com.google.android.horologist.tiles.SuspendingTileService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.stateIn
  * The main function, [tileRequest], is triggered when the system calls for a tile. Resources are
  * provided with the [resourcesRequest] method, which is triggered when the tile uses an Image.
  */
-class MessagingTileService : CoroutinesTileService() {
+class MessagingTileService : SuspendingTileService() {
     private lateinit var repo: MessagingRepo
     private lateinit var imageLoader: ImageLoader
     private lateinit var renderer: MessagingTileRenderer
