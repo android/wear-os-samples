@@ -25,7 +25,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 playservices-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
-wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha03"
+wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-SNAPSHOT"
 wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
 
 [plugins]
