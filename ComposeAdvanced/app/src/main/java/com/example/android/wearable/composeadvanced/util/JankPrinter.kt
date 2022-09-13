@@ -23,8 +23,6 @@ import androidx.metrics.performance.JankStats
 import androidx.metrics.performance.PerformanceMetricsState
 import com.example.android.wearable.composeadvanced.BuildConfig
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
 import java.util.concurrent.TimeUnit
 
 /**
