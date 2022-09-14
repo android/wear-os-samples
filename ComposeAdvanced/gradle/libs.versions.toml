@@ -34,6 +34,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material-iconscore = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
 compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
