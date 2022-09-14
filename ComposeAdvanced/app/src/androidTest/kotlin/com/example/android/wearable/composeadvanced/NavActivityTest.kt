@@ -26,6 +26,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * Demonstration of a Compose Activity test.
+ */
 class NavActivityTest {
     @get:Rule
     var rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity> =
