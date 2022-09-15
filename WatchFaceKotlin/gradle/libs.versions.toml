@@ -16,7 +16,7 @@ android-lint-gradle = "com.android.tools.lint:lint-gradle:30.2.2"
 android-material = "com.google.android.material:material:1.6.1"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.2.2"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.3.0"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.2.0"
