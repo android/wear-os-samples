@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "7.2.2"
+android-gradle-plugin = "7.3.0"
 androidx-activity = "1.5.1"
 androidx-wear-compose = "1.0.2"
 compose = "1.2.1"

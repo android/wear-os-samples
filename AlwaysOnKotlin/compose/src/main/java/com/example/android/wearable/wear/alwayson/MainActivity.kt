@@ -60,7 +60,7 @@ internal var activeDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate
  * Why not use just one or the other? Coroutines are generally less battery intensive and can be
  * triggered every second. However, they can not wake up the processor (common in ambient mode).
  *
- * Alarms can wake up the processor (what we need for ambient move), but they are less efficient
+ * Alarms can wake up the processor (what we need for ambient mode), but they are less efficient
  * compared to coroutines when it comes to quick update frequencies.
  *
  * Therefore, we use coroutines for active mode (can trigger every second and are better on the

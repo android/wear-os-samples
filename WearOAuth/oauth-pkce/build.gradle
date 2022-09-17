@@ -30,10 +30,6 @@ android {
 
     }
 
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
-    }
-
     buildTypes {
         release {
             minifyEnabled false
