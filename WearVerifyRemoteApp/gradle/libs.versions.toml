@@ -24,7 +24,7 @@ jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
-playservices-wearable = "com.google.android.gms:play-services-wearable:17.1.0"
+playservices-wearable = "com.google.android.gms:play-services-wearable:18.0.0"
 wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha03"
 wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
 
