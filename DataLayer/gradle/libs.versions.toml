@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "7.3.0"
-androidx-activity = "1.5.1"
+androidx-activity = "1.6.0"
 androidx-lifecycle = "2.5.1"
 androidx-wear-compose = "1.0.2"
 compose = "1.2.1"
@@ -13,7 +13,7 @@ org-jetbrains-kotlinx = "1.6.4"
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.2.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.2"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.3"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
