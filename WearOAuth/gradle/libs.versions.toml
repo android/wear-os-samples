@@ -60,7 +60,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
-org-robolectric = "org.robolectric:robolectric:4.8.2"
+org-robolectric = "org.robolectric:robolectric:4.9"
 playservices-auth = "com.google.android.gms:play-services-auth:20.3.0"
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.0.0"
 test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
