@@ -8,7 +8,7 @@ androidx-wear-tiles = "1.0.1"
 androidx-wear-watchface = "1.1.1"
 compose = "1.2.0"
 ktlint = "0.46.1"
-org-jetbrains-kotlin = "1.7.10"
+org-jetbrains-kotlin = "1.7.20"
 org-jetbrains-kotlinx = "1.6.4"
 
 [libraries]
