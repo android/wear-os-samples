@@ -15,7 +15,7 @@ org-jetbrains-kotlinx = "1.6.4"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.3.0"
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.3.0"
-androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
+androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.1.0-dev01"
 androidx-wear-watchface-complications-data-source-ktx = { module = "androidx.wear.watchface:watchface-complications-data-source-ktx", version.ref = "androidx-wear-watchface" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
