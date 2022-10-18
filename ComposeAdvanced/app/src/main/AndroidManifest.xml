@@ -40,13 +40,30 @@
 
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="CA Main"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.example.android.wearable.composeadvanced.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".benchmark.ScrollActivity"
+            android:exported="true"
+            android:label="CA Scroll"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.example.android.wearable.composeadvanced.BENCHMARK" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

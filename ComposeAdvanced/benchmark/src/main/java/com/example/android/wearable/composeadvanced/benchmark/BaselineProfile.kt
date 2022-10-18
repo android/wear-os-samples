@@ -68,6 +68,7 @@ class BaselineProfile {
                 findAndClickText("Watch 2K")
                 backWhenIdle()
                 backWhenIdle()
+                scrollDown()
                 findAndClickText("Add to Time")
                 findAndClickText("User Input Components")
                 findAndClickText("Stepper")
@@ -93,12 +94,12 @@ class BaselineProfile {
 
     private fun findAndClickText(text: String) {
         device.wait(Until.findObject(By.text(text)), 3000)
-        device.findObject(By.text(text)).click()
+        device.findObject(By.text(text))?.click()
     }
 
     private fun findAndClickDesc(desc: String) {
         device.wait(Until.findObject(By.desc(desc)), 3000)
-        device.findObject(By.desc(desc)).click()
+        device.findObject(By.desc(desc))?.click()
     }
 
     private fun backWhenIdle() {
