@@ -26,7 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
+import androidx.tracing.Trace
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
@@ -47,6 +49,13 @@ class ScrollActivity : ComponentActivity() {
     internal lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Trace.beginAsyncSection("SplashScreen", 0)
+
+        val splashScreen = installSplashScreen()
+        splashScreen.setOnExitAnimationListener {
+            Trace.endAsyncSection("SplashScreen", 0)
+        }
+
         super.onCreate(savedInstanceState)
 
         jankPrinter = JankPrinter()
