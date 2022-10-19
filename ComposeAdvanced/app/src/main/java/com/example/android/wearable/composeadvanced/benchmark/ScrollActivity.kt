@@ -49,16 +49,11 @@ class ScrollActivity : ComponentActivity() {
     internal lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Trace.beginAsyncSection("SplashScreen", 0)
-
-        val splashScreen = installSplashScreen()
-        splashScreen.setOnExitAnimationListener {
-            Trace.endAsyncSection("SplashScreen", 0)
-        }
-
         super.onCreate(savedInstanceState)
 
         jankPrinter = JankPrinter()
+
+        setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
             navController = rememberSwipeDismissableNavController()

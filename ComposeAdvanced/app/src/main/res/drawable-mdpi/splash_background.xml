@@ -15,20 +15,18 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <style name="SplashTheme" parent="@android:style/Theme.DeviceDefault">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
-    <!-- For future testing -->
-    <style name="AndroidxSplashTheme" parent="@android:style/Theme.DeviceDefault">
-        <item name="windowSplashScreenBackground">@android:color/black</item>
-
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_round</item>
-
-        <item name="postSplashScreenTheme">@style/MainTheme</item>
-    </style>
-
-    <style name="MainTheme" parent="@android:style/Theme.DeviceDefault">
-    </style>
-</resources>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/black"/>
+        </shape>
+    </item>
+    <item
+        android:width="@dimen/flash_screen_icon_size"
+        android:height="@dimen/flash_screen_icon_size"
+        android:gravity="center">
+        <bitmap
+            android:src="@drawable/ic_launcher_round"
+            android:gravity="fill_horizontal|fill_vertical"/>
+    </item>
+</layer-list>
