@@ -13,7 +13,7 @@ org-jetbrains-kotlinx = "1.6.4"
 
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.3.1"
-android-material = "com.google.android.material:material:1.6.1"
+android-material = "com.google.android.material:material:1.7.0"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.3.1"
