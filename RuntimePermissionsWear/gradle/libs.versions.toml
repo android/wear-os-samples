@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "7.3.0"
-androidx-activity = "1.6.0"
+androidx-activity = "1.6.1"
 androidx-lifecycle = "2.4.1"
 androidx-test = "1.4.0"
 androidx-wear-compose = "1.0.0"
