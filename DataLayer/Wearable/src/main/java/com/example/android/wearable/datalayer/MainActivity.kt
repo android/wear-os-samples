@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             try {
                 val nodes = getCapabilitiesForReachableNodes()
-                    .filterValues { "mobile" in it || "wear" in it }.keys
+                    .filterValues { MOBILE_CAPABILITY in it || WEAR_CAPABILITY in it }.keys
                 displayNodes(nodes)
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             try {
                 val nodes = getCapabilitiesForReachableNodes()
-                    .filterValues { "mobile" in it && "camera" in it }.keys
+                    .filterValues { MOBILE_CAPABILITY in it && CAMERA_CAPABILITY in it }.keys
                 displayNodes(nodes)
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
