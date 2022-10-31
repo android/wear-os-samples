@@ -130,6 +130,9 @@ dependencies {
     implementation libs.horologist.compose.layout
     implementation libs.wear.input
 
+    implementation libs.androidx.splashscreen
+    implementation libs.androidx.tracing.ktx
+
     // Testing
     testImplementation libs.junit
     androidTestImplementation libs.test.ext.junit

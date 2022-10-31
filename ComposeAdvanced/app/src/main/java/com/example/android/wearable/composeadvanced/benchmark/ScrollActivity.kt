@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ScalingLazyColumn
@@ -47,9 +48,13 @@ class ScrollActivity : ComponentActivity() {
     internal lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         jankPrinter = JankPrinter()
+
+        setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
             navController = rememberSwipeDismissableNavController()
