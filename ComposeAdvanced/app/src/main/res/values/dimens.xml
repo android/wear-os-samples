@@ -15,5 +15,5 @@
   ~ limitations under the License.
   -->
 <resources>
-    <dimen name="flash_screen_icon_size">48dp</dimen>
+    <dimen name="splash_screen_icon_size">48dp</dimen>
 </resources>

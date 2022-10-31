@@ -16,15 +16,15 @@
   -->
 
 <resources>
-    <style name="SplashTheme" parent="@android:style/Theme.DeviceDefault">
+    <style name="LegacySplashTheme" parent="@android:style/Theme.DeviceDefault">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
     <!-- For future testing -->
-    <style name="AndroidxSplashTheme" parent="@android:style/Theme.DeviceDefault">
+    <style name="SplashTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@android:color/black</item>
 
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_round</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
 
         <item name="postSplashScreenTheme">@style/MainTheme</item>
     </style>
