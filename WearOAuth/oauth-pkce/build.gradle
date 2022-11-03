@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.pkce"
@@ -28,10 +28,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-    }
-
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     buildTypes {

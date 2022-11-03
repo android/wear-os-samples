@@ -64,13 +64,19 @@ class AnalogWatchCanvasRenderer(
     private val complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
     canvasType: Int
-) : Renderer.CanvasRenderer(
+) : Renderer.CanvasRenderer2<AnalogWatchCanvasRenderer.AnalogSharedAssets>(
     surfaceHolder,
     currentUserStyleRepository,
     watchState,
     canvasType,
-    FRAME_PERIOD_MS_DEFAULT
+    FRAME_PERIOD_MS_DEFAULT,
+    clearWithBackgroundTintBeforeRenderingHighlightLayer = false
 ) {
+    class AnalogSharedAssets : SharedAssets {
+        override fun onDestroy() {
+        }
+    }
+
     private val scope: CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -124,6 +130,10 @@ class AnalogWatchCanvasRenderer(
                 updateWatchFaceData(userStyle)
             }
         }
+    }
+
+    override suspend fun createSharedAssets(): AnalogSharedAssets {
+        return AnalogSharedAssets()
     }
 
     /*
@@ -208,7 +218,12 @@ class AnalogWatchCanvasRenderer(
         super.onDestroy()
     }
 
-    override fun renderHighlightLayer(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
+    override fun renderHighlightLayer(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime,
+        sharedAssets: AnalogSharedAssets
+    ) {
         canvas.drawColor(renderParameters.highlightLayer!!.backgroundTint)
 
         for ((_, complication) in complicationSlotsManager.complicationSlots) {
@@ -218,7 +233,12 @@ class AnalogWatchCanvasRenderer(
         }
     }
 
-    override fun render(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
+    override fun render(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime,
+        sharedAssets: AnalogSharedAssets
+    ) {
         val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
             watchFaceColors.ambientBackgroundColor
         } else {
@@ -434,7 +454,6 @@ class AnalogWatchCanvasRenderer(
         numberStyleOuterCircleRadiusFraction: Float,
         gapBetweenOuterCircleAndBorderFraction: Float
     ) {
-
         // Draws text hour indicators (12, 3, 6, and 9).
         val textBounds = Rect()
         textPaint.color = outerElementColor

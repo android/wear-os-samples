@@ -20,22 +20,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
-        applicationId "com.example.android.wearable.tiles"
+        applicationId "com.example.wear.tiles"
         minSdk 26
         targetSdk 30
         versionCode 1
         versionName "1.0"
-    }
-
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
-    }
-
-    buildFeatures {
-        viewBinding true
     }
 
     buildTypes {
@@ -52,19 +44,35 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs += "-opt-in=com.google.android.horologist.tiles.ExperimentalHorologistTilesApi"
+        freeCompilerArgs += "-opt-in=com.google.android.horologist.compose.tools.ExperimentalHorologistComposeToolsApi"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
 dependencies {
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.datastore
+
+    implementation libs.androidx.wear.tiles
+    implementation libs.androidx.wear.tiles.material
+
+    implementation libs.coil
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.wear
 
-    // Use to implement support for wear tiles
-    implementation libs.wear.tiles
-    implementation libs.wear.tiles.material
+    debugImplementation libs.compose.ui.tooling
+    implementation libs.compose.ui.tooling.preview
 
-    // Use to preview wear tiles in your own app
-    debugImplementation libs.wear.tiles.renderer
+    implementation libs.horologist.compose.tools
+    implementation libs.horologist.tiles
 }

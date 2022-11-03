@@ -15,58 +15,80 @@
  */
 package com.example.wear.tiles.messaging
 
-import androidx.annotation.DrawableRes
-import com.example.wear.tiles.R
-import kotlinx.coroutines.delay
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.wear.tiles.messaging.Contact.Companion.toContact
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-data class Contact(
-    val id: Long,
-    val initials: String,
-    val name: String,
-    @DrawableRes val avatarRes: Int?
-)
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "contacts")
 
-object MessagingRepo {
+class MessagingRepo(private val context: Context) {
+    fun getFavoriteContacts(): Flow<List<Contact>> = context.dataStore.data.map { preferences ->
+        val count = preferences[intPreferencesKey("contact.count")] ?: 0
 
-    suspend fun getFavoriteContacts(): List<Contact> {
-        delay(200)
-        return listOf(
+        (0 until count).mapNotNull {
+            preferences[stringPreferencesKey("contact.$it")]?.toContact()
+        }
+    }
+
+    suspend fun updateContacts(contacts: List<Contact>) {
+        context.dataStore.edit {
+            it.clear()
+            contacts.forEachIndexed { index, contact ->
+                it[stringPreferencesKey("contact.$index")] = contact.toPreferenceString()
+            }
+            it[intPreferencesKey("contact.count")] = contacts.size
+        }
+    }
+
+    companion object {
+        private const val avatarPath =
+            "https://github.com/android/wear-os-samples/raw/main/WearTilesKotlin/" +
+                "app/src/main/res/drawable-nodpi"
+
+        val knownContacts = listOf(
             Contact(
                 id = 0,
                 initials = "JV",
                 name = "Jyoti V",
-                avatarRes = null
+                avatarUrl = null
             ),
             Contact(
                 id = 1,
                 initials = "AC",
                 name = "Ali C",
-                avatarRes = R.drawable.ali
+                avatarUrl = "$avatarPath/ali.png"
             ),
             Contact(
                 id = 2,
-                initials = "FS",
-                name = "Felipe S",
-                avatarRes = null
+                initials = "TB",
+                name = "Taylor B",
+                avatarUrl = "$avatarPath/taylor.jpg"
             ),
             Contact(
                 id = 3,
-                initials = "TB",
-                name = "Taylor B",
-                avatarRes = R.drawable.taylor
+                initials = "FS",
+                name = "Felipe S",
+                avatarUrl = null
             ),
             Contact(
                 id = 4,
                 initials = "JG",
                 name = "Judith G",
-                avatarRes = null
+                avatarUrl = null
             ),
             Contact(
                 id = 5,
                 initials = "AO",
                 name = "Andrew O",
-                avatarRes = null
-            ),
+                avatarUrl = null
+            )
         )
     }
 }

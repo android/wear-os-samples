@@ -1,28 +1,29 @@
 Wear Tiles Sample
-===============================
-Demonstrates tiles using the new AndroidX alpha library.
+=================
 
-Introduction
-------------
+<img src="app/src/main/res/drawable/tile_messaging.png" height="400" alt="Screenshot"/>
 
-[Tiles](https://d.android.com/training/articles/wear-tiles) provide users with swipeable access
-to the things they need to know and get done right from their wrist. They are fast to access and
-convenient, designed to provide users with what they need in the moment, which gives users control
-over what information and actions they want to see.
+[Tiles](https://d.android.com/training/wearables/tiles) provide easy access to the information and
+actions users need in order to get things done. With a simple swipe from the watch face, a user can
+find out the latest forecast or start a timer.
 
-This repository contains a set of sample implementations of Tiles, demonstrating various use cases.
-Each Tile extends TileProviderService and implements onTileRequest and onResourcesRequest.
+This repository contains a sample tile built using the [Tiles Material Components](https://developer.android.com/reference/androidx/wear/tiles/material/package-summary)
+library (for UI) and [Horologist Tiles](https://github.com/google/horologist#-tiles) (preview
+utilities and Kotlin-friendly wrappers). It also showcases most of the Golden Tile layouts from the
+[Tiles Design Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates).
 
-Screenshots
--------------
+Get Started
+-----------
 
-<img src="app/src/main/res/drawable/tile_goals.png" height="400" alt="Screenshot Goals Tile"/> <img src="app/src/main/res/drawable/tile_media.png" height="400" alt="Screenshot"/> <img src="app/src/main/res/drawable/tile_messaging.png" height="400" alt="Screenshot"/>
+Build the project from the command line using `./gradlew build` or import it into Android Studio to
+benefit from the IDE shortcuts like direct surface launching which lets you launch the Messaging
+tile directly to a device or emulator in just one click.
 
-Getting Started
----------------
+Layout samples from the Tiles Design Kit can be found in `GoldenTilesPreviewsRow[N].kt`. Open the
+file in "Split" or "Design" mode to view the previews without a device or emulator.
 
-This sample uses the Gradle build system. To build this project, use the "gradlew build" command or
-use "Import Project" in Android Studio.
+For the sample, start with `MessagingTileService.kt`; the layout (with IDE preview) can be found in 
+`MessagingTileLayout.kt`.
 
 Support
 -------

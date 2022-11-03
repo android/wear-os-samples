@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         // NOTE: This must be the same in the phone app and the wear app for the capabilities API
@@ -28,7 +28,7 @@ android {
         versionCode 1
         versionName "1.0"
         minSdk 21
-        targetSdk 30
+        targetSdk 32
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,7 +53,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
@@ -66,12 +66,9 @@ dependencies {
     implementation libs.androidx.activity.compose
     implementation libs.compose.material
     implementation libs.compose.ui.tooling
-    implementation libs.compose.compiler
     implementation libs.androidx.core.ktx
     implementation libs.androidx.fragment.ktx
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.playservices.wearable
-
-    wearApp projects.wearable
 }

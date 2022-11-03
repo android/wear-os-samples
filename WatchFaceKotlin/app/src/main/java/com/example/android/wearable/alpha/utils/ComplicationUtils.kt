@@ -80,7 +80,6 @@ fun createComplicationSlotManager(
     currentUserStyleRepository: CurrentUserStyleRepository,
     drawableId: Int = DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID
 ): ComplicationSlotsManager {
-
     val defaultCanvasComplicationFactory =
         CanvasComplicationFactory { watchState, listener ->
             CanvasComplicationDrawable(
@@ -95,7 +94,8 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Left.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.DATA_SOURCE_DAY_OF_WEEK
+            SystemDataSources.DATA_SOURCE_DAY_OF_WEEK,
+            ComplicationType.SHORT_TEXT
         ),
         bounds = ComplicationSlotBounds(
             RectF(
@@ -105,7 +105,7 @@ fun createComplicationSlotManager(
                 LEFT_AND_RIGHT_COMPLICATIONS_BOTTOM_BOUND
             )
         )
-    ).setDefaultDataSourceType(ComplicationType.SHORT_TEXT)
+    )
         .build()
 
     val rightComplication = ComplicationSlot.createRoundRectComplicationSlotBuilder(
@@ -113,7 +113,8 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.DATA_SOURCE_STEP_COUNT
+            SystemDataSources.DATA_SOURCE_STEP_COUNT,
+            ComplicationType.SHORT_TEXT
         ),
         bounds = ComplicationSlotBounds(
             RectF(
@@ -123,8 +124,7 @@ fun createComplicationSlotManager(
                 LEFT_AND_RIGHT_COMPLICATIONS_BOTTOM_BOUND
             )
         )
-    ).setDefaultDataSourceType(ComplicationType.SHORT_TEXT)
-        .build()
+    ).build()
     return ComplicationSlotsManager(
         listOf(leftComplication, rightComplication),
         currentUserStyleRepository

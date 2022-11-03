@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         versionCode 1
@@ -31,7 +31,6 @@ android {
 
     lintOptions {
         warningsAsErrors true
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {
@@ -50,6 +49,5 @@ android {
 
 dependencies {
     implementation libs.androidx.activity.ktx
-    implementation libs.androidx.appcompat
     implementation projects.timetext
 }

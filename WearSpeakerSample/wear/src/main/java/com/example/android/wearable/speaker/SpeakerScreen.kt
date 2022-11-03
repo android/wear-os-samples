@@ -124,7 +124,7 @@ private fun computeControlDashboardUiState(
                 expanded = true,
                 enabled = true,
                 visible = true
-            ),
+            )
         )
         PlaybackState.PlayingVoice -> ControlDashboardUiState(
             micState = ControlDashboardButtonUiState(
@@ -141,7 +141,7 @@ private fun computeControlDashboardUiState(
                 expanded = false,
                 enabled = false,
                 visible = false
-            ),
+            )
         )
         PlaybackState.Ready -> ControlDashboardUiState(
             micState = ControlDashboardButtonUiState(
@@ -158,7 +158,7 @@ private fun computeControlDashboardUiState(
                 expanded = false,
                 enabled = true,
                 visible = true
-            ),
+            )
         )
         PlaybackState.Recording -> ControlDashboardUiState(
             micState = ControlDashboardButtonUiState(
@@ -175,7 +175,7 @@ private fun computeControlDashboardUiState(
                 expanded = false,
                 enabled = false,
                 visible = false
-            ),
+            )
         )
     }
 
@@ -193,7 +193,7 @@ private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<
     showSystemUi = true,
     widthDp = 200,
     heightDp = 200,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH,
+    uiMode = Configuration.UI_MODE_TYPE_WATCH
 )
 @Composable
 fun SpeakerScreenPreview(

@@ -48,6 +48,7 @@ private const val CLIENT_SECRET = ""
 class AuthPKCEViewModel(application: Application) : AndroidViewModel(application) {
     // Status to show on the Wear OS display
     val status: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+
     // Dynamic content to show on the Wear OS display
     val result: MutableLiveData<String> by lazy { MutableLiveData<String>() }
 
@@ -115,7 +116,6 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
     private suspend fun retrieveOAuthCode(
         oauthRequest: OAuthRequest
     ): Result<String> {
-
         Log.d(TAG, "Authorization requested. Request URL: ${oauthRequest.requestUrl}")
 
         // Wrap the callback-based request inside a coroutine wrapper

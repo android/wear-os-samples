@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.wear.compose.material.AutoCenteringParams
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListState
@@ -57,7 +58,7 @@ fun UserInputComponentsScreen(
     onClickDemoDatePicker: () -> Unit,
     onClickDemo12hTimePicker: () -> Unit,
     onClickDemo24hTimePicker: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     var textForUserInput by remember { mutableStateOf("") }
     var textForVoiceInput by remember { mutableStateOf("") }
@@ -87,7 +88,8 @@ fun UserInputComponentsScreen(
 
     ScalingLazyColumn(
         modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
-        state = scalingLazyListState
+        state = scalingLazyListState,
+        autoCentering = AutoCenteringParams(itemIndex = 0)
     ) {
         item {
             Chip(
@@ -101,7 +103,7 @@ fun UserInputComponentsScreen(
                 },
                 secondaryLabel = {
                     Text(
-                        text = value.toString(),
+                        text = value.toString()
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -120,7 +122,7 @@ fun UserInputComponentsScreen(
                 },
                 secondaryLabel = {
                     Text(
-                        text = value.toString(),
+                        text = value.toString()
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -139,7 +141,7 @@ fun UserInputComponentsScreen(
                 },
                 secondaryLabel = {
                     Text(
-                        text = dateTime.toLocalDate().toString(),
+                        text = dateTime.toLocalDate().toString()
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -159,7 +161,7 @@ fun UserInputComponentsScreen(
                 secondaryLabel = {
                     val formatter = remember { DateTimeFormatter.ofPattern("hh:mm a") }
                     Text(
-                        text = dateTime.toLocalTime().format(formatter),
+                        text = dateTime.toLocalTime().format(formatter)
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -179,7 +181,7 @@ fun UserInputComponentsScreen(
                 secondaryLabel = {
                     val formatter = remember { DateTimeFormatter.ofPattern("HH:mm:ss") }
                     Text(
-                        text = dateTime.toLocalTime().format(formatter),
+                        text = dateTime.toLocalTime().format(formatter)
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -212,7 +214,7 @@ fun UserInputComponentsScreen(
                 },
                 secondaryLabel = {
                     Text(
-                        text = textForUserInput,
+                        text = textForUserInput
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -245,7 +247,7 @@ fun UserInputComponentsScreen(
                 },
                 secondaryLabel = {
                     Text(
-                        text = textForVoiceInput,
+                        text = textForVoiceInput
                     )
                 },
                 modifier = Modifier.fillMaxWidth()

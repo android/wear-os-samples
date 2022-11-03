@@ -19,17 +19,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.devicegrant"
         minSdk 26
         targetSdk 30
         versionCode 1
         versionName "1.0"
-    }
-
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     // Used to make the direct HTTP call for the token exchange. This will eventually be removed

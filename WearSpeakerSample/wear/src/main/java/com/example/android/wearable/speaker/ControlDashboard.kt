@@ -63,7 +63,7 @@ fun ControlDashboard(
         circle = circle,
         mic = mic,
         play = play,
-        music = music,
+        music = music
     )
 
     // We are using ConstraintLayout here for the circular constraints
@@ -125,7 +125,7 @@ private fun createConstraintSet(
     circle: Any,
     mic: Any,
     play: Any,
-    music: Any,
+    music: Any
 ): ConstraintSet {
     val iconCircleRadius = 32.dp
     val iconMinimizedSize = 48.dp
@@ -205,7 +205,7 @@ private fun ControlDashboardButton(
     //       https://issuetracker.google.com/issues/203123015
 
     val alpha by animateFloatAsState(
-        targetValue = if (buttonState.visible) 1f else 0f,
+        targetValue = if (buttonState.visible) 1f else 0f
     )
 
     Button(
@@ -241,7 +241,7 @@ data class ControlDashboardButtonUiState(
 data class ControlDashboardUiState(
     val micState: ControlDashboardButtonUiState,
     val playState: ControlDashboardButtonUiState,
-    val musicState: ControlDashboardButtonUiState,
+    val musicState: ControlDashboardButtonUiState
 ) {
     init {
         // Check that at most one of the buttons is expanded

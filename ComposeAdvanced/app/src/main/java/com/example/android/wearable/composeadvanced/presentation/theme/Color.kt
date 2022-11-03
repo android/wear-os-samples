@@ -50,5 +50,5 @@ internal val themeValues = listOf(
             secondary = Color(0xFFFFBB29),
             secondaryVariant = Color(0xFFD68400)
         )
-    ),
+    )
 )

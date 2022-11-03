@@ -123,16 +123,19 @@ class MainWearActivity :
             PackageManager.PERMISSION_GRANTED
         ) {
             binding.wearBodySensorsPermissionButton.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_very_satisfied, 0, 0, 0
+                R.drawable.ic_very_satisfied,
+                0,
+                0,
+                0
             )
         }
 
         // Restore whether we've already asked the user for permission on behalf of the phone.
         askedForPermissionOnBehalfOfPhone =
             savedInstanceState?.getBoolean(
-            ASKED_PERMISSION_ON_BEHALF_OF_PHONE,
-            askedForPermissionOnBehalfOfPhone
-        ) ?: askedForPermissionOnBehalfOfPhone
+                ASKED_PERMISSION_ON_BEHALF_OF_PHONE,
+                askedForPermissionOnBehalfOfPhone
+            ) ?: askedForPermissionOnBehalfOfPhone
 
         checkForRemotePermissionRequest()
 
@@ -177,7 +180,8 @@ class MainWearActivity :
         // won't lose their listeners. (They are cached and shared between GoogleApi instances.)
         Wearable.getMessageClient(this).addListener(this)
         Wearable.getCapabilityClient(this).addListener(
-            this, Constants.CAPABILITY_PHONE_APP
+            this,
+            Constants.CAPABILITY_PHONE_APP
         )
 
         lifecycleScope.launch {
@@ -276,7 +280,8 @@ class MainWearActivity :
      */
     private fun checkForRemotePermissionRequest() {
         isPhoneRequestingPermission = intent.getBooleanExtra(
-            EXTRA_PROMPT_PERMISSION_FROM_PHONE, false
+            EXTRA_PROMPT_PERMISSION_FROM_PHONE,
+            false
         )
 
         // If we've already asked the user on behalf of the phone, don't ask again
@@ -293,7 +298,10 @@ class MainWearActivity :
             val sensorSummary = this.sensorSummary()
 
             binding.wearBodySensorsPermissionButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_very_satisfied, 0, 0, 0
+                R.drawable.ic_very_satisfied,
+                0,
+                0,
+                0
             )
 
             logToUi(sensorSummary)
@@ -316,7 +324,10 @@ class MainWearActivity :
             }
         } else {
             binding.wearBodySensorsPermissionButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_very_dissatisfied, 0, 0, 0
+                R.drawable.ic_very_dissatisfied,
+                0,
+                0,
+                0
             )
             if (isPhoneRequestingPermission) {
                 // Resets so this isn't triggered every time permission is changed in app.

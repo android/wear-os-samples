@@ -15,235 +15,126 @@
  */
 package com.example.wear.tiles.messaging
 
-import androidx.core.content.ContextCompat
-import androidx.wear.tiles.ActionBuilders
-import androidx.wear.tiles.ColorBuilders.argb
-import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.tiles.DimensionBuilders.dp
-import androidx.wear.tiles.LayoutElementBuilders.Column
-import androidx.wear.tiles.LayoutElementBuilders.FontStyles
-import androidx.wear.tiles.LayoutElementBuilders.Layout
-import androidx.wear.tiles.LayoutElementBuilders.LayoutElement
-import androidx.wear.tiles.LayoutElementBuilders.Row
-import androidx.wear.tiles.LayoutElementBuilders.Spacer
-import androidx.wear.tiles.LayoutElementBuilders.Text
-import androidx.wear.tiles.ModifiersBuilders.Clickable
-import androidx.wear.tiles.ModifiersBuilders.Modifiers
-import androidx.wear.tiles.ModifiersBuilders.Semantics
+import android.graphics.Bitmap
+import androidx.lifecycle.lifecycleScope
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
-import androidx.wear.tiles.ResourceBuilders.AndroidImageResourceByResId
-import androidx.wear.tiles.ResourceBuilders.ImageResource
 import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.TimelineBuilders.Timeline
-import androidx.wear.tiles.TimelineBuilders.TimelineEntry
-import androidx.wear.tiles.material.Button
-import androidx.wear.tiles.material.ButtonColors
-import com.example.wear.tiles.CoroutinesTileService
-import com.example.wear.tiles.R
-
-// Updating this version triggers a new call to onResourcesRequest(). This is useful for dynamic
-// resources, the contents of which change even though their id stays the same (e.g. a graph).
-// In this sample, our resources are all fixed, so we use a constant value.
-private const val RESOURCES_VERSION = "1"
-
-// Dimensions
-private val SPACING_TITLE_SUBTITLE = dp(4f)
-private val SPACING_SUBTITLE_CONTACTS = dp(12f)
-private val SPACING_CONTACTS_HORIZONTAL = dp(8f)
-private val SPACING_CONTACTS_VERTICAL = dp(4f)
-
-// Resource identifiers for images
-private const val ID_IC_SEARCH = "ic_search"
-private const val ID_CONTACT_PREFIX = "contact_"
+import coil.Coil
+import coil.ImageLoader
+import com.google.android.horologist.tiles.SuspendingTileService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 /**
- * Creates a Messaging Tile, showing your favorite contacts and a button to search other contacts.
- * This is a demo tile only, so the buttons don't actually work.
+ * Creates a Messaging tile, showing up to 4 contacts, an icon button and compact chip.
  *
- * The main function, [onTileRequest], is triggered when the system calls for a tile and implements
- * ListenableFuture which allows the Tile to be returned asynchronously.
+ * It extends [CoroutinesTileService], a Coroutine-friendly wrapper around
+ * [androidx.wear.tiles.TileService], and implements [tileRequest] and [resourcesRequest].
  *
- * Resources are provided with the [onResourcesRequest] method, which is triggered when the tile
- * uses an Image.
+ * The main function, [tileRequest], is triggered when the system calls for a tile. Resources are
+ * provided with the [resourcesRequest] method, which is triggered when the tile uses an Image.
  */
-class MessagingTileService : CoroutinesTileService() {
+class MessagingTileService : SuspendingTileService() {
+    private lateinit var repo: MessagingRepo
+    private lateinit var imageLoader: ImageLoader
+    private lateinit var renderer: MessagingTileRenderer
+    private lateinit var tileStateFlow: StateFlow<MessagingTileState?>
+
+    override fun onCreate() {
+        super.onCreate()
+
+        repo = MessagingRepo(this)
+        imageLoader = Coil.imageLoader(this)
+        renderer = MessagingTileRenderer(this)
+
+        tileStateFlow = repo.getFavoriteContacts()
+            .map { contacts -> MessagingTileState(contacts) }
+            .stateIn(
+                lifecycleScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = null
+            )
+    }
+
+    /**
+     * Read the latest data, delegating to the [MessagingTileRenderer] which creates a layout to
+     * which it binds the state.
+     */
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val contacts = MessagingRepo.getFavoriteContacts().take(4)
-        return Tile.Builder()
-            .setResourcesVersion(RESOURCES_VERSION)
-            // Creates a timeline to hold one or more tile entries for a specific time periods.
-            .setTimeline(
-                Timeline.Builder()
-                    .addTimelineEntry(
-                        TimelineEntry.Builder()
-                            .setLayout(
-                                Layout.Builder()
-                                    .setRoot(layout(contacts, requestParams.deviceParameters!!))
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
-            ).build()
+        val tileState: MessagingTileState = latestTileState()
+        return renderer.renderTimeline(tileState, requestParams)
     }
 
-    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
-        val contacts = MessagingRepo.getFavoriteContacts()
-        return Resources.Builder()
-            .setVersion(RESOURCES_VERSION)
-            .apply {
-                // Add the scaled & cropped avatar images
-                contacts
-                    .mapNotNull { contact ->
-                        // Only create a resource for contacts with an associated avatar
-                        contact.avatarRes?.let {
-                            contact.id to
-                                ImageResource.Builder().setAndroidResourceByResId(
-                                    AndroidImageResourceByResId.Builder()
-                                        .setResourceId(contact.avatarRes).build()
-                                ).build()
-                        }
-                    }.forEach { (id, imageResource) ->
-                        // Add each created image resource to the list
-                        addIdToImageMapping("$ID_CONTACT_PREFIX$id", imageResource)
-                    }
-            }
-            .addIdToImageMapping(
-                ID_IC_SEARCH,
-                ImageResource.Builder()
-                    .setAndroidResourceByResId(
-                        AndroidImageResourceByResId.Builder()
-                            .setResourceId(R.drawable.ic_search)
-                            .build()
-                    )
-                    .build()
-            )
-            .build()
-    }
+    /**
+     * Reads the latest state from the flow, and updates the data if there isn't any.
+     */
+    private suspend fun latestTileState(): MessagingTileState {
+        var tileState = tileStateFlow.filterNotNull().first()
 
-    private fun layout(
-        contacts: List<Contact>,
-        deviceParameters: DeviceParameters
-    ): LayoutElement = Column.Builder()
-        .addContent(
-            Text.Builder()
-                .setText(resources.getString(R.string.tile_messaging_title))
-                .setFontStyle(
-                    FontStyles
-                        .title3(deviceParameters)
-                        .setColor(
-                            argb(ContextCompat.getColor(baseContext, R.color.primary))
-                        )
-                        .build()
-                )
-                .build()
-        )
-        .addContent(Spacer.Builder().setHeight(SPACING_TITLE_SUBTITLE).build())
-        .addContent(
-            Text.Builder()
-                .setText(resources.getString(R.string.tile_messaging_subtitle))
-                .setFontStyle(
-                    FontStyles
-                        .caption1(deviceParameters)
-                        .setColor(
-                            argb(ContextCompat.getColor(baseContext, R.color.onSecondary))
-                        )
-                        .build()
-                )
-                .build()
-        )
-        .addContent(Spacer.Builder().setHeight(SPACING_SUBTITLE_CONTACTS).build())
-        .addContent(
-            Row.Builder()
-                .addContent(
-                    contactLayout(
-                        contact = contacts[0],
-                        clickable = Clickable.Builder()
-                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                            .build()
-                    )
-                )
-                .addContent(Spacer.Builder().setWidth(SPACING_CONTACTS_HORIZONTAL).build())
-                .addContent(
-                    contactLayout(
-                        contact = contacts[1],
-                        clickable = Clickable.Builder()
-                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                            .build()
-                    )
-                )
-                .addContent(Spacer.Builder().setWidth(SPACING_CONTACTS_HORIZONTAL).build())
-                .addContent(
-                    contactLayout(
-                        contact = contacts[2],
-                        clickable = Clickable.Builder()
-                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                            .build()
-                    )
-                )
-                .build()
-        )
-        .addContent(Spacer.Builder().setHeight(SPACING_CONTACTS_VERTICAL).build())
-        .addContent(
-            Row.Builder()
-                .addContent(
-                    contactLayout(
-                        contact = contacts[3],
-                        clickable = Clickable.Builder()
-                            .setOnClick(ActionBuilders.LoadAction.Builder().build())
-                            .build()
-                    )
-                )
-                .addContent(Spacer.Builder().setWidth(SPACING_CONTACTS_HORIZONTAL).build())
-                .addContent(searchLayout())
-                .build()
-        )
-        .setModifiers(
-            Modifiers.Builder()
-                .setSemantics(
-                    Semantics.Builder()
-                        .setContentDescription(getString(R.string.tile_messaging_label))
-                        .build()
-                )
-                .build()
-        )
-        .build()
-
-    private fun contactLayout(
-        contact: Contact,
-        clickable: Clickable
-    ) = Button.Builder(this, clickable).apply {
-        setContentDescription(contact.name)
-        setButtonColors(
-            ButtonColors(
-                ContextCompat.getColor(baseContext, R.color.secondary),
-                ContextCompat.getColor(baseContext, R.color.primary)
-            )
-        )
-        if (contact.avatarRes == null) {
-            setTextContent(contact.initials)
-        } else {
-            setImageContent("$ID_CONTACT_PREFIX${contact.id}")
+        // see `refreshData()` docs for more information
+        if (tileState.contacts.isEmpty()) {
+            refreshData()
+            tileState = tileStateFlow.filterNotNull().first()
         }
+        return tileState
     }
-        .build()
 
-    private fun searchLayout() = Button.Builder(
-        this,
-        Clickable.Builder()
-            .setOnClick(ActionBuilders.LoadAction.Builder().build())
-            .setId("")
-            .build()
-    )
-        .setButtonColors(
-            ButtonColors(
-                ContextCompat.getColor(baseContext, R.color.primaryDark),
-                ContextCompat.getColor(baseContext, R.color.primary)
-            )
-        )
-        .setContentDescription(getString(R.string.tile_messaging_search))
-        .setIconContent(ID_IC_SEARCH)
-        .build()
+    /**
+     * If our data source (the repository) is empty/has stale data, this is where we could perform
+     * an update. For this sample, we're updating the repository with fake data
+     * ([MessagingRepo.knownContacts]).
+     *
+     * In a more complete example, tiles, complications and the main app (/overlay) would
+     * share a common data source so it's less likely that an initial data refresh triggered by the
+     * tile would be necessary.
+     */
+    private suspend fun refreshData() {
+        repo.updateContacts(MessagingRepo.knownContacts)
+    }
+
+    /**
+     * Downloads bitmaps from the network and passes them to [MessagingTileRenderer] to add as
+     * image resources (alongside any local resources).
+     */
+    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
+        val avatars = fetchAvatarsFromNetwork(requestParams)
+        return renderer.produceRequestedResources(avatars, requestParams)
+    }
+
+    /**
+     * Each contact in the tile state could have an avatar (represented by image url). We fetch them
+     * from the network in this suspending function, and return the resulting bitmaps.
+     */
+    private suspend fun fetchAvatarsFromNetwork(
+        requestParams: ResourcesRequest
+    ): Map<Contact, Bitmap> {
+        val tileState: MessagingTileState = latestTileState()
+        val requestedAvatars: List<Contact> = if (requestParams.resourceIds.isEmpty()) {
+            tileState.contacts
+        } else {
+            tileState.contacts.filter {
+                requestParams.resourceIds.contains(MessagingTileRenderer.ID_CONTACT_PREFIX + it.id)
+            }
+        }
+
+        val images = coroutineScope {
+            requestedAvatars.map { contact ->
+                async {
+                    val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
+                    image?.let { contact to it }
+                }
+            }
+        }.awaitAll().filterNotNull().toMap()
+
+        return images
+    }
 }

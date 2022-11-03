@@ -68,12 +68,12 @@ class IconDataSourceService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData =
         getComplicationData(
             tapAction = null,
-            case = Case.FACE,
+            case = Case.FACE
         )
 
     private fun getComplicationData(
         tapAction: PendingIntent?,
-        case: Case,
+        case: Case
     ): ComplicationData =
         when (case) {
             Case.FACE -> MonochromaticImageComplicationData.Builder(

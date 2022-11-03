@@ -20,17 +20,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         versionCode 1
         versionName "1.0"
         minSdk 26
         targetSdk 30
-    }
-
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {

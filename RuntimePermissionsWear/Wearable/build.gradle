@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         // NOTE: This must be the same in the phone app and the wear app for the capabilities API
@@ -28,13 +28,9 @@ android {
         versionCode 1
         versionName "1.0"
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdk 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    lintOptions {
-        ignore "OldTargetApi" // API >30 doesn"t exist for Wear OS
     }
 
     compileOptions {

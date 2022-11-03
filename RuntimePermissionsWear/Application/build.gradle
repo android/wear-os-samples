@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         // NOTE: This must be the same in the phone app and the wear app for the capabilities API
@@ -28,7 +28,7 @@ android {
         versionCode 1
         versionName "1.0"
         minSdkVersion 18
-        targetSdkVersion 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

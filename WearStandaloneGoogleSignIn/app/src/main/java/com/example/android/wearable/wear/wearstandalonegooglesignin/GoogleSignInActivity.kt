@@ -107,7 +107,7 @@ class GoogleSignInActivity : ComponentActivity() {
                             Log.w("GoogleSignInActivity", "Sign out failed: $apiException")
                         }
                     }
-                },
+                }
             )
         }
     }
@@ -117,14 +117,14 @@ class GoogleSignInActivity : ComponentActivity() {
 fun GoogleSignInScreen(
     googleSignInAccount: GoogleSignInAccount?,
     onSignInClicked: () -> Unit,
-    onSignOutClicked: () -> Unit,
+    onSignOutClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (googleSignInAccount == null) {
             AndroidView(::SignInButton) { signInButton ->
