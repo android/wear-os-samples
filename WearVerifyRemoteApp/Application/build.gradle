@@ -53,6 +53,4 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.wear.remote.interactions
     implementation libs.playservices.wearable
-
-    wearApp projects.wearable
 }
