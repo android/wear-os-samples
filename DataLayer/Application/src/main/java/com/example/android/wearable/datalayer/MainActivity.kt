@@ -66,7 +66,6 @@ class MainActivity : ComponentActivity() {
     private val dataClient by lazy { Wearable.getDataClient(this) }
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
-    private val nodeClient by lazy { Wearable.getNodeClient(this) }
 
     private val isCameraSupported by lazy {
         packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
@@ -167,7 +166,10 @@ class MainActivity : ComponentActivity() {
     private fun startWearableActivity() {
         lifecycleScope.launch {
             try {
-                val nodes = nodeClient.connectedNodes.await()
+                val nodes = capabilityClient
+                    .getCapability(WEAR_CAPABILITY, CapabilityClient.FILTER_REACHABLE)
+                    .await()
+                    .nodes
 
                 // Send a message to all nodes in parallel
                 nodes.map { node ->
@@ -253,6 +255,7 @@ class MainActivity : ComponentActivity() {
         private const val TIME_KEY = "time"
         private const val COUNT_KEY = "count"
         private const val CAMERA_CAPABILITY = "camera"
+        private const val WEAR_CAPABILITY = "wear"
 
         private val countInterval = Duration.ofSeconds(5)
     }
