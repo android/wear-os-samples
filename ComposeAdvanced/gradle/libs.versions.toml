@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "7.3.1"
 androidx-activity = "1.6.1"
-androidx-benchmark = "1.1.0"
+androidx-benchmark = "1.1.1"
 androidx-lifecycle = "2.5.1"
 androidx-test-espresso = "3.5.0"
 androidx-test-ext = "1.1.4"
