@@ -16,7 +16,7 @@ adjust them according to your environment.
 Support
 -------
 
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
+- Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
 
 If you've found an error in the sample, please file an issue report at:
 https://github.com/android/wear-os-samples/issues/new

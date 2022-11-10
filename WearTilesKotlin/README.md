@@ -28,7 +28,7 @@ For the sample, start with `MessagingTileService.kt`; the layout (with IDE previ
 Support
 -------
 
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
+- Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
 
 If you've found an error in this sample, please file an issue:
 https://github.com/android/wear-os-samples
