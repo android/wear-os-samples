@@ -43,7 +43,7 @@ This sample uses the Gradle build system. To build this project, use the
 Support
 -------
 
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
+- Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
 
 If you've found an error in this sample, please file an issue in the issue tracker.
 

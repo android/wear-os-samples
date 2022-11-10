@@ -64,7 +64,7 @@ Support
 
 **General questions**
   - https://stackoverflow.com/questions/tagged/wear-os
-  - http://stackoverflow.com/questions/tagged/android
+  - https://stackoverflow.com/questions/tagged/android
 
 If you've found an error in this sample, please file an issue:
 https://github.com/android/wear-os-samples/issues/new
