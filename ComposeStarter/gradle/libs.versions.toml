@@ -29,5 +29,5 @@ wear-compose-material = { module = "androidx.wear.compose:compose-material", ver
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.11.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.12.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
