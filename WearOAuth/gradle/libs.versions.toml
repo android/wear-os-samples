@@ -92,5 +92,5 @@ wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", ver
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.11.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.12.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
