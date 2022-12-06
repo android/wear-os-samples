@@ -75,8 +75,7 @@ import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.Wa
 import com.google.android.horologist.composables.DatePicker
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
-import com.google.android.horologist.compose.layout.fadeAway
-import com.google.android.horologist.compose.layout.fadeAwayScalingLazyList
+import com.google.android.horologist.compose.layout.scrollAway
 import java.time.LocalDateTime
 
 @Composable
@@ -138,20 +137,19 @@ fun WearApp(
                         DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
                             val scrollViewModel: ScalingLazyListStateViewModel =
                                 viewModel(currentBackStackEntry!!)
-                            Modifier.fadeAwayScalingLazyList {
-                                scrollViewModel.scrollState
-                            }
+                            Modifier.scrollAway(scrollViewModel.scrollState)
                         }
+
                         DestinationScrollType.COLUMN_SCROLLING -> {
                             val viewModel: ScrollStateViewModel =
                                 viewModel(currentBackStackEntry!!)
-                            Modifier.fadeAway {
-                                viewModel.scrollState
-                            }
+                            Modifier.scrollAway(viewModel.scrollState)
                         }
+
                         DestinationScrollType.TIME_TEXT_ONLY -> {
                             Modifier
                         }
+
                         else -> {
                             null
                         }
@@ -188,6 +186,7 @@ fun WearApp(
                             viewModel(currentBackStackEntry!!)
                         PositionIndicator(scalingLazyListState = scrollViewModel.scrollState)
                     }
+
                     DestinationScrollType.COLUMN_SCROLLING -> {
                         // Get or create the ViewModel associated with the current back stack entry
                         val viewModel: ScrollStateViewModel = viewModel(currentBackStackEntry!!)
