@@ -98,7 +98,7 @@ fun SomeScreenContent() {
                         checked = itemChecked,
                         modifier = Modifier.semantics {
                             this.contentDescription =
-                                "Item $item ${if (itemChecked) "Checked" else "Unchecked"}"
+                                if (itemChecked) "Checked" else "Unchecked"
                         }
                     )
                 }
