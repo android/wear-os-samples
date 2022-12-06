@@ -28,11 +28,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
-import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
-import androidx.wear.compose.material.ToggleChipDefaults
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.util.JankPrinter
 
@@ -95,9 +94,12 @@ fun SomeScreenContent() {
                     Text("Item $item")
                 },
                 toggleControl = {
-                    Icon(
-                        imageVector = ToggleChipDefaults.switchIcon(checked = itemChecked),
-                        contentDescription = "Item $item ${if (itemChecked) "Checked" else "Unchecked"}"
+                    Switch(
+                        checked = itemChecked,
+                        modifier = Modifier.semantics {
+                            this.contentDescription =
+                                "Item $item ${if (itemChecked) "Checked" else "Unchecked"}"
+                        }
                     )
                 }
             )
