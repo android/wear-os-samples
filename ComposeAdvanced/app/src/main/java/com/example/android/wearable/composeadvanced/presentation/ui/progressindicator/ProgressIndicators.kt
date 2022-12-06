@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -59,6 +60,7 @@ fun ProgressIndicatorsScreen(
             item {
                 CompactChip(
                     onClick = menuItem.clickHander,
+                    shape = CutCornerShape(4.dp),
                     label = {
                         Text(
                             menuItem.name,
