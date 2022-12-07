@@ -31,10 +31,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.OutlinedChip
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.ScalingLazyListAnchorType
 import androidx.wear.compose.material.Text
@@ -62,24 +61,22 @@ fun Dialogs(
         anchorType = ScalingLazyListAnchorType.ItemStart
     ) {
         item {
-            Chip(
+            OutlinedChip(
                 onClick = {
                     confirmationStatus = ""
                     confirmationShowDialog = true
                 },
-                colors = ChipDefaults.primaryChipColors(),
                 label = { Text(stringResource(R.string.confirmation_dialog_label)) },
                 secondaryLabel = { Text(confirmationStatus) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
         item {
-            Chip(
+            OutlinedChip(
                 onClick = {
                     alertStatus = ""
                     alertShowDialog = true
                 },
-                colors = ChipDefaults.primaryChipColors(),
                 label = { Text(stringResource(R.string.alert_dialog_label)) },
                 secondaryLabel = { Text(alertStatus) },
                 modifier = Modifier.fillMaxWidth()
