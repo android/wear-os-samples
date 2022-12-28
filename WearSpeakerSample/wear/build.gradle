@@ -57,6 +57,9 @@ android {
 }
 
 dependencies {
+    def composeBom = platform(libs.androidx.compose.bom)
+
+    implementation composeBom
     implementation libs.kotlinx.coroutines.android
     implementation libs.androidx.activity.compose
     implementation libs.compose.material.ripple
