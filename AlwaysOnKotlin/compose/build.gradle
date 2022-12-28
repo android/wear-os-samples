@@ -72,6 +72,9 @@ android {
 }
 
 dependencies {
+    def composeBom = platform(libs.androidx.compose.bom)
+
+    implementation composeBom
     implementation libs.kotlinx.coroutines.android
     implementation libs.androidx.activity.compose
     implementation libs.compose.ui
@@ -84,6 +87,7 @@ dependencies {
     implementation libs.androidx.window
     implementation libs.compose.ui.test.manifest
 
+    androidTestImplementation composeBom
     androidTestImplementation libs.kotlinx.coroutines.test
     androidTestImplementation libs.test.core.ktx
     androidTestImplementation libs.test.ext.junit.ktx
