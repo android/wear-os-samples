@@ -58,8 +58,11 @@ android {
 }
 
 dependencies {
+    def composeBom = platform(libs.androidx.compose.bom)
+
     coreLibraryDesugaring libs.android.desugarjdklibs
 
+    implementation composeBom
     implementation libs.kotlinx.coroutines.core
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.play.services
