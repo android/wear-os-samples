@@ -61,5 +61,4 @@ dependencies {
     implementation libs.playservices.wearable
 
     implementation projects.shared
-    wearApp projects.wearable
 }
