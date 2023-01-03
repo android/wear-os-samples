@@ -67,8 +67,8 @@ playservices-wearable = "com.google.android.gms:play-services-wearable:18.0.0"
 test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 test-espresso-core = "androidx.test.espresso:espresso-core:3.5.0"
-test-ext-junit = "androidx.test.ext:junit:1.1.4"
-test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.4"
+test-ext-junit = "androidx.test.ext:junit:1.1.5"
+test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
 test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
