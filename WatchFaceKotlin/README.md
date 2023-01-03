@@ -22,9 +22,6 @@ allow you to successfully install the watch face on the Wear device.
 When installed, you will need to select the watch face in the watch face picker, i.e., the watch
 face will not launch on its own like a regular app.
 
-For more information, check out our code lab:
-[1]: https://codelabs.developers.google.com/codelabs/watchface/index.html
-
 Screenshots
 -------------
 
