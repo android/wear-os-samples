@@ -26,7 +26,7 @@ kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versi
 org-robolectric = "org.robolectric:robolectric:4.9.2"
 test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 test-espresso-core = "androidx.test.espresso:espresso-core:3.5.0"
-test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.4"
+test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
 test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 
