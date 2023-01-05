@@ -1,7 +1,7 @@
 Wear Tiles Sample
 =================
 
-<img src="app/src/main/res/drawable/tile_messaging.png" height="400" />
+<img src="screenshots/tile_messaging.png" height="400" />
 
 [Tiles](https://d.android.com/training/wearables/tiles) provide easy access to the information and
 actions users need in order to get things done. With a simple swipe from the watch face, a user can
@@ -15,7 +15,7 @@ It also showcases most of the Golden Tile layouts from the [Tiles Design Kit](ht
 in the `tiles.golden` package of the `debug` sourceset. To see what these look like, open one of the
 "GoldenTilesPreviewsRowN" files and choose the "Split" or "Design" editor view.
 
-<img src="app/src/main/res/drawable/tile_preview_design_view.png" width="1024" alt="Screenshot of Android Studio showing the design view of GoldenTilesPreviewsRow1.kt. A grid view of Wear OS Tiles are displayed."/>
+<img src="screenshots/tile_preview_design_view.png" width="1024" alt="Screenshot of Android Studio showing the design view of GoldenTilesPreviewsRow1.kt. A grid view of Wear OS Tiles are displayed."/>
 
 Get Started
 -----------
