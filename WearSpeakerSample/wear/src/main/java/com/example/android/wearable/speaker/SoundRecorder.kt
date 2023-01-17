@@ -21,6 +21,7 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.AudioTrack
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.annotation.RequiresPermission
@@ -28,6 +29,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
@@ -37,6 +41,8 @@ class SoundRecorder(
     private val context: Context,
     private val outputFileName: String
 ) {
+    val audioFile = File(context.filesDir, outputFileName)
+
     private var state = State.IDLE
 
     private enum class State {
@@ -57,47 +63,38 @@ class SoundRecorder(
         }
 
         // Check if there isn't a recording to play
-        if (!File(context.filesDir, outputFileName).exists()) return
+        if (!audioFile.exists()) return
 
-        state = State.PLAYING
+        suspendCancellableCoroutine { cont ->
+            state = State.PLAYING
 
-        val intSize = AudioTrack.getMinBufferSize(RECORDING_RATE, CHANNELS_OUT, FORMAT)
-
-        val audioTrack = AudioTrack.Builder()
-            .setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-            .setBufferSizeInBytes(intSize)
-            .setAudioFormat(
-                AudioFormat.Builder()
-                    .setSampleRate(RECORDING_RATE)
-                    .setChannelMask(CHANNELS_OUT)
-                    .setEncoding(FORMAT)
-                    .build()
-            )
-            .setTransferMode(AudioTrack.MODE_STREAM)
-            .build()
-
-        audioTrack.setVolume(AudioTrack.getMaxVolume())
-        audioTrack.play()
-
-        try {
-            withContext(Dispatchers.IO) {
-                context.openFileInput(outputFileName).buffered().use { bufferedInputStream ->
-                    val buffer = ByteArray(intSize * 2)
-                    while (isActive) {
-                        val read = bufferedInputStream.read(buffer, 0, buffer.size)
-                        if (read < 0) break
-                        audioTrack.write(buffer, 0, read)
-                    }
+            val mediaPlayer = MediaPlayer().apply {
+                setDataSource(audioFile.path)
+                setOnInfoListener { mr, what, extra ->
+                    println("info: $mr $what $extra")
+                    true
+                }
+                setOnErrorListener { mr, what, extra ->
+                    println("error: $mr $what $extra")
+                    true
+                }
+                setOnCompletionListener {
+                    reset()
+                    release()
+                    state = State.IDLE
+                    cont.resume(value = Unit, onCancellation = {})
                 }
             }
-        } finally {
-            audioTrack.release()
-            state = State.IDLE
+
+            mediaPlayer.prepare()
+
+            mediaPlayer.start()
+
+            cont.invokeOnCancellation {
+                mediaPlayer.stop()
+                mediaPlayer.reset()
+                mediaPlayer.release()
+            }
         }
     }
 
@@ -113,47 +110,34 @@ class SoundRecorder(
             return
         }
 
-        state = State.RECORDING
-
-        val intSize = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT)
-
-        val audioRecord = AudioRecord.Builder()
-            .setAudioSource(MediaRecorder.AudioSource.MIC)
-            .setAudioFormat(
-                AudioFormat.Builder()
-                    .setSampleRate(RECORDING_RATE)
-                    .setChannelMask(CHANNEL_IN)
-                    .setEncoding(FORMAT)
-                    .build()
-            )
-            .setBufferSizeInBytes(intSize * 3)
-            .build()
-
-        audioRecord.startRecording()
-
-        try {
-            withContext(Dispatchers.IO) {
-                context.openFileOutput(outputFileName, Context.MODE_PRIVATE)
-                    .buffered()
-                    .use { bufferedOutputStream ->
-                        val buffer = ByteArray(intSize)
-                        while (isActive) {
-                            val read = audioRecord.read(buffer, 0, buffer.size)
-                            bufferedOutputStream.write(buffer, 0, read)
-                        }
-                    }
+        suspendCancellableCoroutine<Unit> { cont ->
+            @Suppress("DEPRECATION")
+            val mediaRecorder = MediaRecorder().apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.OGG)
+                setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+                setOutputFile(audioFile.path)
+                setOnInfoListener { mr, what, extra ->
+                    println("info: $mr $what $extra")
+                }
+                setOnErrorListener { mr, what, extra ->
+                    println("error: $mr $what $extra")
+                }
             }
-        } finally {
-            audioRecord.release()
-            state = State.IDLE
+
+            cont.invokeOnCancellation {
+                mediaRecorder.stop()
+                state = State.IDLE
+            }
+
+            mediaRecorder.prepare()
+            mediaRecorder.start()
+
+            state = State.RECORDING
         }
     }
 
     companion object {
         private const val TAG = "SoundRecorder"
-        private const val RECORDING_RATE = 8000 // can go up to 44K, if needed
-        private const val CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO
-        private const val CHANNELS_OUT = AudioFormat.CHANNEL_OUT_MONO
-        private const val FORMAT = AudioFormat.ENCODING_PCM_16BIT
     }
 }
