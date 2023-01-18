@@ -35,6 +35,9 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.NodeClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
+import java.io.ByteArrayOutputStream
+import java.time.Duration
+import java.time.Instant
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -45,9 +48,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
-import java.time.Duration
-import java.time.Instant
 
 /**
  * Manages Wearable clients to showcase the [DataClient], [MessageClient], [CapabilityClient] and

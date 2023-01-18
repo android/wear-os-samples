@@ -30,6 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.wear.widget.CurvedTextView
 import com.google.common.truth.Truth.assertThat
+import java.util.TimeZone
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.Test
@@ -37,7 +38,6 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
-import java.util.TimeZone
 
 @Config(
     instrumentedPackages = [

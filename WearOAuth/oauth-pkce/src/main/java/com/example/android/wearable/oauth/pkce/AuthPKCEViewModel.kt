@@ -28,11 +28,11 @@ import androidx.wear.phone.interactions.authentication.OAuthResponse
 import androidx.wear.phone.interactions.authentication.RemoteAuthClient
 import com.example.android.wearable.oauth.util.doGetRequest
 import com.example.android.wearable.oauth.util.doPostRequest
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 private const val TAG = "WearOAuthViewModel"
 

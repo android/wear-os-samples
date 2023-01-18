@@ -40,15 +40,15 @@ import com.example.android.wearable.alpha.data.watchface.WatchFaceData
 import com.example.android.wearable.alpha.utils.COLOR_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.DRAW_HOUR_PIPS_STYLE_SETTING
 import com.example.android.wearable.alpha.utils.WATCH_HAND_LENGTH_STYLE_SETTING
+import java.time.Duration
+import java.time.ZonedDateTime
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.ZonedDateTime
-import kotlin.math.cos
-import kotlin.math.sin
 
 // Default for how long each frame is displayed at expected frame rate.
 private const val FRAME_PERIOD_MS_DEFAULT: Long = 16L

@@ -36,14 +36,14 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.material.MaterialTheme
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalTime
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 /**
  * Duration between updates while in active mode.

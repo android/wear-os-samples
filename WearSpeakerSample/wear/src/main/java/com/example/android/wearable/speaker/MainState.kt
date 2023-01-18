@@ -28,12 +28,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import java.time.Duration
+import kotlin.coroutines.resume
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.time.Duration
-import kotlin.coroutines.resume
 
 /**
  * A state holder driving the logic of the app.
