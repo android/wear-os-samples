@@ -119,7 +119,10 @@ class LongTextDataSourceService : SuspendingComplicationDataSourceService() {
                         image = Icon.createWithResource(this, R.drawable.ic_battery)
                     )
                         .setAmbientImage(
-                            ambientImage = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                            ambientImage = Icon.createWithResource(
+                                this,
+                                R.drawable.ic_battery_burn_protect
+                            )
                         )
                         .build()
                 )

@@ -82,6 +82,8 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
         /**
          * Returns the [ComplicationToggleArgs] from the [Intent] sent to the [ComplicationToggleArgs].
          */
-        private fun Intent.getArgs(): ComplicationToggleArgs = requireNotNull(extras?.getParcelable(EXTRA_ARGS))
+        private fun Intent.getArgs(): ComplicationToggleArgs = requireNotNull(
+            extras?.getParcelable(EXTRA_ARGS)
+        )
     }
 }

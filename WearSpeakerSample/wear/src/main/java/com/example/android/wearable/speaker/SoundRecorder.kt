@@ -21,8 +21,8 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
