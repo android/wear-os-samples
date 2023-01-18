@@ -5,7 +5,7 @@ androidx-compose-bom = "2023.01.00"
 androidx-wear-compose = "1.1.1"
 compose-compiler = "1.4.0"
 ktlint = "0.46.1"
-org-jetbrains-kotlin = "1.7.20"
+org-jetbrains-kotlin = "1.8.0"
 org-jetbrains-kotlinx = "1.6.4"
 
 [libraries]
