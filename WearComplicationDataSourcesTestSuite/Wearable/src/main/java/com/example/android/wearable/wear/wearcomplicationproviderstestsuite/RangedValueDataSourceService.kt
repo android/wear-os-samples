@@ -95,7 +95,9 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 ).build()
                 monochromaticImage = null
                 title = null
-                caseContentDescription = getString(R.string.ranged_value_text_only_content_description)
+                caseContentDescription = getString(
+                    R.string.ranged_value_text_only_content_description
+                )
             }
             Case.TEXT_WITH_ICON -> {
                 text = PlainComplicationText.Builder(
@@ -105,11 +107,16 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                     image = Icon.createWithResource(this, R.drawable.ic_battery)
                 )
                     .setAmbientImage(
-                        ambientImage = Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                        ambientImage = Icon.createWithResource(
+                            this,
+                            R.drawable.ic_battery_burn_protect
+                        )
                     )
                     .build()
                 title = null
-                caseContentDescription = getString(R.string.ranged_value_text_with_icon_content_description)
+                caseContentDescription = getString(
+                    R.string.ranged_value_text_with_icon_content_description
+                )
             }
             Case.TEXT_WITH_TITLE -> {
                 text = PlainComplicationText.Builder(
@@ -120,7 +127,9 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                     text = getText(R.string.short_title)
                 ).build()
 
-                caseContentDescription = getString(R.string.ranged_value_text_with_title_content_description)
+                caseContentDescription = getString(
+                    R.string.ranged_value_text_with_title_content_description
+                )
             }
             Case.ICON_ONLY -> {
                 text = null
@@ -128,7 +137,9 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                     image = Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
                 ).build()
                 title = null
-                caseContentDescription = getString(R.string.ranged_value_icon_only_content_description)
+                caseContentDescription = getString(
+                    R.string.ranged_value_icon_only_content_description
+                )
             }
         }
 

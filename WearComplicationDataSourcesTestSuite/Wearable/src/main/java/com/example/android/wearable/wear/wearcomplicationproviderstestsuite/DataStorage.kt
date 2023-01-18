@@ -23,7 +23,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "ComplicationTestSuite")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "ComplicationTestSuite"
+)
 
 /**
  * Returns the current state for a given complication.
