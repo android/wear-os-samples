@@ -93,7 +93,7 @@ class MainState(
     /**
      * The [SoundRecorder] for recording and playing audio captured on-device.
      */
-    private val soundRecorder = SoundRecorder(activity, "audiorecord.pcm")
+    private val soundRecorder = SoundRecorder(activity, "audiorecord.opus")
 
     suspend fun onStopped() {
         playbackStateMutatorMutex.mutate {
