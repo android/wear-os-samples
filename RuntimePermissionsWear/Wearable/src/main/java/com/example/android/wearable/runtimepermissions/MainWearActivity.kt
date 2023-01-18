@@ -36,11 +36,11 @@ import com.google.android.gms.wearable.DataMap
 import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 /**
  * Displays data that requires runtime permissions both locally (BODY_SENSORS) and remotely on

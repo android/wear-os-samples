@@ -44,6 +44,7 @@ suspend fun ComplicationToggleArgs.updateState(context: Context) {
     val stateKey = getStatePreferenceKey()
     context.dataStore.edit { preferences ->
         val currentValue = preferences[stateKey] ?: 0
-        preferences[stateKey] = currentValue + 1 // benign overflow possible, all samples take a modulo of this number
+        // benign overflow possible, all samples take a modulo of this number
+        preferences[stateKey] = currentValue + 1
     }
 }

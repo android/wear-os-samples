@@ -24,10 +24,10 @@ import android.media.AudioTrack
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
