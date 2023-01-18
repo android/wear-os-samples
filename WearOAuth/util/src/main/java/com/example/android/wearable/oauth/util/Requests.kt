@@ -74,7 +74,7 @@ suspend fun doGetRequest(
 ): JSONObject {
     return withContext(dispatcher) {
         val conn = (URL(url).openConnection() as HttpURLConnection)
-        requestHeaders.forEach { (key, value) ->
+        requestHeaders.entries.forEach { (key, value) ->
             conn.setRequestProperty(key, value)
         }
         val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))
