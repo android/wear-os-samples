@@ -43,11 +43,11 @@ import androidx.wear.compose.foundation.CurvedModifier
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.foundation.radialGradientBackground
-import androidx.wear.compose.material.AutoCenteringParams
+import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip

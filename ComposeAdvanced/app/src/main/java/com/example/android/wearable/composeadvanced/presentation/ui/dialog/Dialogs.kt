@@ -34,13 +34,13 @@ import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.OutlinedChip
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListAnchorType
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListAnchorType
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.dialog.Confirmation
 import androidx.wear.compose.material.dialog.Dialog
-import androidx.wear.compose.material.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import com.example.android.wearable.composeadvanced.R
 
 @Composable
