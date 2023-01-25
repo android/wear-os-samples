@@ -85,10 +85,11 @@ android {
 }
 
 dependencies {
-    def composeBom = platform(libs.androidx.compose.bom)
-
     // General compose dependencies
-    implementation composeBom
+
+    // Uncomment two lines below if you want to use Compose BoM and stable releases
+    // def composeBom = platform(libs.androidx.compose.bom)
+    // implementation composeBom
     implementation libs.androidx.activity.compose
     implementation libs.compose.ui.tooling.preview
     implementation libs.compose.foundation
@@ -138,7 +139,8 @@ dependencies {
 
     // Testing
     testImplementation libs.junit
-    androidTestImplementation composeBom
+    // Uncomment the line below if you want to use Compose BoM and stable releases
+    // androidTestImplementation composeBom
     androidTestImplementation libs.test.ext.junit
     androidTestImplementation libs.test.espresso.core
     androidTestImplementation libs.compose.ui.test.junit4
