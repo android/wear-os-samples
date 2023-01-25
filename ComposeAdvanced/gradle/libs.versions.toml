@@ -7,7 +7,8 @@ androidx-lifecycle = "2.5.1"
 androidx-test-espresso = "3.5.1"
 androidx-test-ext = "1.1.5"
 androidx-test-uiautomator = "2.2.0"
-androidx-wear-compose = "1.1.1"
+androidx-wear-compose = "1.2.0-alpha02"
+compose = "1.4.0-alpha04"
 compose-compiler = "1.4.0"
 horologist = "0.2.7"
 ktlint = "0.46.1"
@@ -33,13 +34,16 @@ androidx-tracing-ktx = "androidx.tracing:tracing-ktx:1.1.0"
 com-google-maps-compose = "com.google.maps.android:maps-compose:2.9.1"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.1.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
-compose-foundation = { module = "androidx.compose.foundation:foundation" }
-compose-material-iconscore = { module = "androidx.compose.material:material-icons-core" }
-compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended" }
-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+# Remove version.ref for compose dependencies below if you want to use Compose BoM and stable releases
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
+compose-material-iconscore = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
+compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
