@@ -64,12 +64,11 @@ class MainActivity : ComponentActivity() {
         jankPrinter.installJankStats(activity = this)
     }
 
-    override fun getDefaultViewModelCreationExtras(): CreationExtras {
-        return MutableCreationExtras(super.getDefaultViewModelCreationExtras()).apply {
+    override val defaultViewModelCreationExtras: CreationExtras
+        get() = MutableCreationExtras(super.defaultViewModelCreationExtras).apply {
             set(
                 WatchRepository.WATCH_REPOSITORY_KEY,
                 (application as BaseApplication).watchRepository
             )
         }
-    }
 }
