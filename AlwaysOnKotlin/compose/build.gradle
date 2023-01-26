@@ -86,6 +86,9 @@ dependencies {
     implementation libs.wear.compose.material
     implementation libs.androidx.window
     implementation libs.compose.ui.test.manifest
+    
+    // Release mode doesn't work without that dependency
+    compileOnly "com.google.android.wearable:wearable:2.9.0"
 
     androidTestImplementation composeBom
     androidTestImplementation libs.kotlinx.coroutines.test
