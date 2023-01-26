@@ -18,7 +18,7 @@ package com.example.android.wearable.composeadvanced.presentation.ui
 import androidx.compose.foundation.ScrollState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import com.example.android.wearable.composeadvanced.util.saveable
 
 const val SCROLL_STATE_KEY = "scrollState"
