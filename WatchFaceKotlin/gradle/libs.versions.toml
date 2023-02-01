@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "7.3.1"
+android-gradle-plugin = "7.4.1"
 androidx-activity = "1.6.1"
 androidx-lifecycle = "2.5.1"
 androidx-test = "1.4.0"
