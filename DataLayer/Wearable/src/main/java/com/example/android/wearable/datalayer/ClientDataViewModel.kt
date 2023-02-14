@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.datalayer
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -64,6 +65,7 @@ class ClientDataViewModel(
 
     private var loadPhotoJob: Job = Job().apply { complete() }
 
+    @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         // Add all events to the event log
         _events.addAll(
