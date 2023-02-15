@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.datalayer
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
@@ -52,6 +53,7 @@ class ClientDataViewModel :
     var image by mutableStateOf<Bitmap?>(null)
         private set
 
+    @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         _events.addAll(
             dataEvents.map { dataEvent ->

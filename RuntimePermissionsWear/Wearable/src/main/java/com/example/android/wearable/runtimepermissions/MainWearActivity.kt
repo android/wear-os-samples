@@ -16,6 +16,7 @@
 package com.example.android.wearable.runtimepermissions
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -51,6 +52,7 @@ import kotlinx.coroutines.tasks.await
  * this Activity also sends back the results of the permission request to the phone device (and
  * the sensor data if approved).
  */
+@SuppressLint("VisibleForTests")
 class MainWearActivity :
     AppCompatActivity(),
     OnCapabilityChangedListener,

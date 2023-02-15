@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.datalayer
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.wearable.DataEventBuffer
@@ -35,6 +36,7 @@ class DataLayerListenerService : WearableListenerService() {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
+    @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         super.onDataChanged(dataEvents)
 

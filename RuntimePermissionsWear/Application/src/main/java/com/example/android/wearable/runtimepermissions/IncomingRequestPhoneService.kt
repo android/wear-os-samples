@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.runtimepermissions
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
@@ -35,6 +36,7 @@ import kotlinx.coroutines.tasks.await
 /**
  * Handles all incoming requests for phone data (and permissions) from wear devices.
  */
+@SuppressLint("VisibleForTests")
 class IncomingRequestPhoneService : WearableListenerService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
