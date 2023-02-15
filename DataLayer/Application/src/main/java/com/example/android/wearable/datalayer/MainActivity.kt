@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.datalayer
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
@@ -61,6 +62,7 @@ import kotlinx.coroutines.withContext
  * While resumed, this activity also logs all interactions across the clients, which includes events
  * sent from this activity and from the watch(es).
  */
+@SuppressLint("VisibleForTests")
 class MainActivity : ComponentActivity() {
 
     private val dataClient by lazy { Wearable.getDataClient(this) }

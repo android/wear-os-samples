@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.runtimepermissions
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -55,6 +56,7 @@ import kotlinx.coroutines.tasks.await
  * After the user decides what to do, that activity returns the result here, to handle sending data across and keeps
  * user in app experience.
  */
+@SuppressLint("VisibleForTests")
 class MainPhoneActivity :
     AppCompatActivity(),
     CapabilityClient.OnCapabilityChangedListener,
