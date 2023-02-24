@@ -16,19 +16,11 @@
   -->
 
 <resources>
-    <style name="LegacySplashTheme" parent="@android:style/Theme.DeviceDefault">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
-    <!-- For future testing -->
-    <style name="SplashTheme" parent="Theme.SplashScreen">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@android:color/black</item>
 
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
 
-        <item name="postSplashScreenTheme">@style/MainTheme</item>
-    </style>
-
-    <style name="MainTheme" parent="@android:style/Theme.DeviceDefault">
+        <item name="postSplashScreenTheme">@android:style/Theme.DeviceDefault</item>
     </style>
 </resources>
