@@ -17,7 +17,7 @@ androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.4.1"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.4.2"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.2.0"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
