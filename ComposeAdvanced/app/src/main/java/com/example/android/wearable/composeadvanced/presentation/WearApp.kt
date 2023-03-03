@@ -37,12 +37,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.activity
 import androidx.navigation.navArgument
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
+import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.currentBackStackEntryAsState
@@ -75,8 +76,6 @@ import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.Wa
 import com.google.android.horologist.composables.DatePicker
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
-import com.google.android.horologist.compose.layout.fadeAway
-import com.google.android.horologist.compose.layout.fadeAwayScalingLazyList
 import java.time.LocalDateTime
 
 @Composable
@@ -138,20 +137,19 @@ fun WearApp(
                         DestinationScrollType.SCALING_LAZY_COLUMN_SCROLLING -> {
                             val scrollViewModel: ScalingLazyListStateViewModel =
                                 viewModel(currentBackStackEntry!!)
-                            Modifier.fadeAwayScalingLazyList {
-                                scrollViewModel.scrollState
-                            }
+                            Modifier.scrollAway(scrollViewModel.scrollState)
                         }
+
                         DestinationScrollType.COLUMN_SCROLLING -> {
                             val viewModel: ScrollStateViewModel =
                                 viewModel(currentBackStackEntry!!)
-                            Modifier.fadeAway {
-                                viewModel.scrollState
-                            }
+                            Modifier.scrollAway(viewModel.scrollState)
                         }
+
                         DestinationScrollType.TIME_TEXT_ONLY -> {
                             Modifier
                         }
+
                         else -> {
                             null
                         }
@@ -188,6 +186,7 @@ fun WearApp(
                             viewModel(currentBackStackEntry!!)
                         PositionIndicator(scalingLazyListState = scrollViewModel.scrollState)
                     }
+
                     DestinationScrollType.COLUMN_SCROLLING -> {
                         // Get or create the ViewModel associated with the current back stack entry
                         val viewModel: ScrollStateViewModel = viewModel(currentBackStackEntry!!)

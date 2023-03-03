@@ -16,8 +16,7 @@ adjust them according to your environment.
 Support
 -------
 
-You can find support by posting up on the Android Wear Developers Community
-page at the link below:
+- Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
 
 If you've found an error in the sample, please file an issue report at:
 https://github.com/android/wear-os-samples/issues/new
@@ -27,8 +26,6 @@ Getting Started
 
 This sample uses the Gradle build system. To build this project, use the
 "gradlew build" command or use "Import Project" in Android Studio.
-
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.

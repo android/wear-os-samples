@@ -18,15 +18,15 @@
 package com.example.android.wearable.oauth.util
 
 import android.util.Log
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 /**
  * Simple implementation of a POST request. Normally you'd use a library to do these requests.
@@ -74,7 +74,7 @@ suspend fun doGetRequest(
 ): JSONObject {
     return withContext(dispatcher) {
         val conn = (URL(url).openConnection() as HttpURLConnection)
-        requestHeaders.forEach { (key, value) ->
+        requestHeaders.onEach { (key, value) ->
             conn.setRequestProperty(key, value)
         }
         val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))

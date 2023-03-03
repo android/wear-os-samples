@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,11 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListAnchorType
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.CompactChip
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListAnchorType
-import androidx.wear.compose.material.ScalingLazyListState
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.presentation.MenuItem
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
@@ -59,6 +60,7 @@ fun ProgressIndicatorsScreen(
             item {
                 CompactChip(
                     onClick = menuItem.clickHander,
+                    shape = CutCornerShape(4.dp),
                     label = {
                         Text(
                             menuItem.name,

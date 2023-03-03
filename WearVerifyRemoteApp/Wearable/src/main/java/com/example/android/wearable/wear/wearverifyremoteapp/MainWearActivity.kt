@@ -32,16 +32,15 @@ import com.example.android.wearable.wear.wearverifyremoteapp.databinding.Activit
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.Node
-import com.google.android.gms.wearable.NodeClient
 import com.google.android.gms.wearable.Wearable
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 /**
  * Checks if the phone app is installed on remote device. If it is not, allows user to open app
@@ -51,7 +50,6 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var capabilityClient: CapabilityClient
-    private lateinit var nodeClient: NodeClient
     private lateinit var remoteActivityHelper: RemoteActivityHelper
 
     private var androidPhoneNodeWithApp: Node? = null
@@ -63,7 +61,6 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
         setContentView(binding.root)
 
         capabilityClient = Wearable.getCapabilityClient(this)
-        nodeClient = Wearable.getNodeClient(this)
         remoteActivityHelper = RemoteActivityHelper(this)
 
         binding.informationTextView.text = getString(R.string.message_checking)
@@ -156,6 +153,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
                     .addCategory(Intent.CATEGORY_BROWSABLE)
                     .setData(Uri.parse(ANDROID_MARKET_APP_URI))
             }
+
             PhoneTypeHelper.DEVICE_TYPE_IOS -> {
                 Log.d(TAG, "\tDEVICE_TYPE_IOS")
 
@@ -164,6 +162,7 @@ class MainWearActivity : FragmentActivity(), CapabilityClient.OnCapabilityChange
                     .addCategory(Intent.CATEGORY_BROWSABLE)
                     .setData(Uri.parse(APP_STORE_APP_URI))
             }
+
             else -> {
                 Log.d(TAG, "\tDEVICE_TYPE_ERROR_UNKNOWN")
                 return

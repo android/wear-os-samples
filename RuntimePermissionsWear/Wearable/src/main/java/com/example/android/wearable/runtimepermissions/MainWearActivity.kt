@@ -16,6 +16,7 @@
 package com.example.android.wearable.runtimepermissions
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -36,11 +37,11 @@ import com.google.android.gms.wearable.DataMap
 import com.google.android.gms.wearable.MessageClient.OnMessageReceivedListener
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 /**
  * Displays data that requires runtime permissions both locally (BODY_SENSORS) and remotely on
@@ -51,6 +52,7 @@ import kotlin.math.sqrt
  * this Activity also sends back the results of the permission request to the phone device (and
  * the sensor data if approved).
  */
+@SuppressLint("VisibleForTests")
 class MainWearActivity :
     AppCompatActivity(),
     OnCapabilityChangedListener,

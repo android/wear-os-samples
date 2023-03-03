@@ -1,32 +1,32 @@
 [versions]
-android-gradle-plugin = "7.3.1"
+android-gradle-plugin = "7.4.1"
 androidx-activity = "1.6.1"
 androidx-lifecycle = "2.5.1"
-androidx-test = "1.4.0"
-androidx-wear-compose = "1.0.2"
+androidx-test = "1.5.0"
+androidx-wear-compose = "1.1.2"
 androidx-wear-tiles = "1.1.0"
 androidx-wear-watchface = "1.1.1"
-compose = "1.2.1"
-compose-compiler = "1.3.2"
-org-jetbrains-kotlin = "1.7.20"
+compose = "1.3.3"
+compose-compiler = "1.4.2"
+org-jetbrains-kotlin = "1.8.10"
 org-jetbrains-kotlinx = "1.6.4"
 ktlint = "0.46.1"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.2.2"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:30.3.1"
-android-material = "com.google.android.material:material:1.7.0"
-android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:30.3.1"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:30.4.2"
+android-material = "com.google.android.material:material:1.8.0"
+android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:30.4.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-appcompat = "androidx.appcompat:appcompat:1.5.1"
+androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.3.1"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.4.2"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.4"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.5.5"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
@@ -61,15 +61,15 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
-org-robolectric = "org.robolectric:robolectric:4.9"
-playservices-auth = "com.google.android.gms:play-services-auth:20.3.0"
+org-robolectric = "org.robolectric:robolectric:4.9.2"
+playservices-auth = "com.google.android.gms:play-services-auth:20.4.1"
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.0.0"
 test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
-test-espresso-core = "androidx.test.espresso:espresso-core:3.4.0"
-test-ext-junit = "androidx.test.ext:junit:1.1.3"
-test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.3"
-test-ext-truth = "androidx.test.ext:truth:1.4.0"
+test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
+test-ext-junit = "androidx.test.ext:junit:1.1.5"
+test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
+test-ext-truth = "androidx.test.ext:truth:1.5.0"
 test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
@@ -92,5 +92,5 @@ wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", ver
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.11.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.16.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }

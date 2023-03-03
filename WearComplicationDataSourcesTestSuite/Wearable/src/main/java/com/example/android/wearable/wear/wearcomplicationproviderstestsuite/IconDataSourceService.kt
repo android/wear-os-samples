@@ -88,7 +88,9 @@ class IconDataSourceService : SuspendingComplicationDataSourceService() {
                 monochromaticImage = MonochromaticImage.Builder(
                     Icon.createWithResource(this, R.drawable.ic_battery)
                 )
-                    .setAmbientImage(Icon.createWithResource(this, R.drawable.ic_battery_burn_protect))
+                    .setAmbientImage(
+                        Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                    )
                     .build(),
                 contentDescription = PlainComplicationText.Builder(
                     text = getText(R.string.icon_battery_content_description)

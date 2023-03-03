@@ -19,19 +19,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.Colors
-import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ListHeader
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.material.RadioButton
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
 import com.example.android.wearable.composeadvanced.presentation.theme.ThemeValues
-import com.google.android.horologist.compose.navscaffold.ExperimentalHorologistComposeLayoutApi
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
-@OptIn(ExperimentalHorologistComposeLayoutApi::class)
 @Composable
 internal fun ThemeScreen(
     scalingLazyListState: ScalingLazyListState,
@@ -55,9 +55,11 @@ internal fun ThemeScreen(
                 ToggleChip(
                     checked = checked,
                     toggleControl = {
-                        Icon(
-                            imageVector = ToggleChipDefaults.radioIcon(checked = checked),
-                            contentDescription = if (checked) "On" else "Off"
+                        RadioButton(
+                            selected = checked,
+                            modifier = Modifier.semantics {
+                                this.contentDescription = if (checked) "On" else "Off"
+                            }
                         )
                     },
                     onCheckedChange = { onValueChange(listItem.colors) },

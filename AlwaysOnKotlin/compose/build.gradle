@@ -20,12 +20,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         versionCode 1
         versionName "1.0"
         minSdk 26
+        //noinspection ExpiredTargetSdkVersion
         targetSdk 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -45,12 +46,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         allWarningsAsErrors = true
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
@@ -72,6 +73,9 @@ android {
 }
 
 dependencies {
+    def composeBom = platform(libs.androidx.compose.bom)
+
+    implementation composeBom
     implementation libs.kotlinx.coroutines.android
     implementation libs.androidx.activity.compose
     implementation libs.compose.ui
@@ -84,6 +88,10 @@ dependencies {
     implementation libs.androidx.window
     implementation libs.compose.ui.test.manifest
 
+    // Release mode doesn't work without that dependency
+    compileOnly "com.google.android.wearable:wearable:2.9.0"
+
+    androidTestImplementation composeBom
     androidTestImplementation libs.kotlinx.coroutines.test
     androidTestImplementation libs.test.core.ktx
     androidTestImplementation libs.test.ext.junit.ktx

@@ -24,16 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
+import androidx.wear.compose.foundation.lazy.items
+import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
-import androidx.wear.compose.material.ToggleChipDefaults
-import androidx.wear.compose.material.items
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
@@ -100,9 +101,11 @@ fun WatchListScreen(
                     )
                 },
                 toggleControl = {
-                    Icon(
-                        imageVector = ToggleChipDefaults.switchIcon(checked = showVignette),
-                        contentDescription = if (showVignette) "On" else "Off"
+                    Switch(
+                        checked = showVignette,
+                        modifier = Modifier.semantics {
+                            this.contentDescription = if (showVignette) "On" else "Off"
+                        }
                     )
                 }
             )

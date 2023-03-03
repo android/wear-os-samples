@@ -30,6 +30,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,16 +42,15 @@ import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.foundation.CurvedModifier
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedRow
+import androidx.wear.compose.foundation.lazy.AutoCenteringParams
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.foundation.radialGradientBackground
-import androidx.wear.compose.material.AutoCenteringParams
 import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
-import androidx.wear.compose.material.ToggleChipDefaults
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.MenuItem
@@ -125,11 +126,12 @@ fun LandingScreen(
                         )
                     },
                     toggleControl = {
-                        Icon(
-                            imageVector = ToggleChipDefaults.switchIcon(
-                                checked = proceedingTimeTextEnabled
-                            ),
-                            contentDescription = if (proceedingTimeTextEnabled) "On" else "Off"
+                        Switch(
+                            checked = proceedingTimeTextEnabled,
+                            modifier = Modifier.semantics {
+                                this.contentDescription =
+                                    if (proceedingTimeTextEnabled) "On" else "Off"
+                            }
                         )
                     }
                 )
