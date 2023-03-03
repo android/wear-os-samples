@@ -20,7 +20,9 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
+
+    namespace "com.example.android.wearable.wear.alwayson"
 
     defaultConfig {
         versionCode 1
