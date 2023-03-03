@@ -28,6 +28,8 @@ if (localFile.exists()) {
 android {
     compileSdk 33
 
+    namespace "com.example.android.wearable.composeadvanced"
+
     defaultConfig {
         applicationId "com.example.android.wearable.composeadvanced"
         minSdk 26
@@ -73,6 +75,7 @@ android {
 
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
