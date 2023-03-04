@@ -166,7 +166,12 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(TAG, "onResume()")
         super.onResume()
         val filter = IntentFilter(AMBIENT_UPDATE_ACTION)
-        registerReceiver(this, ambientUpdateBroadcastReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        registerReceiver(
+            this,
+            ambientUpdateBroadcastReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         refreshDisplayAndSetNextUpdate()
     }
 
