@@ -9,6 +9,7 @@ compose-compiler = "1.4.3"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.8.10"
 org-jetbrains-kotlinx = "1.6.4"
+wearable = "2.9.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -40,6 +41,7 @@ test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
+wearable = { module = "com.google.android.wearable:wearable", version.ref = "wearable" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
