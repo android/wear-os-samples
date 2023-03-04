@@ -60,17 +60,17 @@ android {
     testOptions {
         devices {
             squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
-                device = "wear_square"
+                device = "Wear OS Square"
                 apiLevel = 30
                 systemImageSource = "android-wear"
             }
             roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
-                device = "wear_round"
+                device = "Wear OS Large Round"
                 apiLevel = 28
                 systemImageSource = "android-wear"
             }
             roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
-                device = "wear_round"
+                device = "Wear OS Large Round"
                 apiLevel = 30
                 systemImageSource = "android-wear"
             }
