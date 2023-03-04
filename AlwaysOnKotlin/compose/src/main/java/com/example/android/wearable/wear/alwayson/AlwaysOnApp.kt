@@ -33,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.content.getSystemService
+import androidx.core.content.ContextCompat.registerReceiver
+import androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.material.MaterialTheme
@@ -239,7 +241,7 @@ fun SystemBroadcastReceiver(
             }
         }
 
-        context.registerReceiver(broadcast, intentFilter)
+        registerReceiver(context, broadcast, intentFilter, RECEIVER_NOT_EXPORTED)
 
         // When the effect leaves the Composition, remove the callback
         onDispose {
