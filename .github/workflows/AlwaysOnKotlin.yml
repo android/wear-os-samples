@@ -75,9 +75,7 @@ jobs:
       fail-fast: false
       matrix:
         device:
-          - roundApi28
           - roundApi30
-          - squareApi30
 
     steps:
       - name: Checkout
