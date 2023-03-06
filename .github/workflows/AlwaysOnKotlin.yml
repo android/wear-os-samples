@@ -100,7 +100,7 @@ jobs:
 
       - name: Run instrumentation tests
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew ${{ matrix.device }}Check --stacktrace
+        run: ./gradlew ${{ matrix.device }}Check -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect --stacktrace
 
       - name: Upload views test reports
         uses: actions/upload-artifact@v3
