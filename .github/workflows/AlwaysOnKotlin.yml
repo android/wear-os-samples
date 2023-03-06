@@ -103,6 +103,7 @@ jobs:
           -Dorg.gradle.workers.max=1
           -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
           -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=600
+          -Pandroid.testInstrumentationRunnerArguments.numShards=1
           --stacktrace --info
 
       - name: Upload views test reports
