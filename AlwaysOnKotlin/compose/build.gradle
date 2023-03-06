@@ -72,6 +72,26 @@ android {
         exclude "META-INF/AL2.0"
         exclude "META-INF/LGPL2.1"
     }
+
+  testOptions {
+    devices {
+      squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Square"
+        apiLevel = 30
+        systemImageSource = "android-wear"
+      }
+      roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Large Round"
+        apiLevel = 28
+        systemImageSource = "android-wear"
+      }
+      roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Large Round"
+        apiLevel = 30
+        systemImageSource = "android-wear"
+      }
+    }
+  }
 }
 
 dependencies {
