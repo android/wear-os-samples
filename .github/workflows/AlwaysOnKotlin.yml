@@ -99,9 +99,10 @@ jobs:
 
       - name: Run instrumentation tests
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew ${{ matrix.device }}Check 
-          -Dorg.gradle.workers.max=1 
-          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect 
+        run: ./gradlew ${{ matrix.device }}Check
+          -Dorg.gradle.workers.max=1
+          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=600
           --stacktrace --info
 
       - name: Upload views test reports
