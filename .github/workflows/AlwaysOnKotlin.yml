@@ -68,7 +68,6 @@ jobs:
           path: ${{ env.SAMPLE_PATH }}/compose/build/reports
 
   android-test:
-    needs: build
     runs-on: macos-latest # enables hardware acceleration in the virtual machine
     timeout-minutes: 30
     strategy:
@@ -100,7 +99,10 @@ jobs:
 
       - name: Run instrumentation tests
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew ${{ matrix.device }}Check -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect --stacktrace
+        run: ./gradlew ${{ matrix.device }}Check 
+          -Dorg.gradle.workers.max=1 
+          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect 
+          --stacktrace --info
 
       - name: Upload views test reports
         uses: actions/upload-artifact@v3
