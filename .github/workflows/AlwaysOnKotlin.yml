@@ -101,7 +101,6 @@ jobs:
           key: gradle-${{ hashFiles('checksum.txt') }}
 
       - name: Run instrumentation tests
-        continue-on-error: true
         working-directory: ${{ env.SAMPLE_PATH }}
         run: ./gradlew ${{ matrix.device }}Check
           -Dorg.gradle.workers.max=1
@@ -109,8 +108,8 @@ jobs:
           -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
           -Pandroid.experimental.androidTest.numManagedDeviceShards=1
           -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-          --stacktrace --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=false
+          --stacktrace
 
       - name: Upload views test reports
         uses: actions/upload-artifact@v3
