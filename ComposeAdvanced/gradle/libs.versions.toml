@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "7.4.1"
+android-gradle-plugin = "7.4.2"
 androidx-activity = "1.6.1"
 androidx-benchmark = "1.1.1"
 androidx-compose-bom = "2023.01.00"
