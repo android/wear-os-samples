@@ -1,14 +1,14 @@
 [versions]
-android-gradle-plugin = "7.4.1"
+android-gradle-plugin = "8.1.0-alpha07"
 androidx-activity = "1.6.1"
 androidx-compose-bom = "2023.01.00"
 androidx-lifecycle = "2.5.1"
-androidx-test = "1.5.0"
 androidx-wear-compose = "1.1.2"
-compose-compiler = "1.4.2"
+compose-compiler = "1.4.3"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.8.10"
 org-jetbrains-kotlinx = "1.6.4"
+wearable = "2.9.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -29,17 +29,18 @@ jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
+test-core = "androidx.test:core:1.5.0"
+test-core-ktx = "androidx.test:core-ktx:1.5.0"
 test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
 test-ext-junit = "androidx.test.ext:junit:1.1.5"
 test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
-test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
+test-rules = "androidx.test:rules:1.5.0"
+test-runner = "androidx.test:runner:1.5.2"
+test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-alpha02"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
+wearable = { module = "com.google.android.wearable:wearable", version.ref = "wearable" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
