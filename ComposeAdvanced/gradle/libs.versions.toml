@@ -31,7 +31,7 @@ androidx-test-ext = { module = "androidx.test.ext:junit", version.ref = "android
 androidx-test-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext" }
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
 androidx-tracing-ktx = "androidx.tracing:tracing-ktx:1.1.0"
-com-google-maps-compose = "com.google.maps.android:maps-compose:2.11.0"
+com-google-maps-compose = "com.google.maps.android:maps-compose:2.11.1"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.1.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 
