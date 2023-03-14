@@ -1,13 +1,13 @@
 [versions]
-android-gradle-plugin = "7.4.1"
+android-gradle-plugin = "7.4.2"
 androidx-activity = "1.6.1"
-androidx-lifecycle = "2.5.1"
+androidx-lifecycle = "2.6.0"
 androidx-test = "1.5.0"
 androidx-wear-compose = "1.1.2"
 androidx-wear-tiles = "1.1.0"
 androidx-wear-watchface = "1.1.1"
 compose = "1.3.3"
-compose-compiler = "1.4.2"
+compose-compiler = "1.4.3"
 org-jetbrains-kotlin = "1.8.10"
 org-jetbrains-kotlinx = "1.6.4"
 ktlint = "0.46.1"
@@ -92,5 +92,5 @@ wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", ver
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.16.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.17.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }

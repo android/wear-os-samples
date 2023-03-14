@@ -25,6 +25,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.VisibleForTesting
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
@@ -164,7 +166,12 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(TAG, "onResume()")
         super.onResume()
         val filter = IntentFilter(AMBIENT_UPDATE_ACTION)
-        registerReceiver(ambientUpdateBroadcastReceiver, filter)
+        registerReceiver(
+            this,
+            ambientUpdateBroadcastReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         refreshDisplayAndSetNextUpdate()
     }
 

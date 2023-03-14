@@ -22,6 +22,8 @@ plugins {
 android {
     compileSdk 33
 
+    namespace "com.example.android.wearable.wear.alwayson"
+
     defaultConfig {
         versionCode 1
         versionName "1.0"
@@ -70,6 +72,26 @@ android {
         exclude "META-INF/AL2.0"
         exclude "META-INF/LGPL2.1"
     }
+
+  testOptions {
+    devices {
+      squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Square"
+        apiLevel = 30
+        systemImageSource = "android-wear"
+      }
+      roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Large Round"
+        apiLevel = 28
+        systemImageSource = "android-wear"
+      }
+      roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Large Round"
+        apiLevel = 30
+        systemImageSource = "android-wear"
+      }
+    }
+  }
 }
 
 dependencies {
@@ -89,7 +111,7 @@ dependencies {
     implementation libs.compose.ui.test.manifest
 
     // Release mode doesn't work without that dependency
-    compileOnly "com.google.android.wearable:wearable:2.9.0"
+    compileOnly libs.wearable
 
     androidTestImplementation composeBom
     androidTestImplementation libs.kotlinx.coroutines.test

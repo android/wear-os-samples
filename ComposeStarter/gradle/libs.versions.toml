@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "7.4.1"
+android-gradle-plugin = "7.4.2"
 androidx-activity = "1.6.1"
 androidx-compose-bom = "2023.01.00"
 androidx-lifecycle = "2.4.1"
@@ -7,7 +7,7 @@ androidx-test = "1.4.0"
 androidx-wear-compose = "1.1.2"
 androidx-wear-tiles = "1.0.1"
 androidx-wear-watchface = "1.0.1"
-compose-compiler = "1.4.2"
+compose-compiler = "1.4.3"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.8.10"
 org-jetbrains-kotlinx = "1.6.0"
@@ -30,5 +30,5 @@ wear-compose-material = { module = "androidx.wear.compose:compose-material", ver
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.16.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.17.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
