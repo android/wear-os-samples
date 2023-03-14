@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'AlwaysOnKotlin/**'
+      - '.github/workflows/AlwaysOnKotlin.yml'
   pull_request:
     paths:
       - 'AlwaysOnKotlin/**'
+      - '.github/workflows/AlwaysOnKotlin.yml'
 
 env:
   SAMPLE_PATH: AlwaysOnKotlin

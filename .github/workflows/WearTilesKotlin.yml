@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'WearTilesKotlin/**'
+      - '.github/workflows/WearTilesKotlin.yml'
   pull_request:
     paths:
       - 'WearTilesKotlin/**'
+      - '.github/workflows/WearTilesKotlin.yml'
 
 env:
   SAMPLE_PATH: WearTilesKotlin
