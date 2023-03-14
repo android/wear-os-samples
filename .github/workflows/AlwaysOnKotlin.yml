@@ -28,20 +28,15 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Generate cache key
-        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        working-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew check --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check --stacktrace
 
       - name: Upload views build outputs (APKs)
         uses: actions/upload-artifact@v3
@@ -89,27 +84,18 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Generate cache key
-        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
       - name: Run instrumentation tests
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew ${{ matrix.device }}Check
-          -Dorg.gradle.workers.max=1
-          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
-          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
-          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
-          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=false
-          --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: ${{ matrix.device }}Check
+            -Dorg.gradle.workers.max=1
+            -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+            -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
+            -Pandroid.experimental.androidTest.numManagedDeviceShards=1
+            -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+            -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=false
+            --stacktrace
 
       - name: Upload views test reports
         uses: actions/upload-artifact@v3
@@ -136,20 +122,11 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Generate cache key
-        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew compose:assembleRelease
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: compose:assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
