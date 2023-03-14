@@ -32,13 +32,14 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-        working-directory: ${{ env.SAMPLE_PATH }}
+        with:
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Build project
-        working-directory: ${{ env.SAMPLE_PATH }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: check --stacktrace
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
@@ -69,10 +70,10 @@ jobs:
           java-version: 11
 
       - name: Build project
-        working-directory: ${{ env.SAMPLE_PATH }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: app:assembleRelease
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v3

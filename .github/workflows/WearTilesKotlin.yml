@@ -32,13 +32,15 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-        working-directory: ${{ env.SAMPLE_PATH }}
+        with:
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: check --stacktrace
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
