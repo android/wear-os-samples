@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'WearTilesKotlin/**'
+      - '.github/workflows/WearTilesKotlin.yml'
   pull_request:
     paths:
       - 'WearTilesKotlin/**'
+      - '.github/workflows/WearTilesKotlin.yml'
 
 env:
   SAMPLE_PATH: WearTilesKotlin
@@ -28,20 +30,17 @@ jobs:
           distribution: 'zulu'
           java-version: 11
 
-      - name: Generate cache key
-        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
-
-      - uses: actions/cache@v3
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew check --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check --stacktrace
+          build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
