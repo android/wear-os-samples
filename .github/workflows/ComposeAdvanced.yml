@@ -6,9 +6,11 @@ on:
       - main
     paths:
       - 'ComposeAdvanced/**'
+      - '.github/workflows/ComposeAdvanced.yml'
   pull_request:
     paths:
       - 'ComposeAdvanced/**'
+      - '.github/workflows/ComposeAdvanced.yml'
 
 env:
   SAMPLE_PATH: ComposeAdvanced
