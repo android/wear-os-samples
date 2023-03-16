@@ -26,7 +26,7 @@ if (localFile.exists()) {
 }
 
 android {
-    compileSdkPreview "UpsideDownCake"
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.android.wearable.composeadvanced"

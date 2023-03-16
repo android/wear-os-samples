@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.example.android.wearable.composeadvanced.benchmark'
-    compileSdkPreview "UpsideDownCake"
+    compileSdk 33
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
