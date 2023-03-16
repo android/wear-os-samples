@@ -2,7 +2,6 @@
 android-gradle-plugin = "7.4.2"
 androidx-activity = "1.6.1"
 androidx-lifecycle = "2.5.1"
-androidx-test = "1.5.2"
 androidx-wear-compose = "1.1.0-rc01"
 androidx-wear-tiles = "1.0.1"
 androidx-wear-watchface = "1.0.1"
@@ -24,11 +23,11 @@ jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "org-jetbrains-kotlin" }
 org-robolectric = "org.robolectric:robolectric:4.9.2"
-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
+test-core-ktx = "androidx.test:core-ktx:1.5.0"
 test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
 test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+test-runner = "androidx.test:runner:1.5.2"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
