@@ -2,7 +2,7 @@
 android-gradle-plugin = "7.4.2"
 androidx-activity = "1.6.1"
 androidx-lifecycle = "2.6.0"
-androidx-test = "1.5.0"
+androidx-test = "1.5.2"
 androidx-wear-compose = "1.1.2"
 androidx-wear-tiles = "1.1.0"
 androidx-wear-watchface = "1.1.1"
