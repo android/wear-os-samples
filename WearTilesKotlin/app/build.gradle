@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-  compileSdkPreview "UpsideDownCake"
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.example.wear.tiles"
