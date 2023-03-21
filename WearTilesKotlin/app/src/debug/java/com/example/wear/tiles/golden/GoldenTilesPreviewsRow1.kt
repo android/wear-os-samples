@@ -116,7 +116,7 @@ fun Ski() {
 @WearLargeRoundDevicePreview
 @Composable
 fun SleepTracker() {
-    // TODO: yuri has an example of this one
+    // TODO: This tile doesn't use standard components; we can achieve it by drawing on a Canvas (Compose's DrawScope) then converting it to a bitmap using Horologist
 }
 
 private fun Context.deviceParams() = buildDeviceParameters(resources)
