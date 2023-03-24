@@ -12,8 +12,8 @@ org-jetbrains-kotlinx = "1.6.4"
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.4.2"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
-androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0"
-androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0"
+androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
 androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
 androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
 coil = "io.coil-kt:coil-compose:2.2.2"
