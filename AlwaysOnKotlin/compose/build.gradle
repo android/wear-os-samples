@@ -34,6 +34,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    lint {
+      disable 'GradleDependency'
+    }
+
     lintOptions {
         warningsAsErrors true
     }
