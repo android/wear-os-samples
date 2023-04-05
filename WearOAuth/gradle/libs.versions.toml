@@ -14,7 +14,7 @@ ktlint = "0.46.1"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:1.2.3"
+android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.2"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:30.4.2"
 android-material = "com.google.android.material:material:1.8.0"
 android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:30.4.2"
@@ -47,7 +47,7 @@ compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", versio
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.9"
 junit = "junit:junit:4.13.2"
 kotlin-annotation-processing-gradle = { module = "org.jetbrains.kotlin:kotlin-annotation-processing-gradle", version.ref = "org-jetbrains-kotlin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
@@ -62,7 +62,7 @@ kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
 org-robolectric = "org.robolectric:robolectric:4.9.2"
-playservices-auth = "com.google.android.gms:play-services-auth:20.4.1"
+playservices-auth = "com.google.android.gms:play-services-auth:20.5.0"
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.0.0"
 test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
