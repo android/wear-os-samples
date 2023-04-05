@@ -15,7 +15,7 @@ android-lint-gradle = "com.android.tools.lint:lint-gradle:30.4.2"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
-androidx-core-ktx = "androidx.core:core-ktx:1.9.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.10.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.4.2"
 androidx-wear = "androidx.wear:wear:1.2.0"
 com-google-truth = "com.google.truth:truth:1.1.3"
