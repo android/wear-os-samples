@@ -13,27 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalPagerApi::class, ExperimentalHorologistComposeLayoutApi::class)
+
 package com.example.android.wearable.composestarter.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.Card
+import androidx.wear.compose.material.ListHeader
+import androidx.wear.compose.material.PositionIndicator
+import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.material.Vignette
+import androidx.wear.compose.material.VignettePosition
+import androidx.wear.compose.material.scrollAway
 import com.example.android.wearable.composestarter.R
-import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.navscaffold.ExperimentalHorologistComposeLayoutApi
+import com.google.android.horologist.compose.pager.PagerScreen
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
@@ -51,42 +62,51 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            WearApp("Android")
+            WearApp()
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
-    WearAppTheme {
-        /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
-         * version of LazyColumn for wear devices with some added features. For more information,
-         * see d.android.com/wear/compose.
-         */
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .selectableGroup(),
-            verticalArrangement = Arrangement.Center
+fun WearApp() {
+    PagerScreen(count = 5) { pageNumber ->
+        val columnState = ScalingLazyColumnDefaults.scalingLazyColumnDefaults().create()
+        Scaffold(
+            vignette = {
+                Vignette(vignettePosition = VignettePosition.TopAndBottom)
+            },
+            timeText = {
+                TimeText(
+                    modifier = Modifier.scrollAway(
+                        columnState.state,
+                        columnState.initialScrollPosition.index,
+                        columnState.initialScrollPosition.offsetPx.dp
+                    )
+                )
+            },
+            positionIndicator = { PositionIndicator(columnState.state) },
         ) {
-            Greeting(greetingName = greetingName)
+            ScalingLazyColumn(columnState = columnState) {
+                item {
+                    ListHeader {
+                        Text(text = "Page $pageNumber")
+                    }
+                }
+                items(10) {
+                    Card(onClick = { /*TODO*/ }) {
+                        Column(modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "This is card element")
+                            Image(painter = painterResource(
+                                id = R.drawable.abc_vector_test),
+                                contentDescription = "",
+                                modifier = Modifier.size(48.dp))
+                            Text(text = "And number is $it")
+                        }
+                    }
+                }
+            }
         }
     }
-}
-
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }
