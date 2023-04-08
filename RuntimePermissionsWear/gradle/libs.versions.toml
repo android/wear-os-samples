@@ -19,7 +19,7 @@ androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-core-ktx = "androidx.core:core-ktx:1.10.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:7.4.2"
 androidx-wear = "androidx.wear:wear:1.2.0"
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.9"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlin-scripting-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable", version.ref = "org-jetbrains-kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "org-jetbrains-kotlin" }
