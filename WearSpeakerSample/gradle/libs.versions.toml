@@ -18,7 +18,7 @@ androidx-media = "androidx.media:media:1.6.0"
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-material-ripple = { module = "androidx.compose.material:material-ripple" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.9"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
