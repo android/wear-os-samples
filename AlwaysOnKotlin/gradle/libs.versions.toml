@@ -37,7 +37,7 @@ test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
 test-rules = "androidx.test:rules:1.5.0"
 test-runner = "androidx.test:runner:1.5.2"
-test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-alpha02"
+test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-alpha03"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wearable = { module = "com.google.android.wearable:wearable", version.ref = "wearable" }
