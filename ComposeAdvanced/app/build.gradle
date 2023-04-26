@@ -17,6 +17,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+  alias(libs.plugins.androidx.baselineprofile)
 }
 
 Properties localProperties = new Properties()
@@ -139,15 +140,17 @@ dependencies {
 
     implementation libs.androidx.splashscreen
     implementation libs.androidx.tracing.ktx
+  implementation libs.profileinstaller
 
-    // Testing
+  // Testing
     testImplementation libs.junit
     // Uncomment the line below if you want to use Compose BoM and stable releases
     // androidTestImplementation composeBom
     androidTestImplementation libs.test.ext.junit
     androidTestImplementation libs.test.espresso.core
     androidTestImplementation libs.compose.ui.test.junit4
-    debugImplementation libs.compose.ui.tooling
+  baselineProfile project(path: ':baselineprofile')
+  debugImplementation libs.compose.ui.tooling
 
     androidTestImplementation libs.androidx.test.ext
     androidTestImplementation libs.androidx.test.ext.ktx
