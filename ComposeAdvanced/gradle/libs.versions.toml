@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "7.4.2"
+android-gradle-plugin = "8.0.0"
 androidx-activity = "1.7.1"
 androidx-benchmark = "1.1.1"
 androidx-compose-bom = "2023.04.01"
@@ -8,12 +8,12 @@ androidx-test-espresso = "3.5.1"
 androidx-test-ext = "1.1.5"
 androidx-test-uiautomator = "2.2.0"
 androidx-wear-compose = "1.2.0-alpha09"
-compose = "1.4.2"
-compose-compiler = "1.4.4"
+compose = "1.5.0-alpha03"
+compose-compiler = "1.4.6"
 horologist = "0.4.3"
 ktlint = "0.46.1"
 navigation = "2.5.3"
-org-jetbrains-kotlin = "1.8.10"
+org-jetbrains-kotlin = "1.8.20"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
