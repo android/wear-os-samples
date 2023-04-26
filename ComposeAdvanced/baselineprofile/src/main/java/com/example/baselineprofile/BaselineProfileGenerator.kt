@@ -2,10 +2,16 @@
 
 package com.example.baselineprofile
 
+import android.graphics.Point
 import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,6 +42,14 @@ class BaselineProfileGenerator {
     @get:Rule
     val rule = BaselineProfileRule()
 
+    private lateinit var device: UiDevice
+
+    @Before
+    fun setUp() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        device = UiDevice.getInstance(instrumentation)
+    }
+
     @Test
     fun generate() {
         rule.collectBaselineProfile("com.example.android.wearable.composeadvanced") {
@@ -47,14 +61,47 @@ class BaselineProfileGenerator {
             pressHome()
             startActivityAndWait()
 
-            // TODO Write more interactions to optimize advanced journeys of your app.
-            // For example:
-            // 1. Wait until the content is asynchronously loaded
-            // 2. Scroll the feed content
-            // 3. Navigate to detail screen
-
-            // Check UiAutomator documentation for more information how to interact with the app.
-            // https://d.android.com/training/testing/other-components/ui-automator
+            findAndClickText("List of Watches")
+            scrollDown()
+            findAndClickText("Watch 2K")
+            backWhenIdle()
+            backWhenIdle()
+            scrollDown()
+            findAndClickText("Add to Time")
+            findAndClickText("User Input Components")
+            findAndClickText("Stepper")
+            findAndClickDesc("Increase")
+            backWhenIdle()
+            findAndClickText("Slider")
+            findAndClickDesc("Decrease")
+            backWhenIdle()
+            backWhenIdle()
         }
+    }
+
+    private fun scrollDown() {
+        // Scroll down to view remaining UI elements
+        // Setting a gesture margin is important otherwise gesture nav is triggered.
+        device.waitForIdle()
+        val list = device.findObject(By.scrollable(true))
+        list.setGestureMargin(device.displayWidth / 5)
+        list.drag(Point(list.visibleCenter.x, list.visibleCenter.y / 2))
+        device.waitForIdle()
+    }
+
+    private fun findAndClickText(text: String) {
+        device.wait(Until.findObject(By.text(text)), 3000)
+        device.findObject(By.text(text))?.click()
+    }
+
+    private fun findAndClickDesc(desc: String) {
+        device.wait(Until.findObject(By.desc(desc)), 3000)
+        device.findObject(By.desc(desc))?.click()
+    }
+
+    private fun backWhenIdle() {
+        device.waitForIdle()
+        device.pressBack()
+        device.waitForIdle()
     }
 }
