@@ -1,9 +1,6 @@
-@file:OptIn(ExperimentalBaselineProfilesApi::class)
-
 package com.example.baselineprofile
 
 import android.graphics.Point
-import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
