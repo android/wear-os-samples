@@ -84,8 +84,10 @@ class BaselineProfileGenerator {
         // Setting a gesture margin is important otherwise gesture nav is triggered.
         device.waitForIdle()
         val list = device.findObject(By.scrollable(true))
-        list.setGestureMargin(device.displayWidth / 5)
-        list.drag(Point(list.visibleCenter.x, list.visibleCenter.y / 2))
+        if (list != null) {
+            list.setGestureMargin(device.displayWidth / 5)
+            list.drag(Point(list.visibleCenter.x, list.visibleCenter.y / 2))
+        }
         device.waitForIdle()
     }
 

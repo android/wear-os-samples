@@ -90,7 +90,8 @@ android {
 
 baselineProfile {
   filter {
-    include("com.example.android.wearable.**")
+    // For now include all app and androidx classes
+//    include("com.example.android.wearable.**")
   }
 }
 
