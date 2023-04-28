@@ -47,9 +47,9 @@ class ScrollActivity : ComponentActivity() {
     internal lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         installSplashScreen()
+
+        super.onCreate(savedInstanceState)
 
         jankPrinter = JankPrinter()
 
