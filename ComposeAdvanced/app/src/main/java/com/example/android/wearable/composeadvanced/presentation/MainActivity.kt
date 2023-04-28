@@ -39,9 +39,9 @@ class MainActivity : ComponentActivity() {
     internal lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
 
         jankPrinter = JankPrinter()
 
