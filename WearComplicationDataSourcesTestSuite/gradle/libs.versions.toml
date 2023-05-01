@@ -14,7 +14,7 @@ org-jetbrains-kotlinx = "1.6.4"
 [libraries]
 android-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.0"
 androidx-core-ktx = "androidx.core:core-ktx:1.10.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.0.0"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.0.1"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-wear-watchface-complications-data-source-ktx = { module = "androidx.wear.watchface:watchface-complications-data-source-ktx", version.ref = "androidx-wear-watchface" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.10"
