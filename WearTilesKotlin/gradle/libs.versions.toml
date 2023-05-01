@@ -10,7 +10,7 @@ org-jetbrains-kotlin = "1.8.10"
 org-jetbrains-kotlinx = "1.6.4"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.0"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.1"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
