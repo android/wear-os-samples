@@ -2,7 +2,7 @@
 android-gradle-plugin = "8.0.0"
 androidx-activity = "1.7.1"
 androidx-benchmark = "1.1.1"
-androidx-compose-bom = "2023.04.01"
+androidx-compose-bom = "2023.05.00"
 androidx-lifecycle = "2.6.1"
 androidx-test-espresso = "3.5.1"
 androidx-test-ext = "1.1.5"
