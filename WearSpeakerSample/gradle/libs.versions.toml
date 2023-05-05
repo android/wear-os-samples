@@ -7,7 +7,7 @@ androidx-wear-compose = "1.1.2"
 compose-compiler = "1.4.2"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.8.10"
-org-jetbrains-kotlinx = "1.6.4"
+org-jetbrains-kotlinx = "1.7.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
