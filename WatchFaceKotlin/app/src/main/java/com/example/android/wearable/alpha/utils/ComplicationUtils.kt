@@ -42,7 +42,7 @@ private const val LEFT_COMPLICATION_RIGHT_BOUND = 0.4f
 private const val RIGHT_COMPLICATION_LEFT_BOUND = 0.6f
 private const val RIGHT_COMPLICATION_RIGHT_BOUND = 0.8f
 
-private const val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_red_style
+private val DEFAULT_COMPLICATION_STYLE_DRAWABLE_ID = R.drawable.complication_red_style
 
 // Unique IDs for each complication. The settings activity that supports allowing users
 // to select their complication data provider requires numbers to be >= 0.
