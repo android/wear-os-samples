@@ -93,7 +93,12 @@ android {
         device = "Wear OS Large Round"
         apiLevel = 30
         systemImageSource = "android-wear"
-      }
+      },
+      roundApi33(com.android.build.api.dsl.ManagedVirtualDevice) {
+        device = "Wear OS Large Round"
+        apiLevel = 33
+        systemImageSource = "android-wear"
+      },
     }
   }
 }
