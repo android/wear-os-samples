@@ -22,7 +22,7 @@ plugins {
 android {
     compileSdkVersion 33
 
-    namespace "com.example.android.wearable.timetext"
+    namespace "com.example.android.wearable.timetextsample"
 
     defaultConfig {
         versionCode 1
