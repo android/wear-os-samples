@@ -22,6 +22,8 @@ plugins {
 android {
     compileSdkVersion 33
 
+    namespace "com.example.android.wearable.runtimepermissions"
+
     defaultConfig {
         // NOTE: This must be the same in the phone app and the wear app for the capabilities API
         applicationId "com.example.android.wearable.runtimepermissions"

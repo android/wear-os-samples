@@ -21,6 +21,8 @@ plugins {
 android {
     compileSdk 33
 
+    namespace "com.example.android.wearable.composestarter"
+
     defaultConfig {
         applicationId "com.example.android.wearable.composestarter"
         minSdk 26

@@ -23,6 +23,8 @@ plugins {
 android {
     compileSdkVersion 33
 
+    namespace "com.example.android.wearable.wear.wearcomplicationproviderstestsuite"
+
     defaultConfig {
         versionCode 1
         versionName "1.0"

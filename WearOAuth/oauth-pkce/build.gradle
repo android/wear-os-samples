@@ -21,6 +21,8 @@ plugins {
 android {
     compileSdk 33
 
+    namespace "com.example.android.wearable.oauth.pkce"
+
     defaultConfig {
         applicationId "com.example.android.wearable.oauth.pkce"
         minSdk 26
