@@ -29,24 +29,24 @@ import com.example.android.wearable.alpha.R
 // X_COLOR_STYLE_NAME_RESOURCE_ID - String name to display in the user settings UI for the style.
 // X_COLOR_STYLE_ICON_ID - Icon to display in the user settings UI for the style.
 const val AMBIENT_COLOR_STYLE_ID = "ambient_style_id"
-private const val AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID = R.string.ambient_style_name
-private const val AMBIENT_COLOR_STYLE_ICON_ID = R.drawable.white_style
+private val AMBIENT_COLOR_STYLE_NAME_RESOURCE_ID = R.string.ambient_style_name
+private val AMBIENT_COLOR_STYLE_ICON_ID = R.drawable.white_style
 
 const val RED_COLOR_STYLE_ID = "red_style_id"
-private const val RED_COLOR_STYLE_NAME_RESOURCE_ID = R.string.red_style_name
-private const val RED_COLOR_STYLE_ICON_ID = R.drawable.red_style
+private val RED_COLOR_STYLE_NAME_RESOURCE_ID = R.string.red_style_name
+private val RED_COLOR_STYLE_ICON_ID = R.drawable.red_style
 
 const val GREEN_COLOR_STYLE_ID = "green_style_id"
-private const val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
-private const val GREEN_COLOR_STYLE_ICON_ID = R.drawable.green_style
+private val GREEN_COLOR_STYLE_NAME_RESOURCE_ID = R.string.green_style_name
+private val GREEN_COLOR_STYLE_ICON_ID = R.drawable.green_style
 
 const val BLUE_COLOR_STYLE_ID = "blue_style_id"
-private const val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
-private const val BLUE_COLOR_STYLE_ICON_ID = R.drawable.blue_style
+private val BLUE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.blue_style_name
+private val BLUE_COLOR_STYLE_ICON_ID = R.drawable.blue_style
 
 const val WHITE_COLOR_STYLE_ID = "white_style_id"
-private const val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
-private const val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
+private val WHITE_COLOR_STYLE_NAME_RESOURCE_ID = R.string.white_style_name
+private val WHITE_COLOR_STYLE_ICON_ID = R.drawable.white_style
 
 /**
  * Represents watch face color style options the user can select (includes the unique id, the
