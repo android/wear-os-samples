@@ -106,6 +106,7 @@ dependencies {
     implementation libs.androidx.activity.ktx
     implementation libs.androidx.core.ktx
     implementation libs.androidx.wear
+    implementation libs.androidx.tracing
 
     androidTestImplementation libs.kotlinx.coroutines.test
     androidTestImplementation libs.test.core
@@ -118,4 +119,5 @@ dependencies {
     androidTestImplementation libs.test.rules
     androidTestImplementation libs.test.uiautomator
     androidTestImplementation libs.com.google.truth
+    androidTestImplementation libs.androidx.tracing
 }

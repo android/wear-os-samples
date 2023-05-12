@@ -111,9 +111,6 @@ android {
 }
 
 dependencies {
-    def composeBom = platform(libs.androidx.compose.bom)
-
-    implementation composeBom
     implementation libs.kotlinx.coroutines.android
     implementation libs.androidx.activity.compose
     implementation libs.compose.ui
@@ -125,15 +122,16 @@ dependencies {
     implementation libs.wear.compose.material
     implementation libs.androidx.window
     implementation libs.compose.ui.test.manifest
+    implementation libs.androidx.tracing
 
     // Release mode doesn't work without that dependency
     compileOnly libs.wearable
 
-    androidTestImplementation composeBom
     androidTestImplementation libs.kotlinx.coroutines.test
     androidTestImplementation libs.test.core.ktx
     androidTestImplementation libs.test.ext.junit.ktx
     androidTestImplementation libs.test.runner
     androidTestImplementation libs.test.uiautomator
     androidTestImplementation libs.compose.ui.test.junit4
+    androidTestImplementation libs.androidx.tracing
 }
