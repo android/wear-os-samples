@@ -1,20 +1,20 @@
 [versions]
-android-gradle-plugin = "8.1.0-beta02"
+android-gradle-plugin = "8.2.0-alpha03"
 androidx-activity = "1.7.1"
 androidx-compose-bom = "2023.05.01"
 androidx-lifecycle = "2.6.1"
 androidx-wear-compose = "1.1.2"
-compose-compiler = "1.4.4"
+compose-compiler = "1.4.7"
 ktlint = "0.46.1"
-org-jetbrains-kotlin = "1.8.10"
-org-jetbrains-kotlinx = "1.6.4"
+org-jetbrains-kotlin = "1.8.21"
+org-jetbrains-kotlinx = "1.7.0"
 wearable = "2.9.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-core-ktx = "androidx.core:core-ktx:1.10.1"
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-core-ktx = "androidx.core:core-ktx:1.10.1"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.0.1"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.2.0"
@@ -25,18 +25,19 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+firebaseTestlab = "com.google.firebase.testlab:testlab-gradle-plugin:0.0.1-alpha03"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.10"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
-test-core = "androidx.test:core:1.5.0"
-test-core-ktx = "androidx.test:core-ktx:1.5.0"
-test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
-test-ext-junit = "androidx.test.ext:junit:1.1.5"
-test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
-test-ext-truth = "androidx.test.ext:truth:1.5.0"
-test-rules = "androidx.test:rules:1.5.0"
-test-runner = "androidx.test:runner:1.5.2"
+test-core = "androidx.test:core:1.6.0-alpha01"
+test-core-ktx = "androidx.test:core-ktx:1.6.0-alpha01"
+test-espresso-core = "androidx.test.espresso:espresso-core:3.6.0-alpha01"
+test-ext-junit = "androidx.test.ext:junit:1.2.0-alpha01"
+test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.2.0-alpha01"
+test-ext-truth = "androidx.test.ext:truth:1.6.0-alpha01"
+test-rules = "androidx.test:rules:1.6.0-alpha01"
+test-runner = "androidx.test:runner:1.6.0-alpha02"
 test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-alpha03"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
