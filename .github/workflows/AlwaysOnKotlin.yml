@@ -73,6 +73,8 @@ jobs:
       matrix:
         device:
           - roundApi28
+          - roundApi30
+          - roundApi33
 
     steps:
       - name: Checkout
