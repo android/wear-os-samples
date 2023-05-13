@@ -92,7 +92,7 @@ jobs:
       - name: Accept licenses
         run: |
           mkdir /Users/runner/Library/Android/sdk/licenses
-          echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
+          echo 84831b9409646a918e30573bab4c9c91346d8abd > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
 
       - name: Run instrumentation tests
         uses: gradle/gradle-build-action@v2
