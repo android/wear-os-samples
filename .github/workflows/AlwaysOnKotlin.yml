@@ -91,7 +91,7 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir /Users/runner/Library/Android/sdk/licenses
+          mkdir -p /Users/runner/Library/Android/sdk/licenses
           echo 84831b9409646a918e30573bab4c9c91346d8abd > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
 
       - name: Run instrumentation tests
