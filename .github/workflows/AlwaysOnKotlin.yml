@@ -79,7 +79,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
+
       - name: Install pulseaudio
         run: brew install pulseaudio
 
@@ -88,6 +88,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
+
+      - name: Accept licenses
+        run: |
+          mkdir /Users/runner/Library/Android/sdk/licenses
+          echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
 
       - name: Run instrumentation tests
         uses: gradle/gradle-build-action@v2
