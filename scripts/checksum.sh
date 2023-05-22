@@ -1,5 +1,5 @@
 #
-#  Copyright 2021 Google, Inc.
+#  Copyright 2023 Google, Inc.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -18,23 +18,29 @@
 SAMPLE=$1
 RESULT_FILE=$2
 
-if [ -f $RESULT_FILE ]; then
-  rm $RESULT_FILE
+# Check if the result file exists and prompt for overwrite if necessary
+if [ -f "$RESULT_FILE" ]; then
+  read -p "Result file already exists. Overwrite? (y/n): " overwrite
+  if [[ $overwrite != "y" ]]; then
+    exit 1
+  fi
 fi
-touch $RESULT_FILE
 
+# Create an empty result file
+> "$RESULT_FILE"
+
+# Function to calculate the MD5 checksum of a file
 checksum_file() {
-  echo $(openssl md5 $1 | awk '{print $2}')
+  echo $(openssl md5 "$1" | awk '{print $2}')
 }
 
-FILES=()
-while read -r -d ''; do
-	FILES+=("$REPLY")
-done < <(find $SAMPLE -type f \( -name "build.gradle*" -o -name "gradle-wrapper.properties"  -o -name "robolectric.properties" \) -print0)
+# Find files matching specific patterns and store them in the FILES array
+mapfile -d '' FILES < <(find "$SAMPLE" -type f \( -name "build.gradle*" -o -name "gradle-wrapper.properties" -o -name "robolectric.properties" \) -print0)
 
-# Loop through files and append MD5 to result file
-for FILE in ${FILES[@]}; do
-	echo $(checksum_file $FILE) >> $RESULT_FILE
+# Loop through files and append the MD5 checksums to the result file
+for FILE in "${FILES[@]}"; do
+  echo "$(checksum_file "$FILE")" >> "$RESULT_FILE"
 done
-# Now sort the file so that it is idempotent
-sort $RESULT_FILE -o $RESULT_FILE
+
+# Sort the result file in-place for idempotent results
+sort -o "$RESULT_FILE" "$RESULT_FILE"
