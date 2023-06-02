@@ -25,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -100,7 +102,7 @@ fun AlwaysOnApp(
     /**
      * A ping used to set up a loopback side-effect loop, to continuously update the time.
      */
-    var updateDataTrigger by remember { mutableStateOf(0L) }
+    var updateDataTrigger by remember { mutableLongStateOf(0L) }
 
     /**
      * The current instant to display
@@ -115,7 +117,7 @@ fun AlwaysOnApp(
     /**
      * The number of times the current time and instant have been updated
      */
-    var drawCount by remember { mutableStateOf(0) }
+    var drawCount by remember { mutableIntStateOf(0) }
 
     fun updateData() {
         updateDataTrigger++
