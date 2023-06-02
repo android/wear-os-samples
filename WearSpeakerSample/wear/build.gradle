@@ -71,4 +71,5 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.media
     implementation libs.wear.compose.material
+    implementation libs.wear.compose.foundation
 }
