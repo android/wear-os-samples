@@ -105,6 +105,7 @@ jobs:
             -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
             -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=false
             --stacktrace
+            --info
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload views test reports
