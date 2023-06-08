@@ -62,6 +62,7 @@ import com.example.android.wearable.composeadvanced.presentation.ui.ScrollStateV
 import com.example.android.wearable.composeadvanced.presentation.ui.dialog.Dialogs
 import com.example.android.wearable.composeadvanced.presentation.ui.landing.LandingScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.map.MapActivity
+import com.example.android.wearable.composeadvanced.presentation.ui.map.MapScreen
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.FullScreenProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.IndeterminateProgressIndicator
 import com.example.android.wearable.composeadvanced.presentation.ui.progressindicator.ProgressIndicatorsScreen
@@ -230,6 +231,11 @@ fun WearApp(
                             navController = swipeDismissableNavController,
                             menuNameResource = R.string.map_label,
                             screen = Screen.Map
+                        ),
+                        menuNameAndCallback(
+                            navController = swipeDismissableNavController,
+                            menuNameResource = R.string.map_inline_label,
+                            screen = Screen.MapInline
                         ),
                         menuNameAndCallback(
                             navController = swipeDismissableNavController,
@@ -496,6 +502,12 @@ fun WearApp(
                         availableThemes = themeValues
                     ) { colors -> themeColors = colors }
                     RequestFocusOnResume(focusRequester)
+                }
+
+                composable(
+                    route = Screen.MapInline.route
+                ) {
+                    MapScreen()
                 }
 
                 activity(

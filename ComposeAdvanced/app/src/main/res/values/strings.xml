@@ -55,5 +55,6 @@
     <string name="theme_label">Theme</string>
     <string name="voice_text_entry_label">Voice Input</string>
     <string name="voice_input_label">Voice Text Entry</string>
+    <string name="map_inline_label">Map Inline</string>
 
 </resources>
