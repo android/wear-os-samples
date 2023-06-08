@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,11 +44,14 @@ import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
+import androidx.wear.compose.material.edgeSwipeToDismiss
+import androidx.wear.compose.material.rememberSwipeToDismissBoxState
 import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.currentBackStackEntryAsState
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavHostState
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
 import com.example.android.wearable.composeadvanced.presentation.navigation.DestinationScrollType
@@ -196,6 +200,9 @@ fun WearApp(
                 }
             }
         ) {
+            val swipeDismissState = rememberSwipeToDismissBoxState()
+            val navState = rememberSwipeDismissableNavHostState(swipeDismissState)
+
             /*
              * Wear OS's version of NavHost supports swipe-to-dismiss (similar to back
              * gesture on mobile). Otherwise, the code looks very similar.
@@ -203,6 +210,7 @@ fun WearApp(
             SwipeDismissableNavHost(
                 navController = swipeDismissableNavController,
                 startDestination = Screen.Landing.route,
+                state = navState,
                 modifier = Modifier.background(MaterialTheme.colors.background)
             ) {
                 // Main Window
@@ -507,7 +515,7 @@ fun WearApp(
                 composable(
                     route = Screen.MapInline.route
                 ) {
-                    MapScreen()
+                    MapScreen(modifier = Modifier.edgeSwipeToDismiss(swipeDismissState, edgeWidth = 20.dp))
                 }
 
                 activity(

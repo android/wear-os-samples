@@ -34,10 +34,14 @@ import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.BuildConfig
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+
+val singapore = LatLng(1.35, 103.87)
+val london = LatLng(51.5332642, -0.1285781)
 
 /**
  * Displays a Google Map focused on Singapore.
@@ -48,7 +52,10 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,
-    onClose: (() -> Unit)? = null
+    onClose: (() -> Unit)? = null,
+    cameraState: CameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(london, 10f)
+    }
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         if (BuildConfig.mapsApiKey.isEmpty()) {
@@ -57,14 +64,15 @@ fun MapScreen(
                 text = "Set mapsApiKey in local.properties"
             )
         } else {
-            val singapore = LatLng(1.35, 103.87)
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(singapore, 10f)
-            }
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState
+                cameraPositionState = cameraState
             ) {
+                Marker(
+                    state = MarkerState(position = london),
+                    title = "London",
+                    snippet = "Marker in London"
+                )
                 Marker(
                     state = MarkerState(position = singapore),
                     title = "Singapore",

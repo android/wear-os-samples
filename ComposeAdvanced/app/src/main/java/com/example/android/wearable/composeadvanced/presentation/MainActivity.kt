@@ -23,7 +23,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.navigation.NavHostController
+import androidx.wear.compose.material.rememberSwipeToDismissBoxState
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavHostState
 import com.example.android.wearable.composeadvanced.data.WatchRepository
 import com.example.android.wearable.composeadvanced.util.JankPrinter
 
@@ -51,7 +53,7 @@ class MainActivity : ComponentActivity() {
             navController = rememberSwipeDismissableNavController()
 
             WearApp(
-                swipeDismissableNavController = navController
+                swipeDismissableNavController = navController,
             )
 
             LaunchedEffect(Unit) {
