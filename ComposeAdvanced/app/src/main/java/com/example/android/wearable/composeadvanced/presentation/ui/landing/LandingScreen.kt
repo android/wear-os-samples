@@ -30,8 +30,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -50,11 +48,12 @@ import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.MenuItem
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
+import com.google.android.horologist.compose.material.ToggleChip
+import com.google.android.horologist.compose.material.ToggleChipToggleControl
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 /**
@@ -117,23 +116,9 @@ fun LandingScreen(
                 ToggleChip(
                     modifier = Modifier.fillMaxWidth(),
                     checked = proceedingTimeTextEnabled,
-                    onCheckedChange = onClickProceedingTimeText,
-                    label = {
-                        Text(
-                            text = stringResource(R.string.proceeding_text_toggle_chip_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                    toggleControl = {
-                        Switch(
-                            checked = proceedingTimeTextEnabled,
-                            modifier = Modifier.semantics {
-                                this.contentDescription =
-                                    if (proceedingTimeTextEnabled) "On" else "Off"
-                            }
-                        )
-                    }
+                    onCheckedChanged = onClickProceedingTimeText,
+                    label = stringResource(R.string.proceeding_text_toggle_chip_label),
+                    toggleControl = ToggleChipToggleControl.Switch
                 )
             }
         }
