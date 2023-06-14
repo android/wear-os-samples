@@ -111,6 +111,7 @@ fun WearApp(
 
             scrollable(
                 route = Screen.UserInputComponents.route,
+                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(firstItemIsFullWidth = true)
             ) {
                 UserInputComponentsScreen(
                     columnState = it.columnState,
