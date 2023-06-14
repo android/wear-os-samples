@@ -40,7 +40,7 @@ internal fun ThemeScreen(
 ) {
     ScalingLazyColumn(
         columnState = columnState,
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
     ) {
         item {
             ListHeader {

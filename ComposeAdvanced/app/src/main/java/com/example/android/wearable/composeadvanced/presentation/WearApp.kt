@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.example.android.wearable.composeadvanced.presentation
 
 import androidx.compose.runtime.Composable
@@ -94,7 +93,9 @@ fun WearApp(
             // Main Window
             scrollable(
                 route = Screen.Landing.route,
-                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(firstItemIsFullWidth = true)
+                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(
+                    firstItemIsFullWidth = true
+                )
             ) {
                 LandingScreen(
                     columnState = it.columnState,
@@ -111,7 +112,9 @@ fun WearApp(
 
             scrollable(
                 route = Screen.UserInputComponents.route,
-                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(firstItemIsFullWidth = true)
+                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(
+                    firstItemIsFullWidth = true
+                )
             ) {
                 UserInputComponentsScreen(
                     columnState = it.columnState,
@@ -154,16 +157,17 @@ fun WearApp(
             }
 
             scrollable(
-                route = Screen.WatchList.route,
+                route = Screen.WatchList.route
             ) {
                 val vignetteVisible = rememberSaveable { mutableStateOf(true) }
 
-                it.viewModel.vignettePosition = if (vignetteVisible.value)
+                it.viewModel.vignettePosition = if (vignetteVisible.value) {
                     VignetteMode.On(
                         VignettePosition.TopAndBottom
                     )
-                else
+                } else {
                     VignetteMode.Off
+                }
 
                 WatchListScreen(
                     columnState = it.columnState,
@@ -184,14 +188,14 @@ fun WearApp(
                 arguments = listOf(
                     navArgument(WATCH_ID_NAV_ARGUMENT) {
                         type = NavType.IntType
-                    },
+                    }
                 )
             ) {
                 val watchId: Int = it.arguments!!.getInt(WATCH_ID_NAV_ARGUMENT)
 
                 WatchDetailScreen(
                     watchId = watchId,
-                    scrollState = it.scrollableState,
+                    scrollState = it.scrollableState
                 )
             }
 
@@ -230,7 +234,7 @@ fun WearApp(
             }
 
             scrollable(
-                route = Screen.ProgressIndicators.route,
+                route = Screen.ProgressIndicators.route
             ) {
                 ProgressIndicatorsScreen(
                     columnState = it.columnState,
@@ -243,13 +247,13 @@ fun WearApp(
             }
 
             composable(
-                route = Screen.FullScreenProgressIndicator.route,
+                route = Screen.FullScreenProgressIndicator.route
             ) {
                 FullScreenProgressIndicator()
             }
 
             scrollable(
-                route = Screen.Theme.route,
+                route = Screen.Theme.route
             ) { it ->
                 ThemeScreen(
                     columnState = it.columnState,

@@ -61,7 +61,7 @@ fun ProgressIndicatorsScreen(
 
     ScalingLazyColumn(
         columnState = columnState,
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize()
     ) {
         for (menuItem in menuItems) {
             item {
