@@ -29,6 +29,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.foundation.lazy.items
@@ -38,22 +39,24 @@ import androidx.wear.compose.material.ToggleChip
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 @Composable
 fun WatchListScreen(
-    viewModel: WatchListViewModel,
-    scalingLazyListState: ScalingLazyListState,
-    focusRequester: FocusRequester,
+    columnState: ScalingLazyColumnState,
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit
 ) {
+    val viewModel: WatchListViewModel = viewModel(
+        factory = WatchListViewModel.Factory
+    )
     val watches by viewModel.watches
     WatchListScreen(
         watches = watches,
-        scalingLazyListState = scalingLazyListState,
-        focusRequester = focusRequester,
+        columnState = columnState,
         showVignette = showVignette,
         onClickVignetteToggle = onClickVignetteToggle,
         onClickWatch = onClickWatch
@@ -67,29 +70,18 @@ fun WatchListScreen(
 @Composable
 fun WatchListScreen(
     watches: List<WatchModel>,
-    scalingLazyListState: ScalingLazyListState,
-    focusRequester: FocusRequester,
+    columnState: ScalingLazyColumnState,
     showVignette: Boolean,
     onClickVignetteToggle: (Boolean) -> Unit,
     onClickWatch: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     ScalingLazyColumn(
-        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
-        state = scalingLazyListState
+        modifier = modifier.fillMaxSize(),
+        columnState = columnState
     ) {
         item {
             ToggleChip(
-                modifier = Modifier
-                    .height(48.dp)
-                    .padding(
-                        horizontal = if (LocalConfiguration.current.isScreenRound) {
-                            20.dp
-                        } else {
-                            10.dp
-                        },
-                        vertical = 8.dp
-                    ),
                 checked = showVignette,
                 onCheckedChange = onClickVignetteToggle,
                 label = {

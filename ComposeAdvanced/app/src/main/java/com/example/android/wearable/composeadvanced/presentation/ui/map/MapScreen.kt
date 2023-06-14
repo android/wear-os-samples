@@ -74,25 +74,18 @@ fun MapScreen(
             if (onClose != null) {
                 CompactChip(
                     modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .size(width = 50.dp, height = 24.dp)
                         .align(Alignment.BottomCenter),
                     onClick = onClose,
                     label = {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "X",
-                                color = MaterialTheme.colors.onSecondary,
-                                style = MaterialTheme.typography.button
-                            )
-                        }
+                        Text(
+                            text = "Close",
+                            color = MaterialTheme.colors.onSecondary,
+                            style = MaterialTheme.typography.button
+                        )
                     },
                     colors = ChipDefaults
                         .chipColors(backgroundColor = MaterialTheme.colors.secondary),
-                    contentPadding = PaddingValues(vertical = 0.dp)
+                    contentPadding = PaddingValues(vertical = 0.dp, horizontal = 14.dp)
                 )
             }
         }
