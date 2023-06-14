@@ -33,8 +33,6 @@ import androidx.wear.compose.material.VignettePosition
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
-import com.example.android.wearable.composeadvanced.presentation.navigation.DestinationScrollType
-import com.example.android.wearable.composeadvanced.presentation.navigation.SCROLL_TYPE_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
 import com.example.android.wearable.composeadvanced.presentation.navigation.WATCH_ID_NAV_ARGUMENT
 import com.example.android.wearable.composeadvanced.presentation.theme.WearAppTheme
@@ -245,14 +243,6 @@ fun WearApp(
 
             composable(
                 route = Screen.FullScreenProgressIndicator.route,
-                arguments = listOf(
-                    // In this case, the argument isn't part of the route, it's just attached
-                    // as information for the destination.
-                    navArgument(SCROLL_TYPE_NAV_ARGUMENT) {
-                        type = NavType.EnumType(DestinationScrollType::class.java)
-                        defaultValue = DestinationScrollType.TIME_TEXT_ONLY
-                    }
-                )
             ) {
                 FullScreenProgressIndicator()
             }
