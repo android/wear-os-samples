@@ -19,7 +19,7 @@ androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.0.2"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.2.0"
 androidx-window = "androidx.window:window:1.1.0"
-com-google-truth = "com.google.truth:truth:1.1.4"
+com-google-truth = "com.google.truth:truth:1.1.5"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
