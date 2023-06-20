@@ -32,8 +32,8 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p ~/Library/Android/sdk/licenses
-          cp AlwaysOnKotlin/licences/* ~/Library/Android/sdk/licenses
+          mkdir -p /usr/local/lib/android/sdk
+          cp AlwaysOnKotlin/licences/* /usr/local/lib/android/sdk
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -72,7 +72,7 @@ jobs:
 
   android-test:
     runs-on: macos-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 10
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -117,6 +117,7 @@ jobs:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Echo avd config
+        if: ${{ always() }}
         run: echo ~/.android/avd/gradle-managed/*.avd/*.ini
 
       - name: Upload test reports
@@ -144,8 +145,8 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p ~/Library/Android/sdk/licenses
-          cp AlwaysOnKotlin/licences/* ~/Library/Android/sdk/licenses
+          mkdir -p /usr/local/lib/android/sdk
+          cp AlwaysOnKotlin/licences/* /usr/local/lib/android/sdk
 
       - name: Build project
         uses: gradle/gradle-build-action@v2
