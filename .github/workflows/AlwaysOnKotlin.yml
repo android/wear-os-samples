@@ -32,8 +32,8 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p /Users/runner/Library/Android/sdk/licenses
-          cp licences/* > /Users/runner/Library/Android/sdk/licenses
+          mkdir -p ~/Library/Android/sdk/licenses
+          cp licences/* ~/Library/Android/sdk/licenses
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -96,8 +96,8 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p /Users/runner/Library/Android/sdk/licenses
-          cp licences/* > /Users/runner/Library/Android/sdk/licenses
+          mkdir -p ~/Library/Android/sdk/licenses
+          cp licences/* ~/Library/Android/sdk/licenses
 
       - name: Run logcat
         run: adb logcat '*:V' > logcat.txt &
@@ -144,8 +144,8 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p /Users/runner/Library/Android/sdk/licenses
-          cp licences/* > /Users/runner/Library/Android/sdk/licenses
+          mkdir -p ~/Library/Android/sdk/licenses
+          cp licences/* ~/Library/Android/sdk/licenses
 
       - name: Build project
         uses: gradle/gradle-build-action@v2
