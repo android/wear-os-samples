@@ -94,6 +94,9 @@ jobs:
           mkdir -p /Users/runner/Library/Android/sdk/licenses
           echo 84831b9409646a918e30573bab4c9c91346d8abd > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
 
+      - name: Run logcat
+        run: adb logcat '*:V' > logcat.txt &
+
       - name: Run instrumentation tests
         uses: gradle/gradle-build-action@v2
         with:
@@ -108,17 +111,15 @@ jobs:
             --info
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
-      - name: Upload views test reports
+      - name: Upload test reports
+        if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
           name: test-reports
-          path: ${{ env.SAMPLE_PATH }}/views/build/reports
-
-      - name: Upload compose test reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-reports
-          path: ${{ env.SAMPLE_PATH }}/compose/build/reports
+          path: |
+            logcat.txt
+            ${{ env.SAMPLE_PATH }}/compose/build/reports
+            ${{ env.SAMPLE_PATH }}/views/build/reports
 
   apk:
     runs-on: ubuntu-latest
