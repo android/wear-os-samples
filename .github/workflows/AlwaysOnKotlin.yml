@@ -118,7 +118,7 @@ jobs:
 
       - name: Echo avd config
         if: ${{ always() }}
-        run: echo ~/.android/avd/gradle-managed/*.avd/*.ini
+        run: grep "" ~/.android/avd/gradle-managed/*.avd/*.ini
 
       - name: Upload test reports
         if: ${{ always() }}
