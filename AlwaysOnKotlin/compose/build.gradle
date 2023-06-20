@@ -1,3 +1,7 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+import com.android.build.gradle.internal.AvdComponentsBuildService
+import com.android.sdklib.internal.avd.EmulatedProperties
+
 /*
  * Copyright (C) 2021 The Android Open Source Project
  *
@@ -18,6 +22,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+
+println("RECOMMENDED_NUMBER_OF_CORES " + EmulatedProperties.RECOMMENDED_NUMBER_OF_CORES.toString())
+println("MAX_NUMBER_OF_CORES " + EmulatedProperties.MAX_NUMBER_OF_CORES.toString())
 
 android {
     compileSdk 33
@@ -79,28 +86,36 @@ android {
 
   testOptions {
     devices {
-      squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+      squareApi30(ManagedVirtualDevice) {
         device = "Wear OS Square"
         apiLevel = 30
         systemImageSource = "android-wear"
       }
-      roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
+      roundApi28(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 28
         systemImageSource = "android-wear"
       }
-      roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+      roundApi30(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 30
         systemImageSource = "android-wear"
       }
-      roundApi33(com.android.build.api.dsl.ManagedVirtualDevice) {
+      roundApi33(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 33
         systemImageSource = "android-wear"
       }
     }
   }
+}
+
+afterEvaluate {
+  var avds = project.gradle.sharedServices.getRegistrations().find {
+    it.getName().startsWith("com.android.build.gradle.internal.AvdComponentsBuildService")
+  }.getService().get() as AvdComponentsBuildService
+  println(avds.avdFolder.get())
+  println(avds.allAvds())
 }
 
 dependencies {

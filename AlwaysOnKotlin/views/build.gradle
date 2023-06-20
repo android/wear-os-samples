@@ -1,3 +1,5 @@
+import com.android.sdklib.internal.avd.EmulatedProperties
+
 /*
  * Copyright (C) 2021 The Android Open Source Project
  *
@@ -18,6 +20,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+
+println("RECOMMENDED_NUMBER_OF_CORES " + EmulatedProperties.RECOMMENDED_NUMBER_OF_CORES.toString())
+println("MAX_NUMBER_OF_CORES " + EmulatedProperties.MAX_NUMBER_OF_CORES.toString())
 
 android {
     compileSdk 33
