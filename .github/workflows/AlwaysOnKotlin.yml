@@ -32,7 +32,7 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p /usr/local/lib/android/sdk
+          mkdir -p /usr/local/lib/android/sdk/licenses
           cp AlwaysOnKotlin/licences/* /usr/local/lib/android/sdk
 
       - name: Setup Gradle
