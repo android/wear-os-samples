@@ -6,7 +6,7 @@ androidx-lifecycle = "2.6.1"
 androidx-wear-compose = "1.2.0-beta02"
 compose-compiler = "1.4.7"
 ktlint = "0.46.1"
-org-jetbrains-kotlin = "1.8.21"
+org-jetbrains-kotlin = "1.9.0"
 org-jetbrains-kotlinx = "1.7.2"
 wearable = "2.9.0"
 
