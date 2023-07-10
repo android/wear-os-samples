@@ -39,7 +39,7 @@ import com.example.android.wearable.composeadvanced.BuildConfig
  */
 @Composable
 fun CustomTimeText(
-    visible: Boolean,
+    visible: Boolean = true,
     modifier: Modifier = Modifier,
     startText: String? = null
 ) {

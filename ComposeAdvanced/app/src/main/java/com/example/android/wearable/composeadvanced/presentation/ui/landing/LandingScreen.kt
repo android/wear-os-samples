@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -40,9 +39,7 @@ import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.foundation.CurvedModifier
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedRow
-import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.foundation.radialGradientBackground
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.MaterialTheme
@@ -50,11 +47,13 @@ import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
-import com.example.android.wearable.composeadvanced.presentation.MenuItem
+import com.example.android.wearable.composeadvanced.presentation.menuNameAndCallback
+import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.compose.material.ToggleChip
 import com.google.android.horologist.compose.material.ToggleChipToggleControl
-import com.google.android.horologist.compose.navscaffold.scrollableColumn
 
 /**
  * Simple landing page with three actions, view a list of watches, toggle on/off text before the
@@ -66,20 +65,46 @@ import com.google.android.horologist.compose.navscaffold.scrollableColumn
  */
 @Composable
 fun LandingScreen(
-    scalingLazyListState: ScalingLazyListState,
-    focusRequester: FocusRequester,
+    columnState: ScalingLazyColumnState,
     onClickWatchList: () -> Unit,
-    menuItems: List<MenuItem>,
+    onNavigate: (String) -> Unit,
     proceedingTimeTextEnabled: Boolean,
     onClickProceedingTimeText: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val menuItems = listOf(
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.user_input_components_label,
+            screen = Screen.UserInputComponents
+        ),
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.map_label,
+            screen = Screen.Map
+        ),
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.dialogs_label,
+            screen = Screen.Dialogs
+        ),
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.progress_indicators_label,
+            screen = Screen.ProgressIndicators
+        ),
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.theme_label,
+            screen = Screen.Theme
+        )
+    )
+
     Box(modifier = modifier.fillMaxSize()) {
         // Places both Chips (button and toggle) in the middle of the screen.
         ScalingLazyColumn(
-            modifier = Modifier.scrollableColumn(focusRequester, scalingLazyListState),
-            state = scalingLazyListState,
-            autoCentering = AutoCenteringParams(itemIndex = 0)
+            columnState = columnState,
+            modifier = modifier.fillMaxSize()
         ) {
             item {
                 // Signify we have drawn the content of the first screen

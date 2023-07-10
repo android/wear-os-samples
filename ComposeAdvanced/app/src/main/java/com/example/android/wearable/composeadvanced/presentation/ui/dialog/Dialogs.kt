@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.dialog
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -57,7 +58,7 @@ fun Dialogs(
     val dialogYes = stringResource(R.string.alert_dialog_yes)
 
     ScalingLazyColumn(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         anchorType = ScalingLazyListAnchorType.ItemStart
     ) {
         item {

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalWearFoundationApi::class)
+
 package com.example.android.wearable.composeadvanced.presentation.ui.watch
 
 import androidx.compose.foundation.ScrollState
@@ -29,31 +31,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.data.WatchModel
-import com.google.android.horologist.compose.navscaffold.scrollableColumn
+import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 
 @Composable
 fun WatchDetailScreen(
-    viewModel: WatchDetailViewModel,
-    scrollState: ScrollState,
-    focusRequester: FocusRequester
+    watchId: Int,
+    scrollState: ScrollState
 ) {
+    val viewModel: WatchDetailViewModel =
+        viewModel(factory = WatchDetailViewModel.factory(watchId))
+
     val watch by viewModel.watch
     WatchDetailScreen(
         watch = watch,
-        scrollState = scrollState,
-        focusRequester = focusRequester
+        scrollState = scrollState
     )
 }
 
@@ -64,13 +69,13 @@ fun WatchDetailScreen(
 fun WatchDetailScreen(
     watch: WatchModel?,
     scrollState: ScrollState,
-    focusRequester: FocusRequester,
     modifier: Modifier = Modifier
 ) {
+    val focusRequester = rememberActiveFocusRequester()
     Column(
         modifier = modifier
             .fillMaxSize()
-            .scrollableColumn(focusRequester, scrollState)
+            .rotaryWithScroll(focusRequester, scrollState)
             .verticalScroll(scrollState)
             .padding(
                 top = 26.dp,
