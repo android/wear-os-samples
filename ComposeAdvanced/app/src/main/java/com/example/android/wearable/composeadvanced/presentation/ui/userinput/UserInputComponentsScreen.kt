@@ -22,6 +22,7 @@ import android.speech.RecognizerIntent
 import android.view.inputmethod.EditorInfo
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,18 +30,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.Text
 import androidx.wear.input.RemoteInputIntentHelper
 import androidx.wear.input.wearableExtender
 import com.example.android.wearable.composeadvanced.R
-import com.google.android.horologist.compose.navscaffold.scrollableColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -49,8 +48,7 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun UserInputComponentsScreen(
-    scalingLazyListState: ScalingLazyListState,
-    focusRequester: FocusRequester,
+    columnState: ScalingLazyColumnState,
     value: Int,
     dateTime: LocalDateTime,
     onClickStepper: () -> Unit,
@@ -87,9 +85,8 @@ fun UserInputComponentsScreen(
         }
 
     ScalingLazyColumn(
-        modifier = modifier.scrollableColumn(focusRequester, scalingLazyListState),
-        state = scalingLazyListState,
-        autoCentering = AutoCenteringParams(itemIndex = 0)
+        columnState = columnState,
+        modifier = modifier.fillMaxSize()
     ) {
         item {
             Chip(

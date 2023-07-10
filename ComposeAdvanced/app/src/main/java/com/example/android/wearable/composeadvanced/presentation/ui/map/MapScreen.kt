@@ -15,14 +15,10 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.ui.map
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,25 +70,18 @@ fun MapScreen(
             if (onClose != null) {
                 CompactChip(
                     modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .size(width = 50.dp, height = 24.dp)
                         .align(Alignment.BottomCenter),
                     onClick = onClose,
                     label = {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "X",
-                                color = MaterialTheme.colors.onSecondary,
-                                style = MaterialTheme.typography.button
-                            )
-                        }
+                        Text(
+                            text = "Close",
+                            color = MaterialTheme.colors.onSecondary,
+                            style = MaterialTheme.typography.button
+                        )
                     },
                     colors = ChipDefaults
                         .chipColors(backgroundColor = MaterialTheme.colors.secondary),
-                    contentPadding = PaddingValues(vertical = 0.dp)
+                    contentPadding = PaddingValues(vertical = 0.dp, horizontal = 14.dp)
                 )
             }
         }

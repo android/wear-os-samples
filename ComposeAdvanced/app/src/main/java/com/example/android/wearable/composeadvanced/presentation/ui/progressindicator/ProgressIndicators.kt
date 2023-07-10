@@ -22,7 +22,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CutCornerShape
@@ -30,31 +29,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.ScalingLazyListAnchorType
-import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.CompactChip
 import androidx.wear.compose.material.Text
-import com.example.android.wearable.composeadvanced.presentation.MenuItem
-import com.google.android.horologist.compose.navscaffold.scrollableColumn
+import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.presentation.menuNameAndCallback
+import com.example.android.wearable.composeadvanced.presentation.navigation.Screen
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 
 @Composable
 fun ProgressIndicatorsScreen(
-    scalingLazyListState: ScalingLazyListState,
-    focusRequester: FocusRequester,
-    menuItems: List<MenuItem>,
+    columnState: ScalingLazyColumnState,
+    onNavigate: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val menuItems = listOf(
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.indeterminate_progress_indicator_label,
+            screen = Screen.IndeterminateProgressIndicator
+        ),
+        menuNameAndCallback(
+            onNavigate = onNavigate,
+            menuNameResource = R.string.full_screen_progress_indicator_label,
+            screen = Screen.FullScreenProgressIndicator
+        )
+    )
+
     ScalingLazyColumn(
-        modifier = modifier
-            .scrollableColumn(focusRequester, scalingLazyListState)
-            .fillMaxWidth(),
-        state = scalingLazyListState,
-        anchorType = ScalingLazyListAnchorType.ItemStart
+        columnState = columnState,
+        modifier = modifier.fillMaxSize()
     ) {
         for (menuItem in menuItems) {
             item {
@@ -88,7 +95,7 @@ fun IndeterminateProgressIndicator(
 fun FullScreenProgressIndicator(
     modifier: Modifier = Modifier
 ) {
-    val transition = rememberInfiniteTransition()
+    val transition = rememberInfiniteTransition(label = "Ongoing")
 
     val currentRotation by transition.animateFloat(
         0f,
@@ -99,7 +106,8 @@ fun FullScreenProgressIndicator(
                 easing = LinearEasing,
                 delayMillis = 1000
             )
-        )
+        ),
+        label = "Progress Rotation"
     )
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
