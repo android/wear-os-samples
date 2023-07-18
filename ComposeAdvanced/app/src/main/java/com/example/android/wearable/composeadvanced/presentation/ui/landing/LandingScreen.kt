@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.AnchorType
@@ -39,11 +38,8 @@ import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.foundation.CurvedModifier
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedRow
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.radialGradientBackground
-import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.curvedText
 import com.example.android.wearable.composeadvanced.R
@@ -52,6 +48,7 @@ import com.example.android.wearable.composeadvanced.presentation.navigation.Scre
 import com.example.android.wearable.composeadvanced.presentation.ui.util.ReportFullyDrawn
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
+import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.material.ToggleChip
 import com.google.android.horologist.compose.material.ToggleChipToggleControl
 
@@ -112,28 +109,14 @@ fun LandingScreen(
 
                 Chip(
                     onClick = onClickWatchList,
-                    label = {
-                        Text(
-                            stringResource(R.string.list_of_watches_button_label),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.list_of_watches_button_label)
                 )
             }
             for (listItem in menuItems) {
                 item {
                     Chip(
                         onClick = listItem.clickHander,
-                        label = {
-                            Text(
-                                listItem.name,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
+                        label = listItem.name
                     )
                 }
             }
