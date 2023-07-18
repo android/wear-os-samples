@@ -33,16 +33,16 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.ScalingLazyListAnchorType
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.OutlinedChip
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Alert
-import androidx.wear.compose.material.dialog.Confirmation
 import androidx.wear.compose.material.dialog.Dialog
 import com.example.android.wearable.composeadvanced.R
+import com.google.android.horologist.compose.material.Button
+import com.google.android.horologist.compose.material.Confirmation
 
 @Composable
 fun Dialogs(
@@ -130,31 +130,25 @@ fun Dialogs(
             },
             negativeButton = {
                 Button(
+                    imageVector = Icons.Filled.Clear,
+                    contentDescription = dialogNo,
                     onClick = {
                         alertStatus = dialogNo
                         alertShowDialog = false
                     },
                     colors = ButtonDefaults.secondaryButtonColors()
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Clear,
-                        contentDescription = dialogNo
-                    )
-                }
+                )
             },
             positiveButton = {
                 Button(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = dialogYes,
                     onClick = {
                         alertStatus = dialogYes
                         alertShowDialog = false
                     },
                     colors = ButtonDefaults.primaryButtonColors()
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = dialogYes
-                    )
-                }
+                )
             },
             scrollState = scrollState
         ) {
