@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.example.android.wearable.composeadvanced.benchmark'
-    compileSdk 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
