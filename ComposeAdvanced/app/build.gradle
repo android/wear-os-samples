@@ -121,6 +121,9 @@ dependencies {
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
     implementation libs.wear.compose.foundation
 
+    // Compose preview annotations for Wear OS.
+    implementation libs.wear.compose.tooling
+
     // If you are using Compose Navigation, use the Wear OS version (NOT the
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
     implementation libs.wear.compose.navigation
