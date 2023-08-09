@@ -24,7 +24,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-core-ktx = "androidx.core:core-ktx:1.10.1"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.0.2"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.0"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.1"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
