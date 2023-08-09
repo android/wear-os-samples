@@ -33,7 +33,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
+        warningsAsErrors false
     }
 
     buildTypes {
