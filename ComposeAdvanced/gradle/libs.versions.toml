@@ -8,9 +8,9 @@ androidx-test-espresso = "3.5.1"
 androidx-test-ext = "1.1.5"
 androidx-test-uiautomator = "2.2.0"
 androidx-wear-compose = "1.2.0-beta02"
-compose = "1.5.0-beta03"
-compose-compiler = "1.4.7"
-horologist = "0.5.1"
+compose = "1.5.0-rc01"
+compose-compiler = "1.5.1"
+horologist = "0.5.3"
 ktlint = "0.46.1"
 navigation = "2.6.0"
 org-jetbrains-kotlin = "1.8.21"
@@ -31,7 +31,7 @@ androidx-test-ext = { module = "androidx.test.ext:junit", version.ref = "android
 androidx-test-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext" }
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
 androidx-tracing-ktx = "androidx.tracing:tracing-ktx:1.1.0"
-com-google-maps-compose = "com.google.maps.android:maps-compose:2.11.5"
+com-google-maps-compose = "com.google.maps.android:maps-compose:2.13.0"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.1.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 

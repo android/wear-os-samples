@@ -12,7 +12,7 @@ org-jetbrains-kotlin = "1.8.21"
 org-jetbrains-kotlinx = "1.7.2"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.2"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.0"
 android-material = "com.google.android.material:material:1.9.0"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.10.1"

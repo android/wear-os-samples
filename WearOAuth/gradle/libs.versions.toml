@@ -7,7 +7,7 @@ androidx-wear-compose = "1.2.0-beta02"
 androidx-wear-tiles = "1.1.0"
 androidx-wear-watchface = "1.1.1"
 compose = "1.4.3"
-compose-compiler = "1.4.7"
+compose-compiler = "1.5.1"
 org-jetbrains-kotlin = "1.8.21"
 org-jetbrains-kotlinx = "1.7.2"
 ktlint = "0.46.1"
@@ -15,9 +15,9 @@ ktlint = "0.46.1"
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.3"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.2"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.0"
 android-material = "com.google.android.material:material:1.9.0"
-android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.2"
+android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
