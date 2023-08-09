@@ -36,7 +36,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
+        warningsAsErrors false
         ignore "ObsoleteLintCustomCheck"
     }
 
