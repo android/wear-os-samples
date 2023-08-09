@@ -44,5 +44,5 @@ wearable = { module = "com.google.android.wearable:wearable", version.ref = "wea
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.18.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.20.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
