@@ -15,12 +15,11 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.util.WearComponentPreview
 import com.google.android.horologist.compose.material.Chip
 
 /**
@@ -45,12 +44,9 @@ fun WatchAppChip(
     )
 }
 
-@Preview(
-    apiLevel = 26,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH
-)
+@WearComponentPreview
 @Composable
-fun PreviewWatchAppChip() {
+fun WatchAppChipPreview() {
     Box {
         WatchAppChip(
             watchModelNumber = 123456,

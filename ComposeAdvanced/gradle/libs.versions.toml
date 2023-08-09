@@ -57,6 +57,7 @@ test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.r
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
+wear-compose-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "androidx-wear-compose" }
 wear-input = "androidx.wear:wear-input:1.2.0-alpha02"
 
 [plugins]
