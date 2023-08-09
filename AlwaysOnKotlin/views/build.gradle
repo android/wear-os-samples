@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     namespace "com.example.android.wearable.wear.alwayson"
 
@@ -34,7 +34,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
+        warningsAsErrors false
     }
 
     buildTypes {

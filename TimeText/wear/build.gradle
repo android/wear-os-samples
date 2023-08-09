@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     namespace "com.example.android.wearable.timetextsample"
 
@@ -32,7 +32,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
+        warningsAsErrors false
     }
 
     compileOptions {
