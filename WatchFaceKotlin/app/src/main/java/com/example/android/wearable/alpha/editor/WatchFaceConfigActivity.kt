@@ -28,7 +28,6 @@ import com.example.android.wearable.alpha.editor.WatchFaceConfigStateHolder.Comp
 import com.example.android.wearable.alpha.utils.LEFT_COMPLICATION_ID
 import com.example.android.wearable.alpha.utils.RIGHT_COMPLICATION_ID
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -65,7 +64,9 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.minuteHandLengthSlider.addOnChangeListener { slider, value, fromUser ->
             Log.d(TAG, "addOnChangeListener(): $slider, $value, $fromUser")
-            stateHolder.setMinuteHandArmLength(value)
+            if (fromUser) {
+                stateHolder.setMinuteHandArmLength(value)
+            }
         }
 
         lifecycleScope.launch(Dispatchers.Main.immediate) {
@@ -77,7 +78,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
                         }
                         is WatchFaceConfigStateHolder.EditWatchFaceUiState.Success -> {
                             Log.d(TAG, "StateFlow Success.")
-                            updateWatchFacePreview(uiState.userStylesAndPreview)
+                            updateWatchFaceEditorPreview(uiState.userStylesAndPreview)
                         }
                         is WatchFaceConfigStateHolder.EditWatchFaceUiState.Error -> {
                             Log.e(TAG, "Flow error: ${uiState.exception}")
@@ -87,7 +88,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
         }
     }
 
-    private fun updateWatchFacePreview(
+    private fun updateWatchFaceEditorPreview(
         userStylesAndPreview: WatchFaceConfigStateHolder.UserStylesAndPreview
     ) {
         Log.d(TAG, "updateWatchFacePreview: $userStylesAndPreview")
@@ -97,6 +98,7 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.ticksEnabledSwitch.isChecked = userStylesAndPreview.ticksEnabled
         binding.minuteHandLengthSlider.value = userStylesAndPreview.minuteHandLength
+        Log.i(TAG, "*** ${userStylesAndPreview.minuteHandLength}")
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
 
         enabledWidgets()
