@@ -98,7 +98,6 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding.ticksEnabledSwitch.isChecked = userStylesAndPreview.ticksEnabled
         binding.minuteHandLengthSlider.value = userStylesAndPreview.minuteHandLength
-        Log.i(TAG, "*** ${userStylesAndPreview.minuteHandLength}")
         binding.preview.watchFaceBackground.setImageBitmap(userStylesAndPreview.previewImage)
 
         enabledWidgets()
