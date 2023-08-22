@@ -267,19 +267,6 @@ class MainActivity : FragmentActivity() {
         var ambientDetails: AmbientLifecycleObserver.AmbientDetails? = null
 
         /**
-         * If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.
-         */
-        private val isLowBitAmbient
-            get() = ambientDetails?.deviceHasLowBitAmbient ?: false
-
-        /**
-         * If the display requires burn-in protection in ambient mode, rendered pixels need to be
-         * intermittently offset to avoid screen burn-in.
-         */
-        private val doBurnInProtection
-            get() = ambientDetails?.burnInProtectionRequired ?: false
-
-        /**
          * Prepares the UI for ambient mode.
          */
         override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) {
@@ -296,7 +283,7 @@ class MainActivity : FragmentActivity() {
             binding.state.setTextColor(Color.WHITE)
             binding.updateRate.setTextColor(Color.WHITE)
             binding.drawCount.setTextColor(Color.WHITE)
-            if (isLowBitAmbient) {
+            if (ambientDetails.deviceHasLowBitAmbient) {
                 binding.time.paint.isAntiAlias = false
                 binding.timeStamp.paint.isAntiAlias = false
                 binding.state.paint.isAntiAlias = false
@@ -325,7 +312,7 @@ class MainActivity : FragmentActivity() {
              * these requirements only apply in ambient mode, and only when this property is set
              * to true.
              */
-            if (doBurnInProtection) {
+            if (ambientDetails?.burnInProtectionRequired == true) {
                 binding.container.translationX =
                     Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1).toFloat()
                 binding.container.translationY =
@@ -344,19 +331,17 @@ class MainActivity : FragmentActivity() {
             binding.state.setTextColor(Color.GREEN)
             binding.updateRate.setTextColor(Color.GREEN)
             binding.drawCount.setTextColor(Color.GREEN)
-            if (isLowBitAmbient) {
-                binding.time.paint.isAntiAlias = true
-                binding.timeStamp.paint.isAntiAlias = true
-                binding.state.paint.isAntiAlias = true
-                binding.updateRate.paint.isAntiAlias = true
-                binding.drawCount.paint.isAntiAlias = true
-            }
+
+            /* Reset any low bit mode. */
+            binding.time.paint.isAntiAlias = true
+            binding.timeStamp.paint.isAntiAlias = true
+            binding.state.paint.isAntiAlias = true
+            binding.updateRate.paint.isAntiAlias = true
+            binding.drawCount.paint.isAntiAlias = true
 
             /* Reset any random offset applied for burn-in protection. */
-            if (doBurnInProtection) {
-                binding.container.translationX = 0f
-                binding.container.translationY = 0f
-            }
+            binding.container.translationX = 0f
+            binding.container.translationY = 0f
             refreshDisplayAndSetNextUpdate()
         }
     }
