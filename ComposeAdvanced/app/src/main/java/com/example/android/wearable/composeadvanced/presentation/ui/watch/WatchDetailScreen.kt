@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -75,8 +74,7 @@ fun WatchDetailScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .rotaryWithScroll(focusRequester, scrollState)
-            .verticalScroll(scrollState)
+            .rotaryWithScroll(scrollState, focusRequester)
             .padding(
                 top = 26.dp,
                 start = 8.dp,
