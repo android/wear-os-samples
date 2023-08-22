@@ -16,13 +16,13 @@
 package com.example.android.wearable.wear.alwayson
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.fragment.app.FragmentActivity
-import androidx.wear.ambient.AmbientModeSupport
+import androidx.wear.ambient.AmbientLifecycleObserver
 import java.time.Clock
 import java.time.Instant
 import kotlinx.coroutines.CoroutineDispatcher
@@ -79,14 +79,16 @@ internal var activeDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate
  * Faces API documentation: keeping most pixels black, avoiding large blocks of white pixels, using
  * only black and white, disabling anti-aliasing, etc.
  */
-class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
+class MainActivity : ComponentActivity() {
 
     private val ambientCallbackState = AmbientCallbackState()
+
+    private val ambientObserver = AmbientLifecycleObserver(this, ambientCallbackState)
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AmbientModeSupport.attach(this)
+        lifecycle.addObserver(ambientObserver)
 
         setContent {
             AlwaysOnApp(
@@ -97,11 +99,9 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             )
         }
     }
-
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = ambientCallbackState
 }
 
-private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
+private class AmbientCallbackState : AmbientLifecycleObserver.AmbientLifecycleCallback {
 
     /**
      * A ticker state that increase whenever we get a call to `onUpdateAmbient`
@@ -116,20 +116,10 @@ private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
     /**
      * Prepares the UI for ambient mode.
      */
-    override fun onEnterAmbient(ambientDetails: Bundle) {
-        super.onEnterAmbient(ambientDetails)
-        val isLowBitAmbient = ambientDetails.getBoolean(
-            AmbientModeSupport.EXTRA_LOWBIT_AMBIENT,
-            false
-        )
-        val doBurnInProtection = ambientDetails.getBoolean(
-            AmbientModeSupport.EXTRA_BURN_IN_PROTECTION,
-            false
-        )
-
+    override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) {
         ambientState = AmbientState.Ambient(
-            isLowBitAmbient = isLowBitAmbient,
-            doBurnInProtection = doBurnInProtection
+            isLowBitAmbient = ambientDetails.deviceHasLowBitAmbient,
+            doBurnInProtection = ambientDetails.burnInProtectionRequired
         )
     }
 
@@ -140,7 +130,6 @@ private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
      * requires it.
      */
     override fun onUpdateAmbient() {
-        super.onUpdateAmbient()
         ambientUpdateTimestamp = Instant.now(clock)
     }
 
@@ -148,7 +137,6 @@ private class AmbientCallbackState : AmbientModeSupport.AmbientCallback() {
      * Restores the UI to active (non-ambient) mode.
      */
     override fun onExitAmbient() {
-        super.onExitAmbient()
         ambientState = AmbientState.Interactive
     }
 }
