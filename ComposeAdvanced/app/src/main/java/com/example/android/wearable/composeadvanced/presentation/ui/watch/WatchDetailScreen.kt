@@ -74,7 +74,7 @@ fun WatchDetailScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .rotaryWithScroll(focusRequester, scrollState)
+            .rotaryWithScroll(scrollState, focusRequester)
             .padding(
                 top = 26.dp,
                 start = 8.dp,
