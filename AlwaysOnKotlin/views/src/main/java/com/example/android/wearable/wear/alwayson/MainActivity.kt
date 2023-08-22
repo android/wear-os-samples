@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.VisibleForTesting
@@ -187,16 +188,20 @@ class MainActivity : FragmentActivity() {
      * (active mode = coroutines and ambient mode = Alarm).
      */
     private fun refreshDisplayAndSetNextUpdate() {
+        Log.d(TAG, "refreshDisplayAndSetNextUpdate()")
         loadDataAndUpdateScreen()
         val instant = Instant.now(clock)
         if (ambientCallbackState.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
-            ambientUpdateAlarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.toEpochMilli(),
-                ambientUpdatePendingIntent
-            )
+            if (Build.VERSION.SDK_INT < 33) {
+                ambientUpdateAlarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerTime.toEpochMilli(),
+                    ambientUpdatePendingIntent
+                )
+            }
         } else {
+            Log.d(TAG, "!isAmbient")
             val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)
             activeUpdateJob.cancel()
             activeUpdateJob = lifecycleScope.launch {
@@ -248,14 +253,17 @@ class MainActivity : FragmentActivity() {
                 R.string.mode_active_label
             }
         )
-        binding.updateRate.text = getString(
-            R.string.update_rate_label,
-            if (ambientCallbackState.isAmbient) {
-                AMBIENT_INTERVAL.seconds
-            } else {
-                ACTIVE_INTERVAL.seconds
-            }
-        )
+        binding.updateRate.text =
+            if (ambientCallbackState.isAmbient && Build.VERSION.SDK_INT >= 33) getString(
+                R.string.disabled_label
+            ) else getString(
+                R.string.update_rate_label,
+                if (ambientCallbackState.isAmbient) {
+                    AMBIENT_INTERVAL.seconds
+                } else {
+                    ACTIVE_INTERVAL.seconds
+                }
+            )
         binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
     }
 
@@ -357,7 +365,7 @@ class MainActivity : FragmentActivity() {
         /**
          * Duration between updates while in ambient mode.
          */
-        private val AMBIENT_INTERVAL = Duration.ofSeconds(10)
+        private val AMBIENT_INTERVAL = Duration.ofSeconds(60)
 
         /**
          * Action for updating the display in ambient mode, per our custom refresh cycle.
