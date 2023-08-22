@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat.registerReceiver
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.wear.ambient.AmbientModeSupport
+import androidx.wear.ambient.AmbientLifecycleObserver
 import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
 import java.time.Clock
 import java.time.Duration
@@ -85,15 +85,13 @@ import kotlinx.coroutines.withContext
  * Faces API documentation: keeping most pixels black, avoiding large blocks of white pixels, using
  * only black and white, disabling anti-aliasing, etc.
  */
-class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
+class MainActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    /**
-     * Ambient mode controller attached to this display. Used by Activity to see if it is in ambient
-     * mode.
-     */
-    private lateinit var ambientController: AmbientModeSupport.AmbientController
+    private val ambientCallbackState = MyAmbientCallback()
+
+    private val ambientObserver = AmbientLifecycleObserver(this, ambientCallbackState)
 
     /**
      * Since the coroutine-based update (used in active mode) can't wake up the processor when the
@@ -120,10 +118,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
 
+        lifecycle.addObserver(ambientObserver)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ambientController = AmbientModeSupport.attach(this)
         ambientUpdateAlarmManager = getSystemService()!!
 
         /*
@@ -190,7 +189,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
     private fun refreshDisplayAndSetNextUpdate() {
         loadDataAndUpdateScreen()
         val instant = Instant.now(clock)
-        if (ambientController.isAmbient) {
+        if (ambientCallbackState.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
             ambientUpdateAlarmManager.setExact(
                 AlarmManager.RTC_WAKEUP,
@@ -235,7 +234,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(
             TAG,
             "loadDataAndUpdateScreen(): " +
-                "${currentInstant.toEpochMilli()} (${ambientController.isAmbient})"
+                "${currentInstant.toEpochMilli()} (${ambientCallbackState.isAmbient})"
         )
 
         val currentTime = LocalTime.now(clock)
@@ -243,7 +242,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         binding.time.text = dateFormat.format(currentTime)
         binding.timeStamp.text = getString(R.string.timestamp_label, currentInstant.toEpochMilli())
         binding.state.text = getString(
-            if (ambientController.isAmbient) {
+            if (ambientCallbackState.isAmbient) {
                 R.string.mode_ambient_label
             } else {
                 R.string.mode_active_label
@@ -251,7 +250,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         )
         binding.updateRate.text = getString(
             R.string.update_rate_label,
-            if (ambientController.isAmbient) {
+            if (ambientCallbackState.isAmbient) {
                 AMBIENT_INTERVAL.seconds
             } else {
                 ACTIVE_INTERVAL.seconds
@@ -260,30 +259,31 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
     }
 
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = MyAmbientCallback()
+    private inner class MyAmbientCallback : AmbientLifecycleObserver.AmbientLifecycleCallback {
 
-    private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
+        val isAmbient: Boolean
+            get() = ambientDetails != null
+
+        var ambientDetails: AmbientLifecycleObserver.AmbientDetails? = null
 
         /**
          * If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.
          */
-        private var isLowBitAmbient = false
+        private val isLowBitAmbient
+            get() = ambientDetails?.deviceHasLowBitAmbient ?: false
 
         /**
          * If the display requires burn-in protection in ambient mode, rendered pixels need to be
          * intermittently offset to avoid screen burn-in.
          */
-        private var doBurnInProtection = false
+        private val doBurnInProtection
+            get() = ambientDetails?.burnInProtectionRequired ?: false
 
         /**
          * Prepares the UI for ambient mode.
          */
-        override fun onEnterAmbient(ambientDetails: Bundle) {
-            super.onEnterAmbient(ambientDetails)
-            isLowBitAmbient =
-                ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
-            doBurnInProtection =
-                ambientDetails.getBoolean(AmbientModeSupport.EXTRA_BURN_IN_PROTECTION, false)
+        override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) {
+            this.ambientDetails = ambientDetails
 
             // Cancel any active updates
             activeUpdateJob.cancel()
@@ -313,8 +313,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          * requires it.
          */
         override fun onUpdateAmbient() {
-            super.onUpdateAmbient()
-
             /*
              * If the screen requires burn-in protection, views must be shifted around periodically
              * in ambient mode. To ensure that content isn't shifted off the screen, avoid placing
@@ -339,7 +337,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          * Restores the UI to active (non-ambient) mode.
          */
         override fun onExitAmbient() {
-            super.onExitAmbient()
+            this.ambientDetails = null
 
             /* Clears out Alarms since they are only used in ambient mode. */
             ambientUpdateAlarmManager.cancel(ambientUpdatePendingIntent)
