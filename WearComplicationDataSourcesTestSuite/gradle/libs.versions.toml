@@ -12,7 +12,7 @@ org-jetbrains-kotlin = "1.8.21"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.0"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.1"
 androidx-core-ktx = "androidx.core:core-ktx:1.10.1"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.0"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
