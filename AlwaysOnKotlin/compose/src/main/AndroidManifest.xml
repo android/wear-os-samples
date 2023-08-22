@@ -41,7 +41,8 @@
         <activity android:name="com.example.android.wearable.wear.alwayson.MainActivity"
             android:launchMode="singleInstance"
             android:configChanges="orientation|keyboardHidden"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity=".main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
