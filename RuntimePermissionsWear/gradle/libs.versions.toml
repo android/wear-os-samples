@@ -12,7 +12,7 @@ org-jetbrains-kotlin = "1.8.21"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.0"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.1"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
