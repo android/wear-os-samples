@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.components
 
-import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -24,13 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
 import androidx.wear.compose.material.curvedText
+import androidx.wear.compose.ui.tooling.preview.WearPreviewLargeRound
+import androidx.wear.compose.ui.tooling.preview.WearPreviewSmallRound
+import androidx.wear.compose.ui.tooling.preview.WearPreviewSquare
 import com.example.android.wearable.composeadvanced.BuildConfig
 
 /**
@@ -101,25 +101,9 @@ fun CustomTimeText(
     }
 }
 
-@Preview(
-    apiLevel = 26,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH,
-    showSystemUi = true,
-    device = Devices.WEAR_OS_LARGE_ROUND
-)
-@Preview(
-    apiLevel = 26,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH,
-    showSystemUi = true,
-    device = Devices.WEAR_OS_SQUARE
-)
-@Preview(
-    apiLevel = 26,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH,
-    showSystemUi = true,
-    device = Devices.WEAR_OS_SMALL_ROUND
-)
-// This will only be rendered properly in AS Chipmunk and beyond
+@WearPreviewLargeRound
+@WearPreviewSquare
+@WearPreviewSmallRound
 @Composable
 fun PreviewCustomTimeText() {
     CustomTimeText(

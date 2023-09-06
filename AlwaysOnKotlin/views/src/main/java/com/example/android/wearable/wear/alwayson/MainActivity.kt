@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.VisibleForTesting
@@ -30,7 +31,7 @@ import androidx.core.content.ContextCompat.registerReceiver
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.wear.ambient.AmbientModeSupport
+import androidx.wear.ambient.AmbientLifecycleObserver
 import com.example.android.wearable.wear.alwayson.databinding.ActivityMainBinding
 import java.time.Clock
 import java.time.Duration
@@ -85,15 +86,13 @@ import kotlinx.coroutines.withContext
  * Faces API documentation: keeping most pixels black, avoiding large blocks of white pixels, using
  * only black and white, disabling anti-aliasing, etc.
  */
-class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
+class MainActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    /**
-     * Ambient mode controller attached to this display. Used by Activity to see if it is in ambient
-     * mode.
-     */
-    private lateinit var ambientController: AmbientModeSupport.AmbientController
+    private val ambientCallbackState = MyAmbientCallback()
+
+    private val ambientObserver = AmbientLifecycleObserver(this, ambientCallbackState)
 
     /**
      * Since the coroutine-based update (used in active mode) can't wake up the processor when the
@@ -120,10 +119,11 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
 
+        lifecycle.addObserver(ambientObserver)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ambientController = AmbientModeSupport.attach(this)
         ambientUpdateAlarmManager = getSystemService()!!
 
         /*
@@ -188,16 +188,20 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
      * (active mode = coroutines and ambient mode = Alarm).
      */
     private fun refreshDisplayAndSetNextUpdate() {
+        Log.d(TAG, "refreshDisplayAndSetNextUpdate()")
         loadDataAndUpdateScreen()
         val instant = Instant.now(clock)
-        if (ambientController.isAmbient) {
+        if (ambientCallbackState.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
-            ambientUpdateAlarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.toEpochMilli(),
-                ambientUpdatePendingIntent
-            )
+            if (Build.VERSION.SDK_INT < 33) {
+                ambientUpdateAlarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerTime.toEpochMilli(),
+                    ambientUpdatePendingIntent
+                )
+            }
         } else {
+            Log.d(TAG, "!isAmbient")
             val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)
             activeUpdateJob.cancel()
             activeUpdateJob = lifecycleScope.launch {
@@ -235,7 +239,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         Log.d(
             TAG,
             "loadDataAndUpdateScreen(): " +
-                "${currentInstant.toEpochMilli()} (${ambientController.isAmbient})"
+                "${currentInstant.toEpochMilli()} (${ambientCallbackState.isAmbient})"
         )
 
         val currentTime = LocalTime.now(clock)
@@ -243,47 +247,38 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         binding.time.text = dateFormat.format(currentTime)
         binding.timeStamp.text = getString(R.string.timestamp_label, currentInstant.toEpochMilli())
         binding.state.text = getString(
-            if (ambientController.isAmbient) {
+            if (ambientCallbackState.isAmbient) {
                 R.string.mode_ambient_label
             } else {
                 R.string.mode_active_label
             }
         )
-        binding.updateRate.text = getString(
-            R.string.update_rate_label,
-            if (ambientController.isAmbient) {
-                AMBIENT_INTERVAL.seconds
-            } else {
-                ACTIVE_INTERVAL.seconds
-            }
-        )
+        binding.updateRate.text =
+            if (ambientCallbackState.isAmbient && Build.VERSION.SDK_INT >= 33) getString(
+                R.string.disabled_label
+            ) else getString(
+                R.string.update_rate_label,
+                if (ambientCallbackState.isAmbient) {
+                    AMBIENT_INTERVAL.seconds
+                } else {
+                    ACTIVE_INTERVAL.seconds
+                }
+            )
         binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
     }
 
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback = MyAmbientCallback()
+    private inner class MyAmbientCallback : AmbientLifecycleObserver.AmbientLifecycleCallback {
 
-    private inner class MyAmbientCallback : AmbientModeSupport.AmbientCallback() {
+        val isAmbient: Boolean
+            get() = ambientDetails != null
 
-        /**
-         * If the display is low-bit in ambient mode. i.e. it requires anti-aliased fonts.
-         */
-        private var isLowBitAmbient = false
-
-        /**
-         * If the display requires burn-in protection in ambient mode, rendered pixels need to be
-         * intermittently offset to avoid screen burn-in.
-         */
-        private var doBurnInProtection = false
+        var ambientDetails: AmbientLifecycleObserver.AmbientDetails? = null
 
         /**
          * Prepares the UI for ambient mode.
          */
-        override fun onEnterAmbient(ambientDetails: Bundle) {
-            super.onEnterAmbient(ambientDetails)
-            isLowBitAmbient =
-                ambientDetails.getBoolean(AmbientModeSupport.EXTRA_LOWBIT_AMBIENT, false)
-            doBurnInProtection =
-                ambientDetails.getBoolean(AmbientModeSupport.EXTRA_BURN_IN_PROTECTION, false)
+        override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) {
+            this.ambientDetails = ambientDetails
 
             // Cancel any active updates
             activeUpdateJob.cancel()
@@ -296,7 +291,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
             binding.state.setTextColor(Color.WHITE)
             binding.updateRate.setTextColor(Color.WHITE)
             binding.drawCount.setTextColor(Color.WHITE)
-            if (isLowBitAmbient) {
+            if (ambientDetails.deviceHasLowBitAmbient) {
                 binding.time.paint.isAntiAlias = false
                 binding.timeStamp.paint.isAntiAlias = false
                 binding.state.paint.isAntiAlias = false
@@ -313,8 +308,6 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          * requires it.
          */
         override fun onUpdateAmbient() {
-            super.onUpdateAmbient()
-
             /*
              * If the screen requires burn-in protection, views must be shifted around periodically
              * in ambient mode. To ensure that content isn't shifted off the screen, avoid placing
@@ -327,7 +320,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
              * these requirements only apply in ambient mode, and only when this property is set
              * to true.
              */
-            if (doBurnInProtection) {
+            if (ambientDetails?.burnInProtectionRequired == true) {
                 binding.container.translationX =
                     Random.nextInt(-BURN_IN_OFFSET_PX, BURN_IN_OFFSET_PX + 1).toFloat()
                 binding.container.translationY =
@@ -339,26 +332,24 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
          * Restores the UI to active (non-ambient) mode.
          */
         override fun onExitAmbient() {
-            super.onExitAmbient()
+            this.ambientDetails = null
 
             /* Clears out Alarms since they are only used in ambient mode. */
             ambientUpdateAlarmManager.cancel(ambientUpdatePendingIntent)
             binding.state.setTextColor(Color.GREEN)
             binding.updateRate.setTextColor(Color.GREEN)
             binding.drawCount.setTextColor(Color.GREEN)
-            if (isLowBitAmbient) {
-                binding.time.paint.isAntiAlias = true
-                binding.timeStamp.paint.isAntiAlias = true
-                binding.state.paint.isAntiAlias = true
-                binding.updateRate.paint.isAntiAlias = true
-                binding.drawCount.paint.isAntiAlias = true
-            }
+
+            /* Reset any low bit mode. */
+            binding.time.paint.isAntiAlias = true
+            binding.timeStamp.paint.isAntiAlias = true
+            binding.state.paint.isAntiAlias = true
+            binding.updateRate.paint.isAntiAlias = true
+            binding.drawCount.paint.isAntiAlias = true
 
             /* Reset any random offset applied for burn-in protection. */
-            if (doBurnInProtection) {
-                binding.container.translationX = 0f
-                binding.container.translationY = 0f
-            }
+            binding.container.translationX = 0f
+            binding.container.translationY = 0f
             refreshDisplayAndSetNextUpdate()
         }
     }
@@ -374,7 +365,7 @@ class MainActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvi
         /**
          * Duration between updates while in ambient mode.
          */
-        private val AMBIENT_INTERVAL = Duration.ofSeconds(10)
+        private val AMBIENT_INTERVAL = Duration.ofSeconds(60)
 
         /**
          * Action for updating the display in ambient mode, per our custom refresh cycle.

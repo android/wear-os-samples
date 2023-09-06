@@ -1,16 +1,16 @@
 [versions]
-android-gradle-plugin = "8.0.2"
+android-gradle-plugin = "8.1.1"
 androidx-test = "1.4.0"
-androidx-wear-tiles = "1.1.0"
-compose = "1.4.3"
+androidx-wear-tiles = "1.2.0"
+compose = "1.5.0"
 compose-compiler = "1.4.7"
-horologist = "0.4.11"
+horologist = "0.5.5"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.8.21"
-org-jetbrains-kotlinx = "1.7.2"
+org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.0.2"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.1"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"

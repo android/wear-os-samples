@@ -16,20 +16,17 @@
 package com.example.android.wearable.composeadvanced.presentation.ui.theme
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.wear.compose.material.Colors
 import androidx.wear.compose.material.ListHeader
-import androidx.wear.compose.material.RadioButton
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.material.ToggleChipDefaults
 import com.example.android.wearable.composeadvanced.presentation.theme.ThemeValues
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
+import com.google.android.horologist.compose.material.ToggleChip
+import com.google.android.horologist.compose.material.ToggleChipToggleControl
 
 @Composable
 internal fun ThemeScreen(
@@ -52,24 +49,14 @@ internal fun ThemeScreen(
             item {
                 ToggleChip(
                     checked = checked,
-                    toggleControl = {
-                        RadioButton(
-                            selected = checked,
-                            modifier = Modifier.semantics {
-                                this.contentDescription = if (checked) "On" else "Off"
-                            }
-                        )
-                    },
-                    onCheckedChange = { onValueChange(listItem.colors) },
+                    toggleControl = ToggleChipToggleControl.Radio,
+                    onCheckedChanged = { onValueChange(listItem.colors) },
                     // Override the default toggle control color to show the user the current
                     // primary selected color.
                     colors = ToggleChipDefaults.toggleChipColors(
                         checkedToggleControlColor = currentlySelectedColors.primary
                     ),
-                    label = {
-                        Text(listItem.description)
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    label = listItem.description
                 )
             }
         }

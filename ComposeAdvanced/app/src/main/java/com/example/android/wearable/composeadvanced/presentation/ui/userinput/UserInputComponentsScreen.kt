@@ -23,7 +23,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,15 +30,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.Text
 import androidx.wear.input.RemoteInputIntentHelper
 import androidx.wear.input.wearableExtender
 import com.example.android.wearable.composeadvanced.R
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
+import com.google.android.horologist.compose.material.Chip
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -91,97 +87,43 @@ fun UserInputComponentsScreen(
         item {
             Chip(
                 onClick = onClickStepper,
-                label = {
-                    Text(
-                        stringResource(id = R.string.stepper_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    Text(
-                        text = value.toString()
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(id = R.string.stepper_label),
+                secondaryLabel = value.toString()
             )
         }
 
         item {
             Chip(
                 onClick = onClickSlider,
-                label = {
-                    Text(
-                        stringResource(id = R.string.slider_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    Text(
-                        text = value.toString()
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(id = R.string.slider_label),
+                secondaryLabel = value.toString()
             )
         }
 
         item {
             Chip(
                 onClick = onClickDemoDatePicker,
-                label = {
-                    Text(
-                        stringResource(R.string.date_picker_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    Text(
-                        text = dateTime.toLocalDate().toString()
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(R.string.date_picker_label),
+                secondaryLabel = dateTime.toLocalDate().toString()
             )
         }
 
         item {
+            val formatter = remember { DateTimeFormatter.ofPattern("hh:mm a") }
             Chip(
                 onClick = onClickDemo12hTimePicker,
-                label = {
-                    Text(
-                        stringResource(R.string.time_12h_picker_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    val formatter = remember { DateTimeFormatter.ofPattern("hh:mm a") }
-                    Text(
-                        text = dateTime.toLocalTime().format(formatter)
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(R.string.time_12h_picker_label),
+                secondaryLabel = dateTime.toLocalTime().format(formatter)
             )
         }
 
         item {
+            val formatter = remember { DateTimeFormatter.ofPattern("HH:mm:ss") }
+
             Chip(
                 onClick = onClickDemo24hTimePicker,
-                label = {
-                    Text(
-                        stringResource(R.string.time_24h_picker_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    val formatter = remember { DateTimeFormatter.ofPattern("HH:mm:ss") }
-                    Text(
-                        text = dateTime.toLocalTime().format(formatter)
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(R.string.time_24h_picker_label),
+                secondaryLabel = dateTime.toLocalTime().format(formatter)
             )
         }
 
@@ -202,19 +144,8 @@ fun UserInputComponentsScreen(
                 onClick = {
                     launcher.launch(intent)
                 },
-                label = {
-                    Text(
-                        stringResource(R.string.text_input_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    Text(
-                        text = textForUserInput
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(R.string.text_input_label),
+                secondaryLabel = textForUserInput
             )
         }
 
@@ -235,19 +166,8 @@ fun UserInputComponentsScreen(
                 onClick = {
                     voiceLauncher.launch(voiceIntent)
                 },
-                label = {
-                    Text(
-                        stringResource(R.string.voice_input_label),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel = {
-                    Text(
-                        text = textForVoiceInput
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+                label = stringResource(R.string.voice_input_label),
+                secondaryLabel = textForVoiceInput
             )
         }
     }

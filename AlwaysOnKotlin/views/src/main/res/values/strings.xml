@@ -21,4 +21,5 @@
     <string name="mode_ambient_label">Ambient Mode (Alarm)</string>
     <string name="update_rate_label" tools:ignore="PluralsCandidate">Update rate: %1$d sec</string>
     <string name="draw_count_label">Draw count: %1$d</string>
+    <string name="disabled_label">Disabled</string>
 </resources>

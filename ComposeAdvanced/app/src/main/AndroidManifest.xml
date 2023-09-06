@@ -39,7 +39,8 @@
 
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity=".main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,7 +65,8 @@
         <activity
             android:name=".benchmark.ScrollActivity"
             android:exported="true"
-            android:label="CA Scroll">
+            android:label="CA Scroll"
+            android:taskAffinity=".scroll">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -77,8 +79,9 @@
 
         <activity
             android:name=".presentation.ui.map.MapActivity"
-            android:exported="true"
-            android:label="@string/map_activity_name"></activity>
+            android:exported="false"
+            android:label="@string/map_activity_name"
+            android:taskAffinity=".main" />
 
         <profileable
             android:shell="true"

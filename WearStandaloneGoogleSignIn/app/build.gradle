@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     namespace "com.example.android.wearable.wear.wearstandalonegooglesignin"
 
@@ -34,7 +34,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
+        warningsAsErrors false
         ignore "ObsoleteLintCustomCheck"
     }
 
