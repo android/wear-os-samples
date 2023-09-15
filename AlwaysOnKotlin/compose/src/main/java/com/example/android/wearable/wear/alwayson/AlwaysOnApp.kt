@@ -40,6 +40,8 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.material.MaterialTheme
+import com.google.android.horologist.compose.ambient.AmbientState
+import com.google.android.horologist.compose.ambient.AmbientStateUpdate
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
@@ -69,10 +71,9 @@ private val ambientUpdateIntent = Intent(AMBIENT_UPDATE_ACTION)
 
 @Composable
 fun AlwaysOnApp(
-    ambientState: AmbientState,
-    ambientUpdateTimestamp: Instant,
     clock: Clock,
-    activeDispatcher: CoroutineDispatcher
+    activeDispatcher: CoroutineDispatcher,
+    ambientStateUpdate: AmbientStateUpdate
 ) {
     val ambientUpdateAlarmManager = rememberAlarmManager()
 
@@ -143,7 +144,7 @@ fun AlwaysOnApp(
     }
 
     if (isResumed) {
-        when (ambientState) {
+        when (ambientStateUpdate.ambientState) {
             is AmbientState.Ambient -> {
                 // When we are resumed and ambient, setup the broadcast receiver
                 SystemBroadcastReceiver(systemAction = AMBIENT_UPDATE_ACTION) {
@@ -160,14 +161,14 @@ fun AlwaysOnApp(
         }
 
         // Whenever we change ambient state (and initially) update the data.
-        LaunchedEffect(ambientState) {
+        LaunchedEffect(ambientStateUpdate.ambientState) {
             updateData()
         }
 
         // Then, setup a ping to refresh data again: either via the alarm manager, or simply
         // after a delay
-        LaunchedEffect(updateDataTrigger, ambientState) {
-            when (ambientState) {
+        LaunchedEffect(updateDataTrigger, ambientStateUpdate.ambientState) {
+            when (ambientStateUpdate.ambientState) {
                 is AmbientState.Ambient -> {
                     val triggerTime = currentInstant.getNextInstantWithInterval(
                         AMBIENT_INTERVAL
@@ -194,8 +195,7 @@ fun AlwaysOnApp(
 
     MaterialTheme {
         AlwaysOnScreen(
-            ambientState = ambientState,
-            ambientUpdateTimestamp = ambientUpdateTimestamp,
+            ambientStateUpdate = ambientStateUpdate,
             drawCount = drawCount,
             currentInstant = currentInstant,
             currentTime = currentTime
