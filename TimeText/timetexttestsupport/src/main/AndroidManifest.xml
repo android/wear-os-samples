@@ -16,6 +16,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.wearable.timetexttextsupport">
     <application>
-        <activity android:name="com.example.android.wearable.timetext.TestActivity" />
+        <activity android:name="com.example.android.wearable.timetext.TestActivity"
+            android:taskAffinity=".main"
+            />
     </application>
 </manifest>

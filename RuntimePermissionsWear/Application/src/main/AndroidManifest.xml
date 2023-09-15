@@ -38,7 +38,9 @@
         <activity
             android:name=".MainPhoneActivity"
             android:launchMode="singleTask"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity=".main"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,12 +51,14 @@
         <activity
             android:name=".PhonePermissionRequestActivity"
             android:label="@string/title_activity_phone_permission_request"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:taskAffinity=".main"/>
 
         <activity
             android:name=".WearPermissionRequestActivity"
             android:label="@string/title_activity_wear_permission_request"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:taskAffinity=".main"/>
 
         <service
             android:name=".IncomingRequestPhoneService"

@@ -35,7 +35,9 @@
 
         <activity
             android:name=".MainWearActivity"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:taskAffinity=".main"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,7 +47,9 @@
 
         <activity
             android:name=".RequestPermissionOnPhoneActivity"
-            android:label="@string/title_activity_request_permission_on_phone">
+            android:label="@string/title_activity_request_permission_on_phone"
+            android:taskAffinity=".main"
+            >
         </activity>
 
         <service
