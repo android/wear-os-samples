@@ -33,7 +33,9 @@
 
         <activity
             android:name="com.example.android.wearable.timetext.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity=".main"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -35,7 +35,9 @@
 
         <activity
             android:name=".AuthDeviceGrantActivity"
-            android:label="wearoauth">
+            android:label="wearoauth"
+            android:taskAffinity=".main"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
