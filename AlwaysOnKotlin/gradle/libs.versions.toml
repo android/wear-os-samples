@@ -3,8 +3,10 @@ android-gradle-plugin = "8.1.1"
 androidx-activity = "1.7.2"
 androidx-compose-bom = "2023.09.00"
 androidx-lifecycle = "2.6.2"
-androidx-wear-compose = "1.2.0"
+androidx-wear-compose = "1.3.0-alpha05"
 compose-compiler = "1.4.7"
+compose-ui-tooling = "1.2.0"
+horologist-compose-layout = "0.5.6"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.8.21"
 org-jetbrains-kotlinx = "1.7.3"
@@ -13,19 +15,18 @@ wearable = "2.9.0"
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
+androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "compose-ui-tooling" }
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.1"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.3.0"
 androidx-window = "androidx.window:window:1.1.0"
 com-google-truth = "com.google.truth:truth:1.1.5"
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.10"
+horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist-compose-layout" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
@@ -37,7 +38,7 @@ test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
 test-rules = "androidx.test:rules:1.5.0"
 test-runner = "androidx.test:runner:1.5.2"
-test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-alpha03"
+test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-alpha04"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wearable = { module = "com.google.android.wearable:wearable", version.ref = "wearable" }
@@ -45,4 +46,3 @@ wearable = { module = "com.google.android.wearable:wearable", version.ref = "wea
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:6.18.0"
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }

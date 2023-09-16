@@ -119,6 +119,9 @@ dependencies {
     implementation libs.androidx.window
     implementation libs.compose.ui.test.manifest
 
+    implementation(libs.horologist.compose.layout)
+    implementation(libs.androidx.compose.ui.tooling)
+
     // Release mode doesn't work without that dependency
     compileOnly libs.wearable
 
