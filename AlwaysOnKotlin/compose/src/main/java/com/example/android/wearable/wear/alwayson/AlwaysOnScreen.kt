@@ -208,7 +208,7 @@ fun AlwaysOnScreenAmbientPreview() {
                         deviceHasLowBitAmbient = true
                     )
                 ),
-                changeTimeMillis = System.currentTimeMillis(),
+                changeTimeMillis = System.currentTimeMillis()
             ),
             drawCount = 4,
             currentInstant = Instant.now(),
