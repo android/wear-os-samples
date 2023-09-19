@@ -33,11 +33,9 @@ android {
     defaultConfig {
         applicationId "com.example.android.wearable.composeadvanced"
         minSdk 26
-        targetSdk 30
+        targetSdk 33
         versionCode 1
         versionName "1.0"
-
-        applicationId "com.example.android.wearable.composeadvanced"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
