@@ -24,6 +24,7 @@
         <string name="icon_label">Icon</string>
         <string name="small_image_label">Small Image</string>
         <string name="large_image_label">Large Image</string>
+        <string name="weighted_elements_label">Weighted Elements</string>
 
         <string name="icon_face_content_description">Face</string>
         <string name="icon_battery_content_description">Battery</string>
@@ -64,4 +65,13 @@
         <string name="long_text_with_image_and_title">Text w/ Image &amp; Title</string>
         <string name="long_text_with_image_and_title_content_description">Text with Image and Title</string>
         <string name="long_title">Long Title</string>
+
+        <string name="weighted_elements_text_only">TxtOnly</string>
+        <string name="weighted_elements_text_only_content_description">@string/weighted_elements_text_only</string>
+        <string name="weighted_elements_text_with_icon">w/Icon</string>
+        <string name="weighted_elements_text_with_icon_content_description">@string/weighted_elements_text_with_icon</string>
+        <string name="weighted_elements_text_with_title">w/Title</string>
+        <string name="weighted_elements_text_with_title_content_description">@string/weighted_elements_text_with_title</string>
+        <string name="weighted_elements_icon_only_content_description">Icon only</string>
+        <string name="weighted_elements_content_description">%1$s with %2$d elements</string>
 </resources>
