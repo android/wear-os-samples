@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+    Copyright 2023 Google LLC
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+    Basic example of a text-only, digital watch face, demonstrating:
+    
+    - Use of TimeText for digital watch faces
+    - Showing different styling in ambient mode, via the Variant element
+    - Localization using Android string resources
+-->
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="TICK_PER_SECOND" value="15"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:32"/>
+  <Scene backgroundColor="#ff000000">
+    <DigitalClock x="0" y="0" width="450" height="450">
+      <!-- For further attributes see:
+          https://developer.android.com/training/wearables/wff/clock/time-text -->
+      <!-- SYNC_TO_DEVICE specifies to respect the device 12/24h setting -->
+      <!-- Interactive mode version-->
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="175" width="450" height="100" alpha="255">
+        <Variant mode="AMBIENT" target="alpha" value="0"/>
+        <!-- Specifying the watch's default font-family by using SYNC_TO_DEVICE instead of a named family -->
+        <Font family="SYNC_TO_DEVICE" size="128" weight="NORMAL" slant="NORMAL" color="#ffffffff"/>
+      </TimeText>
+      <!-- Ambient mode version - thinner weight -->
+      <TimeText format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" x="0" y="175" width="450" height="100" alpha="0">
+        <!-- Specifying the watch's default family by using SYNC_TO_DEVICE -->
+        <Variant mode="AMBIENT" target="alpha" value="255"/>
+        <Font family="SYNC_TO_DEVICE" size="128" weight="THIN" slant="NORMAL" color="#ffffffff"/>
+      </TimeText>
+    </DigitalClock>
+    <Group x="0" y="0" width="450" height="450" name="hello_world">
+      <PartText x="0" y="285" width="450" height="50">
+        <Variant mode="AMBIENT" target="alpha" value="0"/>
+        <Text align="CENTER">
+          <!-- Demonstrates using Android string resources for localization -->
+          <Font family="SYNC_TO_DEVICE" size="36" color="#ffffffff">
+            <Template>@string/greeting</Template>
+          </Font>
+        </Text>
+      </PartText>
+    </Group>
+  </Scene>
+</WatchFace>

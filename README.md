@@ -19,7 +19,10 @@ Samples
 
 * **[RuntimePermissionsWear](RuntimePermissionsWear)** (Kotlin) - Demonstrates requesting permissions not only on a Wear OS device and a mobile device, but also across devices, e.g., request permissions on a mobile device from your wear device and the other way around. Note: It does require you having both the Wear and Mobile version of the app installed on both devices. [Guide](https://developer.android.com/training/articles/wear-permissions)
 
-* **[WatchFaceKotlin](WatchFaceKotlin)** (Kotlin) - Demos the new AndroidX Watch Face APIs which provide their own storage mechanism for watch face preference values.
+* **[WatchFaceFormat](WatchFaceFormat)** - Demos the new Watch Face Format which allows quick development of performant watch
+    faces in XML [Guide](https://developer.android.com/training/wearables/wff)
+
+* **[WatchFaceKotlin](WatchFaceKotlin)** (Kotlin) - Demos the AndroidX Watch Face APIs which provide their own storage mechanism for watch face preference values.
 
 * **[WearAccessibilityApp](WearAccessibilityApp)** (Java) - Sample demonstrates how to include accessibility support for your wearable app. [Guide](https://developer.android.com/guide/topics/ui/accessibility)
 
