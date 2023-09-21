@@ -191,6 +191,7 @@ class MainActivity : FragmentActivity() {
         Log.d(TAG, "refreshDisplayAndSetNextUpdate()")
         loadDataAndUpdateScreen()
         val instant = Instant.now(clock)
+        Log.d(TAG, "isAmbient = ${ambientCallbackState.isAmbient}")
         if (ambientCallbackState.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
             if (Build.VERSION.SDK_INT < 33) {
@@ -201,7 +202,6 @@ class MainActivity : FragmentActivity() {
                 )
             }
         } else {
-            Log.d(TAG, "!isAmbient")
             val delay = instant.getDelayToNextInstantWithInterval(ACTIVE_INTERVAL)
             activeUpdateJob.cancel()
             activeUpdateJob = lifecycleScope.launch {
