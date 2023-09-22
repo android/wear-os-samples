@@ -2,12 +2,16 @@
   <configuration default="false" name="Messaging Tile" type="AndroidTileConfigurationType" factoryName="AndroidTileConfigurationFactory" show_console_on_std_err="false" show_console_on_std_out="false">
     <module name="SampleTiles.app" />
     <option name="allowRunningInParallel" value="false" />
-    <option name="componentName" value="com.example.wear.tiles.messaging.MessagingTileService" />
-    <option name="installFlags" value="" />
     <option name="projectPathOnTarget" />
     <option name="selectedOptions">
       <list />
     </option>
+    <LaunchOptions>
+      <option name="componentName" value="com.example.wear.tiles.messaging.MessagingTileService" />
+    </LaunchOptions>
+    <DeployOptions>
+      <option name="pmInstallFlags" value="" />
+    </DeployOptions>
     <method v="2">
       <option name="Make" enabled="true" />
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
