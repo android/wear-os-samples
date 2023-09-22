@@ -41,7 +41,7 @@ private object ColorPalette {
     val darkBlue = Color(0xFF202124)
 }
 
-private fun Colors.toTileColors() = androidx.wear.tiles.material.Colors(
+private fun Colors.toTileColors() = androidx.wear.protolayout.material.Colors(
     /* primary = */ primary.toArgb(),
     /* onPrimary = */ onPrimary.toArgb(),
     /* surface = */ surface.toArgb(),

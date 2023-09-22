@@ -16,14 +16,14 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.tiles.ColorBuilders
-import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.tiles.ModifiersBuilders.Clickable
-import androidx.wear.tiles.material.ChipColors
-import androidx.wear.tiles.material.CompactChip
-import androidx.wear.tiles.material.Text
-import androidx.wear.tiles.material.Typography
-import androidx.wear.tiles.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.ColorBuilders
+import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.material.ChipColors
+import androidx.wear.protolayout.material.CompactChip
+import androidx.wear.protolayout.material.Text
+import androidx.wear.protolayout.material.Typography
+import androidx.wear.protolayout.material.layouts.PrimaryLayout
 
 object HeartRate {
 

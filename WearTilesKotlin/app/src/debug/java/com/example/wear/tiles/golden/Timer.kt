@@ -16,16 +16,16 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.tiles.ColorBuilders
-import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.tiles.ModifiersBuilders.Clickable
-import androidx.wear.tiles.material.Button
-import androidx.wear.tiles.material.ButtonColors
-import androidx.wear.tiles.material.ChipColors
-import androidx.wear.tiles.material.CompactChip
-import androidx.wear.tiles.material.Typography
-import androidx.wear.tiles.material.layouts.MultiButtonLayout
-import androidx.wear.tiles.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.ColorBuilders
+import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.material.Button
+import androidx.wear.protolayout.material.ButtonColors
+import androidx.wear.protolayout.material.ChipColors
+import androidx.wear.protolayout.material.CompactChip
+import androidx.wear.protolayout.material.Typography
+import androidx.wear.protolayout.material.layouts.MultiButtonLayout
+import androidx.wear.protolayout.material.layouts.PrimaryLayout
 
 object Timer {
 
