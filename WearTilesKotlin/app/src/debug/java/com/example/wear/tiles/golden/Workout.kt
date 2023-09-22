@@ -16,18 +16,19 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.tiles.ColorBuilders
-import androidx.wear.tiles.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.tiles.DimensionBuilders.ExpandedDimensionProp
-import androidx.wear.tiles.ModifiersBuilders.Clickable
-import androidx.wear.tiles.material.Button
-import androidx.wear.tiles.material.ChipColors
-import androidx.wear.tiles.material.CompactChip
-import androidx.wear.tiles.material.Text
-import androidx.wear.tiles.material.TitleChip
-import androidx.wear.tiles.material.Typography
-import androidx.wear.tiles.material.layouts.MultiButtonLayout
-import androidx.wear.tiles.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.ColorBuilders
+import androidx.wear.protolayout.DeviceParametersBuilders
+import androidx.wear.protolayout.DimensionBuilders
+import androidx.wear.protolayout.ModifiersBuilders
+import androidx.wear.protolayout.material.Button
+import androidx.wear.protolayout.material.ChipColors
+import androidx.wear.protolayout.material.CompactChip
+import androidx.wear.protolayout.material.Text
+import androidx.wear.protolayout.material.TitleChip
+import androidx.wear.protolayout.material.Typography
+import androidx.wear.protolayout.material.layouts.MultiButtonLayout
+import androidx.wear.protolayout.material.layouts.PrimaryLayout
+
 
 object Workout {
     const val BUTTON_1_ICON_ID = "workout 1"
@@ -36,12 +37,12 @@ object Workout {
 
     fun buttonsLayout(
         context: Context,
-        deviceParameters: DeviceParameters,
+        deviceParameters: DeviceParametersBuilders.DeviceParameters,
         weekSummary: String,
-        button1Clickable: Clickable,
-        button2Clickable: Clickable,
-        button3Clickable: Clickable,
-        chipClickable: Clickable
+        button1Clickable: ModifiersBuilders.Clickable,
+        button2Clickable: ModifiersBuilders.Clickable,
+        button3Clickable: ModifiersBuilders.Clickable,
+        chipClickable: ModifiersBuilders.Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setPrimaryLabelTextContent(
@@ -80,8 +81,8 @@ object Workout {
 
     fun largeChipLayout(
         context: Context,
-        deviceParameters: DeviceParameters,
-        clickable: Clickable,
+        deviceParameters: DeviceParametersBuilders.DeviceParameters,
+        clickable: ModifiersBuilders.Clickable,
         lastWorkoutSummary: String
     ) = PrimaryLayout.Builder(deviceParameters)
         .setPrimaryLabelTextContent(
@@ -95,7 +96,7 @@ object Workout {
                 // TitleChip/Chip's default width == device width minus some padding
                 // Since PrimaryLayout's content slot already has margin, this leads to clipping
                 // unless we override the width to use the available space
-                .setWidth(ExpandedDimensionProp.Builder().build())
+                .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                 .setChipColors(
                     ChipColors(
                         /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),

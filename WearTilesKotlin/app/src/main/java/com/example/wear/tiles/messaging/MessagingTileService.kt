@@ -17,9 +17,9 @@ package com.example.wear.tiles.messaging
 
 import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
+import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
-import androidx.wear.tiles.ResourceBuilders.Resources
 import androidx.wear.tiles.TileBuilders.Tile
 import coil.Coil
 import coil.ImageLoader
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.stateIn
 /**
  * Creates a Messaging tile, showing up to 4 contacts, an icon button and compact chip.
  *
- * It extends [CoroutinesTileService], a Coroutine-friendly wrapper around
+ * It extends [SuspendingTileService], a Coroutine-friendly wrapper around
  * [androidx.wear.tiles.TileService], and implements [tileRequest] and [resourcesRequest].
  *
  * The main function, [tileRequest], is triggered when the system calls for a tile. Resources are
@@ -105,7 +105,7 @@ class MessagingTileService : SuspendingTileService() {
      * Downloads bitmaps from the network and passes them to [MessagingTileRenderer] to add as
      * image resources (alongside any local resources).
      */
-    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
+    override suspend fun resourcesRequest(requestParams: ResourcesRequest): ResourceBuilders.Resources {
         val avatars = fetchAvatarsFromNetwork(requestParams)
         return renderer.produceRequestedResources(avatars, requestParams)
     }
