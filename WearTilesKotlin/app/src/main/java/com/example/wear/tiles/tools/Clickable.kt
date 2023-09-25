@@ -15,8 +15,8 @@
  */
 package com.example.wear.tiles.tools
 
-import androidx.wear.tiles.ActionBuilders
-import androidx.wear.tiles.ModifiersBuilders
+import androidx.wear.protolayout.ActionBuilders
+import androidx.wear.protolayout.ModifiersBuilders
 
 val emptyClickable = ModifiersBuilders.Clickable.Builder()
     .setOnClick(ActionBuilders.LoadAction.Builder().build())
