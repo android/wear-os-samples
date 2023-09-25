@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.wear.alwayson
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -69,6 +70,7 @@ const val AMBIENT_UPDATE_ACTION = "com.example.android.wearable.wear.alwayson.ac
  */
 private val ambientUpdateIntent = Intent(AMBIENT_UPDATE_ACTION)
 
+@SuppressLint("ScheduleExactAlarm")
 @Composable
 fun AlwaysOnApp(
     clock: Clock,
@@ -173,6 +175,10 @@ fun AlwaysOnApp(
                     val triggerTime = currentInstant.getNextInstantWithInterval(
                         AMBIENT_INTERVAL
                     )
+                    // setExact() should *not* be used in production code. In a real application,
+                    // updates would be triggered by an external event. Since this is not available
+                    // to this sample, we use setExact() instead. (set() is insufficient, since it
+                    // does not allow ambient updates.)
                     ambientUpdateAlarmManager.setExact(
                         AlarmManager.RTC_WAKEUP,
                         triggerTime.toEpochMilli(),
