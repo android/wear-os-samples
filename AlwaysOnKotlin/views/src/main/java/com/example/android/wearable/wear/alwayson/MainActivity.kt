@@ -194,11 +194,15 @@ class MainActivity : FragmentActivity() {
         if (ambientCallbackState.isAmbient) {
             val triggerTime = instant.getNextInstantWithInterval(AMBIENT_INTERVAL)
             if (Build.VERSION.SDK_INT < 33) {
-                ambientUpdateAlarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    triggerTime.toEpochMilli(),
-                    ambientUpdatePendingIntent
-                )
+                try {
+                    ambientUpdateAlarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime.toEpochMilli(),
+                        ambientUpdatePendingIntent
+                    )
+                } catch (_: SecurityException) {
+                    Log.d(TAG, "SecurityException when calling setExact(), screen will not be refreshed")
+                }
             }
         } else {
             Log.d(TAG, "!isAmbient")
