@@ -201,7 +201,10 @@ class MainActivity : FragmentActivity() {
                         ambientUpdatePendingIntent
                     )
                 } catch (_: SecurityException) {
-                    Log.d(TAG, "SecurityException when calling setExact(), screen will not be refreshed")
+                    Log.d(
+                        TAG,
+                        "SecurityException when calling setExact(), screen will not be refreshed"
+                    )
                 }
             }
         } else {
