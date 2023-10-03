@@ -165,9 +165,9 @@ private class GoogleSignInContract(
             Log.w(
                 "GoogleSignInContract",
                 "Sign in failed: code=${
-                exception.statusCode
+                    exception.statusCode
                 }, message=${
-                GoogleSignInStatusCodes.getStatusCodeString(exception.statusCode)
+                    GoogleSignInStatusCodes.getStatusCodeString(exception.statusCode)
                 }"
             )
             null

@@ -56,8 +56,10 @@ object HeartRate {
             CompactChip.Builder(context, "Measure", clickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.LightRed),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.LightRed),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Black)
                     )
                 )
                 .build()

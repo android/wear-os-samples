@@ -51,12 +51,12 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
             complication = Complication.RANGED_VALUE,
-            complicationInstanceId = request.complicationInstanceId
+            complicationInstanceId = request.complicationInstanceId,
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
                 context = this,
-                args = args
+                args = args,
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
@@ -64,19 +64,19 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
 
         return getComplicationData(
             tapAction = complicationTogglePendingIntent,
-            case = case
+            case = case,
         )
     }
 
     override fun getPreviewData(type: ComplicationType): ComplicationData? =
         getComplicationData(
             tapAction = null,
-            case = Case.TEXT_WITH_ICON
+            case = Case.TEXT_WITH_ICON,
         )
 
     private fun getComplicationData(
         tapAction: PendingIntent?,
-        case: Case
+        case: Case,
     ): ComplicationData {
         val text: ComplicationText?
         val monochromaticImage: MonochromaticImage?
@@ -91,54 +91,54 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
         when (case) {
             Case.TEXT_ONLY -> {
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_only)
+                    text = getText(R.string.short_text_only),
                 ).build()
                 monochromaticImage = null
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_only_content_description
+                    R.string.ranged_value_text_only_content_description,
                 )
             }
             Case.TEXT_WITH_ICON -> {
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_icon)
+                    text = getText(R.string.short_text_with_icon),
                 ).build()
                 monochromaticImage = MonochromaticImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_battery)
+                    image = Icon.createWithResource(this, R.drawable.ic_battery),
                 )
                     .setAmbientImage(
                         ambientImage = Icon.createWithResource(
                             this,
-                            R.drawable.ic_battery_burn_protect
-                        )
+                            R.drawable.ic_battery_burn_protect,
+                        ),
                     )
                     .build()
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_with_icon_content_description
+                    R.string.ranged_value_text_with_icon_content_description,
                 )
             }
             Case.TEXT_WITH_TITLE -> {
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_title)
+                    text = getText(R.string.short_text_with_title),
                 ).build()
                 monochromaticImage = null
                 title = PlainComplicationText.Builder(
-                    text = getText(R.string.short_title)
+                    text = getText(R.string.short_title),
                 ).build()
 
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_with_title_content_description
+                    R.string.ranged_value_text_with_title_content_description,
                 )
             }
             Case.ICON_ONLY -> {
                 text = null
                 monochromaticImage = MonochromaticImage.Builder(
-                    image = Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
+                    image = Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24),
                 ).build()
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_icon_only_content_description
+                    R.string.ranged_value_icon_only_content_description,
                 )
             }
         }
@@ -151,8 +151,8 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 value,
                 percentage,
                 minValue,
-                maxValue
-            )
+                maxValue,
+            ),
         )
             .build()
 
@@ -160,7 +160,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
             value = value,
             min = minValue,
             max = maxValue,
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
         )
             .setText(text)
             .setMonochromaticImage(monochromaticImage)
@@ -171,12 +171,13 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
 
     private enum class Case(
         val minValue: Float,
-        val maxValue: Float
+        val maxValue: Float,
     ) {
         TEXT_ONLY(0f, 100f),
         TEXT_WITH_ICON(-20f, 20f),
         TEXT_WITH_TITLE(57.5f, 824.2f),
-        ICON_ONLY(10_045f, 100_000f);
+        ICON_ONLY(10_045f, 100_000f),
+        ;
 
         init {
             require(minValue < maxValue) { "Minimum value was greater than maximum value!" }

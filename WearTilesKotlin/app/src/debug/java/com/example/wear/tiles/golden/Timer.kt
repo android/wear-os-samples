@@ -52,8 +52,10 @@ object Timer {
             CompactChip.Builder(context, "New", clickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkYellow),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.DarkYellow),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.White)
                     )
                 )
                 .build()
@@ -65,8 +67,10 @@ object Timer {
             .setTextContent(timer.minutes, Typography.TYPOGRAPHY_TITLE3)
             .setButtonColors(
                 ButtonColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                    /*backgroundColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.Yellow),
+                    /*contentColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                 )
             )
             .build()

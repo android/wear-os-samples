@@ -41,7 +41,7 @@ data class ComplicationToggleArgs(
      * The system-defined key for the instance of a provided complication.
      * (it's entirely possible for the same complication to be used multiple times)
      */
-    val complicationInstanceId: Int
+    val complicationInstanceId: Int,
 ) : Parcelable
 
 /**

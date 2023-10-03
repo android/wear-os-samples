@@ -5,7 +5,7 @@ androidx-wear-tooling-preview = "0"
 compose = "1.5.2"
 compose-compiler = "1.4.7"
 horologist = "0.5.7"
-ktlint = "0.46.1"
+ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.8.21"
 org-jetbrains-kotlinx = "1.7.3"
 
@@ -25,4 +25,4 @@ kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.18.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.22.0"

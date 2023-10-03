@@ -49,60 +49,60 @@ class IconDataSourceService : SuspendingComplicationDataSourceService() {
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
             complication = Complication.ICON,
-            complicationInstanceId = request.complicationInstanceId
+            complicationInstanceId = request.complicationInstanceId,
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
                 context = this,
-                args = args
+                args = args,
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this@IconDataSourceService)
         val case = Case.values()[state.mod(Case.values().size)]
         return getComplicationData(
             tapAction = complicationTogglePendingIntent,
-            case = case
+            case = case,
         )
     }
 
     override fun getPreviewData(type: ComplicationType): ComplicationData =
         getComplicationData(
             tapAction = null,
-            case = Case.FACE
+            case = Case.FACE,
         )
 
     private fun getComplicationData(
         tapAction: PendingIntent?,
-        case: Case
+        case: Case,
     ): ComplicationData =
         when (case) {
             Case.FACE -> MonochromaticImageComplicationData.Builder(
                 monochromaticImage = MonochromaticImage.Builder(
-                    Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24)
+                    Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24),
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.icon_face_content_description)
-                ).build()
+                    text = getText(R.string.icon_face_content_description),
+                ).build(),
             )
             Case.BATTERY -> MonochromaticImageComplicationData.Builder(
                 monochromaticImage = MonochromaticImage.Builder(
-                    Icon.createWithResource(this, R.drawable.ic_battery)
+                    Icon.createWithResource(this, R.drawable.ic_battery),
                 )
                     .setAmbientImage(
-                        Icon.createWithResource(this, R.drawable.ic_battery_burn_protect)
+                        Icon.createWithResource(this, R.drawable.ic_battery_burn_protect),
                     )
                     .build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.icon_battery_content_description)
-                ).build()
+                    text = getText(R.string.icon_battery_content_description),
+                ).build(),
             )
             Case.EVENT -> MonochromaticImageComplicationData.Builder(
                 monochromaticImage = MonochromaticImage.Builder(
-                    Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24)
+                    Icon.createWithResource(this, R.drawable.ic_event_vd_theme_24),
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.icon_event_content_description)
-                ).build()
+                    text = getText(R.string.icon_event_content_description),
+                ).build(),
             )
         }
             .setTapAction(tapAction)
