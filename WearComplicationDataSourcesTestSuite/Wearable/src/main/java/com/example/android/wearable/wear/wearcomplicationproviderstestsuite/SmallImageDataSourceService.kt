@@ -49,53 +49,53 @@ class SmallImageDataSourceService : SuspendingComplicationDataSourceService() {
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
             complication = Complication.SMALL_IMAGE,
-            complicationInstanceId = request.complicationInstanceId
+            complicationInstanceId = request.complicationInstanceId,
         )
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
                 context = this,
-                args = args
+                args = args,
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
         val case = Case.values()[state.mod(Case.values().size)]
         return getComplicationData(
             tapAction = complicationTogglePendingIntent,
-            case = case
+            case = case,
         )
     }
 
     override fun getPreviewData(type: ComplicationType): ComplicationData =
         getComplicationData(
             tapAction = null,
-            case = Case.PHOTO
+            case = Case.PHOTO,
         )
 
     private fun getComplicationData(
         tapAction: PendingIntent?,
-        case: Case
+        case: Case,
     ): ComplicationData =
         when (case) {
             Case.PHOTO -> SmallImageComplicationData.Builder(
                 // An image using IMAGE_STYLE_PHOTO may be cropped to fill the space given to it.
                 smallImage = SmallImage.Builder(
                     image = Icon.createWithResource(this, R.drawable.aquarium),
-                    type = SmallImageType.PHOTO
+                    type = SmallImageType.PHOTO,
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.small_image_photo_content_description)
-                ).build()
+                    text = getText(R.string.small_image_photo_content_description),
+                ).build(),
             )
             Case.ICON -> SmallImageComplicationData.Builder(
                 // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
                 // space given to it.
                 smallImage = SmallImage.Builder(
                     image = Icon.createWithResource(this, R.drawable.ic_launcher),
-                    type = SmallImageType.ICON
+                    type = SmallImageType.ICON,
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.small_image_icon_content_description)
-                ).build()
+                    text = getText(R.string.small_image_icon_content_description),
+                ).build(),
             )
         }
             .setTapAction(tapAction)

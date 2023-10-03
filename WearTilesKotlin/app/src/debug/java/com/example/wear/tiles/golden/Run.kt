@@ -50,8 +50,10 @@ object Run {
                 .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Blue),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Blue),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Black)
                     )
                 )
                 .build()
@@ -60,8 +62,10 @@ object Run {
             CompactChip.Builder(context, "More", moreChipClickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkGray),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.DarkGray),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.White)
                     )
                 )
                 .build()

@@ -47,8 +47,10 @@ class MessagingTileRenderer(context: Context) :
         // the Search image resource in both of these cases.
         if (resourceIds.isEmpty() || resourceIds.contains(ID_IC_SEARCH)) {
             addIdToImageMapping(
-                /* id = */ ID_IC_SEARCH,
-                /* image = */ drawableResToImageResource(R.drawable.ic_search_24)
+                /* id = */
+                ID_IC_SEARCH,
+                /* image = */
+                drawableResToImageResource(R.drawable.ic_search_24)
             )
         }
 
@@ -57,8 +59,10 @@ class MessagingTileRenderer(context: Context) :
         // filtered so it only contains bitmaps for the requested resources.
         resourceState.forEach { (contact, bitmap) ->
             addIdToImageMapping(
-                /* id = */ "$ID_CONTACT_PREFIX${contact.id}",
-                /* image = */ bitmapToImageResource(bitmap)
+                /* id = */
+                "$ID_CONTACT_PREFIX${contact.id}",
+                /* image = */
+                bitmapToImageResource(bitmap)
             )
         }
     }

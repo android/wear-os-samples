@@ -55,6 +55,8 @@ object Goal {
 }
 
 private fun blueOnTranslucentWhite() = ProgressIndicatorColors(
-    /* indicatorColor = */ ColorBuilders.argb(GoldenTilesColors.Blue),
-    /* trackColor = */ ColorBuilders.argb(GoldenTilesColors.White10Pc)
+    /* indicatorColor = */
+    ColorBuilders.argb(GoldenTilesColors.Blue),
+    /* trackColor = */
+    ColorBuilders.argb(GoldenTilesColors.White10Pc)
 )

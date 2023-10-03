@@ -42,8 +42,12 @@ private object ColorPalette {
 }
 
 private fun Colors.toTileColors() = androidx.wear.protolayout.material.Colors(
-    /* primary = */ primary.toArgb(),
-    /* onPrimary = */ onPrimary.toArgb(),
-    /* surface = */ surface.toArgb(),
-    /* onSurface = */ onSurface.toArgb()
+    /* primary = */
+    primary.toArgb(),
+    /* onPrimary = */
+    onPrimary.toArgb(),
+    /* surface = */
+    surface.toArgb(),
+    /* onSurface = */
+    onSurface.toArgb()
 )

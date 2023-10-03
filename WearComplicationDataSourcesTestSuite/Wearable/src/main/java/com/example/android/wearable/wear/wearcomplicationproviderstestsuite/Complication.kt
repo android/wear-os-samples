@@ -23,12 +23,12 @@ enum class Complication(
     /**
      * A stable key that can be used to distinguish between this app's complications.
      */
-    val key: String
+    val key: String,
 ) {
     ICON("Icon"),
     LARGE_IMAGE("LargeImage"),
     LONG_TEXT("LongText"),
     RANGED_VALUE("RangedValue"),
     SHORT_TEXT("ShortText"),
-    SMALL_IMAGE("SmallImage")
+    SMALL_IMAGE("SmallImage"),
 }

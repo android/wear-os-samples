@@ -105,7 +105,9 @@ class MessagingTileService : SuspendingTileService() {
      * Downloads bitmaps from the network and passes them to [MessagingTileRenderer] to add as
      * image resources (alongside any local resources).
      */
-    override suspend fun resourcesRequest(requestParams: ResourcesRequest): ResourceBuilders.Resources {
+    override suspend fun resourcesRequest(
+        requestParams: ResourcesRequest
+    ): ResourceBuilders.Resources {
         val avatars = fetchAvatarsFromNetwork(requestParams)
         return renderer.produceRequestedResources(avatars, requestParams)
     }
