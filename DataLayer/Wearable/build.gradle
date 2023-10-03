@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
 
     namespace "com.example.android.wearable.datalayer"
 
@@ -30,7 +30,7 @@ android {
         versionName "1.0"
 
         minSdk 26
-        targetSdk 30
+        targetSdk 33
     }
 
     lintOptions {
