@@ -160,6 +160,7 @@ fun AlwaysOnApp(
                     }
                 }
             }
+
             AmbientState.Interactive -> Unit
         }
 
@@ -185,7 +186,10 @@ fun AlwaysOnApp(
                     } catch (_: SecurityException) {
                         Log.d(
                             TAG,
-                            "SecurityException when calling setExact(), screen will not be refreshed"
+                            arrayOf(
+                                "SecurityException when calling setExact(),",
+                                "screen will not be refreshed"
+                            ).joinToString(" ")
                         )
                     }
                 }
