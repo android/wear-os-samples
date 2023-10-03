@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -62,6 +63,8 @@ val ACTIVE_INTERVAL: Duration = Duration.ofSeconds(1)
 val AMBIENT_INTERVAL: Duration = Duration.ofSeconds(10)
 
 const val AMBIENT_UPDATE_ACTION = "com.example.android.wearable.wear.alwayson.action.AMBIENT_UPDATE"
+
+const val TAG = "AlwaysOnApp"
 
 /**
  * Create a PendingIntent which we'll give to the AlarmManager to send ambient mode updates
@@ -173,12 +176,20 @@ fun AlwaysOnApp(
                     val triggerTime = currentInstant.getNextInstantWithInterval(
                         AMBIENT_INTERVAL
                     )
-                    ambientUpdateAlarmManager.setExact(
-                        AlarmManager.RTC_WAKEUP,
-                        triggerTime.toEpochMilli(),
-                        ambientUpdatePendingIntent
-                    )
+                    try {
+                        ambientUpdateAlarmManager.setExact(
+                            AlarmManager.RTC_WAKEUP,
+                            triggerTime.toEpochMilli(),
+                            ambientUpdatePendingIntent
+                        )
+                    } catch (_: SecurityException) {
+                        Log.d(
+                            TAG,
+                            "SecurityException when calling setExact(), screen will not be refreshed"
+                        )
+                    }
                 }
+
                 AmbientState.Interactive -> {
                     val delay = currentInstant.getDelayToNextInstantWithInterval(
                         ACTIVE_INTERVAL
