@@ -30,7 +30,7 @@ android {
         versionName "1.0"
 
         minSdk 26
-        targetSdk 30
+        targetSdk 33
     }
 
     lintOptions {
