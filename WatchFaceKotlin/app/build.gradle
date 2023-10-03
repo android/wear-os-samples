@@ -27,7 +27,7 @@ android {
     defaultConfig {
         applicationId "com.example.android.wearable.alpha"
         minSdk 28
-        targetSdk 30
+        targetSdk 33
         versionCode 1
         versionName "1.0"
     }

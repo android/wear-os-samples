@@ -23,7 +23,6 @@
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.DeviceDefault">
