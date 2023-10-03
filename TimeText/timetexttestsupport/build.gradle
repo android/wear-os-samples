@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdkVersion 34
 
     namespace 'com.example.android.wearable.timetexttextsupport'
 

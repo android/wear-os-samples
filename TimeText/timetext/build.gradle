@@ -20,13 +20,13 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdkVersion 34
 
     namespace 'com.example.android.wearable.timetext'
 
     defaultConfig {
         minSdk 23
-        targetSdk 33
+        targetSdk 30
     }
 
     lintOptions {
