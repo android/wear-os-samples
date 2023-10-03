@@ -54,8 +54,10 @@ object Media {
             CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Pink),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Pink),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                     )
                 )
                 .build()
@@ -76,8 +78,10 @@ object Media {
             .setPrimaryLabelContent(playlist.label)
             .setChipColors(
                 ChipColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkPink),
-                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                    /*backgroundColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.DarkPink),
+                    /*contentColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.White)
                 )
             )
             .build()

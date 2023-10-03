@@ -69,7 +69,9 @@ fun CustomTimeText(
                         style = CurvedTextStyle(textStyle)
                     )
                 }
-            } else null,
+            } else {
+                null
+            },
             startLinearContent = if (visibleText) {
                 {
                     Text(
@@ -77,7 +79,9 @@ fun CustomTimeText(
                         style = textStyle
                     )
                 }
-            } else null,
+            } else {
+                null
+            },
             // Trailing text is against Wear UX guidance, used here just for development.
             endCurvedContent = if (showWarning) {
                 {
@@ -87,7 +91,9 @@ fun CustomTimeText(
                         color = Color.Red
                     )
                 }
-            } else null,
+            } else {
+                null
+            },
             endLinearContent = if (showWarning) {
                 {
                     Text(
@@ -96,7 +102,9 @@ fun CustomTimeText(
                         color = Color.Red
                     )
                 }
-            } else null
+            } else {
+                null
+            }
         )
     }
 }

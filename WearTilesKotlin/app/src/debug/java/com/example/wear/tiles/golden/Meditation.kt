@@ -59,8 +59,10 @@ object Meditation {
             CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /* backgroundColor = */ ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                        /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                        /* backgroundColor = */
+                        ColorBuilders.argb(GoldenTilesColors.LightPurple),
+                        /* contentColor = */
+                        ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                     )
                 )
                 .build()
@@ -81,10 +83,14 @@ object Meditation {
             .setPrimaryLabelContent(session.label)
             .setChipColors(
                 ChipColors(
-                    /* backgroundColor = */ ColorBuilders.argb(GoldenTilesColors.DarkPurple),
-                    /* iconColor = */ ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                    /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.White),
-                    /* secondaryContentColor = */ ColorBuilders.argb(GoldenTilesColors.White)
+                    /* backgroundColor = */
+                    ColorBuilders.argb(GoldenTilesColors.DarkPurple),
+                    /* iconColor = */
+                    ColorBuilders.argb(GoldenTilesColors.LightPurple),
+                    /* contentColor = */
+                    ColorBuilders.argb(GoldenTilesColors.White),
+                    /* secondaryContentColor = */
+                    ColorBuilders.argb(GoldenTilesColors.White)
                 )
             )
             .build()
@@ -115,8 +121,10 @@ object Meditation {
             CompactChip.Builder(context, "New", clickable, deviceParameters)
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkPurple),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.DarkPurple),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.White)
                     )
                 )
                 .build()
@@ -128,8 +136,10 @@ object Meditation {
             .setTextContent(timer.minutes.toString(), Typography.TYPOGRAPHY_TITLE3)
             .setButtonColors(
                 ButtonColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                    /*backgroundColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.LightPurple),
+                    /*contentColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                 )
             )
             .build()

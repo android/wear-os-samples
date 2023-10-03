@@ -35,4 +35,3 @@ public annotation class WearSmallRoundDevicePreview
     group = "Devices - Large Round"
 )
 public annotation class WearLargeRoundDevicePreview
-
