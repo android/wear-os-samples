@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
-    name = "ComplicationTestSuite"
+    name = "ComplicationTestSuite",
 )
 
 /**

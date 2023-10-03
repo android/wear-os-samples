@@ -47,7 +47,7 @@ class LargeImageDataSourceService : SuspendingComplicationDataSourceService() {
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
             complication = Complication.LARGE_IMAGE,
-            complicationInstanceId = request.complicationInstanceId
+            complicationInstanceId = request.complicationInstanceId,
         )
 
         // On many watch faces a large image complication might not respond to taps as the
@@ -57,39 +57,39 @@ class LargeImageDataSourceService : SuspendingComplicationDataSourceService() {
         val complicationTogglePendingIntent =
             ComplicationToggleReceiver.getComplicationToggleIntent(
                 context = this,
-                args = args
+                args = args,
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
         val case = Case.values()[state.mod(Case.values().size)]
         return getComplicationData(
             tapAction = complicationTogglePendingIntent,
-            case = case
+            case = case,
         )
     }
 
     override fun getPreviewData(type: ComplicationType): ComplicationData? =
         getComplicationData(
             tapAction = null,
-            case = Case.AQUARIUM
+            case = Case.AQUARIUM,
         )
 
     private fun getComplicationData(
         tapAction: PendingIntent?,
-        case: Case
+        case: Case,
     ): ComplicationData =
         when (case) {
             Case.AQUARIUM -> PhotoImageComplicationData.Builder(
                 photoImage = Icon.createWithResource(this, R.drawable.aquarium),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.photo_image_aquarium_content_description)
-                ).build()
+                    text = getText(R.string.photo_image_aquarium_content_description),
+                ).build(),
             )
             Case.OUTDOORS -> PhotoImageComplicationData.Builder(
                 photoImage = Icon.createWithResource(this, R.drawable.outdoors),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.photo_image_outdoors_content_description)
-                ).build()
+                    text = getText(R.string.photo_image_outdoors_content_description),
+                ).build(),
             )
         }
             .setTapAction(tapAction)

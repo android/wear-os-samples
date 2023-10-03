@@ -29,7 +29,6 @@ import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
 
-
 object Workout {
     const val BUTTON_1_ICON_ID = "workout 1"
     const val BUTTON_2_ICON_ID = "workout 2"
@@ -71,8 +70,10 @@ object Workout {
                 CompactChip.Builder(context, "More", chipClickable, deviceParameters)
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.BlueGray),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White)
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.BlueGray),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.White)
                         )
                     )
                     .build()
@@ -99,8 +100,10 @@ object Workout {
                 .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Yellow),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Black)
                     )
                 )
                 .build()

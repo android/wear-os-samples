@@ -27,7 +27,7 @@ import androidx.wear.watchface.complications.datasource.ComplicationRequest
 class NoDataDataSourceService : ComplicationDataSourceService() {
     override fun onComplicationRequest(
         request: ComplicationRequest,
-        listener: ComplicationRequestListener
+        listener: ComplicationRequestListener,
     ) {
         listener.onComplicationData(NoDataComplicationData())
     }

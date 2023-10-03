@@ -254,16 +254,20 @@ class MainActivity : FragmentActivity() {
             }
         )
         binding.updateRate.text =
-            if (ambientCallbackState.isAmbient && Build.VERSION.SDK_INT >= 33) getString(
-                R.string.disabled_label
-            ) else getString(
-                R.string.update_rate_label,
-                if (ambientCallbackState.isAmbient) {
-                    AMBIENT_INTERVAL.seconds
-                } else {
-                    ACTIVE_INTERVAL.seconds
-                }
-            )
+            if (ambientCallbackState.isAmbient && Build.VERSION.SDK_INT >= 33) {
+                getString(
+                    R.string.disabled_label
+                )
+            } else {
+                getString(
+                    R.string.update_rate_label,
+                    if (ambientCallbackState.isAmbient) {
+                        AMBIENT_INTERVAL.seconds
+                    } else {
+                        ACTIVE_INTERVAL.seconds
+                    }
+                )
+            }
         binding.drawCount.text = getString(R.string.draw_count_label, drawCount)
     }
 

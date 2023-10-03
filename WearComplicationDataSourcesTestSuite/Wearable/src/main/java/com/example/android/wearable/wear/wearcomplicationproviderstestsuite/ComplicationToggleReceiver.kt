@@ -44,7 +44,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
                 ComplicationDataSourceUpdateRequester
                     .create(
                         context = context,
-                        complicationDataSourceComponent = args.providerComponent
+                        complicationDataSourceComponent = args.providerComponent,
                     )
                     .requestUpdate(args.complicationInstanceId)
             } finally {
@@ -63,7 +63,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
          */
         fun getComplicationToggleIntent(
             context: Context,
-            args: ComplicationToggleArgs
+            args: ComplicationToggleArgs,
         ): PendingIntent {
             val intent = Intent(context, ComplicationToggleReceiver::class.java).apply {
                 putExtra(EXTRA_ARGS, args)
@@ -75,7 +75,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
                 context,
                 args.complicationInstanceId,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -83,7 +83,7 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
          * Returns the [ComplicationToggleArgs] from the [Intent] sent to the [ComplicationToggleArgs].
          */
         private fun Intent.getArgs(): ComplicationToggleArgs = requireNotNull(
-            extras?.getParcelable(EXTRA_ARGS)
+            extras?.getParcelable(EXTRA_ARGS),
         )
     }
 }

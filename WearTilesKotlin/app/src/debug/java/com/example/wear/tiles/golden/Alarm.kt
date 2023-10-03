@@ -50,8 +50,10 @@ object Alarm {
                 .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                 .setChipColors(
                     ChipColors(
-                        /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                        /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                        /*backgroundColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.Yellow),
+                        /*contentColor=*/
+                        ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                     )
                 )
                 .build()
