@@ -11,7 +11,7 @@ androidx-wear-compose = "1.2.0"
 compose = "1.5.2"
 compose-compiler = "1.4.7"
 horologist = "0.5.7"
-ktlint = "0.46.1"
+ktlint = "0.50.0"
 navigation = "2.7.3"
 org-jetbrains-kotlin = "1.8.21"
 
