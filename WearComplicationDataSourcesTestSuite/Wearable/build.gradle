@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
 
     namespace "com.example.android.wearable.wear.wearcomplicationproviderstestsuite"
 
@@ -29,7 +29,7 @@ android {
         versionCode 1
         versionName "1.0"
         minSdk 26
-        targetSdk 30
+        targetSdk 33
     }
 
     lintOptions {
