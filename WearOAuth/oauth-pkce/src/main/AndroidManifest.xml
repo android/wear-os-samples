@@ -37,6 +37,7 @@
             android:name=".AuthPKCEActivity"
             android:label="wearoauth"
             android:taskAffinity=".main"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
