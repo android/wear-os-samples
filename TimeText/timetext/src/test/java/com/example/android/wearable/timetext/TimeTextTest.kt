@@ -178,7 +178,7 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("422")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("4:22")))
     }
 
     @Test
@@ -193,7 +193,7 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("16:22")))
     }
 
     @Test
@@ -208,11 +208,11 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("16:22")))
 
         Settings.System.putString(application.contentResolver, Settings.System.TIME_12_24, "12")
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("422")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("4:22")))
     }
 
     @Test
@@ -227,12 +227,12 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("16:22")))
 
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"))
         application.sendBroadcast(Intent(Intent.ACTION_TIMEZONE_CHANGED))
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("022")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("00:22")))
     }
 
     @Test
@@ -247,12 +247,12 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("16:22")))
 
         currentInstant += 60_000
         application.sendBroadcast(Intent(Intent.ACTION_TIME_TICK))
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1623")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("16:23")))
     }
 
     @Test
@@ -267,12 +267,12 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("16:22")))
 
         currentInstant += 3_600_000
         application.sendBroadcast(Intent(Intent.ACTION_TIME_CHANGED))
 
-        onView(withId(R.id.timeTextClock)).check(matches(withText("1722")))
+        onView(withId(R.id.timeTextClock)).check(matches(withText("17:22")))
     }
 
     @SuppressLint("CheckResult")
@@ -466,7 +466,7 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("422")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("4:22")))
     }
 
     @Test
@@ -482,7 +482,7 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("16:22")))
     }
 
     @Test
@@ -498,11 +498,11 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("16:22")))
 
         Settings.System.putString(application.contentResolver, Settings.System.TIME_12_24, "12")
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("422")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("4:22")))
     }
 
     @Test
@@ -518,12 +518,12 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("16:22")))
 
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"))
         application.sendBroadcast(Intent(Intent.ACTION_TIMEZONE_CHANGED))
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("022")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("00:22")))
     }
 
     @Test
@@ -539,12 +539,12 @@ class TimeTextTest {
             )
         }
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("1622")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("16:22")))
 
         currentInstant += 60_000
         application.sendBroadcast(Intent(Intent.ACTION_TIME_TICK))
 
-        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("1623")))
+        onView(withId(R.id.timeTextClock)).check(matches(withCurvedText("16:23")))
     }
 
     @Test
