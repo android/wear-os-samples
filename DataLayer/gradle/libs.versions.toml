@@ -4,9 +4,9 @@ androidx-activity = "1.8.0"
 androidx-compose-bom = "2023.10.00"
 androidx-lifecycle = "2.6.2"
 androidx-wear-compose = "1.2.0"
-compose-compiler = "1.4.7"
+compose-compiler = "1.5.3"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.8.21"
+org-jetbrains-kotlin = "1.9.10"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]

@@ -9,11 +9,11 @@ androidx-test-ext = "1.1.5"
 androidx-test-uiautomator = "2.2.0"
 androidx-wear-compose = "1.2.0"
 compose = "1.5.3"
-compose-compiler = "1.4.7"
+compose-compiler = "1.5.3"
 horologist = "0.5.7"
 ktlint = "0.50.0"
 navigation = "2.7.4"
-org-jetbrains-kotlin = "1.8.21"
+org-jetbrains-kotlin = "1.9.10"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
