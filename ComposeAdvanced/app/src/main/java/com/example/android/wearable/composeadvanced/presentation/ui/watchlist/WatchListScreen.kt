@@ -23,11 +23,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
+import androidx.wear.compose.material.Scaffold
+import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.example.android.wearable.composeadvanced.R
+import com.example.android.wearable.composeadvanced.data.WatchLocalDataSource
 import com.example.android.wearable.composeadvanced.data.WatchModel
 import com.example.android.wearable.composeadvanced.presentation.components.WatchAppChip
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
+import com.google.android.horologist.compose.layout.scrollAway
 import com.google.android.horologist.compose.material.ToggleChip
 import com.google.android.horologist.compose.material.ToggleChipToggleControl
 
@@ -86,5 +93,29 @@ fun WatchListScreen(
                 onClickWatch = onClickWatch
             )
         }
+    }
+}
+
+@WearPreviewDevices
+@Composable
+@ExperimentalHorologistApi
+fun WatchListScreenPreview() {
+    val columnState = ScalingLazyColumnDefaults.belowTimeText().create()
+    Scaffold(
+        timeText = {
+            TimeText(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .scrollAway(columnState)
+            )
+        }
+    ) {
+        WatchListScreen(
+            watches = WatchLocalDataSource().watches,
+            columnState = columnState,
+            showVignette = false,
+            onClickVignetteToggle = {},
+            onClickWatch = {}
+        )
     }
 }
