@@ -20,7 +20,7 @@ compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref 
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.10"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
