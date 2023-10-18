@@ -1,8 +1,8 @@
 [versions]
 android-gradle-plugin = "8.1.2"
 androidx-activity = "1.8.0"
-androidx-compose-bom = "2023.10.00"
-androidx-wear-compose = "1.2.0"
+androidx-compose-bom = "2023.10.01"
+androidx-wear-compose = "1.2.1"
 compose-compiler = "1.5.3"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.10"
