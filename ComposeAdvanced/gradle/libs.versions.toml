@@ -1,14 +1,14 @@
 [versions]
 android-gradle-plugin = "8.1.2"
 androidx-activity = "1.8.0"
-androidx-benchmark = "1.1.1"
-androidx-compose-bom = "2023.10.00"
+androidx-benchmark = "1.2.0"
+androidx-compose-bom = "2023.10.01"
 androidx-lifecycle = "2.6.2"
 androidx-test-espresso = "3.5.1"
 androidx-test-ext = "1.1.5"
 androidx-test-uiautomator = "2.2.0"
-androidx-wear-compose = "1.2.0"
-compose = "1.5.3"
+androidx-wear-compose = "1.2.1"
+compose = "1.5.4"
 compose-compiler = "1.5.3"
 horologist = "0.5.8"
 ktlint = "0.50.0"
@@ -32,7 +32,7 @@ androidx-test-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = 
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
 androidx-tracing-ktx = "androidx.tracing:tracing-ktx:1.1.0"
 com-google-maps-compose = "com.google.maps.android:maps-compose:3.1.1"
-com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.1.0"
+com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.2.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 
 # Remove version.ref for compose dependencies below if you want to use Compose BoM and stable releases

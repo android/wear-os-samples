@@ -2,7 +2,7 @@
 android-gradle-plugin = "8.1.2"
 androidx-wear-tiles = "1.2.0"
 androidx-wear-tooling-preview = "0"
-compose = "1.5.3"
+compose = "1.5.4"
 compose-compiler = "1.5.3"
 horologist = "0.5.8"
 ktlint = "0.50.0"
