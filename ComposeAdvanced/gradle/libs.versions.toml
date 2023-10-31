@@ -13,7 +13,7 @@ compose-compiler = "1.5.3"
 horologist = "0.5.9"
 ktlint = "0.50.0"
 navigation = "2.7.4"
-org-jetbrains-kotlin = "1.9.10"
+org-jetbrains-kotlin = "1.9.20"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }

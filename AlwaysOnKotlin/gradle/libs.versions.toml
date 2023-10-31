@@ -8,7 +8,7 @@ compose-compiler = "1.5.3"
 compose-ui-tooling = "1.2.1"
 horologist-compose-layout = "0.5.9"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.10"
+org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
 wearable = "2.9.0"
 

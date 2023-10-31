@@ -6,7 +6,7 @@ compose = "1.5.4"
 compose-compiler = "1.5.3"
 horologist = "0.5.9"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.10"
+org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
