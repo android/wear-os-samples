@@ -22,7 +22,7 @@ com-google-truth = "com.google.truth:truth:1.1.5"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "org-jetbrains-kotlin" }
-org-robolectric = "org.robolectric:robolectric:4.11"
+org-robolectric = "org.robolectric:robolectric:4.11.1"
 test-core-ktx = "androidx.test:core-ktx:1.5.0"
 test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
 test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
