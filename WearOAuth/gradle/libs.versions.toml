@@ -14,7 +14,7 @@ ktlint = "0.50.0"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.3"
+android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.4"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.2"
 android-material = "com.google.android.material:material:1.10.0"
 android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.2"
@@ -26,7 +26,7 @@ androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.2"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.1"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.2"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }

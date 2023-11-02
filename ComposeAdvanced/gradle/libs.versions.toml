@@ -12,7 +12,7 @@ compose = "1.5.4"
 compose-compiler = "1.5.3"
 horologist = "0.5.9"
 ktlint = "0.50.0"
-navigation = "2.7.4"
+navigation = "2.7.5"
 org-jetbrains-kotlin = "1.9.10"
 
 [libraries]
