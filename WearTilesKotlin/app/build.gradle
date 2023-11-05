@@ -65,14 +65,15 @@ dependencies {
     implementation libs.androidx.datastore
 
     implementation libs.androidx.wear.tiles.material
-    implementation libs.androidx.wear.tooling.preview
 
     implementation libs.coil
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.guava
 
-    implementation libs.compose.ui.tooling.preview
-
     implementation libs.horologist.compose.tools
     implementation libs.horologist.tiles
+
+    implementation libs.androidx.wear.tooling.preview
+    implementation libs.compose.ui.tooling.preview
+    debugImplementation libs.androidx.ui.tooling
 }
