@@ -29,6 +29,7 @@ import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.IconSizePreview
+import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
 import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.compose.tools.LayoutElementPreview
@@ -98,6 +99,7 @@ private fun searchLayout(
     .build()
 
 @WearSmallRoundDevicePreview
+@WearLargeRoundDevicePreview
 @Composable
 private fun MessageTilePreview() {
     val context = LocalContext.current
