@@ -7,9 +7,9 @@ androidx-test = "1.4.0"
 androidx-wear-compose = "1.2.1"
 androidx-wear-tiles = "1.1.0"
 androidx-wear-watchface = "1.0.1"
-compose-compiler = "1.5.3"
+compose-compiler = "1.5.4"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.10"
+org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.6.0"
 
 [libraries]
