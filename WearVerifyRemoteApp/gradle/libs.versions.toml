@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.1.2"
+android-gradle-plugin = "8.1.3"
 androidx-activity = "1.8.0"
 androidx-lifecycle = "2.6.2"
 androidx-test = "1.4.0"
@@ -12,12 +12,12 @@ org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.2"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.3"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.2"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.3"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.3.0"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
