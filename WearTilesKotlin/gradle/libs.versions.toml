@@ -3,10 +3,10 @@ android-gradle-plugin = "8.1.2"
 androidx-wear-tiles = "1.2.0"
 androidx-wear-tooling-preview = "0"
 compose = "1.5.4"
-compose-compiler = "1.5.3"
+compose-compiler = "1.5.4"
 horologist = "0.5.9"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.10"
+org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
