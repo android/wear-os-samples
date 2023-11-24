@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFaceInfo>
+    <!-- 
+      Preview is the only required element here 
+    
+      For other elements, see: https://developer.android.com/training/wearables/wff/setup#declare-metadata
+    -->
+    <Preview value="@drawable/preview" />
+
+    <Editable value="true" />
+</WatchFaceInfo>
