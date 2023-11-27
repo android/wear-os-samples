@@ -1,9 +1,9 @@
 [versions]
 android-gradle-plugin = "8.1.3"
-androidx-activity = "1.8.0"
+androidx-activity = "1.8.1"
 androidx-compose-bom = "2023.10.01"
 androidx-lifecycle = "2.6.2"
-androidx-wear-compose = "1.3.0-alpha08"
+androidx-wear-compose = "1.3.0-beta01"
 compose-compiler = "1.5.4"
 compose-ui-tooling = "1.2.1"
 horologist-compose-layout = "0.5.10"
@@ -20,7 +20,7 @@ androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.3.0"
-androidx-window = "androidx.window:window:1.1.0"
+androidx-window = "androidx.window:window:1.2.0"
 com-google-truth = "com.google.truth:truth:1.1.5"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -46,4 +46,4 @@ wearable = { module = "com.google.android.wearable:wearable", version.ref = "wea
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.22.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.23.0"
