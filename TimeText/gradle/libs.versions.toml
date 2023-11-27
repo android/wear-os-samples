@@ -1,6 +1,6 @@
 [versions]
-android-gradle-plugin = "8.1.3"
-androidx-activity = "1.8.0"
+android-gradle-plugin = "8.1.4"
+androidx-activity = "1.8.1"
 androidx-lifecycle = "2.5.1"
 androidx-wear-compose = "1.1.0-rc01"
 androidx-wear-tiles = "1.1.0"
@@ -11,12 +11,12 @@ org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.6.1"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.3"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.4"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.3"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.4"
 androidx-wear = "androidx.wear:wear:1.3.0"
 com-google-truth = "com.google.truth:truth:1.1.5"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
@@ -31,5 +31,5 @@ test-runner = "androidx.test:runner:1.5.2"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.22.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.23.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }

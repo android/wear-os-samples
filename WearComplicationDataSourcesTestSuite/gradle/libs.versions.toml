@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.1.3"
+android-gradle-plugin = "8.1.4"
 androidx-activity = "1.4.0"
 androidx-lifecycle = "2.5.1"
 androidx-test = "1.4.0"
@@ -12,9 +12,9 @@ org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.3"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.4"
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.3"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.4"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-wear-watchface-complications-data-source-ktx = { module = "androidx.wear.watchface:watchface-complications-data-source-ktx", version.ref = "androidx-wear-watchface" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
@@ -25,5 +25,5 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.22.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.23.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
