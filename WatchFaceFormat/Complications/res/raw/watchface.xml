@@ -127,6 +127,12 @@
         slotId="0"
         name="top_complication" displayName="Top"
         supportedTypes="RANGED_VALUE">
+      <!--
+        There is no guarantee that the primaryProvider component name is
+        available on the device. Therefore defaultSystemProvider is mandatory in
+        DefaultSystemProvider, to provide a fallback.
+        System providers are listed here: https://developer.android.com/reference/android/support/wearable/complications/SystemProviders.html
+      -->
       <DefaultProviderPolicy
           primaryProvider="com.fitbit.FitbitMobile/com.fitbit.complications.calories.CaloriesComplicationDataSourceService"
           primaryProviderType="RANGED_VALUE"
