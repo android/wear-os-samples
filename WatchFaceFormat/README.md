@@ -18,7 +18,16 @@ For more details on the Watch Face Format, see:
 - [XML reference][wff-xml-reference]
 - [Design guidance][watch-face-design-guidance]
 
-## Building the sample
+## Samples
+
+There are currently three samples available:
+
+- `SimpleDigital` - A basic digital watch face.
+- `SimpleAnalog` - A basic analog watch face.
+- `Complications` - Demonstrates using Complications in a watch face and
+  rendering data from Complication data sources.
+
+## Building the samples
 
 This sample uses a shell script to demonstrate the packaging of the watch face.
 
@@ -38,6 +47,8 @@ From the `WatchFaceFormat` directory, execute:
 ```shell
 ./build-wff.sh SimpleDigital
 ```
+
+(the same applies for `SimpleAnalog` and `Complications`)
 
 This will build the watch face in a few formats, notably:
 
