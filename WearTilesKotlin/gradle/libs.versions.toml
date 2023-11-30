@@ -1,10 +1,10 @@
 [versions]
-android-gradle-plugin = "8.1.4"
+android-gradle-plugin = "8.2.0"
 androidx-wear-tiles = "1.2.0"
-androidx-wear-tooling-preview = "0"
+androidx-wear-tooling-preview = "1.0.0"
 compose = "1.5.4"
 compose-compiler = "1.5.4"
-horologist = "0.5.10"
+horologist = "0.5.12"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
@@ -27,4 +27,4 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", vers
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.23.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.23.2"

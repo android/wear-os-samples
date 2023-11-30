@@ -1,12 +1,12 @@
 [versions]
-android-gradle-plugin = "8.1.3"
+android-gradle-plugin = "8.2.0"
 androidx-activity = "1.8.1"
 androidx-compose-bom = "2023.10.01"
 androidx-lifecycle = "2.6.2"
 androidx-wear-compose = "1.3.0-beta01"
 compose-compiler = "1.5.4"
 compose-ui-tooling = "1.2.1"
-horologist-compose-layout = "0.5.10"
+horologist-compose-layout = "0.5.12"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
@@ -46,4 +46,4 @@ wearable = { module = "com.google.android.wearable:wearable", version.ref = "wea
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.23.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.23.2"
