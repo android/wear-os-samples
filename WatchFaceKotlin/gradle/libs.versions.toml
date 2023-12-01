@@ -1,22 +1,22 @@
 [versions]
-android-gradle-plugin = "8.1.4"
+android-gradle-plugin = "8.2.0"
 androidx-activity = "1.8.1"
 androidx-lifecycle = "2.6.2"
 androidx-test = "1.4.0"
 androidx-wear-compose = "1.1.0-rc01"
 androidx-wear-tiles = "1.1.0"
-androidx-wear-watchface = "1.1.1"
+androidx-wear-watchface = "1.2.0"
 compose = "1.5.0-beta01"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.20"
 org-jetbrains-kotlinx = "1.7.3"
 
 [libraries]
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.1.4"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.2.0"
 android-material = "com.google.android.material:material:1.10.0"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.1.4"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.2.0"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.3.0"
@@ -37,5 +37,5 @@ wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", ver
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.23.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.23.2"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
