@@ -49,7 +49,7 @@
         <Text align="CENTER">
           <!-- Demonstrates using Android string resources for localization -->
           <Font family="SYNC_TO_DEVICE" size="36" color="#ffffffff">
-            <Template>@string/greeting</Template>
+            <Template>%s<Parameter expression="greeting"></Parameter></Template>
           </Font>
         </Text>
       </PartText>
