@@ -23,7 +23,6 @@
 -->
 <WatchFace width="450" height="450">
   <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
-  <Metadata key="TICK_PER_SECOND" value="15"/>
   <Metadata key="PREVIEW_TIME" value="10:08:32"/>
   <Scene backgroundColor="#ff000000">
     <DigitalClock x="0" y="0" width="450" height="450">
