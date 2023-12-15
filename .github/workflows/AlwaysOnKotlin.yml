@@ -42,25 +42,25 @@ jobs:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload views build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: ${{ env.SAMPLE_PATH }}/views/build/outputs
 
       - name: Upload views build reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: ${{ env.SAMPLE_PATH }}/views/build/reports
 
       - name: Upload compose build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: ${{ env.SAMPLE_PATH }}/compose/build/outputs
 
       - name: Upload compose build reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: ${{ env.SAMPLE_PATH }}/compose/build/reports
@@ -109,13 +109,13 @@ jobs:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload views test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: ${{ env.SAMPLE_PATH }}/views/build/reports
 
       - name: Upload compose test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: ${{ env.SAMPLE_PATH }}/compose/build/reports
@@ -140,7 +140,7 @@ jobs:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: App
           path: ${{ env.SAMPLE_PATH }}/compose/build/outputs/apk/release/compose-release.apk

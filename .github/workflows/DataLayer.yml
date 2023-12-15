@@ -44,7 +44,7 @@ jobs:
         run: ./gradlew check --stacktrace
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: |
@@ -52,7 +52,7 @@ jobs:
             ${{ env.SAMPLE_PATH }}/Application/build/outputs
 
       - name: Upload build reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: |
@@ -88,7 +88,7 @@ jobs:
         run: ./gradlew app:assembleRelease
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: App
           path: ${{ env.SAMPLE_PATH }}/Wearable/build/outputs/apk/release/Wearable-release.apk
