@@ -43,14 +43,14 @@ jobs:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: ${{ env.SAMPLE_PATH }}/app/build/outputs
 
       - name: Upload build reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: ${{ env.SAMPLE_PATH }}/app/build/reports
