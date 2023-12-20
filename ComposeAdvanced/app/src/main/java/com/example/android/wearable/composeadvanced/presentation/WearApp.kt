@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.composeadvanced.presentation
 
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,7 +29,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.activity
 import androidx.navigation.navArgument
+import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.presentation.components.CustomTimeText
@@ -52,12 +56,9 @@ import com.example.android.wearable.composeadvanced.presentation.ui.watchlist.Wa
 import com.google.android.horologist.composables.DatePicker
 import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.navscaffold.NavScaffoldViewModel.VignetteMode
-import com.google.android.horologist.compose.navscaffold.WearNavScaffold
-import com.google.android.horologist.compose.navscaffold.composable
-import com.google.android.horologist.compose.navscaffold.scrollStateComposable
-import com.google.android.horologist.compose.navscaffold.scrollable
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberColumnState
 import java.time.LocalDateTime
 
 @Composable
@@ -75,197 +76,191 @@ fun WearApp(
         var displayValueForUserInput by remember { mutableIntStateOf(5) }
         var dateTimeForUserInput by remember { mutableStateOf(LocalDateTime.now()) }
 
-        WearNavScaffold(
-            modifier = modifier,
-            navController = swipeDismissableNavController,
-            startDestination = Screen.Landing.route,
-            timeText = {
-                CustomTimeText(
-                    modifier = it,
-                    startText = if (showProceedingTextBeforeTime) {
-                        stringResource(R.string.leading_time_text)
-                    } else {
-                        null
-                    }
-                )
-            }
-        ) {
-            // Main Window
-            scrollable(
-                route = Screen.Landing.route,
-                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(
-                    firstItemIsFullWidth = true
-                )
-            ) {
-                LandingScreen(
-                    columnState = it.columnState,
-                    onClickWatchList = {
-                        swipeDismissableNavController.navigate(Screen.WatchList.route)
-                    },
-                    proceedingTimeTextEnabled = showProceedingTextBeforeTime,
-                    onClickProceedingTimeText = {
-                        showProceedingTextBeforeTime = !showProceedingTextBeforeTime
-                    },
-                    onNavigate = { swipeDismissableNavController.navigate(it) }
-                )
-            }
-
-            scrollable(
-                route = Screen.UserInputComponents.route,
-                columnStateFactory = ScalingLazyColumnDefaults.belowTimeText(
-                    firstItemIsFullWidth = true
-                )
-            ) {
-                UserInputComponentsScreen(
-                    columnState = it.columnState,
-                    value = displayValueForUserInput,
-                    dateTime = dateTimeForUserInput,
-                    onClickStepper = {
-                        swipeDismissableNavController.navigate(Screen.Stepper.route)
-                    },
-                    onClickSlider = {
-                        swipeDismissableNavController.navigate(Screen.Slider.route)
-                    },
-                    onClickDemoDatePicker = {
-                        swipeDismissableNavController.navigate(Screen.DatePicker.route)
-                    },
-                    onClickDemo12hTimePicker = {
-                        swipeDismissableNavController.navigate(Screen.Time12hPicker.route)
-                    },
-                    onClickDemo24hTimePicker = {
-                        swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
-                    }
-                )
-            }
-
-            composable(route = Screen.Stepper.route) {
-                StepperScreen(
-                    displayValue = displayValueForUserInput,
-                    onValueChange = {
-                        displayValueForUserInput = it
-                    }
-                )
-            }
-
-            composable(route = Screen.Slider.route) {
-                SliderScreen(
-                    displayValue = displayValueForUserInput,
-                    onValueChange = {
-                        displayValueForUserInput = it
-                    }
-                )
-            }
-
-            scrollable(
-                route = Screen.WatchList.route
-            ) {
-                val vignetteVisible = rememberSaveable { mutableStateOf(true) }
-
-                it.viewModel.vignettePosition = if (vignetteVisible.value) {
-                    VignetteMode.On(
-                        VignettePosition.TopAndBottom
-                    )
+        AppScaffold(timeText = {
+            CustomTimeText(
+                startText = if (showProceedingTextBeforeTime) {
+                    stringResource(R.string.leading_time_text)
                 } else {
-                    VignetteMode.Off
+                    null
+                }
+            )
+        }) {
+            SwipeDismissableNavHost(
+                modifier = modifier,
+                navController = swipeDismissableNavController,
+                startDestination = Screen.Landing.route,
+
+                ) {
+                // Main Window
+                composable(
+                    route = Screen.Landing.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        LandingScreen(columnState = columnState,
+                            onClickWatchList = {
+                                swipeDismissableNavController.navigate(Screen.WatchList.route)
+                            },
+                            proceedingTimeTextEnabled = showProceedingTextBeforeTime,
+                            onClickProceedingTimeText = {
+                                showProceedingTextBeforeTime = !showProceedingTextBeforeTime
+                            },
+                            onNavigate = { swipeDismissableNavController.navigate(it) })
+                    }
                 }
 
-                WatchListScreen(
-                    columnState = it.columnState,
-                    showVignette = vignetteVisible.value,
-                    onClickVignetteToggle = { showVignette ->
-                        vignetteVisible.value = showVignette
-                    },
-                    onClickWatch = { id ->
-                        swipeDismissableNavController.navigate(
-                            route = Screen.WatchDetail.route + "/" + id
+                composable(
+                    route = Screen.UserInputComponents.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        UserInputComponentsScreen(columnState = columnState,
+                            value = displayValueForUserInput,
+                            dateTime = dateTimeForUserInput,
+                            onClickStepper = {
+                                swipeDismissableNavController.navigate(Screen.Stepper.route)
+                            },
+                            onClickSlider = {
+                                swipeDismissableNavController.navigate(Screen.Slider.route)
+                            },
+                            onClickDemoDatePicker = {
+                                swipeDismissableNavController.navigate(Screen.DatePicker.route)
+                            },
+                            onClickDemo12hTimePicker = {
+                                swipeDismissableNavController.navigate(Screen.Time12hPicker.route)
+                            },
+                            onClickDemo24hTimePicker = {
+                                swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
+                            })
+                    }
+                }
+
+                composable(route = Screen.Stepper.route) {
+                    StepperScreen(displayValue = displayValueForUserInput, onValueChange = {
+                        displayValueForUserInput = it
+                    })
+                }
+
+                composable(route = Screen.Slider.route) {
+                    SliderScreen(displayValue = displayValueForUserInput, onValueChange = {
+                        displayValueForUserInput = it
+                    })
+                }
+
+                composable(
+                    route = Screen.WatchList.route
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        var vignetteVisible by rememberSaveable { mutableStateOf(true) }
+
+                        WatchListScreen(
+                            columnState = columnState,
+                            showVignette = vignetteVisible,
+                            onClickVignetteToggle = { showVignette ->
+                                vignetteVisible = showVignette
+                            },
+                            onClickWatch = { id ->
+                                swipeDismissableNavController.navigate(
+                                    route = Screen.WatchDetail.route + "/" + id
+                                )
+                            }
+                        )
+
+                        if (vignetteVisible) {
+                            Vignette(vignettePosition = VignettePosition.TopAndBottom)
+                        }
+                    }
+                }
+
+                composable(route = Screen.WatchDetail.route + "/{$WATCH_ID_NAV_ARGUMENT}",
+                    arguments = listOf(navArgument(WATCH_ID_NAV_ARGUMENT) {
+                        type = NavType.IntType
+                    })) {
+                    val watchId: Int = it.arguments!!.getInt(WATCH_ID_NAV_ARGUMENT)
+
+                    val columnState = rememberScrollState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        WatchDetailScreen(
+                            watchId = watchId, scrollState = columnState
                         )
                     }
-                )
-            }
+                }
 
-            scrollStateComposable(
-                route = Screen.WatchDetail.route + "/{$WATCH_ID_NAV_ARGUMENT}",
-                arguments = listOf(
-                    navArgument(WATCH_ID_NAV_ARGUMENT) {
-                        type = NavType.IntType
+                composable(Screen.DatePicker.route) {
+                    DatePicker(
+                        onDateConfirm = {
+                            swipeDismissableNavController.popBackStack()
+                            dateTimeForUserInput = it.atTime(dateTimeForUserInput.toLocalTime())
+                        }, date = dateTimeForUserInput.toLocalDate()
+                    )
+                }
+
+                composable(Screen.Time24hPicker.route) {
+                    TimePicker(
+                        onTimeConfirm = {
+                            swipeDismissableNavController.popBackStack()
+                            dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
+                        }, time = dateTimeForUserInput.toLocalTime()
+                    )
+                }
+
+                composable(Screen.Time12hPicker.route) {
+                    TimePickerWith12HourClock(
+                        onTimeConfirm = {
+                            swipeDismissableNavController.popBackStack()
+                            dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
+                        }, time = dateTimeForUserInput.toLocalTime()
+                    )
+                }
+
+                composable(Screen.Dialogs.route) {
+                    Dialogs()
+                }
+
+                composable(
+                    route = Screen.ProgressIndicators.route
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        ProgressIndicatorsScreen(columnState = columnState,
+                            onNavigate = { swipeDismissableNavController.navigate(it) })
                     }
-                )
-            ) {
-                val watchId: Int = it.arguments!!.getInt(WATCH_ID_NAV_ARGUMENT)
+                }
 
-                WatchDetailScreen(
-                    watchId = watchId,
-                    scrollState = it.scrollableState
-                )
-            }
+                composable(Screen.IndeterminateProgressIndicator.route) {
+                    IndeterminateProgressIndicator()
+                }
 
-            composable(Screen.DatePicker.route) {
-                DatePicker(
-                    onDateConfirm = {
-                        swipeDismissableNavController.popBackStack()
-                        dateTimeForUserInput = it.atTime(dateTimeForUserInput.toLocalTime())
-                    },
-                    date = dateTimeForUserInput.toLocalDate()
-                )
-            }
+                composable(
+                    route = Screen.FullScreenProgressIndicator.route
+                ) {
+                    FullScreenProgressIndicator()
+                }
 
-            composable(Screen.Time24hPicker.route) {
-                TimePicker(
-                    onTimeConfirm = {
-                        swipeDismissableNavController.popBackStack()
-                        dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
-                    },
-                    time = dateTimeForUserInput.toLocalTime()
-                )
-            }
+                composable(
+                    route = Screen.Theme.route
+                ) {
+                    val columnState = rememberColumnState()
 
-            composable(Screen.Time12hPicker.route) {
-                TimePickerWith12HourClock(
-                    onTimeConfirm = {
-                        swipeDismissableNavController.popBackStack()
-                        dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
-                    },
-                    time = dateTimeForUserInput.toLocalTime()
-                )
-            }
+                    ScreenScaffold(scrollState = columnState) {}
+                    ThemeScreen(
+                        columnState = columnState,
+                        currentlySelectedColors = themeColors,
+                        availableThemes = themeValues
+                    ) { colors -> themeColors = colors }
+                }
 
-            composable(Screen.Dialogs.route) {
-                Dialogs()
-            }
-
-            scrollable(
-                route = Screen.ProgressIndicators.route
-            ) {
-                ProgressIndicatorsScreen(
-                    columnState = it.columnState,
-                    onNavigate = { swipeDismissableNavController.navigate(it) }
-                )
-            }
-
-            composable(Screen.IndeterminateProgressIndicator.route) {
-                IndeterminateProgressIndicator()
-            }
-
-            composable(
-                route = Screen.FullScreenProgressIndicator.route
-            ) {
-                FullScreenProgressIndicator()
-            }
-
-            scrollable(
-                route = Screen.Theme.route
-            ) { it ->
-                ThemeScreen(
-                    columnState = it.columnState,
-                    currentlySelectedColors = themeColors,
-                    availableThemes = themeValues
-                ) { colors -> themeColors = colors }
-            }
-
-            activity(
-                route = Screen.Map.route
-            ) {
-                this.activityClass = MapActivity::class
+                activity(
+                    route = Screen.Map.route
+                ) {
+                    this.activityClass = MapActivity::class
+                }
             }
         }
     }
@@ -273,9 +268,7 @@ fun WearApp(
 
 @Composable
 internal fun menuNameAndCallback(
-    onNavigate: (String) -> Unit,
-    menuNameResource: Int,
-    screen: Screen
+    onNavigate: (String) -> Unit, menuNameResource: Int, screen: Screen
 ) = MenuItem(stringResource(menuNameResource)) { onNavigate(screen.route) }
 
 data class MenuItem(val name: String, val clickHander: () -> Unit)
