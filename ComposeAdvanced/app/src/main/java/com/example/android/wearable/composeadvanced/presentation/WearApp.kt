@@ -88,17 +88,18 @@ fun WearApp(
             SwipeDismissableNavHost(
                 modifier = modifier,
                 navController = swipeDismissableNavController,
-                startDestination = Screen.Landing.route,
+                startDestination = Screen.Landing.route
 
-                ) {
+            ) {
                 // Main Window
                 composable(
-                    route = Screen.Landing.route,
+                    route = Screen.Landing.route
                 ) {
                     val columnState = rememberColumnState()
 
                     ScreenScaffold(scrollState = columnState) {
-                        LandingScreen(columnState = columnState,
+                        LandingScreen(
+                            columnState = columnState,
                             onClickWatchList = {
                                 swipeDismissableNavController.navigate(Screen.WatchList.route)
                             },
@@ -106,17 +107,19 @@ fun WearApp(
                             onClickProceedingTimeText = {
                                 showProceedingTextBeforeTime = !showProceedingTextBeforeTime
                             },
-                            onNavigate = { swipeDismissableNavController.navigate(it) })
+                            onNavigate = { swipeDismissableNavController.navigate(it) }
+                        )
                     }
                 }
 
                 composable(
-                    route = Screen.UserInputComponents.route,
+                    route = Screen.UserInputComponents.route
                 ) {
                     val columnState = rememberColumnState()
 
                     ScreenScaffold(scrollState = columnState) {
-                        UserInputComponentsScreen(columnState = columnState,
+                        UserInputComponentsScreen(
+                            columnState = columnState,
                             value = displayValueForUserInput,
                             dateTime = dateTimeForUserInput,
                             onClickStepper = {
@@ -133,7 +136,8 @@ fun WearApp(
                             },
                             onClickDemo24hTimePicker = {
                                 swipeDismissableNavController.navigate(Screen.Time24hPicker.route)
-                            })
+                            }
+                        )
                     }
                 }
 
@@ -176,17 +180,22 @@ fun WearApp(
                     }
                 }
 
-                composable(route = Screen.WatchDetail.route + "/{$WATCH_ID_NAV_ARGUMENT}",
-                    arguments = listOf(navArgument(WATCH_ID_NAV_ARGUMENT) {
-                        type = NavType.IntType
-                    })) {
+                composable(
+                    route = Screen.WatchDetail.route + "/{$WATCH_ID_NAV_ARGUMENT}",
+                    arguments = listOf(
+                        navArgument(WATCH_ID_NAV_ARGUMENT) {
+                            type = NavType.IntType
+                        }
+                    )
+                ) {
                     val watchId: Int = it.arguments!!.getInt(WATCH_ID_NAV_ARGUMENT)
 
                     val columnState = rememberScrollState()
 
                     ScreenScaffold(scrollState = columnState) {
                         WatchDetailScreen(
-                            watchId = watchId, scrollState = columnState
+                            watchId = watchId,
+                            scrollState = columnState
                         )
                     }
                 }
@@ -196,7 +205,8 @@ fun WearApp(
                         onDateConfirm = {
                             swipeDismissableNavController.popBackStack()
                             dateTimeForUserInput = it.atTime(dateTimeForUserInput.toLocalTime())
-                        }, date = dateTimeForUserInput.toLocalDate()
+                        },
+                        date = dateTimeForUserInput.toLocalDate()
                     )
                 }
 
@@ -205,7 +215,8 @@ fun WearApp(
                         onTimeConfirm = {
                             swipeDismissableNavController.popBackStack()
                             dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
-                        }, time = dateTimeForUserInput.toLocalTime()
+                        },
+                        time = dateTimeForUserInput.toLocalTime()
                     )
                 }
 
@@ -214,7 +225,8 @@ fun WearApp(
                         onTimeConfirm = {
                             swipeDismissableNavController.popBackStack()
                             dateTimeForUserInput = it.atDate(dateTimeForUserInput.toLocalDate())
-                        }, time = dateTimeForUserInput.toLocalTime()
+                        },
+                        time = dateTimeForUserInput.toLocalTime()
                     )
                 }
 
@@ -228,8 +240,10 @@ fun WearApp(
                     val columnState = rememberColumnState()
 
                     ScreenScaffold(scrollState = columnState) {
-                        ProgressIndicatorsScreen(columnState = columnState,
-                            onNavigate = { swipeDismissableNavController.navigate(it) })
+                        ProgressIndicatorsScreen(
+                            columnState = columnState,
+                            onNavigate = { swipeDismissableNavController.navigate(it) }
+                        )
                     }
                 }
 
@@ -268,7 +282,9 @@ fun WearApp(
 
 @Composable
 internal fun menuNameAndCallback(
-    onNavigate: (String) -> Unit, menuNameResource: Int, screen: Screen
+    onNavigate: (String) -> Unit,
+    menuNameResource: Int,
+    screen: Screen
 ) = MenuItem(stringResource(menuNameResource)) { onNavigate(screen.route) }
 
 data class MenuItem(val name: String, val clickHander: () -> Unit)
