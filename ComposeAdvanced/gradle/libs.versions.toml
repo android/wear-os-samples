@@ -10,7 +10,7 @@ androidx-test-uiautomator = "2.2.0"
 androidx-wear-compose = "1.2.1"
 compose = "1.5.4"
 compose-compiler = "1.5.7"
-horologist = "0.5.14"
+horologist = "0.5.15"
 ktlint = "0.50.0"
 navigation = "2.7.6"
 org-jetbrains-kotlin = "1.9.21"
@@ -47,6 +47,7 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
+horologist-images-base = { module = "com.google.android.horologist:horologist-images-base", version.ref = "horologist" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
