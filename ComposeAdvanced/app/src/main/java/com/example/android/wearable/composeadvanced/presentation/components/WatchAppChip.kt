@@ -15,12 +15,14 @@
  */
 package com.example.android.wearable.composeadvanced.presentation.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.android.wearable.composeadvanced.R
 import com.example.android.wearable.composeadvanced.util.WearComponentPreview
 import com.google.android.horologist.compose.material.Chip
+import com.google.android.horologist.images.base.paintable.DrawableResPaintable
 
 /**
  * Simple Chip for displaying the Watch models.
@@ -29,13 +31,13 @@ import com.google.android.horologist.compose.material.Chip
 fun WatchAppChip(
     watchModelNumber: Int,
     watchName: String,
-    watchIcon: Int,
+    @DrawableRes watchIcon: Int,
     onClickWatch: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Chip(
         modifier = modifier,
-        icon = watchIcon,
+        icon = DrawableResPaintable(watchIcon),
         label = watchName,
         secondaryLabel = "id: $watchModelNumber",
         onClick = {
