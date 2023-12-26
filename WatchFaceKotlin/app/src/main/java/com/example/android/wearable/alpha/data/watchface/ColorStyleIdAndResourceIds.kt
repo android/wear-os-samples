@@ -150,6 +150,7 @@ enum class ColorStyleIdAndResourceIds(
                     UserStyleSetting.Option.Id(colorStyleIdAndResourceIds.id),
                     context.resources,
                     colorStyleIdAndResourceIds.nameResourceId,
+                    colorStyleIdAndResourceIds.nameResourceId,
                     Icon.createWithResource(
                         context,
                         colorStyleIdAndResourceIds.iconResourceId

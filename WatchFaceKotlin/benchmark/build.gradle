@@ -1,0 +1,68 @@
+plugins {
+  id 'com.android.test'
+  id 'org.jetbrains.kotlin.android'
+  id 'com.google.firebase.testlab'
+}
+
+android {
+  namespace 'com.example.android.wearable.alpha.benchmark'
+  compileSdk 34
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_17.majorVersion
+  }
+
+  defaultConfig {
+    minSdk 29
+    targetSdk 34
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  testOptions {
+    managedDevices {
+      devices {
+        pixelWatch1(com.google.firebase.testlab.gradle.ManagedDevice) {
+          device = "r11"
+          apiLevel = 30
+        }
+      }
+    }
+  }
+
+  buildTypes {
+    // This benchmark buildType is used for benchmarking, and should function like your
+    // release build (for example, with minification on). It's signed with a debug key
+    // for easy local/CI testing.
+    benchmark {
+      debuggable = true
+      signingConfig = debug.signingConfig
+    }
+  }
+
+  targetProjectPath = ":app"
+  experimentalProperties["android.experimental.self-instrumenting"] = true
+}
+
+dependencies {
+  implementation libs.androidx.benchmark.macro.junit4
+  implementation libs.androidx.benchmark.junit4
+  implementation libs.androidx.test.ext
+  implementation libs.androidx.test.espresso.core
+  implementation libs.androidx.test.uiautomator
+}
+
+androidComponents {
+  beforeVariants(selector().all()) {
+    enabled = buildType == "benchmark"
+  }
+}
+
+firebaseTestLab {
+  serviceAccountCredentials.set(file("credentials.json"))
+}

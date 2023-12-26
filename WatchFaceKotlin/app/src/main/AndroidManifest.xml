@@ -15,6 +15,7 @@
   limitations under the License.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.wearable.alpha">
 
     <!-- Required for complications to receive complication data and open the provider chooser. -->
@@ -84,5 +85,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <profileable
+            android:shell="true"
+            tools:ignore="UnusedAttribute" />
     </application>
 </manifest>

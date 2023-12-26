@@ -1,8 +1,13 @@
 [versions]
+#android-gradle-plugin = "8.3.0-alpha17"
 android-gradle-plugin = "8.2.0"
 androidx-activity = "1.8.2"
+androidx-benchmark = "1.2.2"
 androidx-lifecycle = "2.6.2"
-androidx-test = "1.4.0"
+androidx-test = "1.6.0-alpha04"
+androidx-test-espresso = "3.6.0-alpha02"
+androidx-test-ext = "1.2.0-alpha02"
+androidx-test-uiautomator = "2.3.0-beta01"
 androidx-wear-compose = "1.1.0-rc01"
 androidx-wear-tiles = "1.1.0"
 androidx-wear-watchface = "1.2.0"
@@ -15,10 +20,19 @@ org-jetbrains-kotlinx = "1.7.3"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:31.2.0"
 android-material = "com.google.android.material:material:1.11.0"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
+androidx-benchmark-junit4 = { module = "androidx.benchmark:benchmark-junit4", version.ref = "androidx-benchmark" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
 androidx-core-ktx = "androidx.core:core-ktx:1.12.0"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.2.0"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-metrics-performance = "androidx.metrics:metrics-performance:1.0.0-alpha04"
+androidx-splashscreen =  "androidx.core:core-splashscreen:1.0.1"
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
+androidx-test-ext = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext" }
+androidx-test-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext" }
+androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
+androidx-tracing-ktx = "androidx.tracing:tracing-ktx:1.2.0"
 androidx-wear = "androidx.wear:wear:1.3.0"
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.11"
 kotlin-annotation-processing-gradle = { module = "org.jetbrains.kotlin:kotlin-annotation-processing-gradle", version.ref = "org-jetbrains-kotlin" }

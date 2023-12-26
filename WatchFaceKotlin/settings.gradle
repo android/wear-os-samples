@@ -33,4 +33,5 @@ dependencyResolutionManagement {
 }
 
 include ":app"
+include ":benchmark"
 rootProject.name = "WatchFaceKotlin"
