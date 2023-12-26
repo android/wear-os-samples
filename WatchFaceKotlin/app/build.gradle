@@ -88,7 +88,6 @@ dependencies {
     implementation libs.wear.watchface.complications.data.source
 
     implementation libs.wear.watchface
-    implementation libs.wear.watchface.client
     implementation libs.wear.watchface.complications.rendering
     implementation libs.wear.watchface.data
     implementation libs.wear.watchface.editor
