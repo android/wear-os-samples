@@ -24,6 +24,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
+import androidx.tracing.trace
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.Renderer
@@ -224,11 +225,13 @@ class AnalogWatchCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
-        canvas.drawColor(renderParameters.highlightLayer!!.backgroundTint)
+        trace("CanvasRenderer2.renderHighlightLayer") {
+            canvas.drawColor(renderParameters.highlightLayer!!.backgroundTint)
 
-        for ((_, complication) in complicationSlotsManager.complicationSlots) {
-            if (complication.enabled) {
-                complication.renderHighlightLayer(canvas, zonedDateTime, renderParameters)
+            for ((_, complication) in complicationSlotsManager.complicationSlots) {
+                if (complication.enabled) {
+                    complication.renderHighlightLayer(canvas, zonedDateTime, renderParameters)
+                }
             }
         }
     }
@@ -239,34 +242,40 @@ class AnalogWatchCanvasRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: AnalogSharedAssets
     ) {
-        val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
-            watchFaceColors.ambientBackgroundColor
-        } else {
-            watchFaceColors.activeBackgroundColor
-        }
+        trace("CanvasRenderer2.render") {
+            val backgroundColor = if (renderParameters.drawMode == DrawMode.AMBIENT) {
+                watchFaceColors.ambientBackgroundColor
+            } else {
+                watchFaceColors.activeBackgroundColor
+            }
 
-        canvas.drawColor(backgroundColor)
+            if (Math.random() > 0.95f) {
+                Thread.sleep(40)
+            }
 
-        // CanvasComplicationDrawable already obeys rendererParameters.
-        drawComplications(canvas, zonedDateTime)
+            canvas.drawColor(backgroundColor)
 
-        if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY)) {
-            drawClockHands(canvas, bounds, zonedDateTime)
-        }
+            // CanvasComplicationDrawable already obeys rendererParameters.
+            drawComplications(canvas, zonedDateTime)
 
-        if (renderParameters.drawMode == DrawMode.INTERACTIVE &&
-            renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) &&
-            watchFaceData.drawHourPips
-        ) {
-            drawNumberStyleOuterElement(
-                canvas,
-                bounds,
-                watchFaceData.numberRadiusFraction,
-                watchFaceData.numberStyleOuterCircleRadiusFraction,
-                watchFaceColors.activeOuterElementColor,
-                watchFaceData.numberStyleOuterCircleRadiusFraction,
-                watchFaceData.gapBetweenOuterCircleAndBorderFraction
-            )
+            if (renderParameters.watchFaceLayers.contains(WatchFaceLayer.COMPLICATIONS_OVERLAY)) {
+                drawClockHands(canvas, bounds, zonedDateTime)
+            }
+
+            if (renderParameters.drawMode == DrawMode.INTERACTIVE &&
+                renderParameters.watchFaceLayers.contains(WatchFaceLayer.BASE) &&
+                watchFaceData.drawHourPips
+            ) {
+                drawNumberStyleOuterElement(
+                    canvas,
+                    bounds,
+                    watchFaceData.numberRadiusFraction,
+                    watchFaceData.numberStyleOuterCircleRadiusFraction,
+                    watchFaceColors.activeOuterElementColor,
+                    watchFaceData.numberStyleOuterCircleRadiusFraction,
+                    watchFaceData.gapBetweenOuterCircleAndBorderFraction
+                )
+            }
         }
     }
 

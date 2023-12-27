@@ -94,4 +94,6 @@ dependencies {
     implementation libs.wear.watchface.data
     implementation libs.wear.watchface.editor
     implementation libs.wear.watchface.style
+
+    implementation(libs.androidx.tracing.ktx)
 }

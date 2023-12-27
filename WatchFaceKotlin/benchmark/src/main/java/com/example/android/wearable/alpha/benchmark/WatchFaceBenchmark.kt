@@ -22,8 +22,6 @@ import android.app.UiAutomation
 import android.content.ComponentName
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.ExperimentalMetricApi
-import androidx.benchmark.macro.MacrobenchmarkScope
-import androidx.benchmark.macro.PowerMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.filters.LargeTest
@@ -66,9 +64,9 @@ class WatchFaceBenchmark(
     @Test
     fun startup() = benchmarkRule.measureRepeated(
         packageName = PACKAGE_NAME,
-        metrics = listOf(PowerMetric(PowerMetric.Battery())),
+        metrics = listOf(WatchfaceRenderMetric),
         compilationMode = CompilationMode.Partial(),
-        iterations = 10,
+        iterations = 3,
         startupMode = StartupMode.WARM,
         setupBlock = {
             device.startWatchface(
@@ -99,7 +97,7 @@ class WatchFaceBenchmark(
     companion object {
         @Parameterized.Parameters(name = "ambient={0}")
         @JvmStatic
-        fun parameters() = listOf(true)
+        fun parameters() = listOf(false, true)
 
         const val PACKAGE_NAME = "com.example.android.wearable.alpha"
     }
