@@ -17,6 +17,8 @@
 
 package com.example.android.wearable.alpha.benchmark
 
+import android.app.Instrumentation
+import android.app.UiAutomation
 import android.content.ComponentName
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.ExperimentalMetricApi
@@ -26,62 +28,81 @@ import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
+/**
+ * Open Web UI.
+ */
 @LargeTest
 @RunWith(Parameterized::class)
 class WatchFaceBenchmark(
-    private val compilationMode: CompilationMode
+    private val ambient: Boolean
 ) {
+    private lateinit var instrumentation: Instrumentation
+    private lateinit var uiAutomation: UiAutomation
+    private lateinit var device: UiDevice
+
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
+
+    @Before
+    fun setup() {
+        instrumentation = InstrumentationRegistry.getInstrumentation()
+        uiAutomation = instrumentation.uiAutomation
+        device = UiDevice.getInstance(instrumentation)
+    }
+
+    @Before
+    fun after() {
+        device.wakeUp()
+        device.startWatchface(DefaultWatchFace)
+    }
 
     @Test
     fun startup() = benchmarkRule.measureRepeated(
         packageName = PACKAGE_NAME,
         metrics = listOf(PowerMetric(PowerMetric.Battery())),
-        compilationMode = compilationMode,
-        iterations = 1,
+        compilationMode = CompilationMode.Partial(),
+        iterations = 10,
         startupMode = StartupMode.WARM,
         setupBlock = {
-            val instrumentation = InstrumentationRegistry.getInstrumentation()
-            val uiAutomation = instrumentation.uiAutomation
-            uiAutomation.adoptShellPermissionIdentity()
-
-            try {
-                startWatchface(
-                    ComponentName(
-                        PACKAGE_NAME,
-                        "com.example.android.wearable.alpha.AnalogWatchFaceService"
-                    )
+            device.startWatchface(
+                ComponentName(
+                    PACKAGE_NAME,
+                    "com.example.android.wearable.alpha.AnalogWatchFaceService"
                 )
-                Thread.sleep(10000)
-            } finally {
-                uiAutomation.dropShellPermissionIdentity()
+            )
+            repeat(5) {
+                println("Sleep in setupBlock $it")
+                Thread.sleep(1000)
             }
-        }
+            if (ambient) {
+                println("Ambient Mode")
+                device.sleep()
+            } else {
+                println("Waking Up")
+                device.wakeUp()
+            }
+        },
     ) {
-        Thread.sleep(10000)
+        repeat(10) {
+            println("Sleep in test $it")
+            Thread.sleep(1000)
+        }
     }
 
     companion object {
-        @Parameterized.Parameters(name = "compilation={0}")
+        @Parameterized.Parameters(name = "ambient={0}")
         @JvmStatic
-        fun parameters() = listOf(CompilationMode.Partial())
+        fun parameters() = listOf(true)
 
-        private const val PACKAGE_NAME = "com.example.android.wearable.alpha"
+        const val PACKAGE_NAME = "com.example.android.wearable.alpha"
     }
-}
-
-private fun MacrobenchmarkScope.startWatchface(watchfaceName: ComponentName) {
-
-
-    // From https://cs.android.com/android-studio/platform/tools/base/+/mirror-goog-studio-main:deploy/deployer/src/main/java/com/android/tools/deployer/model/component/WatchFace.java
-    val result =
-        this.device.executeShellCommand("am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation set-watchface --ecn component ${watchfaceName.flattenToString()}")
 }
 
 

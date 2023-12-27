@@ -42,6 +42,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
 wear-watchface = { module = "androidx.wear.watchface:watchface", version.ref = "androidx-wear-watchface" }
 wear-watchface-client = { module = "androidx.wear.watchface:watchface-client", version.ref = "androidx-wear-watchface" }
 wear-watchface-complications-data = { module = "androidx.wear.watchface:watchface-complications-data", version.ref = "androidx-wear-watchface" }

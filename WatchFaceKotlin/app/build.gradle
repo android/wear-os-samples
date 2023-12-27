@@ -40,6 +40,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
         benchmark {
@@ -88,6 +89,7 @@ dependencies {
     implementation libs.wear.watchface.complications.data.source
 
     implementation libs.wear.watchface
+    implementation libs.wear.watchface.client
     implementation libs.wear.watchface.complications.rendering
     implementation libs.wear.watchface.data
     implementation libs.wear.watchface.editor
