@@ -35,8 +35,8 @@ object WatchfaceRenderMetric : TraceMetric() {
         val drawSamples = draw.map { it.long("dur").toDouble() / 1000000 }
         val renderSamples = render.map { it.long("dur").toDouble() / 1000000 }
         return listOf(
-            Measurement("Draw", drawSamples.ifEmpty { listOf(Double.NaN) }),
-            Measurement("Render", renderSamples.ifEmpty { listOf(Double.NaN) })
+            Measurement("Draw", drawSamples.ifEmpty { listOf(0.0) }),
+            Measurement("Render", renderSamples.ifEmpty { listOf(0.0) })
         )
     }
 }
