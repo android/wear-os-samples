@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 /*
  * Copyright (C) 2021 The Android Open Source Project
  *
@@ -17,6 +19,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "com.google.firebase.testlab"
 }
 
 android {
@@ -78,23 +81,31 @@ android {
     }
 
   testOptions {
+    firebaseTestLab {
+      managedDevices {
+          pixelWatch {
+            device = "r11"
+            apiLevel = 30
+          }
+      }
+    }
     devices {
-      squareApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+      squareApi30(ManagedVirtualDevice) {
         device = "Wear OS Square"
         apiLevel = 30
         systemImageSource = "android-wear"
       }
-      roundApi28(com.android.build.api.dsl.ManagedVirtualDevice) {
+      roundApi28(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 28
         systemImageSource = "android-wear"
       }
-      roundApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+      roundApi30(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 30
         systemImageSource = "android-wear"
       }
-      roundApi33(com.android.build.api.dsl.ManagedVirtualDevice) {
+      roundApi33(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 33
         systemImageSource = "android-wear"
@@ -132,4 +143,10 @@ dependencies {
     androidTestImplementation libs.test.runner
     androidTestImplementation libs.test.uiautomator
     androidTestImplementation libs.compose.ui.test.junit4
+
+    testImplementation libs.kotlinx.coroutines.test
+    testImplementation libs.test.core.ktx
+    testImplementation libs.test.ext.junit.ktx
+    testImplementation libs.test.runner
+    testImplementation libs.compose.ui.test.junit4
 }
