@@ -143,4 +143,10 @@ dependencies {
     androidTestImplementation libs.test.runner
     androidTestImplementation libs.test.uiautomator
     androidTestImplementation libs.compose.ui.test.junit4
+
+    testImplementation libs.kotlinx.coroutines.test
+    testImplementation libs.test.core.ktx
+    testImplementation libs.test.ext.junit.ktx
+    testImplementation libs.test.runner
+    testImplementation libs.compose.ui.test.junit4
 }
