@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.2.0"
+android-gradle-plugin = "8.2.1"
 androidx-wear-tiles = "1.2.0"
 androidx-wear-tooling-preview = "1.0.0"
 compose = "1.5.4"
