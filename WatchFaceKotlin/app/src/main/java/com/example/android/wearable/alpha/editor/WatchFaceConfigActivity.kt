@@ -51,6 +51,9 @@ class WatchFaceConfigActivity : ComponentActivity() {
 
         binding = ActivityWatchFaceConfigBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // google wear os guidelines require scrollable options to accept rotary input
+        // lets focus scroll_view on watch face config activity creation
+        binding.scrollView.requestFocus()
 
         // Disable widgets until data loads and values are set.
         binding.colorStylePickerButton.isEnabled = false
