@@ -2,7 +2,7 @@
 android-gradle-plugin = "8.2.1"
 androidx-activity = "1.8.2"
 androidx-compose-bom = "2023.10.01"
-androidx-lifecycle = "2.6.2"
+androidx-lifecycle = "2.7.0"
 androidx-wear-compose = "1.2.1"
 compose-compiler = "1.5.7"
 ktlint = "0.50.0"
