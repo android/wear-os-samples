@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.2.1"
 androidx-activity = "1.8.2"
-androidx-lifecycle = "2.6.2"
+androidx-lifecycle = "2.7.0"
 androidx-test = "1.4.0"
 androidx-wear-compose = "1.1.0-rc01"
 androidx-wear-tiles = "1.1.0"
@@ -25,7 +25,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.1.0"
-wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha03"
+wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha04"
 wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
 
 [plugins]

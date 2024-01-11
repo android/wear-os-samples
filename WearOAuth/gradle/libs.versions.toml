@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.2.1"
 androidx-activity = "1.8.2"
-androidx-lifecycle = "2.6.2"
+androidx-lifecycle = "2.7.0"
 androidx-test = "1.5.2"
 androidx-wear-compose = "1.2.1"
 androidx-wear-tiles = "1.2.0"
@@ -76,7 +76,7 @@ test-uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
-wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha03"
+wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha04"
 wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
 wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
 wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
