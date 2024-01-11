@@ -27,13 +27,15 @@ import androidx.wear.protolayout.material.ChipColors
 import androidx.wear.protolayout.material.CompactChip
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
+import com.example.wear.tiles.golden.resources
 import com.example.wear.tiles.tools.IconSizePreview
-import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
-import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.compose.tools.LayoutElementPreview
-import com.google.android.horologist.compose.tools.LayoutRootPreview
 import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
@@ -98,19 +100,11 @@ private fun searchLayout(
     .setButtonColors(ButtonColors.secondaryButtonColors(MessagingTileTheme.colors))
     .build()
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-private fun MessageTilePreview() {
-    val context = LocalContext.current
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
+private fun MessageTilePreview(context: Context): TilePreviewData {
     val state = MessagingTileState(MessagingRepo.knownContacts)
-    LayoutRootPreview(
-        messagingTileLayout(
-            state,
-            context,
-            buildDeviceParameters(context.resources)
-        )
-    ) {
+    return TilePreviewData(onTileResourceRequest = resources {
         addIdToImageMapping(
             state.contacts[1].imageResourceId(),
             bitmapToImageResource(
@@ -127,6 +121,14 @@ private fun MessageTilePreview() {
             MessagingTileRenderer.ID_IC_SEARCH,
             drawableResToImageResource(R.drawable.ic_search_24)
         )
+    }) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            messagingTileLayout(
+                state,
+                context,
+                buildDeviceParameters(context.resources)
+            )
+        ).build()
     }
 }
 
