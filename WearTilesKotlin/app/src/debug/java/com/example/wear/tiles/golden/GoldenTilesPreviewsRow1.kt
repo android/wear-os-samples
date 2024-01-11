@@ -16,107 +16,91 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.wear.protolayout.ResourceBuilders
+import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
 import com.example.wear.tiles.R
-import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
-import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.compose.tools.LayoutRootPreview
-import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Goal() {
-    val context = LocalContext.current
-    LayoutRootPreview(
-        Goal.layout(context, context.deviceParams(), steps = 5168, goal = 8000)
-    )
+@Preview
+fun Goal(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
+        Goal.layout(
+            context, it.deviceConfiguration, steps = 5168, goal = 8000
+        )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun WorkoutButtons() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview
+fun WorkoutButtons(context: Context) = TilePreviewData(onTileResourceRequest = resources {
+    addIdToImageMapping(
+        Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
+    )
+    addIdToImageMapping(
+        Workout.BUTTON_2_ICON_ID, drawableResToImageResource(R.drawable.ic_yoga_24)
+    )
+    addIdToImageMapping(
+        Workout.BUTTON_3_ICON_ID, drawableResToImageResource(R.drawable.ic_cycling_24)
+    )
+}) {
+    singleTimelineEntryTileBuilder(
         Workout.buttonsLayout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             weekSummary = "1 run this week",
             button1Clickable = emptyClickable,
             button2Clickable = emptyClickable,
             button3Clickable = emptyClickable,
             chipClickable = emptyClickable
         )
-    ) {
-        addIdToImageMapping(
-            Workout.BUTTON_1_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_run_24)
-        )
-        addIdToImageMapping(
-            Workout.BUTTON_2_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_yoga_24)
-        )
-        addIdToImageMapping(
-            Workout.BUTTON_3_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_cycling_24)
-        )
-    }
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun WorkoutLargeChip() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview
+fun WorkoutLargeChip(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
         Workout.largeChipLayout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             clickable = emptyClickable,
             lastWorkoutSummary = "Last session 45m"
         )
-    )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Run() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview
+fun Run(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
         Run.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             lastRunText = "2 days ago",
             startRunClickable = emptyClickable,
             moreChipClickable = emptyClickable
         )
-    )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Ski() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview
+fun Ski(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
         Ski.layout(
             context,
             stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
             stat2 = Ski.Stat("Distance", "21.8", "mile")
         )
-    )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun SleepTracker() {
+//@Preview
+fun SleepTracker(context: Context) {
     // TODO: This tile doesn't use standard components; we can achieve it by drawing on a Canvas (Compose's DrawScope) then converting it to a bitmap using Horologist
 }
 
-private fun Context.deviceParams() = buildDeviceParameters(resources)
+internal fun resources(fn: ResourceBuilders.Resources.Builder.() -> Unit): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources =
+    {
+        ResourceBuilders.Resources.Builder().setVersion(it.version).apply(fn).build()
+    }

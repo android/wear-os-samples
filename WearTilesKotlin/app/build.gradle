@@ -75,5 +75,7 @@ dependencies {
 
     implementation libs.androidx.wear.tooling.preview
     implementation libs.compose.ui.tooling.preview
+
     debugImplementation libs.androidx.ui.tooling
+    debugImplementation libs.androidx.tiles.tooling.preview
 }
