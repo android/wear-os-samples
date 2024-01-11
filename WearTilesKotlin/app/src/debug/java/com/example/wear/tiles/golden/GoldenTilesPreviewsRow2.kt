@@ -16,50 +16,51 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
-import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
-import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.compose.tools.LayoutRootPreview
-import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 /**
  * b/238548541 (internal bug - the spacing doesn't match Figma)
  */
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun HeartRateSimple() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun HeartRateSimple(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         HeartRate.simpleLayout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             heartRateBpm = 86,
             clickable = emptyClickable
         )
+    ).build()
+}
+
+//@Preview
+fun HeartRateGraph(context: Context) {
+    TODO()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun MeditationChips(context: Context) = TilePreviewData(resources {
+    addIdToImageMapping(
+        Meditation.CHIP_1_ICON_ID,
+        drawableResToImageResource(R.drawable.ic_breathe_24)
     )
-}
-
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun HeartRateGraph() {
-    // TODO: not trivial, ataul has dibs though please!
-}
-
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun MeditationChips() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+    addIdToImageMapping(
+        Meditation.CHIP_2_ICON_ID,
+        drawableResToImageResource(R.drawable.ic_mindfulness_24)
+    )
+}) {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Meditation.chipsLayout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             session1 = Meditation.Session(
                 label = "Breathe",
                 iconId = Meditation.CHIP_1_ICON_ID,
@@ -72,44 +73,31 @@ fun MeditationChips() {
             ),
             browseClickable = emptyClickable
         )
-    ) {
-        addIdToImageMapping(
-            Meditation.CHIP_1_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_breathe_24)
-        )
-        addIdToImageMapping(
-            Meditation.CHIP_2_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_mindfulness_24)
-        )
-    }
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun MeditationButtons() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun MeditationButtons(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Meditation.buttonsLayout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             timer1 = Meditation.Timer(minutes = 5, clickable = emptyClickable),
             timer2 = Meditation.Timer(minutes = 10, clickable = emptyClickable),
             timer3 = Meditation.Timer(minutes = 15, clickable = emptyClickable),
             clickable = emptyClickable
         )
-    )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Timer() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun Timer(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Timer.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             timer1 = Timer.Timer(minutes = "05", clickable = emptyClickable),
             timer2 = Timer.Timer(minutes = "10", clickable = emptyClickable),
             timer3 = Timer.Timer(minutes = "15", clickable = emptyClickable),
@@ -117,24 +105,20 @@ fun Timer() {
             timer5 = Timer.Timer(minutes = "30", clickable = emptyClickable),
             clickable = emptyClickable
         )
-    )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Alarm() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun Alarm(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Alarm.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             timeUntilAlarm = "Less than 1 min",
             alarmTime = "14:58",
             alarmDays = "Mon, Tue, Wed",
             clickable = emptyClickable
         )
-    )
+    ).build()
 }
-
-private fun Context.deviceParams() = buildDeviceParameters(resources)

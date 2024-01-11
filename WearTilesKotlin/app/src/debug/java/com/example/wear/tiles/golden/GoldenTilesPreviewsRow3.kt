@@ -16,28 +16,29 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
-import com.example.wear.tiles.tools.WearLargeRoundDevicePreview
-import com.example.wear.tiles.tools.WearSmallRoundDevicePreview
 import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.compose.tools.LayoutRootPreview
-import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 /**
  * b/238560022 misaligned because we can't add an offset, small preview is clipped
  */
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Weather() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun Weather(context: Context) = TilePreviewData(resources {
+    addIdToImageMapping(
+        Weather.SCATTERED_SHOWERS_ICON_ID,
+        drawableResToImageResource(R.drawable.scattered_showers)
+    )
+}) {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Weather.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             location = "San Francisco",
             weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
             currentTemperature = "52°",
@@ -45,62 +46,54 @@ fun Weather() {
             highTemperature = "64°",
             weatherSummary = "Showers"
         )
-    ) {
-        addIdToImageMapping(
-            Weather.SCATTERED_SHOWERS_ICON_ID,
-            drawableResToImageResource(R.drawable.scattered_showers)
-        )
-    }
+    ).build()
 }
 
 /**
  * b/238556504 alignment doesn't match figma.
  */
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun News() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun News(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         News.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             headline = "Millions still without power as new storm moves across US",
             newsVendor = "The New York Times",
             clickable = emptyClickable
         )
-    )
+    ).build()
 }
 
 /**
  * b/238571095 Alignment doesn't match Figma
  */
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Calendar() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun Calendar(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Calendar.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             eventTime = "6:30-7:30 PM",
             eventName = "Morning Pilates with Christina Lloyd",
             eventLocation = "216 Market Street",
             clickable = emptyClickable
         )
-    )
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Social() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun Social(context: Context) = TilePreviewData(resources {
+    addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
+    addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
+}) {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Social.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             Social.Contact(
                 initials = "AC",
                 clickable = emptyClickable,
@@ -119,21 +112,25 @@ fun Social() {
                 avatarId = Social.AVATAR_ID_2
             )
         )
-    ) {
-        addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
-        addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
-    }
+    ).build()
 }
 
-@WearSmallRoundDevicePreview
-@WearLargeRoundDevicePreview
-@Composable
-fun Media() {
-    val context = LocalContext.current
-    LayoutRootPreview(
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun Media(context: Context) = TilePreviewData(resources {
+    addIdToImageMapping(
+        Media.CHIP_1_ICON_ID,
+        drawableResToImageResource(R.drawable.ic_music_queue_24)
+    )
+    addIdToImageMapping(
+        Media.CHIP_2_ICON_ID,
+        drawableResToImageResource(R.drawable.ic_podcasts_24)
+    )
+}) {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
         Media.layout(
             context,
-            context.deviceParams(),
+            it.deviceConfiguration,
             playlist1 = Media.Playlist(
                 label = "Liked songs",
                 iconId = Media.CHIP_1_ICON_ID,
@@ -146,16 +143,5 @@ fun Media() {
             ),
             browseClickable = emptyClickable
         )
-    ) {
-        addIdToImageMapping(
-            Media.CHIP_1_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_music_queue_24)
-        )
-        addIdToImageMapping(
-            Media.CHIP_2_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_podcasts_24)
-        )
-    }
+    ).build()
 }
-
-private fun Context.deviceParams() = buildDeviceParameters(resources)
