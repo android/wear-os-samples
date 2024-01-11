@@ -21,11 +21,13 @@ import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Goal(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Goal.layout(
@@ -34,7 +36,8 @@ fun Goal(context: Context) = TilePreviewData {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun WorkoutButtons(context: Context) = TilePreviewData(onTileResourceRequest = resources {
     addIdToImageMapping(
         Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
@@ -59,7 +62,8 @@ fun WorkoutButtons(context: Context) = TilePreviewData(onTileResourceRequest = r
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun WorkoutLargeChip(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Workout.largeChipLayout(
@@ -71,7 +75,8 @@ fun WorkoutLargeChip(context: Context) = TilePreviewData {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Run(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Run.layout(
@@ -84,7 +89,8 @@ fun Run(context: Context) = TilePreviewData {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Ski(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Ski.layout(

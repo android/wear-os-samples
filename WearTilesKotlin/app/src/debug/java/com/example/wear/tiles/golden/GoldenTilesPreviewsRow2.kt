@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
@@ -26,7 +27,8 @@ import com.google.android.horologist.tiles.images.drawableResToImageResource
 /**
  * b/238548541 (internal bug - the spacing doesn't match Figma)
  */
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun HeartRateSimple(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         HeartRate.simpleLayout(
@@ -43,7 +45,8 @@ fun HeartRateGraph(context: Context) {
     TODO()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun MeditationChips(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Meditation.CHIP_1_ICON_ID,
@@ -73,7 +76,8 @@ fun MeditationChips(context: Context) = TilePreviewData(resources {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun MeditationButtons(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Meditation.buttonsLayout(
@@ -87,7 +91,8 @@ fun MeditationButtons(context: Context) = TilePreviewData {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Timer(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Timer.layout(
@@ -103,7 +108,8 @@ fun Timer(context: Context) = TilePreviewData {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Alarm(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Alarm.layout(

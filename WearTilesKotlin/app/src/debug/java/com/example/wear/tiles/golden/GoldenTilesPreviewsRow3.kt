@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
@@ -26,7 +27,8 @@ import com.google.android.horologist.tiles.images.drawableResToImageResource
 /**
  * b/238560022 misaligned because we can't add an offset, small preview is clipped
  */
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Weather(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Weather.SCATTERED_SHOWERS_ICON_ID,
@@ -50,7 +52,8 @@ fun Weather(context: Context) = TilePreviewData(resources {
 /**
  * b/238556504 alignment doesn't match figma.
  */
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun News(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         News.layout(
@@ -66,7 +69,8 @@ fun News(context: Context) = TilePreviewData {
 /**
  * b/238571095 Alignment doesn't match Figma
  */
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Calendar(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Calendar.layout(
@@ -80,7 +84,8 @@ fun Calendar(context: Context) = TilePreviewData {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Social(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
     addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
@@ -110,7 +115,8 @@ fun Social(context: Context) = TilePreviewData(resources {
     ).build()
 }
 
-@Preview
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
 fun Media(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Media.CHIP_1_ICON_ID,
