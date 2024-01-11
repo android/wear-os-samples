@@ -3,7 +3,7 @@ android-gradle-plugin = "8.2.1"
 androidx-activity = "1.8.2"
 androidx-benchmark = "1.2.2"
 androidx-compose-bom = "2023.10.01"
-androidx-lifecycle = "2.6.2"
+androidx-lifecycle = "2.7.0"
 androidx-test-espresso = "3.5.1"
 androidx-test-ext = "1.1.5"
 androidx-test-uiautomator = "2.2.0"
@@ -24,7 +24,7 @@ androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-commo
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
-androidx-metrics-performance = "androidx.metrics:metrics-performance:1.0.0-alpha04"
+androidx-metrics-performance = "androidx.metrics:metrics-performance:1.0.0-beta01"
 androidx-splashscreen =  "androidx.core:core-splashscreen:1.0.1"
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 androidx-test-ext = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext" }
