@@ -113,7 +113,7 @@ fun createComplicationSlotManager(
         canvasComplicationFactory = defaultCanvasComplicationFactory,
         supportedTypes = ComplicationConfig.Right.supportedTypes,
         defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-            SystemDataSources.DATA_SOURCE_STEP_COUNT,
+            SystemDataSources.DATA_SOURCE_WATCH_BATTERY,
             ComplicationType.SHORT_TEXT
         ),
         bounds = ComplicationSlotBounds(
