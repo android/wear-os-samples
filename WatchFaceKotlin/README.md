@@ -1,14 +1,12 @@
 WatchFace Sample (Kotlin)
 ===============================
-Demonstrates watch faces using the new androidX libraries (Kotlin).
+Demonstrates watch faces using the androidX libraries (Kotlin). **The newer [Watch Face Format][1]
+(WFF) is recommended in preference to using these libraries.**
 
 Introduction
 ------------
-With the release of the androidX watch face libraries (late 2020), Wear OS has simplified
-watch face development.
-
-This sample gives you an early preview of how you can simplify your development with the new 100%
-Kotlin libraries.
+The AndroidX watch face libraries allow you to develop a watch face service in Kotlin. However,
+[WFF][1] is strongly recommended in preference to this approach.
 
 Steps to build in Android Studio
 --------------------------------
@@ -46,3 +44,5 @@ https://github.com/android/wear-os-samples
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
+
+[1]: https://developer.android.com/training/wearables/wff
