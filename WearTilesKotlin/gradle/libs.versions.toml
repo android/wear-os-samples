@@ -8,7 +8,7 @@ horologist = "0.5.18"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.21"
 org-jetbrains-kotlinx = "1.7.3"
-tiles-tooling-preview = "1.3.0-alpha04"
+tiles-tooling-preview = "1.3.0-beta01"
 
 [libraries]
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
