@@ -46,5 +46,5 @@ wearable = { module = "com.google.android.wearable:wearable", version.ref = "wea
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.23.3"
+com-diffplug-spotless = "com.diffplug.spotless:6.24.0"
 firebase-testlab = "com.google.firebase.testlab:0.0.1-alpha05"
