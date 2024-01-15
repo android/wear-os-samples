@@ -29,5 +29,5 @@ playservices-wearable = "com.google.android.gms:play-services-wearable:18.1.0"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.23.3"
+com-diffplug-spotless = "com.diffplug.spotless:6.24.0"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
