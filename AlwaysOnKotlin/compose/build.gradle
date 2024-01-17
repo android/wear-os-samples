@@ -19,7 +19,7 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id "com.google.firebase.testlab"
+//    id "com.google.firebase.testlab"
 }
 
 android {
@@ -81,20 +81,15 @@ android {
     }
 
   testOptions {
-    firebaseTestLab {
-      managedDevices {
-          pixelWatch {
-            device = "r11"
-            apiLevel = 30
-          }
-      }
-    }
+//    firebaseTestLab {
+//      managedDevices {
+//          pixelWatch {
+//            device = "r11"
+//            apiLevel = 30
+//          }
+//      }
+//    }
     devices {
-      squareApi30(ManagedVirtualDevice) {
-        device = "Wear OS Square"
-        apiLevel = 30
-        systemImageSource = "android-wear"
-      }
       roundApi28(ManagedVirtualDevice) {
         device = "Wear OS Large Round"
         apiLevel = 28
