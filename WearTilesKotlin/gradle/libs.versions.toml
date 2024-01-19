@@ -4,7 +4,7 @@ androidx-wear-tiles = "1.2.0"
 androidx-wear-tooling-preview = "1.0.0"
 compose = "1.5.4"
 compose-compiler = "1.5.7"
-horologist = "0.5.18"
+horologist = "0.5.19"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.21"
 org-jetbrains-kotlinx = "1.7.3"
@@ -27,6 +27,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.0.4"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
