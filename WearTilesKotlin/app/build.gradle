@@ -42,6 +42,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -75,6 +76,8 @@ dependencies {
 
     implementation libs.androidx.wear.tooling.preview
     implementation libs.compose.ui.tooling.preview
+
+    coreLibraryDesugaring libs.desugar.jdk.libs
 
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.tiles.tooling.preview
