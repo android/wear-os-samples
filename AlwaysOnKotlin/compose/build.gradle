@@ -57,6 +57,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -135,6 +136,8 @@ dependencies {
 
     // Release mode doesn't work without that dependency
     compileOnly libs.wearable
+
+    coreLibraryDesugaring libs.desugar.jdk.libs
 
     androidTestImplementation composeBom
     androidTestImplementation libs.kotlinx.coroutines.test

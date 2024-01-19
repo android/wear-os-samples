@@ -43,6 +43,7 @@ test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-beta01"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wearable = { module = "com.google.android.wearable:wearable", version.ref = "wearable" }
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.0.4"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

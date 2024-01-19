@@ -34,6 +34,7 @@ androidx-tracing-ktx = "androidx.tracing:tracing-ktx:1.2.0"
 com-google-maps-compose = "com.google.maps.android:maps-compose:4.3.0"
 com-google-play-services-maps = "com.google.android.gms:play-services-maps:18.2.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.0.4"
 
 # Remove version.ref for compose dependencies below if you want to use Compose BoM and stable releases
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
