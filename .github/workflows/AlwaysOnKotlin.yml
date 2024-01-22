@@ -94,6 +94,12 @@ jobs:
           mkdir -p /Users/runner/Library/Android/sdk/licenses
           echo 84831b9409646a918e30573bab4c9c91346d8abd > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
 
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Run instrumentation tests
         uses: gradle/gradle-build-action@v2
         with:
