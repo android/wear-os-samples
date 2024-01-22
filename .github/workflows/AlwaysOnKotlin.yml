@@ -88,8 +88,8 @@ jobs:
 
       - name: Accept licenses
         run: |
-          mkdir -p /Users/runner/Library/Android/sdk/licenses
-          echo 84831b9409646a918e30573bab4c9c91346d8abd > /Users/runner/Library/Android/sdk/licenses/android-sdk-preview-license
+          mkdir -p /usr/local/lib/android/sdk/licenses
+          echo 84831b9409646a918e30573bab4c9c91346d8abd > /usr/local/lib/android/sdk/licenses/android-sdk-preview-license
 
       - name: Enable KVM group perms
         run: |
