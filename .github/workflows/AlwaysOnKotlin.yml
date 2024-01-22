@@ -106,8 +106,8 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.device }}Check
-            -Dorg.gradle.workers.max=1
-            -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+            --stacktrace
+            --info
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload views test reports
