@@ -1,6 +1,5 @@
 name: AlwaysOnKotlin
 
-  A
 on:
   push:
     branches:
@@ -80,6 +79,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Bump to AGP 8.4 alpha
+        run: |
+          sed -i 's/android-gradle-plugin = .*/android-gradle-plugin = "8.4.0-alpha04"/' gradle/libs.versions.toml
+          sed -i 's/id "com.google.firebase.testlab"//' compose/build.gradle
 
       - name: Enable KVM group perms
         run: |

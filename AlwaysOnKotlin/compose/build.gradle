@@ -82,12 +82,14 @@ android {
     }
 
   testOptions {
-    firebaseTestLab {
-      managedDevices {
+    if (pluginManager.hasPlugin("com.google.firebase.testlab")) {
+      firebaseTestLab {
+        managedDevices {
           pixelWatch {
             device = "r11"
             apiLevel = 30
           }
+        }
       }
     }
     devices {
