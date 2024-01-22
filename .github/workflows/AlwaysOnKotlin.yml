@@ -93,6 +93,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
 #      - name: Install GMD image
+#      ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
 #        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-${{ matrix.device }};android-wear;x86_64"
 
       - name: Set up JDK 17
