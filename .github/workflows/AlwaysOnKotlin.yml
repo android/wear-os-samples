@@ -1,5 +1,6 @@
 name: AlwaysOnKotlin
 
+  A
 on:
   push:
     branches:
@@ -92,10 +93,17 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Accept licenses
+        run: |
+          mkdir -p /usr/local/lib/android/sdk/licenses
+          echo 84831b9409646a918e30573bab4c9c91346d8abd > /usr/local/lib/android/sdk/licenses/android-sdk-preview-license
+
       - name: Run instrumentation tests
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.device }}Check
+            -Dorg.gradle.workers.max=1
+            -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload views test reports
