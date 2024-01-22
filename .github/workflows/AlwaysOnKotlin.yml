@@ -1,4 +1,4 @@
-name: AlwaysOnKotlin
+name: AlwaysOnKotlina
 
 on:
   push:
@@ -72,9 +72,9 @@ jobs:
       fail-fast: false
       matrix:
         device:
-          - roundApi28
-          - roundApi30
-          - roundApi33
+          - 28
+          - 30
+          - 33
 
     steps:
       - name: Checkout
@@ -91,6 +91,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Install GMD image
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-${{ matrix.device }};android-wear;x86_64"
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -105,7 +108,7 @@ jobs:
       - name: Run instrumentation tests
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ${{ matrix.device }}Check
+          arguments: roundApi${{ matrix.device }}Check
             --stacktrace
             --info
           build-root-directory: ${{ env.SAMPLE_PATH }}
