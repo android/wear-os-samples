@@ -91,7 +91,7 @@ jobs:
           mkdir -p /usr/local/lib/android/sdk/licenses
           echo 84831b9409646a918e30573bab4c9c91346d8abd > /usr/local/lib/android/sdk/licenses/android-sdk-preview-license
 
-      - name: Install NDK
+      - name: Install emulator
         run: |
           sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "emulator"
 
