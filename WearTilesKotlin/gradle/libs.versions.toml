@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.2.1"
+android-gradle-plugin = "8.2.2"
 androidx-wear-tiles = "1.2.0"
 androidx-wear-tooling-preview = "1.0.0"
 compose = "1.5.4"
@@ -31,4 +31,4 @@ desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.0.4"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.24.0"
+com-diffplug-spotless = "com.diffplug.spotless:6.25.0"
