@@ -48,4 +48,4 @@ desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.0.4"
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:6.25.0"
-firebase-testlab = "com.google.firebase.testlab:0.0.1-alpha05"
+firebase-testlab = "com.google.firebase.testlab:0.0.1-alpha06"
