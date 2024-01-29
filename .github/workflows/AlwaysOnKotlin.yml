@@ -83,8 +83,7 @@ jobs:
       - name: Bump to AGP 8.4 alpha
         run: |
           sed -i 's/android-gradle-plugin = .*/android-gradle-plugin = "8.4.0-alpha04"/' ${{ env.SAMPLE_PATH }}/gradle/libs.versions.toml
-          sed -i 's/id "com.google.firebase.testlab"//' ${{ env.SAMPLE_PATH }}/compose/build.gradle
-          cat ${{ env.SAMPLE_PATH }}/gradle/libs.versions.toml
+          sed -i 's/\/\/(\s+id "com.google.firebase.testlab")/\1/' ${{ env.SAMPLE_PATH }}/compose/build.gradle
 
       - name: Enable KVM group perms
         run: |
