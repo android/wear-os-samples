@@ -97,6 +97,9 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Install Emulator
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --install "emulator"
+
       - name: Accept licenses
         run: |
           mkdir -p /usr/local/lib/android/sdk/licenses
