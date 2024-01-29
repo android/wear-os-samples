@@ -82,15 +82,16 @@ android {
     }
 
   testOptions {
-    //
-//    firebaseTestLab {
-//      managedDevices {
-//          pixelWatch {
-//            device = "r11"
-//            apiLevel = 30
-//          }
-//      }
-//    }
+    if (pluginManager.hasPlugin("com.google.firebase.testlab")) {
+      firebaseTestLab {
+        managedDevices {
+          pixelWatch {
+            device = "r11"
+            apiLevel = 30
+          }
+        }
+      }
+    }
     devices {
       squareApi30(ManagedVirtualDevice) {
         device = "Wear OS Square"
