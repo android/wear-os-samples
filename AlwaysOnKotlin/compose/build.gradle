@@ -19,7 +19,7 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id "com.google.firebase.testlab"
+//    id "com.google.firebase.testlab"
 }
 
 android {
