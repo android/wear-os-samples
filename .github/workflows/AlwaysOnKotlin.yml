@@ -109,8 +109,6 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: roundApi${{ matrix.device }}Check
-            --stacktrace
-            --info
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Upload views test reports
