@@ -17,6 +17,7 @@ For more details on the Watch Face Format, see:
 - [Watch Face Format setup][wff-setup]
 - [XML reference][wff-xml-reference]
 - [Design guidance][watch-face-design-guidance]
+- [Validator tools and Schema][validator-tools]
 
 ## Samples
 
@@ -83,3 +84,4 @@ On a Wear 4 device, such as the Wear emulator:
 [wff-xml-reference]: https://developer.android.com/training/wearables/wff/watch-face
 [watch-face-design-guidance]: https://developer.android.com/design/ui/wear/guides/surfaces/watch-faces
 [contributing]: ../CONTRIBUTING.md
+[validator-tools]: https://github.com/google/watchface
