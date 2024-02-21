@@ -17,7 +17,7 @@ For more details on the Watch Face Format, see:
 - [Watch Face Format setup][wff-setup]
 - [XML reference][wff-xml-reference]
 - [Design guidance][watch-face-design-guidance]
-- [Validator tools][validator-tools]
+- [Validator tools and Schema][validator-tools]
 
 ## Samples
 
