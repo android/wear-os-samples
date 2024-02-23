@@ -29,6 +29,12 @@
     {
       "matchPackageNames": ["com.google.guava:guava"],
       "versioning": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(-(?<compatibility>.*))?$"
+    },
+    {
+      "matchPackagePatterns": [
+        "com.google.android.horologist:.*"
+      ],
+      "allowedVersions": "<0.6.0"
     }
   ]
 }
