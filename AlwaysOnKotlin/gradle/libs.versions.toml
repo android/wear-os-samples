@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.2.2"
 androidx-activity = "1.8.2"
-androidx-compose-bom = "2024.02.00"
+androidx-compose-bom = "2024.02.01"
 androidx-lifecycle = "2.7.0"
 androidx-wear-compose = "1.3.0"
 compose-compiler = "1.5.10"
@@ -39,7 +39,7 @@ test-ext-junit-ktx = "androidx.test.ext:junit-ktx:1.1.5"
 test-ext-truth = "androidx.test.ext:truth:1.5.0"
 test-rules = "androidx.test:rules:1.5.0"
 test-runner = "androidx.test:runner:1.5.2"
-test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0-rc01"
+test-uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wearable = { module = "com.google.android.wearable:wearable", version.ref = "wearable" }
