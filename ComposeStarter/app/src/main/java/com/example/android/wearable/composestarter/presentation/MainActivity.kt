@@ -132,7 +132,7 @@ fun ListScreen() {
         ScalingLazyColumn(
             columnState = columnState,
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             item {
                 ListHeader {
@@ -151,7 +151,8 @@ fun ListScreen() {
                 Button(
                     imageVector = Icons.Default.Build,
                     contentDescription = "Example Button",
-                    onClick = { })
+                    onClick = { }
+                )
             }
         }
     }
