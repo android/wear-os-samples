@@ -43,6 +43,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.majorVersion
@@ -67,7 +68,7 @@ dependencies {
     // General compose dependencies
     implementation composeBom
     implementation libs.androidx.activity.compose
-    implementation libs.compose.ui.tooling.preview
+    implementation libs.androidx.splashscreen
 
     // Compose for Wear OS Dependencies
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
@@ -79,10 +80,22 @@ dependencies {
 
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
     implementation libs.wear.compose.foundation
+    implementation(libs.androidx.material.icons.core)
+
+    // Horologist for correct Compose layout
+    implementation libs.horologist.composables
+    implementation libs.horologist.compose.layout
+    implementation libs.horologist.compose.material
+
+    // Preview Tooling
+    implementation libs.compose.ui.tooling.preview
+    implementation(libs.androidx.compose.ui.tooling)
 
     // If you are using Compose Navigation, use the Wear OS version (NOT the
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
-    // implementation libs.wear.compose.navigation
+    implementation libs.wear.compose.navigation
+
+    coreLibraryDesugaring libs.desugar.jdk.libs
 
     // Testing
     testImplementation libs.junit
