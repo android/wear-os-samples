@@ -16,6 +16,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.roborazzi
 }
 
 android {
@@ -44,6 +45,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
         coreLibraryDesugaringEnabled true
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources true
+        }
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.majorVersion
@@ -95,10 +101,17 @@ dependencies {
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
     implementation libs.wear.compose.navigation
 
+    implementation libs.androidx.ui.test.manifest
+
     coreLibraryDesugaring libs.desugar.jdk.libs
 
     // Testing
+    testImplementation libs.androidx.ui.test.junit4
     testImplementation libs.junit
+    testImplementation libs.robolectric
+    testImplementation libs.roborazzi
+    testImplementation libs.roborazzi.compose
+    testImplementation libs.roborazzi.rule
 
     androidTestImplementation libs.test.ext.junit
     androidTestImplementation libs.test.espresso.core
@@ -106,5 +119,6 @@ dependencies {
     androidTestImplementation composeBom
 
     debugImplementation libs.compose.ui.tooling
+    debugImplementation libs.androidx.ui.test.manifest
     debugImplementation composeBom
 }
