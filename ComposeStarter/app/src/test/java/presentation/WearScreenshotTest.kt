@@ -45,7 +45,7 @@ abstract class WearScreenshotTest {
         }
 
         composeRule.onRoot().captureRoboImage(
-            filePath ="src/test/screenshots/${this.javaClass.simpleName}_${device.id}.png",
+            filePath = "src/test/screenshots/${this.javaClass.simpleName}_${device.id}.png",
             roborazziOptions = RoborazziOptions(
                 recordOptions = RoborazziOptions.RecordOptions(
                     applyDeviceCrop = true
