@@ -103,6 +103,7 @@ fun WearApp() {
 fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
     val scrollState = ScrollState(0)
 
+    // Wear design guidelines specify a 5.2% horizontal padding on each side of the list.
     val horizontalPadding = (0.052f * LocalConfiguration.current.screenWidthDp).dp
 
     /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
@@ -129,6 +130,11 @@ fun ListScreen() {
     val columnState = rememberColumnState()
 
     ScreenScaffold(scrollState = columnState) {
+        /*
+         * Using the Horologist [ScalingLazyColumn] here takes care of the horizontal and vertical
+         * padding for the list, so there is no need to specify it, as in the [GreetingScreen]
+         * composable.
+         */
         ScalingLazyColumn(
             columnState = columnState,
             modifier = Modifier
