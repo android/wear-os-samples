@@ -27,7 +27,9 @@ class GreetingScreenTest(override val device: WearDevice) : WearScreenshotTest()
 
     @Test
     fun greetingScreenTest() = runTest {
-        AppScaffold {
+        AppScaffold(
+            timeText = { ResponsiveFixedSourceTimeText() }
+        ) {
             GreetingScreen(greetingName = "screenshot", onShowList = {})
         }
     }
