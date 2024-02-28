@@ -44,6 +44,8 @@ abstract class WearScreenshotTest {
     @OptIn(ExperimentalRoborazziApi::class)
     fun runTest(content: @Composable () -> Unit) {
         RuntimeEnvironment.setQualifiers("+w${device.dp}dp-h${device.dp}dp")
+        RuntimeEnvironment.setFontScale(device.fontScale)
+
         composeRule.setContent {
             content()
         }
