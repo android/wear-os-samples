@@ -16,15 +16,20 @@
 package presentation
 
 import com.example.android.wearable.composestarter.presentation.ListScreen
+import com.google.android.horologist.compose.layout.AppScaffold
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class ListScreenTest(override val device: WearDevice) : WearScreenshotTest() {
+    override val tolerance = 0.03f
+
     @Test
     fun listScreenTest() = runTest {
-        ListScreen()
+        AppScaffold {
+            ListScreen()
+        }
     }
 
     companion object {

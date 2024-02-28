@@ -20,6 +20,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziOptions
+import com.github.takahirom.roborazzi.ThresholdValidator
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
 import org.robolectric.RuntimeEnvironment
@@ -37,6 +38,9 @@ abstract class WearScreenshotTest {
 
     abstract val device: WearDevice
 
+    // Allow for individual tolerances to be set on each test, should be between 0.0 and 1.0
+    open val tolerance: Float = 0.0f
+
     @OptIn(ExperimentalRoborazziApi::class)
     fun runTest(content: @Composable () -> Unit) {
         RuntimeEnvironment.setQualifiers("+w${device.dp}dp-h${device.dp}dp")
@@ -49,6 +53,9 @@ abstract class WearScreenshotTest {
             roborazziOptions = RoborazziOptions(
                 recordOptions = RoborazziOptions.RecordOptions(
                     applyDeviceCrop = true
+                ),
+                compareOptions = RoborazziOptions.CompareOptions(
+                    resultValidator = ThresholdValidator(tolerance)
                 )
             )
         )
