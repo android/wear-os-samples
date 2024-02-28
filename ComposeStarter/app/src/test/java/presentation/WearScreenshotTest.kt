@@ -18,6 +18,8 @@ package presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
 import org.robolectric.RuntimeEnvironment
@@ -35,6 +37,7 @@ abstract class WearScreenshotTest {
 
     abstract val device: WearDevice
 
+    @OptIn(ExperimentalRoborazziApi::class)
     fun runTest(content: @Composable () -> Unit) {
         RuntimeEnvironment.setQualifiers("+w${device.dp}dp-h${device.dp}dp")
         composeRule.setContent {
@@ -42,7 +45,12 @@ abstract class WearScreenshotTest {
         }
 
         composeRule.onRoot().captureRoboImage(
-            "src/test/screenshots/${this.javaClass.simpleName}_${device.id}.png"
+            filePath ="src/test/screenshots/${this.javaClass.simpleName}_${device.id}.png",
+            roborazziOptions = RoborazziOptions(
+                recordOptions = RoborazziOptions.RecordOptions(
+                    applyDeviceCrop = true
+                )
+            )
         )
     }
 }
