@@ -27,7 +27,9 @@ class ListScreenTest(override val device: WearDevice) : WearScreenshotTest() {
 
     @Test
     fun listScreenTest() = runTest {
-        AppScaffold {
+        AppScaffold(
+            timeText = { ResponsiveFixedSourceTimeText() }
+        ) {
             ListScreen()
         }
     }
