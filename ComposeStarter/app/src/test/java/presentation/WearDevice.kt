@@ -21,7 +21,8 @@ enum class WearDevice(
     val id: String,
     val modelName: String,
     val screenSizePx: Int,
-    val density: Float
+    val density: Float,
+    val fontScale: Float = 1f
 ) {
     MobvoiTicWatchPro5(
         id = "ticwatch_pro_5",
@@ -35,7 +36,7 @@ enum class WearDevice(
         screenSizePx = 396,
         density = 2.0f
     ),
-    SamsungGalaxyWatch6Large(
+    SamsungGalaxyWatch6(
         id = "galaxy_watch_6",
         modelName = "Samsung Galaxy Watch 6 Large",
         screenSizePx = 480,
@@ -58,6 +59,20 @@ enum class WearDevice(
         modelName = "Generic Large Round",
         screenSizePx = 454,
         density = 2.0f
+    ),
+    SamsungGalaxyWatch6SmallFont(
+        id = "galaxy_watch_6_small_font",
+        modelName = "Samsung Galaxy Watch 6 Large",
+        screenSizePx = 480,
+        density = 2.125f,
+        fontScale = 0.94f
+    ),
+    GooglePixelWatchLargeFont(
+        id = "pixel_watch_large_font",
+        modelName = "Google Pixel Watch",
+        screenSizePx = 384,
+        density = 2.0f,
+        fontScale = 1.24f
     );
 
     val dp: Int = (screenSizePx / density).roundToInt()
