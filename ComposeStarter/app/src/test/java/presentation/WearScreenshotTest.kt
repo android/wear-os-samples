@@ -59,7 +59,7 @@ abstract class WearScreenshotTest {
 
     fun captureScreenshot(suffix: String) {
         composeRule.onRoot().captureRoboImage(
-            filePath = "src/test/screenshots/${this.javaClass.simpleName}_${device.id}${suffix}.png",
+            filePath = "src/test/screenshots/${this.javaClass.simpleName}_${device.id}$suffix.png",
             roborazziOptions = RoborazziOptions(
                 recordOptions = RoborazziOptions.RecordOptions(
                     applyDeviceCrop = true
