@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalRoborazziApi::class)
+
 package presentation
 
 import androidx.compose.runtime.Composable
@@ -50,8 +52,14 @@ abstract class WearScreenshotTest {
             content()
         }
 
+        val suffix = ""
+
+        captureScreenshot(suffix)
+    }
+
+    fun captureScreenshot(suffix: String) {
         composeRule.onRoot().captureRoboImage(
-            filePath = "src/test/screenshots/${this.javaClass.simpleName}_${device.id}.png",
+            filePath = "src/test/screenshots/${this.javaClass.simpleName}_${device.id}${suffix}.png",
             roborazziOptions = RoborazziOptions(
                 recordOptions = RoborazziOptions.RecordOptions(
                     applyDeviceCrop = true
