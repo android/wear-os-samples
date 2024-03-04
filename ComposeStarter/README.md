@@ -8,8 +8,8 @@ Introduction
 Simple "Hello, World" app meant as a starting point for a new project using
 Compose for Wear OS.
 
-Displays only a centered [Text] composable, and the actual text varies based on the shape of the
-device (round vs. square/rectangular).
+Displays a centered [Text] composable and a list built with [Horologist]
+(https://github.com/google/horologist).
 
 For more information on composable options in Compose for Wear OS, check out our
 [documentation](https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary.html).
@@ -18,8 +18,6 @@ Screenshots
 -----------
 
 <img src="screenshots/round_hello.png" height="372" alt="Round Screenshot"/>
-
-<img src="screenshots/square_hello.png" height="349" alt="Square Screenshot"/> 
 
 
 Getting Started
