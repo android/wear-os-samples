@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:OptIn(ExperimentalHorologistApi::class)
 
 package com.example.android.wearable.composestarter.presentation
@@ -36,10 +37,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ListHeader
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PositionIndicator
+import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TitleCard
+import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -48,12 +58,6 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberColumnState
-import com.google.android.horologist.compose.material.Button
-import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 
 /**
@@ -86,14 +90,12 @@ fun WearApp() {
     val navController = rememberSwipeDismissableNavController()
 
     WearAppTheme {
-        AppScaffold {
-            SwipeDismissableNavHost(navController = navController, startDestination = "menu") {
-                composable("menu") {
-                    GreetingScreen("Android", onShowList = { navController.navigate("list") })
-                }
-                composable("list") {
-                    ListScreen()
-                }
+        SwipeDismissableNavHost(navController = navController, startDestination = "menu") {
+            composable("menu") {
+                GreetingScreen("Android", onShowList = { navController.navigate("list") })
+            }
+            composable("list") {
+                ListScreen()
             }
         }
     }
@@ -110,7 +112,10 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
      * version of LazyColumn for wear devices with some added features. For more information,
      * see d.android.com/wear/compose.
      */
-    ScreenScaffold(scrollState = scrollState) {
+    Scaffold(
+        timeText = { TimeText(modifier = Modifier.scrollAway(scrollState)) },
+        positionIndicator = { PositionIndicator(scrollState) }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,25 +125,38 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
             verticalArrangement = Arrangement.Center
         ) {
             Greeting(greetingName = greetingName)
-            Chip(label = "Show List", onClick = onShowList)
+            Chip(label = { Text("Show List") }, onClick = onShowList, modifier = Modifier.fillMaxWidth())
         }
     }
 }
 
 @Composable
 fun ListScreen() {
-    val columnState = rememberColumnState()
+    val listState =
+        rememberScalingLazyListState(initialCenterItemIndex = 1, initialCenterItemScrollOffset = 0)
 
-    ScreenScaffold(scrollState = columnState) {
+    Scaffold(
+        timeText = {
+            TimeText(
+                modifier = Modifier.scrollAway(
+                    listState,
+                    itemIndex = 1,
+                    offset = 0.dp
+                )
+            )
+        },
+        positionIndicator = { PositionIndicator(listState) }
+    ) {
         /*
          * Using the Horologist [ScalingLazyColumn] here takes care of the horizontal and vertical
          * padding for the list, so there is no need to specify it, as in the [GreetingScreen]
          * composable.
          */
         ScalingLazyColumn(
-            columnState = columnState,
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
+                .rotaryWithScroll(listState)
         ) {
             item {
                 ListHeader {
@@ -146,7 +164,7 @@ fun ListScreen() {
                 }
             }
             item {
-                Chip(label = "Example Chip", onClick = { })
+                Chip(label = { Text("Example Chip") }, onClick = { }, modifier = Modifier.fillMaxWidth())
             }
             item {
                 TitleCard(title = { Text("Example Title") }, onClick = { }) {
@@ -155,10 +173,10 @@ fun ListScreen() {
             }
             item {
                 Button(
-                    imageVector = Icons.Default.Build,
-                    contentDescription = "Example Button",
                     onClick = { }
-                )
+                ) {
+                    Icon(imageVector = Icons.Default.Build, contentDescription = "Example Button")
+                }
             }
         }
     }
