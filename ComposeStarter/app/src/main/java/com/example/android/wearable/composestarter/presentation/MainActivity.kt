@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @file:OptIn(ExperimentalHorologistApi::class)
 
 package com.example.android.wearable.composestarter.presentation
@@ -124,7 +123,11 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
             verticalArrangement = Arrangement.Center
         ) {
             Greeting(greetingName = greetingName)
-            Chip(label = { Text("Show List") }, onClick = onShowList, modifier = Modifier.fillMaxWidth())
+            Chip(
+                label = { Text("Show List") },
+                onClick = onShowList,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -168,7 +171,11 @@ fun ListScreen() {
                 }
             }
             item {
-                Chip(label = { Text("Example Chip") }, onClick = { }, modifier = Modifier.fillMaxWidth())
+                Chip(
+                    label = { Text("Example Chip") },
+                    onClick = { },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
             item {
                 Button(
