@@ -146,12 +146,12 @@ fun ListScreen() {
                 }
             }
             item {
-                Chip(label = "Example Chip", onClick = { })
-            }
-            item {
                 TitleCard(title = { Text("Example Title") }, onClick = { }) {
                     Text("Example Content\nMore Lines\nAnd More")
                 }
+            }
+            item {
+                Chip(label = "Example Chip", onClick = { })
             }
             item {
                 Button(
