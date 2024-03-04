@@ -164,12 +164,12 @@ fun ListScreen() {
                 }
             }
             item {
-                Chip(label = { Text("Example Chip") }, onClick = { }, modifier = Modifier.fillMaxWidth())
-            }
-            item {
                 TitleCard(title = { Text("Example Title") }, onClick = { }) {
                     Text("Example Content\nMore Lines\nAnd More")
                 }
+            }
+            item {
+                Chip(label = { Text("Example Chip") }, onClick = { }, modifier = Modifier.fillMaxWidth())
             }
             item {
                 Button(
