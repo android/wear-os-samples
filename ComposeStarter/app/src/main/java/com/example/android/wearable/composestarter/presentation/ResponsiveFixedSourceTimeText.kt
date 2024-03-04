@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package presentation
+package com.example.android.wearable.composestarter.presentation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.TimeSource
@@ -27,10 +28,11 @@ import androidx.wear.compose.material.TimeText
  * TODO: This composable should be removed when ResponsiveTimeText is available in Horologist 0.5.x
  */
 @Composable
-fun ResponsiveFixedSourceTimeText() {
+fun ResponsiveFixedSourceTimeText(modifier: Modifier = Modifier) {
     val height = LocalConfiguration.current.screenHeightDp
     val padding = height * 0.021
     TimeText(
+        modifier = modifier,
         contentPadding = PaddingValues(padding.dp),
         timeSource = object : TimeSource {
             override val currentTime: String

@@ -47,7 +47,6 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TitleCard
 import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -113,7 +112,7 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
      * see d.android.com/wear/compose.
      */
     Scaffold(
-        timeText = { TimeText(modifier = Modifier.scrollAway(scrollState)) },
+        timeText = { ResponsiveFixedSourceTimeText(modifier = Modifier.scrollAway(scrollState)) },
         positionIndicator = { PositionIndicator(scrollState) }
     ) {
         Column(
@@ -137,7 +136,7 @@ fun ListScreen() {
 
     Scaffold(
         timeText = {
-            TimeText(
+            ResponsiveFixedSourceTimeText(
                 modifier = Modifier.scrollAway(
                     listState,
                     itemIndex = 1,
