@@ -50,8 +50,9 @@ import com.example.android.wearable.composestarter.presentation.theme.WearAppThe
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberColumnState
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
@@ -127,7 +128,16 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
 
 @Composable
 fun ListScreen() {
-    val columnState = rememberColumnState()
+    /*
+     * Specifying the types of items that appear at the start and end of the list ensures that the
+     * appropriate padding is used.
+     */
+    val columnState = rememberResponsiveColumnState(
+        contentPadding = ScalingLazyColumnDefaults.padding(
+            first = ScalingLazyColumnDefaults.ItemType.Text,
+            last = ScalingLazyColumnDefaults.ItemType.SingleButton
+        )
+    )
 
     ScreenScaffold(scrollState = columnState) {
         /*

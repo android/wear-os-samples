@@ -17,6 +17,7 @@ package presentation
 
 import com.example.android.wearable.composestarter.presentation.GreetingScreen
 import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ResponsiveTimeText
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -28,7 +29,7 @@ class GreetingScreenTest(override val device: WearDevice) : WearScreenshotTest()
     @Test
     fun greetingScreenTest() = runTest {
         AppScaffold(
-            timeText = { ResponsiveFixedSourceTimeText() }
+            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
         ) {
             GreetingScreen(greetingName = "screenshot", onShowList = {})
         }
