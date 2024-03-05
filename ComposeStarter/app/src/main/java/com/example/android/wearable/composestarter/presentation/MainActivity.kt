@@ -59,8 +59,8 @@ import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
  *
- * Displays only a centered [Text] composable, and the actual text varies based on the shape of the
- * device (round vs. square/rectangular).
+ * Displays a centered [Text] composable and a list built with [Horologist]
+ * (https://github.com/google/horologist).
  *
  * Use the Wear version of Compose Navigation. You can carry
  * over your knowledge from mobile and it supports the swipe-to-dismiss gesture (Wear OS's
@@ -131,7 +131,7 @@ fun ListScreen() {
 
     ScreenScaffold(scrollState = columnState) {
         /*
-         * Using the Horologist [ScalingLazyColumn] here takes care of the horizontal and vertical
+         * The Horologist [ScalingLazyColumn] takes care of the horizontal and vertical
          * padding for the list, so there is no need to specify it, as in the [GreetingScreen]
          * composable.
          */
