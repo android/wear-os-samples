@@ -36,7 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.ListHeader
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TitleCard
@@ -55,6 +54,7 @@ import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.Chip
+import com.google.android.horologist.compose.material.Title
 import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 
 /**
@@ -151,9 +151,7 @@ fun ListScreen() {
                 .fillMaxSize()
         ) {
             item {
-                ListHeader {
-                    Text("Header")
-                }
+                Title(text = "Header")
             }
             item {
                 TitleCard(title = { Text("Example Title") }, onClick = { }) {
