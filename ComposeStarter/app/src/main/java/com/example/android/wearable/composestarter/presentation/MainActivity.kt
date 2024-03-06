@@ -111,7 +111,7 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
     ScreenScaffold(scrollState = scrollState) {
         val padding = ScalingLazyColumnDefaults.padding(
             first = ItemType.Text,
-            last = ItemType.Chip,
+            last = ItemType.Chip
         )()
         Column(
             modifier = Modifier
@@ -119,7 +119,7 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
                 .verticalScroll(scrollState)
                 .rotaryWithScroll(scrollState)
                 .padding(padding),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             Greeting(greetingName = greetingName)
             Chip(label = "Show List", onClick = onShowList)

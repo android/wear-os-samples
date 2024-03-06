@@ -43,7 +43,7 @@ object Temp {
         backgroundColor: Color = Color.Transparent,
         contentColor: Color = MaterialTheme.colors.onSurfaceVariant,
         contentPadding: PaddingValues = itemPadding(),
-        content: @Composable RowScope.() -> Unit,
+        content: @Composable RowScope.() -> Unit
     ) {
         Row(
             modifier = modifier
@@ -51,11 +51,11 @@ object Temp {
                 .wrapContentSize()
                 .background(backgroundColor)
                 .padding(contentPadding)
-                .semantics(mergeDescendants = true) { heading() },
+                .semantics(mergeDescendants = true) { heading() }
         ) {
             CompositionLocalProvider(
                 LocalContentColor provides contentColor,
-                LocalTextStyle provides MaterialTheme.typography.button,
+                LocalTextStyle provides MaterialTheme.typography.button
             ) {
                 content()
             }
@@ -74,7 +74,7 @@ object Temp {
     fun firstItemPadding(): PaddingValues = PaddingValues(
         start = screenWidthDp().dp * HorizontalPaddingPercent,
         end = screenWidthDp().dp * HorizontalPaddingPercent,
-        bottom = BottomPadding,
+        bottom = BottomPadding
     )
 
     /**
@@ -85,7 +85,7 @@ object Temp {
         start = screenWidthDp().dp * HorizontalPaddingPercent,
         end = screenWidthDp().dp * HorizontalPaddingPercent,
         top = TopPadding,
-        bottom = BottomPadding,
+        bottom = BottomPadding
     )
 
     private const val HorizontalPaddingPercent = 0.073f
