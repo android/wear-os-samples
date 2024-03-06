@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalHorologistApi::class)
+@file:OptIn(ExperimentalHorologistApi::class, ExperimentalWearFoundationApi::class)
 
 package com.example.android.wearable.composestarter.presentation
 
@@ -30,13 +30,21 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TitleCard
+import androidx.wear.compose.material.dialog.Dialog
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -53,6 +61,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.google.android.horologist.compose.material.AlertContent
 import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
@@ -86,22 +95,35 @@ class MainActivity : ComponentActivity() {
 fun WearApp() {
     val navController = rememberSwipeDismissableNavController()
 
+    var showDialog by remember { mutableStateOf(false) }
+
     WearAppTheme {
         AppScaffold {
             SwipeDismissableNavHost(navController = navController, startDestination = "menu") {
                 composable("menu") {
-                    GreetingScreen("Android", onShowList = { navController.navigate("list") })
+                    GreetingScreen(
+                        "Android",
+                        onShowList = { navController.navigate("list") },
+                        onShowDialog = { showDialog = true }
+                    )
                 }
                 composable("list") {
                     ListScreen()
                 }
             }
+
+            SampleDialog(
+                showDialog = showDialog,
+                onDismiss = { showDialog = false },
+                onCancel = {},
+                onOk = {}
+            )
         }
     }
 }
 
 @Composable
-fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
+fun GreetingScreen(greetingName: String, onShowList: () -> Unit, onShowDialog: () -> Unit) {
     val scrollState = ScrollState(0)
 
     /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
@@ -119,10 +141,14 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
                 .verticalScroll(scrollState)
                 .rotaryWithScroll(scrollState)
                 .padding(padding),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(
+                space = 4.dp,
+                alignment = Alignment.CenterVertically
+            )
         ) {
             Greeting(greetingName = greetingName)
             Chip(label = "Show List", onClick = onShowList)
+            Chip(label = "Show Dialog", onClick = onShowDialog)
         }
     }
 }
@@ -187,11 +213,53 @@ fun Greeting(greetingName: String) {
     }
 }
 
+@Composable
+fun SampleDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    onCancel: () -> Unit,
+    onOk: () -> Unit
+) {
+    val state = rememberResponsiveColumnState()
+
+    Dialog(
+        showDialog = showDialog,
+        onDismissRequest = onDismiss,
+        scrollState = state.state
+    ) {
+        SampleDialogContent(onCancel, onDismiss, onOk)
+    }
+}
+
+@Composable
+fun SampleDialogContent(
+    onCancel: () -> Unit,
+    onDismiss: () -> Unit,
+    onOk: () -> Unit
+) {
+    AlertContent(
+        icon = {},
+        title = "Title",
+        onCancel = {
+            onCancel()
+            onDismiss()
+        },
+        onOk = {
+            onOk()
+            onDismiss()
+        }
+    ) {
+        item {
+            Text(text = "An unknown error occurred during the request.")
+        }
+    }
+}
+
 @WearPreviewDevices
 @WearPreviewFontScales
 @Composable
 fun GreetingScreenPreview() {
-    GreetingScreen("Preview Android", onShowList = {})
+    GreetingScreen("Preview Android", onShowList = {}, onShowDialog = {})
 }
 
 @WearPreviewDevices
