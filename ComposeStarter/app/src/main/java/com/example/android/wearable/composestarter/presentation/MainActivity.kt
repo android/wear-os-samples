@@ -99,7 +99,7 @@ fun WearApp() {
                 composable("menu") {
                     GreetingScreen(
                         "Android",
-                        onShowList = { navController.navigate("list") },
+                        onShowList = { navController.navigate("list") }
                     )
                 }
                 composable("list") {
