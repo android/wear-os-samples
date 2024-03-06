@@ -34,11 +34,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.material.MaterialTheme
@@ -95,8 +93,6 @@ class MainActivity : ComponentActivity() {
 fun WearApp() {
     val navController = rememberSwipeDismissableNavController()
 
-    var showDialog by remember { mutableStateOf(false) }
-
     WearAppTheme {
         AppScaffold {
             SwipeDismissableNavHost(navController = navController, startDestination = "menu") {
@@ -104,26 +100,18 @@ fun WearApp() {
                     GreetingScreen(
                         "Android",
                         onShowList = { navController.navigate("list") },
-                        onShowDialog = { showDialog = true }
                     )
                 }
                 composable("list") {
                     ListScreen()
                 }
             }
-
-            SampleDialog(
-                showDialog = showDialog,
-                onDismiss = { showDialog = false },
-                onCancel = {},
-                onOk = {}
-            )
         }
     }
 }
 
 @Composable
-fun GreetingScreen(greetingName: String, onShowList: () -> Unit, onShowDialog: () -> Unit) {
+fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
     val scrollState = ScrollState(0)
 
     /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
@@ -141,20 +129,18 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit, onShowDialog: (
                 .verticalScroll(scrollState)
                 .rotaryWithScroll(scrollState)
                 .padding(padding),
-            verticalArrangement = Arrangement.spacedBy(
-                space = 4.dp,
-                alignment = Alignment.CenterVertically
-            )
+            verticalArrangement = Arrangement.Center
         ) {
             Greeting(greetingName = greetingName)
             Chip(label = "Show List", onClick = onShowList)
-            Chip(label = "Show Dialog", onClick = onShowDialog)
         }
     }
 }
 
 @Composable
 fun ListScreen() {
+    var showDialog by remember { mutableStateOf(false) }
+
     /*
      * Specifying the types of items that appear at the start and end of the list ensures that the
      * appropriate padding is used.
@@ -194,11 +180,18 @@ fun ListScreen() {
                 Button(
                     imageVector = Icons.Default.Build,
                     contentDescription = "Example Button",
-                    onClick = { }
+                    onClick = { showDialog = true }
                 )
             }
         }
     }
+
+    SampleDialog(
+        showDialog = showDialog,
+        onDismiss = { showDialog = false },
+        onCancel = {},
+        onOk = {}
+    )
 }
 
 @Composable
@@ -259,7 +252,7 @@ fun SampleDialogContent(
 @WearPreviewFontScales
 @Composable
 fun GreetingScreenPreview() {
-    GreetingScreen("Preview Android", onShowList = {}, onShowDialog = {})
+    GreetingScreen("Preview Android", onShowList = {})
 }
 
 @WearPreviewDevices

@@ -31,7 +31,7 @@ class GreetingScreenTest(override val device: WearDevice) : WearScreenshotTest()
         AppScaffold(
             timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
         ) {
-            GreetingScreen(greetingName = "screenshot", onShowList = {}, onShowDialog = {})
+            GreetingScreen(greetingName = "screenshot", onShowList = {})
         }
     }
 
