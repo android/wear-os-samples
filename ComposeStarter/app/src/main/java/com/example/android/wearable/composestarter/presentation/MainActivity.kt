@@ -31,12 +31,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.ListHeader
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TitleCard
@@ -46,11 +43,14 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
+import com.example.android.wearable.composestarter.presentation.Temp.ResponsiveListHeader
+import com.example.android.wearable.composestarter.presentation.Temp.firstItemPadding
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import com.google.android.horologist.compose.material.Button
@@ -104,20 +104,21 @@ fun WearApp() {
 fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
     val scrollState = ScrollState(0)
 
-    // Wear design guidelines specify a 5.2% horizontal padding on each side of the list.
-    val horizontalPadding = (0.052f * LocalConfiguration.current.screenWidthDp).dp
-
     /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
      * version of LazyColumn for wear devices with some added features. For more information,
      * see d.android.com/wear/compose.
      */
     ScreenScaffold(scrollState = scrollState) {
+        val padding = ScalingLazyColumnDefaults.padding(
+            first = ItemType.Text,
+            last = ItemType.Chip
+        )()
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
                 .rotaryWithScroll(scrollState)
-                .padding(horizontal = horizontalPadding),
+                .padding(padding),
             verticalArrangement = Arrangement.Center
         ) {
             Greeting(greetingName = greetingName)
@@ -134,8 +135,8 @@ fun ListScreen() {
      */
     val columnState = rememberResponsiveColumnState(
         contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ScalingLazyColumnDefaults.ItemType.Text,
-            last = ScalingLazyColumnDefaults.ItemType.SingleButton
+            first = ItemType.Text,
+            last = ItemType.SingleButton
         )
     )
 
@@ -151,8 +152,8 @@ fun ListScreen() {
                 .fillMaxSize()
         ) {
             item {
-                ListHeader {
-                    Text("Header")
+                ResponsiveListHeader(contentPadding = firstItemPadding()) {
+                    Text(text = "Header")
                 }
             }
             item {
@@ -176,12 +177,14 @@ fun ListScreen() {
 
 @Composable
 fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
+    ResponsiveListHeader(contentPadding = firstItemPadding()) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.primary,
+            text = stringResource(R.string.hello_world, greetingName)
+        )
+    }
 }
 
 @WearPreviewDevices
