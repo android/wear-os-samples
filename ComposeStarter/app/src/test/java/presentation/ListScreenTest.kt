@@ -21,6 +21,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import com.example.android.wearable.composestarter.presentation.ListScreen
 import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ResponsiveTimeText
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -33,7 +34,7 @@ class ListScreenTest(override val device: WearDevice) : WearScreenshotTest() {
     fun listScreenTest() {
         runTest {
             AppScaffold(
-                timeText = { ResponsiveFixedSourceTimeText() }
+                timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
             ) {
                 ListScreen()
             }
