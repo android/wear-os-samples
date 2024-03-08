@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalHorologistApi::class)
+@file:OptIn(ExperimentalHorologistApi::class, ExperimentalWearFoundationApi::class)
 
 package com.example.android.wearable.composestarter.presentation
 
@@ -30,13 +30,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TitleCard
+import androidx.wear.compose.material.dialog.Dialog
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -53,6 +59,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.google.android.horologist.compose.material.AlertContent
 import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
@@ -90,7 +97,10 @@ fun WearApp() {
         AppScaffold {
             SwipeDismissableNavHost(navController = navController, startDestination = "menu") {
                 composable("menu") {
-                    GreetingScreen("Android", onShowList = { navController.navigate("list") })
+                    GreetingScreen(
+                        "Android",
+                        onShowList = { navController.navigate("list") }
+                    )
                 }
                 composable("list") {
                     ListScreen()
@@ -129,6 +139,8 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
 
 @Composable
 fun ListScreen() {
+    var showDialog by remember { mutableStateOf(false) }
+
     /*
      * Specifying the types of items that appear at the start and end of the list ensures that the
      * appropriate padding is used.
@@ -168,11 +180,18 @@ fun ListScreen() {
                 Button(
                     imageVector = Icons.Default.Build,
                     contentDescription = "Example Button",
-                    onClick = { }
+                    onClick = { showDialog = true }
                 )
             }
         }
     }
+
+    SampleDialog(
+        showDialog = showDialog,
+        onDismiss = { showDialog = false },
+        onCancel = {},
+        onOk = {}
+    )
 }
 
 @Composable
@@ -184,6 +203,48 @@ fun Greeting(greetingName: String) {
             color = MaterialTheme.colors.primary,
             text = stringResource(R.string.hello_world, greetingName)
         )
+    }
+}
+
+@Composable
+fun SampleDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    onCancel: () -> Unit,
+    onOk: () -> Unit
+) {
+    val state = rememberResponsiveColumnState()
+
+    Dialog(
+        showDialog = showDialog,
+        onDismissRequest = onDismiss,
+        scrollState = state.state
+    ) {
+        SampleDialogContent(onCancel, onDismiss, onOk)
+    }
+}
+
+@Composable
+fun SampleDialogContent(
+    onCancel: () -> Unit,
+    onDismiss: () -> Unit,
+    onOk: () -> Unit
+) {
+    AlertContent(
+        icon = {},
+        title = "Title",
+        onCancel = {
+            onCancel()
+            onDismiss()
+        },
+        onOk = {
+            onOk()
+            onDismiss()
+        }
+    ) {
+        item {
+            Text(text = "An unknown error occurred during the request.")
+        }
     }
 }
 
