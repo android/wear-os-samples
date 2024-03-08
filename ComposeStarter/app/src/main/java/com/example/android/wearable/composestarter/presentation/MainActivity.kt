@@ -43,8 +43,6 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
-import com.example.android.wearable.composestarter.presentation.Temp.ResponsiveListHeader
-import com.example.android.wearable.composestarter.presentation.Temp.firstItemPadding
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
@@ -55,6 +53,8 @@ import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.Chip
+import com.google.android.horologist.compose.material.ListHeaderDefaults.firstItemPadding
+import com.google.android.horologist.compose.material.ResponsiveListHeader
 import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 
 /**
