@@ -17,7 +17,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.App" parent="@android:style/Theme.DeviceDefault" />
 
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
         <!-- Set the splash screen background to black -->
         <item name="windowSplashScreenBackground">@android:color/black</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splashscreen</item>
