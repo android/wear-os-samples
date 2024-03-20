@@ -20,12 +20,12 @@ package com.example.android.wearable.composestarter.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -77,14 +77,12 @@ import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         setContent {
-            installSplashScreen()
-
             WearApp()
-
-            setTheme(android.R.style.Theme_DeviceDefault)
         }
     }
 }
@@ -112,7 +110,7 @@ fun WearApp() {
 
 @Composable
 fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
-    val scrollState = ScrollState(0)
+    val scrollState = rememberScrollState()
 
     /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
      * version of LazyColumn for wear devices with some added features. For more information,
