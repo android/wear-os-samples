@@ -45,8 +45,6 @@ class MainActivity : ComponentActivity() {
 
         jankPrinter = JankPrinter()
 
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
             navController = rememberSwipeDismissableNavController()
 
