@@ -77,14 +77,12 @@ import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         setContent {
-            installSplashScreen()
-
             WearApp()
-
-            setTheme(android.R.style.Theme_DeviceDefault)
         }
     }
 }
