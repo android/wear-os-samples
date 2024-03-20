@@ -17,7 +17,7 @@ For more information on composable options in Compose for Wear OS, check out our
 Screenshots
 -----------
 
-<img src="screenshots/round_hello.png" height="372" alt="Round Screenshot"/>
+<img src="app/src/test/screenshots/GreetingScreenTest_pixel_watch.png" height="384" alt="Round Screenshot"/>
 
 
 Getting Started
