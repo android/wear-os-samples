@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -110,7 +111,7 @@ fun WearApp() {
 
 @Composable
 fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
-    val scrollState = ScrollState(0)
+    val scrollState = rememberScrollState()
 
     /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
      * version of LazyColumn for wear devices with some added features. For more information,
