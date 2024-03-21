@@ -1,3 +1,7 @@
+This project is now deprecated and unmaintained.
+Refer to [Google Sign in sample](https://github.com/google/horologist/tree/main/auth/sample/wear) to
+learn how to implement Google Sign on Wear OS.
+
 Android Wear Google Sign-In Sample
 ===================================
 

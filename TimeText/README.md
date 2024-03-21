@@ -1,3 +1,6 @@
+This project is now deprecated and unmaintained.
+For learning how to display time on top of app screens, refer to [Horologist AppScaffold](https://github.com/google/horologist/blob/main/compose-layout/src/main/java/com/google/android/horologist/compose/layout/AppScaffold.kt)
+
 
 TimeText Sample
 ================================

@@ -1,3 +1,6 @@
+This project is now deprecated and unmaintained.
+To learn how to check if the app is installed from the connected mobile app and how to launch it,
+refer to [Datalayer helpers on Horologist project](https://google.github.io/horologist/datalayer-helpers-guide/#launching-the-app-on-the-other-device)
 
 Android WearVerifyRemoteApp Sample
 ==================================
