@@ -1,3 +1,6 @@
+This project is now deprecated and unmaintained.
+Refer to [ExerciseSampleCompose](https://github.com/android/health-samples/tree/main/health-services/ExerciseSampleCompose)
+for learning how to use Runtime permissions for a real case scenario.
 
 Android RuntimePermissionsWear Sample
 =====================================

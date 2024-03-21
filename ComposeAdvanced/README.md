@@ -1,3 +1,10 @@
+This project is now deprecated and unmaintained.
+Refer to [ComposeStarter](https://github.com/android/wear-os-samples/tree/main/ComposeStarter)
+for a starter sample showcasing navigation and responsive layout.
+Refer to [Horologist sample](https://github.com/google/horologist/tree/main/sample/src/main/java/com/google/android/horologist)
+for showcasing Horologist components built on top of Compose and based on specification for
+[Material design](https://developer.android.com/design/ui/wear/guides/foundations/download)
+
 Compose for Wear OS Advanced Sample
 ===================================
 Demonstrates Compose with the Wear optimized Scaffold, Navigation, curved text, and more!
