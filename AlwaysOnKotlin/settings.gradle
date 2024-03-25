@@ -36,4 +36,3 @@ dependencyResolutionManagement {
 
 
 include ":compose"
-include ":views"

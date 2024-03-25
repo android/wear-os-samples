@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<lint>
-    <!--
-    Lint incorrectly handles wear target sdk
-    https://issuetracker.google.com/issues/196420849
-    -->
-    <issue id="OldTargetApi" severity="ignore" />
-    <issue id="ExpiringTargetSdkVersion" severity="ignore" />
-</lint>
