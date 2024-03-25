@@ -111,16 +111,16 @@ jobs:
           arguments: roundApi${{ matrix.device }}Check
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
-      - name: Upload views test reports
+      - name: Upload views test reports ${{ matrix.device }}
         uses: actions/upload-artifact@v4
         with:
-          name: views-test-reports
+          name: views-test-reports ${{ matrix.device }}
           path: ${{ env.SAMPLE_PATH }}/views/build/reports
 
-      - name: Upload compose test reports
+      - name: Upload compose test reports ${{ matrix.device }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: test-reports ${{ matrix.device }}
           path: ${{ env.SAMPLE_PATH }}/compose/build/reports
 
   apk:

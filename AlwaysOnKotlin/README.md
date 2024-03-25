@@ -1,4 +1,7 @@
-
+> ### **Warning!**
+>
+> **The implementation of this sample with views is unmaintained and will not be updated.**
+> 
 Android AlwaysOn Kotlin Sample
 =======================
 
