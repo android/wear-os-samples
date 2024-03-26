@@ -41,18 +41,6 @@ jobs:
           arguments: check --stacktrace
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
-      - name: Upload views build outputs (APKs)
-        uses: actions/upload-artifact@v4
-        with:
-          name: views-build-outputs
-          path: ${{ env.SAMPLE_PATH }}/views/build/outputs
-
-      - name: Upload views build reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: views-build-reports
-          path: ${{ env.SAMPLE_PATH }}/views/build/reports
-
       - name: Upload compose build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:
@@ -111,16 +99,10 @@ jobs:
           arguments: roundApi${{ matrix.device }}Check
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
-      - name: Upload views test reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: views-test-reports
-          path: ${{ env.SAMPLE_PATH }}/views/build/reports
-
       - name: Upload compose test reports
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: test-reports${{ matrix.device }}
           path: ${{ env.SAMPLE_PATH }}/compose/build/reports
 
   apk:
