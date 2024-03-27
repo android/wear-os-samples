@@ -31,13 +31,13 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: check --stacktrace
           build-root-directory: ${{ env.SAMPLE_PATH }}
