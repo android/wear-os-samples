@@ -31,12 +31,12 @@ jobs:
           java-version: '17'
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           build-root-directory: ${{ env.SAMPLE_PATH }}
 
       - name: Build project
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: check --stacktrace
           build-root-directory: ${{ env.SAMPLE_PATH }}
@@ -94,7 +94,7 @@ jobs:
           echo 84831b9409646a918e30573bab4c9c91346d8abd > /usr/local/lib/android/sdk/licenses/android-sdk-preview-license
 
       - name: Run instrumentation tests
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: roundApi${{ matrix.device }}Check
           build-root-directory: ${{ env.SAMPLE_PATH }}
@@ -119,7 +119,7 @@ jobs:
           java-version: 17
 
       - name: Build project
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: compose:assembleRelease
           build-root-directory: ${{ env.SAMPLE_PATH }}
