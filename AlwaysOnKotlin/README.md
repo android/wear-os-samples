@@ -1,7 +1,8 @@
 > ### **Warning!**
 >
-> **The implementation of this sample with views is unmaintained and will not be updated.**
+> **The implementation of this sample is unmaintained and will not be updated.**
 > 
+> Use [Exercise sample] (https://github.com/android/health-samples/tree/main/health-services/ExerciseSampleCompose) to learn how to implement Ambient Mode.
 Android AlwaysOn Kotlin Sample
 =======================
 
