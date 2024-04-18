@@ -31,7 +31,7 @@ android {
 
     buildTypes {
         release {
-            // Add signingConfig to build release builds
+            // TODO:Add your signingConfig here to build release builds
             isMinifyEnabled = true
         }
     }
