@@ -30,45 +30,34 @@ There are currently three samples available:
 
 ## Building the samples
 
-This sample uses a shell script to demonstrate the packaging of the watch face.
-
-You will need to set a handful of environment variables first:
-
-- `ANDROID_HOME` - path to your SDK installation, for example on Mac:
-  `/Users/<my_user>/Library/Android/sdk`
-- `AAPT2` - path to the AAPT2 binary, for example:
-  `$ANDROID_HOME/build-tools/<version>/aapt2`
-- `ANDROID_JAR` - path to the Android JAR, for example:
-  `$ANDROID_HOME/platforms/android-<version>/android.jar`
-- `BUNDLETOOL` - path to the Bundle Tool. On Mac, this can be installed using
-  `brew install bundletool`
-
-From the `WatchFaceFormat` directory, execute:
+Use Gradle to build each of the samples. For example, to build the
+`SimpleDigital` debug build:
 
 ```shell
-./build-wff.sh SimpleDigital
+cd SimpleDigital
+./gradlew assembleDebug
 ```
 
-(the same applies for `SimpleAnalog` and `Complications`)
+To then install and set as the current watch face on a device or emulator:
 
-This will build the watch face in a few formats, notably:
+```shell
+adb install watchface/build/outputs/apk/debug/watchface-debug.apk
+adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation set-watchface --es watchFaceId com.example.simpledigital
+```
 
-- `SimpleDigital/out/mybundle.aab` - a bundle suitable for upload to Play
-- `SimpleDigital/out/result_apks/universal.apk` - an APK, for easy deployment
-  to a local device.
+For more guidance on building and signing release builds, see
+[signing guidance][signing] on developer.android.com
 
-## Deploying locally for test
+## Debugging
 
-On a Wear 4 device, such as the Wear emulator:
+1. Use the [XML validator][validator-tools] to confirm that the XML in
+   `watchface.xml` is valid.
+1. Use `logcat` to look for any error messages from the WFF runtime, such as
+   potential errors in WFF expressions.
 
-1. install the watch face:
-
-    ```shell
-    adb install SimpleDigital/out/result_apks/universal.apk
-    ```
-
-1. Long press on the current watch face, and locate the option to select further
-   watch faces. Choose the **Simple Digital** watch face.
+   ```shell
+   adb logcat --pid=$(adb shell pidof -s com.google.wear.watchface.runtime)
+   ```
 
 ## Support
 
@@ -85,3 +74,4 @@ On a Wear 4 device, such as the Wear emulator:
 [watch-face-design-guidance]: https://developer.android.com/design/ui/wear/guides/surfaces/watch-faces
 [contributing]: ../CONTRIBUTING.md
 [validator-tools]: https://github.com/google/watchface
+[signing]: https://developer.android.com/build/building-cmdline#gradle_signing
