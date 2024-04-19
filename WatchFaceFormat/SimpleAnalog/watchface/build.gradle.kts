@@ -33,6 +33,9 @@ android {
         release {
             // TODO:Add your signingConfig here to build release builds
             isMinifyEnabled = true
+            // Ensure shrink resources is false, to avoid potential for them
+            // being removed.
+            isShrinkResources = false
         }
     }
 }
