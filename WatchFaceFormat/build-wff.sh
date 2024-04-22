@@ -14,39 +14,46 @@
 # limitations under the License.
 set -e
 
-JAVA="java"
+if [ -z "$1" ]; then
+  echo "usage: $(basename "$0") DIRECTORY"
+  exit 1
+fi
+
 INPUT_ROOT="${1:-./}"
 DEST_AAB="${INPUT_ROOT}/out/mybundle.aab"
 DEST_APK="${INPUT_ROOT}/out/mybundle.apk"
 
-BUNDLETOOL="$(which bundletool)"
+set +e
+BUNDLETOOL="${BUNDLETOOL:-$(which bundletool)}"
+AAPT2="${AAPT2:-$(which aapt2)}"
+set -e
+
+if [[ ! -f "${INPUT_ROOT}/AndroidManifest.xml" ]]; then
+  echo "Error: ""${INPUT_ROOT}/AndroidManifest.xml"" not found"
+  exit 1
+fi
+
 PACKAGE_NAME=$(xmllint --xpath 'string(//manifest/@package)' "${INPUT_ROOT}/AndroidManifest.xml")
 
 if [[ -z "${ANDROID_HOME}" ]]; then
   echo "Error: ANDROID_HOME not defined, please set and try again"
   exit 1
-else
-  ANDROID_HOME="${ANDROID_HOME}"
-fi
-
-if [[ -z "${AAPT2}" ]]; then
-  echo "Error: AAPT2 not defined, please set and try again"
-  echo "e.g. <sdk-path>/build-tools/<version>/aapt2"
-  exit 1
-else
-  AAPT2="${AAPT2}"
 fi
 
 if [[ -z "${ANDROID_JAR}" ]]; then
   echo "Error: ANDROID_JAR not defined, please set and try again"
   echo "e.g. <sdk-path>/platforms/android-<version>/android.jar"
   exit 1
-else
-  ANDROID_JAR="${ANDROID_JAR}"
+fi
+
+if [[ -z "${AAPT2}" ]]; then
+  echo "Error: AAPT2 not defined or 'aapt2' not found"
+  echo "e.g. <sdk-path>/build-tools/<version>/aapt2"
+  exit 1
 fi
 
 if [[ -z "${BUNDLETOOL}" ]]; then
-  echo "Error: Bundletool is required to run this script"
+  echo "Error: BUNDLETOOL not defined or 'bundletool' not found"
   echo "See: https://developer.android.com/tools/bundletool for more details on bundletool"
   echo "or on a Mac, use 'brew install bundletool'"
   exit 1
@@ -78,7 +85,7 @@ cp "${INPUT_ROOT}/out/base-apk/resources.pb" "${INPUT_ROOT}/out/aab-root/base"
 
 "${BUNDLETOOL}" build-bundle --modules="${INPUT_ROOT}/out/aab-root/base.zip" --output="${DEST_AAB}"
 
-if [[ ! -z "${DEST_APK}" ]]; then
+if [[ -n "${DEST_APK}" ]]; then
   if [[ -f "${INPUT_ROOT}/out/result.apks" ]]; then
     rm "${INPUT_ROOT}/out/result.apks"
   fi
@@ -91,4 +98,3 @@ if [[ ! -z "${DEST_APK}" ]]; then
 else
   echo "Not building apks"
 fi
-
