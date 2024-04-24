@@ -20,14 +20,13 @@ import android.content.ComponentName
 import android.graphics.Color
 import android.graphics.drawable.Icon
 import androidx.annotation.RequiresApi
-import androidx.datastore.core.DataStore
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationText
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.MonochromaticImage
+import androidx.wear.watchface.complications.data.NoDataComplicationData
 import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.WeightedElementsComplicationData
-import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import kotlin.random.Random
@@ -35,21 +34,13 @@ import kotlin.random.Random
 /**
  * A complication provider that supports only [ComplicationType.WEIGHTED_ELEMENTS] and cycles
  * through the possible configurations on tap. The value is randomised on each update.
- *
- * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
- * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationRequest].
- *
- * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
- * (see [NoDataDataSourceService] for an example)
  */
 @RequiresApi(33)
 class WeightedElementsDataSourceService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         if (request.complicationType != ComplicationType.WEIGHTED_ELEMENTS) {
-            return null
+            return NoDataComplicationData()
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),

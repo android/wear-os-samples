@@ -18,31 +18,22 @@ package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
-import androidx.datastore.core.DataStore
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.NoDataComplicationData
 import androidx.wear.watchface.complications.data.PhotoImageComplicationData
 import androidx.wear.watchface.complications.data.PlainComplicationText
-import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 
 /**
  * A complication provider that supports only [ComplicationType.PHOTO_IMAGE] and cycles
  * between a couple of images on tap.
- *
- * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
- * coroutines, so data operations (specifically, calls to [DataStore]) can be supported directly in the
- * [onComplicationRequest].
- *
- * If you don't perform any suspending operations to update your complications, you can subclass
- * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
- * (see [NoDataDataSourceService] for an example)
  */
 class LargeImageDataSourceService : SuspendingComplicationDataSourceService() {
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         if (request.complicationType != ComplicationType.PHOTO_IMAGE) {
-            return null
+            return NoDataComplicationData()
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
