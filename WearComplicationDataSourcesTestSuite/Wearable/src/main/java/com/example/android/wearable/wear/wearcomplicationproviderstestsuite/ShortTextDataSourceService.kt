@@ -57,7 +57,7 @@ class ShortTextDataSourceService : SuspendingComplicationDataSourceService() {
             )
         // Suspending function to retrieve the complication's state
         val state = args.getState(this)
-        val case = Case.values()[state.mod(Case.values().size)]
+        val case = Case.entries[state.mod(Case.entries.size)]
         return getComplicationData(
             tapAction = complicationTogglePendingIntent,
             case = case,

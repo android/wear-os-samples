@@ -19,6 +19,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +84,12 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
          * Returns the [ComplicationToggleArgs] from the [Intent] sent to the [ComplicationToggleArgs].
          */
         private fun Intent.getArgs(): ComplicationToggleArgs = requireNotNull(
-            extras?.getParcelable(EXTRA_ARGS),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                extras?.getParcelable(EXTRA_ARGS, ComplicationToggleArgs::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                extras?.getParcelable(EXTRA_ARGS)
+            }
         )
     }
 }

@@ -18,20 +18,21 @@ package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 import android.app.PendingIntent
 import android.content.ComponentName
 import android.graphics.drawable.Icon
+import androidx.annotation.RequiresApi
 import androidx.datastore.core.DataStore
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationText
 import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.GoalProgressComplicationData
 import androidx.wear.watchface.complications.data.MonochromaticImage
 import androidx.wear.watchface.complications.data.PlainComplicationText
-import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import kotlin.random.Random
 
 /**
- * A complication provider that supports only [ComplicationType.RANGED_VALUE] and cycles
+ * A complication provider that supports only [ComplicationType.GOAL_PROGRESS] and cycles
  * through the possible configurations on tap. The value is randomised on each update.
  *
  * Note: This subclasses [SuspendingComplicationDataSourceService] instead of [ComplicationDataSourceService] to support
@@ -42,15 +43,16 @@ import kotlin.random.Random
  * [ComplicationDataSourceService] and override [onComplicationRequest] directly.
  * (see [NoDataDataSourceService] for an example)
  */
-class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
+@RequiresApi(33)
+class GoalProgressDataSourceService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
-        if (request.complicationType != ComplicationType.RANGED_VALUE) {
+        if (request.complicationType != ComplicationType.GOAL_PROGRESS) {
             return null
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complication = Complication.RANGED_VALUE,
+            complication = Complication.GOAL_PROGRESS,
             complicationInstanceId = request.complicationInstanceId,
         )
         val complicationTogglePendingIntent =
@@ -83,10 +85,11 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
         val title: ComplicationText?
         val caseContentDescription: String
 
-        val minValue = case.minValue
-        val maxValue = case.maxValue
-        val value = Random.nextDouble(minValue.toDouble(), maxValue.toDouble()).toFloat()
-        val percentage = (value - minValue) / (maxValue - minValue)
+        // Create a ceiling above the target value, as GOAL_PROGRESS complication data can exceed
+        // the target value.
+        val ceiling = case.targetValue + 5000.0
+        val currentValue = Random.nextDouble(0.0, ceiling).toFloat()
+        val percentage = currentValue / case.targetValue
 
         when (case) {
             Case.TEXT_ONLY -> {
@@ -96,7 +99,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 monochromaticImage = null
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_only_content_description,
+                    R.string.goal_progress_text_only_content_description,
                 )
             }
             Case.TEXT_WITH_ICON -> {
@@ -115,7 +118,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                     .build()
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_with_icon_content_description,
+                    R.string.goal_progress_text_with_icon_content_description,
                 )
             }
             Case.TEXT_WITH_TITLE -> {
@@ -128,7 +131,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 ).build()
 
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_with_title_content_description,
+                    R.string.goal_progress_text_with_title_content_description,
                 )
             }
             Case.ICON_ONLY -> {
@@ -138,7 +141,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 ).build()
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_icon_only_content_description,
+                    R.string.goal_progress_icon_only_content_description,
                 )
             }
         }
@@ -146,20 +149,18 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
         // Create a content description that includes the value information
         val contentDescription = PlainComplicationText.Builder(
             text = getString(
-                R.string.ranged_value_content_description,
+                R.string.goal_progress_content_description,
                 caseContentDescription,
-                value,
+                currentValue,
                 percentage,
-                minValue,
-                maxValue,
+                case.targetValue
             ),
         )
             .build()
 
-        return RangedValueComplicationData.Builder(
-            value = value,
-            min = minValue,
-            max = maxValue,
+        return GoalProgressComplicationData.Builder(
+            value = currentValue,
+            targetValue = case.targetValue,
             contentDescription = contentDescription,
         )
             .setText(text)
@@ -170,17 +171,11 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
     }
 
     private enum class Case(
-        val minValue: Float,
-        val maxValue: Float,
+        val targetValue: Float,
     ) {
-        TEXT_ONLY(0f, 100f),
-        TEXT_WITH_ICON(-20f, 20f),
-        TEXT_WITH_TITLE(57.5f, 824.2f),
-        ICON_ONLY(10_045f, 100_000f),
-        ;
-
-        init {
-            require(minValue < maxValue) { "Minimum value was greater than maximum value!" }
-        }
+        TEXT_ONLY(5000f),
+        TEXT_WITH_ICON(2500f),
+        TEXT_WITH_TITLE(10000f),
+        ICON_ONLY(10000f)
     }
 }
