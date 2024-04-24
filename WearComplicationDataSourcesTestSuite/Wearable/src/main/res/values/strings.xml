@@ -25,7 +25,7 @@
         <string name="icon_label">Icon</string>
         <string name="small_image_label">Small Image</string>
         <string name="large_image_label">Large Image</string>
-        <string name="weighted_elements">Large Image</string>
+        <string name="weighted_elements">Weighted Elements</string>
 
         <string name="icon_face_content_description">Face</string>
         <string name="icon_battery_content_description">Battery</string>
