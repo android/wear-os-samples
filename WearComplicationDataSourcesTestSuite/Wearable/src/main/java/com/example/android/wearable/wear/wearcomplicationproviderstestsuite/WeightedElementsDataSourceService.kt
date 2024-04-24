@@ -154,7 +154,8 @@ class WeightedElementsDataSourceService : SuspendingComplicationDataSourceServic
             .build()
     }
 
-    private fun createWeightedElements(numElements: Int) : List<WeightedElementsComplicationData.Element> {
+    private fun createWeightedElements(numElements: Int) :
+        List<WeightedElementsComplicationData.Element> {
         val elements = mutableListOf<WeightedElementsComplicationData.Element>()
         repeat(numElements) { index ->
             val weight = Random.nextInt(1, 3).toFloat()
