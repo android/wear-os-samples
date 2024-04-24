@@ -25,10 +25,12 @@ enum class Complication(
      */
     val key: String,
 ) {
+    GOAL_PROGRESS("GoalProgress"),
     ICON("Icon"),
     LARGE_IMAGE("LargeImage"),
     LONG_TEXT("LongText"),
     RANGED_VALUE("RangedValue"),
     SHORT_TEXT("ShortText"),
     SMALL_IMAGE("SmallImage"),
+    WEIGHTED_ELEMENTS("WeightedElements"),
 }

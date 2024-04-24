@@ -19,6 +19,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.core.os.BundleCompat
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +69,6 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
             val intent = Intent(context, ComplicationToggleReceiver::class.java).apply {
                 putExtra(EXTRA_ARGS, args)
             }
-
             // Pass complicationId as the requestCode to ensure that different complications get
             // different intents.
             return PendingIntent.getBroadcast(
@@ -83,7 +83,11 @@ class ComplicationToggleReceiver : BroadcastReceiver() {
          * Returns the [ComplicationToggleArgs] from the [Intent] sent to the [ComplicationToggleArgs].
          */
         private fun Intent.getArgs(): ComplicationToggleArgs = requireNotNull(
-            extras?.getParcelable(EXTRA_ARGS),
+            BundleCompat.getParcelable(
+                this.extras!!,
+                EXTRA_ARGS,
+                ComplicationToggleArgs::class.java,
+            ),
         )
     }
 }

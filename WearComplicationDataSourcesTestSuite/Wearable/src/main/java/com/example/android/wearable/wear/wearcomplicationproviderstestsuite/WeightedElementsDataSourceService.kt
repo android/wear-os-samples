@@ -17,31 +17,34 @@ package com.example.android.wearable.wear.wearcomplicationproviderstestsuite
 
 import android.app.PendingIntent
 import android.content.ComponentName
+import android.graphics.Color
 import android.graphics.drawable.Icon
+import androidx.annotation.RequiresApi
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationText
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.MonochromaticImage
 import androidx.wear.watchface.complications.data.NoDataComplicationData
 import androidx.wear.watchface.complications.data.PlainComplicationText
-import androidx.wear.watchface.complications.data.RangedValueComplicationData
+import androidx.wear.watchface.complications.data.WeightedElementsComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import kotlin.random.Random
 
 /**
- * A complication provider that supports only [ComplicationType.RANGED_VALUE] and cycles
+ * A complication provider that supports only [ComplicationType.WEIGHTED_ELEMENTS] and cycles
  * through the possible configurations on tap. The value is randomised on each update.
  */
-class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
+@RequiresApi(33)
+class WeightedElementsDataSourceService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
-        if (request.complicationType != ComplicationType.RANGED_VALUE) {
+        if (request.complicationType != ComplicationType.WEIGHTED_ELEMENTS) {
             return NoDataComplicationData()
         }
         val args = ComplicationToggleArgs(
             providerComponent = ComponentName(this, javaClass),
-            complication = Complication.RANGED_VALUE,
+            complication = Complication.WEIGHTED_ELEMENTS,
             complicationInstanceId = request.complicationInstanceId,
         )
         val complicationTogglePendingIntent =
@@ -74,11 +77,6 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
         val title: ComplicationText?
         val caseContentDescription: String
 
-        val minValue = case.minValue
-        val maxValue = case.maxValue
-        val value = Random.nextDouble(minValue.toDouble(), maxValue.toDouble()).toFloat()
-        val percentage = (value - minValue) / (maxValue - minValue)
-
         when (case) {
             Case.TEXT_ONLY -> {
                 text = PlainComplicationText.Builder(
@@ -87,7 +85,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 monochromaticImage = null
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_only_content_description,
+                    R.string.weighted_elements_text_only_content_description,
                 )
             }
             Case.TEXT_WITH_ICON -> {
@@ -106,7 +104,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                     .build()
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_with_icon_content_description,
+                    R.string.weighted_elements_text_with_icon_content_description,
                 )
             }
             Case.TEXT_WITH_TITLE -> {
@@ -119,7 +117,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 ).build()
 
                 caseContentDescription = getString(
-                    R.string.ranged_value_text_with_title_content_description,
+                    R.string.weighted_elements_text_with_title_content_description,
                 )
             }
             Case.ICON_ONLY -> {
@@ -129,7 +127,7 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
                 ).build()
                 title = null
                 caseContentDescription = getString(
-                    R.string.ranged_value_icon_only_content_description,
+                    R.string.weighted_elements_icon_only_content_description,
                 )
             }
         }
@@ -137,20 +135,16 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
         // Create a content description that includes the value information
         val contentDescription = PlainComplicationText.Builder(
             text = getString(
-                R.string.ranged_value_content_description,
+                R.string.weighted_elements_content_description,
                 caseContentDescription,
-                value,
-                percentage,
-                minValue,
-                maxValue,
+                case.numElements,
+                resources.getQuantityString(R.plurals.number_of_elements, case.numElements),
             ),
         )
             .build()
 
-        return RangedValueComplicationData.Builder(
-            value = value,
-            min = minValue,
-            max = maxValue,
+        return WeightedElementsComplicationData.Builder(
+            elements = createWeightedElements(case.numElements),
             contentDescription = contentDescription,
         )
             .setText(text)
@@ -160,18 +154,29 @@ class RangedValueDataSourceService : SuspendingComplicationDataSourceService() {
             .build()
     }
 
-    private enum class Case(
-        val minValue: Float,
-        val maxValue: Float,
-    ) {
-        TEXT_ONLY(0f, 100f),
-        TEXT_WITH_ICON(-20f, 20f),
-        TEXT_WITH_TITLE(57.5f, 824.2f),
-        ICON_ONLY(10_045f, 100_000f),
-        ;
-
-        init {
-            require(minValue < maxValue) { "Minimum value was greater than maximum value!" }
+    private fun createWeightedElements(numElements: Int):
+        List<WeightedElementsComplicationData.Element> {
+        val elements = mutableListOf<WeightedElementsComplicationData.Element>()
+        repeat(numElements) { index ->
+            val weight = Random.nextInt(1, 3).toFloat()
+            val color = colors[(index % colors.size)]
+            elements.add(WeightedElementsComplicationData.Element(weight, color))
         }
+        return elements
     }
+
+    private enum class Case(
+        val numElements: Int,
+    ) {
+        TEXT_ONLY(5),
+        TEXT_WITH_ICON(3),
+        TEXT_WITH_TITLE(4),
+        ICON_ONLY(4),
+    }
+
+    private val colors = listOf(
+        Color.argb(255, 255, 0, 0),
+        Color.argb(255, 0, 255, 0),
+        Color.argb(255, 0, 0, 255),
+    )
 }
