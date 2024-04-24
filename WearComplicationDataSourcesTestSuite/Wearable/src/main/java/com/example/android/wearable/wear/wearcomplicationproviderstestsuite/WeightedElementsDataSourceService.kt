@@ -138,7 +138,7 @@ class WeightedElementsDataSourceService : SuspendingComplicationDataSourceServic
                 R.string.weighted_elements_content_description,
                 caseContentDescription,
                 case.numElements,
-                resources.getQuantityString(R.plurals.number_of_elements, case.numElements)
+                resources.getQuantityString(R.plurals.number_of_elements, case.numElements),
             ),
         )
             .build()
@@ -154,7 +154,7 @@ class WeightedElementsDataSourceService : SuspendingComplicationDataSourceServic
             .build()
     }
 
-    private fun createWeightedElements(numElements: Int) :
+    private fun createWeightedElements(numElements: Int):
         List<WeightedElementsComplicationData.Element> {
         val elements = mutableListOf<WeightedElementsComplicationData.Element>()
         repeat(numElements) { index ->
@@ -171,12 +171,12 @@ class WeightedElementsDataSourceService : SuspendingComplicationDataSourceServic
         TEXT_ONLY(5),
         TEXT_WITH_ICON(3),
         TEXT_WITH_TITLE(4),
-        ICON_ONLY(4)
+        ICON_ONLY(4),
     }
 
     private val colors = listOf(
         Color.argb(255, 255, 0, 0),
         Color.argb(255, 0, 255, 0),
-        Color.argb(255, 0, 0, 255)
+        Color.argb(255, 0, 0, 255),
     )
 }

@@ -32,5 +32,5 @@ enum class Complication(
     RANGED_VALUE("RangedValue"),
     SHORT_TEXT("ShortText"),
     SMALL_IMAGE("SmallImage"),
-    WEIGHTED_ELEMENTS("WeightedElements")
+    WEIGHTED_ELEMENTS("WeightedElements"),
 }

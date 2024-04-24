@@ -144,7 +144,7 @@ class GoalProgressDataSourceService : SuspendingComplicationDataSourceService() 
                 caseContentDescription,
                 currentValue,
                 percentage,
-                case.targetValue
+                case.targetValue,
             ),
         )
             .build()
@@ -167,6 +167,6 @@ class GoalProgressDataSourceService : SuspendingComplicationDataSourceService() 
         TEXT_ONLY(5000f),
         TEXT_WITH_ICON(2500f),
         TEXT_WITH_TITLE(10000f),
-        ICON_ONLY(10000f)
+        ICON_ONLY(10000f),
     }
 }
