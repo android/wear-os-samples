@@ -15,42 +15,35 @@
  */
 package com.example.android.wearable.speaker
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
-import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import com.google.android.horologist.compose.layout.ScreenScaffold
 
 /**
  * The composable responsible for displaying the main UI.
  *
  * This composable is stateless, and simply displays the state given to it.
  */
-@OptIn(ExperimentalWearMaterialApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SpeakerScreen(
     playbackState: PlaybackState,
     isPermissionDenied: Boolean,
     recordingProgress: Float,
     onMicClicked: () -> Unit,
-    onPlayClicked: () -> Unit,
-    onMusicClicked: () -> Unit
+    onPlayClicked: () -> Unit
 ) {
-    Scaffold(
-        timeText = {
-            TimeText()
-        }
-    ) {
+    ScreenScaffold {
         // Determine the control dashboard state.
         // This converts the main app state into a control dashboard state for rendering
         val controlDashboardUiState = computeControlDashboardUiState(
@@ -61,7 +54,6 @@ fun SpeakerScreen(
         // The progress bar should only be visible when actively recording
         val isProgressVisible =
             when (playbackState) {
-                PlaybackState.PlayingMusic,
                 PlaybackState.PlayingVoice,
                 is PlaybackState.Ready -> false
                 PlaybackState.Recording -> true
@@ -79,13 +71,11 @@ fun SpeakerScreen(
                 controlDashboardUiState = controlDashboardUiState,
                 onMicClicked = onMicClicked,
                 onPlayClicked = onPlayClicked,
-                onMusicClicked = onMusicClicked,
                 modifier = Modifier
                     .constrainAs(controlDashboard) {
                         centerTo(parent)
                     }
             )
-
             AnimatedVisibility(
                 visible = isProgressVisible,
                 modifier = Modifier
@@ -109,23 +99,6 @@ private fun computeControlDashboardUiState(
     isPermissionDenied: Boolean
 ): ControlDashboardUiState =
     when (playbackState) {
-        PlaybackState.PlayingMusic -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = false,
-                visible = false
-            ),
-            playState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = false,
-                visible = false
-            ),
-            musicState = ControlDashboardButtonUiState(
-                expanded = true,
-                enabled = true,
-                visible = true
-            )
-        )
         PlaybackState.PlayingVoice -> ControlDashboardUiState(
             micState = ControlDashboardButtonUiState(
                 expanded = false,
@@ -136,11 +109,6 @@ private fun computeControlDashboardUiState(
                 expanded = true,
                 enabled = true,
                 visible = true
-            ),
-            musicState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = false,
-                visible = false
             )
         )
         PlaybackState.Ready -> ControlDashboardUiState(
@@ -150,11 +118,6 @@ private fun computeControlDashboardUiState(
                 visible = true
             ),
             playState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = true,
-                visible = true
-            ),
-            musicState = ControlDashboardButtonUiState(
                 expanded = false,
                 enabled = true,
                 visible = true
@@ -170,11 +133,6 @@ private fun computeControlDashboardUiState(
                 expanded = false,
                 enabled = false,
                 visible = false
-            ),
-            musicState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = false,
-                visible = false
             )
         )
     }
@@ -183,18 +141,11 @@ private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<
     listOf(
         PlaybackState.Ready,
         PlaybackState.Recording,
-        PlaybackState.PlayingVoice,
-        PlaybackState.PlayingMusic
+        PlaybackState.PlayingVoice
     )
 )
 
-@Preview(
-    device = Devices.WEAR_OS_SMALL_ROUND,
-    showSystemUi = true,
-    widthDp = 200,
-    heightDp = 200,
-    uiMode = Configuration.UI_MODE_TYPE_WATCH
-)
+@WearPreviewDevices
 @Composable
 fun SpeakerScreenPreview(
     @PreviewParameter(PlaybackStatePreviewProvider::class) playbackState: PlaybackState
@@ -204,7 +155,6 @@ fun SpeakerScreenPreview(
         isPermissionDenied = true,
         recordingProgress = 0.25f,
         onMicClicked = {},
-        onPlayClicked = {},
-        onMusicClicked = {}
+        onPlayClicked = {}
     )
 }

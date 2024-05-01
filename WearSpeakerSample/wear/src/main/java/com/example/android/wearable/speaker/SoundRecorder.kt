@@ -29,10 +29,10 @@ import kotlinx.coroutines.suspendCancellableCoroutine
  * and to playback the same recorded audio file.
  */
 class SoundRecorder(
-    private val context: Context,
-    private val outputFileName: String
+    context: Context,
+    outputFileName: String
 ) {
-    val audioFile = File(context.filesDir, outputFileName)
+    private val audioFile = File(context.filesDir, outputFileName)
 
     private var state = State.IDLE
 
