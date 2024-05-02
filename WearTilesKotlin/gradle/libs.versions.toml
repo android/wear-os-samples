@@ -2,7 +2,7 @@
 android-gradle-plugin = "8.4.0"
 androidx-wear-tiles = "1.3.0"
 androidx-wear-tooling-preview = "1.0.0"
-compose = "1.6.6"
+compose = "1.6.7"
 compose-compiler = "1.5.12"
 horologist = "0.5.27"
 ktlint = "0.50.0"
@@ -11,7 +11,7 @@ org-jetbrains-kotlinx = "1.8.0"
 tiles-tooling-preview = "1.3.0"
 
 [libraries]
-androidx-datastore = "androidx.datastore:datastore-preferences:1.1.0"
+androidx-datastore = "androidx.datastore:datastore-preferences:1.1.1"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
 androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
 androidx-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "tiles-tooling-preview" }

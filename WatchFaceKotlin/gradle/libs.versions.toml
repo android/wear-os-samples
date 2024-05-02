@@ -15,7 +15,7 @@ org-jetbrains-kotlinx = "1.8.0"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:31.4.0"
 android-material = "com.google.android.material:material:1.11.0"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-core-ktx = "androidx.core:core-ktx:1.13.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.13.1"
 androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.4.0"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
