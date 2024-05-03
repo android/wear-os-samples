@@ -31,11 +31,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.dialog.Confirmation
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.material.AlertContent
 import kotlinx.coroutines.launch
 
 /**
@@ -43,6 +44,7 @@ import kotlinx.coroutines.launch
  *
  * The stateful logic is kept by a [MainState].
  */
+@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun SpeakerApp() {
     MaterialTheme {
@@ -69,76 +71,58 @@ fun SpeakerApp() {
         }
 
         val lifecycleOwner = LocalLifecycleOwner.current
+        AppScaffold {
+            // Notify the state holder whenever we become stopped to reset the state
+            DisposableEffect(mainState, scope, lifecycleOwner) {
+                val lifecycleObserver = object : DefaultLifecycleObserver {
+                    override fun onStop(owner: LifecycleOwner) {
+                        super.onStop(owner)
+                        scope.launch { mainState.onStopped() }
+                    }
+                }
 
-        // Notify the state holder whenever we become stopped to reset the state
-        DisposableEffect(mainState, scope, lifecycleOwner) {
-            val lifecycleObserver = object : DefaultLifecycleObserver {
-                override fun onStop(owner: LifecycleOwner) {
-                    super.onStop(owner)
-                    scope.launch { mainState.onStopped() }
+                lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+                onDispose {
+                    lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
                 }
             }
 
-            lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
-
-            onDispose {
-                lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
-            }
-        }
-
-        SpeakerScreen(
-            playbackState = mainState.playbackState,
-            isPermissionDenied = mainState.isPermissionDenied,
-            recordingProgress = mainState.recordingProgress,
-            onMicClicked = {
-                scope.launch {
-                    mainState.onMicClicked()
-                }
-            },
-            onPlayClicked = {
-                scope.launch {
-                    mainState.onPlayClicked()
-                }
-            },
-            onMusicClicked = {
-                scope.launch {
-                    mainState.onMusicClicked()
-                }
-            }
-        )
-
-        if (mainState.showPermissionRationale) {
-            Alert(
-                title = {
-                    Text(text = stringResource(id = R.string.rationale_for_microphone_permission))
-                },
-                positiveButton = {
-                    Button(
-                        onClick = {
-                            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                            mainState.showPermissionRationale = false
-                        }
-                    ) {
-                        Text(text = stringResource(id = R.string.ok))
+            SpeakerScreen(
+                playbackState = mainState.playbackState,
+                isPermissionDenied = mainState.isPermissionDenied,
+                recordingProgress = mainState.recordingProgress,
+                onMicClicked = {
+                    scope.launch {
+                        mainState.onMicClicked()
                     }
                 },
-                negativeButton = {
-                    Button(
-                        onClick = {
-                            mainState.showPermissionRationale = false
-                        }
-                    ) {
-                        Text(text = stringResource(id = R.string.cancel))
+                onPlayClicked = {
+                    scope.launch {
+                        mainState.onPlayClicked()
                     }
                 }
             )
-        }
 
-        if (mainState.showSpeakerNotSupported) {
-            Confirmation(
-                onTimeout = { mainState.showSpeakerNotSupported = false }
-            ) {
-                Text(text = stringResource(id = R.string.no_speaker_supported))
+            if (mainState.showPermissionRationale) {
+                AlertContent(
+                    onOk = {
+                        requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                        mainState.showPermissionRationale = false
+                    },
+                    onCancel = {
+                        mainState.showPermissionRationale = false
+                    },
+                    title = stringResource(id = R.string.rationale_for_microphone_permission)
+                )
+            }
+
+            if (mainState.showSpeakerNotSupported) {
+                Confirmation(
+                    onTimeout = { mainState.showSpeakerNotSupported = false }
+                ) {
+                    Text(text = stringResource(id = R.string.no_speaker_supported))
+                }
             }
         }
     }
