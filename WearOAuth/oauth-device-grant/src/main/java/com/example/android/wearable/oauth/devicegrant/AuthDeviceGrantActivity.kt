@@ -19,7 +19,24 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material.PositionIndicator
+import androidx.wear.compose.material.Scaffold
+import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.material.Vignette
+import androidx.wear.compose.material.VignettePosition
+import androidx.wear.compose.material.scrollAway
+import androidx.wear.compose.material3.Button
 
 /**
  * Demonstrates the OAuth 2.0 flow on Wear OS using Device Authorization Grant, as described in
@@ -38,22 +55,63 @@ class AuthDeviceGrantActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
-        val viewModel by viewModels<AuthDeviceGrantViewModel>()
+        // setViewsContent()
+        setContent { AuthenticateScreen() }
+    }
+}
 
-        // Start the OAuth flow when the user presses the button
-        findViewById<View>(R.id.authenticateButton).setOnClickListener {
-            viewModel.startAuthFlow()
-        }
+@Composable
+fun AuthenticateScreen() {
+    val listState = rememberScalingLazyListState()
 
-        // Show current status on the screen
-        viewModel.status.observe(this) { statusText ->
-            findViewById<TextView>(R.id.status_text_view).text = resources.getText(statusText)
+    Scaffold(
+        timeText = { TimeText(modifier = Modifier.scrollAway(listState)) },
+        vignette = {
+            Vignette(vignettePosition = VignettePosition.TopAndBottom)
+        },
+        positionIndicator = {
+            PositionIndicator(scalingLazyListState = listState)
         }
+    ) {
+        ScalingLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = listState
+        ) {
+            item { ListHeader { Text("OAuth Device Auth Grant", textAlign = TextAlign.Center) } }
+            item {
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.fillMaxSize() ){
+                    Text(text = "Get Grant from Phone",
+                         modifier = Modifier.align(Alignment.CenterVertically))
+                }
+            }
+            item {
+                Text("code generation status")
+            }
+        }
+    }
+}
 
-        // Show dynamic content on the screen
-        viewModel.result.observe(this) { resultText ->
-            findViewById<TextView>(R.id.result_text_view).text = resultText
-        }
+fun ComponentActivity.setViewsContent() {
+    setContentView(R.layout.activity_auth)
+    val viewModel by viewModels<AuthDeviceGrantViewModel>()
+
+    // Start the OAuth flow when the user presses the button
+    // Once you click this, the next view (status_text_view) breifly flashes "check your
+    // phone", before displaying a code
+    findViewById<View>(R.id.authenticateButton).setOnClickListener {
+        viewModel.startAuthFlow()
+    }
+
+    // Show current status on the screen
+    viewModel.status.observe(this) { statusText ->
+        findViewById<TextView>(R.id.status_text_view).text = resources.getText(statusText)
+    }
+
+    // Show dynamic content on the screen
+    viewModel.result.observe(this) { resultText ->
+        findViewById<TextView>(R.id.result_text_view).text = resultText
     }
 }

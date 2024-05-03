@@ -11,6 +11,7 @@ compose-compiler = "1.5.12"
 org-jetbrains-kotlin = "1.9.23"
 org-jetbrains-kotlinx = "1.8.0"
 ktlint = "0.50.0"
+compose-material3 = "1.0.0-alpha22"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
@@ -21,6 +22,7 @@ android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.4.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
+androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "androidx-wear-compose" }
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-core-ktx = "androidx.core:core-ktx:1.13.1"
@@ -88,6 +90,7 @@ wear-watchface-complications-rendering = { module = "androidx.wear.watchface:wat
 wear-watchface-data = { module = "androidx.wear.watchface:watchface-data", version.ref = "androidx-wear-watchface" }
 wear-watchface-editor = { module = "androidx.wear.watchface:watchface-editor", version.ref = "androidx-wear-watchface" }
 wear-watchface-style = { module = "androidx.wear.watchface:watchface-style", version.ref = "androidx-wear-watchface" }
+androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-material3" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
