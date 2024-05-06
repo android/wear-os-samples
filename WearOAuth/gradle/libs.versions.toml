@@ -17,7 +17,7 @@ compose-material3 = "1.0.0-alpha22"
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.4"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:31.4.0"
-android-material = "com.google.android.material:material:1.11.0"
+android-material = "com.google.android.material:material:1.12.0"
 android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.4.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
@@ -64,7 +64,7 @@ kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "org-jetbrains-kotlinx" }
 org-robolectric = "org.robolectric:robolectric:4.12.1"
-playservices-auth = "com.google.android.gms:play-services-auth:21.1.0"
+playservices-auth = "com.google.android.gms:play-services-auth:21.1.1"
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.1.0"
 test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
