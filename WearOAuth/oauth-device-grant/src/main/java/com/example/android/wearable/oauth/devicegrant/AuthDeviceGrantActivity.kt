@@ -16,16 +16,16 @@
 package com.example.android.wearable.oauth.devicegrant
 
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
@@ -55,14 +55,15 @@ class AuthDeviceGrantActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setViewsContent()
-        setContent { AuthenticateScreen() }
+        setContent { AuthenticateScreen(deviceGrantViewModel = viewModel()) }
     }
 }
 
 @Composable
-fun AuthenticateScreen() {
+fun AuthenticateScreen(deviceGrantViewModel: AuthDeviceGrantViewModel) {
     val listState = rememberScalingLazyListState()
+    val uiState = deviceGrantViewModel.uiState.collectAsState()
+    val localContext = LocalContext.current
 
     Scaffold(
         timeText = { TimeText(modifier = Modifier.scrollAway(listState)) },
@@ -81,37 +82,18 @@ fun AuthenticateScreen() {
             item { ListHeader { Text("OAuth Device Auth Grant", textAlign = TextAlign.Center) } }
             item {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { deviceGrantViewModel.startAuthFlow(localContext) },
                     modifier = Modifier.fillMaxSize() ){
                     Text(text = "Get Grant from Phone",
                          modifier = Modifier.align(Alignment.CenterVertically))
                 }
             }
             item {
-                Text("code generation status")
+                Text(uiState.value.statusCode.toString())
+            }
+            item {
+                Text (uiState.value.resultMessage)
             }
         }
-    }
-}
-
-fun ComponentActivity.setViewsContent() {
-    setContentView(R.layout.activity_auth)
-    val viewModel by viewModels<AuthDeviceGrantViewModel>()
-
-    // Start the OAuth flow when the user presses the button
-    // Once you click this, the next view (status_text_view) breifly flashes "check your
-    // phone", before displaying a code
-    findViewById<View>(R.id.authenticateButton).setOnClickListener {
-        viewModel.startAuthFlow()
-    }
-
-    // Show current status on the screen
-    viewModel.status.observe(this) { statusText ->
-        findViewById<TextView>(R.id.status_text_view).text = resources.getText(statusText)
-    }
-
-    // Show dynamic content on the screen
-    viewModel.result.observe(this) { resultText ->
-        findViewById<TextView>(R.id.result_text_view).text = resultText
     }
 }
