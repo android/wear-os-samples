@@ -1,0 +1,980 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<WatchFace height="450" width="450">
+  <Scene>
+    <Group height="450" name="Root" width="450" x="0" y="0">
+      <PartDraw height="450" name="BackgroundContour" width="450" x="0" y="0">
+        <Ellipse height="450.0" width="450.0" x="0.0" y="0.0">
+          <Stroke color="#ff888888" thickness="10.0"/>
+          <Fill color="#ff0c0c0c"/>
+        </Ellipse>
+      </PartDraw>
+      <Group height="430" name="BackgroundWrapper" width="430" x="10" y="10">
+        <Group height="27" name="null" width="100" x="175" y="30">
+          <PartText height="27" width="100" x="0" y="0">
+            <Localization calendar="GREGORIAN" timeZone="SYNC_TO_DEVICE"/>
+            <Text>
+              <Font family="SYNC_TO_DEVICE" size="27">
+                <Template><![CDATA[%s %s]]>
+                  <Parameter expression="[DAY_OF_WEEK_S]"/>
+                  <Parameter expression="[DAY_Z]"/>
+                </Template>
+              </Font>
+            </Text>
+          </PartText>
+        </Group>
+        <DigitalClock height="140" width="270" x="90" y="45">
+          <Localization calendar="GREGORIAN" timeZone="SYNC_TO_DEVICE"/>
+          <TimeText format="hh" height="140" width="180" x="0" y="0">
+            <Font family="SYNC_TO_DEVICE" size="140"/>
+          </TimeText>
+          <TimeText format="mm" height="75" width="85" x="185" y="7">
+            <Font family="SYNC_TO_DEVICE" size="75"/>
+          </TimeText>
+        </DigitalClock>
+        <Group height="140" name="Seconds_And_Separator" width="270" x="90" y="45">
+          <Variant mode="AMBIENT" target="alpha" value="0"/>
+          <PartDraw height="1" tintColor="#ffb3b3b3" width="70" x="192" y="75">
+            <Rectangle height="1.0" width="70.0" x="0.0" y="0.0">
+              <Fill color="#ff888888"/>
+            </Rectangle>
+          </PartDraw>
+          <PartText height="75" width="100" x="185" y="70">
+            <Localization calendar="GREGORIAN" timeZone="SYNC_TO_DEVICE"/>
+            <Text>
+              <Font family="SYNC_TO_DEVICE" size="27">
+                <Template><![CDATA[%s]]>
+                  <Parameter expression="[SECOND_Z]"/>
+                </Template>
+              </Font>
+            </Text>
+          </PartText>
+        </Group>
+        <Group height="255" name="Weather_Condition" width="410" x="10" y="175">
+          <Condition>
+            <Expressions>
+              <Expression name="is_weather_available">[WEATHER.IS_AVAILABLE]</Expression>
+            </Expressions>
+            <Compare expression="is_weather_available">
+              <Group height="255" name="Weather_Available_View" width="410" x="0" y="0">
+                <Group height="47" name="CurrentCondition" width="205" x="0" y="0">
+                  <PartDraw height="47" width="205" x="0" y="0">
+                    <RoundRectangle cornerRadiusX="23.5" cornerRadiusY="23.5" height="47.0" width="205.0" x="0.0" y="0.0">
+                      <Fill color="#ff888888"/>
+                    </RoundRectangle>
+                  </PartDraw>
+                  <PartText height="37" width="195" x="5" y="5">
+                    <Text>
+                      <Font family="SYNC_TO_DEVICE" size="31">
+                        <Template><![CDATA[%s]]>
+                          <Parameter expression="[WEATHER.CONDITION_NAME]"/>
+                        </Template>
+                      </Font>
+                    </Text>
+                  </PartText>
+                </Group>
+                <Group height="47" name="CurrentConditionIcon" width="47" x="215" y="0">
+                  <Condition>
+                    <!--
+                      When using CONDITION, it is a requirement that all
+                      potential values are correctly handled. See:
+                      https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                    -->
+                    <Expressions>
+                      <Expression name="is_clear">[WEATHER.CONDITION] == 1</Expression>
+                      <Expression name="is_cloudy">[WEATHER.CONDITION] == 2</Expression>
+                      <Expression name="is_fog">([WEATHER.CONDITION] == 3) || ([WEATHER.CONDITION] == 13)</Expression>
+                      <Expression name="is_heavy_rain">[WEATHER.CONDITION] == 4</Expression>
+                      <Expression name="is_heavy_snow">[WEATHER.CONDITION] == 5</Expression>
+                      <Expression name="is_rain">([WEATHER.CONDITION] == 6) || ([WEATHER.CONDITION] == 12)</Expression>
+                      <Expression name="is_snow">([WEATHER.CONDITION] == 7) || ([WEATHER.CONDITION] == 11)</Expression>
+                      <Expression name="is_sunny">[WEATHER.CONDITION] == 8</Expression>
+                      <Expression name="is_thunderstorm">[WEATHER.CONDITION] == 9</Expression>
+                      <Expression name="is_sleet">[WEATHER.CONDITION] == 10</Expression>
+                      <Expression name="is_partly_cloudy_day">([WEATHER.CONDITION] == 14) &amp;&amp; ([WEATHER.IS_DAY] == true)</Expression>
+                      <Expression name="is_partly_cloudy_night">([WEATHER.CONDITION] == 14) &amp;&amp; (![WEATHER.IS_DAY] == true)</Expression>
+                      <Expression name="is_windy">[WEATHER.CONDITION] == 15</Expression>
+                    </Expressions>
+                    <Compare expression="is_clear">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_clear"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_cloudy">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_cloudy"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_fog">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_fog"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_heavy_rain">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_heavy_rain"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_heavy_snow">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_heavy_snow"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_rain">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_rain"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_snow">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_snow"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_sunny">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_sunny"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_thunderstorm">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_thunderstorm"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_sleet">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_sleet"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_partly_cloudy_day">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_partly_cloudy_day"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_partly_cloudy_night">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_partly_cloudy_night"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_windy">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_windy"/>
+                      </PartImage>
+                    </Compare>
+                  </Condition>
+                </Group>
+                <Group height="47" name="CurrentTemp" width="137" x="273" y="0">
+                  <PartDraw height="47" width="137" x="0" y="0">
+                    <RoundRectangle cornerRadiusX="23.5" cornerRadiusY="23.5" height="47.0" width="137.0" x="0.0" y="0.0">
+                      <Fill color="#ff888888"/>
+                    </RoundRectangle>
+                  </PartDraw>
+                  <PartText height="37" width="127" x="5" y="5">
+                    <Text>
+                      <Font family="SYNC_TO_DEVICE" size="31">
+                        <Template><![CDATA[%s° %s]]>
+                          <Parameter expression="[WEATHER.TEMPERATURE]"/>
+                          <Parameter expression="[WEATHER.TEMPERATURE_UNIT] == 1 ? &quot;C&quot; : &quot;F&quot;"/>
+                        </Template>
+                      </Font>
+                    </Text>
+                  </PartText>
+                </Group>
+                <!--Up to 8 hours can be queried, with indexed from 1 to 8. Each hour must be checked via the IS_AVAILABLE field before being used-->
+                <Group height="100" name="Hour_1_Root" width="60" x="70" y="50">
+                  <Condition>
+                    <Expressions>
+                      <Expression name="is_weather_forecast_1_available">[WEATHER.HOURS.1.IS_AVAILABLE]</Expression>
+                    </Expressions>
+                    <Compare expression="is_weather_forecast_1_available">
+                      <Condition>
+                        <Expressions>
+                          <!--
+                            When using CONDITION, it is a requirement that all
+                            potential values are correctly handled. See:
+                            https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                          -->
+                          <Expression name="is_clear">[WEATHER.HOURS.1.CONDITION] == 1</Expression>
+                          <Expression name="is_cloudy">[WEATHER.HOURS.1.CONDITION] == 2</Expression>
+                          <Expression name="is_fog">([WEATHER.HOURS.1.CONDITION] == 3) || ([WEATHER.HOURS.1.CONDITION] == 13)</Expression>
+                          <Expression name="is_heavy_rain">[WEATHER.HOURS.1.CONDITION] == 4</Expression>
+                          <Expression name="is_heavy_snow">[WEATHER.HOURS.1.CONDITION] == 5</Expression>
+                          <Expression name="is_rain">([WEATHER.HOURS.1.CONDITION] == 6) || ([WEATHER.HOURS.1.CONDITION] == 12)</Expression>
+                          <Expression name="is_snow">([WEATHER.HOURS.1.CONDITION] == 7) || ([WEATHER.HOURS.1.CONDITION] == 11)</Expression>
+                          <Expression name="is_sunny">[WEATHER.HOURS.1.CONDITION] == 8</Expression>
+                          <Expression name="is_thunderstorm">[WEATHER.HOURS.1.CONDITION] == 9</Expression>
+                          <Expression name="is_sleet">[WEATHER.HOURS.1.CONDITION] == 10</Expression>
+                          <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.1.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.1.IS_DAY] == true)</Expression>
+                          <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.1.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.1.IS_DAY] == true)</Expression>
+                          <Expression name="is_windy">[WEATHER.HOURS.1.CONDITION] == 15</Expression>
+                        </Expressions>
+                        <Compare expression="is_clear">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_clear"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_cloudy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_cloudy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_fog">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_fog"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sunny">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sunny"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_thunderstorm">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_thunderstorm"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sleet">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sleet"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_day">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_day"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_night">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_night"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_windy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                      </Condition>
+                      <PartText height="20" width="60" x="0" y="60">
+                        <Text>
+                          <Font family="SYNC_TO_DEVICE" size="18">
+                            <Template><![CDATA[%s°]]>
+                              <Parameter expression="[WEATHER.HOURS.1.TEMPERATURE]"/>
+                            </Template>
+                          </Font>
+                        </Text>
+                      </PartText>
+                      <Condition>
+                        <Expressions>
+                          <Expression name="is_24_mode">[IS_24_HOUR_MODE]</Expression>
+                        </Expressions>
+                        <Compare expression="is_24_mode">
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s:00]]>
+                                  <Parameter expression="([HOUR_0_23] + 1) % 24"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Compare>
+                        <Default>
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s%s]]>
+                                  <Parameter expression="([HOUR_0_23] + 1) % 24 &lt;= 12 ? ([HOUR_0_23] + 1) % 24 : ([HOUR_0_23] + 1) % 24 - 12"/>
+                                  <Parameter expression="([HOUR_0_23] + 1) % 24 &lt; 12 ? &quot;AM&quot; : &quot;PM&quot;"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Default>
+                      </Condition>
+                    </Compare>
+                  </Condition>
+                </Group>
+                <Group height="100" name="Hour_2_Root" width="60" x="140" y="50">
+                  <Condition>
+                    <Expressions>
+                      <Expression name="is_weather_forecast_2_available">[WEATHER.HOURS.2.IS_AVAILABLE]</Expression>
+                    </Expressions>
+                    <Compare expression="is_weather_forecast_2_available">
+                      <Condition>
+                        <Expressions>
+                          <!--
+                            When using CONDITION, it is a requirement that all
+                            potential values are correctly handled. See:
+                            https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                          -->
+                          <Expression name="is_clear">[WEATHER.HOURS.2.CONDITION] == 1</Expression>
+                          <Expression name="is_cloudy">[WEATHER.HOURS.2.CONDITION] == 2</Expression>
+                          <Expression name="is_fog">([WEATHER.HOURS.2.CONDITION] == 3) || ([WEATHER.HOURS.2.CONDITION] == 13)</Expression>
+                          <Expression name="is_heavy_rain">[WEATHER.HOURS.2.CONDITION] == 4</Expression>
+                          <Expression name="is_heavy_snow">[WEATHER.HOURS.2.CONDITION] == 5</Expression>
+                          <Expression name="is_rain">([WEATHER.HOURS.2.CONDITION] == 6) || ([WEATHER.HOURS.2.CONDITION] == 12)</Expression>
+                          <Expression name="is_snow">([WEATHER.HOURS.2.CONDITION] == 7) || ([WEATHER.HOURS.2.CONDITION] == 11)</Expression>
+                          <Expression name="is_sunny">[WEATHER.HOURS.2.CONDITION] == 8</Expression>
+                          <Expression name="is_thunderstorm">[WEATHER.HOURS.2.CONDITION] == 9</Expression>
+                          <Expression name="is_sleet">[WEATHER.HOURS.2.CONDITION] == 10</Expression>
+                          <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.2.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.2.IS_DAY] == true)</Expression>
+                          <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.2.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.2.IS_DAY] == true)</Expression>
+                          <Expression name="is_windy">[WEATHER.HOURS.2.CONDITION] == 15</Expression>
+                        </Expressions>
+                        <Compare expression="is_clear">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_clear"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_cloudy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_cloudy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_fog">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_fog"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sunny">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sunny"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_thunderstorm">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_thunderstorm"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sleet">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sleet"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_day">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_day"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_night">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_night"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_windy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                      </Condition>
+                      <PartText height="20" width="60" x="0" y="60">
+                        <Text>
+                          <Font family="SYNC_TO_DEVICE" size="18">
+                            <Template><![CDATA[%s°]]>
+                              <Parameter expression="[WEATHER.HOURS.2.TEMPERATURE]"/>
+                            </Template>
+                          </Font>
+                        </Text>
+                      </PartText>
+                      <Condition>
+                        <Expressions>
+                          <Expression name="is_24_mode">[IS_24_HOUR_MODE]</Expression>
+                        </Expressions>
+                        <Compare expression="is_24_mode">
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s:00]]>
+                                  <Parameter expression="([HOUR_0_23] + 2) % 24"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Compare>
+                        <Default>
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s%s]]>
+                                  <Parameter expression="([HOUR_0_23] + 2) % 24 &lt;= 12 ? ([HOUR_0_23] + 2) % 24 : ([HOUR_0_23] + 2) % 24 - 12"/>
+                                  <Parameter expression="([HOUR_0_23] + 2) % 24 &lt; 12 ? &quot;AM&quot; : &quot;PM&quot;"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Default>
+                      </Condition>
+                    </Compare>
+                  </Condition>
+                </Group>
+                <Group height="100" name="Hour_3_Root" width="60" x="210" y="50">
+                  <Condition>
+                    <Expressions>
+                      <Expression name="is_weather_forecast_3_available">[WEATHER.HOURS.3.IS_AVAILABLE]</Expression>
+                    </Expressions>
+                    <Compare expression="is_weather_forecast_3_available">
+                      <Condition>
+                        <Expressions>
+                          <!--
+                            When using CONDITION, it is a requirement that all
+                            potential values are correctly handled. See:
+                            https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                          -->
+                          <Expression name="is_clear">[WEATHER.HOURS.3.CONDITION] == 1</Expression>
+                          <Expression name="is_cloudy">[WEATHER.HOURS.3.CONDITION] == 2</Expression>
+                          <Expression name="is_fog">([WEATHER.HOURS.3.CONDITION] == 3) || ([WEATHER.HOURS.3.CONDITION] == 13)</Expression>
+                          <Expression name="is_heavy_rain">[WEATHER.HOURS.3.CONDITION] == 4</Expression>
+                          <Expression name="is_heavy_snow">[WEATHER.HOURS.3.CONDITION] == 5</Expression>
+                          <Expression name="is_rain">([WEATHER.HOURS.3.CONDITION] == 6) || ([WEATHER.HOURS.3.CONDITION] == 12)</Expression>
+                          <Expression name="is_snow">([WEATHER.HOURS.3.CONDITION] == 7) || ([WEATHER.HOURS.3.CONDITION] == 11)</Expression>
+                          <Expression name="is_sunny">[WEATHER.HOURS.3.CONDITION] == 8</Expression>
+                          <Expression name="is_thunderstorm">[WEATHER.HOURS.3.CONDITION] == 9</Expression>
+                          <Expression name="is_sleet">[WEATHER.HOURS.3.CONDITION] == 10</Expression>
+                          <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.3.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.3.IS_DAY] == true)</Expression>
+                          <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.3.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.3.IS_DAY] == true)</Expression>
+                          <Expression name="is_windy">[WEATHER.HOURS.3.CONDITION] == 15</Expression>
+                        </Expressions>
+                        <Compare expression="is_clear">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_clear"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_cloudy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_cloudy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_fog">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_fog"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sunny">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sunny"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_thunderstorm">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_thunderstorm"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sleet">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sleet"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_day">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_day"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_night">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_night"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_windy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                      </Condition>
+                      <PartText height="20" width="60" x="0" y="60">
+                        <Text>
+                          <Font family="SYNC_TO_DEVICE" size="18">
+                            <Template><![CDATA[%s°]]>
+                              <Parameter expression="[WEATHER.HOURS.3.TEMPERATURE]"/>
+                            </Template>
+                          </Font>
+                        </Text>
+                      </PartText>
+                      <Condition>
+                        <Expressions>
+                          <Expression name="is_24_mode">[IS_24_HOUR_MODE]</Expression>
+                        </Expressions>
+                        <Compare expression="is_24_mode">
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s:00]]>
+                                  <Parameter expression="([HOUR_0_23] + 3) % 24"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Compare>
+                        <Default>
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s%s]]>
+                                  <Parameter expression="([HOUR_0_23] + 3) % 24 &lt;= 12 ? ([HOUR_0_23] + 3) % 24 : ([HOUR_0_23] + 3) % 24 - 12"/>
+                                  <Parameter expression="([HOUR_0_23] + 3) % 24 &lt; 12 ? &quot;AM&quot; : &quot;PM&quot;"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Default>
+                      </Condition>
+                    </Compare>
+                  </Condition>
+                </Group>
+                <Group height="100" name="Hour_4_Root" width="60" x="280" y="50">
+                  <Condition>
+                    <Expressions>
+                      <Expression name="is_weather_forecast_4_available">[WEATHER.HOURS.4.IS_AVAILABLE]</Expression>
+                    </Expressions>
+                    <Compare expression="is_weather_forecast_4_available">
+                      <Condition>
+                        <Expressions>
+                          <!--
+                            When using CONDITION, it is a requirement that all
+                            potential values are correctly handled. See:
+                            https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                          -->
+                          <Expression name="is_clear">[WEATHER.HOURS.4.CONDITION] == 1</Expression>
+                          <Expression name="is_cloudy">[WEATHER.HOURS.4.CONDITION] == 2</Expression>
+                          <Expression name="is_fog">([WEATHER.HOURS.4.CONDITION] == 3) || ([WEATHER.HOURS.4.CONDITION] == 13)</Expression>
+                          <Expression name="is_heavy_rain">[WEATHER.HOURS.4.CONDITION] == 4</Expression>
+                          <Expression name="is_heavy_snow">[WEATHER.HOURS.4.CONDITION] == 5</Expression>
+                          <Expression name="is_rain">([WEATHER.HOURS.4.CONDITION] == 6) || ([WEATHER.HOURS.4.CONDITION] == 12)</Expression>
+                          <Expression name="is_snow">([WEATHER.HOURS.4.CONDITION] == 7) || ([WEATHER.HOURS.4.CONDITION] == 11)</Expression>
+                          <Expression name="is_sunny">[WEATHER.HOURS.4.CONDITION] == 8</Expression>
+                          <Expression name="is_thunderstorm">[WEATHER.HOURS.4.CONDITION] == 9</Expression>
+                          <Expression name="is_sleet">[WEATHER.HOURS.4.CONDITION] == 10</Expression>
+                          <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.4.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.4.IS_DAY] == true)</Expression>
+                          <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.4.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.4.IS_DAY] == true)</Expression>
+                          <Expression name="is_windy">[WEATHER.HOURS.4.CONDITION] == 15</Expression>
+                        </Expressions>
+                        <Compare expression="is_clear">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_clear"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_cloudy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_cloudy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_fog">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_fog"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_heavy_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_heavy_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_rain">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_rain"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_snow">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_snow"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sunny">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sunny"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_thunderstorm">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_thunderstorm"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_sleet">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_sleet"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_day">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_day"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_partly_cloudy_night">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_partly_cloudy_night"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_windy">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                      </Condition>
+                      <PartText height="20" width="60" x="0" y="60">
+                        <Text>
+                          <Font family="SYNC_TO_DEVICE" size="18">
+                            <Template><![CDATA[%s°]]>
+                              <Parameter expression="[WEATHER.HOURS.4.TEMPERATURE]"/>
+                            </Template>
+                          </Font>
+                        </Text>
+                      </PartText>
+                      <Condition>
+                        <Expressions>
+                          <Expression name="is_24_mode">[IS_24_HOUR_MODE]</Expression>
+                        </Expressions>
+                        <Compare expression="is_24_mode">
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s:00]]>
+                                  <Parameter expression="([HOUR_0_23] + 4) % 24"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Compare>
+                        <Default>
+                          <PartText height="20" width="60" x="0" y="80">
+                            <Text>
+                              <Font family="SYNC_TO_DEVICE" size="17">
+                                <Template><![CDATA[%s%s]]>
+                                  <Parameter expression="([HOUR_0_23] + 4) % 24 &lt;= 12 ? ([HOUR_0_23] + 4) % 24 : ([HOUR_0_23] + 4) % 24 - 12"/>
+                                  <Parameter expression="([HOUR_0_23] + 4) % 24 &lt; 12 ? &quot;AM&quot; : &quot;PM&quot;"/>
+                                </Template>
+                              </Font>
+                            </Text>
+                          </PartText>
+                        </Default>
+                      </Condition>
+                    </Compare>
+                  </Condition>
+                </Group>
+                <!--Up to 5 days can be queried, with indexes from 1 to 5. Each day must be checked via IS_AVAILABLE before being used-->
+                <Condition>
+                  <Expressions>
+                    <Expression name="is_day_1_available">[WEATHER.DAYS.1.IS_AVAILABLE]</Expression>
+                  </Expressions>
+                  <Compare expression="is_day_1_available">
+                    <Group height="40" name="Day_Forecast_1" width="287" x="61" y="160">
+                      <PartDraw height="40" width="287" x="0" y="0">
+                        <RoundRectangle cornerRadiusX="20.0" cornerRadiusY="20.0" height="40.0" width="287.0" x="0.0" y="0.0">
+                          <Fill color="#ff888888"/>
+                        </RoundRectangle>
+                      </PartDraw>
+                      <Group height="30" name="Day_Forecast_1_inner" width="267" x="10" y="5">
+                        <PartText height="30" width="20" x="0" y="0">
+                          <Text>
+                            <Font family="SYNC_TO_DEVICE" size="20">
+                              <Template><![CDATA[%s:]]>
+                                <Parameter expression="(1 + [DAY_0_30]) % [DAYS_IN_MONTH] + 1"/>
+                              </Template>
+                            </Font>
+                          </Text>
+                        </PartText>
+                        <Condition>
+                          <Expressions>
+                            <!--
+                              When using CONDITION, it is a requirement that all
+                              potential values are correctly handled. See:
+                              https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                            -->
+                            <Expression name="is_clear">[WEATHER.DAYS.1.CONDITION_DAY] == 1</Expression>
+                            <Expression name="is_cloudy">[WEATHER.DAYS.1.CONDITION_DAY] == 2</Expression>
+                            <Expression name="is_fog">([WEATHER.DAYS.1.CONDITION_DAY] == 3) || ([WEATHER.DAYS.1.CONDITION_DAY] == 13)</Expression>
+                            <Expression name="is_heavy_rain">[WEATHER.DAYS.1.CONDITION_DAY] == 4</Expression>
+                            <Expression name="is_heavy_snow">[WEATHER.DAYS.1.CONDITION_DAY] == 5</Expression>
+                            <Expression name="is_rain">([WEATHER.DAYS.1.CONDITION_DAY] == 6) || ([WEATHER.DAYS.1.CONDITION_DAY] == 12)</Expression>
+                            <Expression name="is_snow">([WEATHER.DAYS.1.CONDITION_DAY] == 7) || ([WEATHER.DAYS.1.CONDITION_DAY] == 11)</Expression>
+                            <Expression name="is_sunny">[WEATHER.DAYS.1.CONDITION_DAY] == 8</Expression>
+                            <Expression name="is_thunderstorm">[WEATHER.DAYS.1.CONDITION_DAY] == 9</Expression>
+                            <Expression name="is_sleet">[WEATHER.DAYS.1.CONDITION_DAY] == 10</Expression>
+                            <Expression name="is_partly_cloudy_day">([WEATHER.DAYS.1.CONDITION_DAY] == 14) &amp;&amp; (true)</Expression>
+                            <Expression name="is_partly_cloudy_night">([WEATHER.DAYS.1.CONDITION_DAY] == 14) &amp;&amp; (!true)</Expression>
+                            <Expression name="is_windy">[WEATHER.DAYS.1.CONDITION_DAY] == 15</Expression>
+                          </Expressions>
+                          <Compare expression="is_clear">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_clear"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_cloudy">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_cloudy"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_fog">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_fog"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_heavy_rain">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_heavy_rain"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_heavy_snow">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_heavy_snow"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_rain">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_rain"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_snow">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_snow"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_sunny">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_sunny"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_thunderstorm">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_thunderstorm"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_sleet">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_sleet"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_partly_cloudy_day">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_partly_cloudy_day"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_partly_cloudy_night">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_partly_cloudy_night"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_windy">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_windy"/>
+                            </PartImage>
+                          </Compare>
+                        </Condition>
+                        <PartText height="30" width="70" x="60" y="0">
+                          <Text>
+                            <Font family="SYNC_TO_DEVICE" size="20">
+                              <Template><![CDATA[%s° %s%%]]>
+                                <Parameter expression="[WEATHER.DAYS.1.TEMPERATURE_HIGH]"/>
+                                <Parameter expression="[WEATHER.DAYS.1.CHANCE_OF_PRECIPITATION]"/>
+                              </Template>
+                            </Font>
+                          </Text>
+                        </PartText>
+                        <Condition>
+                          <Expressions>
+                            <!--
+                              When using CONDITION, it is a requirement that all
+                              potential values are correctly handled. See:
+                              https://developer.android.com/docs/quality-guidelines/wear-app-quality
+                            -->
+                            <Expression name="is_clear">[WEATHER.DAYS.1.CONDITION_NIGHT] == 1</Expression>
+                            <Expression name="is_cloudy">[WEATHER.DAYS.1.CONDITION_NIGHT] == 2</Expression>
+                            <Expression name="is_fog">([WEATHER.DAYS.1.CONDITION_NIGHT] == 3) || ([WEATHER.DAYS.1.CONDITION_NIGHT] == 13)</Expression>
+                            <Expression name="is_heavy_rain">[WEATHER.DAYS.1.CONDITION_NIGHT] == 4</Expression>
+                            <Expression name="is_heavy_snow">[WEATHER.DAYS.1.CONDITION_NIGHT] == 5</Expression>
+                            <Expression name="is_rain">([WEATHER.DAYS.1.CONDITION_NIGHT] == 6) || ([WEATHER.DAYS.1.CONDITION_NIGHT] == 12)</Expression>
+                            <Expression name="is_snow">([WEATHER.DAYS.1.CONDITION_NIGHT] == 7) || ([WEATHER.DAYS.1.CONDITION_NIGHT] == 11)</Expression>
+                            <Expression name="is_sunny">[WEATHER.DAYS.1.CONDITION_NIGHT] == 8</Expression>
+                            <Expression name="is_thunderstorm">[WEATHER.DAYS.1.CONDITION_NIGHT] == 9</Expression>
+                            <Expression name="is_sleet">[WEATHER.DAYS.1.CONDITION_NIGHT] == 10</Expression>
+                            <Expression name="is_partly_cloudy_day">([WEATHER.DAYS.1.CONDITION_NIGHT] == 14) &amp;&amp; (false)</Expression>
+                            <Expression name="is_partly_cloudy_night">([WEATHER.DAYS.1.CONDITION_NIGHT] == 14) &amp;&amp; (!false)</Expression>
+                            <Expression name="is_windy">[WEATHER.DAYS.1.CONDITION_NIGHT] == 15</Expression>
+                          </Expressions>
+                          <Compare expression="is_clear">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_clear"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_cloudy">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_cloudy"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_fog">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_fog"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_heavy_rain">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_heavy_rain"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_heavy_snow">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_heavy_snow"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_rain">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_rain"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_snow">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_snow"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_sunny">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_sunny"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_thunderstorm">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_thunderstorm"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_sleet">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_sleet"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_partly_cloudy_day">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_partly_cloudy_day"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_partly_cloudy_night">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_partly_cloudy_night"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_windy">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_windy"/>
+                            </PartImage>
+                          </Compare>
+                        </Condition>
+                        <PartText height="30" width="70" x="170" y="0">
+                          <Text>
+                            <Font family="SYNC_TO_DEVICE" size="20">
+                              <Template><![CDATA[%s° %s%%]]>
+                                <Parameter expression="[WEATHER.DAYS.1.TEMPERATURE_LOW]"/>
+                                <Parameter expression="[WEATHER.DAYS.1.CHANCE_OF_PRECIPITATION_NIGHT]"/>
+                              </Template>
+                            </Font>
+                          </Text>
+                        </PartText>
+                      </Group>
+                    </Group>
+                  </Compare>
+                  <Default/>
+                </Condition>
+                <Condition>
+                  <Expressions>
+                    <Expression name="is_24_h_mode">[IS_24_HOUR_MODE]</Expression>
+                  </Expressions>
+                  <Compare expression="is_24_h_mode">
+                    <PartText height="40" width="410" x="0" y="200">
+                      <Text>
+                        <Font family="SYNC_TO_DEVICE" size="22">
+                          <Template><![CDATA[Last updated: %s]]>
+                            <!--The icuText can accept a secondary argument, which can be any expression evaluating to a UTC timestamp in milliseconds.-->
+                            <Parameter expression="icuText(&quot;HH:mm&quot;, [WEATHER.LAST_UPDATED])"/>
+                          </Template>
+                        </Font>
+                      </Text>
+                    </PartText>
+                  </Compare>
+                  <Default>
+                    <PartText height="40" width="410" x="0" y="200">
+                      <Text>
+                        <Font family="SYNC_TO_DEVICE" size="22">
+                          <Template><![CDATA[Last updated: %s]]>
+                            <!--The icuText can accept a secondary argument, which can be any expression evaluating to a UTC timestamp in milliseconds.-->
+                            <Parameter expression="icuText(&quot;hh:mm&quot;, [WEATHER.LAST_UPDATED])"/>
+                          </Template>
+                        </Font>
+                      </Text>
+                    </PartText>
+                  </Default>
+                </Condition>
+              </Group>
+            </Compare>
+            <Default>
+              <Group height="255" name="Not_Available_Wrapper" width="410" x="0" y="0">
+                <PartText height="255" width="410" x="0" y="0">
+                  <Text>
+                    <Font family="SYNC_TO_DEVICE" size="30">Weather data is not available</Font>
+                  </Text>
+                </PartText>
+              </Group>
+            </Default>
+          </Condition>
+        </Group>
+      </Group>
+    </Group>
+  </Scene>
+</WatchFace>
