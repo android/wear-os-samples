@@ -14,6 +14,7 @@ ui-test-junit4 = "1.6.7"
 ui-test-manifest = "1.6.7"
 horologist = "0.5.27"
 androidx-constraintlayout-compose = "1.0.1"
+material3-android = "1.2.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -32,6 +33,11 @@ horologist-composables = { module = "com.google.android.horologist:horologist-co
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
+horologist-audio-ui = { module = "com.google.android.horologist:horologist-audio-ui", version.ref = "horologist" }
+horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist" }
+horologist-images-coil = { module = "com.google.android.horologist:horologist-images-coil", version.ref = "horologist" }
+horologist-media-data = { module = "com.google.android.horologist:horologist-media-data", version.ref = "horologist" }
+horologist-media-ui = { module = "com.google.android.horologist:horologist-media-ui", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
@@ -45,6 +51,7 @@ wear-compose-material = { module = "androidx.wear.compose:compose-material", ver
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidx-constraintlayout-compose" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3-android" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

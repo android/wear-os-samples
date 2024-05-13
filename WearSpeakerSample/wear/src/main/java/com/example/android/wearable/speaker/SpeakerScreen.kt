@@ -17,6 +17,7 @@ package com.example.android.wearable.speaker
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -87,7 +88,9 @@ fun SpeakerScreen(
                     }
             ) {
                 LinearProgressIndicator(
-                    progress = recordingProgress
+                    progress = {
+                        recordingProgress
+                    },
                 )
             }
         }
