@@ -646,6 +646,9 @@
         <PartImage x="0" y="0" height="112" width="112">
           <Image resource="[COMPLICATION.PHOTO_IMAGE]" />
         </PartImage>
+        <PartImage x="0" y="0" height="112" width="112" renderMode="MASK">
+          <Image resource="source" />
+        </PartImage>
       </Complication>
 
       <Complication type="SMALL_IMAGE">
