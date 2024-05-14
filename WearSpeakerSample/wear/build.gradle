@@ -40,21 +40,27 @@ android {
         }
     }
 
-    compileOptions {
-      sourceCompatibility JavaVersion.VERSION_17
-      targetCompatibility JavaVersion.VERSION_17
-      coreLibraryDesugaringEnabled true
-    }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+    coreLibraryDesugaringEnabled true
+  }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.majorVersion
+  testOptions {
+    unitTests {
+      includeAndroidResources true
     }
+  }
 
-    buildFeatures {
-        compose true
-    }
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_17.majorVersion
+  }
 
-    composeOptions {
+  buildFeatures {
+    compose = true
+  }
+
+  composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
@@ -100,6 +106,10 @@ dependencies {
   implementation libs.horologist.audio.ui
   implementation libs.horologist.media.data
   implementation libs.horologist.images.coil
+
+  implementation libs.androidx.media3.exoplayerworkmanager
+  implementation libs.androidx.media3.common
+  implementation libs.androidx.media3.exoplayer
 
   // Preview Tooling
   implementation libs.compose.ui.tooling.preview
