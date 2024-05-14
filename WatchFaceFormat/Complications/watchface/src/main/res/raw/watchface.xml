@@ -6,6 +6,8 @@
   - MONOCHROMATIC_IMAGE
   - SMALL_IMAGE
   - RANGED_VALUE
+  - PHOTO_IMAGE
+  - LONG_TEXT
 
   The other types are not demonstrated in this sample at this time.
 
@@ -33,7 +35,7 @@
           <Stroke color="[CONFIGURATION.themeColor.2]" thickness="10" />
         </Ellipse>
       </PartDraw>
-      <PartText x="158" y="46" width="132" height="132">
+      <PartText x="158" y="16" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
@@ -41,7 +43,7 @@
               color="[CONFIGURATION.themeColor.2]">RANGED_VALUE</Font>
         </TextCircular>
       </PartText>
-      <PartText x="46" y="158" width="132" height="132">
+      <PartText x="46" y="76" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
@@ -49,7 +51,7 @@
               color="[CONFIGURATION.themeColor.2]">SHORT_TEXT</Font>
         </TextCircular>
       </PartText>
-      <PartText x="272" y="158" width="132" height="132">
+      <PartText x="272" y="76" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
@@ -57,13 +59,20 @@
               color="[CONFIGURATION.themeColor.2]">MONOCHROMATIC_IMAGE</Font>
         </TextCircular>
       </PartText>
-      <PartText x="158" y="272" width="132" height="132">
+      <PartText x="158" y="144" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
               slant="NORMAL"
-              color="[CONFIGURATION.themeColor.2]">SMALL_IMAGE</Font>
+              color="[CONFIGURATION.themeColor.2]">PHOTO_IMAGE / SMALL_IMAGE</Font>
         </TextCircular>
+      </PartText>
+      <PartText x="100" y="370" width="250" height="20">
+        <Text align="CENTER">
+          <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
+              slant="NORMAL"
+              color="[CONFIGURATION.themeColor.2]">LONG_TEXT</Font>
+        </Text>
       </PartText>
     </Group>
     <Group name="border_and_main_label_ambient" x="0" y="0" width="112" height="112" alpha="0">
@@ -73,7 +82,7 @@
           <Stroke color="[CONFIGURATION.themeColor.1]" thickness="10" />
         </Ellipse>
       </PartDraw>
-      <PartText x="158" y="46" width="132" height="132">
+      <PartText x="158" y="16" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
@@ -81,7 +90,7 @@
               color="[CONFIGURATION.themeColor.1]">RANGED_VALUE</Font>
         </TextCircular>
       </PartText>
-      <PartText x="46" y="158" width="132" height="132">
+      <PartText x="46" y="76" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
@@ -89,7 +98,7 @@
               color="[CONFIGURATION.themeColor.1]">SHORT_TEXT</Font>
         </TextCircular>
       </PartText>
-      <PartText x="272" y="158" width="132" height="132">
+      <PartText x="272" y="76" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
@@ -97,13 +106,20 @@
               color="[CONFIGURATION.themeColor.1]">MONOCHROMATIC_IMAGE</Font>
         </TextCircular>
       </PartText>
-      <PartText x="158" y="272" width="132" height="132">
+      <PartText x="158" y="144" width="132" height="132">
         <TextCircular centerX="66" centerY="66" direction="COUNTER_CLOCKWISE"
             endAngle="90" height="127" width="127" startAngle="270">
           <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
               slant="NORMAL"
-              color="[CONFIGURATION.themeColor.1]">SMALL_IMAGE</Font>
+              color="[CONFIGURATION.themeColor.1]">PHOTO_IMAGE / SMALL_IMAGE</Font>
         </TextCircular>
+      </PartText>
+      <PartText x="100" y="370" width="250" height="20">
+        <Text align="CENTER">
+          <Font family="SYNC_TO_DEVICE" size="12" weight="NORMAL" 
+              slant="NORMAL"
+              color="[CONFIGURATION.themeColor.1]">LONG_TEXT</Font>
+        </Text>
       </PartText>
     </Group>
 
@@ -121,7 +137,7 @@
       See: https://developer.android.com/training/wearables/wff/complication/default-provider-policy
     -->
     <ComplicationSlot
-        x="168" y="56"
+        x="168" y="24"
         width="112" height="112"
         slotId="0"
         name="top_complication" displayName="Top"
@@ -368,7 +384,7 @@
       is shown also, and if not, then Title is shown, if present.
     -->
     <ComplicationSlot
-        x="56" y="168"
+        x="56" y="84"
         width="112" height="112"
         slotId="1"
         name="left_complication" displayName="Left"
@@ -545,7 +561,7 @@
       provided.
     -->
     <ComplicationSlot
-        x="282" y="168"
+        x="282" y="84"
         width="112" height="112"
         slotId="2"
         name="right_complication" displayName="Right"
@@ -606,7 +622,7 @@
     </ComplicationSlot>
 
     <!--
-      A basic example of a SMALL_IMAGE complication.
+      A basic example of a SMALL_IMAGE and PHOTO_IMAGE complication.
 
       SMALL_IMAGES can be of two types: ICON and PHOTO.
 
@@ -614,11 +630,11 @@
       is a PHOTO, a grayscale filter is demonstrated.
     -->
     <ComplicationSlot
-        x="168" y="282"
+        x="168" y="152"
         width="112" height="112"
         slotId="3"
         name="bottom_complication" displayName="Bottom"
-        supportedTypes="SMALL_IMAGE">
+        supportedTypes="PHOTO_IMAGE SMALL_IMAGE">
       <DefaultProviderPolicy
           primaryProvider="com.google.android.wearable.weather/com.google.android.wearable.weather.complications.WeatherProviderService"
           primaryProviderType="SMALL_IMAGE"
@@ -626,6 +642,12 @@
           defaultSystemProviderType="SMALL_IMAGE"
           />
       <BoundingOval x="0" y="0" width="112" height="112" outlinePadding="2" />
+      <Complication type="PHOTO_IMAGE">
+        <PartImage x="0" y="0" height="112" width="112">
+          <Image resource="[COMPLICATION.PHOTO_IMAGE]" />
+        </PartImage>
+      </Complication>
+
       <Complication type="SMALL_IMAGE">
         <Group name="smallImage_oval" x="0" y="0" width="112" height="112">
           <PartDraw x="0" y="0" height="112" width="112" alpha="0">
@@ -722,6 +744,85 @@
           </Compare>
         </Condition>
       </Complication>
+    </ComplicationSlot>
+
+    <Group name="big_rectangle" x="88" y="284" width="274" height="84">
+      <PartDraw x="0" y="0" height="84" width="274" alpha="0">
+        <Variant mode="AMBIENT" target="alpha" value="255" />
+        <RoundRectangle x="0" y="0" height="84" width="274" 
+                cornerRadiusX="5" cornerRadiusY="5">
+          <Stroke color="[CONFIGURATION.themeColor.1]" thickness="2" />
+        </RoundRectangle>
+      </PartDraw>
+      <PartDraw x="0" y="0" height="84" width="274" alpha="255">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+        <RoundRectangle x="0" y="0" height="84" width="274" 
+                cornerRadiusX="5" cornerRadiusY="5">
+          <Stroke color="[CONFIGURATION.themeColor.2]" thickness="2" />
+        </RoundRectangle>
+      </PartDraw>
+    </Group>
+
+    <ComplicationSlot
+        x="88" y="284"
+        width="274" height="84"
+        slotId="4"
+        name="big_complication" displayName="Large"
+        supportedTypes="LONG_TEXT">
+      <DefaultProviderPolicy
+          defaultSystemProvider="NEXT_EVENT"
+          defaultSystemProviderType="LONG_TEXT"
+          />
+      <BoundingRoundBox x="0" y="0" width="274" height="84" cornerRadius="3" outlinePadding="2" />
+
+      <Complication type="LONG_TEXT">
+        <Condition>
+          <Expressions>
+            <Expression name="longText_title">
+              <![CDATA[[COMPLICATION.TITLE] != null]]>
+            </Expression>
+          </Expressions>
+          <Compare expression="longText_title">
+            <PartText x="8" y="10" width="262" height="24" alpha="255">
+              <Variant mode="AMBIENT" target="alpha" value="0" />
+              <Text align="START" ellipsis="TRUE">
+                <Font family="SYNC_TO_DEVICE" size="24" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+                  <Template>%s<Parameter expression="[COMPLICATION.TITLE]"/>
+                  </Template>
+                </Font>
+              </Text>
+            </PartText>
+            <PartText x="8" y="10" width="262" height="24" alpha="0">
+              <Variant mode="AMBIENT" target="alpha" value="255" />
+              <Text align="START" ellipsis="TRUE">
+                <Font family="SYNC_TO_DEVICE" size="24" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+                  <Template>%s<Parameter expression="[COMPLICATION.TITLE]"/>
+                  </Template>
+                </Font>
+              </Text>
+            </PartText>
+          </Compare>
+        </Condition>
+        <PartText x="8" y="48" width="262" height="32" alpha="255">
+          <Variant mode="AMBIENT" target="alpha" value="0" />
+          <Text align="START" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+              <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+              </Template>
+            </Font>
+          </Text>
+        </PartText>
+        <PartText x="8" y="48" width="262" height="32" alpha="0">
+          <Variant mode="AMBIENT" target="alpha" value="255" />
+          <Text align="START" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+              <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+              </Template>
+            </Font>
+          </Text>
+        </PartText>
+      </Complication>
+
     </ComplicationSlot>
   </Scene>
 </WatchFace>
