@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+<!--
+    Copyright 2024 Google LLC
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+	Basic example of using Flavors. Three Flavors are illustrated here, each of
+  which combine a number of settings together to provide distinct presets that
+  the user can select from in the companion app.
+-->
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:32"/>
+
+  <UserConfigurations>
+    <ColorConfiguration id="themeColor" defaultValue="0" displayName="theme_color_label" screenReaderText="theme_color_label">
+      <ColorOption displayName="theme_color_zero_label" id="0" colors="#FFFFFF #CCCCCC #999999" />
+      <ColorOption displayName="theme_color_one_label" id="1" colors="#ABD2FA #B0FE76 #7692FF" />
+      <ColorOption displayName="theme_color_two_label" id="2" colors="#D65780 #EE9480 #EFD2CB" />
+    </ColorConfiguration>
+    <ListConfiguration id="clockAppearance" displayName="clock_appearance_label" icon="clock_appearance_icon" screenReaderText="clock_appearance_label" defaultValue="0">
+      <ListOption id="0" displayName="clock_appearance_zero_label" icon="clock_appearance_zero_icon" />
+      <ListOption id="1" displayName="clock_appearance_one_label" icon="clock_appearance_one_icon" />
+      <ListOption id="2" displayName="clock_appearance_two_label" icon="clock_appearance_two_icon" />
+    </ListConfiguration>
+    <BooleanConfiguration id="showHr" displayName="show_hr_label"
+        icon="hr_icon" screenReaderText="show_hr_label"
+        defaultValue="TRUE" />
+    <Flavors defaultValue="flavorZero">
+      <Flavor id="flavorZero" displayName="flavor_zero_label" icon="flavor_zero_icon">
+        <Configuration id="themeColor" optionId="0"/>
+        <Configuration id="clockAppearance" optionId="0"/>
+        <Configuration id="showHr" optionId="FALSE"/>
+        <ComplicationSlot slotId="0">
+          <!--
+            Type here is set to empty to demonstrate how to hide a complication
+            slot in Flavors.
+          -->
+          <DefaultProviderPolicy
+                  defaultSystemProvider="SUNRISE_SUNSET"
+                  defaultSystemProviderType="EMPTY"/>
+        </ComplicationSlot>
+      </Flavor>
+      <Flavor id="flavorOne" displayName="flavor_one_label" icon="flavor_one_icon">
+        <Configuration id="themeColor" optionId="1"/>
+        <Configuration id="clockAppearance" optionId="1"/>
+        <Configuration id="showHr" optionId="FALSE"/>
+        <ComplicationSlot slotId="0">
+          <DefaultProviderPolicy
+                  defaultSystemProvider="UNREAD_NOTIFICATION_COUNT"
+                  defaultSystemProviderType="SHORT_TEXT"/>
+        </ComplicationSlot>
+      </Flavor>
+      <Flavor id="flavorTwo" displayName="flavor_two_label" icon="flavor_two_icon">
+        <Configuration id="themeColor" optionId="2"/>
+        <Configuration id="clockAppearance" optionId="2"/>
+        <Configuration id="showHr" optionId="TRUE"/>
+        <ComplicationSlot slotId="0">
+          <DefaultProviderPolicy
+                  defaultSystemProvider="STEP_COUNT"
+                  defaultSystemProviderType="SHORT_TEXT"/>
+        </ComplicationSlot>
+      </Flavor>
+    </Flavors>
+  </UserConfigurations>
+
+  <Scene backgroundColor="#ff000000">
+    <ListConfiguration id="clockAppearance">
+      <ListOption id="0">
+        <DigitalClock x="0" y="168" width="450" height="100">
+          <TimeText x="0" y="0" width="450" height="100" format="h:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+            <Font family="SYNC_TO_DEVICE" size="96" weight="THIN"
+                color="[CONFIGURATION.themeColor.0]"/>
+          </TimeText>
+        </DigitalClock>
+      </ListOption>
+      <ListOption id="1">
+        <DigitalClock x="0" y="168" width="450" height="100">
+          <TimeText x="0" y="0" width="450" height="100" format="h:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+            <Font family="SYNC_TO_DEVICE" size="104" weight="NORMAL"
+                color="[CONFIGURATION.themeColor.0]"/>
+          </TimeText>
+        </DigitalClock>
+      </ListOption>
+      <ListOption id="2">
+        <DigitalClock x="0" y="168" width="450" height="100">
+          <TimeText x="0" y="0" width="450" height="100" format="h:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+            <Font family="SYNC_TO_DEVICE" size="116" weight="EXTRA_BOLD" 
+                color="[CONFIGURATION.themeColor.0]"/>
+          </TimeText>
+        </DigitalClock>
+      </ListOption>
+    </ListConfiguration>
+
+    <BooleanConfiguration id="showHr">
+      <BooleanOption id="TRUE">
+        <PartText x="150" y="72" width="150" height="80" alpha="255">
+          <Variant mode="AMBIENT" target="alpha" value="0" />
+          <Text align="CENTER" ellipsis="TRUE">
+            <Font family="SYNC_TO_DEVICE" size="48" slant="NORMAL" color="#000000">
+              <Outline color="[CONFIGURATION.themeColor.1]" width="4">
+                <Template>♡ %s<Parameter expression="[HEART_RATE] != null ? [HEART_RATE] : &quot;--&quot;"/>
+                </Template>
+              </Outline>
+            </Font>
+          </Text>
+        </PartText>
+      </BooleanOption>
+    </BooleanConfiguration>
+
+    <ComplicationSlot
+        x="168" y="281"
+        width="112" height="112"
+        slotId="0"
+        name="complication_one" displayName="complication_one_label"
+        supportedTypes="SHORT_TEXT EMPTY">
+      <DefaultProviderPolicy
+          primaryProvider="com.google.android.gm/com.google.android.apps.gmail.wear.complications.UnreadEmailsComplicationService"
+          primaryProviderType="SHORT_TEXT"
+          defaultSystemProvider="SUNRISE_SUNSET"
+          defaultSystemProviderType="SHORT_TEXT"
+          />
+      <BoundingOval x="0" y="0" width="112" height="112" outlinePadding="2" />
+
+      <Complication type="SHORT_TEXT">
+        <Group name="shortText_oval" x="0" y="0" width="112" height="112">
+          <PartDraw x="0" y="0" height="112" width="112" alpha="0">
+            <Variant mode="AMBIENT" target="alpha" value="255" />
+            <Arc direction="CLOCKWISE" startAngle="0" endAngle="360" centerX="56" centerY="56" width="100" height="100">
+              <Stroke color="[CONFIGURATION.themeColor.1]" cap="ROUND" thickness="2" />
+            </Arc>
+          </PartDraw>
+          <PartDraw x="0" y="0" height="112" width="112" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Arc direction="CLOCKWISE" startAngle="0" endAngle="360" centerX="56" centerY="56" width="100" height="100">
+              <Stroke color="[CONFIGURATION.themeColor.2]" cap="ROUND" thickness="2" />
+            </Arc>
+          </PartDraw>
+        </Group>
+        <Condition>
+          <Expressions>
+            <Expression name="shortText_monochromaticImage">
+              <![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null]]>
+            </Expression>
+            <Expression name="shortText_title">
+              <![CDATA[[COMPLICATION.TITLE] != null]]>
+            </Expression>
+          </Expressions>
+          <Compare expression="shortText_monochromaticImage">
+            <Condition>
+              <Expressions>
+                <Expression name="monochromatic_ambientImage">
+                  <![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null && [COMPLICATION.MONOCHROMATIC_IMAGE_AMBIENT] != null]]>
+                </Expression>
+                <Expression name="monochromatic_noAmbientImage">
+                  <![CDATA[[COMPLICATION.MONOCHROMATIC_IMAGE] != null && [COMPLICATION.MONOCHROMATIC_IMAGE_AMBIENT] == null]]>
+                </Expression>
+              </Expressions>
+              <Compare expression="monochromatic_ambientImage">
+                <PartImage x="40" y="15" width="32" height="32" tintColor="[CONFIGURATION.themeColor.1]" alpha="0">
+                  <Variant mode="AMBIENT" target="alpha" value="255" />
+                  <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE_AMBIENT]" />
+                </PartImage>
+                <PartImage x="40" y="15" width="32" height="32" tintColor="[CONFIGURATION.themeColor.2]" alpha="255">
+                  <Variant mode="AMBIENT" target="alpha" value="0" />
+                  <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+                <PartText x="0" y="56" width="112" height="20" alpha="0">
+                  <Variant mode="AMBIENT" target="alpha" value="255" />
+                  <Text align="CENTER" ellipsis="TRUE">
+                    <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+                      <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                      </Template>
+                    </Font>
+                  </Text>
+                </PartText>
+                <PartText x="0" y="56" width="112" height="20" alpha="255">
+                  <Variant mode="AMBIENT" target="alpha" value="0" />
+                  <Text align="CENTER" ellipsis="TRUE">
+                    <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+                      <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                      </Template>
+                    </Font>
+                  </Text>
+                </PartText>
+              </Compare>
+              <Compare expression="monochromatic_noAmbientImage">
+                <PartImage x="40" y="15" width="32" height="32" tintColor="[CONFIGURATION.themeColor.1]" alpha="0">
+                  <Variant mode="AMBIENT" target="alpha" value="255" />
+                  <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+                <PartImage x="40" y="15" width="32" height="32" tintColor="[CONFIGURATION.themeColor.2]" alpha="255">
+                  <Variant mode="AMBIENT" target="alpha" value="0" />
+                  <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+                <PartText x="0" y="56" width="112" height="20" alpha="0">
+                  <Variant mode="AMBIENT" target="alpha" value="255" />
+                  <Text align="CENTER" ellipsis="TRUE">
+                    <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+                      <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                      </Template>
+                    </Font>
+                  </Text>
+                </PartText>
+                <PartText x="0" y="56" width="112" height="20" alpha="255">
+                  <Variant mode="AMBIENT" target="alpha" value="0" />
+                  <Text align="CENTER" ellipsis="TRUE">
+                    <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+                      <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                      </Template>
+                    </Font>
+                  </Text>
+                </PartText>
+              </Compare>
+            </Condition>
+          </Compare>
+          <Compare expression="shortText_title">
+            <Group name="shortText_title_ambient" x="0" y="0" width="200" height="200" alpha="0">
+              <Variant mode="AMBIENT" target="alpha" value="255" />
+              <PartText x="0" y="33" width="112" height="20">
+                <Text align="CENTER" ellipsis="TRUE">
+                  <Font family="SYNC_TO_DEVICE" size="20" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+                    <Template>%s<Parameter expression="[COMPLICATION.TITLE]"/>
+                    </Template>
+                  </Font>
+                </Text>
+              </PartText>
+              <PartText x="0" y="56" width="112" height="20">
+                <Text align="CENTER" ellipsis="TRUE">
+                  <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                    </Template>
+                  </Font>
+                </Text>
+              </PartText>
+            </Group>
+            <Group name="shortText_title" x="0" y="0" width="200" height="200" alpha="255">
+              <Variant mode="AMBIENT" target="alpha" value="0" />
+              <PartText x="0" y="33" width="112" height="20">
+                <Text align="CENTER" ellipsis="TRUE">
+                  <Font family="SYNC_TO_DEVICE" size="20" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+                    <Template>%s<Parameter expression="[COMPLICATION.TITLE]"/>
+                    </Template>
+                  </Font>
+                </Text>
+              </PartText>
+              <PartText x="0" y="56" width="112" height="20">
+                <Text align="CENTER" ellipsis="TRUE">
+                  <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                    </Template>
+                  </Font>
+                </Text>
+              </PartText>
+            </Group>
+          </Compare>
+          <!-- Text, on its own, with no Icon or Title -->
+          <Default>
+            <PartText x="0" y="0" width="112" height="112" alpha="255">
+              <Variant mode="AMBIENT" target="alpha" value="0" />
+              <Text align="CENTER" ellipsis="TRUE">
+                <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.2]">
+                  <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                  </Template>
+                </Font>
+              </Text>
+            </PartText>
+            <PartText x="0" y="0" width="112" height="112" alpha="0">
+              <Variant mode="AMBIENT" target="alpha" value="255" />
+              <Text align="CENTER" ellipsis="TRUE">
+                <Font family="SYNC_TO_DEVICE" size="28" weight="NORMAL" slant="NORMAL" color="[CONFIGURATION.themeColor.1]">
+                  <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/>
+                  </Template>
+                </Font>
+              </Text>
+            </PartText>
+          </Default>
+        </Condition>
+      </Complication>
+    </ComplicationSlot>
+
+
+  </Scene>
+</WatchFace>
