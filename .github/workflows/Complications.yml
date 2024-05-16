@@ -1,17 +1,17 @@
-name: WearComplicationDataSourcesTestSuite
+name: Complications
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'WearComplicationDataSourcesTestSuite/**'
+      - 'Complications/**'
   pull_request:
     paths:
-      - 'WearComplicationDataSourcesTestSuite/**'
+      - 'Complications/**'
 
 env:
-  SAMPLE_PATH: WearComplicationDataSourcesTestSuite
+  SAMPLE_PATH: Complications
 
 jobs:
   build:
