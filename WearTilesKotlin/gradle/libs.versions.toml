@@ -12,8 +12,8 @@ tiles-tooling-preview = "1.3.0"
 
 [libraries]
 androidx-datastore = "androidx.datastore:datastore-preferences:1.1.1"
-androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
-androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.8.0"
+androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0"
 androidx-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "tiles-tooling-preview" }
 androidx-tiles-tooling = { module = "androidx.wear.tiles:tiles-tooling", version.ref = "tiles-tooling-preview" }
 androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
