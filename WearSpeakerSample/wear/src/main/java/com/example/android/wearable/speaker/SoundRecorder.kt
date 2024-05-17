@@ -17,7 +17,6 @@ package com.example.android.wearable.speaker
 
 import android.Manifest
 import android.content.Context
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.annotation.RequiresPermission
@@ -25,8 +24,7 @@ import java.io.File
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
- * A helper class to provide methods to record audio input from the MIC to the internal storage
- * and to playback the same recorded audio file.
+ * A helper class to provide methods to record audio input from the MIC to the internal storage.
  */
 class SoundRecorder(
     context: Context,
@@ -37,56 +35,7 @@ class SoundRecorder(
     private var state = State.IDLE
 
     private enum class State {
-        IDLE, RECORDING, PLAYING
-    }
-
-    /**
-     * Plays the recorded file, if any.
-     *
-     * Returns when playing the file is finished.
-     *
-     * This is cancellable, and cancelling it will stop playback.
-     */
-    suspend fun play() {
-        if (state != State.IDLE) {
-            Log.w(TAG, "Requesting to play while state was not IDLE")
-            return
-        }
-
-        // Check if there isn't a recording to play
-        if (!audioFile.exists()) return
-
-        suspendCancellableCoroutine { cont ->
-            state = State.PLAYING
-
-            val mediaPlayer = MediaPlayer().apply {
-                setDataSource(audioFile.path)
-                setOnInfoListener { mr, what, extra ->
-                    println("info: $mr $what $extra")
-                    true
-                }
-                setOnErrorListener { mr, what, extra ->
-                    println("error: $mr $what $extra")
-                    true
-                }
-                setOnCompletionListener {
-                    reset()
-                    release()
-                    state = State.IDLE
-                    cont.resume(value = Unit, onCancellation = {})
-                }
-            }
-
-            mediaPlayer.prepare()
-
-            mediaPlayer.start()
-
-            cont.invokeOnCancellation {
-                mediaPlayer.stop()
-                mediaPlayer.reset()
-                mediaPlayer.release()
-            }
-        }
+        IDLE, RECORDING
     }
 
     /**

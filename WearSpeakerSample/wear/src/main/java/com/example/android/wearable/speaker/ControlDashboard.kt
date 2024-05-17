@@ -17,8 +17,6 @@
 
 package com.example.android.wearable.speaker
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,9 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
@@ -37,6 +33,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 
@@ -52,6 +49,7 @@ fun ControlDashboard(
     controlDashboardUiState: ControlDashboardUiState,
     onMicClicked: () -> Unit,
     onPlayClicked: () -> Unit,
+    recordingProgress: Float,
     modifier: Modifier = Modifier
 ) {
     val circle = Any()
@@ -59,7 +57,6 @@ fun ControlDashboard(
     val play = Any()
 
     val constraintSet = createConstraintSet(
-        controlDashboardUiState = controlDashboardUiState,
         circle = circle,
         mic = mic,
         play = play
@@ -73,6 +70,10 @@ fun ControlDashboard(
     ) {
         Spacer(
             modifier = modifier.layoutId(circle)
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.fillMaxSize(),
+            progress = recordingProgress
         )
 
         ControlDashboardButton(
@@ -92,52 +93,24 @@ fun ControlDashboard(
             onClick = onPlayClicked,
             layoutId = play,
             imageVector = Icons.Filled.PlayArrow,
-            contentDescription = if (controlDashboardUiState.playState.expanded) {
-                stringResource(id = R.string.stop_playing_recording)
-            } else {
-                stringResource(id = R.string.play_recording)
-            }
+            contentDescription = stringResource(id = R.string.play_recording)
         )
     }
 }
 
 /**
- * Creates the [ConstraintSet] for the [controlDashboardUiState].
+ * Creates the [ConstraintSet].
  *
- * The [circle], [mic], [play] and [music] are used as keys for the constraints.
+ * The [circle], [mic], [play] are used as keys for the constraints.
  */
 @Composable
 private fun createConstraintSet(
-    controlDashboardUiState: ControlDashboardUiState,
     circle: Any,
     mic: Any,
     play: Any
 ): ConstraintSet {
     val iconCircleRadius = 32.dp
     val iconMinimizedSize = 48.dp
-    val iconExpandedSize = 136.dp
-
-    val micSize by animateDpAsState(
-        targetValue = if (controlDashboardUiState.micState.expanded) {
-            iconExpandedSize
-        } else {
-            iconMinimizedSize
-        }
-    )
-    val micRadius by animateDpAsState(
-        targetValue = if (controlDashboardUiState.micState.expanded) 0.dp else iconCircleRadius
-    )
-
-    val playSize by animateDpAsState(
-        targetValue = if (controlDashboardUiState.playState.expanded) {
-            iconExpandedSize
-        } else {
-            iconMinimizedSize
-        }
-    )
-    val playRadius by animateDpAsState(
-        targetValue = if (controlDashboardUiState.playState.expanded) 0.dp else iconCircleRadius
-    )
 
     return ConstraintSet {
         val circleRef = createRefFor(circle)
@@ -146,14 +119,14 @@ private fun createConstraintSet(
 
         constrain(circleRef) { centerTo(parent) }
         constrain(playRef) {
-            width = Dimension.value(playSize)
-            height = Dimension.value(playSize)
-            circular(circleRef, 90f, playRadius)
+            width = Dimension.value(iconMinimizedSize)
+            height = Dimension.value(iconMinimizedSize)
+            circular(circleRef, 90f, iconCircleRadius)
         }
         constrain(micRef) {
-            width = Dimension.value(micSize)
-            height = Dimension.value(micSize)
-            circular(circleRef, 270f, micRadius)
+            width = Dimension.value(iconMinimizedSize)
+            height = Dimension.value(iconMinimizedSize)
+            circular(circleRef, 270f, iconCircleRadius)
         }
     }
 }
@@ -174,14 +147,9 @@ private fun ControlDashboardButton(
     // TODO: Replace with a version of IconButton?
     //       https://issuetracker.google.com/issues/203123015
 
-    val alpha by animateFloatAsState(
-        targetValue = if (buttonState.visible) 1f else 0f
-    )
-
     Button(
         modifier = modifier
             .fillMaxSize()
-            .alpha(alpha)
             .layoutId(layoutId),
         enabled = buttonState.enabled && buttonState.visible,
         onClick = onClick
