@@ -40,27 +40,34 @@ android {
         }
     }
 
-    compileOptions {
-      sourceCompatibility JavaVersion.VERSION_17
-      targetCompatibility JavaVersion.VERSION_17
-      coreLibraryDesugaringEnabled true
-    }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+    coreLibraryDesugaringEnabled true
+  }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.majorVersion
+  testOptions {
+    unitTests {
+      includeAndroidResources true
     }
+  }
 
-    buildFeatures {
-        compose true
-    }
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_17.majorVersion
+  }
 
-    composeOptions {
+  buildFeatures {
+    compose = true
+  }
+
+  composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
 dependencies {
-    def composeBom = platform(libs.androidx.compose.bom)
+    implementation libs.androidx.material3.android
+  def composeBom = platform(libs.androidx.compose.bom)
 
 
   // Horologist for correct Compose layout
@@ -86,12 +93,23 @@ dependencies {
 
   // Foundation is additive, so you can use the mobile version in your Wear OS app.
   implementation libs.wear.compose.foundation
+  implementation libs.wear.compose.material
   implementation(libs.androidx.material.icons.core)
 
   // Horologist for correct Compose layout
   implementation libs.horologist.composables
   implementation libs.horologist.compose.layout
   implementation libs.horologist.compose.material
+
+  //Horologist Media toolkit
+  implementation libs.horologist.media.ui
+  implementation libs.horologist.audio.ui
+  implementation libs.horologist.media.data
+  implementation libs.horologist.images.coil
+
+  implementation libs.androidx.media3.exoplayerworkmanager
+  implementation libs.androidx.media3.common
+  implementation libs.androidx.media3.exoplayer
 
   // Preview Tooling
   implementation libs.compose.ui.tooling.preview

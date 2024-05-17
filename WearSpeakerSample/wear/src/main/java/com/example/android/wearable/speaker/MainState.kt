@@ -141,28 +141,6 @@ class MainState(
         }
     }
 
-    suspend fun onPlayClicked() {
-        playbackStateMutatorMutex.mutate {
-            when (playbackState) {
-                is PlaybackState.Ready,
-                PlaybackState.Recording -> {
-                    if (speakerIsSupported(activity)) {
-                        playbackState = PlaybackState.PlayingVoice
-                        soundRecorder.play()
-                        playbackState = PlaybackState.Ready
-                    } else {
-                        showSpeakerNotSupported = true
-                        playbackState = PlaybackState.Ready
-                    }
-                }
-                // If we were already playing, transition back to ready
-                PlaybackState.PlayingVoice -> {
-                    playbackState = PlaybackState.Ready
-                }
-            }
-        }
-    }
-
     suspend fun permissionResultReturned() {
         playbackStateMutatorMutex.mutate {
             // Check if the user granted the permission
@@ -189,7 +167,7 @@ class MainState(
 }
 
 /**
- * The four "resting" playback states of the application.
+ * The three playback states of the application.
  */
 sealed class PlaybackState {
     object Ready : PlaybackState()

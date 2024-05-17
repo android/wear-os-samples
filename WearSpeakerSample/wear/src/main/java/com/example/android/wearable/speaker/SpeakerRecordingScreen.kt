@@ -17,10 +17,9 @@ package com.example.android.wearable.speaker
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -34,9 +33,8 @@ import com.google.android.horologist.compose.layout.ScreenScaffold
  *
  * This composable is stateless, and simply displays the state given to it.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SpeakerScreen(
+fun SpeakerRecordingScreen(
     playbackState: PlaybackState,
     isPermissionDenied: Boolean,
     recordingProgress: Float,
@@ -71,6 +69,7 @@ fun SpeakerScreen(
                 controlDashboardUiState = controlDashboardUiState,
                 onMicClicked = onMicClicked,
                 onPlayClicked = onPlayClicked,
+                recordingProgress = recordingProgress,
                 modifier = Modifier
                     .constrainAs(controlDashboard) {
                         centerTo(parent)
@@ -87,7 +86,9 @@ fun SpeakerScreen(
                     }
             ) {
                 LinearProgressIndicator(
-                    progress = recordingProgress
+                    progress = {
+                        recordingProgress
+                    }
                 )
             }
         }
@@ -150,7 +151,7 @@ private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<
 fun SpeakerScreenPreview(
     @PreviewParameter(PlaybackStatePreviewProvider::class) playbackState: PlaybackState
 ) {
-    SpeakerScreen(
+    SpeakerRecordingScreen(
         playbackState = playbackState,
         isPermissionDenied = true,
         recordingProgress = 0.25f,
