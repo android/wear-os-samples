@@ -71,7 +71,6 @@ android {
 }
 
 dependencies {
-
     def composeBom = platform(libs.androidx.compose.bom)
 
     // General compose dependencies
@@ -125,6 +124,7 @@ dependencies {
     androidTestImplementation composeBom
 
     screenshotTestImplementation(libs.androidx.compose.ui.tooling)
+    screenshotTestImplementation libs.androidx.wear.tooling.preview
 
     debugImplementation libs.compose.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest

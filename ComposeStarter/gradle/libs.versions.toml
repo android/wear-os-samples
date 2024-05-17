@@ -13,6 +13,7 @@ roborazzi = "1.15.0"
 screenshot = "0.0.1-alpha01"
 ui-test-junit4 = "1.6.7"
 ui-test-manifest = "1.6.7"
+wear-tooling-preview = "1.0.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -42,6 +43,7 @@ test-ext-junit = "androidx.test.ext:junit:1.1.5"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
+androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
