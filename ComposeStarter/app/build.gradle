@@ -17,6 +17,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     alias libs.plugins.roborazzi
+    alias(libs.plugins.screenshot)
 }
 
 android {
@@ -65,6 +66,8 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
 dependencies {
@@ -120,6 +123,8 @@ dependencies {
     androidTestImplementation libs.test.espresso.core
     androidTestImplementation libs.compose.ui.test.junit4
     androidTestImplementation composeBom
+
+    screenshotTestImplementation(libs.androidx.compose.ui.tooling)
 
     debugImplementation libs.compose.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
