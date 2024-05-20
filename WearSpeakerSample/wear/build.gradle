@@ -123,8 +123,6 @@ dependencies {
 
   implementation libs.androidx.ui.test.manifest
 
-  implementation libs.androidx.constraintlayout.compose
-
   coreLibraryDesugaring libs.desugar.jdk.libs
 
   // Testing

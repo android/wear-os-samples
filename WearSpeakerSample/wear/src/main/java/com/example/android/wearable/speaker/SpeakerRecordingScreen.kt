@@ -15,16 +15,9 @@
  */
 package com.example.android.wearable.speaker
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.google.android.horologist.compose.layout.ScreenScaffold
 
@@ -49,49 +42,12 @@ fun SpeakerRecordingScreen(
             isPermissionDenied = isPermissionDenied
         )
 
-        // The progress bar should only be visible when actively recording
-        val isProgressVisible =
-            when (playbackState) {
-                PlaybackState.PlayingVoice,
-                is PlaybackState.Ready -> false
-                PlaybackState.Recording -> true
-            }
-
-        // We are using ConstraintLayout here to center the ControlDashboard, and align the progress
-        // indicator to it.
-        // In general, ConstraintLayout is less necessary for Compose than it was for Views
-        ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            val (controlDashboard, progressBar) = createRefs()
-
-            ControlDashboard(
-                controlDashboardUiState = controlDashboardUiState,
-                onMicClicked = onMicClicked,
-                onPlayClicked = onPlayClicked,
-                recordingProgress = recordingProgress,
-                modifier = Modifier
-                    .constrainAs(controlDashboard) {
-                        centerTo(parent)
-                    }
-            )
-            AnimatedVisibility(
-                visible = isProgressVisible,
-                modifier = Modifier
-                    .constrainAs(progressBar) {
-                        width = Dimension.fillToConstraints
-                        top.linkTo(controlDashboard.bottom, 5.dp)
-                        start.linkTo(controlDashboard.start)
-                        end.linkTo(controlDashboard.end)
-                    }
-            ) {
-                LinearProgressIndicator(
-                    progress = {
-                        recordingProgress
-                    }
-                )
-            }
-        }
+        ControlDashboard(
+            controlDashboardUiState = controlDashboardUiState,
+            onMicClicked = onMicClicked,
+            onPlayClicked = onPlayClicked,
+            recordingProgress = recordingProgress
+        )
     }
 }
 
