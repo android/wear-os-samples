@@ -17,21 +17,19 @@
 
 package com.example.android.wearable.speaker
 
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.Dimension
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
@@ -52,81 +50,38 @@ fun ControlDashboard(
     recordingProgress: Float,
     modifier: Modifier = Modifier
 ) {
-    val circle = Any()
-    val mic = Any()
-    val play = Any()
-
-    val constraintSet = createConstraintSet(
-        circle = circle,
-        mic = mic,
-        play = play
-    )
-
-    // We are using ConstraintLayout here for the circular constraints
-    // In general, ConstraintLayout is less necessary for Compose than it was for Views
-    ConstraintLayout(
-        constraintSet = constraintSet,
-        modifier = modifier
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize()
     ) {
-        Spacer(
-            modifier = modifier.layoutId(circle)
-        )
-        CircularProgressIndicator(
-            modifier = Modifier.fillMaxSize(),
-            progress = recordingProgress
-        )
-
-        ControlDashboardButton(
-            buttonState = controlDashboardUiState.micState,
-            onClick = onMicClicked,
-            layoutId = mic,
-            imageVector = Icons.Filled.Mic,
-            contentDescription = if (controlDashboardUiState.micState.expanded) {
-                stringResource(id = R.string.stop_recording)
-            } else {
-                stringResource(id = R.string.record)
-            }
-        )
-
-        ControlDashboardButton(
-            buttonState = controlDashboardUiState.playState,
-            onClick = onPlayClicked,
-            layoutId = play,
-            imageVector = Icons.Filled.PlayArrow,
-            contentDescription = stringResource(id = R.string.play_recording)
-        )
-    }
-}
-
-/**
- * Creates the [ConstraintSet].
- *
- * The [circle], [mic], [play] are used as keys for the constraints.
- */
-@Composable
-private fun createConstraintSet(
-    circle: Any,
-    mic: Any,
-    play: Any
-): ConstraintSet {
-    val iconCircleRadius = 32.dp
-    val iconMinimizedSize = 48.dp
-
-    return ConstraintSet {
-        val circleRef = createRefFor(circle)
-        val micRef = createRefFor(mic)
-        val playRef = createRefFor(play)
-
-        constrain(circleRef) { centerTo(parent) }
-        constrain(playRef) {
-            width = Dimension.value(iconMinimizedSize)
-            height = Dimension.value(iconMinimizedSize)
-            circular(circleRef, 90f, iconCircleRadius)
+        // Show the progress indicator only when recording
+        if (controlDashboardUiState.micState.expanded) {
+            CircularProgressIndicator(
+                progress = recordingProgress,
+                modifier = modifier.fillMaxSize()
+            )
         }
-        constrain(micRef) {
-            width = Dimension.value(iconMinimizedSize)
-            height = Dimension.value(iconMinimizedSize)
-            circular(circleRef, 270f, iconCircleRadius)
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ControlDashboardButton(
+                buttonState = controlDashboardUiState.micState,
+                onClick = onMicClicked,
+                imageVector = Icons.Filled.Mic,
+                contentDescription = if (controlDashboardUiState.micState.expanded) {
+                    stringResource(id = R.string.stop_recording)
+                } else {
+                    stringResource(id = R.string.record)
+                }
+            )
+
+            ControlDashboardButton(
+                buttonState = controlDashboardUiState.playState,
+                onClick = onPlayClicked,
+                imageVector = Icons.Filled.PlayArrow,
+                contentDescription = stringResource(id = R.string.play_recording)
+            )
         }
     }
 }
@@ -138,28 +93,18 @@ private fun createConstraintSet(
 private fun ControlDashboardButton(
     buttonState: ControlDashboardButtonUiState,
     onClick: () -> Unit,
-    layoutId: Any,
     imageVector: ImageVector,
     contentDescription: String,
     modifier: Modifier = Modifier
 ) {
-    val iconPadding = 8.dp
-    // TODO: Replace with a version of IconButton?
-    //       https://issuetracker.google.com/issues/203123015
-
     Button(
-        modifier = modifier
-            .fillMaxSize()
-            .layoutId(layoutId),
+        modifier = modifier,
         enabled = buttonState.enabled && buttonState.visible,
         onClick = onClick
     ) {
         Icon(
             imageVector = imageVector,
-            contentDescription = contentDescription,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(iconPadding)
+            contentDescription = contentDescription
         )
     }
 }
