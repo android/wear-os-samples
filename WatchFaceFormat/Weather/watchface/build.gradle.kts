@@ -38,6 +38,8 @@ android {
             // Ensure shrink resources is false, to avoid potential for them
             // being removed.
             isShrinkResources = false
+
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 }
