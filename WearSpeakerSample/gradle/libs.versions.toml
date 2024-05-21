@@ -16,7 +16,7 @@ ui-test-manifest = "1.6.7"
 horologist = "0.5.27"
 androidx-constraintlayout-compose = "1.0.1"
 material3-android = "1.2.1"
-kotlinxCoroutine = "1.8.0"
+kotlinxCoroutine = "1.8.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
