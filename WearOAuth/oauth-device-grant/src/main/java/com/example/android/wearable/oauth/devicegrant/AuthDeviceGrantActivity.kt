@@ -16,10 +16,8 @@
 package com.example.android.wearable.oauth.devicegrant
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -58,7 +56,6 @@ class AuthDeviceGrantActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { AuthenticateScreen(deviceGrantViewModel = viewModel()) }
-        // setViewsContent()
     }
 }
 
@@ -100,24 +97,3 @@ fun AuthenticateScreen(deviceGrantViewModel: AuthDeviceGrantViewModel) {
     }
 }}
 
-//fun ComponentActivity.setViewsContent() {
-//    setContentView(R.layout.activity_auth)
-//    val viewModel by viewModels<AuthDeviceGrantViewModel>()
-//
-//    // Start the OAuth flow when the user presses the button
-//    // Once you click this, the next view (status_text_view) breifly flashes "check your
-//    // phone", before displaying a code
-//    findViewById<View>(R.id.authenticateButton).setOnClickListener {
-//        viewModel.startAuthFlow()
-//    }
-//
-//    // Show current status on the screen
-//    viewModel.status.observe(this) { statusText ->
-//        findViewById<TextView>(R.id.status_text_view).text = resources.getText(statusText)
-//    }
-//
-//    // Show dynamic content on the screen
-//    viewModel.result.observe(this) { resultText ->
-//        findViewById<TextView>(R.id.result_text_view).text = resultText
-//    }
-//}
