@@ -1,0 +1,57 @@
+name: Complications
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Complications/**'
+  pull_request:
+    paths:
+      - 'Complications/**'
+
+env:
+  SAMPLE_PATH: Complications
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Generate cache key
+        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - name: Build project
+        working-directory: ${{ env.SAMPLE_PATH }}
+        run: ./gradlew check --stacktrace
+
+      - name: Upload build outputs (APKs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-outputs
+          path: ${{ env.SAMPLE_PATH }}/Wearable/build/outputs
+
+      - name: Upload build reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: ${{ env.SAMPLE_PATH }}/Wearable/build/reports

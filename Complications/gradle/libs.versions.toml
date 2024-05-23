@@ -1,9 +1,9 @@
 [versions]
-android-gradle-plugin = "8.4.0"
+android-gradle-plugin = "8.4.1"
 androidx-wear-watchface = "1.2.1"
 
-org-jetbrains-kotlin = "1.9.23"
-org-jetbrains-kotlinx = "1.8.0"
+org-jetbrains-kotlin = "1.9.24"
+org-jetbrains-kotlinx = "1.8.1"
 
 [libraries]
 androidx-core-ktx = "androidx.core:core-ktx:1.13.1"

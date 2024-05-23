@@ -21,12 +21,21 @@ For more details on the Watch Face Format, see:
 
 ## Samples
 
-There are currently three samples available:
+There are currently five samples available:
 
 - `SimpleDigital` - A basic digital watch face.
 - `SimpleAnalog` - A basic analog watch face.
 - `Complications` - Demonstrates using Complications in a watch face and
   rendering data from Complication data sources.
+- `Flavors` - Demonstrates [Flavors][flavors], a version 2 feature of the Watch
+Face Format.
+
+![Flavors](images/flavors.png)
+
+- `Weather` - Current, hourly and daily [weather data][weather] in the Watch
+Face Format. Weather is also a version 2 feature.
+
+![Weather](images/weather.png)
 
 ## Building the samples
 
@@ -75,3 +84,5 @@ For more guidance on building and signing release builds, see
 [contributing]: ../CONTRIBUTING.md
 [validator-tools]: https://github.com/google/watchface
 [signing]: https://developer.android.com/build/building-cmdline#gradle_signing
+[flavors]: https://developer.android.com/training/wearables/wff/user-configuration/flavor
+[weather]: https://developer.android.com/training/wearables/wff/weather

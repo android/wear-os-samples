@@ -31,11 +31,18 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Confirmation
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.audio.ui.VolumeScreen
+import com.google.android.horologist.audio.ui.VolumeViewModel
 import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.material.AlertContent
 import kotlinx.coroutines.launch
 
@@ -53,6 +60,10 @@ fun SpeakerApp() {
         val context = LocalContext.current
         val activity = context.findActivity()
         val scope = rememberCoroutineScope()
+
+        val volumeViewModel: VolumeViewModel = viewModel(factory = VolumeViewModel.Factory)
+
+        val navController = rememberSwipeDismissableNavController()
 
         val mainState = remember(activity) {
             MainState(
@@ -87,41 +98,55 @@ fun SpeakerApp() {
                     lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
                 }
             }
+            SwipeDismissableNavHost(navController = navController, startDestination = "speaker") {
+                composable("speaker") {
+                    SpeakerRecordingScreen(
+                        playbackState = mainState.playbackState,
+                        isPermissionDenied = mainState.isPermissionDenied,
+                        recordingProgress = mainState.recordingProgress,
+                        onMicClicked = {
+                            scope.launch {
+                                mainState.onMicClicked()
+                            }
+                        },
+                        onPlayClicked = {
+                            navController.navigate("player")
+                        }
+                    )
 
-            SpeakerScreen(
-                playbackState = mainState.playbackState,
-                isPermissionDenied = mainState.isPermissionDenied,
-                recordingProgress = mainState.recordingProgress,
-                onMicClicked = {
-                    scope.launch {
-                        mainState.onMicClicked()
+                    if (mainState.showPermissionRationale) {
+                        AlertContent(
+                            onOk = {
+                                requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                                mainState.showPermissionRationale = false
+                            },
+                            onCancel = {
+                                mainState.showPermissionRationale = false
+                            },
+                            title = stringResource(
+                                id = R.string.rationale_for_microphone_permission
+                            )
+                        )
                     }
-                },
-                onPlayClicked = {
-                    scope.launch {
-                        mainState.onPlayClicked()
+
+                    if (mainState.showSpeakerNotSupported) {
+                        Confirmation(
+                            onTimeout = { mainState.showSpeakerNotSupported = false }
+                        ) {
+                            Text(text = stringResource(id = R.string.no_speaker_supported))
+                        }
                     }
                 }
-            )
-
-            if (mainState.showPermissionRationale) {
-                AlertContent(
-                    onOk = {
-                        requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                        mainState.showPermissionRationale = false
-                    },
-                    onCancel = {
-                        mainState.showPermissionRationale = false
-                    },
-                    title = stringResource(id = R.string.rationale_for_microphone_permission)
-                )
-            }
-
-            if (mainState.showSpeakerNotSupported) {
-                Confirmation(
-                    onTimeout = { mainState.showSpeakerNotSupported = false }
-                ) {
-                    Text(text = stringResource(id = R.string.no_speaker_supported))
+                composable("player") {
+                    SpeakerPlayerScreen(
+                        volumeViewModel = volumeViewModel,
+                        onVolumeClick = { navController.navigate("volume") }
+                    )
+                }
+                composable("volume") {
+                    ScreenScaffold(timeText = {}) {
+                        VolumeScreen(volumeViewModel = volumeViewModel)
+                    }
                 }
             }
         }
@@ -131,7 +156,7 @@ fun SpeakerApp() {
 /**
  * Find the closest Activity in a given Context.
  */
-private tailrec fun Context.findActivity(): Activity =
+tailrec fun Context.findActivity(): Activity =
     when (this) {
         is Activity -> this
         is ContextWrapper -> baseContext.findActivity()
