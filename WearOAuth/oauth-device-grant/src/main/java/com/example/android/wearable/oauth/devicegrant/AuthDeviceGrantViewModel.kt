@@ -41,7 +41,9 @@ data class DeviceGrantState (
     val statusCode: Int = 0,
     val resultMessage: String = ""
 )
+
 /**
+ *
  * The viewModel that implements the OAuth flow. The method [startAuthFlow] implements the
  * different steps of the flow. It first retrieves the URL that should be opened on the paired
  * device, then polls for the access token, and uses it to retrieve the user's name.

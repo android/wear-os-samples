@@ -1,4 +1,4 @@
-Wear OS OAuth Sample
+qWear OS OAuth Sample
 ===================================
 
 Introduction
@@ -12,7 +12,7 @@ any OAuth server instead.
 
 ## Device Authorization Grant OAuth ([RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628)]
 
-The flow starts by tapping the "authenticate" button in the Wear OS app. This retrieves a
+The flow starts by tappin the "authenticate" button in the Wear OS app. This retrieves a
 verification URL from the OAuth server, and opens this URL on the paired phone. It then continues to
 poll the OAuth server for OAuth tokens. After the user accepts and provides consent, the OAuth
 tokens are filled, and the result is used to make an authenticated call to the Google OAuth 2.0 API.
@@ -54,7 +54,7 @@ https://developer.android.com/training/wearables/get-started/creating
 
     - For the Device Authorization Grant sample you must follow the instructions
       for ["TV and limited input"](https://developers.google.com/identity/protocols/oauth2/limited-input-device#creatingcred)
-      .
+
     - For the PKCE sample you follow the instructions
       for ["web application"](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred)
       . Make sure to register https://wear.googleapis.com/3p_auth/<package_name>
