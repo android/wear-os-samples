@@ -50,6 +50,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -92,4 +93,15 @@ dependencies {
     implementation libs.wear.compose.foundation
 
     implementation libs.playservices.wearable
+
+  // Horologist for correct Compose layout
+  implementation libs.horologist.composables
+  implementation libs.horologist.compose.layout
+  implementation libs.horologist.compose.material
+
+  coreLibraryDesugaring libs.desugar.jdk.libs
+
+  // Preview Tooling
+  implementation libs.compose.ui.tooling.preview
+  implementation libs.wear.compose.ui.tooling
 }
