@@ -12,6 +12,8 @@ org-jetbrains-kotlin = "1.9.24"
 org-jetbrains-kotlinx = "1.8.1"
 ktlint = "0.50.0"
 compose-material3 = "1.0.0-alpha22"
+horologist-compose = "0.6.12"
+
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
@@ -49,6 +51,7 @@ compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", versio
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+horologist-compose-layout = { group = "com.google.android.horologist", name = "horologist-compose-layout", version.ref = "horologist-compose" }
 jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.12"
 junit = "junit:junit:4.13.2"
 kotlin-annotation-processing-gradle = { module = "org.jetbrains.kotlin:kotlin-annotation-processing-gradle", version.ref = "org-jetbrains-kotlin" }

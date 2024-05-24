@@ -24,19 +24,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material.PositionIndicator
-import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.TimeText
-import androidx.wear.compose.material.Vignette
-import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.material.scrollAway
-import androidx.wear.compose.material3.Button
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
+import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 
 /**
  * Demonstrates the OAuth 2.0 flow on Wear OS using Device Authorization Grant, as described in
@@ -55,45 +55,46 @@ class AuthDeviceGrantActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { AuthenticateScreen(deviceGrantViewModel = viewModel()) }
+        setContent { AuthenticateApp(deviceGrantViewModel = viewModel()) }
     }
 }
 
+@OptIn(ExperimentalHorologistApi::class)
 @Composable
-fun AuthenticateScreen(deviceGrantViewModel: AuthDeviceGrantViewModel) {
-    val listState = rememberScalingLazyListState()
-    val uiState = deviceGrantViewModel.uiState.collectAsState()
-    val localContext = LocalContext.current
-
-    Scaffold(
-        timeText = { TimeText(modifier = Modifier.scrollAway(listState)) },
-        vignette = {
-            Vignette(vignettePosition = VignettePosition.TopAndBottom)
-        },
-        positionIndicator = {
-            PositionIndicator(scalingLazyListState = listState)
-        }
-    ) {
-        ScalingLazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = listState
-        ) {
-            item { ListHeader { Text("OAuth Device Auth Grant", textAlign = TextAlign.Center) } }
-            item {
-                Button(
-                    onClick = { deviceGrantViewModel.startAuthFlow(localContext) },
-                    modifier = Modifier.fillMaxSize() ){
-                    Text(text = "Get Grant from Phone",
-                         modifier = Modifier.align(Alignment.CenterVertically))
+fun AuthenticateApp(deviceGrantViewModel: AuthDeviceGrantViewModel) {
+    AppScaffold {
+        val uiState = deviceGrantViewModel.uiState.collectAsState()
+        val localContext = LocalContext.current
+        val columnState = rememberResponsiveColumnState(
+            contentPadding = ScalingLazyColumnDefaults.padding(
+                first = ItemType.Unspecified,
+                last = ItemType.Unspecified
+            )
+        )
+        ScreenScaffold(scrollState = columnState) {
+            ScalingLazyColumn(columnState = columnState) {
+                item {
+                    ListHeader {
+                        Text(
+                            stringResource(R.string.oauth_device_auth_grant),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
+                item {
+                    Button(
+                        onClick = { deviceGrantViewModel.startAuthFlow(localContext) },
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text(
+                            text = stringResource(R.string.get_grant_from_phone),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                item { Text(uiState.value.statusCode.toString()) }
+                item { Text(uiState.value.resultMessage) }
             }
-            item {
-                Text(uiState.value.statusCode.toString())
-            }
-            item {
-                Text (uiState.value.resultMessage)
         }
     }
-}}
-
+}

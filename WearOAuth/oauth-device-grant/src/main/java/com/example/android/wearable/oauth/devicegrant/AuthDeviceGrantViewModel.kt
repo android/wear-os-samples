@@ -37,7 +37,7 @@ private const val TAG = "AuthDeviceGrantViewModel"
 private const val CLIENT_ID = ""
 private const val CLIENT_SECRET = ""
 
-data class DeviceGrantState (
+data class DeviceGrantState(
     val statusCode: Int = 0,
     val resultMessage: String = ""
 )
