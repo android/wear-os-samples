@@ -11,7 +11,7 @@ compose-compiler = "1.5.14"
 org-jetbrains-kotlin = "1.9.24"
 org-jetbrains-kotlinx = "1.8.1"
 ktlint = "0.50.0"
-compose-material3 = "1.0.0-alpha22"
+compose-material3 = "1.0.0-alpha23"
 horologist-compose = "0.6.12"
 
 
