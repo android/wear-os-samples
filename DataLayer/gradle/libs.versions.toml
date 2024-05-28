@@ -8,6 +8,8 @@ compose-compiler = "1.5.14"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.24"
 org-jetbrains-kotlinx = "1.8.1"
+horologist = "0.5.27"
+compose-ui-tooling = "1.3.1"
 
 [libraries]
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.4"
@@ -30,6 +32,12 @@ kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-cor
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.1.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
+wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "compose-ui-tooling" }
+horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
+horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
+horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.0.4"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
