@@ -20,7 +20,6 @@ import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,24 +30,23 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Button
+import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.material.Card
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.PositionIndicator
-import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import androidx.wear.compose.material.Vignette
-import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.material.items
-import androidx.wear.compose.material.rememberScalingLazyListState
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
+import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.google.android.horologist.compose.material.Chip
 
-@OptIn(ExperimentalWearMaterialApi::class)
+@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun MainApp(
     events: List<Event>,
@@ -56,88 +54,88 @@ fun MainApp(
     onQueryOtherDevicesClicked: () -> Unit,
     onQueryMobileCameraClicked: () -> Unit
 ) {
-    val scalingLazyListState = rememberScalingLazyListState()
-
-    Scaffold(
-        vignette = { Vignette(vignettePosition = VignettePosition.TopAndBottom) },
-        positionIndicator = { PositionIndicator(scalingLazyListState = scalingLazyListState) },
-        timeText = { TimeText() }
-    ) {
-        ScalingLazyColumn(
-            state = scalingLazyListState,
-            contentPadding = PaddingValues(
-                horizontal = 8.dp,
-                vertical = 32.dp
+    AppScaffold {
+        val columnState = rememberResponsiveColumnState(
+            contentPadding = ScalingLazyColumnDefaults.padding(
+                first = ItemType.Chip,
+                last = ItemType.Text
             )
-        ) {
-            item {
-                Button(
-                    onClick = onQueryOtherDevicesClicked,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.query_other_devices))
-                }
-            }
+        )
 
-            item {
-                Button(
-                    onClick = onQueryMobileCameraClicked,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.query_mobile_camera))
-                }
-            }
-
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .padding(32.dp)
-                ) {
-                    if (image == null) {
-                        Image(
-                            painterResource(id = R.drawable.photo_placeholder),
-                            contentDescription = stringResource(
-                                id = R.string.photo_placeholder
-                            ),
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        Image(
-                            image.asImageBitmap(),
-                            contentDescription = stringResource(
-                                id = R.string.captured_photo
-                            ),
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
-            }
-
-            if (events.isEmpty()) {
+        ScreenScaffold(scrollState = columnState) {
+            /*
+             * The Horologist [ScalingLazyColumn] takes care of the horizontal and vertical
+             * padding for the list, so there is no need to specify it.
+             */
+            ScalingLazyColumn(
+                columnState = columnState,
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
                 item {
-                    Text(
-                        stringResource(id = R.string.waiting),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                    Chip(
+                        label = stringResource(id = R.string.query_other_devices),
+                        onClick = onQueryOtherDevicesClicked
                     )
                 }
-            } else {
-                items(events) { event ->
-                    Card(
-                        onClick = {},
-                        enabled = false
+                item {
+                    Chip(
+                        label = stringResource(id = R.string.query_mobile_camera),
+                        onClick = onQueryMobileCameraClicked
+                    )
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .padding(32.dp)
                     ) {
-                        Column {
-                            Text(
-                                stringResource(id = event.title),
-                                style = MaterialTheme.typography.title3
+                        if (image == null) {
+                            Image(
+                                painterResource(id = R.drawable.photo_placeholder),
+                                contentDescription = stringResource(
+                                    id = R.string.photo_placeholder
+                                ),
+                                modifier = Modifier.fillMaxSize()
                             )
-                            Text(
-                                event.text,
-                                style = MaterialTheme.typography.body2
+                        } else {
+                            Image(
+                                image.asImageBitmap(),
+                                contentDescription = stringResource(
+                                    id = R.string.captured_photo
+                                ),
+                                modifier = Modifier.fillMaxSize()
                             )
+                        }
+                    }
+                }
+
+                if (events.isEmpty()) {
+                    item {
+                        Text(
+                            stringResource(id = R.string.waiting),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                } else {
+                    items(events) { event ->
+                        Card(
+                            onClick = {},
+                            enabled = false
+                        ) {
+                            Column {
+                                Text(
+                                    stringResource(id = event.title),
+                                    style = MaterialTheme.typography.title3
+                                )
+                                Text(
+                                    event.text,
+                                    style = MaterialTheme.typography.body2
+                                )
+                            }
                         }
                     }
                 }
@@ -146,7 +144,8 @@ fun MainApp(
     }
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@WearPreviewDevices
+@WearPreviewFontScales
 @Composable
 fun MainAppPreviewEvents() {
     MainApp(
@@ -184,7 +183,8 @@ fun MainAppPreviewEvents() {
     )
 }
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@WearPreviewDevices
+@WearPreviewFontScales
 @Composable
 fun MainAppPreviewEmpty() {
     MainApp(
