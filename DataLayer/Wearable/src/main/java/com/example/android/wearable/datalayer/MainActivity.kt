@@ -24,22 +24,41 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.wearable.CapabilityClient
+import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
-import com.google.android.gms.wearable.Wearable
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.data.WearDataLayerRegistry
+import com.google.android.horologist.datalayer.watch.WearDataLayerAppHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+@OptIn(ExperimentalHorologistApi::class)
 class MainActivity : ComponentActivity() {
 
-    private val dataClient by lazy { Wearable.getDataClient(this) }
-    private val messageClient by lazy { Wearable.getMessageClient(this) }
-    private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
+    private lateinit var wearDataLayerAppHelper: WearDataLayerAppHelper
+    private lateinit var dataClient: DataClient
+    private lateinit var messageClient: MessageClient
+    private lateinit var capabilityClient: CapabilityClient
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val registry = WearDataLayerRegistry.fromContext(
+            application = this@MainActivity.applicationContext,
+            coroutineScope = lifecycleScope
+        )
+        wearDataLayerAppHelper = WearDataLayerAppHelper(
+            context = applicationContext,
+            registry = registry,
+            scope = lifecycleScope
+        )
+        dataClient = registry.dataClient
+        messageClient = registry.messageClient
+        capabilityClient = registry.capabilityClient
 
         setContent {
             MainApp(
@@ -54,9 +73,11 @@ class MainActivity : ComponentActivity() {
     private fun onQueryOtherDevicesClicked() {
         lifecycleScope.launch {
             try {
-                val nodes = getCapabilitiesForReachableNodes()
-                    .filterValues { MOBILE_CAPABILITY in it || WEAR_CAPABILITY in it }.keys
-                displayNodes(nodes)
+                    wearDataLayerAppHelper.connectedAndInstalledNodes.collect { nodes ->
+                        var nodeList = nodes.mapTo(mutableSetOf()) { it }
+                        displayResult(nodeList)
+                    }
+
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
             } catch (exception: Exception) {
@@ -68,9 +89,9 @@ class MainActivity : ComponentActivity() {
     private fun onQueryMobileCameraClicked() {
         lifecycleScope.launch {
             try {
-                val nodes = getCapabilitiesForReachableNodes()
-                    .filterValues { MOBILE_CAPABILITY in it && CAMERA_CAPABILITY in it }.keys
-                displayNodes(nodes)
+                var nodes = getCapabilitiesForReachableNodes()
+                        .filterValues { MOBILE_CAPABILITY in it && CAMERA_CAPABILITY in it }.keys
+                displayResult(nodes)
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
             } catch (exception: Exception) {
@@ -102,12 +123,14 @@ class MainActivity : ComponentActivity() {
             // Transform the capability list for each node into a set
             .mapValues { it.value.toSet() }
 
-    private fun displayNodes(nodes: Set<Node>) {
-        val message = if (nodes.isEmpty()) {
-            getString(R.string.no_device)
-        } else {
-            getString(R.string.connected_nodes, nodes.joinToString(", ") { it.displayName })
-        }
+    // TODO remove Toast as it's not a best practice on Wear and improve handling of result
+    private fun displayResult(nodes: Set<Node>) {
+        val message =
+            if (nodes.isEmpty()) {
+                getString(R.string.no_device)
+            } else {
+                getString(R.string.connected_nodes, nodes.joinToString(", ") { it.displayName })
+            }
 
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

@@ -17,6 +17,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="android_wear_capabilities" tools:ignore="UnusedResources" translatable="false">
         <!-- declaring the provided capabilities -->
-        <item>wear</item>
+        <item>data_layer_app_helper_device_watch</item>
     </string-array>
 </resources>

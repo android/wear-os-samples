@@ -45,13 +45,6 @@
                     android:pathPrefix="/count"
                     android:scheme="wear" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-                <data
-                    android:host="*"
-                    android:pathPrefix="/start-activity"
-                    android:scheme="wear" />
-            </intent-filter>
         </service>
         <activity
             android:name=".MainActivity"

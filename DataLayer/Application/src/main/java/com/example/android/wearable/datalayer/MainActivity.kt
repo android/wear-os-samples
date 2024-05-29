@@ -34,15 +34,16 @@ import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.PutDataMapRequest
-import com.google.android.gms.wearable.Wearable
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.data.WearDataLayerRegistry
+import com.google.android.horologist.data.activityConfig
+import com.google.android.horologist.datalayer.phone.PhoneDataLayerAppHelper
 import java.io.ByteArrayOutputStream
 import java.time.Duration
 import java.time.Instant
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -55,17 +56,22 @@ import kotlinx.coroutines.withContext
  * While resumed, this activity periodically sends a count through the [DataClient], and offers
  * the ability for the user to take and send a photo over the [DataClient].
  *
- * This activity also allows the user to launch the companion wear activity via the [MessageClient].
+ * This activity also allows the user to launch the companion wear activity using Horologist
+ * PhoneDataLayerAppHelper, see https://google.github.io/horologist/api/datalayer/phone/com.google.android.horologist.datalayer.phone/-phone-data-layer-app-helper/index.html.
  *
  * While resumed, this activity also logs all interactions across the clients, which includes events
  * sent from this activity and from the watch(es).
  */
 @SuppressLint("VisibleForTests")
+@OptIn(ExperimentalHorologistApi::class)
 class MainActivity : ComponentActivity() {
+    private val SAMPLE_CLASS_FULL_NAME =
+        "com.example.android.wearable.datalayer.MainActivity"
 
-    private val dataClient by lazy { Wearable.getDataClient(this) }
-    private val messageClient by lazy { Wearable.getMessageClient(this) }
-    private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
+    private lateinit var phoneDataLayerAppHelper: PhoneDataLayerAppHelper
+    private lateinit var dataClient: DataClient
+    private lateinit var messageClient: MessageClient
+    private lateinit var capabilityClient: CapabilityClient
 
     private val isCameraSupported by lazy {
         packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
@@ -82,25 +88,42 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val registry = WearDataLayerRegistry.fromContext(
+            application = this@MainActivity.applicationContext,
+            coroutineScope = lifecycleScope
+        )
+
+        dataClient = registry.dataClient
+        messageClient = registry.messageClient
+        capabilityClient = registry.capabilityClient
+
+        phoneDataLayerAppHelper = PhoneDataLayerAppHelper(
+            context = this,
+            registry = registry
+        )
+
         var count = 0
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                // Set the initial trigger such that the first count will happen in one second.
-                var lastTriggerTime = Instant.now() - (countInterval - Duration.ofSeconds(1))
-                while (isActive) {
-                    // Figure out how much time we still have to wait until our next desired trigger
-                    // point. This could be less than the count interval if sending the count took
-                    // some time.
-                    delay(
-                        Duration.between(Instant.now(), lastTriggerTime + countInterval).toMillis()
-                    )
-                    // Update when we are triggering sending the count
-                    lastTriggerTime = Instant.now()
-                    sendCount(count)
+            if (phoneDataLayerAppHelper.isAvailable()) {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    // Set the initial trigger such that the first count will happen in one second.
+                    var lastTriggerTime = Instant.now() - (countInterval - Duration.ofSeconds(1))
+                    while (isActive) {
+                        // Figure out how much time we still have to wait until our next desired trigger
+                        // point. This could be less than the count interval if sending the count took
+                        // some time.
+                        delay(
+                            Duration.between(Instant.now(), lastTriggerTime + countInterval)
+                                .toMillis()
+                        )
+                        // Update when we are triggering sending the count
+                        lastTriggerTime = Instant.now()
+                        sendCount(count)
 
-                    // Increment the count to send next time
-                    count++
+                        // Increment the count to send next time
+                        count++
+                    }
                 }
             }
         }
@@ -165,25 +188,22 @@ class MainActivity : ComponentActivity() {
 
     private fun startWearableActivity() {
         lifecycleScope.launch {
-            try {
-                val nodes = capabilityClient
-                    .getCapability(WEAR_CAPABILITY, CapabilityClient.FILTER_REACHABLE)
-                    .await()
-                    .nodes
-
-                // Send a message to all nodes in parallel
-                nodes.map { node ->
-                    async {
-                        messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf())
-                            .await()
+            if (phoneDataLayerAppHelper.isAvailable()) {
+                try {
+                    val config = activityConfig {
+                        classFullName = SAMPLE_CLASS_FULL_NAME
                     }
-                }.awaitAll()
-
-                Log.d(TAG, "Starting activity requests sent successfully")
-            } catch (cancellationException: CancellationException) {
-                throw cancellationException
-            } catch (exception: Exception) {
-                Log.d(TAG, "Starting activity failed: $exception")
+                    phoneDataLayerAppHelper.connectedAndInstalledNodes.collect { nodes ->
+                        nodes.mapTo(mutableSetOf()) {
+                            phoneDataLayerAppHelper.startRemoteActivity(it.id, config)
+                        }
+                    }
+                    Log.d(TAG, "Starting activity requests sent successfully")
+                } catch (cancellationException: CancellationException) {
+                    throw cancellationException
+                } catch (exception: Exception) {
+                    Log.d(TAG, "Starting activity failed: $exception")
+                }
             }
         }
     }
@@ -195,23 +215,25 @@ class MainActivity : ComponentActivity() {
 
     private fun sendPhoto() {
         lifecycleScope.launch {
-            try {
-                val image = clientDataViewModel.image ?: return@launch
-                val imageAsset = image.toAsset()
-                val request = PutDataMapRequest.create(IMAGE_PATH).apply {
-                    dataMap.putAsset(IMAGE_KEY, imageAsset)
-                    dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
+            if (phoneDataLayerAppHelper.isAvailable()) {
+                try {
+                    val image = clientDataViewModel.image ?: return@launch
+                    val imageAsset = image.toAsset()
+                    val request = PutDataMapRequest.create(IMAGE_PATH).apply {
+                        dataMap.putAsset(IMAGE_KEY, imageAsset)
+                        dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
+                    }
+                        .asPutDataRequest()
+                        .setUrgent()
+
+                    val result = dataClient.putDataItem(request).await()
+
+                    Log.d(TAG, "DataItem saved: $result")
+                } catch (cancellationException: CancellationException) {
+                    throw cancellationException
+                } catch (exception: Exception) {
+                    Log.d(TAG, "Saving DataItem failed: $exception")
                 }
-                    .asPutDataRequest()
-                    .setUrgent()
-
-                val result = dataClient.putDataItem(request).await()
-
-                Log.d(TAG, "DataItem saved: $result")
-            } catch (cancellationException: CancellationException) {
-                throw cancellationException
-            } catch (exception: Exception) {
-                Log.d(TAG, "Saving DataItem failed: $exception")
             }
         }
     }
@@ -248,7 +270,6 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val TAG = "MainActivity"
 
-        private const val START_ACTIVITY_PATH = "/start-activity"
         private const val COUNT_PATH = "/count"
         private const val IMAGE_PATH = "/image"
         private const val IMAGE_KEY = "photo"

@@ -20,6 +20,7 @@
     <string name="query_other_devices">Query for connected devices</string>
     <string name="query_mobile_camera">Query for mobile camera</string>
     <string name="no_device">No device provides the requested capabilities</string>
+    <string name="unsupported_feature">Your device does not support the Wearable API</string>
     <string name="connected_nodes">Nodes: %1$s</string>
     <string name="message">Message</string>
     <string name="capability_changed">Capability changed</string>

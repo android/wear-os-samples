@@ -29,7 +29,7 @@ android {
         applicationId "com.example.android.wearable.datalayer"
         versionCode 1
         versionName "1.0"
-        minSdk 21
+        minSdk 23
         targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -76,4 +76,6 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.playservices.wearable
+    implementation libs.horologist.datalayer
+    implementation libs.horologist.datalayer.phone
 }
