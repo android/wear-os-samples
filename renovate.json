@@ -18,13 +18,15 @@
       "matchPackagePatterns": [
         "org.jetbrains.kotlin.*"
       ],
-      "groupName": "kotlin"
+      "groupName": "kotlin",
+      "allowedVersions": "<2.0.0"
     },
     {
       "matchPackagePatterns": [
         "com.google.devtools.ksp"
       ],
-      "groupName": "kotlin"
+      "groupName": "kotlin",
+      "allowedVersions": "<2.0.0"
     },
     {
       "matchPackageNames": ["com.google.guava:guava"],

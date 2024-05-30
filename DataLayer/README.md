@@ -17,12 +17,11 @@ the required interfaces using Jetpack Compose.
 
 It showcases how to use an [WearableListenerService][1] to consume DataEvents
 as well as implementations for various required listeners when using the [DataClient][2],
-[MessageClient][3] and [NodeClient][4].
+[MessageClient][3].
 
 [1]: https://developers.google.com/android/reference/com/google/android/gms/wearable/WearableListenerService
 [2]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataClient
 [3]: https://developers.google.com/android/reference/com/google/android/gms/wearable/MessageClient
-[4]: https://developers.google.com/android/reference/com/google/android/gms/wearable/NodeClient
 
 Pre-requisites
 --------------

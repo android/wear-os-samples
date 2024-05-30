@@ -41,7 +41,6 @@ fun SpeakerRecordingScreen(
             playbackState = playbackState,
             isPermissionDenied = isPermissionDenied
         )
-
         ControlDashboard(
             controlDashboardUiState = controlDashboardUiState,
             onMicClicked = onMicClicked,

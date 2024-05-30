@@ -33,7 +33,6 @@ import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.MessageClient
-import com.google.android.gms.wearable.NodeClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import java.io.ByteArrayOutputStream
@@ -51,8 +50,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 /**
- * Manages Wearable clients to showcase the [DataClient], [MessageClient], [CapabilityClient] and
- * [NodeClient].
+ * Manages Wearable clients to showcase the [DataClient], [MessageClient], [CapabilityClient].
  *
  * While resumed, this activity periodically sends a count through the [DataClient], and offers
  * the ability for the user to take and send a photo over the [DataClient].
