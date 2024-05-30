@@ -24,4 +24,5 @@
     <string name="status_retrieving_user">Retrieving user profile…</string>
     <string name="status_failure_user">Could not retrieve user profile</string>
     <string name="status_retrieved">User profile retrieved. Name:</string>
+    <string name="authenticate">Authenticate</string>
 </resources>
