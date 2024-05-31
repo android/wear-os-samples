@@ -67,8 +67,8 @@ fun AuthenticateApp(deviceGrantViewModel: AuthDeviceGrantViewModel) {
         val localContext = LocalContext.current
         val columnState = rememberResponsiveColumnState(
             contentPadding = ScalingLazyColumnDefaults.padding(
-                first = ItemType.Unspecified,
-                last = ItemType.Unspecified
+                first = ItemType.Text,
+                last = ItemType.Text
             )
         )
         ScreenScaffold(scrollState = columnState) {

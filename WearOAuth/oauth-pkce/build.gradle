@@ -45,11 +45,13 @@ android {
       proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
     }
   }
-  //
+
   buildFeatures {
     compose true
   }
-  composeOptions { kotlinCompilerExtensionVersion compose_version }
+  composeOptions {
+    kotlinCompilerExtensionVersion compose_version
+  }
 }
 
 dependencies {

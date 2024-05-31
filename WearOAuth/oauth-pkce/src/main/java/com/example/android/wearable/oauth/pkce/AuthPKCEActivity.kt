@@ -63,8 +63,8 @@ fun PKCEApp(pkceViewModel: AuthPKCEViewModel) {
         val localContext = LocalContext.current
         val columnState = rememberResponsiveColumnState(
             contentPadding = ScalingLazyColumnDefaults.padding(
-                first = ScalingLazyColumnDefaults.ItemType.Unspecified,
-                last = ScalingLazyColumnDefaults.ItemType.Unspecified
+                first = ScalingLazyColumnDefaults.ItemType.Text,
+                last = ScalingLazyColumnDefaults.ItemType.Text
             )
         )
         ScreenScaffold(scrollState = columnState) {
