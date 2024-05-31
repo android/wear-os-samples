@@ -14,51 +14,70 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+  id 'com.android.application'
+  id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    compileSdk 34
+  compileSdk 34
+  namespace "com.example.android.wearable.oauth.pkce"
 
-    namespace "com.example.android.wearable.oauth.pkce"
+  defaultConfig {
+    applicationId "com.example.android.wearable.oauth.pkce"
+    minSdk 26
+    targetSdk 33
+    versionCode 1
+    versionName "1.0"
+  }
 
-    defaultConfig {
-        applicationId "com.example.android.wearable.oauth.pkce"
-        minSdk 26
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
-    }
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+  }
 
-    compileOptions {
-      sourceCompatibility = JavaVersion.VERSION_17
-      targetCompatibility = JavaVersion.VERSION_17
-    }
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_17.majorVersion
+  }
 
-    kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_17.majorVersion
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
     }
+  }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-        }
-    }
-    buildFeatures {
-        viewBinding true
-    }
+  buildFeatures {
+    compose true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion compose_version
+  }
 }
 
 dependencies {
-    implementation projects.util
-    implementation libs.kotlin.stdlib
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.wear)
-    implementation(libs.wear.phone.interactions)
-    implementation libs.playservices.wearable
+  implementation(libs.wear.compose.foundation)
+
+  // For Wear Material Design UX guidelines and specifications
+  implementation(libs.wear.compose.material)
+  implementation(libs.androidx.compose.material3)
+
+  // For integration between Wear Compose and Androidx Navigation libraries
+  implementation(libs.wear.compose.navigation)
+
+  // For Wear preview annotations
+  implementation(libs.androidx.compose.ui.tooling)
+
+  // Horologist dependencies
+  implementation(libs.horologist.compose.layout)
+
+  // Standard android deps
+  implementation projects.util
+  implementation libs.kotlin.stdlib
+  implementation libs.androidx.core.ktx
+  implementation libs.androidx.appcompat
+  implementation(libs.androidx.lifecycle.viewmodel.ktx)
+  implementation(libs.androidx.fragment.ktx)
+  implementation(libs.androidx.wear)
+  implementation(libs.wear.phone.interactions)
+  implementation libs.playservices.wearable
 }
