@@ -26,9 +26,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.AvailabilityException
+import com.google.android.gms.common.api.GoogleApi
 import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.DataClient
@@ -85,32 +94,45 @@ class MainActivity : ComponentActivity() {
         var count = 0
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                // Set the initial trigger such that the first count will happen in one second.
-                var lastTriggerTime = Instant.now() - (countInterval - Duration.ofSeconds(1))
-                while (isActive) {
-                    // Figure out how much time we still have to wait until our next desired trigger
-                    // point. This could be less than the count interval if sending the count took
-                    // some time.
-                    delay(
-                        Duration.between(Instant.now(), lastTriggerTime + countInterval).toMillis()
-                    )
-                    // Update when we are triggering sending the count
-                    lastTriggerTime = Instant.now()
-                    sendCount(count)
+            if (isAvailable(capabilityClient)) {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    // Set the initial trigger such that the first count will happen in one second.
+                    var lastTriggerTime = Instant.now() - (countInterval - Duration.ofSeconds(1))
+                    while (isActive) {
+                        // Figure out how much time we still have to wait until our next desired trigger
+                        // point. This could be less than the count interval if sending the count took
+                        // some time.
+                        delay(
+                            Duration.between(Instant.now(), lastTriggerTime + countInterval)
+                                .toMillis()
+                        )
+                        // Update when we are triggering sending the count
+                        lastTriggerTime = Instant.now()
+                        sendCount(count)
 
-                    // Increment the count to send next time
-                    count++
+                        // Increment the count to send next time
+                        // This count is local to the specific instance of this activity and may reset
+                        // when a new instance is recreated. For a more complex example where the counter
+                        // is stored in a DataStore and modeled as a proto, see thre Horologist DataLayer sample in
+                        // https://google.github.io/horologist/datalayer/
+                        count++
+                    }
                 }
             }
         }
 
         setContent {
             MaterialTheme {
+                val coroutineScope = rememberCoroutineScope()
+                var apiAvailable by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) {
+                    apiAvailable = isAvailable(capabilityClient)
+                }
                 MainApp(
                     events = clientDataViewModel.events,
                     image = clientDataViewModel.image,
                     isCameraSupported = isCameraSupported,
+                    apiAvailable = apiAvailable,
                     onTakePhotoClick = ::takePhoto,
                     onSendPhotoClick = ::sendPhoto,
                     onStartWearableActivityClick = ::startWearableActivity
@@ -163,6 +185,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    // This method starts the Wearable app on the connected Wear device.
+    // Alternative to this implementation, Horologist offers a DataHelper API which allows to
+    // start the main activity or a different activity of your choice from the Wearable app
+    // see https://google.github.io/horologist/datalayer-helpers-guide/#launching-a-specific-activity-on-the-other-device
+    // for details
     private fun startWearableActivity() {
         lifecycleScope.launch {
             try {
@@ -172,6 +199,9 @@ class MainActivity : ComponentActivity() {
                     .nodes
 
                 // Send a message to all nodes in parallel
+                // If you need an acknowledge for the start activity use case, you can alternatively use
+                // [MessageClient.sendRequest](https://developers.google.com/android/reference/com/google/android/gms/wearable/MessageClient#sendRequest(java.lang.String,%20java.lang.String,%20byte[]))
+                // See an implementation in Horologist DataHelper https://github.com/google/horologist/blob/release-0.5.x/datalayer/core/src/main/java/com/google/android/horologist/data/apphelper/DataLayerAppHelper.kt#L210
                 nodes.map { node ->
                     async {
                         messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf())
@@ -244,6 +274,26 @@ class MainActivity : ComponentActivity() {
                 Asset.createFromBytes(byteStream.toByteArray())
             }
         }
+
+    // This function checks that the Wearable API is available on the mobile device.
+    // If you are using the Horologist DataHelpers, this method is available in
+    // https://google.github.io/horologist/datalayer-helpers-guide/#check-api-availability
+
+    private suspend fun isAvailable(api: GoogleApi<*>): Boolean {
+        return try {
+            GoogleApiAvailability.getInstance()
+                .checkApiAvailability(api)
+                .await()
+
+            true
+        } catch (e: AvailabilityException) {
+            Log.d(
+                TAG,
+                "${api.javaClass.simpleName} API is not available in this device."
+            )
+            false
+        }
+    }
 
     companion object {
         private const val TAG = "MainActivity"
