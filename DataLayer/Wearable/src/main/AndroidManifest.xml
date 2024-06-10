@@ -20,6 +20,7 @@
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
+        android:name=".SampleApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
