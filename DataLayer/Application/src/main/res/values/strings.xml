@@ -25,4 +25,5 @@
     <string name="data_item_unknown">Unknown DataItem type</string>
     <string name="message_from_watch">Message from watch</string>
     <string name="capability_changed">Capability changed</string>
+    <string name="wearable_api_unavailable">The Wearable API is not available on this device</string>
 </resources>

@@ -25,7 +25,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityInfo
@@ -42,7 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class ClientDataViewModel(
+class MainViewModel(
     application: Application
 ) :
     AndroidViewModel(application),
@@ -75,14 +79,13 @@ class ClientDataViewModel(
                     DataEvent.TYPE_DELETED -> R.string.data_item_deleted
                     else -> R.string.data_item_unknown
                 }
-
                 Event(
                     title = title,
                     text = dataEvent.dataItem.toString()
+
                 )
             }
         )
-
         // Do additional work for specific events
         dataEvents.forEach { dataEvent ->
             when (dataEvent.type) {
@@ -129,6 +132,18 @@ class ClientDataViewModel(
         return response.inputStream.use { inputStream ->
             withContext(Dispatchers.IO) {
                 BitmapFactory.decodeStream(inputStream)
+            }
+        }
+    }
+    companion object {
+        private const val TAG = "MainViewModel"
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = this[APPLICATION_KEY]!!
+                MainViewModel(
+                    application
+                )
             }
         }
     }
