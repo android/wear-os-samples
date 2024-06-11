@@ -16,10 +16,11 @@
 package com.example.android.wearable.datalayer
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material.Text
-import com.google.android.gms.wearable.Node
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
@@ -32,7 +33,7 @@ import com.google.android.horologist.compose.material.ResponsiveListHeader
 @Composable
 @OptIn(ExperimentalHorologistApi::class)
 fun NodesScreen(
-    nodes: Set<Node>,
+    nodes: Set<NodeUiModel>,
     modifier: Modifier = Modifier
 ) {
     val columnState = rememberResponsiveColumnState(
@@ -48,7 +49,7 @@ fun NodesScreen(
         ) {
             item {
                 ResponsiveListHeader {
-                    Text("Nodes")
+                    Text(stringResource(id = R.string.nodes))
                 }
             }
             items(nodes.size) { index ->
@@ -60,4 +61,11 @@ fun NodesScreen(
             }
         }
     }
+}
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun NodesScreenPreview() {
+    NodesScreen(setOf(NodeUiModel("aaaaaa", displayName = "Pixel Watch", isNearby = true)))
 }

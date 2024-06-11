@@ -17,6 +17,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.roborazzi
 }
 
 android {
@@ -58,6 +59,12 @@ android {
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
+    testOptions {
+      unitTests {
+        includeAndroidResources true
+      }
+    }
+
     buildFeatures {
         compose true
     }
@@ -65,6 +72,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
+
+  packagingOptions {
+    resources {
+      excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    }
+  }
 }
 
 dependencies {
@@ -94,6 +107,8 @@ dependencies {
 
     implementation libs.playservices.wearable
 
+    implementation libs.androidx.ui.test.manifest
+
   // Horologist for correct Compose layout
   implementation libs.horologist.composables
   implementation libs.horologist.compose.layout
@@ -104,4 +119,26 @@ dependencies {
   // Preview Tooling
   implementation libs.compose.ui.tooling.preview
   implementation libs.wear.compose.ui.tooling
+
+  // Testing
+  testImplementation libs.androidx.ui.test.junit4
+  testImplementation libs.junit
+  testImplementation libs.robolectric
+  testImplementation libs.roborazzi
+  testImplementation libs.roborazzi.compose
+  testImplementation libs.roborazzi.rule
+  testImplementation libs.test.ext.junit
+  testImplementation(libs.horologist.roboscreenshots) {
+    exclude(group: "com.github.QuickBirdEng.kotlin-snapshot-testing")
+  }
+
+  androidTestImplementation libs.test.ext.junit
+  androidTestImplementation libs.test.espresso.core
+  androidTestImplementation libs.compose.ui.test.junit4
+  androidTestImplementation composeBom
+
+  debugImplementation libs.compose.ui.tooling
+  debugImplementation libs.androidx.ui.test.manifest
+  debugImplementation composeBom
+
 }
