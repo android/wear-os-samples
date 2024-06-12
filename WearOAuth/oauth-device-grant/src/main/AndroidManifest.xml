@@ -23,6 +23,7 @@
     <application
         android:allowBackup="false"
         android:label="OAuth Device Authorization Grant"
+        android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.DeviceDefault">
 
         <meta-data
@@ -35,7 +36,7 @@
 
         <activity
             android:name=".AuthDeviceGrantActivity"
-            android:label="wearoauth"
+            android:label="wearoauth Grant"
             android:taskAffinity=".main"
             android:exported="true"
             >

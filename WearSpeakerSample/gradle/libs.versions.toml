@@ -1,19 +1,22 @@
 [versions]
-android-gradle-plugin = "8.4.0"
+android-gradle-plugin = "8.4.2"
 androidx-activity = "1.9.0"
 androidx-compose-bom = "2024.05.00"
 androidx-lifecycle = "2.7.0"
+androidx-media3 = "1.3.1"
 androidx-wear-compose = "1.3.1"
 compose-compiler = "1.5.14"
 compose-ui-tooling = "1.3.1"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.24"
-robolectric = "4.12.1"
-roborazzi = "1.15.0"
+robolectric = "4.12.2"
+roborazzi = "1.20.0"
 ui-test-junit4 = "1.6.7"
 ui-test-manifest = "1.6.7"
 horologist = "0.5.27"
 androidx-constraintlayout-compose = "1.0.1"
+material3-android = "1.2.1"
+kotlinxCoroutine = "1.8.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -32,6 +35,11 @@ horologist-composables = { module = "com.google.android.horologist:horologist-co
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
+horologist-audio-ui = { module = "com.google.android.horologist:horologist-audio-ui", version.ref = "horologist" }
+horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist" }
+horologist-images-coil = { module = "com.google.android.horologist:horologist-images-coil", version.ref = "horologist" }
+horologist-media-data = { module = "com.google.android.horologist:horologist-media-data", version.ref = "horologist" }
+horologist-media-ui = { module = "com.google.android.horologist:horologist-media-ui", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
@@ -45,6 +53,19 @@ wear-compose-material = { module = "androidx.wear.compose:compose-material", ver
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidx-constraintlayout-compose" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3-android" }
+androidx-media3-common = { module = "androidx.media3:media3-common", version.ref = "androidx-media3" }
+androidx-media3-datasourceokhttp = { module = "androidx.media3:media3-datasource-okhttp", version.ref = "androidx-media3" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
+androidx-media3-exoplayerdash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "androidx-media3" }
+androidx-media3-exoplayerhls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "androidx-media3" }
+androidx-media3-exoplayerrtsp = { module = "androidx.media3:media3-exoplayer-rtsp", version.ref = "androidx-media3" }
+androidx-media3-exoplayerworkmanager = { module = "androidx.media3:media3-exoplayer-workmanager", version.ref = "androidx-media3" }
+androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "androidx-media3" }
+androidx-media3-testutils = { module = "androidx.media3:media3-test-utils", version.ref = "androidx-media3" }
+androidx-media3-testutils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "androidx-media3" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutine" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

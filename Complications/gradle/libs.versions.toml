@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.4.0"
+android-gradle-plugin = "8.4.2"
 androidx-wear-watchface = "1.2.1"
 
 org-jetbrains-kotlin = "1.9.24"
