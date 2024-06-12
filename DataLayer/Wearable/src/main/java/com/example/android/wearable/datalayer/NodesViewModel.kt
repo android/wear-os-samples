@@ -88,7 +88,10 @@ class NodesViewModel(
             nodes,
             cameraNodes
         ) { nodes, cameraNodes ->
-            UIState(nodes, cameraNodes)
+            UIState(
+                nodes.mapTo(mutableSetOf()) { it.toNodesUI() },
+                cameraNodes.mapTo(mutableSetOf()) { it.toNodesUI() }
+            )
         }
             .stateIn(
                 scope = viewModelScope,
@@ -97,8 +100,8 @@ class NodesViewModel(
             )
 
     data class UIState(
-        val nodes: Set<Node> = setOf(),
-        val cameraNodes: Set<Node> = setOf()
+        val nodes: Set<NodeUiModel> = setOf(),
+        val cameraNodes: Set<NodeUiModel> = setOf()
     )
 
     companion object {
@@ -116,3 +119,15 @@ class NodesViewModel(
         }
     }
 }
+
+data class NodeUiModel(
+    val id: String,
+    val displayName: String,
+    val isNearby: Boolean
+)
+
+fun Node.toNodesUI(): NodeUiModel = NodeUiModel(
+    id = this.id,
+    displayName = this.displayName,
+    isNearby = isNearby
+)
