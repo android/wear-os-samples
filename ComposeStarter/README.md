@@ -32,7 +32,8 @@ This sample demonstrates two techniques for helping you design for different dis
 
 1.  Compose [`WearPreviewDevices`][wear-preview-devices] and [`WearPreviewFontScales`][wear-preview-font-scales] annotations: These generate a set of previews in the preview pane within Android Studio, for a range of different screen sizes and font display size settings, allowing you to see how your design would look.
 
-2.  Screenshot tests: This sample also demonstrates screenshot testing, for a set of [defined devices][wear-device]. For more information on screenshot testing, see this talk from [droidcon London][droidcon-talk].
+2.  Screenshot tests: This sample also demonstrates screenshot testing, for a set of [defined devices][wear-device]. For more information on screenshot testing, see this talk from [droidcon London][droidcon-talk], and see the [Continuous Integration][ci-guide] for more details on how to build screenshot
+    testing into your automated workflows.
 
     - To generate new images for the tests, run `./gradlew recordRoborazziDebug`
     - To test against existing reference images, run `./gradlew verifyRoborazziDebug`
@@ -55,3 +56,4 @@ submitting a pull request through GitHub. Please see CONTRIBUTING.md for more de
 [wear-device]: https://github.com/android/wear-os-samples/blob/main/ComposeStarter/app/src/test/java/presentation/WearDevice.kt
 [wear-preview-font-scales]: https://developer.android.com/reference/kotlin/androidx/wear/compose/ui/tooling/preview/WearPreviewFontScales
 [wear-preview-devices]: https://developer.android.com/reference/kotlin/androidx/wear/compose/ui/tooling/preview/WearPreviewDevices
+[ci-guide]: https://developer.android.com/training/testing/continuous-integration
