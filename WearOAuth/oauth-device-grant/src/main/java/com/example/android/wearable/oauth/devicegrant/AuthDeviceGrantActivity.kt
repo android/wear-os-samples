@@ -23,13 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
@@ -59,42 +60,76 @@ class AuthDeviceGrantActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun AuthenticateApp(deviceGrantViewModel: AuthDeviceGrantViewModel) {
     AppScaffold {
         val uiState = deviceGrantViewModel.uiState.collectAsState()
-        val localContext = LocalContext.current
-        val columnState = rememberResponsiveColumnState(
-            contentPadding = ScalingLazyColumnDefaults.padding(
-                first = ItemType.Text,
-                last = ItemType.Text
-            )
+        AuthenticateScreen(
+            uiState.value.statusCode,
+            uiState.value.resultMessage,
+            deviceGrantViewModel::startAuthFlow
         )
-        ScreenScaffold(scrollState = columnState) {
-            ScalingLazyColumn(columnState = columnState) {
-                item {
-                    ListHeader {
-                        Text(
-                            stringResource(R.string.oauth_device_auth_grant),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+    }
+}
+
+@OptIn(ExperimentalHorologistApi::class)
+@Composable
+fun AuthenticateScreen(
+    statusCode: Int,
+    resultMessage: String,
+    startAuthFlow: () -> Unit
+) {
+    val columnState = rememberResponsiveColumnState(
+        contentPadding = ScalingLazyColumnDefaults.padding(
+            first = ItemType.Text,
+            last = ItemType.Text
+        )
+    )
+    ScreenScaffold(scrollState = columnState) {
+        ScalingLazyColumn(columnState = columnState) {
+            item {
+                ListHeader {
+                    Text(
+                        stringResource(R.string.oauth_device_auth_grant),
+                        textAlign = TextAlign.Center
+                    )
                 }
-                item {
-                    Button(
-                        onClick = { deviceGrantViewModel.startAuthFlow(localContext) },
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Text(
-                            text = stringResource(R.string.get_grant_from_phone),
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                }
-                item { Text(uiState.value.statusCode.toString()) }
-                item { Text(uiState.value.resultMessage) }
             }
+            item {
+                Button(
+                    onClick = { startAuthFlow() },
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = stringResource(R.string.get_grant_from_phone),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
+            }
+            item { Text(stringResource(id = statusCode)) }
+            item { Text(resultMessage) }
         }
     }
+}
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun AuthenticateScreenPreview() {
+    AuthenticateScreen(
+        statusCode = R.string.status_retrieved,
+        resultMessage = "User name",
+        startAuthFlow = {}
+    )
+}
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun AuthenticateScreenFailedPreview() {
+    AuthenticateScreen(
+        statusCode = R.string.status_failed,
+        resultMessage = "",
+        startAuthFlow = {}
+    )
 }
