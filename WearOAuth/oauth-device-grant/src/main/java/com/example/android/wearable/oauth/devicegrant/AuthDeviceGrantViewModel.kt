@@ -15,11 +15,12 @@
  */
 package com.example.android.wearable.oauth.devicegrant
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.example.android.wearable.oauth.util.doGetRequest
@@ -29,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 private const val TAG = "AuthDeviceGrantViewModel"
@@ -38,7 +40,7 @@ private const val CLIENT_ID = ""
 private const val CLIENT_SECRET = ""
 
 data class DeviceGrantState(
-    val statusCode: Int = 0,
+    val statusCode: Int = R.string.oauth_device_authorization_default,
     val resultMessage: String = ""
 )
 
@@ -48,16 +50,19 @@ data class DeviceGrantState(
  * different steps of the flow. It first retrieves the URL that should be opened on the paired
  * device, then polls for the access token, and uses it to retrieve the user's name.
  */
-class AuthDeviceGrantViewModel : ViewModel() {
+class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(application) {
+    private val context = getApplication<Application>().applicationContext
     private val _uiState = MutableStateFlow(DeviceGrantState())
+
     val uiState: StateFlow<DeviceGrantState> = _uiState.asStateFlow()
 
     private fun showStatus(statusString: Int = 0, resultString: String = "") {
-        _uiState.value =
-            _uiState.value.copy(statusCode = statusString, resultMessage = resultString)
+        _uiState.update {
+            DeviceGrantState(statusString, resultString)
+        }
     }
 
-    fun startAuthFlow(context: Context) {
+    fun startAuthFlow() {
         viewModelScope.launch {
             // Step 1: Retrieve the verification URI
             showStatus(statusString = R.string.status_switch_to_phone)
