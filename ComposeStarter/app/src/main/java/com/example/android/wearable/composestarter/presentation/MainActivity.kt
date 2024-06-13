@@ -49,6 +49,7 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
+import com.example.android.wearable.composestarter.screenshot.RoborazziConfig
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
@@ -243,6 +244,7 @@ fun SampleDialogContent(
     }
 }
 
+@RoborazziConfig(comparisonThreshold = 0.02f)
 @WearPreviewDevices
 @WearPreviewFontScales
 @Composable
@@ -250,6 +252,7 @@ fun GreetingScreenPreview() {
     GreetingScreen("Preview Android", onShowList = {})
 }
 
+@RoborazziConfig(comparisonThreshold = 0.02f)
 @WearPreviewDevices
 @WearPreviewFontScales
 @Composable

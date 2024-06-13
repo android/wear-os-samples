@@ -115,6 +115,7 @@ dependencies {
     testImplementation(libs.horologist.roboscreenshots) {
       exclude(group: "com.github.QuickBirdEng.kotlin-snapshot-testing")
     }
+    testImplementation("com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.1")
 
     androidTestImplementation libs.test.ext.junit
     androidTestImplementation libs.test.espresso.core
