@@ -12,20 +12,33 @@ import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import sergio.sastre.composable.preview.scanner.core.preview.getAnnotation
 
 object RoborazziOptionsMapper {
-    fun createFor(preview: ComposablePreview<AndroidPreviewInfo>): RoborazziOptions =
-        preview.getAnnotation<RoborazziConfig>()?.let { config ->
-            RoborazziOptions(
-                compareOptions = RoborazziOptions.CompareOptions(
-                    resultValidator = ThresholdValidator(
-                        config.comparisonThreshold
-                    )
-                )
-            )
-        } ?: RoborazziOptions()
+    fun createFor(preview: ComposablePreview<AndroidPreviewInfo>): RoborazziOptions {
+        val roborazziConfig = preview.getAnnotation<RoborazziConfig>() ?: RoborazziConfig(0.02f)
+
+        return RoborazziOptions(
+            compareOptions = RoborazziOptions.CompareOptions(
+                resultValidator = ThresholdValidator(
+                    roborazziConfig.comparisonThreshold
+                ),
+            ),
+            recordOptions = RoborazziOptions.RecordOptions(
+                applyDeviceCrop = true,
+            ),
+        )
+    }
 }
 
 object RobolectricPreviewInfosApplier {
     fun applyFor(preview: ComposablePreview<AndroidPreviewInfo>) {
-        RuntimeEnvironment.setQualifiers(RobolectricDeviceQualifiers.WearOSLargeRound)
+        val device = when (preview.previewInfo.device) {
+            "id:wearos_large_round" -> RobolectricDeviceQualifiers.WearOSLargeRound
+            "id:wearos_small_round" -> RobolectricDeviceQualifiers.WearOSSmallRound
+            "id:wearos_square" -> RobolectricDeviceQualifiers.WearOSSquare
+            else -> null
+        }
+        if (device != null) {
+            RuntimeEnvironment.setQualifiers(device)
+        }
+        RuntimeEnvironment.setFontScale(preview.previewInfo.fontScale)
     }
 }
