@@ -23,6 +23,7 @@
     <application
         android:allowBackup="false"
         android:label="OAuth PKCE"
+        android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.DeviceDefault">
 
         <meta-data
@@ -35,7 +36,7 @@
 
         <activity
             android:name=".AuthPKCEActivity"
-            android:label="wearoauth"
+            android:label="wearoauth PKCE"
             android:taskAffinity=".main"
             android:exported="true"
             >
