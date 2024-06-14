@@ -15,10 +15,11 @@
  */
 package com.example.android.wearable.oauth.pkce
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.wear.phone.interactions.authentication.CodeChallenge
 import androidx.wear.phone.interactions.authentication.CodeVerifier
@@ -55,7 +56,8 @@ data class ProofKeyCodeExchangeState(
  * different steps of the flow. It first retrieves the OAuth code, uses it to exchange it for an
  * access token, and uses the token to retrieve the user's name.
  */
-class AuthPKCEViewModel : ViewModel() {
+class AuthPKCEViewModel(application: Application) : AndroidViewModel(application) {
+    private val context = getApplication<Application>().applicationContext
     private val _uiState = MutableStateFlow(ProofKeyCodeExchangeState())
     val uiState: StateFlow<ProofKeyCodeExchangeState> = _uiState.asStateFlow()
 
@@ -74,7 +76,7 @@ class AuthPKCEViewModel : ViewModel() {
      * the phone. After the user consents on their phone, the wearable app is notified and can
      * continue the authorization process.
      */
-    fun startAuthFlow(context: Context) {
+    fun startAuthFlow() {
         viewModelScope.launch {
             val codeVerifier = CodeVerifier()
 
