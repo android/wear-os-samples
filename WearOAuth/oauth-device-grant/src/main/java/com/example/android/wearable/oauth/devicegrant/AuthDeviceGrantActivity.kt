@@ -18,17 +18,14 @@ package com.example.android.wearable.oauth.devicegrant
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.ListHeader
-import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ListHeader
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
@@ -96,15 +93,14 @@ fun AuthenticateScreen(
                 }
             }
             item {
-                Button(
+                Chip(
                     onClick = { startAuthFlow() },
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Text(
-                        text = stringResource(R.string.get_grant_from_phone),
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                }
+                    label = {
+                        Text(
+                            text = stringResource(R.string.get_grant_from_phone)
+                        )
+                    }
+                )
             }
             item { Text(stringResource(id = statusCode)) }
             item { Text(resultMessage) }
