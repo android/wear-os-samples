@@ -16,6 +16,7 @@
 plugins {
   id 'com.android.application'
   id 'org.jetbrains.kotlin.android'
+  alias libs.plugins.roborazzi
 }
 
 android {
@@ -50,34 +51,61 @@ android {
     compose true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion compose_version
+    kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+  }
+
+  testOptions {
+    unitTests {
+      includeAndroidResources true
+    }
   }
 }
 
 dependencies {
+  def composeBom = platform(libs.androidx.compose.bom)
+
+  // General compose dependencies
+  implementation composeBom
   implementation(libs.wear.compose.foundation)
 
   // For Wear Material Design UX guidelines and specifications
   implementation(libs.wear.compose.material)
-  implementation(libs.androidx.compose.material3)
 
   // For integration between Wear Compose and Androidx Navigation libraries
   implementation(libs.wear.compose.navigation)
 
   // For Wear preview annotations
+  implementation libs.compose.ui.tooling.preview
   implementation(libs.androidx.compose.ui.tooling)
 
   // Horologist dependencies
   implementation(libs.horologist.compose.layout)
 
-  // Standard android deps
+  // Standard android dependencies
   implementation projects.util
-  implementation libs.kotlin.stdlib
-  implementation libs.androidx.core.ktx
-  implementation libs.androidx.appcompat
+  implementation(libs.kotlin.stdlib)
+  implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.appcompat)
   implementation(libs.androidx.lifecycle.viewmodel.ktx)
   implementation(libs.androidx.fragment.ktx)
   implementation(libs.androidx.wear)
   implementation(libs.wear.phone.interactions)
-  implementation libs.playservices.wearable
+  implementation(libs.playservices.wearable)
+
+  implementation libs.androidx.ui.test.manifest
+
+  // Testing
+  testImplementation libs.androidx.ui.test.junit4
+  testImplementation libs.junit
+  testImplementation libs.robolectric
+  testImplementation libs.roborazzi
+  testImplementation libs.roborazzi.compose
+  testImplementation libs.roborazzi.rule
+  testImplementation(libs.horologist.roboscreenshots) {
+    exclude(group: "com.github.QuickBirdEng.kotlin-snapshot-testing")
+  }
+
+  debugImplementation libs.compose.ui.tooling
+  debugImplementation libs.androidx.ui.test.manifest
+  debugImplementation composeBom
 }
