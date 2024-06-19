@@ -6,7 +6,7 @@
     resource dimensions and represent weather
     condition.
      -->
-    <!-- Icon set for day, [WEATHER.IS_DAY] == 0 -->
+    <!-- Icon set for day, [WEATHER.IS_DAY] == 1 -->
     <BitmapFont name="weather_icons_day">
       <Character name="0" resource="ic_unknown" width="96" height="96" />
       <Character name="1" resource="ic_clear" width="96" height="96" />
@@ -32,7 +32,7 @@
       <Word name="21" resource="ic_tornado" width="96" height="96" />
       <Word name="22" resource="ic_tropical_cyclone" width="96" height="96" />
     </BitmapFont>
-    <!-- Icon set for night, [WEATHER.IS_DAY] == 1 -->
+    <!-- Icon set for night, [WEATHER.IS_DAY] == 0 -->
     <BitmapFont name="weather_icons_night">
       <Character name="0" resource="ic_unknown" width="96" height="96" />
       <Character name="1" resource="ic_clear" width="96" height="96" />
