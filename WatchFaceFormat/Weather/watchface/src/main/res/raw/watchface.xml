@@ -75,10 +75,8 @@
                 <Group height="47" name="CurrentConditionIcon" width="47" x="215" y="0">
                   <Condition>
                     <Expressions>
-                      <Expression name="is_unknown">[WEATHER.CONDITION] == 0</Expression>
                       <Expression name="is_clear">[WEATHER.CONDITION] == 1</Expression>
                       <Expression name="is_cloudy">[WEATHER.CONDITION] == 2</Expression>
-                      <Expression name="is_mist">[WEATHER.CONDITION] == 13</Expression>
                       <Expression name="is_heavy_rain">[WEATHER.CONDITION] == 4</Expression>
                       <Expression name="is_heavy_snow">[WEATHER.CONDITION] == 5</Expression>
                       <Expression name="is_rain">([WEATHER.CONDITION] == 6) || ([WEATHER.CONDITION] == 12)</Expression>
@@ -86,6 +84,7 @@
                       <Expression name="is_sunny">[WEATHER.CONDITION] == 8</Expression>
                       <Expression name="is_thunderstorm">[WEATHER.CONDITION] == 9</Expression>
                       <Expression name="is_sleet">[WEATHER.CONDITION] == 10</Expression>
+                      <Expression name="is_mist">[WEATHER.CONDITION] == 13</Expression>
                       <Expression name="is_partly_cloudy_day">([WEATHER.CONDITION] == 14) &amp;&amp; ([WEATHER.IS_DAY] == true)</Expression>
                       <Expression name="is_partly_cloudy_night">([WEATHER.CONDITION] == 14) &amp;&amp; (![WEATHER.IS_DAY] == true)</Expression>
                       <Expression name="is_windy">[WEATHER.CONDITION] == 15</Expression>
@@ -95,11 +94,6 @@
                       <Expression name="is_tornado">[WEATHER.CONDITION] == 21</Expression>
                       <Expression name="is_tropical_cyclone">[WEATHER.CONDITION] == 22</Expression>
                     </Expressions>
-                    <Compare expression="is_unknown">
-                      <PartImage height="47" width="47" x="0" y="0">
-                        <Image resource="ic_unknown"/>
-                      </PartImage>
-                    </Compare>
                     <Compare expression="is_clear">
                       <PartImage height="47" width="47" x="0" y="0">
                         <Image resource="ic_clear"/>
@@ -108,16 +102,6 @@
                     <Compare expression="is_cloudy">
                       <PartImage height="47" width="47" x="0" y="0">
                         <Image resource="ic_cloudy"/>
-                      </PartImage>
-                    </Compare>
-                    <Compare expression="is_mist">
-                      <PartImage height="47" width="47" x="0" y="0">
-                        <Image resource="ic_mist"/>
-                      </PartImage>
-                    </Compare>
-                    <Compare expression="is_atmospheric_condition">
-                      <PartImage height="47" width="47" x="0" y="0">
-                        <Image resource="ic_atmospheric_condition"/>
                       </PartImage>
                     </Compare>
                     <Compare expression="is_heavy_rain">
@@ -155,6 +139,11 @@
                         <Image resource="ic_sleet"/>
                       </PartImage>
                     </Compare>
+                    <Compare expression="is_mist">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_mist"/>
+                      </PartImage>
+                    </Compare>
                     <Compare expression="is_partly_cloudy_day">
                       <PartImage height="47" width="47" x="0" y="0">
                         <Image resource="ic_partly_cloudy_day"/>
@@ -168,6 +157,11 @@
                     <Compare expression="is_windy">
                       <PartImage height="47" width="47" x="0" y="0">
                         <Image resource="ic_windy"/>
+                      </PartImage>
+                    </Compare>
+                    <Compare expression="is_atmospheric_condition">
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_atmospheric_condition"/>
                       </PartImage>
                     </Compare>
                     <Compare expression="is_thunder">
@@ -185,6 +179,11 @@
                         <Image resource="ic_tropical_cyclone"/>
                       </PartImage>
                     </Compare>
+                    <Default>
+                      <PartImage height="47" width="47" x="0" y="0">
+                        <Image resource="ic_unknown"/>
+                      </PartImage>
+                    </Default>
                   </Condition>
                 </Group>
                 <Group height="47" name="CurrentTemp" width="137" x="273" y="0">
@@ -213,10 +212,8 @@
                     <Compare expression="is_weather_forecast_1_available">
                       <Condition>
                         <Expressions>
-                          <Expression name="is_unknown">[WEATHER.HOURS.1.CONDITION] == 0</Expression>
                           <Expression name="is_clear">[WEATHER.HOURS.1.CONDITION] == 1</Expression>
                           <Expression name="is_cloudy">[WEATHER.HOURS.1.CONDITION] == 2</Expression>
-                          <Expression name="is_mist">[WEATHER.HOURS.1.CONDITION] == 13</Expression>
                           <Expression name="is_heavy_rain">[WEATHER.HOURS.1.CONDITION] == 4</Expression>
                           <Expression name="is_heavy_snow">[WEATHER.HOURS.1.CONDITION] == 5</Expression>
                           <Expression name="is_rain">([WEATHER.HOURS.1.CONDITION] == 6) || ([WEATHER.HOURS.1.CONDITION] == 12)</Expression>
@@ -224,6 +221,7 @@
                           <Expression name="is_sunny">[WEATHER.HOURS.1.CONDITION] == 8</Expression>
                           <Expression name="is_thunderstorm">[WEATHER.HOURS.1.CONDITION] == 9</Expression>
                           <Expression name="is_sleet">[WEATHER.HOURS.1.CONDITION] == 10</Expression>
+                          <Expression name="is_mist">[WEATHER.HOURS.1.CONDITION] == 13</Expression>
                           <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.1.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.1.IS_DAY] == true)</Expression>
                           <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.1.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.1.IS_DAY] == true)</Expression>
                           <Expression name="is_windy">[WEATHER.HOURS.1.CONDITION] == 15</Expression>
@@ -233,11 +231,6 @@
                           <Expression name="is_tornado">[WEATHER.HOURS.1.CONDITION] == 21</Expression>
                           <Expression name="is_tropical_cyclone">[WEATHER.HOURS.1.CONDITION] == 22</Expression>
                         </Expressions>
-                        <Compare expression="is_unknown">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_unknown"/>
-                          </PartImage>
-                        </Compare>
                         <Compare expression="is_clear">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_clear"/>
@@ -246,16 +239,6 @@
                         <Compare expression="is_cloudy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_cloudy"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_mist">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_mist"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_atmospheric_condition">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_heavy_rain">
@@ -293,6 +276,11 @@
                             <Image resource="ic_sleet"/>
                           </PartImage>
                         </Compare>
+                        <Compare expression="is_mist">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_mist"/>
+                          </PartImage>
+                        </Compare>
                         <Compare expression="is_partly_cloudy_day">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_partly_cloudy_day"/>
@@ -306,6 +294,11 @@
                         <Compare expression="is_windy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_atmospheric_condition">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_thunder">
@@ -323,6 +316,11 @@
                             <Image resource="ic_tropical_cyclone"/>
                           </PartImage>
                         </Compare>
+                        <Default>
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_unknown"/>
+                          </PartImage>
+                        </Default>
                       </Condition>
                       <PartText height="20" width="60" x="0" y="60">
                         <Text>
@@ -372,10 +370,8 @@
                     <Compare expression="is_weather_forecast_2_available">
                       <Condition>
                         <Expressions>
-                          <Expression name="is_unknown">[WEATHER.HOURS.2.CONDITION] == 0</Expression>
                           <Expression name="is_clear">[WEATHER.HOURS.2.CONDITION] == 1</Expression>
                           <Expression name="is_cloudy">[WEATHER.HOURS.2.CONDITION] == 2</Expression>
-                          <Expression name="is_mist">[WEATHER.HOURS.2.CONDITION] == 13</Expression>
                           <Expression name="is_heavy_rain">[WEATHER.HOURS.2.CONDITION] == 4</Expression>
                           <Expression name="is_heavy_snow">[WEATHER.HOURS.2.CONDITION] == 5</Expression>
                           <Expression name="is_rain">([WEATHER.HOURS.2.CONDITION] == 6) || ([WEATHER.HOURS.2.CONDITION] == 12)</Expression>
@@ -383,6 +379,7 @@
                           <Expression name="is_sunny">[WEATHER.HOURS.2.CONDITION] == 8</Expression>
                           <Expression name="is_thunderstorm">[WEATHER.HOURS.2.CONDITION] == 9</Expression>
                           <Expression name="is_sleet">[WEATHER.HOURS.2.CONDITION] == 10</Expression>
+                          <Expression name="is_mist">[WEATHER.HOURS.2.CONDITION] == 13</Expression>
                           <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.2.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.2.IS_DAY] == true)</Expression>
                           <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.2.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.2.IS_DAY] == true)</Expression>
                           <Expression name="is_windy">[WEATHER.HOURS.2.CONDITION] == 15</Expression>
@@ -392,11 +389,6 @@
                           <Expression name="is_tornado">[WEATHER.HOURS.2.CONDITION] == 21</Expression>
                           <Expression name="is_tropical_cyclone">[WEATHER.HOURS.2.CONDITION] == 22</Expression>
                         </Expressions>
-                        <Compare expression="is_unknown">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_unknown"/>
-                          </PartImage>
-                        </Compare>
                         <Compare expression="is_clear">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_clear"/>
@@ -405,16 +397,6 @@
                         <Compare expression="is_cloudy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_cloudy"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_mist">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_mist"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_atmospheric_condition">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_heavy_rain">
@@ -452,6 +434,11 @@
                             <Image resource="ic_sleet"/>
                           </PartImage>
                         </Compare>
+                        <Compare expression="is_mist">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_mist"/>
+                          </PartImage>
+                        </Compare>
                         <Compare expression="is_partly_cloudy_day">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_partly_cloudy_day"/>
@@ -465,6 +452,11 @@
                         <Compare expression="is_windy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_atmospheric_condition">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_thunder">
@@ -482,6 +474,11 @@
                             <Image resource="ic_tropical_cyclone"/>
                           </PartImage>
                         </Compare>
+                        <Default>
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_unknown"/>
+                          </PartImage>
+                        </Default>
                       </Condition>
                       <PartText height="20" width="60" x="0" y="60">
                         <Text>
@@ -531,10 +528,8 @@
                     <Compare expression="is_weather_forecast_3_available">
                       <Condition>
                         <Expressions>
-                          <Expression name="is_unknown">[WEATHER.HOURS.3.CONDITION] == 0</Expression>
                           <Expression name="is_clear">[WEATHER.HOURS.3.CONDITION] == 1</Expression>
                           <Expression name="is_cloudy">[WEATHER.HOURS.3.CONDITION] == 2</Expression>
-                          <Expression name="is_mist">[WEATHER.HOURS.3.CONDITION] == 13</Expression>
                           <Expression name="is_heavy_rain">[WEATHER.HOURS.3.CONDITION] == 4</Expression>
                           <Expression name="is_heavy_snow">[WEATHER.HOURS.3.CONDITION] == 5</Expression>
                           <Expression name="is_rain">([WEATHER.HOURS.3.CONDITION] == 6) || ([WEATHER.HOURS.3.CONDITION] == 12)</Expression>
@@ -542,6 +537,7 @@
                           <Expression name="is_sunny">[WEATHER.HOURS.3.CONDITION] == 8</Expression>
                           <Expression name="is_thunderstorm">[WEATHER.HOURS.3.CONDITION] == 9</Expression>
                           <Expression name="is_sleet">[WEATHER.HOURS.3.CONDITION] == 10</Expression>
+                          <Expression name="is_mist">[WEATHER.HOURS.3.CONDITION] == 13</Expression>
                           <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.3.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.3.IS_DAY] == true)</Expression>
                           <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.3.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.3.IS_DAY] == true)</Expression>
                           <Expression name="is_windy">[WEATHER.HOURS.3.CONDITION] == 15</Expression>
@@ -551,11 +547,6 @@
                           <Expression name="is_tornado">[WEATHER.HOURS.3.CONDITION] == 21</Expression>
                           <Expression name="is_tropical_cyclone">[WEATHER.HOURS.3.CONDITION] == 22</Expression>
                         </Expressions>
-                        <Compare expression="is_unknown">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_unknown"/>
-                          </PartImage>
-                        </Compare>
                         <Compare expression="is_clear">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_clear"/>
@@ -564,16 +555,6 @@
                         <Compare expression="is_cloudy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_cloudy"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_mist">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_mist"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_atmospheric_condition">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_heavy_rain">
@@ -611,6 +592,11 @@
                             <Image resource="ic_sleet"/>
                           </PartImage>
                         </Compare>
+                        <Compare expression="is_mist">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_mist"/>
+                          </PartImage>
+                        </Compare>
                         <Compare expression="is_partly_cloudy_day">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_partly_cloudy_day"/>
@@ -624,6 +610,11 @@
                         <Compare expression="is_windy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_atmospheric_condition">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_thunder">
@@ -641,6 +632,11 @@
                             <Image resource="ic_tropical_cyclone"/>
                           </PartImage>
                         </Compare>
+                        <Default>
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_unknown"/>
+                          </PartImage>
+                        </Default>
                       </Condition>
                       <PartText height="20" width="60" x="0" y="60">
                         <Text>
@@ -690,10 +686,8 @@
                     <Compare expression="is_weather_forecast_4_available">
                       <Condition>
                         <Expressions>
-                          <Expression name="is_unknown">[WEATHER.HOURS.4.CONDITION] == 0</Expression>
                           <Expression name="is_clear">[WEATHER.HOURS.4.CONDITION] == 1</Expression>
                           <Expression name="is_cloudy">[WEATHER.HOURS.4.CONDITION] == 2</Expression>
-                          <Expression name="is_mist">[WEATHER.HOURS.4.CONDITION] == 13</Expression>
                           <Expression name="is_heavy_rain">[WEATHER.HOURS.4.CONDITION] == 4</Expression>
                           <Expression name="is_heavy_snow">[WEATHER.HOURS.4.CONDITION] == 5</Expression>
                           <Expression name="is_rain">([WEATHER.HOURS.4.CONDITION] == 6) || ([WEATHER.HOURS.4.CONDITION] == 12)</Expression>
@@ -701,6 +695,7 @@
                           <Expression name="is_sunny">[WEATHER.HOURS.4.CONDITION] == 8</Expression>
                           <Expression name="is_thunderstorm">[WEATHER.HOURS.4.CONDITION] == 9</Expression>
                           <Expression name="is_sleet">[WEATHER.HOURS.4.CONDITION] == 10</Expression>
+                          <Expression name="is_mist">[WEATHER.HOURS.4.CONDITION] == 13</Expression>
                           <Expression name="is_partly_cloudy_day">([WEATHER.HOURS.4.CONDITION] == 14) &amp;&amp; ([WEATHER.HOURS.4.IS_DAY] == true)</Expression>
                           <Expression name="is_partly_cloudy_night">([WEATHER.HOURS.4.CONDITION] == 14) &amp;&amp; (![WEATHER.HOURS.4.IS_DAY] == true)</Expression>
                           <Expression name="is_windy">[WEATHER.HOURS.4.CONDITION] == 15</Expression>
@@ -710,11 +705,6 @@
                           <Expression name="is_tornado">[WEATHER.HOURS.4.CONDITION] == 21</Expression>
                           <Expression name="is_tropical_cyclone">[WEATHER.HOURS.4.CONDITION] == 22</Expression>
                         </Expressions>
-                        <Compare expression="is_unknown">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_unknown"/>
-                          </PartImage>
-                        </Compare>
                         <Compare expression="is_clear">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_clear"/>
@@ -723,16 +713,6 @@
                         <Compare expression="is_cloudy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_cloudy"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_mist">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_mist"/>
-                          </PartImage>
-                        </Compare>
-                        <Compare expression="is_atmospheric_condition">
-                          <PartImage height="60" width="60" x="0" y="0">
-                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_heavy_rain">
@@ -770,6 +750,11 @@
                             <Image resource="ic_sleet"/>
                           </PartImage>
                         </Compare>
+                        <Compare expression="is_mist">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_mist"/>
+                          </PartImage>
+                        </Compare>
                         <Compare expression="is_partly_cloudy_day">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_partly_cloudy_day"/>
@@ -783,6 +768,11 @@
                         <Compare expression="is_windy">
                           <PartImage height="60" width="60" x="0" y="0">
                             <Image resource="ic_windy"/>
+                          </PartImage>
+                        </Compare>
+                        <Compare expression="is_atmospheric_condition">
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_atmospheric_condition"/>
                           </PartImage>
                         </Compare>
                         <Compare expression="is_thunder">
@@ -800,6 +790,11 @@
                             <Image resource="ic_tropical_cyclone"/>
                           </PartImage>
                         </Compare>
+                        <Default>
+                          <PartImage height="60" width="60" x="0" y="0">
+                            <Image resource="ic_unknown"/>
+                          </PartImage>
+                        </Default>
                       </Condition>
                       <PartText height="20" width="60" x="0" y="60">
                         <Text>
@@ -865,10 +860,8 @@
                         </PartText>
                         <Condition>
                           <Expressions>
-                            <Expression name="is_unknown">[WEATHER.DAYS.1.CONDITION_DAY] == 0</Expression>
                             <Expression name="is_clear">[WEATHER.DAYS.1.CONDITION_DAY] == 1</Expression>
                             <Expression name="is_cloudy">[WEATHER.DAYS.1.CONDITION_DAY] == 2</Expression>
-                            <Expression name="is_mist">[WEATHER.DAYS.1.CONDITION_DAY] == 13</Expression>
                             <Expression name="is_heavy_rain">[WEATHER.DAYS.1.CONDITION_DAY] == 4</Expression>
                             <Expression name="is_heavy_snow">[WEATHER.DAYS.1.CONDITION_DAY] == 5</Expression>
                             <Expression name="is_rain">([WEATHER.DAYS.1.CONDITION_DAY] == 6) || ([WEATHER.DAYS.1.CONDITION_DAY] == 12)</Expression>
@@ -876,6 +869,7 @@
                             <Expression name="is_sunny">[WEATHER.DAYS.1.CONDITION_DAY] == 8</Expression>
                             <Expression name="is_thunderstorm">[WEATHER.DAYS.1.CONDITION_DAY] == 9</Expression>
                             <Expression name="is_sleet">[WEATHER.DAYS.1.CONDITION_DAY] == 10</Expression>
+                            <Expression name="is_mist">[WEATHER.DAYS.1.CONDITION_DAY] == 13</Expression>
                             <Expression name="is_partly_cloudy_day">([WEATHER.DAYS.1.CONDITION_DAY] == 14) &amp;&amp; (true)</Expression>
                             <Expression name="is_partly_cloudy_night">([WEATHER.DAYS.1.CONDITION_DAY] == 14) &amp;&amp; (!true)</Expression>
                             <Expression name="is_windy">[WEATHER.DAYS.1.CONDITION_DAY] == 15</Expression>
@@ -885,11 +879,6 @@
                             <Expression name="is_tornado">[WEATHER.DAYS.1.CONDITION_DAY] == 21</Expression>
                             <Expression name="is_tropical_cyclone">[WEATHER.DAYS.1.CONDITION_DAY] == 22</Expression>
                           </Expressions>
-                          <Compare expression="is_unknown">
-                            <PartImage height="30" width="30" x="25" y="0">
-                              <Image resource="ic_unknown"/>
-                            </PartImage>
-                          </Compare>
                           <Compare expression="is_clear">
                             <PartImage height="30" width="30" x="25" y="0">
                               <Image resource="ic_clear"/>
@@ -898,16 +887,6 @@
                           <Compare expression="is_cloudy">
                             <PartImage height="30" width="30" x="25" y="0">
                               <Image resource="ic_cloudy"/>
-                            </PartImage>
-                          </Compare>
-                          <Compare expression="is_mist">
-                            <PartImage height="30" width="30" x="25" y="0">
-                              <Image resource="ic_mist"/>
-                            </PartImage>
-                          </Compare>
-                          <Compare expression="is_atmospheric_condition">
-                            <PartImage height="30" width="30" x="25" y="0">
-                              <Image resource="ic_atmospheric_condition"/>
                             </PartImage>
                           </Compare>
                           <Compare expression="is_heavy_rain">
@@ -945,6 +924,11 @@
                               <Image resource="ic_sleet"/>
                             </PartImage>
                           </Compare>
+                          <Compare expression="is_mist">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_mist"/>
+                            </PartImage>
+                          </Compare>
                           <Compare expression="is_partly_cloudy_day">
                             <PartImage height="30" width="30" x="25" y="0">
                               <Image resource="ic_partly_cloudy_day"/>
@@ -958,6 +942,11 @@
                           <Compare expression="is_windy">
                             <PartImage height="30" width="30" x="25" y="0">
                               <Image resource="ic_windy"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_atmospheric_condition">
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_atmospheric_condition"/>
                             </PartImage>
                           </Compare>
                           <Compare expression="is_thunder">
@@ -975,6 +964,11 @@
                               <Image resource="ic_tropical_cyclone"/>
                             </PartImage>
                           </Compare>
+                          <Default>
+                            <PartImage height="30" width="30" x="25" y="0">
+                              <Image resource="ic_unknown"/>
+                            </PartImage>
+                          </Default>
                         </Condition>
                         <PartText height="30" width="70" x="60" y="0">
                           <Text>
@@ -988,10 +982,8 @@
                         </PartText>
                         <Condition>
                           <Expressions>
-                            <Expression name="is_unknown">[WEATHER.DAYS.1.CONDITION_NIGHT] == 0</Expression>
                             <Expression name="is_clear">[WEATHER.DAYS.1.CONDITION_NIGHT] == 1</Expression>
                             <Expression name="is_cloudy">[WEATHER.DAYS.1.CONDITION_NIGHT] == 2</Expression>
-                            <Expression name="is_mist">[WEATHER.DAYS.1.CONDITION_NIGHT] == 13</Expression>
                             <Expression name="is_heavy_rain">[WEATHER.DAYS.1.CONDITION_NIGHT] == 4</Expression>
                             <Expression name="is_heavy_snow">[WEATHER.DAYS.1.CONDITION_NIGHT] == 5</Expression>
                             <Expression name="is_rain">([WEATHER.DAYS.1.CONDITION_NIGHT] == 6) || ([WEATHER.DAYS.1.CONDITION_NIGHT] == 12)</Expression>
@@ -999,6 +991,7 @@
                             <Expression name="is_sunny">[WEATHER.DAYS.1.CONDITION_NIGHT] == 8</Expression>
                             <Expression name="is_thunderstorm">[WEATHER.DAYS.1.CONDITION_NIGHT] == 9</Expression>
                             <Expression name="is_sleet">[WEATHER.DAYS.1.CONDITION_NIGHT] == 10</Expression>
+                            <Expression name="is_mist">[WEATHER.DAYS.1.CONDITION_NIGHT] == 13</Expression>
                             <Expression name="is_partly_cloudy_day">([WEATHER.DAYS.1.CONDITION_NIGHT] == 14) &amp;&amp; (false)</Expression>
                             <Expression name="is_partly_cloudy_night">([WEATHER.DAYS.1.CONDITION_NIGHT] == 14) &amp;&amp; (!false)</Expression>
                             <Expression name="is_windy">[WEATHER.DAYS.1.CONDITION_NIGHT] == 15</Expression>
@@ -1008,11 +1001,6 @@
                             <Expression name="is_tornado">[WEATHER.DAYS.1.CONDITION_NIGHT] == 21</Expression>
                             <Expression name="is_tropical_cyclone">[WEATHER.DAYS.1.CONDITION_NIGHT] == 22</Expression>
                           </Expressions>
-                          <Compare expression="is_unknown">
-                            <PartImage height="30" width="30" x="135" y="0">
-                              <Image resource="ic_unknown"/>
-                            </PartImage>
-                          </Compare>
                           <Compare expression="is_clear">
                             <PartImage height="30" width="30" x="135" y="0">
                               <Image resource="ic_clear"/>
@@ -1021,16 +1009,6 @@
                           <Compare expression="is_cloudy">
                             <PartImage height="30" width="30" x="135" y="0">
                               <Image resource="ic_cloudy"/>
-                            </PartImage>
-                          </Compare>
-                          <Compare expression="is_mist">
-                            <PartImage height="30" width="30" x="135" y="0">
-                              <Image resource="ic_mist"/>
-                            </PartImage>
-                          </Compare>
-                          <Compare expression="is_atmospheric_condition">
-                            <PartImage height="30" width="30" x="135" y="0">
-                              <Image resource="ic_atmospheric_condition"/>
                             </PartImage>
                           </Compare>
                           <Compare expression="is_heavy_rain">
@@ -1068,6 +1046,11 @@
                               <Image resource="ic_sleet"/>
                             </PartImage>
                           </Compare>
+                          <Compare expression="is_mist">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_mist"/>
+                            </PartImage>
+                          </Compare>
                           <Compare expression="is_partly_cloudy_day">
                             <PartImage height="30" width="30" x="135" y="0">
                               <Image resource="ic_partly_cloudy_day"/>
@@ -1081,6 +1064,11 @@
                           <Compare expression="is_windy">
                             <PartImage height="30" width="30" x="135" y="0">
                               <Image resource="ic_windy"/>
+                            </PartImage>
+                          </Compare>
+                          <Compare expression="is_atmospheric_condition">
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_atmospheric_condition"/>
                             </PartImage>
                           </Compare>
                           <Compare expression="is_thunder">
@@ -1098,6 +1086,11 @@
                               <Image resource="ic_tropical_cyclone"/>
                             </PartImage>
                           </Compare>
+                          <Default>
+                            <PartImage height="30" width="30" x="135" y="0">
+                              <Image resource="ic_unknown"/>
+                            </PartImage>
+                          </Default>
                         </Condition>
                         <PartText height="30" width="70" x="170" y="0">
                           <Text>
