@@ -60,8 +60,8 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 playservices-wearable = "com.google.android.gms:play-services-wearable:18.2.0"
-test-espresso-core = "androidx.test.espresso:espresso-core:3.5.1"
-test-ext-junit = "androidx.test.ext:junit:1.1.5"
+test-espresso-core = "androidx.test.espresso:espresso-core:3.6.0"
+test-ext-junit = "androidx.test.ext:junit:1.2.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
