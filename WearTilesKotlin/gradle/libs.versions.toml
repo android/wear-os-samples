@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "8.5.0"
-androidx-wear-tiles = "1.4.0-alpha04"
+androidx-wear-tiles = "1.4.0-alpha05"
 androidx-wear-tooling-preview = "1.0.0"
 compose = "1.6.8"
 compose-compiler = "1.5.14"
