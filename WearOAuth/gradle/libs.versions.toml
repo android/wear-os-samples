@@ -2,7 +2,7 @@
 android-gradle-plugin = "8.5.0"
 androidx-compose-bom = "2024.06.00"
 androidx-activity = "1.9.0"
-androidx-lifecycle = "2.8.2"
+androidx-lifecycle = "2.8.3"
 androidx-test = "1.5.2"
 androidx-wear-compose = "1.4.0-beta03"
 compose = "1.7.0-beta04"
