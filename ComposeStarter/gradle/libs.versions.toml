@@ -9,7 +9,7 @@ horologist = "0.5.27"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.24"
 robolectric = "4.12.2"
-roborazzi = "1.20.0"
+roborazzi = "1.21.0"
 ui-test-junit4 = "1.6.8"
 ui-test-manifest = "1.6.8"
 
