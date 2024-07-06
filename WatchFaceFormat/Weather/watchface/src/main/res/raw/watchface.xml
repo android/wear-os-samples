@@ -518,7 +518,6 @@
                       </Group>
                     </Group>
                   </Compare>
-                  <Default/>
                 </Condition>
                 <Condition>
                   <Expressions>
