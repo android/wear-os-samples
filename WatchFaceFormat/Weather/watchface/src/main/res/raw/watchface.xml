@@ -132,7 +132,7 @@
                         <Text>
                           <BitmapFont family="weather_icons_day" size="47">
                             <Template><![CDATA[%s]]>
-                              <Parameter expression="[WEATHER.CONDITION] &lt;= 15 : [WEATHER.CONDITION] : 0"/>
+                              <Parameter expression="[WEATHER.CONDITION] &lt;= 15 ? [WEATHER.CONDITION] : 0"/>
                             </Template>
                           </BitmapFont>
                         </Text>
@@ -143,7 +143,7 @@
                         <Text>
                           <BitmapFont family="weather_icons_night" size="47">
                             <Template><![CDATA[%s]]>
-                              <Parameter expression="[WEATHER.CONDITION] &lt;= 15 : [WEATHER.CONDITION] : 0"/>
+                              <Parameter expression="[WEATHER.CONDITION] &lt;= 15 ? [WEATHER.CONDITION] : 0"/>
                             </Template>
                           </BitmapFont>
                         </Text>
@@ -184,7 +184,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_day" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.1.CONDITION] &lt;= 15 : [WEATHER.HOURS.1.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.1.CONDITION] &lt;= 15 ? [WEATHER.HOURS.1.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -195,7 +195,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_night" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.1.CONDITION] &lt;= 15 : [WEATHER.HOURS.1.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.1.CONDITION] &lt;= 15 ? [WEATHER.HOURS.1.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -257,7 +257,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_day" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.2.CONDITION] &lt;= 15 : [WEATHER.HOURS.2.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.2.CONDITION] &lt;= 15 ? [WEATHER.HOURS.2.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -268,7 +268,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_night" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.2.CONDITION] &lt;= 15 : [WEATHER.HOURS.2.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.2.CONDITION] &lt;= 15 ? [WEATHER.HOURS.2.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -330,7 +330,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_day" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.3.CONDITION] &lt;= 15 : [WEATHER.HOURS.3.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.3.CONDITION] &lt;= 15 ? [WEATHER.HOURS.3.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -341,7 +341,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_night" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.3.CONDITION] &lt;= 15 : [WEATHER.HOURS.3.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.3.CONDITION] &lt;= 15 ? [WEATHER.HOURS.3.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -403,7 +403,7 @@
                             <Text>
                               <BitmapFont family="weather_icons_day" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.4.CONDITION] &lt;= 15 : [WEATHER.HOURS.4.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.4.CONDITION] &lt;= 15 ? [WEATHER.HOURS.4.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -413,7 +413,7 @@
                           <PartText name="hours_4_condition_icon" height="60" width="60" x="0" y="0"><Text>
                               <BitmapFont family="weather_icons_night" size="60">
                                 <Template><![CDATA[%s]]>
-                                  <Parameter expression="[WEATHER.HOURS.4.CONDITION] &lt;= 15 : [WEATHER.HOURS.4.CONDITION] : 0"/>
+                                  <Parameter expression="[WEATHER.HOURS.4.CONDITION] &lt;= 15 ? [WEATHER.HOURS.4.CONDITION] : 0"/>
                                 </Template>
                               </BitmapFont>
                             </Text>
@@ -486,7 +486,7 @@
                           <Text>
                             <BitmapFont family="weather_icons_day" size="30">
                               <Template><![CDATA[%s]]>
-                                <Parameter expression="[WEATHER.DAYS.1.CONDITION_DAY] &lt;= 15 : [WEATHER.DAYS.1.CONDITION_DAY] : 0"/>
+                                <Parameter expression="[WEATHER.DAYS.1.CONDITION_DAY] &lt;= 15 ? [WEATHER.DAYS.1.CONDITION_DAY] : 0"/>
                               </Template>
                             </BitmapFont>
                           </Text>
@@ -505,7 +505,7 @@
                           <Text>
                             <BitmapFont family="weather_icons_night" size="30">
                               <Template><![CDATA[%s]]>
-                                <Parameter expression="[WEATHER.DAYS.1.CONDITION_NIGHT] &lt;= 15 : [WEATHER.DAYS.1.CONDITION_NIGHT] : 0"/>
+                                <Parameter expression="[WEATHER.DAYS.1.CONDITION_NIGHT] &lt;= 15 ? [WEATHER.DAYS.1.CONDITION_NIGHT] : 0"/>
                               </Template>
                             </BitmapFont>
                           </Text>
