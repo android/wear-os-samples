@@ -11,7 +11,7 @@
       <Character name="0" resource="ic_unknown" width="96" height="96" />
       <Character name="1" resource="ic_clear" width="96" height="96" />
       <Character name="2" resource="ic_cloudy" width="96" height="96" />
-      <Character name="3" resource="ic_atmospheric_condition" width="96" height="96" />
+      <Character name="3" resource="ic_fog" width="96" height="96" />
       <Character name="4" resource="ic_heavy_rain" width="96" height="96" />
       <Character name="5" resource="ic_heavy_snow" width="96" height="96" />
       <Character name="6" resource="ic_rain" width="96" height="96" />
@@ -24,20 +24,13 @@
       <Word name="13" resource="ic_mist" width="96" height="96" />
       <Word name="14" resource="ic_partly_cloudy_day" width="96" height="96" />
       <Word name="15" resource="ic_windy" width="96" height="96" />
-      <Word name="16" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="17" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="18" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="19" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="20" resource="ic_thunder" width="96" height="96" />
-      <Word name="21" resource="ic_tornado" width="96" height="96" />
-      <Word name="22" resource="ic_tropical_cyclone" width="96" height="96" />
     </BitmapFont>
     <!-- Icon set for night, [WEATHER.IS_DAY] == 0 -->
     <BitmapFont name="weather_icons_night">
       <Character name="0" resource="ic_unknown" width="96" height="96" />
       <Character name="1" resource="ic_clear" width="96" height="96" />
       <Character name="2" resource="ic_cloudy" width="96" height="96" />
-      <Character name="3" resource="ic_atmospheric_condition" width="96" height="96" />
+      <Character name="3" resource="ic_fog" width="96" height="96" />
       <Character name="4" resource="ic_heavy_rain" width="96" height="96" />
       <Character name="5" resource="ic_heavy_snow" width="96" height="96" />
       <Character name="6" resource="ic_rain" width="96" height="96" />
@@ -50,13 +43,6 @@
       <Word name="13" resource="ic_mist" width="96" height="96" />
       <Word name="14" resource="ic_partly_cloudy_night" width="96" height="96" />
       <Word name="15" resource="ic_windy" width="96" height="96" />
-      <Word name="16" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="17" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="18" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="19" resource="ic_atmospheric_condition" width="96" height="96" />
-      <Word name="20" resource="ic_thunder" width="96" height="96" />
-      <Word name="21" resource="ic_tornado" width="96" height="96" />
-      <Word name="22" resource="ic_tropical_cyclone" width="96" height="96" />
     </BitmapFont>
   </BitmapFonts>
   <Scene>
