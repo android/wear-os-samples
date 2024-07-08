@@ -5,12 +5,15 @@
       Define set of icons to be used as bitmap fonts.
       Each character uses 96x96 pixels which is
       resource dimensions and represent weather CONDITION
+
+      This enables us to use the [WEATHER.CONDITION] enum value as an index into
+      a BitmapFont definition, for a convenient way of showing the appropriate
+      weather icon.
+
+      The [WEATHER.CONDITION] value can be used in other ways too such as in
+      Condition expressions, see:
+      https://developer.android.com/training/wearables/wff/common/condition
      -->
-    <!--
-      When using CONDITION, it is a requirement that all
-      potential values are correctly handled. See:
-      https://developer.android.com/docs/quality-guidelines/wear-app-quality
-    -->
     <!-- Icon set for day, [WEATHER.IS_DAY] == 1 -->
     <BitmapFont name="weather_icons_day">
       <Character name="0" resource="ic_unknown" width="96" height="96" />
