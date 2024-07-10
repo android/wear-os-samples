@@ -9,9 +9,8 @@ Demonstrates watch faces using the androidX libraries (Kotlin).
 
 Introduction
 ------------
-The AndroidX watch face libraries allow you to develop a watch face service in Kotlin.
-
-
+The AndroidX watch face libraries allow you to develop a watch face service in Kotlin. However,
+[WFF][1] is strongly recommended in preference to this approach.
 
 Steps to build in Android Studio
 --------------------------------
