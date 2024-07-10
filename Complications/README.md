@@ -5,6 +5,11 @@ Android Complications Sample
 Complication Test Suite is a set of complication data sources that provide dummy data and it can be
 used to test how different types of complications render on a watch face.
 
+> [!IMPORTANT]  
+> As of July 10, 2024, watch faces must use the [Watch Face Format][4] ([sample][6]) in order to be installed on new watches that launch with Wear OS 5 pre-installed. Learn more about the user-facing changes in this [Help Center][5] article.
+>
+> Additionally, starting in early 2025 (specific date to be announced during Q4 2024), all new watch faces published on Google Play must use the Watch Face Format.
+
 Introduction
 ------------
 
@@ -21,10 +26,6 @@ selecting a type from your watch face configuration Activity, you can tap on the
 see more options.
 
 The Wear app demonstrates the use of [ComplicationData][1], [ComplicationDataSourceService][2], and [ComplicationText][3].
-
-[1]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationData
-[2]: https://developer.android.com/reference/kotlin/androidx/wear/complications/datasource/ComplicationDataSourceService
-[3]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationText
 
 Pre-requisites
 --------------
@@ -52,3 +53,10 @@ https://github.com/android/wear-os-samples/issues
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
+
+[1]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationData
+[2]: https://developer.android.com/reference/kotlin/androidx/wear/complications/datasource/ComplicationDataSourceService
+[3]: https://developer.android.com/reference/kotlin/androidx/wear/complications/data/ComplicationText
+[4]: https://developer.android.com/training/wearables/wff
+[5]: https://support.google.com/wearos/thread/284572445
+[6]: https://github.com/android/wear-os-samples/tree/main/WatchFaceFormat
