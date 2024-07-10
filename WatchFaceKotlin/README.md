@@ -50,5 +50,5 @@ Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
 
 [1]: https://developer.android.com/training/wearables/wff
-[2]: https://support.google.com/wearos/thread/
+[2]: https://support.google.com/wearos/thread/284572445
 [3]: https://github.com/android/wear-os-samples/tree/main/WatchFaceFormat
