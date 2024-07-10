@@ -1,7 +1,11 @@
 WatchFace Sample (Kotlin)
 ===============================
-Demonstrates watch faces using the androidX libraries (Kotlin). **The newer [Watch Face Format][1]
-(WFF) is recommended in preference to using these libraries.**
+Demonstrates watch faces using the androidX libraries (Kotlin).
+
+> [!IMPORTANT]  
+> As of July 10, 2024, watch faces must use the [Watch Face Format][1] ([sample][3]) in order to be installed on new watches that launch with Wear OS 5 pre-installed. Learn more about the user-facing changes in this [Help Center][2] article.
+>
+> Additionally, starting in early 2025 (specific date to be announced during Q4 2024), all new watch faces published on Google Play must use the Watch Face Format.
 
 Introduction
 ------------
@@ -46,3 +50,5 @@ Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
 
 [1]: https://developer.android.com/training/wearables/wff
+[2]: https://support.google.com/wearos/thread/
+[3]: https://github.com/android/wear-os-samples/tree/main/WatchFaceFormat
