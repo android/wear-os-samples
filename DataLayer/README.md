@@ -29,10 +29,11 @@ val request = PutDataMapRequest.create(IMAGE_PATH).apply {
 ```
 This use case is successful if the watch is connected and has the Wear app 
 installed which is implemented by using [CapabilityClient][4].
+
 2. Send data from the phone to the watch and ackownledge via a message
-The phone app increments a counter and send it over a period of 5 seconds as a [DataItem] by using [DataClient][2].
+The phone app increments a counter and send it over a period of 5 seconds as a [DataItem][5] by using [DataClient][2].
 The Wear app receives the [DataItem][5] by implementing a [WearableListenerService][1] and acknowledge 
-by sending a [Message] via [MessageClient][3]
+by sending a message via [MessageClient][3]
 ```
 messageClient.sendMessage(
   nodeId,
