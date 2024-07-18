@@ -30,6 +30,7 @@ subprojects {
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
             target("**/*.kt")
+            val buildDir = layout.buildDirectory.get().asFile
             targetExclude("$buildDir/**/*.kt")
             targetExclude("bin/**/*.kt")
 
