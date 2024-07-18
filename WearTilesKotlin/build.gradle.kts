@@ -16,7 +16,7 @@
 
 buildscript {
     dependencies {
-        classpath libs.kotlin.gradle.plugin
+        classpath(libs.kotlin.gradle.plugin)
     }
 }
 
@@ -26,21 +26,21 @@ plugins {
 }
 
 subprojects {
-    apply plugin: "com.diffplug.spotless"
-    spotless {
+    apply(plugin = "com.diffplug.spotless")
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
-            target "**/*.kt"
+            target("**/*.kt")
             targetExclude("$buildDir/**/*.kt")
             targetExclude("bin/**/*.kt")
 
             ktlint(libs.versions.ktlint.get())
-            licenseHeaderFile rootProject.file("../spotless/copyright.kt")
+            licenseHeaderFile(rootProject.file("../spotless/copyright.kt"))
         }
         format("xml") {
-            target('**/*.xml')
-            targetExclude('**/build/**/*.xml')
+            target("**/*.xml")
+            targetExclude("**/build/**/*.xml")
             // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
-            licenseHeaderFile(rootProject.file('../spotless/copyright.xml'), '(<[^!?])')
+            licenseHeaderFile(rootProject.file("../spotless/copyright.xml"), "(<[^!?])")
         }
     }
 }
