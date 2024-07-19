@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.5.0"
+android-gradle-plugin = "8.5.1"
 androidx-compose-bom = "2024.06.00"
 androidx-activity = "1.9.0"
 androidx-lifecycle = "2.8.3"
@@ -13,15 +13,15 @@ ktlint = "0.50.0"
 compose-material3 = "1.0.0-alpha23"
 horologist = "0.6.12"
 robolectric = "4.13"
-roborazzi = "1.21.0"
+roborazzi = "1.23.0"
 ui-test-junit4 = "1.6.8"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.4"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.5.0"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.5.1"
 android-material = "com.google.android.material:material:1.12.0"
-android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.5.0"
+android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.5.1"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
@@ -30,7 +30,7 @@ androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-core-ktx = "androidx.core:core-ktx:1.13.1"
-androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.5.0"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.5.1"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.1.1"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.1"
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
