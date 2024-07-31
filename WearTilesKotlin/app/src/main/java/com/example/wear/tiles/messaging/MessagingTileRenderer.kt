@@ -41,7 +41,7 @@ class MessagingTileRenderer(context: Context) :
     override fun Resources.Builder.produceRequestedResources(
         resourceState: Map<Contact, Bitmap>,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
-        resourceIds: MutableList<String>
+        resourceIds: List<String>
     ) {
         // If `resourceIds` is empty, it means all resources are being requested so we should add
         // the Search image resource in both of these cases.
