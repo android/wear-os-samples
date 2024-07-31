@@ -154,9 +154,7 @@ fun ListScreen() {
          * composable.
          */
         ScalingLazyColumn(
-            columnState = columnState,
-            modifier = Modifier
-                .fillMaxSize()
+            columnState = columnState
         ) {
             item {
                 ResponsiveListHeader(contentPadding = firstItemPadding()) {
