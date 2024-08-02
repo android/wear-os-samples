@@ -16,8 +16,10 @@
 package com.example.wear.tiles.messaging
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.ModifiersBuilders
+import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.material.Button
 import androidx.wear.protolayout.material.ButtonColors
@@ -32,7 +34,6 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.golden.resources
 import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 /**
  * Layout definition for the Messaging Tile.
@@ -57,7 +58,8 @@ internal fun messagingTileLayout(
             }
             .addButtonContent(searchLayout(context, emptyClickable))
             .build()
-    ).setPrimaryChipContent(
+    )
+    .setPrimaryChipContent(
         CompactChip.Builder(
             context,
             context.getString(R.string.tile_messaging_create_new),
@@ -104,15 +106,15 @@ private fun messagingTilePreview(context: Context): TilePreviewData {
         onTileResourceRequest = resources {
             addIdToImageMapping(
                 state.contacts[1].imageResourceId(),
-                drawableResToImageResource(R.drawable.ali)
+                R.drawable.ali
             )
             addIdToImageMapping(
                 state.contacts[2].imageResourceId(),
-                drawableResToImageResource(R.drawable.taylor)
+                R.drawable.taylor
             )
             addIdToImageMapping(
                 MessagingTileRenderer.ID_IC_SEARCH,
-                drawableResToImageResource(R.drawable.ic_search_24)
+                R.drawable.ic_search_24
             )
         },
         onTileRequest = { request ->
@@ -147,7 +149,7 @@ private fun contactWithImagePreview(context: Context): TilePreviewData {
         onTileResourceRequest = {
             Resources.Builder().addIdToImageMapping(
                 "${MessagingTileRenderer.ID_CONTACT_PREFIX}${contact.id}",
-                drawableResToImageResource(R.drawable.ali)
+                R.drawable.ali
             ).build()
         },
         onTileRequest = {
@@ -162,7 +164,7 @@ private fun searchButtonPreview(context: Context) = TilePreviewData(
     onTileResourceRequest = {
         Resources.Builder().addIdToImageMapping(
             MessagingTileRenderer.ID_IC_SEARCH,
-            drawableResToImageResource(R.drawable.ic_search_24)
+            R.drawable.ic_search_24
         ).build()
     },
     onTileRequest = {
@@ -170,3 +172,16 @@ private fun searchButtonPreview(context: Context) = TilePreviewData(
             searchLayout(context, emptyClickable)
         ).build()
     })
+
+fun Resources.Builder.addIdToImageMapping(
+    id: String,
+    @DrawableRes resId: Int
+): Resources.Builder = addIdToImageMapping(
+    id, ResourceBuilders.ImageResource.Builder()
+        .setAndroidResourceByResId(
+            ResourceBuilders.AndroidImageResourceByResId.Builder()
+                .setResourceId(resId)
+                .build()
+        )
+        .build()
+)
