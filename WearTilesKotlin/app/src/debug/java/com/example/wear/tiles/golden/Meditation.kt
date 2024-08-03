@@ -32,6 +32,13 @@ import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.R
+import com.example.wear.tiles.tools.emptyClickable
+import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 object Meditation {
     const val CHIP_1_ICON_ID = "meditation_1"
@@ -40,10 +47,22 @@ object Meditation {
     fun chipsLayout(
         context: Context,
         deviceParameters: DeviceParameters,
+        numOfLeftTasks: Int,
         session1: Session,
         session2: Session,
         browseClickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
+        .apply {
+            if (deviceParameters.screenWidthDp > 225) {
+                setPrimaryLabelTextContent(
+                    Text.Builder(context, "$numOfLeftTasks mindful tasks left")
+                        .setTypography(Typography.TYPOGRAPHY_BODY2)
+                        .setColor(ColorBuilders.argb(GoldenTilesColors.Pink))
+                        .build()
+                )
+            }
+        }
         .setContent(
             Column.Builder()
                 // See the comment on `setWidth` below in `sessionChip()` too. The default width for
@@ -146,4 +165,38 @@ object Meditation {
 
     data class Session(val label: String, val iconId: String, val clickable: Clickable)
     data class Timer(val minutes: Int, val clickable: Clickable)
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun MeditationChipsPreview(context: Context) = TilePreviewData(resources {
+    addIdToImageMapping(
+        Meditation.CHIP_1_ICON_ID,
+        drawableResToImageResource(R.drawable.ic_breathe_24)
+    )
+    addIdToImageMapping(
+        Meditation.CHIP_2_ICON_ID,
+        drawableResToImageResource(R.drawable.ic_mindfulness_24)
+    )
+}) {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Meditation.chipsLayout(
+            context,
+            it.deviceConfiguration,
+            numOfLeftTasks = 2,
+            session1 = Meditation.Session(
+                label = "Breathe",
+                iconId = Meditation.CHIP_1_ICON_ID,
+                clickable = emptyClickable
+            ),
+            session2 = Meditation.Session(
+                label = "Daily mindfulness",
+                iconId = Meditation.CHIP_2_ICON_ID,
+                clickable = emptyClickable
+            ),
+            browseClickable = emptyClickable
+        )
+    ).build()
 }

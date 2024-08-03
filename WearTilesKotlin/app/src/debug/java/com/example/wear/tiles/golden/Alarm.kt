@@ -25,6 +25,11 @@ import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.TitleChip
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.emptyClickable
 
 object Alarm {
 
@@ -36,6 +41,7 @@ object Alarm {
         alarmDays: String,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             Text.Builder(context, timeUntilAlarm)
                 .setColor(ColorBuilders.argb(GoldenTilesColors.White))
@@ -62,7 +68,25 @@ object Alarm {
             Text.Builder(context, alarmDays)
                 .setColor(ColorBuilders.argb(GoldenTilesColors.Yellow))
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                .setMaxLines(2)
                 .build()
         )
         .build()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun AlarmPreview(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Alarm.layout(
+            context,
+            it.deviceConfiguration,
+            timeUntilAlarm = "Less than 1 min",
+            alarmTime = "14:58",
+            alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
+            clickable = emptyClickable
+        )
+    ).build()
 }
