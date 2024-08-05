@@ -28,7 +28,10 @@ import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.tools.emptyClickable
+import java.time.Clock
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -38,6 +41,7 @@ object News {
         context: Context,
         deviceParameters: DeviceParameters,
         date: LocalDate,
+        clock: Clock = Clock.systemDefaultZone(),
         headline: String,
         newsVendor: String,
         clickable: Clickable
@@ -46,7 +50,7 @@ object News {
         .apply {
              if (deviceParameters.screenWidthDp > 225) {
                 setPrimaryLabelTextContent(
-                    Text.Builder(context, date.formatLocalDateTime())
+                    Text.Builder(context, date.formatLocalDateTime(today = LocalDate.now(clock)))
                         .setColor(ColorBuilders.argb(GoldenTilesColors.White))
                         .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                         .build()
@@ -86,13 +90,17 @@ fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
 fun NewsPreview(context: Context) = TilePreviewData {
+    val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
+    val clock = Clock.fixed(now, Clock.systemUTC().zone)
+
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         News.layout(
             context,
             it.deviceConfiguration,
             headline = "Millions still without power as new storm moves across US",
             newsVendor = "The New York Times",
-            date = LocalDate.now().minusDays(1),
+            date = LocalDate.now(clock).minusDays(1),
+            clock = clock,
             clickable = emptyClickable
         )
     ).build()

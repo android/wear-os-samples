@@ -23,7 +23,10 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
+import java.time.Clock
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 /**
  * b/238560022 misaligned because we can't add an offset, small preview is clipped
@@ -56,13 +59,17 @@ fun Weather(context: Context) = TilePreviewData(resources {
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
 fun News(context: Context) = TilePreviewData {
+    val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
+    val clock = Clock.fixed(now, Clock.systemUTC().zone)
+
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         News.layout(
             context,
             it.deviceConfiguration,
             headline = "Millions still without power as new storm moves across US",
             newsVendor = "The New York Times",
-            date = LocalDate.now().minusDays(1),
+            date = LocalDate.now(clock).minusDays(1),
+            clock = clock,
             clickable = emptyClickable
         )
     ).build()
