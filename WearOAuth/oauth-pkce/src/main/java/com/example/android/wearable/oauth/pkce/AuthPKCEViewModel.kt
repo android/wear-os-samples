@@ -16,10 +16,10 @@
 package com.example.android.wearable.oauth.pkce
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.wear.phone.interactions.authentication.CodeChallenge
 import androidx.wear.phone.interactions.authentication.CodeVerifier
@@ -32,13 +32,24 @@ import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 private const val TAG = "WearOAuthViewModel"
 
 // TODO Add your client id & secret here (for dev purposes only).
+// DO NOT MERGE
 private const val CLIENT_ID = ""
 private const val CLIENT_SECRET = ""
+
+data class ProofKeyCodeExchangeState(
+    // Status to show on the Wear OS display
+    val statusCode: Int = R.string.start_auth_flow,
+    // Dynamic content to show on the Wear OS display
+    val resultMessage: String = ""
+)
 
 /**
  * The viewModel that implements the OAuth flow. The method [startAuthFlow] implements the
@@ -46,15 +57,13 @@ private const val CLIENT_SECRET = ""
  * access token, and uses the token to retrieve the user's name.
  */
 class AuthPKCEViewModel(application: Application) : AndroidViewModel(application) {
-    // Status to show on the Wear OS display
-    val status: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    private val context = getApplication<Application>().applicationContext
+    private val _uiState = MutableStateFlow(ProofKeyCodeExchangeState())
+    val uiState: StateFlow<ProofKeyCodeExchangeState> = _uiState.asStateFlow()
 
-    // Dynamic content to show on the Wear OS display
-    val result: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-
-    private fun showStatus(statusString: Int, resultString: String = "") {
-        status.postValue(statusString)
-        result.postValue(resultString)
+    private fun showStatus(statusCode: Int = R.string.start_auth_flow, resultString: String = "") {
+        _uiState.value =
+            _uiState.value.copy(statusCode = statusCode, resultMessage = resultString)
     }
 
     /**
@@ -78,16 +87,16 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
                 .encodedPath("https://accounts.google.com/o/oauth2/v2/auth")
                 .appendQueryParameter("scope", "https://www.googleapis.com/auth/userinfo.profile")
                 .build()
-            val oauthRequest = OAuthRequest.Builder(getApplication())
+            val oauthRequest = OAuthRequest.Builder(context)
                 .setAuthProviderUrl(uri)
                 .setCodeChallenge(CodeChallenge(codeVerifier))
                 .setClientId(CLIENT_ID)
                 .build()
 
             // Step 1: Retrieve the OAuth code
-            showStatus(R.string.status_switch_to_phone)
-            val code = retrieveOAuthCode(oauthRequest).getOrElse {
-                showStatus(R.string.status_failed)
+            showStatus(statusCode = R.string.status_switch_to_phone)
+            val code = retrieveOAuthCode(oauthRequest, context).getOrElse {
+                showStatus(statusCode = R.string.status_failed)
                 return@launch
             }
 
@@ -114,13 +123,14 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
      * communication with the paired device, where the user can log in.
      */
     private suspend fun retrieveOAuthCode(
-        oauthRequest: OAuthRequest
+        oauthRequest: OAuthRequest,
+        context: Context
     ): Result<String> {
         Log.d(TAG, "Authorization requested. Request URL: ${oauthRequest.requestUrl}")
 
         // Wrap the callback-based request inside a coroutine wrapper
         return suspendCoroutine { c ->
-            RemoteAuthClient.create(getApplication()).sendAuthorizationRequest(
+            RemoteAuthClient.create(context).sendAuthorizationRequest(
                 request = oauthRequest,
                 executor = { command -> command?.run() },
                 clientCallback = object : RemoteAuthClient.Callback() {

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.google.android.horologist.compose.layout.ScreenScaffold
 
 /**
@@ -41,7 +42,6 @@ fun SpeakerRecordingScreen(
             playbackState = playbackState,
             isPermissionDenied = isPermissionDenied
         )
-
         ControlDashboard(
             controlDashboardUiState = controlDashboardUiState,
             onMicClicked = onMicClicked,
@@ -103,6 +103,7 @@ private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<
 )
 
 @WearPreviewDevices
+@WearPreviewFontScales
 @Composable
 fun SpeakerScreenPreview(
     @PreviewParameter(PlaybackStatePreviewProvider::class) playbackState: PlaybackState

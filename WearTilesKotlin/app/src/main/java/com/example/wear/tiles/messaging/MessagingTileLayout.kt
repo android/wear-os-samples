@@ -16,11 +16,9 @@
 package com.example.wear.tiles.messaging
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.ModifiersBuilders
+import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.material.Button
 import androidx.wear.protolayout.material.ButtonColors
 import androidx.wear.protolayout.material.ChipColors
@@ -33,29 +31,28 @@ import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.golden.resources
-import com.example.wear.tiles.tools.IconSizePreview
 import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.compose.tools.LayoutElementPreview
-import com.google.android.horologist.compose.tools.buildDeviceParameters
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 /**
  * Layout definition for the Messaging Tile.
  *
- * By separating the layout completely, we can pass fake data for the [MessageTilePreview] so it can
- * be rendered in Android Studio (use the "Split" or "Design" editor modes).
+ * By separating the layout completely, we can pass fake data for the [messagingTilePreview] so it
+ * can be rendered in Android Studio (use the "Split" or "Design" editor modes).
  */
 internal fun messagingTileLayout(
     state: MessagingTileState,
     context: Context,
     deviceParameters: DeviceParametersBuilders.DeviceParameters
 ) = PrimaryLayout.Builder(deviceParameters)
+    .setResponsiveContentInsetEnabled(true)
     .setContent(
         MultiButtonLayout.Builder()
             .apply {
-                // In a PrimaryLayout with a compact chip at the bottom, we can fit 5 buttons.
-                // We're only taking the first 4 contacts so that we can fit a Search button too.
-                state.contacts.take(4).forEach { contact ->
+                // A PrimaryLayout with a compact chip can fit 5 buttons (including search)
+                // on "small" displays, 6 on "large" displays.
+                val isLarge = deviceParameters.screenHeightDp >= 225
+                state.contacts.take(if (isLarge) 5 else 4).forEach { contact ->
                     addButtonContent(contactLayout(context, contact, emptyClickable))
                 }
             }
@@ -100,83 +97,77 @@ private fun searchLayout(
     .setButtonColors(ButtonColors.secondaryButtonColors(MessagingTileTheme.colors))
     .build()
 
-@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
-private fun MessageTilePreview(context: Context): TilePreviewData {
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+private fun messagingTilePreview(context: Context): TilePreviewData {
     val state = MessagingTileState(MessagingRepo.knownContacts)
-    return TilePreviewData(onTileResourceRequest = resources {
-        addIdToImageMapping(
-            state.contacts[1].imageResourceId(),
-            bitmapToImageResource(
-                BitmapFactory.decodeResource(context.resources, R.drawable.ali)
+    return TilePreviewData(
+        onTileResourceRequest = resources {
+            addIdToImageMapping(
+                state.contacts[1].imageResourceId(),
+                drawableResToImageResource(R.drawable.ali)
             )
-        )
-        addIdToImageMapping(
-            state.contacts[2].imageResourceId(),
-            bitmapToImageResource(
-                BitmapFactory.decodeResource(context.resources, R.drawable.taylor)
+            addIdToImageMapping(
+                state.contacts[2].imageResourceId(),
+                drawableResToImageResource(R.drawable.taylor)
             )
-        )
-        addIdToImageMapping(
-            MessagingTileRenderer.ID_IC_SEARCH,
-            drawableResToImageResource(R.drawable.ic_search_24)
-        )
-    }) {
+            addIdToImageMapping(
+                MessagingTileRenderer.ID_IC_SEARCH,
+                drawableResToImageResource(R.drawable.ic_search_24)
+            )
+        },
+        onTileRequest = { request ->
+            TilePreviewHelper.singleTimelineEntryTileBuilder(
+                messagingTileLayout(
+                    state,
+                    context,
+                    request.deviceConfiguration
+                )
+            ).build()
+        })
+}
+
+@Preview
+private fun contactPreview(context: Context) = TilePreviewData(
+    onTileRequest = {
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-            messagingTileLayout(
-                state,
-                context,
-                buildDeviceParameters(context.resources)
+            contactLayout(
+                context = context,
+                contact = MessagingRepo.knownContacts[0],
+                clickable = emptyClickable
             )
         ).build()
     }
-}
+)
 
-@IconSizePreview
-@Composable
-private fun ContactPreview() {
-    LayoutElementPreview(
-        contactLayout(
-            context = LocalContext.current,
-            contact = MessagingRepo.knownContacts[0],
-            clickable = emptyClickable
-        )
-    )
-}
-
-@IconSizePreview
-@Composable
-private fun ContactWithImagePreview() {
-    val context = LocalContext.current
+@Preview
+private fun contactWithImagePreview(context: Context): TilePreviewData {
     val contact = MessagingRepo.knownContacts[1]
-    val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ali)
 
-    val layout = contactLayout(
-        context = context,
-        contact = contact,
-        clickable = emptyClickable
-    )
-
-    LayoutElementPreview(layout) {
-        addIdToImageMapping(
-            "${MessagingTileRenderer.ID_CONTACT_PREFIX}${contact.id}",
-            bitmapToImageResource(bitmap)
-        )
-    }
+    return TilePreviewData(
+        onTileResourceRequest = {
+            Resources.Builder().addIdToImageMapping(
+                "${MessagingTileRenderer.ID_CONTACT_PREFIX}${contact.id}",
+                drawableResToImageResource(R.drawable.ali)
+            ).build()
+        },
+        onTileRequest = {
+            TilePreviewHelper.singleTimelineEntryTileBuilder(
+                contactLayout(context = context, contact = contact, clickable = emptyClickable)
+            ).build()
+        })
 }
 
-@IconSizePreview
-@Composable
-private fun SearchButtonPreview() {
-    LayoutElementPreview(
-        searchLayout(
-            context = LocalContext.current,
-            clickable = emptyClickable
-        )
-    ) {
-        addIdToImageMapping(
+@Preview
+private fun searchButtonPreview(context: Context) = TilePreviewData(
+    onTileResourceRequest = {
+        Resources.Builder().addIdToImageMapping(
             MessagingTileRenderer.ID_IC_SEARCH,
             drawableResToImageResource(R.drawable.ic_search_24)
-        )
-    }
-}
+        ).build()
+    },
+    onTileRequest = {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            searchLayout(context, emptyClickable)
+        ).build()
+    })

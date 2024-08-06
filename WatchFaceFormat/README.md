@@ -33,7 +33,7 @@ Face Format.
 ![Flavors](images/flavors.png)
 
 - `Weather` - Current, hourly and daily [weather data][weather] in the Watch
-Face Format. Weather is also a version 2 feature.
+Face Format. Weather is also a version 2 feature. This requires [minSdk 34](https://github.com/android/wear-os-samples/blob/main/WatchFaceFormat/Weather/watchface/build.gradle.kts#L26-L28), which is currently available via the [Wear OS 5 emulator][wear_5_emulator].
 
 ![Weather](images/weather.png)
 
@@ -86,3 +86,4 @@ For more guidance on building and signing release builds, see
 [signing]: https://developer.android.com/build/building-cmdline#gradle_signing
 [flavors]: https://developer.android.com/training/wearables/wff/user-configuration/flavor
 [weather]: https://developer.android.com/training/wearables/wff/weather
+[wear_5_emulator]: https://developer.android.com/training/wearables/versions/5

@@ -7,11 +7,9 @@ play the recorded voice, if the wearable device is connected to a speaker
 (bluetooth or built-in). If you want to learn how to play media content on Wear OS, refer to 
 [Horologist Media sample](https://google.github.io/horologist/media-sample/)
 
-This sample is also written entirely with Jetpack Compose, using [Wear-specific components provided
-by AndroidX](https://developer.android.com/jetpack/androidx/releases/wear-compose).
 If you are looking for a simpler example of Compose on [WearOS], refer to [ComposeStarter](../ComposeStarter).
 
-This sample doesn't have any companion phone app so you need to install this directly
+This sample doesn't have any companion phone app and you need to install this directly
 on your watch using `adb` or Android Studio.
 
 Pre-requisites

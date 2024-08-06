@@ -53,8 +53,7 @@ https://developer.android.com/training/wearables/get-started/creating
    2.0 client.
 
     - For the Device Authorization Grant sample you must follow the instructions
-      for ["TV and limited input"](https://developers.google.com/identity/protocols/oauth2/limited-input-device#creatingcred)
-      .
+      for ["TV and limited input"](https://developers.google.com/identity/protocols/oauth2/limited-input-device#creatingcred).
     - For the PKCE sample you follow the instructions
       for ["web application"](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred)
       . Make sure to register https://wear.googleapis.com/3p_auth/<package_name>

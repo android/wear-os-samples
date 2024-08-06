@@ -17,8 +17,11 @@
 <resources>
     <string name="start_auth_flow">Authenticate</string>
     <string name="oauth_device_authorization_grant">OAuth Device Authorization Grant</string>
+    <string name="oauth_device_authorization_default">Not authorized</string>
     <string name="status_switch_to_phone">Starting authorization… Switch to your phone to authenticate.</string>
     <string name="status_failed">Authorization failed</string>
     <string name="status_code">"Code: "</string>
     <string name="status_retrieved">User profile retrieved. Name:</string>
+    <string name="get_grant_from_phone">Get Grant from Phone</string>
+    <string name="oauth_device_auth_grant">OAuth Device Auth Grant</string>
 </resources>

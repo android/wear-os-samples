@@ -16,10 +16,26 @@
 package com.example.android.wearable.oauth.pkce
 
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ListHeader
+import androidx.wear.compose.material.Text
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 
 /**
  * Demonstrates the OAuth flow on Wear OS. This sample currently handles the callback from the
@@ -35,22 +51,80 @@ class AuthPKCEActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
-        val viewModel by viewModels<AuthPKCEViewModel>()
+        setContent { PKCEApp(pkceViewModel = viewModel()) }
+    }
+}
 
-        // Start the OAuth flow when the user presses the button
-        findViewById<View>(R.id.authenticateButton).setOnClickListener {
-            viewModel.startAuthFlow()
-        }
+@Composable
+fun PKCEApp(pkceViewModel: AuthPKCEViewModel) {
+    AppScaffold {
+        val uiState = pkceViewModel.uiState.collectAsState()
+        AuthenticateScreen(
+            uiState.value.statusCode,
+            uiState.value.resultMessage,
+            pkceViewModel::startAuthFlow
+        )
+    }
+}
 
-        // Show current status on the screen
-        viewModel.status.observe(this) { statusText ->
-            findViewById<TextView>(R.id.status_text_view).text = resources.getText(statusText)
-        }
-
-        // Show dynamic content on the screen
-        viewModel.result.observe(this) { resultText ->
-            findViewById<TextView>(R.id.result_text_view).text = resultText
+@OptIn(ExperimentalHorologistApi::class)
+@Composable
+fun AuthenticateScreen(
+    statusCode: Int,
+    resultMessage: String,
+    startAuthFlow: () -> Unit
+) {
+    val columnState = rememberResponsiveColumnState(
+        contentPadding = ScalingLazyColumnDefaults.padding(
+            first = ScalingLazyColumnDefaults.ItemType.Text,
+            last = ScalingLazyColumnDefaults.ItemType.Text
+        )
+    )
+    ScreenScaffold(scrollState = columnState) {
+        ScalingLazyColumn(columnState = columnState) {
+            item {
+                ListHeader {
+                    Text(
+                        stringResource(R.string.oauth_pkce),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            item {
+                Chip(
+                    onClick = { startAuthFlow() },
+                    label = {
+                        Text(
+                            text = stringResource(R.string.authenticate),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                )
+            }
+            item { Text(stringResource(id = statusCode)) }
+            item { Text(resultMessage) }
         }
     }
+}
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun AuthenticateScreenPreview() {
+    AuthenticateScreen(
+        statusCode = R.string.status_retrieved,
+        resultMessage = "Bobby Bonson",
+        startAuthFlow = {}
+    )
+}
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun AuthenticateScreenFailedPreview() {
+    AuthenticateScreen(
+        statusCode = R.string.status_failed,
+        resultMessage = "",
+        startAuthFlow = {}
+    )
 }

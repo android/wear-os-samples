@@ -16,17 +16,21 @@
 package com.example.android.wearable.oauth.devicegrant
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.example.android.wearable.oauth.util.doGetRequest
 import com.example.android.wearable.oauth.util.doPostRequest
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 private const val TAG = "AuthDeviceGrantViewModel"
@@ -35,35 +39,41 @@ private const val TAG = "AuthDeviceGrantViewModel"
 private const val CLIENT_ID = ""
 private const val CLIENT_SECRET = ""
 
+data class DeviceGrantState(
+    val statusCode: Int = R.string.oauth_device_authorization_default,
+    val resultMessage: String = ""
+)
+
 /**
+ *
  * The viewModel that implements the OAuth flow. The method [startAuthFlow] implements the
  * different steps of the flow. It first retrieves the URL that should be opened on the paired
  * device, then polls for the access token, and uses it to retrieve the user's name.
  */
 class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(application) {
-    // Status to show on the Wear OS display
-    val status: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    private val context = getApplication<Application>().applicationContext
+    private val _uiState = MutableStateFlow(DeviceGrantState())
 
-    // Dynamic content to show on the Wear OS display
-    val result: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    val uiState: StateFlow<DeviceGrantState> = _uiState.asStateFlow()
 
-    private fun showStatus(statusString: Int, resultString: String = "") {
-        status.postValue(statusString)
-        result.postValue(resultString)
+    private fun showStatus(statusString: Int = 0, resultString: String = "") {
+        _uiState.update {
+            DeviceGrantState(statusString, resultString)
+        }
     }
 
     fun startAuthFlow() {
         viewModelScope.launch {
             // Step 1: Retrieve the verification URI
-            showStatus(R.string.status_switch_to_phone)
+            showStatus(statusString = R.string.status_switch_to_phone)
             val verificationInfo = retrieveVerificationInfo().getOrElse {
-                showStatus(R.string.status_failed)
+                showStatus(statusString = R.string.status_failed)
                 return@launch
             }
 
             // Step 2: Show the pairing code & open the verification URI on the paired device
             showStatus(R.string.status_code, verificationInfo.userCode)
-            fireRemoteIntent(verificationInfo.verificationUri)
+            fireRemoteIntent(context, verificationInfo.verificationUri)
 
             // Step 3: Poll the Auth server for the token
             val token = retrieveToken(verificationInfo.deviceCode, verificationInfo.interval)
@@ -127,8 +137,8 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
      * use [Universal Links](https://developer.apple.com/ios/universal-links/) to intercept the
      * intent.
      */
-    private fun fireRemoteIntent(verificationUri: String) {
-        RemoteActivityHelper(getApplication()).startRemoteActivity(
+    private fun fireRemoteIntent(context: Context, verificationUri: String) {
+        RemoteActivityHelper(context).startRemoteActivity(
             Intent(Intent.ACTION_VIEW).apply {
                 addCategory(Intent.CATEGORY_BROWSABLE)
                 data = Uri.parse(verificationUri)
