@@ -26,6 +26,11 @@ import androidx.wear.protolayout.material.CompactChip
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.emptyClickable
 
 object Timer {
 
@@ -37,8 +42,10 @@ object Timer {
         timer3: Timer,
         timer4: Timer,
         timer5: Timer,
+        timer6: Timer,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setContent(
             MultiButtonLayout.Builder()
                 .addButtonContent(timerButton(context, timer1))
@@ -46,6 +53,11 @@ object Timer {
                 .addButtonContent(timerButton(context, timer3))
                 .addButtonContent(timerButton(context, timer4))
                 .addButtonContent(timerButton(context, timer5))
+                .apply {
+                    if (deviceParameters.screenWidthDp > 225) {
+                        addButtonContent(timerButton(context, timer6))
+                    }
+                }
                 .build()
         )
         .setPrimaryChipContent(
@@ -76,4 +88,24 @@ object Timer {
             .build()
 
     data class Timer(val minutes: String, val clickable: Clickable)
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun TimerPreview(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Timer.layout(
+            context,
+            it.deviceConfiguration,
+            timer1 = Timer.Timer(minutes = "05", clickable = emptyClickable),
+            timer2 = Timer.Timer(minutes = "10", clickable = emptyClickable),
+            timer3 = Timer.Timer(minutes = "15", clickable = emptyClickable),
+            timer4 = Timer.Timer(minutes = "20", clickable = emptyClickable),
+            timer5 = Timer.Timer(minutes = "30", clickable = emptyClickable),
+            timer6 = Timer.Timer(minutes = "45", clickable = emptyClickable),
+            clickable = emptyClickable
+        )
+    ).build()
 }

@@ -23,16 +23,39 @@ import androidx.wear.protolayout.material.CompactChip
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.emptyClickable
+import java.time.Clock
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 object News {
 
     fun layout(
         context: Context,
         deviceParameters: DeviceParameters,
+        date: LocalDate,
+        clock: Clock = Clock.systemDefaultZone(),
         headline: String,
         newsVendor: String,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
+        .apply {
+             if (deviceParameters.screenWidthDp > 225) {
+                setPrimaryLabelTextContent(
+                    Text.Builder(context, date.formatLocalDateTime(today = LocalDate.now(clock)))
+                        .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                        .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                        .build()
+                )
+            }        }
         .setContent(
             Text.Builder(context, headline)
                 .setMaxLines(3)
@@ -51,3 +74,35 @@ object News {
         )
         .build()
 }
+
+fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
+    val yesterday = today.minusDays(1)
+
+    return when {
+        this == yesterday -> "yesterday ${format(DateTimeFormatter.ofPattern("MMM d"))}"
+        this == today -> "today ${format(DateTimeFormatter.ofPattern("MMM d"))}"
+        else -> format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+    }
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun NewsPreview(context: Context) = TilePreviewData {
+    val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
+    val clock = Clock.fixed(now, Clock.systemUTC().zone)
+
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        News.layout(
+            context,
+            it.deviceConfiguration,
+            headline = "Millions still without power as new storm moves across US",
+            newsVendor = "The New York Times",
+            date = LocalDate.now(clock).minusDays(1),
+            clock = clock,
+            clickable = emptyClickable
+        )
+    ).build()
+}
+
