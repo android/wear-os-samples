@@ -49,9 +49,10 @@ internal fun messagingTileLayout(
     .setContent(
         MultiButtonLayout.Builder()
             .apply {
-                // In a PrimaryLayout with a compact chip at the bottom, we can fit 5 buttons.
-                // We're only taking the first 4 contacts so that we can fit a Search button too.
-                state.contacts.take(4).forEach { contact ->
+                // A PrimaryLayout with a compact chip can fit 5 buttons (including search)
+                // on "small" displays, 6 on "large" displays.
+                val isLarge = deviceParameters.screenHeightDp >= 225
+                state.contacts.take(if (isLarge) 5 else 4).forEach { contact ->
                     addButtonContent(contactLayout(context, contact, emptyClickable))
                 }
             }
