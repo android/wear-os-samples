@@ -61,6 +61,7 @@ fun MeditationChips(context: Context) = TilePreviewData(resources {
         Meditation.chipsLayout(
             context,
             it.deviceConfiguration,
+            numOfLeftTasks = 2,
             session1 = Meditation.Session(
                 label = "Breathe",
                 iconId = Meditation.CHIP_1_ICON_ID,
@@ -103,6 +104,7 @@ fun Timer(context: Context) = TilePreviewData {
             timer3 = Timer.Timer(minutes = "15", clickable = emptyClickable),
             timer4 = Timer.Timer(minutes = "20", clickable = emptyClickable),
             timer5 = Timer.Timer(minutes = "30", clickable = emptyClickable),
+            timer6 = Timer.Timer(minutes = "45", clickable = emptyClickable),
             clickable = emptyClickable
         )
     ).build()
@@ -117,7 +119,7 @@ fun Alarm(context: Context) = TilePreviewData {
             it.deviceConfiguration,
             timeUntilAlarm = "Less than 1 min",
             alarmTime = "14:58",
-            alarmDays = "Mon, Tue, Wed",
+            alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
             clickable = emptyClickable
         )
     ).build()

@@ -23,6 +23,11 @@ import androidx.wear.protolayout.material.CompactChip
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.emptyClickable
 
 object Calendar {
 
@@ -34,6 +39,7 @@ object Calendar {
         eventLocation: String,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             Text.Builder(context, eventTime)
                 .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
@@ -57,4 +63,21 @@ object Calendar {
             CompactChip.Builder(context, "Agenda", clickable, deviceParameters).build()
         )
         .build()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun CalendarPreview(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Calendar.layout(
+            context,
+            it.deviceConfiguration,
+            eventTime = "6:30-7:30 PM",
+            eventName = "Morning Pilates with Christina Lloyd",
+            eventLocation = "216 Market Street",
+            clickable = emptyClickable
+        )
+    ).build()
 }
