@@ -13,7 +13,7 @@ ktlint = "0.50.0"
 compose-material3 = "1.0.0-alpha23"
 horologist = "0.6.12"
 robolectric = "4.13"
-roborazzi = "1.25.0"
+roborazzi = "1.26.0"
 ui-test-junit4 = "1.6.8"
 
 [libraries]
