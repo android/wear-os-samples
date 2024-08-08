@@ -25,7 +25,7 @@ import androidx.wear.tooling.preview.devices.WearDevices
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-private fun goal(context: Context) = coalPreview(context)
+private fun goal(context: Context) = goalPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
