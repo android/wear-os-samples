@@ -18,9 +18,7 @@ package com.example.wear.tiles.golden
 import android.content.Context
 import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.LayoutElementBuilders.Column
-import androidx.wear.protolayout.LayoutElementBuilders.Spacer
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.material.ChipColors
 import androidx.wear.protolayout.material.CompactChip
@@ -52,6 +50,7 @@ object HeartRate {
         )
         .setContent(
             MultiSlotLayout.Builder()
+                .setHorizontalSpacerWidth(16f)
                 .addSlotContent(
                     Column.Builder()
                         .apply {
@@ -74,11 +73,6 @@ object HeartRate {
                 )
                 .apply {
                     if (deviceParameters.screenWidthDp > 225) {
-                        addSlotContent(
-                            Spacer.Builder()
-                                .setWidth(dp(16f))
-                                .build()
-                        )
                         addSlotContent(
                             Column.Builder()
                                 .addContent(
