@@ -19,8 +19,6 @@ import android.content.Context
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.Preview
-import androidx.wear.tiles.tooling.preview.TilePreviewData
-import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
 import androidx.wear.tooling.preview.devices.WearDevices
 
 @Preview(device = WearDevices.SMALL_ROUND)
@@ -41,15 +39,7 @@ private fun run(context: Context) = runPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-private fun ski(context: Context) = TilePreviewData {
-    singleTimelineEntryTileBuilder(
-        Ski.layout(
-            context,
-            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
-            stat2 = Ski.Stat("Distance", "21.8", "mile")
-        )
-    ).build()
-}
+private fun ski(context: Context) = skiPreview(context)
 
 //@Preview
 fun sleepTracker(context: Context) {

@@ -22,6 +22,10 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiSlotLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
 
 object Ski {
 
@@ -60,4 +64,18 @@ object Ski {
         .build()
 
     data class Stat(val label: String, val value: String, val unit: String)
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+internal fun skiPreview(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Ski.layout(
+            context,
+            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+            stat2 = Ski.Stat("Distance", "21.8", "mile")
+        )
+    ).build()
 }
