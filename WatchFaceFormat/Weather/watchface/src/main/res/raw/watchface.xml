@@ -27,8 +27,8 @@
       <Character name="8" resource="ic_sunny" width="96" height="96" />
       <Character name="9" resource="ic_thunderstorm" width="96" height="96" />
       <Word name="10" resource="ic_sleet" width="96" height="96" />
-      <Word name="11" resource="ic_rain" width="96" height="96" />
-      <Word name="12" resource="ic_snow" width="96" height="96" />
+      <Word name="11" resource="ic_snow" width="96" height="96" />
+      <Word name="12" resource="ic_rain" width="96" height="96" />
       <Word name="13" resource="ic_mist" width="96" height="96" />
       <Word name="14" resource="ic_partly_cloudy_day" width="96" height="96" />
       <Word name="15" resource="ic_windy" width="96" height="96" />
@@ -46,8 +46,8 @@
       <Character name="8" resource="ic_sunny" width="96" height="96" />
       <Character name="9" resource="ic_thunderstorm" width="96" height="96" />
       <Word name="10" resource="ic_sleet" width="96" height="96" />
-      <Word name="11" resource="ic_rain" width="96" height="96" />
-      <Word name="12" resource="ic_snow" width="96" height="96" />
+      <Word name="11" resource="ic_snow" width="96" height="96" />
+      <Word name="12" resource="ic_rain" width="96" height="96" />
       <Word name="13" resource="ic_mist" width="96" height="96" />
       <Word name="14" resource="ic_partly_cloudy_night" width="96" height="96" />
       <Word name="15" resource="ic_windy" width="96" height="96" />
