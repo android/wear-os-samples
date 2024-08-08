@@ -99,7 +99,7 @@ object Weather {
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun WeatherPreview(context: Context) = TilePreviewData(resources {
+fun weatherPreview(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Weather.SCATTERED_SHOWERS_ICON_ID,
         drawableResToImageResource(R.drawable.scattered_showers)

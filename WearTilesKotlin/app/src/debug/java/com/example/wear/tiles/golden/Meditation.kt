@@ -180,7 +180,7 @@ object Meditation {
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun MeditationChipsPreview(context: Context) = TilePreviewData(resources {
+fun meditationChipsPreview(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Meditation.CHIP_1_ICON_ID,
         drawableResToImageResource(R.drawable.ic_breathe_24)
@@ -214,7 +214,7 @@ fun MeditationChipsPreview(context: Context) = TilePreviewData(resources {
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun MeditationButtonsPreview(context: Context) = TilePreviewData {
+fun meditationButtonsPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Meditation.buttonsLayout(
             context,

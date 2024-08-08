@@ -25,23 +25,23 @@ import androidx.wear.tooling.preview.devices.WearDevices
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun Goal(context: Context) = GoalPreview(context)
+fun goal(context: Context) = coalPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun WorkoutButtons(context: Context) = WorkoutButtonsPreview(context)
+fun workoutButtons(context: Context) = workoutButtonsPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun WorkoutLargeChip(context: Context) = WorkoutLargeChipPreview(context)
+fun workoutLargeChip(context: Context) = workoutLargeChipPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun Run(context: Context) = RunPreview(context)
+fun run(context: Context) = runPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun Ski(context: Context) = TilePreviewData {
+fun ski(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Ski.layout(
             context,
@@ -52,7 +52,7 @@ fun Ski(context: Context) = TilePreviewData {
 }
 
 //@Preview
-fun SleepTracker(context: Context) {
+fun sleepTracker(context: Context) {
     // TODO: This tile doesn't use standard components; we can achieve it by drawing on a Canvas (Compose's DrawScope) then converting it to a bitmap using Horologist
 }
 
