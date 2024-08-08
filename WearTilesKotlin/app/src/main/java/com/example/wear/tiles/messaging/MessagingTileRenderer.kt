@@ -50,7 +50,7 @@ class MessagingTileRenderer(context: Context) :
                 /* id = */
                 ID_IC_SEARCH,
                 /* image = */
-                drawableResToImageResource(R.drawable.ic_search_24)
+                R.drawable.ic_search_24
             )
         }
 
