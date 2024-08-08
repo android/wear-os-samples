@@ -29,17 +29,7 @@ import com.google.android.horologist.tiles.images.drawableResToImageResource
  */
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun HeartRateSimple(context: Context) = TilePreviewData {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        HeartRate.simpleLayout(
-            context,
-            it.deviceConfiguration,
-            highestHeartRateBpm = 86,
-            lowestHeartRateBpm = 54,
-            clickable = emptyClickable
-        )
-    ).build()
-}
+fun HeartRateSimple(context: Context) = HeartRateSimplePreview(context)
 
 //@Preview
 fun HeartRateGraph(context: Context) {
@@ -80,50 +70,12 @@ fun MeditationChips(context: Context) = TilePreviewData(resources {
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun MeditationButtons(context: Context) = TilePreviewData {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Meditation.buttonsLayout(
-            context,
-            it.deviceConfiguration,
-            timer1 = Meditation.Timer(minutes = 5, clickable = emptyClickable),
-            timer2 = Meditation.Timer(minutes = 10, clickable = emptyClickable),
-            timer3 = Meditation.Timer(minutes = 15, clickable = emptyClickable),
-            timer4 = Meditation.Timer(minutes = 20, clickable = emptyClickable),
-            timer5 = Meditation.Timer(minutes = 25, clickable = emptyClickable),
-            clickable = emptyClickable
-        )
-    ).build()
-}
+fun MeditationButtons(context: Context) = MeditationButtonsPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun Timer(context: Context) = TilePreviewData {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Timer.layout(
-            context,
-            it.deviceConfiguration,
-            timer1 = Timer.Timer(minutes = "05", clickable = emptyClickable),
-            timer2 = Timer.Timer(minutes = "10", clickable = emptyClickable),
-            timer3 = Timer.Timer(minutes = "15", clickable = emptyClickable),
-            timer4 = Timer.Timer(minutes = "20", clickable = emptyClickable),
-            timer5 = Timer.Timer(minutes = "30", clickable = emptyClickable),
-            timer6 = Timer.Timer(minutes = "45", clickable = emptyClickable),
-            clickable = emptyClickable
-        )
-    ).build()
-}
+fun Timer(context: Context) = TimerPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun Alarm(context: Context) = TilePreviewData {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Alarm.layout(
-            context,
-            it.deviceConfiguration,
-            timeUntilAlarm = "Less than 1 min",
-            alarmTime = "14:58",
-            alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
-            clickable = emptyClickable
-        )
-    ).build()
-}
+fun Alarm(context: Context) = AlarmPreview(context)
