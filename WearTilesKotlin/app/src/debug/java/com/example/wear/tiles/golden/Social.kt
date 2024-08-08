@@ -37,6 +37,8 @@ object Social {
 
     const val AVATAR_ID_1 = "social avatar id 1"
     const val AVATAR_ID_2 = "social avatar id 2"
+    const val AVATAR_ID_3 = "social avatar id 3"
+    const val AVATAR_ID_4 = "social avatar id 4"
 
     fun layout(
         context: Context,
@@ -93,6 +95,8 @@ object Social {
 internal fun socialPreview(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
     addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
+    addIdToImageMapping(Social.AVATAR_ID_3, drawableResToImageResource(R.drawable.avatar3))
+    addIdToImageMapping(Social.AVATAR_ID_4, drawableResToImageResource(R.drawable.avatar4))
 }) {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Social.layout(
@@ -116,9 +120,16 @@ internal fun socialPreview(context: Context) = TilePreviewData(resources {
                     clickable = emptyClickable,
                     avatarId = Social.AVATAR_ID_2
                 ),
-                Social.Contact(initials = "DA", clickable = emptyClickable, avatarId = null),
-                Social.Contact(initials = "DB", clickable = emptyClickable, avatarId = null),
-                Social.Contact(initials = "DB", clickable = emptyClickable, avatarId = null)
+                Social.Contact(
+                    initials = "DA",
+                    clickable = emptyClickable,
+                    avatarId = Social.AVATAR_ID_3
+                ),
+                Social.Contact(
+                    initials = "DB",
+                    clickable = emptyClickable,
+                    avatarId = Social.AVATAR_ID_4
+                ),
             )
         )
     ).build()
