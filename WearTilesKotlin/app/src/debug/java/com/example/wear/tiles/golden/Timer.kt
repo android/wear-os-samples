@@ -37,26 +37,18 @@ object Timer {
     fun layout(
         context: Context,
         deviceParameters: DeviceParameters,
-        timer1: Timer,
-        timer2: Timer,
-        timer3: Timer,
-        timer4: Timer,
-        timer5: Timer,
-        timer6: Timer,
+        timerList: List<Timer>,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
         .setResponsiveContentInsetEnabled(true)
         .setContent(
             MultiButtonLayout.Builder()
-                .addButtonContent(timerButton(context, timer1))
-                .addButtonContent(timerButton(context, timer2))
-                .addButtonContent(timerButton(context, timer3))
-                .addButtonContent(timerButton(context, timer4))
-                .addButtonContent(timerButton(context, timer5))
                 .apply {
-                    if (deviceParameters.screenWidthDp > 225) {
-                        addButtonContent(timerButton(context, timer6))
-                    }
+                    timerList
+                        .take(if (deviceParameters.screenWidthDp > 225) 6 else 5)
+                        .forEach { timer ->
+                            addButtonContent(timerButton(context, timer))
+                        }
                 }
                 .build()
         )
@@ -99,12 +91,14 @@ internal fun timerPreview(context: Context) = TilePreviewData {
         Timer.layout(
             context,
             it.deviceConfiguration,
-            timer1 = Timer.Timer(minutes = "05", clickable = emptyClickable),
-            timer2 = Timer.Timer(minutes = "10", clickable = emptyClickable),
-            timer3 = Timer.Timer(minutes = "15", clickable = emptyClickable),
-            timer4 = Timer.Timer(minutes = "20", clickable = emptyClickable),
-            timer5 = Timer.Timer(minutes = "30", clickable = emptyClickable),
-            timer6 = Timer.Timer(minutes = "45", clickable = emptyClickable),
+            timerList = listOf(
+                Timer.Timer(minutes = "05", clickable = emptyClickable),
+                Timer.Timer(minutes = "10", clickable = emptyClickable),
+                Timer.Timer(minutes = "15", clickable = emptyClickable),
+                Timer.Timer(minutes = "20", clickable = emptyClickable),
+                Timer.Timer(minutes = "30", clickable = emptyClickable),
+                Timer.Timer(minutes = "45", clickable = emptyClickable)
+            ),
             clickable = emptyClickable
         )
     ).build()
