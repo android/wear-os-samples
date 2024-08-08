@@ -29,16 +29,16 @@ import com.google.android.horologist.tiles.images.drawableResToImageResource
  */
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun heartRateSimple(context: Context) = heartRateSimplePreview(context)
+private fun heartRateSimple(context: Context) = heartRateSimplePreview(context)
 
 //@Preview
-fun heartRateGraph(context: Context) {
+private fun heartRateGraph(context: Context) {
     TODO()
 }
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun meditationChips(context: Context) = TilePreviewData(resources {
+private fun meditationChips(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Meditation.CHIP_1_ICON_ID,
         drawableResToImageResource(R.drawable.ic_breathe_24)
@@ -70,12 +70,12 @@ fun meditationChips(context: Context) = TilePreviewData(resources {
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun meditationButtons(context: Context) = meditationButtonsPreview(context)
+private fun meditationButtons(context: Context) = meditationButtonsPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun timer(context: Context) = timerPreview(context)
+private fun timer(context: Context) = timerPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun alarm(context: Context) = alarmPreview(context)
+private fun alarm(context: Context) = alarmPreview(context)

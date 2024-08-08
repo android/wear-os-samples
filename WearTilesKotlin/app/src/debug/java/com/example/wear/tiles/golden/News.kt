@@ -75,7 +75,7 @@ object News {
         .build()
 }
 
-fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
+internal fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
     val yesterday = today.minusDays(1)
 
     return when {
@@ -89,7 +89,7 @@ fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun newsPreview(context: Context) = TilePreviewData {
+internal fun newsPreview(context: Context) = TilePreviewData {
     val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
     val clock = Clock.fixed(now, Clock.systemUTC().zone)
 

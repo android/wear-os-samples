@@ -131,35 +131,36 @@ object Workout {
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun workoutButtonsPreview(context: Context) = TilePreviewData(onTileResourceRequest = resources {
-    addIdToImageMapping(
-        Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
-    )
-    addIdToImageMapping(
-        Workout.BUTTON_2_ICON_ID, drawableResToImageResource(R.drawable.ic_yoga_24)
-    )
-    addIdToImageMapping(
-        Workout.BUTTON_3_ICON_ID, drawableResToImageResource(R.drawable.ic_cycling_24)
-    )
-}) {
-    singleTimelineEntryTileBuilder(
-        Workout.buttonsLayout(
-            context,
-            it.deviceConfiguration,
-            weekSummary = "1 run this week",
-            button1Clickable = emptyClickable,
-            button2Clickable = emptyClickable,
-            button3Clickable = emptyClickable,
-            chipClickable = emptyClickable
+internal fun workoutButtonsPreview(context: Context) =
+    TilePreviewData(onTileResourceRequest = resources {
+        addIdToImageMapping(
+            Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
         )
-    ).build()
-}
+        addIdToImageMapping(
+            Workout.BUTTON_2_ICON_ID, drawableResToImageResource(R.drawable.ic_yoga_24)
+        )
+        addIdToImageMapping(
+            Workout.BUTTON_3_ICON_ID, drawableResToImageResource(R.drawable.ic_cycling_24)
+        )
+    }) {
+        singleTimelineEntryTileBuilder(
+            Workout.buttonsLayout(
+                context,
+                it.deviceConfiguration,
+                weekSummary = "1 run this week",
+                button1Clickable = emptyClickable,
+                button2Clickable = emptyClickable,
+                button3Clickable = emptyClickable,
+                chipClickable = emptyClickable
+            )
+        ).build()
+    }
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun workoutLargeChipPreview(context: Context) = TilePreviewData {
+internal fun workoutLargeChipPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Workout.largeChipLayout(
             context,

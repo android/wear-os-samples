@@ -24,26 +24,26 @@ import androidx.wear.tooling.preview.devices.WearDevices
  */
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun weather(context: Context) = weatherPreview(context)
+private fun weather(context: Context) = weatherPreview(context)
 
 /**
  * b/238556504 alignment doesn't match figma.
  */
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun news(context: Context) = newsPreview(context)
+private fun news(context: Context) = newsPreview(context)
 
 /**
  * b/238571095 Alignment doesn't match Figma
  */
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun calendar(context: Context) = calendarPreview(context)
+private fun calendar(context: Context) = calendarPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun social(context: Context) = socialPreview(context)
+private fun social(context: Context) = socialPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun media(context: Context) = mediaPreview(context)
+private fun media(context: Context) = mediaPreview(context)

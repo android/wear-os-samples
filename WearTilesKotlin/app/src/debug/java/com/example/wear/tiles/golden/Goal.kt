@@ -70,7 +70,7 @@ private fun blueOnTranslucentWhite() = ProgressIndicatorColors(
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun coalPreview(context: Context) = TilePreviewData {
+internal fun coalPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Goal.layout(
             context, it.deviceConfiguration, steps = 5168, goal = 8000

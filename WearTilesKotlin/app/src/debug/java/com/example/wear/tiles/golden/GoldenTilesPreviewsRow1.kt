@@ -25,23 +25,23 @@ import androidx.wear.tooling.preview.devices.WearDevices
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun goal(context: Context) = coalPreview(context)
+private fun goal(context: Context) = coalPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun workoutButtons(context: Context) = workoutButtonsPreview(context)
+private fun workoutButtons(context: Context) = workoutButtonsPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun workoutLargeChip(context: Context) = workoutLargeChipPreview(context)
+private fun workoutLargeChip(context: Context) = workoutLargeChipPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun run(context: Context) = runPreview(context)
+private fun run(context: Context) = runPreview(context)
 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND)
-fun ski(context: Context) = TilePreviewData {
+private fun ski(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Ski.layout(
             context,

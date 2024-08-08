@@ -94,7 +94,7 @@ object Run {
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun runPreview(context: Context) = TilePreviewData {
+internal fun runPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Run.layout(
             context,
