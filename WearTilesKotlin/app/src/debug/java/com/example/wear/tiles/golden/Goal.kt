@@ -23,10 +23,15 @@ import androidx.wear.protolayout.material.ProgressIndicatorColors
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.EdgeContentLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
+import androidx.wear.tooling.preview.devices.WearDevices
 
 object Goal {
     fun layout(context: Context, deviceParameters: DeviceParameters, steps: Int, goal: Int) =
         EdgeContentLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
             .setEdgeContent(
                 CircularProgressIndicator.Builder()
                     .setProgress(steps.toFloat() / goal)
@@ -60,3 +65,15 @@ private fun blueOnTranslucentWhite() = ProgressIndicatorColors(
     /* trackColor = */
     ColorBuilders.argb(GoldenTilesColors.White10Pc)
 )
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun GoalPreview(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
+        Goal.layout(
+            context, it.deviceConfiguration, steps = 5168, goal = 8000
+        )
+    ).build()
+}

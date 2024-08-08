@@ -26,6 +26,11 @@ import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.TitleChip
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.emptyClickable
 
 object Run {
 
@@ -33,9 +38,11 @@ object Run {
         context: Context,
         deviceParameters: DeviceParameters,
         lastRunText: String,
+        chanceOfRain: Int,
         startRunClickable: Clickable,
         moreChipClickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             Text.Builder(context, lastRunText)
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
@@ -58,6 +65,16 @@ object Run {
                 )
                 .build()
         )
+        .apply {
+            if (deviceParameters.screenWidthDp > 225) {
+                setSecondaryLabelTextContent(
+                    Text.Builder(context, "$chanceOfRain% chance of rain")
+                        .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                        .setColor(ColorBuilders.argb(GoldenTilesColors.LightGray))
+                        .build()
+                )
+            }
+        }
         .setPrimaryChipContent(
             CompactChip.Builder(context, "More", moreChipClickable, deviceParameters)
                 .setChipColors(
@@ -71,4 +88,21 @@ object Run {
                 .build()
         )
         .build()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun RunPreview(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
+        Run.layout(
+            context,
+            it.deviceConfiguration,
+            lastRunText = "2 days ago",
+            chanceOfRain = 20,
+            startRunClickable = emptyClickable,
+            moreChipClickable = emptyClickable
+        )
+    ).build()
 }

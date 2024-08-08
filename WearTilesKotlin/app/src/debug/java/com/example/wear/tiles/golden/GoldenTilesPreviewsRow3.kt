@@ -103,22 +103,26 @@ fun Social(context: Context) = TilePreviewData(resources {
         Social.layout(
             context,
             it.deviceConfiguration,
-            Social.Contact(
-                initials = "AC",
-                clickable = emptyClickable,
-                avatarId = Social.AVATAR_ID_1
-            ),
-            Social.Contact(initials = "AD", clickable = emptyClickable, avatarId = null),
-            Social.Contact(
-                initials = "BD",
-                color = GoldenTilesColors.Purple,
-                clickable = emptyClickable,
-                avatarId = null
-            ),
-            Social.Contact(
-                initials = "DC",
-                clickable = emptyClickable,
-                avatarId = Social.AVATAR_ID_2
+            listOf(
+                Social.Contact(
+                    initials = "AC",
+                    clickable = emptyClickable,
+                    avatarId = Social.AVATAR_ID_1
+                ),
+                Social.Contact(initials = "AD", clickable = emptyClickable, avatarId = null),
+                Social.Contact(
+                    initials = "BD",
+                    color = GoldenTilesColors.Purple,
+                    clickable = emptyClickable,
+                    avatarId = null
+                ),
+                Social.Contact(
+                    initials = "DC",
+                    clickable = emptyClickable,
+                    avatarId = Social.AVATAR_ID_2
+                ),
+                Social.Contact(initials = "DA", clickable = emptyClickable, avatarId = null),
+                Social.Contact(initials = "DB", clickable = emptyClickable, avatarId = null)
             )
         )
     ).build()

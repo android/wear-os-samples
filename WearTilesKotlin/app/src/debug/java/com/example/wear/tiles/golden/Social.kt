@@ -25,6 +25,13 @@ import androidx.wear.protolayout.material.ButtonColors
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.R
+import com.example.wear.tiles.tools.emptyClickable
+import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 object Social {
 
@@ -34,17 +41,18 @@ object Social {
     fun layout(
         context: Context,
         deviceParameters: DeviceParameters,
-        contact1: Contact,
-        contact2: Contact,
-        contact3: Contact,
-        contact4: Contact
+        contacts: List<Contact>
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setContent(
             MultiButtonLayout.Builder()
-                .addButtonContent(button(context, contact1))
-                .addButtonContent(button(context, contact2))
-                .addButtonContent(button(context, contact3))
-                .addButtonContent(button(context, contact4))
+                .apply {
+                    contacts
+                        .take(if (deviceParameters.screenWidthDp > 225) 6 else 4)
+                        .forEach { contact ->
+                            addButtonContent(button(context, contact))
+                        }
+                }
                 .build()
         )
         .build()
@@ -76,4 +84,42 @@ object Social {
         val clickable: Clickable,
         val avatarId: String?
     )
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun SocialPreview(context: Context) = TilePreviewData(resources {
+    addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
+    addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
+}) {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Social.layout(
+            context,
+            it.deviceConfiguration,
+            listOf(
+                Social.Contact(
+                    initials = "AC",
+                    clickable = emptyClickable,
+                    avatarId = Social.AVATAR_ID_1
+                ),
+                Social.Contact(initials = "AD", clickable = emptyClickable, avatarId = null),
+                Social.Contact(
+                    initials = "BD",
+                    color = GoldenTilesColors.Purple,
+                    clickable = emptyClickable,
+                    avatarId = null
+                ),
+                Social.Contact(
+                    initials = "DC",
+                    clickable = emptyClickable,
+                    avatarId = Social.AVATAR_ID_2
+                ),
+                Social.Contact(initials = "DA", clickable = emptyClickable, avatarId = null),
+                Social.Contact(initials = "DB", clickable = emptyClickable, avatarId = null),
+                Social.Contact(initials = "DB", clickable = emptyClickable, avatarId = null)
+            )
+        )
+    ).build()
 }

@@ -34,7 +34,8 @@ fun HeartRateSimple(context: Context) = TilePreviewData {
         HeartRate.simpleLayout(
             context,
             it.deviceConfiguration,
-            heartRateBpm = 86,
+            highestHeartRateBpm = 86,
+            lowestHeartRateBpm = 54,
             clickable = emptyClickable
         )
     ).build()
@@ -87,6 +88,8 @@ fun MeditationButtons(context: Context) = TilePreviewData {
             timer1 = Meditation.Timer(minutes = 5, clickable = emptyClickable),
             timer2 = Meditation.Timer(minutes = 10, clickable = emptyClickable),
             timer3 = Meditation.Timer(minutes = 15, clickable = emptyClickable),
+            timer4 = Meditation.Timer(minutes = 20, clickable = emptyClickable),
+            timer5 = Meditation.Timer(minutes = 25, clickable = emptyClickable),
             clickable = emptyClickable
         )
     ).build()

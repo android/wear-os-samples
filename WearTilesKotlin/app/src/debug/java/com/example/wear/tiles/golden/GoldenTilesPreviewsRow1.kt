@@ -83,6 +83,7 @@ fun Run(context: Context) = TilePreviewData {
             context,
             it.deviceConfiguration,
             lastRunText = "2 days ago",
+            chanceOfRain = 20,
             startRunClickable = emptyClickable,
             moreChipClickable = emptyClickable
         )

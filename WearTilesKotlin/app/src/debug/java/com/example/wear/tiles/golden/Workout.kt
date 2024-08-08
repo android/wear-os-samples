@@ -28,6 +28,13 @@ import androidx.wear.protolayout.material.TitleChip
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.R
+import com.example.wear.tiles.tools.emptyClickable
+import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 object Workout {
     const val BUTTON_1_ICON_ID = "workout 1"
@@ -44,6 +51,7 @@ object Workout {
         chipClickable: ModifiersBuilders.Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
             .setPrimaryLabelTextContent(
                 Text.Builder(context, weekSummary)
                     .setTypography(Typography.TYPOGRAPHY_CAPTION1)
@@ -86,6 +94,7 @@ object Workout {
         clickable: ModifiersBuilders.Clickable,
         lastWorkoutSummary: String
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             Text.Builder(context, "Power Yoga")
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
@@ -115,4 +124,48 @@ object Workout {
                 .build()
         )
         .build()
+}
+
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun WorkoutButtonsPreview(context: Context) = TilePreviewData(onTileResourceRequest = resources {
+    addIdToImageMapping(
+        Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
+    )
+    addIdToImageMapping(
+        Workout.BUTTON_2_ICON_ID, drawableResToImageResource(R.drawable.ic_yoga_24)
+    )
+    addIdToImageMapping(
+        Workout.BUTTON_3_ICON_ID, drawableResToImageResource(R.drawable.ic_cycling_24)
+    )
+}) {
+    singleTimelineEntryTileBuilder(
+        Workout.buttonsLayout(
+            context,
+            it.deviceConfiguration,
+            weekSummary = "1 run this week",
+            button1Clickable = emptyClickable,
+            button2Clickable = emptyClickable,
+            button3Clickable = emptyClickable,
+            chipClickable = emptyClickable
+        )
+    ).build()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun WorkoutLargeChipPreview(context: Context) = TilePreviewData {
+    singleTimelineEntryTileBuilder(
+        Workout.largeChipLayout(
+            context,
+            it.deviceConfiguration,
+            clickable = emptyClickable,
+            lastWorkoutSummary = "Last session 45m"
+        )
+    ).build()
 }

@@ -121,8 +121,11 @@ object Meditation {
         timer1: Timer,
         timer2: Timer,
         timer3: Timer,
+        timer4: Timer,
+        timer5: Timer,
         clickable: Clickable
     ) = PrimaryLayout.Builder(deviceParameters)
+        .setResponsiveContentInsetEnabled(true)
         .setPrimaryLabelTextContent(
             Text.Builder(context, "Minutes")
                 .setTypography(Typography.TYPOGRAPHY_CAPTION1)
@@ -134,6 +137,12 @@ object Meditation {
                 .addButtonContent(timerButton(context, timer1))
                 .addButtonContent(timerButton(context, timer2))
                 .addButtonContent(timerButton(context, timer3))
+                .apply {
+                    if (deviceParameters.screenWidthDp > 225) {
+                        addButtonContent(timerButton(context, timer4))
+                        addButtonContent(timerButton(context, timer5))
+                    }
+                }
                 .build()
         )
         .setPrimaryChipContent(
@@ -197,6 +206,25 @@ fun MeditationChipsPreview(context: Context) = TilePreviewData(resources {
                 clickable = emptyClickable
             ),
             browseClickable = emptyClickable
+        )
+    ).build()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+fun MeditationButtonsPreview(context: Context) = TilePreviewData {
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Meditation.buttonsLayout(
+            context,
+            it.deviceConfiguration,
+            timer1 = Meditation.Timer(minutes = 5, clickable = emptyClickable),
+            timer2 = Meditation.Timer(minutes = 10, clickable = emptyClickable),
+            timer3 = Meditation.Timer(minutes = 15, clickable = emptyClickable),
+            timer4 = Meditation.Timer(minutes = 20, clickable = emptyClickable),
+            timer5 = Meditation.Timer(minutes = 25, clickable = emptyClickable),
+            clickable = emptyClickable
         )
     ).build()
 }
