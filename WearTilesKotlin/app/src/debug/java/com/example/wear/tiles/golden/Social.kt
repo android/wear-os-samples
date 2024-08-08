@@ -91,7 +91,7 @@ object Social {
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
 internal fun socialPreview(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
     addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))

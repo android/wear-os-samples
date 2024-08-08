@@ -130,7 +130,7 @@ object Workout {
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
 internal fun workoutButtonsPreview(context: Context) =
     TilePreviewData(onTileResourceRequest = resources {
         addIdToImageMapping(
@@ -159,7 +159,7 @@ internal fun workoutButtonsPreview(context: Context) =
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
 internal fun workoutLargeChipPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Workout.largeChipLayout(

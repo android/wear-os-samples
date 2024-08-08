@@ -68,7 +68,7 @@ object Calendar {
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
 internal fun calendarPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Calendar.layout(

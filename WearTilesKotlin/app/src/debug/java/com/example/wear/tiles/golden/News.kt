@@ -48,14 +48,15 @@ object News {
     ) = PrimaryLayout.Builder(deviceParameters)
         .setResponsiveContentInsetEnabled(true)
         .apply {
-             if (deviceParameters.screenWidthDp > 225) {
+            if (deviceParameters.screenWidthDp > 225) {
                 setPrimaryLabelTextContent(
                     Text.Builder(context, date.formatLocalDateTime(today = LocalDate.now(clock)))
                         .setColor(ColorBuilders.argb(GoldenTilesColors.White))
                         .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                         .build()
                 )
-            }        }
+            }
+        }
         .setContent(
             Text.Builder(context, headline)
                 .setMaxLines(3)
@@ -88,7 +89,7 @@ internal fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): 
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
 internal fun newsPreview(context: Context) = TilePreviewData {
     val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
     val clock = Clock.fixed(now, Clock.systemUTC().zone)
