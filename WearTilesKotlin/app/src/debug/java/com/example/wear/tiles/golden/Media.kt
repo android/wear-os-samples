@@ -114,8 +114,8 @@ object Media {
 @Preview(device = WearDevices.SMALL_ROUND)
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
 @Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f)
-fun MediaPreview(context: Context) = TilePreviewData(resources {
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
+internal fun mediaPreview(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Media.CHIP_1_ICON_ID,
         drawableResToImageResource(R.drawable.ic_music_queue_24)
