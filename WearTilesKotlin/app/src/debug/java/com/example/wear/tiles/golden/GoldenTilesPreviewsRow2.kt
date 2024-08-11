@@ -16,19 +16,17 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
-import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
+import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
 /**
  * b/238548541 (internal bug - the spacing doesn't match Figma)
  */
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun heartRateSimple(context: Context) = heartRateSimplePreview(context)
 
 //@Preview
@@ -36,8 +34,7 @@ private fun heartRateGraph(context: Context) {
     TODO()
 }
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun meditationChips(context: Context) = TilePreviewData(resources {
     addIdToImageMapping(
         Meditation.CHIP_1_ICON_ID,
@@ -68,14 +65,11 @@ private fun meditationChips(context: Context) = TilePreviewData(resources {
     ).build()
 }
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun meditationButtons(context: Context) = meditationButtonsPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun timer(context: Context) = timerPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun alarm(context: Context) = alarmPreview(context)

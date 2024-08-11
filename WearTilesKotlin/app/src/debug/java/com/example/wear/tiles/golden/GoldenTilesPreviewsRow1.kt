@@ -18,27 +18,21 @@ package com.example.wear.tiles.golden
 import android.content.Context
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.tooling.preview.Preview
-import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun goal(context: Context) = goalPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun workoutButtons(context: Context) = workoutButtonsPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun workoutLargeChip(context: Context) = workoutLargeChipPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun run(context: Context) = runPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun ski(context: Context) = skiPreview(context)
 
 //@Preview

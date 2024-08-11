@@ -16,34 +16,28 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.tiles.tooling.preview.Preview
-import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 
 /**
  * b/238560022 misaligned because we can't add an offset, small preview is clipped
  */
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun weather(context: Context) = weatherPreview(context)
 
 /**
  * b/238556504 alignment doesn't match figma.
  */
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun news(context: Context) = newsPreview(context)
 
 /**
  * b/238571095 Alignment doesn't match Figma
  */
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun calendar(context: Context) = calendarPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun social(context: Context) = socialPreview(context)
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun media(context: Context) = mediaPreview(context)
