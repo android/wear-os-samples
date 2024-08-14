@@ -23,10 +23,9 @@ import androidx.wear.protolayout.material.ProgressIndicatorColors
 import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.EdgeContentLayout
-import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
-import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 
 object Goal {
     fun layout(context: Context, deviceParameters: DeviceParameters, steps: Int, goal: Int) =
@@ -66,10 +65,7 @@ private fun blueOnTranslucentWhite() = ProgressIndicatorColors(
     ColorBuilders.argb(GoldenTilesColors.White10Pc)
 )
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
-@Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
+@MultiRoundDevicesWithFontScalePreviews
 internal fun goalPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Goal.layout(
