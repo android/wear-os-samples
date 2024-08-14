@@ -2,7 +2,7 @@
 android-gradle-plugin = "8.5.2"
 androidx-wear-watchface = "1.2.1"
 
-org-jetbrains-kotlin = "1.9.24"
+org-jetbrains-kotlin = "1.9.25"
 org-jetbrains-kotlinx = "1.8.1"
 
 [libraries]
