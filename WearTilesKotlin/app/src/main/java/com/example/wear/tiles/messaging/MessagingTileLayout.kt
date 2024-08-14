@@ -28,9 +28,9 @@ import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
-import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wear.tiles.R
 import com.example.wear.tiles.golden.resources
+import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
@@ -97,8 +97,7 @@ private fun searchLayout(
     .setButtonColors(ButtonColors.secondaryButtonColors(MessagingTileTheme.colors))
     .build()
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND)
+@MultiRoundDevicesPreviews
 private fun messagingTilePreview(context: Context): TilePreviewData {
     val state = MessagingTileState(MessagingRepo.knownContacts)
     return TilePreviewData(

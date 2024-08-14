@@ -23,10 +23,9 @@ import androidx.wear.protolayout.material.Text
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiSlotLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
-import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
-import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 
 object Ski {
 
@@ -70,10 +69,7 @@ object Ski {
     data class Stat(val label: String, val value: String, val unit: String)
 }
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
-@Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
+@MultiRoundDevicesWithFontScalePreviews
 internal fun skiPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Ski.layout(

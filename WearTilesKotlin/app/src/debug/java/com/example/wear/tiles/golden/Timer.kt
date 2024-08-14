@@ -26,10 +26,9 @@ import androidx.wear.protolayout.material.CompactChip
 import androidx.wear.protolayout.material.Typography
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
-import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
-import androidx.wear.tooling.preview.devices.WearDevices
+import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.emptyClickable
 
 object Timer {
@@ -82,10 +81,7 @@ object Timer {
     data class Timer(val minutes: String, val clickable: Clickable)
 }
 
-@Preview(device = WearDevices.SMALL_ROUND)
-@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f)
-@Preview(device = WearDevices.LARGE_ROUND)
-@Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f)
+@MultiRoundDevicesWithFontScalePreviews
 internal fun timerPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Timer.layout(
