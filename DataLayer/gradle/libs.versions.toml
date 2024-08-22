@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.5.2"
 androidx-activity = "1.9.1"
-androidx-compose-bom = "2024.06.00"
+androidx-compose-bom = "2024.08.00"
 # do not bump to 2.8.0 until bumping to beta version of Compose
 androidx-lifecycle = "2.8.4"
 androidx-wear-compose = "1.3.1"
