@@ -17,7 +17,7 @@ ui-test-junit4 = "1.6.8"
 ui-test-manifest = "1.6.8"
 
 [libraries]
-android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.0"
+android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.1"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-core-ktx = "androidx.core:core-ktx:1.13.1"
@@ -45,7 +45,7 @@ horologist-composables = { module = "com.google.android.horologist:horologist-co
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.0"
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.1"
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }

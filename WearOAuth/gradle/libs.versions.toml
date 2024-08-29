@@ -18,7 +18,7 @@ ui-test-junit4 = "1.6.8"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.0"
+android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.1"
 android-lint-gradle = "com.android.tools.lint:lint-gradle:31.5.2"
 android-material = "com.google.android.material:material:1.12.0"
 android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.5.2"
