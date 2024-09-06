@@ -4,13 +4,12 @@ androidx-compose-bom = "2024.08.00"
 androidx-activity = "1.9.1"
 androidx-lifecycle = "2.8.4"
 androidx-test = "1.5.2"
-androidx-wear-compose = "1.4.0-rc01"
+androidx-wear-compose = "1.4.0"
 compose = "1.7.0-rc01"
 compose-compiler = "1.5.15"
 org-jetbrains-kotlin = "1.9.25"
 org-jetbrains-kotlinx = "1.8.1"
 ktlint = "0.50.0"
-compose-material3 = "1.0.0-alpha23"
 horologist = "0.6.12"
 robolectric = "4.13"
 roborazzi = "1.26.0"
@@ -67,7 +66,6 @@ wear-compose-material = { module = "androidx.wear.compose:compose-material", ver
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
 wear-phone-interactions = "androidx.wear:wear-phone-interactions:1.1.0-alpha04"
 wear-remote-interactions = "androidx.wear:wear-remote-interactions:1.0.0"
-androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-material3" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
