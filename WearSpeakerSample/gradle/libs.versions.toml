@@ -1,18 +1,18 @@
 [versions]
 android-gradle-plugin = "8.6.0"
-androidx-activity = "1.9.1"
-androidx-compose-bom = "2024.08.00"
+androidx-activity = "1.9.2"
+androidx-compose-bom = "2024.09.00"
 androidx-lifecycle = "2.7.0"
 androidx-media3 = "1.4.1"
 androidx-wear-compose = "1.4.0"
 compose-compiler = "1.5.15"
-compose-ui-tooling = "1.3.1"
+compose-ui-tooling = "1.4.0"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 robolectric = "4.13"
 roborazzi = "1.26.0"
-ui-test-junit4 = "1.6.8"
-ui-test-manifest = "1.6.8"
+ui-test-junit4 = "1.7.0"
+ui-test-manifest = "1.7.0"
 horologist = "0.5.28"
 androidx-constraintlayout-compose = "1.0.1"
 kotlinxCoroutine = "1.8.1"
@@ -29,7 +29,7 @@ compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref 
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.1"
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.2"
 horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "horologist" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
