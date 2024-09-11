@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.6.0"
 androidx-activity = "1.9.2"
-androidx-compose-bom = "2024.09.00"
+androidx-compose-bom = "2024.09.01"
 # do not bump to 2.8.0 until bumping to beta version of Compose
 androidx-lifecycle = "2.8.5"
 androidx-wear-compose = "1.4.0"
@@ -13,8 +13,8 @@ horologist = "0.5.28"
 compose-ui-tooling = "1.4.0"
 robolectric = "4.13"
 roborazzi = "1.26.0"
-ui-test-junit4 = "1.7.0"
-ui-test-manifest = "1.7.0"
+ui-test-junit4 = "1.7.1"
+ui-test-manifest = "1.7.1"
 
 [libraries]
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.2"
