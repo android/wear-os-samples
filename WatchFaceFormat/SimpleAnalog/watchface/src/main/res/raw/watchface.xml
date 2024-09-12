@@ -27,22 +27,22 @@
   <Scene backgroundColor="#ff000000">
     <AnalogClock x="0" y="0" width="450" height="450">
       <!-- Interactive-mode hands -->
-      <SecondHand resource="@drawable/second_hand" x="224" y="10" width="2" height="215" pivotX="0.5" pivotY="1">
+      <SecondHand resource="second_hand" x="224" y="10" width="2" height="215" pivotX="0.5" pivotY="1">
         <Variant mode="AMBIENT" target="alpha" value="0"/>
         <!-- Second hand can either be 'Sweep' or 'Tick' in behaviour -->
         <Sweep frequency="15"/>
       </SecondHand>
-      <MinuteHand resource="@drawable/minute_hand" x="220" y="75" width="10" height="150" pivotX="0.5" pivotY="1">
+      <MinuteHand resource="minute_hand" x="220" y="75" width="10" height="150" pivotX="0.5" pivotY="1">
         <Variant mode="AMBIENT" target="alpha" value="0"/>
       </MinuteHand>
-      <HourHand resource="@drawable/hour_hand" x="220" y="125" width="10" height="100" pivotX="0.5" pivotY="1">
+      <HourHand resource="hour_hand" x="220" y="125" width="10" height="100" pivotX="0.5" pivotY="1">
         <Variant mode="AMBIENT" target="alpha" value="0"/>
       </HourHand>
       <!-- Ambient versions - no second hand in ambient mode -->
-      <MinuteHand resource="@drawable/minute_hand_ambient" x="222" y="75" width="6" height="150" pivotX="0.5" pivotY="1" alpha="0">
+      <MinuteHand resource="minute_hand_ambient" x="222" y="75" width="6" height="150" pivotX="0.5" pivotY="1" alpha="0">
         <Variant mode="AMBIENT" target="alpha" value="255"/>
       </MinuteHand>
-      <HourHand resource="@drawable/hour_hand_ambient" x="222" y="125" width="6" height="100" pivotX="0.5" pivotY="1" alpha="0">
+      <HourHand resource="hour_hand_ambient" x="222" y="125" width="6" height="100" pivotX="0.5" pivotY="1" alpha="0">
         <Variant mode="AMBIENT" target="alpha" value="255"/>
       </HourHand>
     </AnalogClock>
