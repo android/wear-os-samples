@@ -78,10 +78,6 @@ android {
 
 dependencies {
     val composeBom = platform(libs.androidx.compose.bom)
-
-    implementation(libs.horologist.compose.layout)
-    implementation(libs.horologist.compose.material)
-
     // General compose dependencies
     implementation(composeBom)
     implementation(libs.androidx.activity.compose)
@@ -103,7 +99,6 @@ dependencies {
     implementation(libs.androidx.material.icons.core)
 
     // Horologist for correct Compose layout
-    implementation(libs.horologist.composables)
     implementation(libs.horologist.compose.layout)
     implementation(libs.horologist.compose.material)
 
@@ -129,7 +124,6 @@ dependencies {
 
     implementation(libs.androidx.ui.test.manifest)
 
-    // Testing
     // Testing
     testImplementation(libs.androidx.ui.test.junit4)
     testImplementation(libs.junit)
