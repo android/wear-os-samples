@@ -76,7 +76,6 @@ dependencies {
   implementation libs.compose.ui.tooling.preview
   implementation(libs.androidx.compose.ui.tooling)
 
-
   // Horologist dependencies
   implementation(libs.horologist.compose.layout)
 

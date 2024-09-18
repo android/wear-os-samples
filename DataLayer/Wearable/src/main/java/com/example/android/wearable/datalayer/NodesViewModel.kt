@@ -105,7 +105,6 @@ class NodesViewModel(
     )
 
     companion object {
-        private const val TAG = "NodesViewModel"
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

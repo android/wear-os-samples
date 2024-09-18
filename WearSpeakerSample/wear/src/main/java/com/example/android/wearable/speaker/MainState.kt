@@ -23,6 +23,7 @@ import android.media.AudioManager
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
@@ -68,7 +69,7 @@ class MainState(
      * corresponds to the last known value of recording progress (or 0), where that value is useful
      * for animations.
      */
-    var recordingProgress by mutableStateOf(0f)
+    var recordingProgress by mutableFloatStateOf(0f)
         private set
 
     /**
