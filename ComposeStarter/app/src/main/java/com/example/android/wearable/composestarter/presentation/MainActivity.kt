@@ -38,6 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults.behavior
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TitleCard
@@ -61,7 +64,6 @@ import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.material.ListHeaderDefaults.firstItemPadding
 import com.google.android.horologist.compose.material.ResponsiveListHeader
-import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
@@ -122,7 +124,10 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .rotaryWithScroll(scrollState)
+                .rotaryScrollable(
+                    behavior(scrollableState = scrollState),
+                    focusRequester = rememberActiveFocusRequester()
+                )
                 .padding(padding),
             verticalArrangement = Arrangement.Center
         ) {

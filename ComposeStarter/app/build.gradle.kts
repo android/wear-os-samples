@@ -92,7 +92,6 @@ dependencies {
     implementation(libs.androidx.material.icons.core)
 
     // Horologist for correct Compose layout
-    implementation(libs.horologist.composables)
     implementation(libs.horologist.compose.layout)
     implementation(libs.horologist.compose.material)
 
