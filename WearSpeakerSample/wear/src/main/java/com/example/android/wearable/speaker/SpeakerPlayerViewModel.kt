@@ -15,7 +15,6 @@
  */
 package com.example.android.wearable.speaker
 
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
@@ -58,10 +57,10 @@ class SpeakerPlayerViewModel(
     val playerState = playerRepository.player
 
     @ExperimentalHorologistApi
-    public companion object {
+    companion object {
         private const val TAG = "SpeakerPlayerViewModel"
 
-        public val Factory: ViewModelProvider.Factory = viewModelFactory {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY]!!
 

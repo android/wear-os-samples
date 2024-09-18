@@ -57,7 +57,7 @@ android {
 dependencies {
     val composeBom = platform(libs.androidx.compose.bom)
 
-    coreLibraryDesugaring(libs.android.desugarjdklibs)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(composeBom)
     implementation(libs.kotlinx.coroutines.core)
