@@ -1,20 +1,20 @@
 [versions]
-android-gradle-plugin = "8.6.0"
+android-gradle-plugin = "8.6.1"
 androidx-activity = "1.9.2"
-androidx-compose-bom = "2024.09.01"
+androidx-compose-bom = "2024.09.02"
 # do not bump to 2.8.0 until bumping to beta version of Compose
-androidx-lifecycle = "2.8.5"
+androidx-lifecycle = "2.8.6"
 androidx-wear-compose = "1.4.0"
 compose-compiler = "1.5.15"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 org-jetbrains-kotlinx = "1.9.0"
-horologist = "0.6.19"
+horologist = "0.6.20"
 compose-ui-tooling = "1.4.0"
 robolectric = "4.13"
 roborazzi = "1.26.0"
-ui-test-junit4 = "1.7.1"
-ui-test-manifest = "1.7.1"
+ui-test-junit4 = "1.7.2"
+ui-test-manifest = "1.7.2"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
