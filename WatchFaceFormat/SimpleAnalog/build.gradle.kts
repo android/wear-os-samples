@@ -14,5 +14,5 @@
  * limitations under the License.
  */
  plugins {
-    id("com.android.application") version "8.6.0" apply false
+    id("com.android.application") version "8.6.1" apply false
 }
