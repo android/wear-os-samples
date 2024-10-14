@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    // Use the locally-defined validator to demonstrate validation on-build.
+    id("com.google.wff.validatorplugin")
 }
 
 android {
@@ -22,6 +25,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        applicationId = "com.example.weather"
         applicationId = "com.example.weather"
         // Weather requires version 2 of the watch face format, which is
         // supported from Wear OS 5 onwards.
