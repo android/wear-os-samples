@@ -19,8 +19,6 @@ import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.slurpersupport.Node
 import org.gradle.api.GradleException
-import org.gradle.api.Project
-import java.nio.file.Path
 
 const val WFF_PROP_NAME = "com.google.wear.watchface.format.version"
 

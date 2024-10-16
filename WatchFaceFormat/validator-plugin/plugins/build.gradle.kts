@@ -28,8 +28,8 @@ java {
 dependencies {
     implementation("com.android.tools.build:gradle-api:7.1.0-alpha13")
 
-    implementation("io.ktor:ktor-client-core:2.3.12")
-    runtimeOnly("io.ktor:ktor-client-okhttp:2.3.12")
+    implementation("io.ktor:ktor-client-core:3.0.0")
+    runtimeOnly("io.ktor:ktor-client-okhttp:3.0.0")
 
     compileOnly(libs.android.gradlePlugin.api)
     implementation(gradleKotlinDsl())

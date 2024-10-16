@@ -19,7 +19,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.Directory
 import org.gradle.api.provider.Provider
-import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
@@ -42,7 +41,9 @@ open class AdbInstallTask : DefaultTask() {
     @get:Input
     lateinit var artifactLoader: BuiltArtifactsLoader
 
-    // TODO - always install?
+    // As this task has no outputs defined, it will always be executed, which is desirable as the
+    // APK should be installed even if the APK itself hasn't changed. (It may have been removed from
+    // the device).
 
     @TaskAction
     fun install() {
