@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-pluginManagement {
-    includeBuild("../validator-plugin")
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-// See: https://medium.com/@ttdevelopment/encountering-the-unable-to-make-progress-running-work-error-in-gradle-6bc363ac1eb8
-gradle.startParameter.excludedTaskNames.addAll(listOf(":validator-plugin:plugins:testClasses"))
 
-rootProject.name = "Flavors"
-include(":watchface")
+plugins {
+    `java-gradle-plugin`
+    alias(libs.plugins.kotlin.jvm)
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+dependencies {
+    implementation("com.android.tools.build:gradle-api:7.1.0-alpha13")
+
+    implementation("io.ktor:ktor-client-core:3.0.0")
+    runtimeOnly("io.ktor:ktor-client-okhttp:3.0.0")
+
+    compileOnly(libs.android.gradlePlugin.api)
+    implementation(gradleKotlinDsl())
+}
+
+gradlePlugin {
+    plugins {
+        create("wffValidatorPlugin") {
+            id = "com.google.wff.validatorplugin"
+            implementationClass = "WffValidatorPlugin"
+        }
+    }
+}

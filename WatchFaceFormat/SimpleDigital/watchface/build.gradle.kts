@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    // Use the locally-defined validator to demonstrate validation on-build.
+    id("com.google.wff.validatorplugin")
 }
 
 android {
