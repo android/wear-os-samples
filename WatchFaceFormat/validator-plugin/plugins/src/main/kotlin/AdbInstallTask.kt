@@ -54,15 +54,17 @@ open class AdbInstallTask : DefaultTask() {
         val apkPath = File(artifacts.elements.single().outputFile).toPath()
 
         val deviceArg = if (device.isEmpty()) "" else "-s $device "
-        val adbCommand = deviceArg + SET_WATCH_FACE_CMD.format(artifacts.applicationId)
+        val installWatchFaceCmd = deviceArg + "install $apkPath"
+        val setWatchFaceCmd = deviceArg + SET_WATCH_FACE_CMD.format(artifacts.applicationId)
 
         project.exec {
+            val argsList = installWatchFaceCmd.split(" ").toList()
             it.commandLine("adb")
-            it.args("install", apkPath)
+            it.args(argsList)
         }
 
         project.exec {
-            val argsList = adbCommand.split(" ").toList()
+            val argsList = setWatchFaceCmd.split(" ").toList()
             it.commandLine("adb")
             it.args(argsList)
         }
