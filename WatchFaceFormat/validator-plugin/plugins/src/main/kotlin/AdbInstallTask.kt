@@ -19,6 +19,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.Directory
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
@@ -30,7 +31,7 @@ const val SET_WATCH_FACE_CMD =
 /**
  * Installs and sets watch face on an attached device via ADB.
  */
-class AdbInstallTask : DefaultTask() {
+open class AdbInstallTask : DefaultTask() {
     @set:Option(option = "device", description = "The ADB device to install on")
     @get:Input
     var device: String = ""
@@ -40,6 +41,8 @@ class AdbInstallTask : DefaultTask() {
 
     @get:Input
     lateinit var artifactLoader: BuiltArtifactsLoader
+
+    // TODO - always install?
 
     @TaskAction
     fun install() {

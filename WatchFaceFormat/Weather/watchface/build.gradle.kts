@@ -26,7 +26,6 @@ android {
 
     defaultConfig {
         applicationId = "com.example.weather"
-        applicationId = "com.example.weather"
         // Weather requires version 2 of the watch face format, which is
         // supported from Wear OS 5 onwards.
         minSdk = 34
