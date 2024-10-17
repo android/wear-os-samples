@@ -1,14 +1,14 @@
 [versions]
-android-gradle-plugin = "8.6.1"
-androidx-wear-tiles = "1.4.0"
+android-gradle-plugin = "8.7.1"
+androidx-wear-tiles = "1.4.1"
 androidx-wear-tooling-preview = "1.0.0"
-compose = "1.7.2"
+compose = "1.7.4"
 compose-compiler = "1.5.15"
 horologist = "0.6.20"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 org-jetbrains-kotlinx = "1.9.0"
-tiles-tooling-preview = "1.4.0"
+tiles-tooling-preview = "1.4.1"
 
 [libraries]
 androidx-datastore = "androidx.datastore:datastore-preferences:1.1.1"
