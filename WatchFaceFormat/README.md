@@ -47,12 +47,11 @@ cd SimpleDigital
 ./gradlew assembleDebug
 ```
 
-To then install and set as the current watch face on a device or emulator:
+Additional commands that you can run from the command-line:
 
-```shell
-adb install watchface/build/outputs/apk/debug/watchface-debug.apk
-adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation set-watchface --es watchFaceId com.example.simpledigital
-```
+- `./gradlew validateWff` - This only validates the WFF XML files, but will not build the APK. This task is automatically run as part of `assembleDebug` and
+  `bundleDebug`.
+- `./gradlew validateWffAndInstall [--device <deviceid>]` - builds and validates the watch face, then installs and sets on a connected device or emulator.
 
 For more guidance on building and signing release builds, see
 [signing guidance][signing] on developer.android.com
