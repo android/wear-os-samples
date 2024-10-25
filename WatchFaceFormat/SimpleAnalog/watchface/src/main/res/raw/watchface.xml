@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-    Copyright 2023 Google LLC
+    Copyright 2024 Google LLC
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,29 +22,67 @@
 	- Sweep vs Tick second hand behavior
 -->
 <WatchFace width="450" height="450">
-  <Metadata key="CLOCK_TYPE" value="ANALOG"/>
-  <Metadata key="PREVIEW_TIME" value="10:08:32"/>
-  <Scene backgroundColor="#ff000000">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:08:32" />
+  <UserConfigurations>
+    <ColorConfiguration id="themeColor" displayName="color_label" defaultValue="0">
+      <ColorOption id="0" displayName="color_theme_0" colors="#ffbe0b #fb5607 #ff006e #8338ec" />
+      <ColorOption id="1" displayName="color_theme_1" colors="#8ecae6 #219ebc #ffb703 #fb8500" />
+      <ColorOption id="2" displayName="color_theme_2" colors="#ff595e #ffca3a #8ac926 #1982c4" />
+      <ColorOption id="3" displayName="color_theme_3" colors="#ff0000 #00ff00 #ff00ff #00ffff" />
+      <ColorOption id="4" displayName="color_theme_4" colors="#ff99c8 #fcf6bd #d0f4de #a9def9" />
+      <ColorOption id="5" displayName="color_theme_5" colors="#1be7ff #6eeb83 #e4ff1a #ffb800" />
+    </ColorConfiguration>
+  </UserConfigurations>
+  <Scene backgroundColor="#000000">
+    <Group x="100" y="100" width="250" height="250" name="background" alpha="127">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartDraw x="0" y="0" width="250" height="250">
+        <Ellipse x="0" y="0" width="250" height="250">
+          <Fill color="[CONFIGURATION.themeColor.3]" />
+        </Ellipse>
+        <Ellipse x="50" y="50" width="150" height="150">
+          <Fill color="#000000" />
+        </Ellipse>
+      </PartDraw>
+    </Group>
+
     <AnalogClock x="0" y="0" width="450" height="450">
-      <!-- Interactive-mode hands -->
-      <SecondHand resource="second_hand" x="224" y="10" width="2" height="215" pivotX="0.5" pivotY="1">
-        <Variant mode="AMBIENT" target="alpha" value="0"/>
-        <!-- Second hand can either be 'Sweep' or 'Tick' in behaviour -->
-        <Sweep frequency="15"/>
+      <Variant mode="AMBIENT" target="alpha" value="192" />
+
+      <!-- Shadows -->
+      <HourHand resource="hour" x="220" y="55" width="20" height="190" pivotX="0.5"
+        pivotY="0.92105263157" tintColor="#883c3c3c">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+      </HourHand>
+      <MinuteHand resource="minute" x="222" y="30" width="16" height="220" pivotX="0.5" pivotY="0.9"
+        tintColor="#883c3c3c">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+      </MinuteHand>
+      <SecondHand resource="second" x="226" y="20" width="8" height="245" pivotX="0.5"
+        pivotY="0.85714285714" tintColor="#883c3c3c">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+        <Sweep frequency="15" />
       </SecondHand>
-      <MinuteHand resource="minute_hand" x="220" y="75" width="10" height="150" pivotX="0.5" pivotY="1">
-        <Variant mode="AMBIENT" target="alpha" value="0"/>
-      </MinuteHand>
-      <HourHand resource="hour_hand" x="220" y="125" width="10" height="100" pivotX="0.5" pivotY="1">
-        <Variant mode="AMBIENT" target="alpha" value="0"/>
+
+      <!-- Main hands -->
+      <HourHand resource="hour" x="215" y="50" width="20" height="190" pivotX="0.5"
+        pivotY="0.92105263157" tintColor="[CONFIGURATION.themeColor.0]">
       </HourHand>
-      <!-- Ambient versions - no second hand in ambient mode -->
-      <MinuteHand resource="minute_hand_ambient" x="222" y="75" width="6" height="150" pivotX="0.5" pivotY="1" alpha="0">
-        <Variant mode="AMBIENT" target="alpha" value="255"/>
+      <MinuteHand resource="minute" x="217" y="25" width="16" height="220" pivotX="0.5" pivotY="0.9"
+        tintColor="[CONFIGURATION.themeColor.1]">
       </MinuteHand>
-      <HourHand resource="hour_hand_ambient" x="222" y="125" width="6" height="100" pivotX="0.5" pivotY="1" alpha="0">
-        <Variant mode="AMBIENT" target="alpha" value="255"/>
-      </HourHand>
+      <SecondHand resource="second" x="221" y="15" width="8" height="245" pivotX="0.5"
+        pivotY="0.85714285714" tintColor="[CONFIGURATION.themeColor.2]">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+        <Sweep frequency="15" />
+      </SecondHand>
     </AnalogClock>
+
+    <PartDraw x="222" y="222" width="6" height="6">
+      <Ellipse x="0" y="0" width="6" height="6">
+        <Fill color="#000000" />
+      </Ellipse>
+    </PartDraw>
   </Scene>
 </WatchFace>
