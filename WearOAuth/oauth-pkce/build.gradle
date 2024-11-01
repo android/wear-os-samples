@@ -17,6 +17,7 @@ plugins {
   id 'com.android.application'
   id 'org.jetbrains.kotlin.android'
   alias libs.plugins.roborazzi
+  alias libs.plugins.compose.compiler
 }
 
 android {
@@ -84,7 +85,6 @@ dependencies {
   // Standard android dependencies
   implementation projects.util
   implementation(libs.kotlin.stdlib)
-  implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.lifecycle.viewmodel.ktx)
   implementation(libs.androidx.fragment.ktx)
