@@ -1,3 +1,8 @@
+# This project is now deprecated and unmaintained
+
+Refer to the [Watch Face Format][1] samples for examples of building watch faces.
+The Watch Face Format is now the recommended approach for all watch faces.
+
 WatchFace Sample (Kotlin)
 ===============================
 Demonstrates watch faces using the androidX libraries (Kotlin). **The newer [Watch Face Format][1]
