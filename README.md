@@ -16,8 +16,6 @@ Samples
 * **[WatchFaceFormat](WatchFaceFormat)** - Demos the new Watch Face Format which allows quick development of performant watch
     faces in XML [Guide](https://developer.android.com/training/wearables/wff)
 
-* **[WatchFaceKotlin](WatchFaceKotlin)** (Kotlin) - Demos the AndroidX Watch Face APIs which provide their own storage mechanism for watch face preference values.
-
 * **[Complications](Complications)** (Kotlin) - If you are writing a watch face with complications, this app gives you a full suite of data sources to test against your implementation of complications to make sure it looks good. [Complication Guide](https://developer.android.com/training/wearables/watch-faces/adding-complications)
 
 * **[WearOAuth](WearOAuth)** (Kotlin) - Demonstrates how developers can authenticate a user on their Wear OS app via the user's mobile/phone device without requiring a mobile app (Wear OS companion app handles the request on the mobile side). The sample uses OAuth. [Guide](https://developer.android.com/training/wearables/apps/auth-wear)
