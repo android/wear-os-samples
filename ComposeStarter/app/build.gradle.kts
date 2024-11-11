@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
 
     namespace = "com.example.android.wearable.composestarter"
 
@@ -117,6 +117,8 @@ dependencies {
     testImplementation(libs.horologist.roboscreenshots) {
         exclude(group = "com.github.QuickBirdEng.kotlin-snapshot-testing")
     }
+//    testImplementation("org.conscrypt:conscrypt-android:2.5.3")
+//    testImplementation("org.robolectric:nativeruntime-dist-compat:1.0.16")
 
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso.core)
