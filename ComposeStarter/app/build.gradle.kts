@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
 
     namespace = "com.example.android.wearable.composestarter"
 
@@ -114,9 +114,7 @@ dependencies {
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
-    testImplementation(libs.horologist.roboscreenshots) {
-        exclude(group = "com.github.QuickBirdEng.kotlin-snapshot-testing")
-    }
+    testImplementation(libs.horologist.roboscreenshots)
 
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso.core)
