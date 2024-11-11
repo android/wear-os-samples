@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
 
     namespace = "com.example.android.wearable.datalayer"
 
@@ -125,9 +125,7 @@ dependencies {
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
     testImplementation(libs.test.ext.junit)
-    testImplementation(libs.horologist.roboscreenshots) {
-        exclude(group = "com.github.QuickBirdEng.kotlin-snapshot-testing")
-    }
+    testImplementation(libs.horologist.roboscreenshots)
 
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso.core)
