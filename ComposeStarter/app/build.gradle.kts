@@ -114,11 +114,7 @@ dependencies {
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
-    testImplementation(libs.horologist.roboscreenshots) {
-        exclude(group = "com.github.QuickBirdEng.kotlin-snapshot-testing")
-    }
-//    testImplementation("org.conscrypt:conscrypt-android:2.5.3")
-//    testImplementation("org.robolectric:nativeruntime-dist-compat:1.0.16")
+    testImplementation(libs.horologist.roboscreenshots)
 
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso.core)
