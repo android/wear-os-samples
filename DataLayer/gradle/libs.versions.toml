@@ -13,7 +13,7 @@ robolectric = "4.13"
 roborazzi = "1.32.2"
 ui-test-junit4 = "1.7.5"
 ui-test-manifest = "1.7.5"
-horologist = "0.7.4-alpha"
+horologist = "0.7.5-alpha"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
