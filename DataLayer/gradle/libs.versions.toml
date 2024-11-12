@@ -10,10 +10,10 @@ org-jetbrains-kotlin = "1.9.25"
 org-jetbrains-kotlinx = "1.9.0"
 compose-ui-tooling = "1.4.0"
 robolectric = "4.13"
-roborazzi = "1.31.0"
+roborazzi = "1.32.2"
 ui-test-junit4 = "1.7.5"
 ui-test-manifest = "1.7.5"
-horologist = "0.7.4-alpha"
+horologist = "0.7.5-alpha"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -42,7 +42,7 @@ wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling",
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.2"
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.3"
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
