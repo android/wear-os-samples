@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
 
     namespace = "com.example.android.wearable.speaker"
 
@@ -104,7 +104,9 @@ dependencies {
 
     // Horologist Media toolkit
     implementation(libs.horologist.media.ui)
+    implementation(libs.horologist.media.ui.model)
     implementation(libs.horologist.audio.ui)
+    implementation(libs.horologist.audio.ui.model)
     implementation(libs.horologist.media.data)
     implementation(libs.horologist.images.coil)
 
@@ -131,14 +133,7 @@ dependencies {
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
-    testImplementation(libs.horologist.roboscreenshots) {
-        exclude(group = "com.github.QuickBirdEng.kotlin-snapshot-testing")
-    }
-
-    androidTestImplementation(libs.test.ext.junit)
-    androidTestImplementation(libs.test.espresso.core)
-    androidTestImplementation(libs.compose.ui.test.junit4)
-    androidTestImplementation(composeBom)
+    testImplementation(libs.horologist.roboscreenshots)
 
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

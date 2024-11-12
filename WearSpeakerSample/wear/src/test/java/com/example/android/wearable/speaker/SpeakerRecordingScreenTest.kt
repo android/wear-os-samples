@@ -29,11 +29,13 @@ class SpeakerRecordingScreenTest(override val device: WearDevice) : WearScreensh
     override val tolerance = 0.02f
 
     @Test
-    fun speakerRecordingScreenTest() = runTest {
-        AppScaffold(
-            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
-        ) {
-            SpeakerScreenPreview(PlaybackState.Recording)
+    fun speakerRecordingScreenTest() {
+        runTest {
+            AppScaffold(
+                timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
+            ) {
+                SpeakerScreenPreview(PlaybackState.Recording)
+            }
         }
     }
 

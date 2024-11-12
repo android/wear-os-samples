@@ -9,10 +9,10 @@ compose-ui-tooling = "1.4.0"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 robolectric = "4.13"
-roborazzi = "1.29.0"
+roborazzi = "1.31.0"
 ui-test-junit4 = "1.7.5"
 ui-test-manifest = "1.7.5"
-horologist = "0.6.20"
+horologist = "0.7.4-alpha"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -23,17 +23,18 @@ androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", versi
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test-manifest" }
 androidx-media = "androidx.media:media:1.7.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.2"
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.3"
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
 horologist-audio-ui = { module = "com.google.android.horologist:horologist-audio-ui", version.ref = "horologist" }
+horologist-audio-ui-model = { module = "com.google.android.horologist:horologist-audio-ui-model", version.ref = "horologist" }
 horologist-images-coil = { module = "com.google.android.horologist:horologist-images-coil", version.ref = "horologist" }
 horologist-media-data = { module = "com.google.android.horologist:horologist-media-data", version.ref = "horologist" }
 horologist-media-ui = { module = "com.google.android.horologist:horologist-media-ui", version.ref = "horologist" }
+horologist-media-ui-model = { module = "com.google.android.horologist:horologist-media-ui-model", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
