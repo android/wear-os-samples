@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "8.7.2"
-androidx-compose-bom = "2024.10.01"
+androidx-compose-bom = "2024.11.00"
 androidx-activity = "1.9.3"
 androidx-lifecycle = "2.8.7"
 androidx-wear-compose = "1.4.0"

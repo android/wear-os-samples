@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.7.2"
 androidx-activity = "1.9.3"
-androidx-compose-bom = "2024.10.01"
+androidx-compose-bom = "2024.11.00"
 androidx-media3 = "1.4.1"
 androidx-wear-compose = "1.4.0"
 compose-compiler = "1.5.15"
