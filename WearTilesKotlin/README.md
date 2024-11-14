@@ -7,7 +7,7 @@ Wear Tiles Sample
 actions users need in order to get things done. With a simple swipe from the watch face, a user can
 find out the latest forecast or start a timer.
 
-This repository contains a sample tile built using the [Tiles Material Components](https://developer.android.com/reference/androidx/wear/tiles/material/package-summary)
+This repository contains a sample tile built using the [Tiles Material Components](https://developer.android.com/reference/androidx/wear/protolayout/material/package-summary)
 library (for UI) and [Horologist Tiles](https://github.com/google/horologist#-tiles) (preview
 utilities and Kotlin-friendly wrappers).
 
