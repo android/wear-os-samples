@@ -9,8 +9,8 @@ ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 org-jetbrains-kotlinx = "1.9.0"
 compose-ui-tooling = "1.4.0"
-robolectric = "4.14"
-roborazzi = "1.32.2"
+robolectric = "4.14.1"
+roborazzi = "1.33.0"
 ui-test-junit4 = "1.7.5"
 ui-test-manifest = "1.7.5"
 horologist = "0.7.5-alpha"
@@ -35,7 +35,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
-playservices-wearable = "com.google.android.gms:play-services-wearable:18.2.0"
+playservices-wearable = "com.google.android.gms:play-services-wearable:19.0.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "compose-ui-tooling" }
