@@ -17,13 +17,16 @@ package com.example.wear.tiles.messaging
 
 import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
-import androidx.wear.protolayout.ResourceBuilders
+import androidx.wear.protolayout.ResourceBuilders.Resources
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.TileBuilders.Tile
 import coil.Coil
 import coil.ImageLoader
+import com.example.wear.tiles.R
 import com.google.android.horologist.tiles.SuspendingTileService
+import java.util.UUID
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -46,7 +49,6 @@ import kotlinx.coroutines.flow.stateIn
 class MessagingTileService : SuspendingTileService() {
     private lateinit var repo: MessagingRepo
     private lateinit var imageLoader: ImageLoader
-    private lateinit var renderer: MessagingTileRenderer
     private lateinit var tileStateFlow: StateFlow<MessagingTileState?>
 
     override fun onCreate() {
@@ -54,7 +56,6 @@ class MessagingTileService : SuspendingTileService() {
 
         repo = MessagingRepo(this)
         imageLoader = Coil.imageLoader(this)
-        renderer = MessagingTileRenderer(this)
 
         tileStateFlow = repo.getFavoriteContacts()
             .map { contacts -> MessagingTileState(contacts) }
@@ -66,12 +67,14 @@ class MessagingTileService : SuspendingTileService() {
     }
 
     /**
-     * Read the latest data, delegating to the [MessagingTileRenderer] which creates a layout to
-     * which it binds the state.
+     * Read the latest data, and create a layout to which it binds the state.
      */
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val tileState: MessagingTileState = latestTileState()
-        return renderer.renderTimeline(tileState, requestParams)
+        val layoutElement = messagingTileLayout(latestTileState(), this, requestParams.deviceConfiguration)
+        val resourcesVersion = if (DEBUG_RESOURCES) UUID.randomUUID().toString() else "0"
+        return Tile.Builder().setResourcesVersion(resourcesVersion).setTileTimeline(
+            Timeline.fromLayoutElement(layoutElement)
+        ).build()
     }
 
     /**
@@ -102,14 +105,36 @@ class MessagingTileService : SuspendingTileService() {
     }
 
     /**
-     * Downloads bitmaps from the network and passes them to [MessagingTileRenderer] to add as
-     * image resources (alongside any local resources).
+     * Downloads bitmaps from the network and adds them to the Resources object
+     * (alongside any local resources).
      */
     override suspend fun resourcesRequest(
         requestParams: ResourcesRequest
-    ): ResourceBuilders.Resources {
+    ): Resources {
         val avatars = fetchAvatarsFromNetwork(requestParams)
-        return renderer.produceRequestedResources(avatars, requestParams)
+        val resourceState = avatars
+        val resourceIds = requestParams.resourceIds
+        return Resources.Builder()
+            .setVersion(requestParams.version)
+            .apply {
+                if (resourceIds.isEmpty() || resourceIds.contains(ID_IC_SEARCH)) {
+                    addIdToImageMapping(
+                        ID_IC_SEARCH,
+                        R.drawable.ic_search_24
+                    )
+                }
+
+                // We already checked `resourceIds` in `MessagingTileService` because we needed to know
+                // which avatars needed to be fetched from the network; `resourceResults` was already
+                // filtered so it only contains bitmaps for the requested resources.
+                resourceState.forEach { (contact, bitmap) ->
+                    addIdToImageMapping(
+                        "$ID_CONTACT_PREFIX${contact.id}",
+                        bitmap
+                    )
+                }
+            }
+            .build()
     }
 
     /**
@@ -124,7 +149,7 @@ class MessagingTileService : SuspendingTileService() {
             tileState.contacts
         } else {
             tileState.contacts.filter {
-                requestParams.resourceIds.contains(MessagingTileRenderer.ID_CONTACT_PREFIX + it.id)
+                requestParams.resourceIds.contains(MessagingTileService.ID_CONTACT_PREFIX + it.id)
             }
         }
 
@@ -139,4 +164,12 @@ class MessagingTileService : SuspendingTileService() {
 
         return images
     }
+
+    companion object {
+        internal const val ID_IC_SEARCH = "ic_search"
+        internal const val ID_CONTACT_PREFIX = "contact:"
+    }
+
 }
+
+const val DEBUG_RESOURCES = true
