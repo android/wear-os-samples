@@ -14,59 +14,63 @@
  * limitations under the License.
  */
 
+import com.android.build.api.variant.BuiltArtifactsLoader
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.GradleException
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
-import org.gradle.work.ChangeType
-import org.gradle.work.Incremental
-import org.gradle.work.InputChanges
+import java.io.File
 import javax.inject.Inject
 
 /**
- * Runs the validator against WFF XML files.
+ * Runs the Memory Footprint checker tool.
  */
-@CacheableTask
-abstract class ValidateWffFilesTask @Inject constructor(@Internal val execOperations: ExecOperations) :
+abstract class MemoryFootprintTask @Inject constructor(@Internal val execOperations: ExecOperations) :
     DefaultTask() {
     init {
         this.outputs.upToDateWhen { true }
     }
 
-    @get:InputFiles
-    @get:Incremental
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val wffFiles: ConfigurableFileCollection
+    @get:InputDirectory
+    abstract val apkLocation: DirectoryProperty
+
+    @get:Internal
+    abstract val artifactsLoader: Property<BuiltArtifactsLoader>
 
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val validatorJarPath: RegularFileProperty
+    abstract val memoryFootprintJarPath: RegularFileProperty
 
     @get:Input
     abstract val wffVersion: Property<Int>
 
     @TaskAction
-    fun validate(inputs: InputChanges) {
-        val changedFiles = inputs.getFileChanges(wffFiles)
-        changedFiles.forEach { change ->
-            if (change.changeType != ChangeType.REMOVED) {
-                execOperations.javaexec {
-                    it.classpath = project.files(validatorJarPath)
-                    // Stop-on-fail ensures that the Gradle Task throws an exception when a WFF file fails
-                    // to validate.
-                    it.args(wffVersion.get().toString(), "--stop-on-fail", change.file.absolutePath)
-                }
-            }
+    fun runMemoryFootprintCheck() {
+        val artifacts =
+            artifactsLoader.get().load(apkLocation.get())
+                ?: throw GradleException("Cannot load APKs")
+        if (artifacts.elements.size != 1)
+            throw GradleException("Expected only one APK!")
+        val apkPath = File(artifacts.elements.single().outputFile).toPath()
+
+        execOperations.javaexec {
+            it.classpath = project.files(memoryFootprintJarPath)
+            it.args(
+                "--schema-version",
+                wffVersion.get().toString(),
+                "--watch-face",
+                apkPath,
+                "--verbose"
+            )
         }
     }
 }
-

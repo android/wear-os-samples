@@ -29,30 +29,42 @@ import org.gradle.kotlin.dsl.register
 const val ASSEMBLE_DEBUG_TASK = "assembleDebug"
 const val BUNDLE_DEBUG_TASK = "bundleDebug"
 const val VALIDATE_TASK = "validateWff"
+const val MEMORY_FOOTPRINT_TASK = "memoryFootprint"
 const val DOWNLOAD_VALIDATOR_TASK = "downloadWffValidator"
+const val DOWNLOAD_MEMORY_FOOTPRINT_TASK = "downloadMemoryFootprint"
 const val INSTALL_TASK = "validateWffAndInstall"
 
-// TODO move from here
 private const val VALIDATOR_URL =
     "https://github.com/google/watchface/releases/download/release/dwf-format-2-validator-1.0.jar"
 private const val VALIDATOR_PATH = "validator/validator.jar"
+private const val MEMORY_FOOTPRINT_URL =
+    "https://github.com/google/watchface/releases/download/latest/memory-footprint.jar"
+private const val MEMORY_FOOTPRINT_PATH = "memory-footprint/memory-footprint.jar"
 
 class WffValidatorPlugin : Plugin<Project> {
     private lateinit var manifestPath: String
 
     override fun apply(project: Project) {
-        val downloadTask = project.tasks.register<ValidatorDownloadTask>(DOWNLOAD_VALIDATOR_TASK) {
-            val validatorPath = project.layout.buildDirectory.file(VALIDATOR_PATH)
-            this.validatorUrl.set(VALIDATOR_URL)
-            this.validatorJarPath.set(validatorPath)
-        }
+        val validatorDownloadTask =
+            project.tasks.register<WffToolDownloadTask>(DOWNLOAD_VALIDATOR_TASK) {
+                val validatorPath = project.layout.buildDirectory.file(VALIDATOR_PATH)
+                this.toolUrl.set(VALIDATOR_URL)
+                this.toolJarPath.set(validatorPath)
+            }
+
+        val memoryFootprintDownloadTask =
+            project.tasks.register<WffToolDownloadTask>(DOWNLOAD_MEMORY_FOOTPRINT_TASK) {
+                val memoryFootprintPath = project.layout.buildDirectory.file(MEMORY_FOOTPRINT_PATH)
+                this.toolUrl.set(MEMORY_FOOTPRINT_URL)
+                this.toolJarPath.set(memoryFootprintPath)
+            }
 
         project.tasks.register<ValidateWffFilesTask>(VALIDATE_TASK) {
             val wffFileCollection = getWffFileCollection(project)
             if (wffFileCollection.isEmpty) {
                 throw GradleException("No WFF XML files found in project!")
             }
-            validatorJarPath.set(downloadTask.get().validatorJarPath)
+            validatorJarPath.set(validatorDownloadTask.get().toolJarPath)
             wffFiles.setFrom(wffFileCollection)
             wffVersion.set(getWffVersion(manifestPath))
         }
@@ -81,6 +93,14 @@ class WffValidatorPlugin : Plugin<Project> {
             proj.tasks.register<AdbInstallTask>(INSTALL_TASK) {
                 apkLocation = apkDirectoryProvider
                 artifactLoader = loader
+                dependsOn(ASSEMBLE_DEBUG_TASK)
+            }
+
+            proj.tasks.register<MemoryFootprintTask>(MEMORY_FOOTPRINT_TASK) {
+                memoryFootprintJarPath.set(memoryFootprintDownloadTask.get().toolJarPath)
+                apkLocation.set(apkDirectoryProvider)
+                artifactsLoader.set(loader)
+                wffVersion.set(getWffVersion(manifestPath))
                 dependsOn(ASSEMBLE_DEBUG_TASK)
             }
         }

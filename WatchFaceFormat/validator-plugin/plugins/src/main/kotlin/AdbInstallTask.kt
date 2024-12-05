@@ -20,9 +20,12 @@ import org.gradle.api.GradleException
 import org.gradle.api.file.Directory
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.process.ExecOperations
 import java.io.File
+import javax.inject.Inject
 
 const val SET_WATCH_FACE_CMD =
     "shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation set-watchface --es watchFaceId %s"
@@ -30,7 +33,8 @@ const val SET_WATCH_FACE_CMD =
 /**
  * Installs and sets watch face on an attached device via ADB.
  */
-open class AdbInstallTask : DefaultTask() {
+open class AdbInstallTask @Inject constructor(@Internal val execOperations: ExecOperations) :
+    DefaultTask() {
     @set:Option(option = "device", description = "The ADB device to install on")
     @get:Input
     var device: String = ""
@@ -57,13 +61,13 @@ open class AdbInstallTask : DefaultTask() {
         val installWatchFaceCmd = deviceArg + "install $apkPath"
         val setWatchFaceCmd = deviceArg + SET_WATCH_FACE_CMD.format(artifacts.applicationId)
 
-        project.exec {
+        execOperations.exec {
             val argsList = installWatchFaceCmd.split(" ").toList()
             it.commandLine("adb")
             it.args(argsList)
         }
 
-        project.exec {
+        execOperations.exec {
             val argsList = setWatchFaceCmd.split(" ").toList()
             it.commandLine("adb")
             it.args(argsList)
