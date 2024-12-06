@@ -38,9 +38,12 @@ private const val DEFAULT_RELEASE_TAG = "release"
 private const val VALIDATOR_URL =
     "https://github.com/google/watchface/releases/download/%s/dwf-format-2-validator-1.0.jar"
 private const val VALIDATOR_PATH = "validator/validator-%s.jar"
+private const val VALIDATOR_OUTPUT_PATH = "validator/validator-%s.txt"
+
 private const val MEMORY_FOOTPRINT_URL =
     "https://github.com/google/watchface/releases/download/%s/memory-footprint.jar"
 private const val MEMORY_FOOTPRINT_PATH = "memory-footprint/memory-footprint-%s.jar"
+private const val MEMORY_FOOTPRINT_OUTPUT_PATH = "memory-footprint/memory-footprint-%s.txt"
 
 class WffValidatorPlugin : Plugin<Project> {
     private lateinit var manifestPath: String
@@ -52,9 +55,12 @@ class WffValidatorPlugin : Plugin<Project> {
         val toolReleaseTag = project.properties["release"] ?: DEFAULT_RELEASE_TAG
 
         val validatorUrl = VALIDATOR_URL.format(toolReleaseTag)
-        val memoryFootprintUrl = MEMORY_FOOTPRINT_URL.format(toolReleaseTag)
         val validatorJar = VALIDATOR_PATH.format(toolReleaseTag)
+        val validatorOutput = VALIDATOR_OUTPUT_PATH.format(toolReleaseTag)
+
+        val memoryFootprintUrl = MEMORY_FOOTPRINT_URL.format(toolReleaseTag)
         val memoryFootprintJar = MEMORY_FOOTPRINT_PATH.format(toolReleaseTag)
+        val memoryFootprintOutput = MEMORY_FOOTPRINT_OUTPUT_PATH.format(toolReleaseTag)
 
         val validatorDownloadTask =
             project.tasks.register<WffToolDownloadTask>(DOWNLOAD_VALIDATOR_TASK) {
@@ -75,7 +81,9 @@ class WffValidatorPlugin : Plugin<Project> {
             if (wffFileCollection.isEmpty) {
                 throw GradleException("No WFF XML files found in project!")
             }
+            val validatorOutputPath = project.layout.buildDirectory.file(validatorOutput)
             validatorJarPath.set(validatorDownloadTask.get().toolJarPath)
+            validatorOutputFile.set(validatorOutputPath)
             wffFiles.setFrom(wffFileCollection)
             wffVersion.set(getWffVersion(manifestPath))
         }
@@ -108,10 +116,12 @@ class WffValidatorPlugin : Plugin<Project> {
             }
 
             proj.tasks.register<MemoryFootprintTask>(MEMORY_FOOTPRINT_TASK) {
+                val memoryFootprintOutputPath = project.layout.buildDirectory.file(memoryFootprintOutput)
                 memoryFootprintJarPath.set(memoryFootprintDownloadTask.get().toolJarPath)
                 apkLocation.set(apkDirectoryProvider)
                 artifactsLoader.set(loader)
                 wffVersion.set(getWffVersion(manifestPath))
+                memoryFootprintOutputFile.set(memoryFootprintOutputPath)
                 dependsOn(ASSEMBLE_DEBUG_TASK)
             }
         }

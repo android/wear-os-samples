@@ -20,10 +20,12 @@ import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
@@ -34,17 +36,13 @@ import javax.inject.Inject
 /**
  * Runs the Memory Footprint checker tool.
  */
+@CacheableTask
 abstract class MemoryFootprintTask() : DefaultTask() {
-    init {
-        // Setting the outputs to always be up to date, meaning that this task will only run if the
-        // input changes (or if the last run was not successful).
-        this.outputs.upToDateWhen { true }
-    }
-
     @get:Inject
     abstract val execOperations: ExecOperations
 
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val apkLocation: DirectoryProperty
 
     @get:Internal
@@ -53,6 +51,9 @@ abstract class MemoryFootprintTask() : DefaultTask() {
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val memoryFootprintJarPath: RegularFileProperty
+
+    @get:OutputFile
+    abstract val memoryFootprintOutputFile: RegularFileProperty
 
     @get:Input
     abstract val wffVersion: Property<Int>
@@ -66,7 +67,7 @@ abstract class MemoryFootprintTask() : DefaultTask() {
             throw GradleException("Expected only one APK!")
         val apkPath = File(artifacts.elements.single().outputFile).toPath()
 
-        execOperations.javaexec {
+        val result = execOperations.javaexec {
             it.classpath = project.files(memoryFootprintJarPath)
             it.args(
                 "--schema-version",
@@ -76,5 +77,6 @@ abstract class MemoryFootprintTask() : DefaultTask() {
                 "--verbose"
             )
         }
+        memoryFootprintOutputFile.get().asFile.writeText(result.toString())
     }
 }
