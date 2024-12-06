@@ -22,21 +22,23 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecOperations
 import org.gradle.work.ChangeType
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
+import javax.inject.Inject
 
 /**
  * Runs the validator against WFF XML files.
  */
 @CacheableTask
 abstract class ValidateWffFilesTask : DefaultTask() {
-    init {
-        this.outputs.upToDateWhen { true }
-    }
+    @get:Inject
+    abstract val execOperations: ExecOperations
 
     @get:InputFiles
     @get:Incremental
@@ -47,6 +49,9 @@ abstract class ValidateWffFilesTask : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val validatorJarPath: RegularFileProperty
 
+    @get:OutputFile
+    abstract val validatorOutputFile: RegularFileProperty
+
     @get:Input
     abstract val wffVersion: Property<Int>
 
@@ -55,12 +60,13 @@ abstract class ValidateWffFilesTask : DefaultTask() {
         val changedFiles = inputs.getFileChanges(wffFiles)
         changedFiles.forEach { change ->
             if (change.changeType != ChangeType.REMOVED) {
-                project.javaexec {
+                val result = execOperations.javaexec {
                     it.classpath = project.files(validatorJarPath)
                     // Stop-on-fail ensures that the Gradle Task throws an exception when a WFF file fails
                     // to validate.
                     it.args(wffVersion.get().toString(), "--stop-on-fail", change.file.absolutePath)
                 }
+                validatorOutputFile.get().asFile.writeText(result.toString())
             }
         }
     }

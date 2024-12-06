@@ -18,42 +18,48 @@ import com.android.build.api.variant.BuiltArtifactsLoader
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.options.Option
 import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
-const val SET_WATCH_FACE_CMD =
-    "shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation set-watchface --es watchFaceId %s"
-
 /**
- * Installs and sets watch face on an attached device via ADB.
+ * Runs the Memory Footprint checker tool.
  */
-abstract class AdbInstallTask() : DefaultTask() {
+@CacheableTask
+abstract class MemoryFootprintTask() : DefaultTask() {
     @get:Inject
     abstract val execOperations: ExecOperations
 
-    @set:Option(option = "device", description = "The ADB device to install on")
-    @get:Input
-    var device: String = ""
-
     @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val apkLocation: DirectoryProperty
 
     @get:Internal
     abstract val artifactsLoader: Property<BuiltArtifactsLoader>
 
-    // As this task has no outputs defined, it will always be executed, which is desirable as the
-    // APK should be installed even if the APK itself hasn't changed. (It may have been removed from
-    // the device).
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val memoryFootprintJarPath: RegularFileProperty
+
+    @get:OutputFile
+    abstract val memoryFootprintOutputFile: RegularFileProperty
+
+    @get:Input
+    abstract val wffVersion: Property<Int>
 
     @TaskAction
-    fun install() {
+    fun runMemoryFootprintCheck() {
         val artifacts =
             artifactsLoader.get().load(apkLocation.get())
                 ?: throw GradleException("Cannot load APKs")
@@ -61,20 +67,16 @@ abstract class AdbInstallTask() : DefaultTask() {
             throw GradleException("Expected only one APK!")
         val apkPath = File(artifacts.elements.single().outputFile).toPath()
 
-        val deviceArg = if (device.isEmpty()) "" else "-s $device "
-        val installWatchFaceCmd = deviceArg + "install $apkPath"
-        val setWatchFaceCmd = deviceArg + SET_WATCH_FACE_CMD.format(artifacts.applicationId)
-
-        execOperations.exec {
-            val argsList = installWatchFaceCmd.split(" ").toList()
-            it.commandLine("adb")
-            it.args(argsList)
+        val result = execOperations.javaexec {
+            it.classpath = project.files(memoryFootprintJarPath)
+            it.args(
+                "--schema-version",
+                wffVersion.get().toString(),
+                "--watch-face",
+                apkPath,
+                "--verbose"
+            )
         }
-
-        execOperations.exec {
-            val argsList = setWatchFaceCmd.split(" ").toList()
-            it.commandLine("adb")
-            it.args(argsList)
-        }
+        memoryFootprintOutputFile.get().asFile.writeText(result.toString())
     }
 }
