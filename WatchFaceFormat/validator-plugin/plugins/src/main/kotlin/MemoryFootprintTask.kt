@@ -34,11 +34,15 @@ import javax.inject.Inject
 /**
  * Runs the Memory Footprint checker tool.
  */
-abstract class MemoryFootprintTask @Inject constructor(@Internal val execOperations: ExecOperations) :
-    DefaultTask() {
+abstract class MemoryFootprintTask() : DefaultTask() {
     init {
+        // Setting the outputs to always be up to date, meaning that this task will only run if the
+        // input changes (or if the last run was not successful).
         this.outputs.upToDateWhen { true }
     }
+
+    @get:Inject
+    abstract val execOperations: ExecOperations
 
     @get:InputDirectory
     abstract val apkLocation: DirectoryProperty

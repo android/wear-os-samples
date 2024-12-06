@@ -22,7 +22,6 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
@@ -36,11 +35,15 @@ import javax.inject.Inject
  * Runs the validator against WFF XML files.
  */
 @CacheableTask
-abstract class ValidateWffFilesTask @Inject constructor(@Internal val execOperations: ExecOperations) :
-    DefaultTask() {
+abstract class ValidateWffFilesTask : DefaultTask() {
     init {
+        // Setting the outputs to always be up to date, meaning that this task will only run if the
+        // input changes (or if the last run was not successful).
         this.outputs.upToDateWhen { true }
     }
+
+    @get:Inject
+    abstract val execOperations: ExecOperations
 
     @get:InputFiles
     @get:Incremental
