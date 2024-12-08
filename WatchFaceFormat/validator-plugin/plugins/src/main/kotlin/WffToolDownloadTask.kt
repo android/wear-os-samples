@@ -30,27 +30,27 @@ import org.gradle.api.tasks.TaskAction
 import java.nio.file.Path
 
 /**
- * Downloads the WFF validator for use in the build process.
+ * Downloads a WFF-related tool for use in the build process.
  */
 @CacheableTask
-abstract class ValidatorDownloadTask : DefaultTask() {
+abstract class WffToolDownloadTask : DefaultTask() {
     @get:OutputFile
-    abstract val validatorJarPath: RegularFileProperty
+    abstract val toolJarPath: RegularFileProperty
 
     @get:Input
-    abstract val validatorUrl: Property<String>
+    abstract val toolUrl: Property<String>
 
     @TaskAction
     fun install() {
-        downloadFileToPath(validatorJarPath.get().asFile.toPath(), validatorUrl.get())
+        downloadFileToPath(toolJarPath.get().asFile.toPath(), toolUrl.get())
     }
 
     private fun downloadFileToPath(filePath: Path, url: String) {
         val client = HttpClient { expectSuccess = true }
         val file = filePath.toFile()
 
-        // The validator generally won't exist already -- but there is the potential for the input
-        // URL to change, in which case the existing validator should be removed.
+        // The tool generally won't exist already -- but there is the potential for the input URL to
+        // change, in which case the existing validator should be removed.
         if (file.exists()) {
             file.delete()
         }
