@@ -1,6 +1,6 @@
 Compose for Wear OS Starter Sample
 ==================================
-Demonstrates a simple "Hello, World" starter project for using Compose with Wear OS.
+Demonstrates a simple "Hello, World" starter project for using Jetpack Compose with Wear OS.
 
 Introduction
 ------------
