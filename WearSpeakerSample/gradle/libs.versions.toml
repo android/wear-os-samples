@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.7.3"
 androidx-activity = "1.9.3"
-androidx-compose-bom = "2024.11.00"
+androidx-compose-bom = "2024.12.01"
 androidx-media3 = "1.5.0"
 androidx-wear-compose = "1.4.0"
 compose-compiler = "1.5.15"
@@ -10,8 +10,8 @@ ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 robolectric = "4.14.1"
 roborazzi = "1.36.0"
-ui-test-junit4 = "1.7.5"
-ui-test-manifest = "1.7.5"
+ui-test-junit4 = "1.7.6"
+ui-test-manifest = "1.7.6"
 horologist = "0.7.5-alpha"
 
 [libraries]
