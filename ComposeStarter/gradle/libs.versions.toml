@@ -2,14 +2,15 @@
 android-gradle-plugin = "8.7.3"
 androidx-activity = "1.9.3"
 androidx-compose-bom = "2024.12.01"
-androidx-wear-compose = "1.4.0"
+androidx-wear-compose-material3 = "1.0.0-alpha30"
+androidx-wear-compose = "1.5.0-alpha07"
 compose-compiler = "1.5.15"
 compose-ui-tooling = "1.4.0"
 horologist = "0.7.5-alpha"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 robolectric = "4.14.1"
-roborazzi = "1.36.0"
+roborazzi = "1.37.0"
 ui-test-junit4 = "1.7.6"
 ui-test-manifest = "1.7.6"
 
@@ -18,7 +19,6 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "compose-ui-tooling" }
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
-androidx-splashscreen =  "androidx.core:core-splashscreen:1.0.1"
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test-manifest" }
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
@@ -26,8 +26,6 @@ compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.3"
-horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
-horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
@@ -38,7 +36,7 @@ roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-ju
 test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
 test-ext-junit = "androidx.test.ext:junit:1.2.1"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
-wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
+wear-compose-material = { module = "androidx.wear.compose:compose-material3", version.ref = "androidx-wear-compose-material3" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
 
 [plugins]

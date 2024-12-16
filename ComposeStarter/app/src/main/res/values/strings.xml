@@ -15,4 +15,11 @@
     <string name="app_name">ComposeStarter</string>
 
     <string name="hello_world">From the Round world,\nHello, %1$s!</string>
+    <string name="show_list">Show list</string>
+    <string name="title">Title</string>
+    <string name= "error_long">An unknown error occurred during the request.</string>
+    <string name= "example_button_content_description">Example Button</string>
+    <string name= "example_card_title">Example Title</string>
+    <string name= "example_card_content">Example Content\nMore Lines\nAnd More"</string>
+    <string name= "example_button_text">Example Button</string>
 </resources>
