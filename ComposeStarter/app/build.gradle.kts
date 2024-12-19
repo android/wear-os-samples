@@ -77,7 +77,6 @@ dependencies {
     // General compose dependencies
     implementation(composeBom)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.splashscreen)
 
     // Compose for Wear OS Dependencies
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
@@ -90,10 +89,6 @@ dependencies {
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
     implementation(libs.wear.compose.foundation)
     implementation(libs.androidx.material.icons.core)
-
-    // Horologist for correct Compose layout
-    implementation(libs.horologist.compose.layout)
-    implementation(libs.horologist.compose.material)
 
     // Preview Tooling
     implementation(libs.compose.ui.tooling.preview)

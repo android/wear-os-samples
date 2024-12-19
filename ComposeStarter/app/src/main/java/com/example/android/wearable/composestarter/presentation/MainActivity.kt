@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalHorologistApi::class, ExperimentalWearFoundationApi::class)
 
 package com.example.android.wearable.composestarter.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.rounded.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,14 +32,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
-import androidx.wear.compose.foundation.rememberActiveFocusRequester
-import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults.behavior
-import androidx.wear.compose.foundation.rotary.rotaryScrollable
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TitleCard
-import androidx.wear.compose.material.dialog.Dialog
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.material3.AlertDialog
+import androidx.wear.compose.material3.AlertDialogDefaults
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButton
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -52,24 +53,11 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.AlertContent
-import com.google.android.horologist.compose.material.Button
-import com.google.android.horologist.compose.material.Chip
-import com.google.android.horologist.compose.material.ListHeaderDefaults.firstItemPadding
-import com.google.android.horologist.compose.material.ResponsiveListHeader
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
  *
- * Displays a centered [Text] composable and a list built with [Horologist]
- * (https://github.com/google/horologist).
+ * Displays a centered [Text] composable and a list built with [TransformingLazyColumn].
  *
  * Use the Wear version of Compose Navigation. You can carry
  * over your knowledge from mobile and it supports the swipe-to-dismiss gesture (Wear OS's
@@ -108,78 +96,77 @@ fun WearApp() {
 }
 
 @Composable
-fun GreetingScreen(greetingName: String, onShowList: () -> Unit) {
-    val scrollState = rememberScrollState()
+fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modifier = Modifier) {
+    val scrollState = rememberTransformingLazyColumnState()
 
-    /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
+    /* If you have enough items in your list, use [TransformingLazyColumn] which is an optimized
      * version of LazyColumn for wear devices with some added features. For more information,
      * see d.android.com/wear/compose.
      */
-    ScreenScaffold(scrollState = scrollState) {
-        val padding = ScalingLazyColumnDefaults.padding(
-            first = ItemType.Text,
-            last = ItemType.Chip
-        )()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .rotaryScrollable(
-                    behavior(scrollableState = scrollState),
-                    focusRequester = rememberActiveFocusRequester()
-                )
-                .padding(padding),
-            verticalArrangement = Arrangement.Center
+    ScreenScaffold(scrollState = scrollState, edgeButton = {
+        EdgeButton(onClick = onShowList) {
+            Text(stringResource(R.string.show_list), textAlign = TextAlign.Center)
+        }
+    }) {
+        // Use workaround from Horologist for padding or wait until fix lands
+        TransformingLazyColumn(
+            state = scrollState,
         ) {
-            Greeting(greetingName = greetingName)
-            Chip(label = "Show List", onClick = onShowList)
+            item { Greeting(greetingName = greetingName, modifier = modifier.fillMaxSize()) }
+
+
         }
     }
 }
 
 @Composable
-fun ListScreen() {
+fun ListScreen(modifier: Modifier = Modifier) {
     var showDialog by remember { mutableStateOf(false) }
 
     /*
      * Specifying the types of items that appear at the start and end of the list ensures that the
      * appropriate padding is used.
      */
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ItemType.Text,
-            last = ItemType.SingleButton
-        )
-    )
+    val listState = rememberTransformingLazyColumnState()
 
-    ScreenScaffold(scrollState = columnState) {
+    ScreenScaffold(scrollState = listState) {
         /*
-         * The Horologist [ScalingLazyColumn] takes care of the horizontal and vertical
-         * padding for the list, so there is no need to specify it, as in the [GreetingScreen]
-         * composable.
+         * TransformingLazyColumn takes care of the horizontal and vertical
+         * padding for the list and handles scrolling.
          */
-        ScalingLazyColumn(
-            columnState = columnState
+        // Use workaround from Horologist for padding or wait until fix lands
+        TransformingLazyColumn(
+            state = listState
         ) {
             item {
-                ResponsiveListHeader(contentPadding = firstItemPadding()) {
-                    Text(text = "Header")
-                }
+                ListHeader(modifier = modifier.fillMaxSize()) { Text(text = "Header") }
             }
             item {
-                TitleCard(title = { Text("Example Title") }, onClick = { }) {
-                    Text("Example Content\nMore Lines\nAnd More")
+                TitleCard(
+                    title = { Text(stringResource(R.string.example_card_title)) },
+                    onClick = { }) {
+                    Text(stringResource(R.string.example_card_content))
                 }
-            }
-            item {
-                Chip(label = "Example Chip", onClick = { })
             }
             item {
                 Button(
-                    imageVector = Icons.Default.Build,
-                    contentDescription = "Example Button",
-                    onClick = { showDialog = true }
+                    label = {
+                        Text(
+                            text = stringResource(R.string.example_button_text),
+                            modifier = modifier.fillMaxWidth()
+                        )
+                    },
+                    onClick = { },
+                    modifier = modifier.fillMaxWidth()
                 )
+            }
+            item {
+                IconButton(onClick = { showDialog = true }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Build,
+                        contentDescription = stringResource(R.string.example_button_content_description)
+                    )
+                }
             }
         }
     }
@@ -193,12 +180,11 @@ fun ListScreen() {
 }
 
 @Composable
-fun Greeting(greetingName: String) {
-    ResponsiveListHeader(contentPadding = firstItemPadding()) {
+fun Greeting(greetingName: String, modifier: Modifier = Modifier) {
+    ListHeader {
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.primary,
             text = stringResource(R.string.hello_world, greetingName)
         )
     }
@@ -209,41 +195,34 @@ fun SampleDialog(
     showDialog: Boolean,
     onDismiss: () -> Unit,
     onCancel: () -> Unit,
-    onOk: () -> Unit
+    onOk: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val state = rememberResponsiveColumnState()
-
-    Dialog(
-        showDialog = showDialog,
+    AlertDialog(
+        show = showDialog,
         onDismissRequest = onDismiss,
-        scrollState = state.state
-    ) {
-        SampleDialogContent(onCancel, onDismiss, onOk)
-    }
-}
-
-@Composable
-fun SampleDialogContent(
-    onCancel: () -> Unit,
-    onDismiss: () -> Unit,
-    onOk: () -> Unit
-) {
-    AlertContent(
         icon = {},
-        title = "Title",
-        onCancel = {
-            onCancel()
-            onDismiss()
+        title = { Text(text = stringResource(R.string.title)) },
+        text = { Text(text = stringResource(R.string.error_long)) },
+        confirmButton = {
+            AlertDialogDefaults.ConfirmButton(
+                onClick = {
+                    // Perform confirm action here
+                    onOk()
+                    onDismiss()
+                }
+            )
         },
-        onOk = {
-            onOk()
-            onDismiss()
+        dismissButton = {
+            AlertDialogDefaults.DismissButton(
+                onClick = {
+                    // Perform dismiss action here
+                    onCancel()
+                    onDismiss()
+                }
+            )
         }
-    ) {
-        item {
-            Text(text = "An unknown error occurred during the request.")
-        }
-    }
+    )
 }
 
 @WearPreviewDevices
