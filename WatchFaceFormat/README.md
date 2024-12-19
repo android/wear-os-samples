@@ -51,6 +51,7 @@ Additional commands that you can run from the command-line:
 
 - `./gradlew validateWff` - This only validates the WFF XML files, but will not build the APK. This task is automatically run as part of `assembleDebug` and
   `bundleDebug`.
+- `./gradlew memoryFootprint`- this runs the [memory footprint evaluator][validator-tools] on the resulting package.
 - `./gradlew validateWffAndInstall [--device <deviceid>]` - builds and validates the watch face, then installs and sets on a connected device or emulator.
 
 For more guidance on building and signing release builds, see
