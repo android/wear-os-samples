@@ -42,7 +42,7 @@ wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling",
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.3"
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.4"
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
