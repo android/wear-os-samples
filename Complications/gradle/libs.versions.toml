@@ -3,7 +3,7 @@ android-gradle-plugin = "8.8.0"
 androidx-wear-watchface = "1.2.1"
 
 org-jetbrains-kotlin = "1.9.25"
-org-jetbrains-kotlinx = "1.9.0"
+org-jetbrains-kotlinx = "1.10.1"
 
 [libraries]
 androidx-core-ktx = "androidx.core:core-ktx:1.15.0"
