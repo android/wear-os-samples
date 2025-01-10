@@ -26,7 +26,7 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.7.3")
+    implementation("com.android.tools.build:gradle-api:8.8.0")
 
     implementation("io.ktor:ktor-client-core:3.0.3")
     runtimeOnly("io.ktor:ktor-client-okhttp:3.0.3")
