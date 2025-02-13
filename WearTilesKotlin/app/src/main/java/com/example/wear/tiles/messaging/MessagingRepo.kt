@@ -48,9 +48,7 @@ class MessagingRepo(private val context: Context) {
     }
 
     companion object {
-        private const val avatarPath =
-            "https://github.com/android/wear-os-samples/raw/main/WearTilesKotlin/" +
-                "app/src/main/res/drawable-nodpi"
+        private const val avatarPath = "https://raw.githubusercontent.com/android/wear-os-samples/main/WearTilesKotlin/app/src/main/res/drawable-nodpi"
 
         val knownContacts = listOf(
             Contact(

@@ -1,25 +1,24 @@
 [versions]
-android-gradle-plugin = "8.7.3"
-androidx-wear-tiles = "1.4.1"
-androidx-wear-tooling-preview = "1.0.0"
-compose = "1.7.6"
+android-gradle-plugin = "8.8.0"
+androidx-wear-tiles = "1.4.1" # https://developer.android.com/jetpack/androidx/releases/wear-tiles
+compose = "1.7.8"
 compose-compiler = "1.5.15"
+concurrent-futures = "1.2.0"
 horologist = "0.7.5-alpha"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.25"
-org-jetbrains-kotlinx = "1.9.0"
-tiles-tooling-preview = "1.4.1"
+org-jetbrains-kotlin = "2.1.10"
+org-jetbrains-kotlinx = "1.10.1"
 
 [libraries]
-androidx-datastore = "androidx.datastore:datastore-preferences:1.1.1"
+androidx-concurrent-futures = { module = "androidx.concurrent:concurrent-futures", version.ref = "concurrent-futures" }
+androidx-datastore = "androidx.datastore:datastore-preferences:1.1.2"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.8.7"
 androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7"
-androidx-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "tiles-tooling-preview" }
-androidx-tiles-tooling = { module = "androidx.wear.tiles:tiles-tooling", version.ref = "tiles-tooling-preview" }
-androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
-androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "androidx-wear-tooling-preview" }
+androidx-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
+androidx-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
+androidx-tiles-tooling = { module = "androidx.wear.tiles:tiles-tooling", version.ref = "androidx-wear-tiles" }
+androidx-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "androidx-wear-tiles" }
 coil = "io.coil-kt:coil-compose:2.7.0"
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 horologist-compose-tools = { module = "com.google.android.horologist:horologist-compose-tools", version.ref = "horologist" }
 horologist-tiles = { module = "com.google.android.horologist:horologist-tiles", version.ref = "horologist" }
@@ -31,4 +30,5 @@ desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.3"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.25.0"
+com-diffplug-spotless = "com.diffplug.spotless:7.0.2"
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }

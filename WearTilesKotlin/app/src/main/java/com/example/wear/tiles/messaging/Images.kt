@@ -18,10 +18,13 @@ package com.example.wear.tiles.messaging
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.ResourceBuilders.ImageResource
 import coil.ImageLoader
+import coil.request.ErrorResult
 import coil.request.ImageRequest
+import coil.request.SuccessResult
 import coil.transform.CircleCropTransformation
 import java.nio.ByteBuffer
 
@@ -38,7 +41,19 @@ suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact, size: Int
         .allowHardware(false)
         .build()
     val response = execute(request)
-    return (response.drawable as? BitmapDrawable)?.bitmap
+    return when (response) {
+        is SuccessResult -> {
+            (response.drawable as? BitmapDrawable)?.bitmap
+        }
+        is ErrorResult -> {
+            Log.d("ImageLoader", "Error loading image ${contact.avatarUrl}: ${response.throwable.message}")
+            null
+        }
+        else -> {
+            Log.d("ImageLoader", "Error loading image ${contact.avatarUrl}: Unknown error")
+            null
+        }
+    }
 }
 
 fun bitmapToImageResource(bitmap: Bitmap): ImageResource {

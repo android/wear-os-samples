@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.stateIn
  * The main function, [tileRequest], is triggered when the system calls for a tile. Resources are
  * provided with the [resourcesRequest] method, which is triggered when the tile uses an Image.
  */
+
 class MessagingTileService : SuspendingTileService() {
     private lateinit var repo: MessagingRepo
     private lateinit var imageLoader: ImageLoader
