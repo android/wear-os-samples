@@ -47,6 +47,11 @@ class MessagingRepo(private val context: Context) {
         }
     }
 
+    // Note that this data structure is copied into Preferences Data Store to
+    // simulate how a real application would persist data. Changes made here
+    // will *not* be reflected in the app until Preferences Data Store is cleared
+    // by e.g. uninstalling the app.
+
     companion object {
         private const val avatarPath =
             "https://github.com/android/wear-os-samples/raw/main/WearTilesKotlin/" +
