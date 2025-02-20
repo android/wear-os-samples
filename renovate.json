@@ -20,9 +20,9 @@
       ],
       "groupName": "kotlin",
       "allowedVersions": "<2.0.0",
-        "ignorePaths": [
-          "WatchFaceFormat/**"
-        ],
+      "ignorePaths": [
+        "WatchFaceFormat/**"
+      ],
     },
     {
       "matchPackagePatterns": [
