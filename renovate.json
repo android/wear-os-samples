@@ -19,7 +19,10 @@
         "org.jetbrains.kotlin.*"
       ],
       "groupName": "kotlin",
-      "allowedVersions": "<2.0.0"
+      "allowedVersions": "<2.0.0",
+      "ignorePaths": [
+        "WatchFaceFormat/**"
+      ],
     },
     {
       "matchPackagePatterns": [
