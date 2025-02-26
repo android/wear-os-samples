@@ -1,6 +1,6 @@
 [versions]
-android-gradle-plugin = "8.8.1"
-androidx-activity = "1.10.0"
+android-gradle-plugin = "8.8.2"
+androidx-activity = "1.10.1"
 androidx-compose-bom = "2025.02.00"
 androidx-media3 = "1.5.1"
 androidx-wear-compose = "1.4.1"
@@ -25,7 +25,7 @@ androidx-media = "androidx.media:media:1.7.0"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.4"
+desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
