@@ -27,8 +27,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.wear.tiles"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = 30
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
@@ -83,8 +83,10 @@ dependencies {
 
     implementation(libs.androidx.tiles)
     implementation(libs.androidx.tiles.renderer)
+    implementation(libs.androidx.protolayout.material3)
     debugImplementation(libs.androidx.tiles.tooling.preview)
     debugImplementation(libs.androidx.tiles.tooling)
 
+    implementation("androidx.wear:wear-tooling-preview:1.0.0")
 
 }
