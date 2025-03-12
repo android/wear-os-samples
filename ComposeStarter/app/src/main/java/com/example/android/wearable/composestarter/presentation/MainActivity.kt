@@ -22,7 +22,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.rounded.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,9 +31,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
-import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import androidx.wear.compose.material3.AlertDialog
@@ -42,10 +42,13 @@ import androidx.wear.compose.material3.AlertDialogDefaults
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButton
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.ScreenScaffoldDefaults
+import androidx.wear.compose.material3.ScreenScaffoldDefaults.contentPadding
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -53,6 +56,9 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
@@ -104,19 +110,33 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modif
      * see d.android.com/wear/compose.
      */
     ScreenScaffold(scrollState = scrollState, edgeButton = {
-        EdgeButton(onClick = onShowList) {
+        EdgeButton(onClick = onShowList,
+            buttonSize = EdgeButtonSize.ExtraSmall) {
             Text(stringResource(R.string.show_list), textAlign = TextAlign.Center)
         }
-    }) {
+    },
+    contentPadding =
+        rememberResponsiveColumnPadding(
+            first = ColumnItemType.ListHeader,
+            last = EdgeButtonPadding
+        ),
+    ) { contentPadding ->
         // Use workaround from Horologist for padding or wait until fix lands
         TransformingLazyColumn(
             state = scrollState,
+            contentPadding = contentPadding
         ) {
             item { Greeting(greetingName = greetingName, modifier = modifier.fillMaxSize()) }
 
 
         }
     }
+}
+
+object EdgeButtonPadding : ColumnItemType {
+    // Edge buttons are always at the bottom of the screen, so they don't need any top padding.
+    @Composable override fun topPadding(horizontalPercent: Float): Dp = 0.dp
+    @Composable override fun bottomPadding(horizontalPercent: Float): Dp = 0.dp
 }
 
 @Composable
@@ -129,14 +149,21 @@ fun ListScreen(modifier: Modifier = Modifier) {
      */
     val listState = rememberTransformingLazyColumnState()
 
-    ScreenScaffold(scrollState = listState) {
+    ScreenScaffold(scrollState = listState,
         /*
          * TransformingLazyColumn takes care of the horizontal and vertical
          * padding for the list and handles scrolling.
          */
         // Use workaround from Horologist for padding or wait until fix lands
+        contentPadding =
+            rememberResponsiveColumnPadding(
+                first = ColumnItemType.ListHeader,
+                last = ColumnItemType.IconButton
+            ),
+        ) { contentPadding ->
         TransformingLazyColumn(
-            state = listState
+            state = listState,
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader(modifier = modifier.fillMaxSize()) { Text(text = "Header") }
@@ -199,7 +226,7 @@ fun SampleDialog(
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
-        show = showDialog,
+        visible = showDialog,
         onDismissRequest = onDismiss,
         icon = {},
         title = { Text(text = stringResource(R.string.title)) },
