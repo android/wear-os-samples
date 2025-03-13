@@ -67,7 +67,9 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        kotlinCompilerExtensionVersion =
+            libs.versions.compose.compiler
+                .get()
     }
 
     packaging {
@@ -92,13 +94,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // Compose for Wear OS Dependencies
-    // Developer Preview currently Alpha 07, with new releases coming soon.
+    // Developer Preview currently Alpha 33, with new releases coming soon.
     // NOTE: DO NOT INCLUDE a dependency on androidx.compose.material:material.
-    // androidx.wear.compose:compose-material is designed as a replacement not an addition to
+    // androidx.wear.compose:compose-material3 is designed as a replacement not an addition to
     // androidx.compose.material:material. If there are features from that you feel are missing from
-    // androidx.wear.compose:compose-material please raise a bug to let us know:
+    // androidx.wear.compose:compose-material3 please raise a bug to let us know:
     // https://issuetracker.google.com/issues/new?component=1077552&template=1598429&pli=1
-    implementation(libs.wear.compose.material)
+    implementation(libs.wear.compose.material3)
 
     // Foundation is additive, so you can use the mobile version in your Wear OS app.
     implementation(libs.wear.compose.foundation)

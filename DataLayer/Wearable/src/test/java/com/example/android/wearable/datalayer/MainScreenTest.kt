@@ -15,9 +15,7 @@
  */
 package com.example.android.wearable.datalayer
 
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ResponsiveTimeText
-import com.google.android.horologist.screenshots.FixedTimeSource
+import androidx.wear.compose.material3.AppScaffold
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
 import org.junit.Test
@@ -30,9 +28,7 @@ class MainScreenTest(override val device: WearDevice) : WearScreenshotTest() {
 
     @Test
     fun mainScreenTest() = runTest {
-        AppScaffold(
-            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
-        ) {
+        AppScaffold {
             MainScreenPreviewEvents()
         }
     }

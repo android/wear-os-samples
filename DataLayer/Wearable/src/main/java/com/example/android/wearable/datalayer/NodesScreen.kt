@@ -15,48 +15,54 @@
  */
 package com.example.android.wearable.datalayer
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.Chip
-import com.google.android.horologist.compose.material.ResponsiveListHeader
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 @Composable
-@OptIn(ExperimentalHorologistApi::class)
 fun NodesScreen(
     nodes: Set<NodeUiModel>,
     modifier: Modifier = Modifier
 ) {
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ItemType.Text,
-            last = ItemType.Chip
-        )
-    )
-    ScreenScaffold(scrollState = columnState) {
-        ScalingLazyColumn(
-            columnState = columnState,
-            modifier = modifier
+    val listState = rememberTransformingLazyColumnState()
+
+    ScreenScaffold(
+        scrollState = listState,
+        contentPadding = rememberResponsiveColumnPadding(
+            first = ColumnItemType.ListHeader,
+            last = ColumnItemType.Button
+        ),
+        modifier = modifier
+    ) { padding ->
+        TransformingLazyColumn(
+            state = listState,
+            contentPadding = padding
         ) {
             item {
-                ResponsiveListHeader {
+                ListHeader {
                     Text(stringResource(id = R.string.nodes))
                 }
             }
             items(nodes.size) { index ->
-                Chip(
-                    label = nodes.elementAt(index).displayName,
+                Button(
+                    label = {
+                        Text(
+                            text = nodes.elementAt(index).displayName
+                        )
+                    },
                     onClick = { },
-                    secondaryLabel = nodes.elementAt(index).id
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
