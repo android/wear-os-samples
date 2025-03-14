@@ -1,6 +1,6 @@
 [versions]
-android-gradle-plugin = "8.8.2"
-androidx-compose-bom = "2025.02.00"
+android-gradle-plugin = "8.9.0"
+androidx-compose-bom = "2025.03.00"
 androidx-activity = "1.10.1"
 androidx-lifecycle = "2.8.7"
 androidx-wear-compose = "1.4.1"
@@ -11,15 +11,15 @@ org-jetbrains-kotlinx = "1.9.0"
 ktlint = "0.50.0"
 horologist = "0.7.5-alpha"
 robolectric = "4.14.1"
-roborazzi = "1.42.0"
+roborazzi = "1.43.0"
 ui-test-junit4 = "1.7.8"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.5"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.8.2"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.9.0"
 android-material = "com.google.android.material:material:1.12.0"
-android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.8.2"
+android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.9.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
