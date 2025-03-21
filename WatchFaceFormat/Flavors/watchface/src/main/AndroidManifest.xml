@@ -23,6 +23,10 @@
   <application
       android:label="@string/watch_face_name"
       android:hasCode="false">
+
+    <meta-data
+        android:name="com.google.android.wearable.standalone"
+        android:value="true" />
     <!--
       This watch face uses Flavors, which requires version 2 of the Watch Face
       Format.
