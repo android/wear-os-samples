@@ -67,9 +67,6 @@ dependencies {
   implementation composeBom
   implementation(libs.wear.compose.foundation)
 
-  // For Wear Material Design UX guidelines and specifications
-  implementation(libs.wear.compose.material)
-
   // For integration between Wear Compose and Androidx Navigation libraries
   implementation(libs.wear.compose.navigation)
 
@@ -91,6 +88,8 @@ dependencies {
   implementation(libs.playservices.wearable)
 
   implementation libs.androidx.ui.test.manifest
+
+  implementation(libs.wear.compose.material3)
 
   // Testing
   testImplementation libs.androidx.ui.test.junit4
