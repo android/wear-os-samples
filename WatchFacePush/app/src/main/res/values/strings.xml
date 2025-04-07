@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WatchFaceMarketplace</string>
+    <string name="version_code">versionCode: %1$d</string>
+    <string name="installed">Installed: %1$s</string>
+    <string name="active">Active: %1$s</string>
+    <string name="custom_version">custom_version: %1$s</string>
+    <string name="set_active">Set active</string>
+    <string name="install">Install</string>
+    <string name="update">Update slot</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="permission_granted">Permission granted</string>
+    <string name="permission_denied">Permission denied</string>
+</resources>
