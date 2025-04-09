@@ -7,7 +7,7 @@ compose-compiler = "1.5.15"
 horologist = "0.7.5-alpha"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
-org-jetbrains-kotlinx = "1.9.0"
+org-jetbrains-kotlinx = "1.10.2"
 tiles-tooling-preview = "1.4.1"
 
 [libraries]
