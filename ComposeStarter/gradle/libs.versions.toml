@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.9.1"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.03.01"
+androidx-compose-bom = "2025.04.00"
 androidx-wear-compose = "1.4.1"
 compose-compiler = "1.5.15"
 compose-ui-tooling = "1.4.1"
@@ -43,6 +43,6 @@ wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation",
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.2"
+com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 

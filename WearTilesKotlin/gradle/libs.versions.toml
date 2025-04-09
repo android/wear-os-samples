@@ -31,4 +31,4 @@ desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.2"
+com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
