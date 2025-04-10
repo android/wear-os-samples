@@ -13,6 +13,8 @@ import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.ConfirmationDialog
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 import com.google.samples.marketplace.R
 import com.google.samples.marketplace.viewmodel.WatchFaceMarketplaceViewModel
 
@@ -59,7 +61,12 @@ fun WatchFaceItemPage(viewModel: WatchFaceMarketplaceViewModel) {
     val statusUpdate by viewModel.dialogMessage
 
     ScreenScaffold(
-        scrollState = scrollState
+        scrollState = scrollState,
+        // Use Horologist for now to get correct top and bottom padding in list.
+        contentPadding = rememberResponsiveColumnPadding(
+            first = ColumnItemType.ListHeader,
+            last = ColumnItemType.Button
+        )
     ) { contentPadding ->
         TransformingLazyColumn(
             state = scrollState,

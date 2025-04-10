@@ -8,6 +8,8 @@ import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 import com.google.samples.marketplace.data.WatchFaceData
 import com.google.samples.marketplace.data.WatchFaceSlotInfo
 import com.google.samples.marketplace.viewmodel.WatchFaceMarketplaceViewModel
@@ -34,9 +36,13 @@ fun WatchFacesPage(
     onWatchFaceSelected: (String) -> Unit = {},
 ) {
     val listState = rememberTransformingLazyColumnState()
-    // TODO: Add contentPadding parameter to screen scaffold once available in M3
     ScreenScaffold(
-        scrollState = listState
+        scrollState = listState,
+        // Use Horologist for now to get correct top and bottom padding in list.
+        contentPadding = rememberResponsiveColumnPadding(
+            first = ColumnItemType.Button,
+            last = ColumnItemType.Button
+        )
     ) { contentPadding ->
         TransformingLazyColumn(
             state = listState,

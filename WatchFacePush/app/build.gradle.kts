@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.core.splashscreen)
     implementation(libs.compose.navigation)
+    implementation(libs.horologist.compose.layout)
 
     // TODO: Switch to this once WFP available
     //implementation(libs.watchface.push)
