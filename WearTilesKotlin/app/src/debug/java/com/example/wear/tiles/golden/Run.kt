@@ -39,66 +39,64 @@ object Run {
         lastRunText: String,
         chanceOfRain: Int,
         startRunClickable: Clickable,
-        moreChipClickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, lastRunText)
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .build()
-        )
-        .setContent(
-            TitleChip.Builder(context, "Start run", startRunClickable, deviceParameters)
-                // TitleChip/Chip's default width == device width minus some padding
-                // Since PrimaryLayout's content slot already has margin, this leads to clipping
-                // unless we override the width to use the available space
-                .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.Blue),
-                        /*contentColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.Black)
+        moreChipClickable: Clickable,
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setPrimaryLabelTextContent(
+                Text.Builder(context, lastRunText)
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .build()
+            )
+            .setContent(
+                TitleChip.Builder(context, "Start run", startRunClickable, deviceParameters)
+                    // TitleChip/Chip's default width == device width minus some padding
+                    // Since PrimaryLayout's content slot already has margin, this leads to clipping
+                    // unless we override the width to use the available space
+                    .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
+                    .setChipColors(
+                        ChipColors(
+                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Blue),
+                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black),
+                        )
                     )
-                )
-                .build()
-        )
-        .apply {
-            if (deviceParameters.screenWidthDp > 225) {
-                setSecondaryLabelTextContent(
-                    Text.Builder(context, "$chanceOfRain% chance of rain")
-                        .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                        .setColor(ColorBuilders.argb(GoldenTilesColors.LightGray))
-                        .build()
-                )
+                    .build()
+            )
+            .apply {
+                if (deviceParameters.screenWidthDp > 225) {
+                    setSecondaryLabelTextContent(
+                        Text.Builder(context, "$chanceOfRain% chance of rain")
+                            .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                            .setColor(ColorBuilders.argb(GoldenTilesColors.LightGray))
+                            .build()
+                    )
+                }
             }
-        }
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "More", moreChipClickable, deviceParameters)
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.DarkGray),
-                        /*contentColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.White)
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "More", moreChipClickable, deviceParameters)
+                    .setChipColors(
+                        ChipColors(
+                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkGray),
+                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White),
+                        )
                     )
-                )
-                .build()
-        )
-        .build()
+                    .build()
+            )
+            .build()
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun runPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
-        Run.layout(
-            context,
-            it.deviceConfiguration,
-            lastRunText = "2 days ago",
-            chanceOfRain = 20,
-            startRunClickable = emptyClickable,
-            moreChipClickable = emptyClickable
+            Run.layout(
+                context,
+                it.deviceConfiguration,
+                lastRunText = "2 days ago",
+                chanceOfRain = 20,
+                startRunClickable = emptyClickable,
+                moreChipClickable = emptyClickable,
+            )
         )
-    ).build()
+        .build()
 }

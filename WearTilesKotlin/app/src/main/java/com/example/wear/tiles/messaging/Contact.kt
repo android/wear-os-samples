@@ -74,14 +74,10 @@ fun getMockLocalContacts() =
             avatarSource = AvatarSource.Resource(R.drawable.taylor),
         ),
         Contact(id = 3, initials = "FS", name = "Felipe S", avatarSource = AvatarSource.None),
-        Contact(
-            id = 4,
-            initials = "JG",
-            name = "Judith G",
-            avatarSource = AvatarSource.None,
-        ),
+        Contact(id = 4, initials = "JG", name = "Judith G", avatarSource = AvatarSource.None),
         Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None),
     )
 
 private const val avatarPath =
-    "https://raw.githubusercontent.com/android/wear-os-samples/main/WearTilesKotlin/app/src/main/res/drawable-nodpi"
+    "https://raw.githubusercontent.com" +
+        "/android/wear-os-samples/main/WearTilesKotlin/app/src/main/res/drawable-nodpi"

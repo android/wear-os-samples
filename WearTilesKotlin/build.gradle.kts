@@ -37,6 +37,7 @@ subprojects {
 
             ktlint(libs.versions.ktlint.get())
             licenseHeaderFile(rootProject.file("../spotless/copyright.kt"))
+            ktfmt(libs.versions.ktfmt.get()).kotlinlangStyle()
         }
         format("xml") {
             target("**/*.xml")

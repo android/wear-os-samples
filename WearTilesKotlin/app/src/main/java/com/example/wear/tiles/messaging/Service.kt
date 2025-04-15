@@ -60,7 +60,6 @@ class MessagingTileService : SuspendingTileService() {
 
     /** This method returns a Tile object, which describes the layout of the Tile. */
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
-
         val layoutElement = tileLayout(this, requestParams.deviceConfiguration, contacts)
 
         // Resources are cached and keyed on resourcesVersion. If a Resources object with the same
@@ -68,8 +67,11 @@ class MessagingTileService : SuspendingTileService() {
         // cached version is used instead. To ensure it is *always* called (e.g. for debugging), set
         // the version to a random string.
         val resourcesVersion =
-            if (DEBUG_RESOURCES) UUID.randomUUID().toString()
-            else contacts.map { it.id }.toSortedSet().joinToString()
+            if (DEBUG_RESOURCES) {
+                UUID.randomUUID().toString()
+            } else {
+                contacts.map { it.id }.toSortedSet().joinToString()
+            }
 
         return Tile.Builder()
             .setResourcesVersion(resourcesVersion)

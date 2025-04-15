@@ -38,51 +38,51 @@ object Alarm {
         timeUntilAlarm: String,
         alarmTime: String,
         alarmDays: String,
-        clickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, timeUntilAlarm)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        )
-        .setContent(
-            TitleChip.Builder(context, alarmTime, clickable, deviceParameters)
-                // TitleChip/Chip's default width == device width minus some padding
-                // Since PrimaryLayout's content slot already has margin, this leads to clipping
-                // unless we override the width to use the available space
-                .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.Yellow),
-                        /*contentColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+        clickable: Clickable,
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setPrimaryLabelTextContent(
+                Text.Builder(context, timeUntilAlarm)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .build()
+            )
+            .setContent(
+                TitleChip.Builder(context, alarmTime, clickable, deviceParameters)
+                    // TitleChip/Chip's default width == device width minus some padding
+                    // Since PrimaryLayout's content slot already has margin, this leads to clipping
+                    // unless we override the width to use the available space
+                    .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
+                    .setChipColors(
+                        ChipColors(
+                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
+                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray),
+                        )
                     )
-                )
-                .build()
-        )
-        .setSecondaryLabelTextContent(
-            Text.Builder(context, alarmDays)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.Yellow))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setMaxLines(2)
-                .build()
-        )
-        .build()
+                    .build()
+            )
+            .setSecondaryLabelTextContent(
+                Text.Builder(context, alarmDays)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.Yellow))
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setMaxLines(2)
+                    .build()
+            )
+            .build()
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun alarmPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Alarm.layout(
-            context,
-            it.deviceConfiguration,
-            timeUntilAlarm = "Less than 1 min",
-            alarmTime = "14:58",
-            alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
-            clickable = emptyClickable
+            Alarm.layout(
+                context,
+                it.deviceConfiguration,
+                timeUntilAlarm = "Less than 1 min",
+                alarmTime = "14:58",
+                alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
+                clickable = emptyClickable,
+            )
         )
-    ).build()
+        .build()
 }

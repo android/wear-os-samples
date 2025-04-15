@@ -38,91 +38,94 @@ object HeartRate {
         deviceParameters: DeviceParameters,
         highestHeartRateBpm: Int,
         lowestHeartRateBpm: Int,
-        clickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, "Now")
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .build()
-        )
-        .setContent(
-            MultiSlotLayout.Builder()
-                .setHorizontalSpacerWidth(16f)
-                .addSlotContent(
-                    Column.Builder()
-                        .apply {
-                            if (deviceParameters.screenWidthDp > 225) {
-                                addContent(
-                                    Text.Builder(context, "Highest")
-                                        .setTypography(Typography.TYPOGRAPHY_BUTTON)
-                                        .setColor(ColorBuilders.argb(GoldenTilesColors.LightRed))
-                                        .build()
-                                )
+        clickable: Clickable,
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setPrimaryLabelTextContent(
+                Text.Builder(context, "Now")
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .build()
+            )
+            .setContent(
+                MultiSlotLayout.Builder()
+                    .setHorizontalSpacerWidth(16f)
+                    .addSlotContent(
+                        Column.Builder()
+                            .apply {
+                                if (deviceParameters.screenWidthDp > 225) {
+                                    addContent(
+                                        Text.Builder(context, "Highest")
+                                            .setTypography(Typography.TYPOGRAPHY_BUTTON)
+                                            .setColor(
+                                                ColorBuilders.argb(GoldenTilesColors.LightRed)
+                                            )
+                                            .build()
+                                    )
+                                }
                             }
-                        }
-                        .addContent(
-                            Text.Builder(context, highestHeartRateBpm.toString())
-                                .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
-                                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                                .build()
-                        )
-                        .build()
-                )
-                .apply {
-                    if (deviceParameters.screenWidthDp > 225) {
-                        addSlotContent(
-                            Column.Builder()
-                                .addContent(
-                                    Text.Builder(context, "Lowest")
-                                        .setTypography(Typography.TYPOGRAPHY_BUTTON)
-                                        .setColor(ColorBuilders.argb(GoldenTilesColors.LightRed))
-                                        .build()
-                                )
-                                .addContent(
-                                    Text.Builder(context, lowestHeartRateBpm.toString())
-                                        .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
-                                        .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                                        .build()
-                                )
-                                .build()
-                        )
-                    }
-                }
-                .build()
-
-        )
-        .setSecondaryLabelTextContent(
-            Text.Builder(context, "bpm")
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.LightGray))
-                .build()
-        )
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "Measure", clickable, deviceParameters)
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.LightRed),
-                        /*contentColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.Black)
+                            .addContent(
+                                Text.Builder(context, highestHeartRateBpm.toString())
+                                    .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
+                                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                                    .build()
+                            )
+                            .build()
                     )
-                )
-                .build()
-        )
-        .build()
+                    .apply {
+                        if (deviceParameters.screenWidthDp > 225) {
+                            addSlotContent(
+                                Column.Builder()
+                                    .addContent(
+                                        Text.Builder(context, "Lowest")
+                                            .setTypography(Typography.TYPOGRAPHY_BUTTON)
+                                            .setColor(
+                                                ColorBuilders.argb(GoldenTilesColors.LightRed)
+                                            )
+                                            .build()
+                                    )
+                                    .addContent(
+                                        Text.Builder(context, lowestHeartRateBpm.toString())
+                                            .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
+                                            .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                        }
+                    }
+                    .build()
+            )
+            .setSecondaryLabelTextContent(
+                Text.Builder(context, "bpm")
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.LightGray))
+                    .build()
+            )
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "Measure", clickable, deviceParameters)
+                    .setChipColors(
+                        ChipColors(
+                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.LightRed),
+                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black),
+                        )
+                    )
+                    .build()
+            )
+            .build()
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun heartRateSimplePreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-        HeartRate.simpleLayout(
-            context,
-            it.deviceConfiguration,
-            highestHeartRateBpm = 86,
-            lowestHeartRateBpm = 54,
-            clickable = emptyClickable
+            HeartRate.simpleLayout(
+                context,
+                it.deviceConfiguration,
+                highestHeartRateBpm = 86,
+                lowestHeartRateBpm = 54,
+                clickable = emptyClickable,
+            )
         )
-    ).build()
+        .build()
 }

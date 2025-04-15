@@ -54,7 +54,7 @@ suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact): ImageRes
                     response.image.toBitmap().toImageResource()
                 }
                 is ErrorResult -> {
-                    Log.d("ImageLoader", "Error loading image ${source}: ${response.throwable}")
+                    Log.d("ImageLoader", "Error loading image $source: ${response.throwable}")
                     null
                 }
             }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.example.wear.tiles.messaging
 
 import android.content.Context
@@ -177,8 +176,9 @@ internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
     return TilePreviewData(
         resources {
             contacts.forEach {
-                if (it.avatarSource is AvatarSource.Resource)
+                if (it.avatarSource is AvatarSource.Resource) {
                     addIdToImageMapping(it.imageResourceId(), it.avatarSource.resourceId)
+                }
             }
         }
     ) {
