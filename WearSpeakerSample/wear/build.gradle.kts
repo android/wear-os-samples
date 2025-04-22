@@ -114,6 +114,8 @@ dependencies {
     implementation(libs.androidx.media3.common)
     implementation(libs.androidx.media3.exoplayer)
 
+    implementation(libs.wear.compose.material3)
+
     // Preview Tooling
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.ui.tooling)

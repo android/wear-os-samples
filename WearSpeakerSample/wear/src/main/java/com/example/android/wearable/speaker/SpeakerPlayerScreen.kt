@@ -38,9 +38,9 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun SpeakerPlayerScreen(
     onVolumeClick: () -> Unit,
+    modifier: Modifier = Modifier,
     volumeViewModel: VolumeViewModel = viewModel(factory = VolumeViewModel.Factory),
-    playerViewModel: SpeakerPlayerViewModel = viewModel(factory = SpeakerPlayerViewModel.Factory),
-    modifier: Modifier = Modifier
+    playerViewModel: SpeakerPlayerViewModel = viewModel(factory = SpeakerPlayerViewModel.Factory)
 ) {
     val volumeUiState by volumeViewModel.volumeUiState.collectAsStateWithLifecycle()
 
