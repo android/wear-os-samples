@@ -95,9 +95,6 @@ configurations {
 }
 
 dependencies {
-    // TODO: Remove this once WFP available
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
-
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.wear.compose.ui.tooling)
@@ -109,10 +106,8 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.horologist.compose.layout)
 
-    // TODO: Switch to this once WFP available
-    //implementation(libs.watchface.push)
+    implementation(libs.watchface.push)
 
-    // build the sample watch faces
     "debugWatchfaceOutput"(project(":samples:defaultwf"))
     "debugWatchfaceOutput"(project(":samples:river"))
     "debugWatchfaceOutput"(project(":samples:firefly"))

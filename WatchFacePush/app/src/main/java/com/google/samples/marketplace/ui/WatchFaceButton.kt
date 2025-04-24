@@ -38,9 +38,7 @@ fun WatchFaceButton(
     onWatchFaceSelected: (String) -> Unit,
     isLoading: Boolean
 ) {
-    // TODO: Looks like the Placeholder API changes post 1.5.0 alpha12 so revisit this before
-    // release
-    val buttonPlaceholderState = rememberPlaceholderState { !isLoading }
+    val buttonPlaceholderState = rememberPlaceholderState(isLoading)
     val slotInfo = watchFaceData.slotInfo
     val (buttonColor, textColor) =
         if (slotInfo != null) {
@@ -81,14 +79,10 @@ fun WatchFaceButton(
         Text(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .placeholderShimmer(buttonPlaceholderState)
                 .placeholder(buttonPlaceholderState),
             text = watchFaceData.name,
             color = textColor
         )
-    }
-    if (!buttonPlaceholderState.isHidden) {
-        LaunchedEffect(buttonPlaceholderState) { buttonPlaceholderState.animatePlaceholder() }
     }
 }
 

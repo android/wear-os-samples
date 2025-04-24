@@ -18,6 +18,12 @@ plugins {
     `kotlin-dsl`
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 repositories {
     gradlePluginPortal()
     google()
@@ -25,5 +31,5 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.9.1")
+    implementation("com.android.tools.build:gradle-api:8.9.2")
 }
