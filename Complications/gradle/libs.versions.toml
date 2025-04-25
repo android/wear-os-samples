@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.9.1"
+android-gradle-plugin = "8.9.2"
 androidx-wear-watchface = "1.2.1"
 
 org-jetbrains-kotlin = "2.1.0"
@@ -9,7 +9,7 @@ ktlint = "0.50.0"
 
 [libraries]
 androidx-core-ktx = "androidx.core:core-ktx:1.16.0"
-androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.1.4"
+androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.1.5"
 androidx-wear-watchface-complications-data-source-ktx = { module = "androidx.wear.watchface:watchface-complications-data-source-ktx", version.ref = "androidx-wear-watchface" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
