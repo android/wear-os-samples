@@ -11,7 +11,7 @@ org-jetbrains-kotlinx = "1.10.2"
 tiles-tooling-preview = "1.4.1"
 
 [libraries]
-androidx-datastore = "androidx.datastore:datastore-preferences:1.1.5"
+androidx-datastore = "androidx.datastore:datastore-preferences:1.1.4"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.8.7"
 androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7"
 androidx-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "tiles-tooling-preview" }
