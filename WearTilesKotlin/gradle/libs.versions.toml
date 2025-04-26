@@ -1,8 +1,8 @@
 [versions]
-android-gradle-plugin = "8.9.1"
+android-gradle-plugin = "8.9.2"
 androidx-wear-tiles = "1.4.1"
 androidx-wear-tooling-preview = "1.0.0"
-compose = "1.7.8"
+compose = "1.8.0"
 compose-compiler = "1.5.15"
 horologist = "0.7.5-alpha"
 ktlint = "0.50.0"
