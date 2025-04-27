@@ -88,20 +88,20 @@ class ShortTextDataSourceService : SuspendingComplicationDataSourceService() {
                         image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24),
                     ).build(),
                 )
-            x`
-                Case.TEXT_WITH_TITLE -> ShortTextComplicationData.Builder(
-            text = PlainComplicationText.Builder(
-                text = safeText(R.string.short_text_with_title),
-            ).build(),
-            contentDescription = PlainComplicationText.Builder(
-                text = safeText(R.string.short_text_with_title_content_description),
-            ).build(),
-        )
-            .setTitle(
-                PlainComplicationText.Builder(
-                    text = safeText(R.string.short_title),
+
+            Case.TEXT_WITH_TITLE -> ShortTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(
+                    text = safeText(R.string.short_text_with_title),
+                ).build(),
+                contentDescription = PlainComplicationText.Builder(
+                    text = safeText(R.string.short_text_with_title_content_description),
                 ).build(),
             )
+                .setTitle(
+                    PlainComplicationText.Builder(
+                        text = safeText(R.string.short_title),
+                    ).build(),
+                )
 
             Case.TEXT_WITH_ICON_AND_TITLE -> ShortTextComplicationData.Builder(
                 // When short text includes both short title and icon, the watch face should only
