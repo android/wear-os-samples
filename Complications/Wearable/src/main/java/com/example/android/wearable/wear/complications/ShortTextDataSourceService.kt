@@ -68,18 +68,19 @@ class ShortTextDataSourceService : SuspendingComplicationDataSourceService() {
         when (case) {
             Case.TEXT_ONLY -> ShortTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_only),
+                    text = safeText(R.string.short_text_only),
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_only_content_description),
+                    text = safeText(R.string.short_text_only_content_description),
                 ).build(),
             )
+
             Case.TEXT_WITH_ICON -> ShortTextComplicationData.Builder(
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_icon),
+                    text = safeText(R.string.short_text_with_icon),
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_icon_content_description),
+                    text = safeText(R.string.short_text_with_icon_content_description),
                 ).build(),
             )
                 .setMonochromaticImage(
@@ -87,32 +88,34 @@ class ShortTextDataSourceService : SuspendingComplicationDataSourceService() {
                         image = Icon.createWithResource(this, R.drawable.ic_face_vd_theme_24),
                     ).build(),
                 )
-            Case.TEXT_WITH_TITLE -> ShortTextComplicationData.Builder(
-                text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_title),
-                ).build(),
-                contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_title_content_description),
+            x`
+                Case.TEXT_WITH_TITLE -> ShortTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(
+                text = safeText(R.string.short_text_with_title),
+            ).build(),
+            contentDescription = PlainComplicationText.Builder(
+                text = safeText(R.string.short_text_with_title_content_description),
+            ).build(),
+        )
+            .setTitle(
+                PlainComplicationText.Builder(
+                    text = safeText(R.string.short_title),
                 ).build(),
             )
-                .setTitle(
-                    PlainComplicationText.Builder(
-                        text = getText(R.string.short_title),
-                    ).build(),
-                )
+
             Case.TEXT_WITH_ICON_AND_TITLE -> ShortTextComplicationData.Builder(
                 // When short text includes both short title and icon, the watch face should only
                 // display one of those fields.
                 text = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_both),
+                    text = safeText(R.string.short_text_with_both),
                 ).build(),
                 contentDescription = PlainComplicationText.Builder(
-                    text = getText(R.string.short_text_with_both_content_description),
+                    text = safeText(R.string.short_text_with_both_content_description),
                 ).build(),
             )
                 .setTitle(
                     PlainComplicationText.Builder(
-                        text = getText(R.string.short_title),
+                        text = safeText(R.string.short_title),
                     ).build(),
                 )
                 .setMonochromaticImage(
@@ -130,4 +133,6 @@ class ShortTextDataSourceService : SuspendingComplicationDataSourceService() {
         TEXT_WITH_TITLE,
         TEXT_WITH_ICON_AND_TITLE,
     }
+
+    private fun safeText(@StringRes resId: Int): String = getText(resId).toString()
 }

@@ -77,6 +77,7 @@ class SmallImageDataSourceService : SuspendingComplicationDataSourceService() {
                     text = getText(R.string.small_image_photo_content_description),
                 ).build(),
             )
+
             Case.ICON -> SmallImageComplicationData.Builder(
                 // An image using IMAGE_STYLE_ICON must not be cropped, and should fit within the
                 // space given to it.
@@ -92,7 +93,11 @@ class SmallImageDataSourceService : SuspendingComplicationDataSourceService() {
             .setTapAction(tapAction)
             .build()
 
+    /**
+     * Different SmallImage styles supported for complications.
+     */
     private enum class Case {
-        PHOTO, ICON
+        PHOTO, // Cropped photo-style image
+        ICON // Bounded icon-style image
     }
 }
