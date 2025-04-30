@@ -56,7 +56,7 @@ abstract class TokenGenerationTask : DefaultTask() {
         val stdErr = ByteArrayOutputStream()
 
         execOperations.javaexec {
-            classpath = project.rootProject.files("lib/DwfValidation_deploy.jar")
+            classpath = project.rootProject.files("lib/wfp-validator.jar")
             args("--apk_path=$apkPath")
 
             standardOutput = stdOut
