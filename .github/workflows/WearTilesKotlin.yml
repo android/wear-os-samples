@@ -1,6 +1,7 @@
 name: WearTilesKotlin
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -37,10 +38,7 @@ jobs:
 
       - name: Build project
         working-directory: ${{ env.SAMPLE_PATH }}
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: check --stacktrace
-          build-root-directory: ${{ env.SAMPLE_PATH }}
+        run: ./gradlew check --stacktrace
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
