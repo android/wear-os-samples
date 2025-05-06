@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
-import androidx.wear.compose.foundation.lazy.TransformingLazyColumnItemScope
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AlertDialogDefaults
@@ -46,10 +45,11 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButton
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
-import androidx.wear.compose.material3.lazy.TransformationSpec
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -151,6 +151,7 @@ fun ListScreen(modifier: Modifier = Modifier) {
      * appropriate padding is used.
      */
     val listState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
     ScreenScaffold(
         scrollState = listState,
@@ -171,14 +172,18 @@ fun ListScreen(modifier: Modifier = Modifier) {
         ) {
             item {
                 ListHeader(
-                    modifier = modifier.fillMaxSize().scrollTransform(this)
+                    modifier =
+                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec)
                 ) { Text(text = "Header") }
             }
             item {
                 TitleCard(
                     title = { Text(stringResource(R.string.example_card_title)) },
                     onClick = { },
-                    modifier = modifier.scrollTransform(this)
+                    modifier =
+                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec)
                 ) {
                     Text(stringResource(R.string.example_card_content))
                 }
@@ -192,13 +197,21 @@ fun ListScreen(modifier: Modifier = Modifier) {
                         )
                     },
                     onClick = { },
-                    modifier = modifier.fillMaxWidth().scrollTransform(this)
+                    modifier =
+                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec)
                 )
             }
             item {
                 IconButton(
                     onClick = { showDialog = true },
-                    modifier = modifier.scrollTransform(this)
+                    modifier = modifier.fillMaxWidth()
+                        .graphicsLayer {
+                            with(transformationSpec) {
+                                applyContainerTransformation(scrollProgress)
+                            }
+                        }
+                        .transformedHeight(this, transformationSpec)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Build,
@@ -264,19 +277,6 @@ fun SampleDialog(
         }
     )
 }
-
-@Composable
-fun Modifier.scrollTransform(
-    scope: TransformingLazyColumnItemScope,
-    spec: TransformationSpec = rememberTransformationSpec()
-) =
-    with(scope) {
-        transformedHeight(spec::getTransformedHeight).graphicsLayer {
-            with(spec) {
-                applyContainerTransformation(scrollProgress)
-            }
-        }
-    }
 
 @WearPreviewDevices
 @WearPreviewFontScales
