@@ -1,24 +1,24 @@
 [versions]
-android-gradle-plugin = "8.9.1"
+android-gradle-plugin = "8.9.2"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.03.01"
+androidx-compose-bom = "2025.04.01"
 androidx-lifecycle = "2.8.7"
 androidx-wear-compose = "1.4.1"
 compose-compiler = "1.5.15"
 ktlint = "0.50.0"
 kotlin = "2.1.0"
-org-jetbrains-kotlinx = "1.10.1"
+org-jetbrains-kotlinx = "1.10.2"
 compose-ui-tooling = "1.4.1"
 robolectric = "4.14.1"
 roborazzi = "1.43.1"
-ui-test-junit4 = "1.7.8"
-ui-test-manifest = "1.7.8"
+ui-test-junit4 = "1.8.0"
+ui-test-manifest = "1.8.0"
 horologist = "0.7.5-alpha"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-core-ktx = "androidx.core:core-ktx:1.15.0"
+androidx-core-ktx = "androidx.core:core-ktx:1.16.0"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.6"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
@@ -29,7 +29,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.12"
+jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.13"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
@@ -53,6 +53,6 @@ test-ext-junit = "androidx.test.ext:junit:1.2.1"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.2"
+com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

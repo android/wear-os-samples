@@ -1,13 +1,13 @@
 [versions]
-android-gradle-plugin = "8.9.1"
+android-gradle-plugin = "8.9.2"
 androidx-wear-tiles = "1.4.1"
 androidx-wear-tooling-preview = "1.0.0"
-compose = "1.7.8"
+compose = "1.8.0"
 compose-compiler = "1.5.15"
 horologist = "0.7.5-alpha"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
-org-jetbrains-kotlinx = "1.9.0"
+org-jetbrains-kotlinx = "1.10.2"
 tiles-tooling-preview = "1.4.1"
 
 [libraries]
@@ -31,4 +31,4 @@ desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.2"
+com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
