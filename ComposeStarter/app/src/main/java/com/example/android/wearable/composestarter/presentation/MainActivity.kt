@@ -41,6 +41,7 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
+import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButton
 import androidx.wear.compose.material3.ListHeader
@@ -203,10 +204,9 @@ fun ListScreen(modifier: Modifier = Modifier) {
                 )
             }
             item {
-                IconButton(
+                FilledIconButton(
                     onClick = { showDialog = true },
-                    modifier = modifier.fillMaxWidth()
-                        .graphicsLayer {
+                    modifier = modifier.graphicsLayer {
                             with(transformationSpec) {
                                 applyContainerTransformation(scrollProgress)
                             }

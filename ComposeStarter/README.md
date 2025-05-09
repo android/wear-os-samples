@@ -8,7 +8,7 @@ Introduction
 Simple "Hello, World" app meant as a starting point for a new project using
 Compose for Wear OS.
 
-Displays a centered [Text] composable and a list built with [Horologist][horologist].
+Displays a centered [Text] composable and a list built with [Compose for Wear OS Material 3][compose-wear-material-3].
 
 For more information on composable options in Compose for Wear OS, check out our
 [documentation][documentation].
@@ -51,7 +51,7 @@ Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
 
 [documentation]: https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary.html
-[horologist]: https://github.com/google/horologist
+[compose-wear-material-3]: https://developer.android.com/jetpack/androidx/releases/wear-compose
 [droidcon-talk]: https://www.droidcon.com/2023/11/15/easy-screenshot-testing-with-compose/
 [wear-device]: https://github.com/android/wear-os-samples/blob/main/ComposeStarter/app/src/test/java/presentation/WearDevice.kt
 [wear-preview-font-scales]: https://developer.android.com/reference/kotlin/androidx/wear/compose/ui/tooling/preview/WearPreviewFontScales
