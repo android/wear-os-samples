@@ -92,6 +92,10 @@ configurations {
             )
         }
     }
+    create("cliToolConfiguration") {
+        isCanBeConsumed = false
+        isCanBeResolved = true
+    }
 }
 
 dependencies {
@@ -118,6 +122,8 @@ dependencies {
 
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    "cliToolConfiguration"(libs.validator.push.cli)
 }
 
 // The watch face samples and their associated tokens are put in the

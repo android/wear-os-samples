@@ -37,6 +37,13 @@ abstract class TokenGenerationTask : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val apkLocation: DirectoryProperty
 
+    @get:Input
+    abstract val packageName: Property<String>
+
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val cliToolClasspath: Property<FileCollection>
+
     @get:Internal
     abstract val artifactsLoader: Property<BuiltArtifactsLoader>
 
@@ -51,13 +58,16 @@ abstract class TokenGenerationTask : DefaultTask() {
         if (artifacts.elements.size != 1)
             throw GradleException("Expected only one APK!")
         val apkPath = File(artifacts.elements.single().outputFile).toPath()
+        val appPackageName = packageName.get().substringBefore(".watchfacepush.")
 
         val stdOut = ByteArrayOutputStream()
         val stdErr = ByteArrayOutputStream()
 
         execOperations.javaexec {
-            classpath = project.rootProject.files("lib/wfp-validator.jar")
+            classpath = cliToolClasspath.get()
+            mainClass = "com.google.android.wearable.watchface.push.validation.cli.DwfValidation"
             args("--apk_path=$apkPath")
+            args("--package_name=$appPackageName")
 
             standardOutput = stdOut
             errorOutput = stdErr

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.2"
+validatorPushCli = "1.0.0-alpha01"
 wear-compose-material3 = "1.0.0-alpha37"
 wear-compose = "1.5.0-alpha14"
 compose-tooling = "1.4.1"
@@ -16,6 +17,7 @@ compose-navigation = { module = "androidx.wear.compose:compose-navigation", vers
 lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
+validator-push-cli = { module = "com.google.android.wearable.watchface.validator:validator-push-cli", version.ref = "validatorPushCli" }
 wear-compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "compose-tooling" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
