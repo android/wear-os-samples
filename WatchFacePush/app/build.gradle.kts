@@ -152,7 +152,7 @@ afterEvaluate {
             tasks.register<TokenResourceTask_gradle.TokenResourceTask>("tokenResTask$capsVariantName") {
                 dependsOn(copyTask)
                 buildVariant.set(variantName)
-                outputDirectory.set(layout.buildDirectory.dir("generated/wfTokenRes").get().asFile)
+                outputDirectory.set(layout.buildDirectory.dir("generated/wfTokenRes/$variantName").get().asFile)
             }
         // make sure to run the two defined tasks before doing anything else.
         // tokenResTask will cause copyWatchFaceAssets to
