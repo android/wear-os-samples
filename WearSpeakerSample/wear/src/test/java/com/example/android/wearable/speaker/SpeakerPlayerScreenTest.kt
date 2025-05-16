@@ -15,10 +15,8 @@
  */
 package com.example.android.wearable.speaker
 
+import androidx.wear.compose.material3.AppScaffold
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ResponsiveTimeText
-import com.google.android.horologist.screenshots.FixedTimeSource
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
 import org.junit.Test
@@ -32,9 +30,7 @@ class SpeakerPlayerScreenTest(override val device: WearDevice) : WearScreenshotT
     @OptIn(ExperimentalHorologistApi::class)
     @Test
     fun speakerPlayerScreenTest() = runTest {
-        AppScaffold(
-            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
-        ) {
+        AppScaffold {
             SpeakerPlayerScreen(onVolumeClick = {})
         }
     }

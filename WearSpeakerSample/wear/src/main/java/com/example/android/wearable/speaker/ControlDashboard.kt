@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalHorologistApi::class)
-
 package com.example.android.wearable.speaker
 
 import androidx.compose.foundation.layout.Arrangement
@@ -30,10 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.CircularProgressIndicator
-import androidx.wear.compose.material.Icon
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.CircularProgressIndicator
+import androidx.wear.compose.material3.Icon
 
 /**
  * The component responsible for drawing the main 3 controls, with their expanded and minimized
@@ -57,7 +54,7 @@ fun ControlDashboard(
         // Show the progress indicator only when recording
         if (controlDashboardUiState.micState.expanded) {
             CircularProgressIndicator(
-                progress = recordingProgress,
+                progress = { recordingProgress },
                 modifier = modifier.fillMaxSize()
             )
         }
