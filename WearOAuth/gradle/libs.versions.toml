@@ -1,8 +1,8 @@
 [versions]
 android-gradle-plugin = "8.7.3"
-androidx-compose-bom = "2024.12.01"
+androidx-compose-bom = "2025.05.00"
 androidx-lifecycle = "2.8.7"
-androidx-wear-compose = "1.4.0"
+androidx-wear-compose = "1.5.0-beta01"
 compose = "1.7.6"
 compose-compiler = "1.5.15"
 kotlin = "2.0.21"
@@ -12,7 +12,7 @@ horologist = "0.7.5-alpha"
 robolectric = "4.14.1"
 roborazzi = "1.37.0"
 ui-test-junit4 = "1.7.6"
-wear-compose-material3 = "1.0.0-alpha33"
+wear-compose-material3 = "1.5.0-beta01"
 
 [libraries]
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
