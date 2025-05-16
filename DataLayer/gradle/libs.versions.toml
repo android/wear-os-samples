@@ -1,8 +1,8 @@
 [versions]
-android-gradle-plugin = "8.9.2"
+android-gradle-plugin = "8.10.0"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.04.01"
-androidx-lifecycle = "2.8.7"
+androidx-compose-bom = "2025.05.00"
+androidx-lifecycle = "2.9.0"
 androidx-wear-compose = "1.4.1"
 compose-compiler = "1.5.15"
 ktlint = "0.50.0"
@@ -11,8 +11,8 @@ org-jetbrains-kotlinx = "1.10.2"
 compose-ui-tooling = "1.4.1"
 robolectric = "4.14.1"
 roborazzi = "1.43.1"
-ui-test-junit4 = "1.8.0"
-ui-test-manifest = "1.8.0"
+ui-test-junit4 = "1.8.1"
+ui-test-manifest = "1.8.1"
 horologist = "0.7.5-alpha"
 
 [libraries]
