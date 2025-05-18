@@ -36,7 +36,7 @@ const val INSTALL_TASK = "validateWffAndInstall"
 
 private const val DEFAULT_RELEASE_TAG = "release"
 private const val VALIDATOR_URL =
-    "https://github.com/google/watchface/releases/download/%s/dwf-format-2-validator-1.0.jar"
+    "https://github.com/google/watchface/releases/download/%s/wff-validator.jar"
 private const val VALIDATOR_PATH = "validator/validator-%s.jar"
 private const val VALIDATOR_OUTPUT_PATH = "validator/validator-%s.txt"
 

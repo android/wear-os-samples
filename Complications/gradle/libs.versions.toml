@@ -1,17 +1,19 @@
 [versions]
-android-gradle-plugin = "8.7.3"
+android-gradle-plugin = "8.9.2"
 androidx-wear-watchface = "1.2.1"
 
-org-jetbrains-kotlin = "1.9.25"
-org-jetbrains-kotlinx = "1.9.0"
+org-jetbrains-kotlin = "2.1.0"
+org-jetbrains-kotlinx = "1.10.2"
+
+ktlint = "0.50.0"
 
 [libraries]
-androidx-core-ktx = "androidx.core:core-ktx:1.15.0"
-androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.1.1"
+androidx-core-ktx = "androidx.core:core-ktx:1.16.0"
+androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.1.4"
 androidx-wear-watchface-complications-data-source-ktx = { module = "androidx.wear.watchface:watchface-complications-data-source-ktx", version.ref = "androidx-wear-watchface" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:6.25.0"
+com-diffplug-spotless = "com.diffplug.spotless:7.0.3"

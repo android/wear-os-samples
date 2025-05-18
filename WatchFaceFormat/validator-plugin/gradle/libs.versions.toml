@@ -1,6 +1,6 @@
 [versions]
-androidGradlePlugin = "8.7.3"
-kotlin = "1.9.25"
+androidGradlePlugin = "8.9.2"
+kotlin = "2.1.10"
 
 [libraries]
 android-gradlePlugin-api = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }

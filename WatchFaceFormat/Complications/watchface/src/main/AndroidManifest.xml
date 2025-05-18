@@ -23,6 +23,10 @@
   <application
       android:label="@string/watch_face_name"
       android:hasCode="false">
+
+    <meta-data
+        android:name="com.google.android.wearable.standalone"
+        android:value="true" />
     <property
         android:name="com.google.wear.watchface.format.version"
         android:value="1" />

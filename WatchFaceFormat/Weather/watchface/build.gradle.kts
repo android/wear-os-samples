@@ -15,7 +15,6 @@
  */
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     // Use the locally-defined validator to demonstrate validation on-build.
     id("com.google.wff.validatorplugin")
 }
@@ -35,6 +34,9 @@ android {
     }
 
     buildTypes {
+        debug {
+          isMinifyEnabled = true
+        }
         release {
             // TODO:Add your signingConfig here to build release builds
             isMinifyEnabled = true
