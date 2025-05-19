@@ -2,17 +2,17 @@
 android-gradle-plugin = "8.9.2"
 androidx-activity = "1.10.1"
 androidx-compose-bom = "2025.05.00"
-androidx-media3 = "1.6.1"
+androidx-media3 = "1.7.1"
 androidx-wear-compose = "1.5.0-beta01"
 compose-compiler = "1.5.15"
 compose-ui-tooling = "1.4.1"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.25"
+kotlin = "2.1.20"
 robolectric = "4.14.1"
 roborazzi = "1.43.1"
 ui-test-junit4 = "1.8.0"
 ui-test-manifest = "1.8.0"
-horologist = "0.7.5-alpha"
+horologist = "0.7.14-beta"
 wear-compose-material3 = "1.0.0-alpha37"
 
 [libraries]
@@ -35,8 +35,10 @@ horologist-images-coil = { module = "com.google.android.horologist:horologist-im
 horologist-media-data = { module = "com.google.android.horologist:horologist-media-data", version.ref = "horologist" }
 horologist-media-ui = { module = "com.google.android.horologist:horologist-media-ui", version.ref = "horologist" }
 horologist-media-ui-model = { module = "com.google.android.horologist:horologist-media-ui-model", version.ref = "horologist" }
+horologist-media-ui-material3 = { module = "com.google.android.horologist:horologist-media-ui-material3", version.ref = "horologist" }
+horologist-audio-ui-material3 = { module = "com.google.android.horologist:horologist-audio-ui-material3", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
@@ -54,4 +56,4 @@ wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-mate
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
-
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
