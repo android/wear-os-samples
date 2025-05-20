@@ -26,12 +26,6 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
 
-    <uses-sdk tools:overrideLibrary="androidx.wear.watchface.push" />
-
-    <queries>
-        <package android:name="com.google.android.wearable.dwf.receiver" />
-    </queries>
-
     <application
         android:name=".MarketplaceApplication"
         android:icon="@mipmap/ic_launcher"
@@ -42,10 +36,6 @@
             android:name="com.google.android.wearable"
             android:required="true" />
 
-        <!--   Necessary to use the Watch Face Push SDK     -->
-        <uses-library
-            android:name="wear-sdk"
-            android:required="true" />
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.

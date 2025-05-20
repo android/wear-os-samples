@@ -27,7 +27,6 @@ import com.google.samples.marketplace.viewmodel.WatchFaceMarketplaceViewModel
 
 @Composable
 fun WearApp() {
-    rememberSwipeDismissableNavController()
     WatchFaceMarketplaceTheme {
         AppScaffold {
             val navController = rememberSwipeDismissableNavController()
