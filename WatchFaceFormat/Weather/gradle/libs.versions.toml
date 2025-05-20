@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "8.9.3"
+androidGradlePlugin = "8.10.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
