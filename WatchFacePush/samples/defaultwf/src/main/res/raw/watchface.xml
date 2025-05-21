@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<WatchFace width="450" height="450" clipShape="CIRCLE">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Scene backgroundColor="#ff46a9ff">
+    <Variant mode="AMBIENT" target="backgroundColor" value="#ff000000"/>
+    <DigitalClock x="125" y="62" width="200" height="100" pivotX="0.5" pivotY="0.5" alpha="255">
+      <TimeText x="0" y="0" width="200" height="100" format="hh:mm:ss" hourFormat="SYNC_TO_DEVICE" align="CENTER" alpha="255">
+        <Variant target="alpha" value="0" mode="AMBIENT"/>
+        <Font family="SYNC_TO_DEVICE" size="50" weight="NORMAL" slant="NORMAL" color="#ffffffff"/>
+      </TimeText>
+      <TimeText x="0" y="0" width="200" height="100" format="hh:mm" hourFormat="SYNC_TO_DEVICE" align="CENTER" alpha="0">
+        <Variant target="alpha" value="255" mode="AMBIENT"/>
+        <Font family="SYNC_TO_DEVICE" size="50" weight="NORMAL" slant="NORMAL" color="#ffffffff"/>
+      </TimeText>
+    </DigitalClock>
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="optimizedGroup_dd82" alpha="255">
+      <PartDraw x="100" y="320" width="251" height="70" pivotX="0.5" pivotY="0.5" name="RoundRectangle1copy_2148" alpha="255">
+        <ScreenReader stringId=""/>
+        <Launch target="com.google.samples.marketplace/com.google.samples.marketplace.MainActivity"/>
+        <RoundRectangle x="0" y="0" width="251" height="70" cornerRadiusX="31.0" cornerRadiusY="31.0">
+          <Fill color="#363350eb"/>
+        </RoundRectangle>
+      </PartDraw>
+      <PartText x="78" y="321" width="293" height="69" pivotX="0.5" pivotY="0.5" name="Text1copy_0e58" alpha="255">
+        <ScreenReader stringId=""/>
+        <Text align="CENTER" ellipsis="FALSE">
+          <Font family="SYNC_TO_DEVICE" size="24" weight="ULTRA_BOLD" slant="NORMAL" color="#fff5f5f5">Select watch face</Font>
+        </Text>
+      </PartText>
+      <PartText x="38" y="175" width="375" height="100" pivotX="0.5" pivotY="0.5" name="Text2_13af" alpha="255">
+        <Text align="CENTER" ellipsis="FALSE">
+          <Font family="SYNC_TO_DEVICE" size="24" weight="NORMAL" slant="NORMAL" color="#ffffffff">marketplace default watchface</Font>
+        </Text>
+      </PartText>
+    </Group>
+  </Scene>
+</WatchFace>

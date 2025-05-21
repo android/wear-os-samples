@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+    Copyright 2025 Google LLC
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+    Basic example watch face, demonstrating:
+    
+    - Use of Photos and PhotosConfiguration for digital watch faces
+    - Use of a PhotosConfiguration with `MUTIPLE` configuration type
+    - Use of Photos element with TAP, ON_VISIBLE with `changeAfterEvery` attribute
+-->
+
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
+  <Metadata key="PREVIEW_TIME" value="10:08:32"/>
+
+  <UserConfigurations>
+    <PhotosConfiguration id="photoConfig" configType="MULTIPLE"/>
+  </UserConfigurations>
+  <Scene backgroundColor="#ff000000">
+    <Variant mode="AMBIENT" target="backgroundColor" value="#ff222222"/>
+    <Group x="0" y="0" width="450" height="450" angle="0"
+        pivotX="0.5" pivotY="0.5" alpha="255" name="photos_container">
+      <PartDraw x="98" y="99" width="255" height="255" angle="0"
+          pivotX="0.5" pivotY="0.5" alpha="255">
+        <Rectangle x="0" y="0" width="255" height="255">
+          <Stroke color="#ffffffff" thickness="2.0" />
+        </Rectangle>
+      </PartDraw>
+      <PartImage x="99" y="100" width="250" height="250" angle="0"
+          pivotX="0.5" pivotY="0.5" alpha="255">
+        <Photos change="ON_VISIBLE TAP" changeAfterEvery="3" source="[CONFIGURATION.photoConfig]"
+            defaultImageResource="default_image"/>
+      </PartImage>
+    </Group>
+    <PartText x="125" y="24" width="200" height="75" angle="0" pivotX="0.5"
+        pivotY="0.5" alpha="255">
+      <Localization calendar="GREGORIAN" />
+      <Text align="CENTER" ellipsis="FALSE">
+        <Font family="SYNC_TO_DEVICE" size="40" weight="NORMAL" slant="NORMAL"
+            color="#ffffffff">
+          <Template>%s:%s %s<Parameter expression="[HOUR_1_12]" />
+            <Parameter expression="[MINUTE_Z]" />
+            <Parameter expression="[AMPM_STRING]" />
+          </Template>
+        </Font>
+      </Text>
+    </PartText>
+  </Scene>
+</WatchFace>

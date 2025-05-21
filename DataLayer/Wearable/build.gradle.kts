@@ -119,6 +119,7 @@ dependencies {
     // Preview Tooling
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.wear.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling)
 
     // Testing
     testImplementation(libs.androidx.ui.test.junit4)
@@ -135,7 +136,6 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     androidTestImplementation(composeBom)
 
-    debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(composeBom)
 }
