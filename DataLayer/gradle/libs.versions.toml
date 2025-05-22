@@ -1,26 +1,28 @@
 [versions]
-android-gradle-plugin = "8.9.2"
+android-gradle-plugin = "8.10.0"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.05.00"
-androidx-lifecycle = "2.8.7"
+androidx-compose-bom = "2025.05.01"
+androidx-lifecycle = "2.9.0"
 androidx-wear-compose = "1.5.0-beta01"
 compose-compiler = "1.5.15"
 ktlint = "0.50.0"
 kotlin = "2.1.0"
-org-jetbrains-kotlinx = "1.9.0"
+org-jetbrains-kotlinx = "1.10.2"
 compose-ui-tooling = "1.4.1"
 robolectric = "4.14.1"
-roborazzi = "1.42.0"
-ui-test-junit4 = "1.8.0"
-ui-test-manifest = "1.8.0"
+roborazzi = "1.43.1"
+ui-test-junit4 = "1.8.2"
+ui-test-manifest = "1.8.1"
 horologist = "0.7.5-alpha"
 wear-compose-material3 = "1.5.0-beta01"
+androidx-fragment = "1.8.7"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-core-ktx = "androidx.core:core-ktx:1.15.0"
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }

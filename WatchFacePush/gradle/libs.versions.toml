@@ -1,0 +1,36 @@
+[versions]
+agp = "8.10.0"
+validatorPushCli = "1.0.0-alpha01"
+wear-compose-material3 = "1.0.0-alpha37"
+wear-compose = "1.5.0-beta02"
+compose-tooling = "1.4.1"
+kotlin = "2.1.0"
+lifecycleViewmodelKtx = "2.9.0"
+composeBom = "2025.05.01"
+activityCompose = "1.10.1"
+coreSplashscreen = "1.0.1"
+watchfacePush = "1.3.0-alpha07"
+horologist = "0.7.10-alpha"
+
+[libraries]
+compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "wear-compose" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+ui = { group = "androidx.compose.ui", name = "ui" }
+validator-push-cli = { module = "com.google.android.wearable.watchface.validator:validator-push-cli", version.ref = "validatorPushCli" }
+wear-compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "compose-tooling" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-material = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wear-compose-material3" }
+compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wear-compose" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
+
+watchface-push = { module = "androidx.wear.watchface:watchface-push", version.ref = "watchfacePush" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

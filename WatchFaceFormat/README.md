@@ -21,7 +21,7 @@ For more details on the Watch Face Format, see:
 
 ## Samples
 
-There are currently five samples available:
+There are currently seven samples available:
 
 - `SimpleDigital` - A basic digital watch face.
 - `SimpleAnalog` - A basic analog watch face.
@@ -33,9 +33,12 @@ Face Format.
 ![Flavors](images/flavors.png)
 
 - `Weather` - Current, hourly and daily [weather data][weather] in the Watch
-Face Format. Weather is also a version 2 feature. This requires [minSdk 34](https://github.com/android/wear-os-samples/blob/main/WatchFaceFormat/Weather/watchface/build.gradle.kts#L26-L28), which is currently available via the [Wear OS 5 emulator][wear_5_emulator].
+Face Format. Weather is also a version 2 feature.
 
 ![Weather](images/weather.png)
+
+- `PhotosMask` and `PhotosMulti` - demonstrating the photos function introduced
+in Wear OS 6.
 
 ## Building the samples
 

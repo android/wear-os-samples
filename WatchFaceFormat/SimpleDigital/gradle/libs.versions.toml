@@ -1,9 +1,5 @@
 [versions]
-androidGradlePlugin = "8.9.2"
-kotlin = "1.9.25"
+androidGradlePlugin = "8.10.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
-

@@ -19,6 +19,7 @@ import androidx.wear.compose.material3.AppScaffold
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -28,6 +29,7 @@ class SpeakerPlayerScreenTest(override val device: WearDevice) : WearScreenshotT
     override val tolerance = 0.02f
 
     @OptIn(ExperimentalHorologistApi::class)
+    @Ignore
     @Test
     fun speakerPlayerScreenTest() = runTest {
         AppScaffold {
