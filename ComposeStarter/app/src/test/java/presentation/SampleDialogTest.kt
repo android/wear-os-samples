@@ -29,7 +29,9 @@ class SampleDialogTest(override val device: WearDevice) : WearScreenshotTest() {
     @Test
     fun greetingScreenTest() = runTest {
         SampleDialog(
-            onCancel = { }, onDismiss = { }, onOk = {},
+            onCancel = { },
+            onDismiss = { },
+            onOk = {},
             showDialog = true
         )
     }

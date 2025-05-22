@@ -207,10 +207,10 @@ fun ListScreen(modifier: Modifier = Modifier) {
                 FilledIconButton(
                     onClick = { showDialog = true },
                     modifier = modifier.graphicsLayer {
-                            with(transformationSpec) {
-                                applyContainerTransformation(scrollProgress)
-                            }
+                        with(transformationSpec) {
+                            applyContainerTransformation(scrollProgress)
                         }
+                    }
                         .transformedHeight(this, transformationSpec)
                 ) {
                     Icon(

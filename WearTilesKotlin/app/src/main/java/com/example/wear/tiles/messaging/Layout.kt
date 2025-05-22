@@ -22,6 +22,7 @@ import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.expression.ProtoLayoutExperimental
 import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
@@ -39,9 +40,9 @@ import androidx.wear.protolayout.modifiers.clip
 import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.modifiers.toProtoLayoutModifiers
 import androidx.wear.protolayout.types.layoutString
+import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
-import com.example.wear.tiles.golden.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.column
@@ -187,4 +188,10 @@ internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
             )
             .build()
     }
+}
+
+internal fun resources(
+    fn: ResourceBuilders.Resources.Builder.() -> Unit
+): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources = {
+    ResourceBuilders.Resources.Builder().setVersion(it.version).apply(fn).build()
 }

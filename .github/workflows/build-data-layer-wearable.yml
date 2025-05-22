@@ -1,0 +1,33 @@
+# Workflow name
+name: Build Wear OS DataLayer Wearable
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: ./DataLayer
+
+      - name: Build DataLayer Wearable app
+        working-directory: ./DataLayer
+        run: ./gradlew Wearable:assembleDebug

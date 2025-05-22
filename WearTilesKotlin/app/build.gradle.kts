@@ -74,6 +74,11 @@ dependencies {
     implementation(libs.androidx.protolayout.material3)
     implementation(libs.androidx.protolayout.material)
 
+    implementation(libs.androidx.tiles.tooling.preview)
+    implementation(libs.androidx.tiles.tooling)
+    implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
+
     debugImplementation(libs.androidx.tiles.tooling.preview)
     debugImplementation(libs.androidx.tiles.tooling)
     debugImplementation(libs.androidx.ui.tooling)
