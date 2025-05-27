@@ -35,7 +35,6 @@
 
         <activity
             android:name=".presentation.MainActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection|assetsPaths|colorMode|density|uiMode|fontScale|fontWeightAdjustment|touchscreen|resourcesUnused"
             android:exported="true"
             android:taskAffinity=".main">
             <intent-filter>
