@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     namespace = "com.example.android.wearable.composestarter"
 
