@@ -11,7 +11,7 @@ org-jetbrains-kotlinx = "1.10.2"
 ktlint = "0.50.0"
 horologist = "0.7.5-alpha"
 robolectric = "4.14.1"
-roborazzi = "1.43.1"
+roborazzi = "1.44.0"
 ui-test-junit4 = "1.8.2"
 
 [libraries]
