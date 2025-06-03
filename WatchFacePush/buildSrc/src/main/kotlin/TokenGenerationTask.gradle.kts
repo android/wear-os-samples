@@ -88,15 +88,15 @@ abstract class TokenGenerationTask : DefaultTask() {
 
         val tokenFileName = apkPath.name.removeSuffix(".apk") + "_token.txt"
         val tokenOutFile = tokenDirectory.get().asFile.resolve(tokenFileName)
-                val match = Pattern.compile("generated token: (\\S+)").matcher(stdOut.toString())
-                if (match.find()) {
-                    val token = match.group(1)
-                    tokenOutFile.writeText(token)
-                } else {
-                    throw TaskExecutionException(
-                        this@TokenGenerationTask,
-                        GradleException("No token generated for $tokenFileName")
-                    )
-                }
-            }
+        val match = Pattern.compile("generated token: (\\S+)").matcher(outputAsText)
+        if (match.find()) {
+            val token = match.group(1)
+            tokenOutFile.writeText(token)
+        } else {
+            throw TaskExecutionException(
+                this@TokenGenerationTask,
+                GradleException("No token generated for $tokenFileName")
+            )
+        }
     }
+}
