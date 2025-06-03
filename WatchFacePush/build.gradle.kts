@@ -26,6 +26,8 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
 }
 
+val mainAppNamespace = Attribute.of("wfp.app.namespace", String::class.java)
+
 subprojects {
     if (!path.startsWith(":samples:")) {
         return@subprojects
@@ -60,8 +62,10 @@ subprojects {
                 val tokenTask =
                     tasks.register<TokenGenerationTask_gradle.TokenGenerationTask>("assembleToken$variantName") {
                         dependsOn(assembleTask)
-                        packageName.set(variant.namespace)
-                        cliToolClasspath.set(rootProject.project("app").configurations.getByName("cliToolConfiguration"))
+                        val cliConfiguration = rootProject.project("app").configurations.getByName("cliToolConfiguration")
+                        val mainAppPackageName = cliConfiguration.attributes.getAttribute(mainAppNamespace)
+                        cliToolClasspath.set(cliConfiguration)
+                        packageName.set(mainAppPackageName)
                         artifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
                         apkLocation.set(variant.artifacts.get(SingleArtifact.APK))
 

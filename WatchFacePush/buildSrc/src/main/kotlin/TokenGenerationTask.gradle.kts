@@ -58,20 +58,31 @@ abstract class TokenGenerationTask : DefaultTask() {
         if (artifacts.elements.size != 1)
             throw GradleException("Expected only one APK!")
         val apkPath = File(artifacts.elements.single().outputFile).toPath()
-        val appPackageName = packageName.get().substringBefore(".watchfacepush.")
+        val appPackageName = packageName.get()
 
         val stdOut = ByteArrayOutputStream()
         val stdErr = ByteArrayOutputStream()
 
         execOperations.javaexec {
             classpath = cliToolClasspath.get()
-            mainClass = "com.google.android.wearable.watchface.push.validation.cli.DwfValidation"
+            mainClass = "com.google.android.wearable.watchface.validator.cli.DwfValidation"
             args("--apk_path=$apkPath")
             args("--package_name=$appPackageName")
 
             standardOutput = stdOut
             errorOutput = stdErr
+
+            isIgnoreExitValue = true
         }
+
+        if (stdOut.toString().contains("Failed check")) {
+            println(stdOut.toString())
+            if (stdErr.toString().isNotEmpty()) {
+                println(stdErr.toString())
+            }
+            throw GradleException("Watch face validation failed")
+        }
+
         val tokenFileName = apkPath.name.removeSuffix(".apk") + "_token.txt"
         val tokenOutFile = tokenDirectory.get().asFile.resolve(tokenFileName)
                 val match = Pattern.compile("generated token: (\\S+)").matcher(stdOut.toString())
