@@ -58,31 +58,45 @@ abstract class TokenGenerationTask : DefaultTask() {
         if (artifacts.elements.size != 1)
             throw GradleException("Expected only one APK!")
         val apkPath = File(artifacts.elements.single().outputFile).toPath()
-        val appPackageName = packageName.get().substringBefore(".watchfacepush.")
+        val appPackageName = packageName.get()
 
         val stdOut = ByteArrayOutputStream()
         val stdErr = ByteArrayOutputStream()
 
         execOperations.javaexec {
             classpath = cliToolClasspath.get()
-            mainClass = "com.google.android.wearable.watchface.push.validation.cli.DwfValidation"
+            mainClass = "com.google.android.wearable.watchface.validator.cli.DwfValidation"
             args("--apk_path=$apkPath")
             args("--package_name=$appPackageName")
 
             standardOutput = stdOut
             errorOutput = stdErr
+
+            isIgnoreExitValue = true
         }
+
+        val outputAsText = stdOut.toString()
+        val errorAsText = stdErr.toString()
+
+        if (outputAsText.contains("Failed check")) {
+            println(outputAsText)
+            if (errorAsText.isNotEmpty()) {
+                println(errorAsText)
+            }
+            throw GradleException("Watch face validation failed")
+        }
+
         val tokenFileName = apkPath.name.removeSuffix(".apk") + "_token.txt"
         val tokenOutFile = tokenDirectory.get().asFile.resolve(tokenFileName)
-                val match = Pattern.compile("generated token: (\\S+)").matcher(stdOut.toString())
-                if (match.find()) {
-                    val token = match.group(1)
-                    tokenOutFile.writeText(token)
-                } else {
-                    throw TaskExecutionException(
-                        this@TokenGenerationTask,
-                        GradleException("No token generated for $tokenFileName")
-                    )
-                }
-            }
+        val match = Pattern.compile("generated token: (\\S+)").matcher(outputAsText)
+        if (match.find()) {
+            val token = match.group(1)
+            tokenOutFile.writeText(token)
+        } else {
+            throw TaskExecutionException(
+                this@TokenGenerationTask,
+                GradleException("No token generated for $tokenFileName")
+            )
+        }
     }
+}

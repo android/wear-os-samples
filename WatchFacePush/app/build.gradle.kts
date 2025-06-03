@@ -70,6 +70,8 @@ android {
     }
 }
 
+
+val mainAppNamespace = Attribute.of("wfp.app.namespace", String::class.java)
 // Define configurations that allows this app to include the sample watch faces in their assets
 configurations {
     create("debugWatchfaceOutput") {
@@ -95,6 +97,9 @@ configurations {
     create("cliToolConfiguration") {
         isCanBeConsumed = false
         isCanBeResolved = true
+        attributes {
+            attribute(mainAppNamespace, android.namespace!!)
+        }
     }
 }
 
