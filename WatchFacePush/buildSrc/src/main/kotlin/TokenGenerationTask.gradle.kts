@@ -75,10 +75,13 @@ abstract class TokenGenerationTask : DefaultTask() {
             isIgnoreExitValue = true
         }
 
-        if (stdOut.toString().contains("Failed check")) {
-            println(stdOut.toString())
-            if (stdErr.toString().isNotEmpty()) {
-                println(stdErr.toString())
+        val outputAsText = stdOut.toString()
+        val errorAsText = stdErr.toString()
+
+        if (outputAsText.contains("Failed check")) {
+            println(outputAsText)
+            if (errorAsText.isNotEmpty()) {
+                println(errorAsText)
             }
             throw GradleException("Watch face validation failed")
         }
