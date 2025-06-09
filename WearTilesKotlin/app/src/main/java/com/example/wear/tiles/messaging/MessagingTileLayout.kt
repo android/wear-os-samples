@@ -29,11 +29,11 @@ import androidx.wear.protolayout.material.ChipColors
 import androidx.wear.protolayout.material.CompactChip
 import androidx.wear.protolayout.material.layouts.MultiButtonLayout
 import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.Preview
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
-import com.example.wear.tiles.golden.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 import com.example.wear.tiles.tools.emptyClickable
 
@@ -196,3 +196,9 @@ fun Resources.Builder.addIdToImageMapping(
     id,
     bitmapToImageResource(bitmap)
 )
+
+internal fun resources(fn: Resources.Builder.() -> Unit):
+        (RequestBuilders.ResourcesRequest) -> Resources =
+    {
+        Resources.Builder().setVersion(it.version).apply(fn).build()
+    }
