@@ -16,8 +16,6 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.protolayout.ResourceBuilders
-import androidx.wear.tiles.RequestBuilders
 import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 
 @MultiRoundDevicesPreviews

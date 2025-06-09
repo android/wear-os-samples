@@ -198,7 +198,7 @@ fun Resources.Builder.addIdToImageMapping(
 )
 
 internal fun resources(fn: Resources.Builder.() -> Unit):
-        (RequestBuilders.ResourcesRequest) -> Resources =
+    (RequestBuilders.ResourcesRequest) -> Resources =
     {
         Resources.Builder().setVersion(it.version).apply(fn).build()
     }
