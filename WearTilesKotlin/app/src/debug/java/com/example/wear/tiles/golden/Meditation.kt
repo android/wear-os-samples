@@ -176,16 +176,18 @@ object Meditation {
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun meditationChipsPreview(context: Context) = TilePreviewData(resources {
-    addIdToImageMapping(
-        Meditation.CHIP_1_ICON_ID,
-        drawableResToImageResource(R.drawable.ic_breathe_24)
-    )
-    addIdToImageMapping(
-        Meditation.CHIP_2_ICON_ID,
-        drawableResToImageResource(R.drawable.ic_mindfulness_24)
-    )
-}) {
+internal fun meditationChipsPreview(context: Context) = TilePreviewData(
+    resources {
+        addIdToImageMapping(
+            Meditation.CHIP_1_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_breathe_24)
+        )
+        addIdToImageMapping(
+            Meditation.CHIP_2_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_mindfulness_24)
+        )
+    }
+) {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Meditation.chipsLayout(
             context,

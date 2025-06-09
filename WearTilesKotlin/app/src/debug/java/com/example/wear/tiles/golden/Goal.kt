@@ -69,7 +69,10 @@ private fun blueOnTranslucentWhite() = ProgressIndicatorColors(
 internal fun goalPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
         Goal.layout(
-            context, it.deviceConfiguration, steps = 5168, goal = 8000
+            context,
+            it.deviceConfiguration,
+            steps = 5168,
+            goal = 8000
         )
     ).build()
 }

@@ -125,20 +125,24 @@ object Workout {
         .build()
 }
 
-
 @MultiRoundDevicesWithFontScalePreviews
 internal fun workoutButtonsPreview(context: Context) =
-    TilePreviewData(onTileResourceRequest = resources {
-        addIdToImageMapping(
-            Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
-        )
-        addIdToImageMapping(
-            Workout.BUTTON_2_ICON_ID, drawableResToImageResource(R.drawable.ic_yoga_24)
-        )
-        addIdToImageMapping(
-            Workout.BUTTON_3_ICON_ID, drawableResToImageResource(R.drawable.ic_cycling_24)
-        )
-    }) {
+    TilePreviewData(
+        onTileResourceRequest = resources {
+            addIdToImageMapping(
+                Workout.BUTTON_1_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_run_24)
+            )
+            addIdToImageMapping(
+                Workout.BUTTON_2_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_yoga_24)
+            )
+            addIdToImageMapping(
+                Workout.BUTTON_3_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_cycling_24)
+            )
+        }
+    ) {
         singleTimelineEntryTileBuilder(
             Workout.buttonsLayout(
                 context,

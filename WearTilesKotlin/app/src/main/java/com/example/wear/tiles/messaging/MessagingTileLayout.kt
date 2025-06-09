@@ -124,7 +124,8 @@ private fun messagingTilePreview(context: Context): TilePreviewData {
                     request.deviceConfiguration
                 )
             ).build()
-        })
+        }
+    )
 }
 
 @Preview
@@ -155,7 +156,8 @@ private fun contactWithImagePreview(context: Context): TilePreviewData {
             TilePreviewHelper.singleTimelineEntryTileBuilder(
                 contactLayout(context = context, contact = contact, clickable = emptyClickable)
             ).build()
-        })
+        }
+    )
 }
 
 @Preview
@@ -170,13 +172,15 @@ private fun searchButtonPreview(context: Context) = TilePreviewData(
         TilePreviewHelper.singleTimelineEntryTileBuilder(
             searchLayout(context, emptyClickable)
         ).build()
-    })
+    }
+)
 
 fun Resources.Builder.addIdToImageMapping(
     id: String,
     @DrawableRes resId: Int
 ): Resources.Builder = addIdToImageMapping(
-    id, ImageResource.Builder()
+    id,
+    ImageResource.Builder()
         .setAndroidResourceByResId(
             ResourceBuilders.AndroidImageResourceByResId.Builder()
                 .setResourceId(resId)
@@ -189,5 +193,6 @@ fun Resources.Builder.addIdToImageMapping(
     id: String,
     bitmap: Bitmap
 ): Resources.Builder = addIdToImageMapping(
-    id, bitmapToImageResource(bitmap)
+    id,
+    bitmapToImageResource(bitmap)
 )

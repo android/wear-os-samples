@@ -88,12 +88,14 @@ object Social {
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun socialPreview(context: Context) = TilePreviewData(resources {
-    addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
-    addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
-    addIdToImageMapping(Social.AVATAR_ID_3, drawableResToImageResource(R.drawable.avatar3))
-    addIdToImageMapping(Social.AVATAR_ID_4, drawableResToImageResource(R.drawable.avatar4))
-}) {
+internal fun socialPreview(context: Context) = TilePreviewData(
+    resources {
+        addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
+        addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
+        addIdToImageMapping(Social.AVATAR_ID_3, drawableResToImageResource(R.drawable.avatar3))
+        addIdToImageMapping(Social.AVATAR_ID_4, drawableResToImageResource(R.drawable.avatar4))
+    }
+) {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Social.layout(
             context,
@@ -125,7 +127,7 @@ internal fun socialPreview(context: Context) = TilePreviewData(resources {
                     initials = "DB",
                     clickable = emptyClickable,
                     avatarId = Social.AVATAR_ID_4
-                ),
+                )
             )
         )
     ).build()
