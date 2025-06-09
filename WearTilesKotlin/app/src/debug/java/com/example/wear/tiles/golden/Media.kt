@@ -33,6 +33,7 @@ import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
+import com.example.wear.tiles.messaging.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
@@ -111,16 +112,18 @@ object Media {
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun mediaPreview(context: Context) = TilePreviewData(resources {
-    addIdToImageMapping(
-        Media.CHIP_1_ICON_ID,
-        drawableResToImageResource(R.drawable.ic_music_queue_24)
-    )
-    addIdToImageMapping(
-        Media.CHIP_2_ICON_ID,
-        drawableResToImageResource(R.drawable.ic_podcasts_24)
-    )
-}) {
+internal fun mediaPreview(context: Context) = TilePreviewData(
+    resources {
+        addIdToImageMapping(
+            Media.CHIP_1_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_music_queue_24)
+        )
+        addIdToImageMapping(
+            Media.CHIP_2_ICON_ID,
+            drawableResToImageResource(R.drawable.ic_podcasts_24)
+        )
+    }
+) {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Media.layout(
             context,

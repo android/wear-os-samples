@@ -17,6 +17,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -54,10 +55,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
 }
 
 dependencies {
@@ -75,11 +72,11 @@ dependencies {
     implementation(libs.horologist.tiles)
 
     implementation(libs.androidx.wear.tooling.preview)
+    implementation(libs.androidx.tiles.tooling.preview)
     implementation(libs.compose.ui.tooling.preview)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.tiles.tooling.preview)
     debugImplementation(libs.androidx.tiles.tooling)
 }

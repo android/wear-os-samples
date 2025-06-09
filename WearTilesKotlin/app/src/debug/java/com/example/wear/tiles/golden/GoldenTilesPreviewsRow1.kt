@@ -16,8 +16,6 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.protolayout.ResourceBuilders
-import androidx.wear.tiles.RequestBuilders
 import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 
 @MultiRoundDevicesPreviews
@@ -35,12 +33,8 @@ private fun run(context: Context) = runPreview(context)
 @MultiRoundDevicesPreviews
 private fun ski(context: Context) = skiPreview(context)
 
-//@Preview
+// @Preview
 fun sleepTracker(context: Context) {
-    // TODO: This tile doesn't use standard components; we can achieve it by drawing on a Canvas (Compose's DrawScope) then converting it to a bitmap using Horologist
+    // TODO: This tile doesn't use standard components; we can achieve it by drawing on a Canvas
+    //  (Compose's DrawScope) then converting it to a bitmap using Horologist
 }
-
-internal fun resources(fn: ResourceBuilders.Resources.Builder.() -> Unit): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources =
-    {
-        ResourceBuilders.Resources.Builder().setVersion(it.version).apply(fn).build()
-    }

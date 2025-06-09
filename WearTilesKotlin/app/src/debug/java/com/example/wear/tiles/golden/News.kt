@@ -102,4 +102,3 @@ internal fun newsPreview(context: Context) = TilePreviewData {
         )
     ).build()
 }
-

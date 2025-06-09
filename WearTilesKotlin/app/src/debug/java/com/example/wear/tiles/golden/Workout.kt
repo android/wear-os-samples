@@ -31,6 +31,7 @@ import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
 import com.example.wear.tiles.R
+import com.example.wear.tiles.messaging.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
@@ -125,20 +126,24 @@ object Workout {
         .build()
 }
 
-
 @MultiRoundDevicesWithFontScalePreviews
 internal fun workoutButtonsPreview(context: Context) =
-    TilePreviewData(onTileResourceRequest = resources {
-        addIdToImageMapping(
-            Workout.BUTTON_1_ICON_ID, drawableResToImageResource(R.drawable.ic_run_24)
-        )
-        addIdToImageMapping(
-            Workout.BUTTON_2_ICON_ID, drawableResToImageResource(R.drawable.ic_yoga_24)
-        )
-        addIdToImageMapping(
-            Workout.BUTTON_3_ICON_ID, drawableResToImageResource(R.drawable.ic_cycling_24)
-        )
-    }) {
+    TilePreviewData(
+        onTileResourceRequest = resources {
+            addIdToImageMapping(
+                Workout.BUTTON_1_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_run_24)
+            )
+            addIdToImageMapping(
+                Workout.BUTTON_2_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_yoga_24)
+            )
+            addIdToImageMapping(
+                Workout.BUTTON_3_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_cycling_24)
+            )
+        }
+    ) {
         singleTimelineEntryTileBuilder(
             Workout.buttonsLayout(
                 context,

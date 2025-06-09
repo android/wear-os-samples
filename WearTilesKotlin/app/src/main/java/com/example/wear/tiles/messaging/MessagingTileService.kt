@@ -70,7 +70,8 @@ class MessagingTileService : SuspendingTileService() {
      * Read the latest data, and create a layout to which it binds the state.
      */
     override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val layoutElement = messagingTileLayout(latestTileState(), this, requestParams.deviceConfiguration)
+        val layoutElement =
+            messagingTileLayout(latestTileState(), this, requestParams.deviceConfiguration)
         val resourcesVersion = if (DEBUG_RESOURCES) UUID.randomUUID().toString() else "0"
         return Tile.Builder().setResourcesVersion(resourcesVersion).setTileTimeline(
             Timeline.fromLayoutElement(layoutElement)
@@ -169,7 +170,6 @@ class MessagingTileService : SuspendingTileService() {
         internal const val ID_IC_SEARCH = "ic_search"
         internal const val ID_CONTACT_PREFIX = "contact:"
     }
-
 }
 
 const val DEBUG_RESOURCES = true

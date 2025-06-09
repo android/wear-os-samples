@@ -28,6 +28,7 @@ import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
+import com.example.wear.tiles.messaging.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
@@ -95,12 +96,14 @@ object Weather {
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun weatherPreview(context: Context) = TilePreviewData(resources {
-    addIdToImageMapping(
-        Weather.SCATTERED_SHOWERS_ICON_ID,
-        drawableResToImageResource(R.drawable.scattered_showers)
-    )
-}) {
+internal fun weatherPreview(context: Context) = TilePreviewData(
+    resources {
+        addIdToImageMapping(
+            Weather.SCATTERED_SHOWERS_ICON_ID,
+            drawableResToImageResource(R.drawable.scattered_showers)
+        )
+    }
+) {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
         Weather.layout(
             context,
