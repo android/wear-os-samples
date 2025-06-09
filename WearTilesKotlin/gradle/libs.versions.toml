@@ -1,7 +1,6 @@
 [versions]
 android-gradle-plugin = "8.10.1"
 compose = "1.8.2"
-compose-compiler = "1.5.15"
 ktlint = "0.50.0"
 ktfmt = "0.54"
 androidx-wear-tiles = "1.5.0"
@@ -29,4 +28,4 @@ desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:7.0.4"
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
