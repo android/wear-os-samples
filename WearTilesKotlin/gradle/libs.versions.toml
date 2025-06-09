@@ -6,7 +6,7 @@ ktfmt = "0.54"
 androidx-wear-tiles = "1.5.0"
 androidx-wear-proto = "1.3.0"
 coil = "3.2.0"
-horologist = "0.7.12-alpha"
+horologist = "0.7.14-beta"
 org-jetbrains-kotlin = "2.1.21"
 wear-tooling-preview = "1.0.0"
 
