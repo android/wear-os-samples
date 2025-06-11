@@ -104,7 +104,7 @@ class MessagingTileService : SuspendingTileService() {
                             .find { it.imageResourceId() == id }
                             ?.let { contact ->
                                 imageLoader.loadAvatar(this@MessagingTileService, contact)?.let {
-                                    image ->
+                                        image ->
                                     id to image
                                 }
                             } ?: (id to R.mipmap.offline.toImageResource())

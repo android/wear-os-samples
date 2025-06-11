@@ -46,7 +46,7 @@ object Media {
         deviceParameters: DeviceParameters,
         playlist1: Playlist,
         playlist2: Playlist,
-        browseClickable: Clickable,
+        browseClickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -77,8 +77,10 @@ object Media {
                 CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Pink),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Pink),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                         )
                     )
                     .build()
@@ -88,7 +90,7 @@ object Media {
     private fun playlistChip(
         context: Context,
         deviceParameters: DeviceParameters,
-        playlist: Playlist,
+        playlist: Playlist
     ): Chip {
         return Chip.Builder(context, playlist.clickable, deviceParameters)
             // TitleChip/Chip's default width == device width minus some padding
@@ -99,8 +101,10 @@ object Media {
             .setPrimaryLabelContent(playlist.label)
             .setChipColors(
                 ChipColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkPink),
-                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White),
+                    /*backgroundColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.DarkPink),
+                    /*contentColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.White)
                 )
             )
             .build()
@@ -115,32 +119,32 @@ internal fun mediaPreview(context: Context) =
         resources {
             addIdToImageMapping(
                 Media.CHIP_1_ICON_ID,
-                drawableResToImageResource(R.drawable.ic_music_queue_24),
+                drawableResToImageResource(R.drawable.ic_music_queue_24)
             )
             addIdToImageMapping(
                 Media.CHIP_2_ICON_ID,
-                drawableResToImageResource(R.drawable.ic_podcasts_24),
+                drawableResToImageResource(R.drawable.ic_podcasts_24)
             )
         }
     ) {
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-                Media.layout(
-                    context,
-                    it.deviceConfiguration,
-                    playlist1 =
-                        Media.Playlist(
-                            label = "Liked songs",
-                            iconId = Media.CHIP_1_ICON_ID,
-                            clickable = emptyClickable,
-                        ),
-                    playlist2 =
-                        Media.Playlist(
-                            label = "Podcasts",
-                            iconId = Media.CHIP_2_ICON_ID,
-                            clickable = emptyClickable,
-                        ),
-                    browseClickable = emptyClickable,
-                )
+            Media.layout(
+                context,
+                it.deviceConfiguration,
+                playlist1 =
+                Media.Playlist(
+                    label = "Liked songs",
+                    iconId = Media.CHIP_1_ICON_ID,
+                    clickable = emptyClickable
+                ),
+                playlist2 =
+                Media.Playlist(
+                    label = "Podcasts",
+                    iconId = Media.CHIP_2_ICON_ID,
+                    clickable = emptyClickable
+                ),
+                browseClickable = emptyClickable
             )
+        )
             .build()
     }

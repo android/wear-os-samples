@@ -36,7 +36,7 @@ object Calendar {
         eventTime: String,
         eventName: String,
         eventLocation: String,
-        clickable: Clickable,
+        clickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -68,14 +68,14 @@ object Calendar {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun calendarPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Calendar.layout(
-                context,
-                it.deviceConfiguration,
-                eventTime = "6:30-7:30 PM",
-                eventName = "Morning Pilates with Christina Lloyd",
-                eventLocation = "216 Market Street",
-                clickable = emptyClickable,
-            )
+        Calendar.layout(
+            context,
+            it.deviceConfiguration,
+            eventTime = "6:30-7:30 PM",
+            eventName = "Morning Pilates with Christina Lloyd",
+            eventLocation = "216 Market Street",
+            clickable = emptyClickable
         )
+    )
         .build()
 }
