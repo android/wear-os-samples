@@ -17,7 +17,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -27,8 +27,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.wear.tiles"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = 30
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
@@ -55,28 +55,32 @@ android {
     buildFeatures {
         compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.datastore)
-
-    implementation(libs.androidx.wear.tiles.material)
-
-    implementation(libs.coil)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.guava)
-
-    implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
 
-    implementation(libs.androidx.wear.tooling.preview)
-    implementation(libs.androidx.tiles.tooling.preview)
-    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.coil3.coil)
+    implementation(libs.coil3.network.okhttp)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.tiles)
+    implementation(libs.androidx.tiles.renderer)
+    implementation(libs.androidx.protolayout.material3)
+    implementation(libs.androidx.protolayout.material)
+
+    implementation(libs.androidx.tiles.tooling.preview)
+    implementation(libs.androidx.tiles.tooling)
+    implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
+
+    debugImplementation(libs.androidx.tiles.tooling.preview)
     debugImplementation(libs.androidx.tiles.tooling)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.wear.tooling.preview)
 }

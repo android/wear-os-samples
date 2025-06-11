@@ -15,20 +15,69 @@
  */
 package com.example.wear.tiles.messaging
 
+import androidx.annotation.DrawableRes
+import com.example.wear.tiles.R
+
 data class Contact(
     val id: Long,
     val initials: String,
     val name: String,
-    val avatarUrl: String?
-) {
-    fun toPreferenceString(): String =
-        listOf(id, initials, name, avatarUrl.orEmpty()).joinToString(",")
+    val avatarSource: AvatarSource,
+)
 
-    companion object {
-        fun String.toContact(): Contact {
-            val (id, initials, name, avatarUrl) = split(",")
+sealed interface AvatarSource {
+    // Represents an image fetched from a network URL
+    data class Network(val url: String) : AvatarSource
 
-            return Contact(id.toLong(), initials, name, avatarUrl.ifBlank { null })
-        }
-    }
+    // Represents an image loaded from Android drawable resources
+    data class Resource(@DrawableRes val resourceId: Int) : AvatarSource
+
+    // Represents the absence of a specific avatar
+    object None : AvatarSource
 }
+
+fun Contact.imageResourceId() = "contact:$id"
+
+fun getMockNetworkContacts() =
+    listOf(
+        Contact(
+            id = 0,
+            initials = "AC",
+            name = "Ali C",
+            avatarSource = AvatarSource.Network("$avatarPath/ali.png"),
+        ),
+        Contact(id = 1, initials = "JV", name = "Jyoti V", avatarSource = AvatarSource.None),
+        Contact(
+            id = 2,
+            initials = "TB",
+            name = "Taylor B",
+            avatarSource = AvatarSource.Network("$avatarPath/taylor.jpg"),
+        ),
+        Contact(id = 3, initials = "FS", name = "Felipe S", avatarSource = AvatarSource.None),
+        Contact(id = 4, initials = "JG", name = "Judith G", avatarSource = AvatarSource.None),
+        Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None),
+    )
+
+fun getMockLocalContacts() =
+    listOf(
+        Contact(
+            id = 0,
+            initials = "AC",
+            name = "Ali C",
+            avatarSource = AvatarSource.Resource(R.drawable.ali),
+        ),
+        Contact(id = 1, initials = "JV", name = "Jyoti V", avatarSource = AvatarSource.None),
+        Contact(
+            id = 2,
+            initials = "TB",
+            name = "Taylor B",
+            avatarSource = AvatarSource.Resource(R.drawable.taylor),
+        ),
+        Contact(id = 3, initials = "FS", name = "Felipe S", avatarSource = AvatarSource.None),
+        Contact(id = 4, initials = "JG", name = "Judith G", avatarSource = AvatarSource.None),
+        Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None),
+    )
+
+private const val avatarPath =
+    "https://raw.githubusercontent.com" +
+        "/android/wear-os-samples/main/WearTilesKotlin/app/src/main/res/drawable-nodpi"

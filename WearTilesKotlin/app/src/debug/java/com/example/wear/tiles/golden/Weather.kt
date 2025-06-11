@@ -28,7 +28,6 @@ import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
-import com.example.wear.tiles.messaging.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
@@ -44,76 +43,79 @@ object Weather {
         currentTemperature: String,
         lowTemperature: String,
         highTemperature: String,
-        weatherSummary: String
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, location)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.Blue))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        )
-        .setContent(
-            MultiSlotLayout.Builder()
-                .addSlotContent(
-                    Image.Builder()
-                        .setWidth(dp(32f))
-                        .setHeight(dp(32f))
-                        .setResourceId(weatherIconId)
-                        .build()
-                )
-                .addSlotContent(
-                    Text.Builder(context, currentTemperature)
-                        .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
-                        .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                        .build()
-                )
-                .addSlotContent(
-                    Column.Builder()
-                        .addContent(
-                            Text.Builder(context, highTemperature)
-                                .setTypography(Typography.TYPOGRAPHY_TITLE3)
-                                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                                .build()
-                        )
-                        .addContent(
-                            Text.Builder(context, lowTemperature)
-                                .setTypography(Typography.TYPOGRAPHY_TITLE3)
-                                .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
-                                .build()
-                        )
-                        .build()
-                )
-                .build()
-        )
-        .setSecondaryLabelTextContent(
-            Text.Builder(context, weatherSummary)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .setTypography(Typography.TYPOGRAPHY_TITLE3)
-                .build()
-        )
-        .build()
+        weatherSummary: String,
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setPrimaryLabelTextContent(
+                Text.Builder(context, location)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.Blue))
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .build()
+            )
+            .setContent(
+                MultiSlotLayout.Builder()
+                    .addSlotContent(
+                        Image.Builder()
+                            .setWidth(dp(32f))
+                            .setHeight(dp(32f))
+                            .setResourceId(weatherIconId)
+                            .build()
+                    )
+                    .addSlotContent(
+                        Text.Builder(context, currentTemperature)
+                            .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
+                            .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                            .build()
+                    )
+                    .addSlotContent(
+                        Column.Builder()
+                            .addContent(
+                                Text.Builder(context, highTemperature)
+                                    .setTypography(Typography.TYPOGRAPHY_TITLE3)
+                                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                                    .build()
+                            )
+                            .addContent(
+                                Text.Builder(context, lowTemperature)
+                                    .setTypography(Typography.TYPOGRAPHY_TITLE3)
+                                    .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+            .setSecondaryLabelTextContent(
+                Text.Builder(context, weatherSummary)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .setTypography(Typography.TYPOGRAPHY_TITLE3)
+                    .build()
+            )
+            .build()
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun weatherPreview(context: Context) = TilePreviewData(
-    resources {
-        addIdToImageMapping(
-            Weather.SCATTERED_SHOWERS_ICON_ID,
-            drawableResToImageResource(R.drawable.scattered_showers)
-        )
+internal fun weatherPreview(context: Context) =
+    TilePreviewData(
+        resources {
+            addIdToImageMapping(
+                Weather.SCATTERED_SHOWERS_ICON_ID,
+                drawableResToImageResource(R.drawable.scattered_showers),
+            )
+        }
+    ) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+                Weather.layout(
+                    context,
+                    it.deviceConfiguration,
+                    location = "San Francisco",
+                    weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
+                    currentTemperature = "52°",
+                    lowTemperature = "48°",
+                    highTemperature = "64°",
+                    weatherSummary = "Showers",
+                )
+            )
+            .build()
     }
-) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Weather.layout(
-            context,
-            it.deviceConfiguration,
-            location = "San Francisco",
-            weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
-            currentTemperature = "52°",
-            lowTemperature = "48°",
-            highTemperature = "64°",
-            weatherSummary = "Showers"
-        )
-    ).build()
-}
