@@ -39,7 +39,7 @@ object Run {
         lastRunText: String,
         chanceOfRain: Int,
         startRunClickable: Clickable,
-        moreChipClickable: Clickable,
+        moreChipClickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -57,8 +57,10 @@ object Run {
                     .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Blue),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Blue),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Black)
                         )
                     )
                     .build()
@@ -77,8 +79,10 @@ object Run {
                 CompactChip.Builder(context, "More", moreChipClickable, deviceParameters)
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkGray),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.DarkGray),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.White)
                         )
                     )
                     .build()
@@ -89,14 +93,14 @@ object Run {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun runPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
-            Run.layout(
-                context,
-                it.deviceConfiguration,
-                lastRunText = "2 days ago",
-                chanceOfRain = 20,
-                startRunClickable = emptyClickable,
-                moreChipClickable = emptyClickable,
-            )
+        Run.layout(
+            context,
+            it.deviceConfiguration,
+            lastRunText = "2 days ago",
+            chanceOfRain = 20,
+            startRunClickable = emptyClickable,
+            moreChipClickable = emptyClickable
         )
+    )
         .build()
 }

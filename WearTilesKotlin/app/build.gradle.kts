@@ -17,7 +17,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    alias(libs.plugins.compose.compiler)
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -56,31 +56,28 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
 }
 
 dependencies {
+    // Horologist provides helpful wrappers for Tiles development
     implementation(libs.horologist.tiles)
 
-    implementation(libs.coil3.coil)
-    implementation(libs.coil3.network.okhttp)
+    // Coil for asynchronous image loading
+    implementation(libs.coil)
+    implementation(libs.coil.okhttp)
 
+    // Java 8+ API desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(libs.androidx.tiles)
-    implementation(libs.androidx.tiles.renderer)
-    implementation(libs.androidx.protolayout.material3)
-    implementation(libs.androidx.protolayout.material)
+    // Core Tile dependencies for creating the service and layouts
+    implementation(libs.androidx.wear.tiles)
+    implementation(libs.androidx.wear.protolayout.material)
+    implementation(libs.androidx.wear.protolayout.material3)
 
-    implementation(libs.androidx.tiles.tooling.preview)
-    implementation(libs.androidx.tiles.tooling)
-    implementation(libs.androidx.ui.tooling)
+    // Tooling dependencies for previewing tiles in Android Studio.
+    // Scoped as 'implementation' to allow previews in the 'main' source set.
+    implementation(libs.androidx.wear.tiles.renderer)
+    implementation(libs.androidx.wear.tiles.tooling.preview)
+    implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.wear.tooling.preview)
-
-    debugImplementation(libs.androidx.tiles.tooling.preview)
-    debugImplementation(libs.androidx.tiles.tooling)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.wear.tooling.preview)
 }

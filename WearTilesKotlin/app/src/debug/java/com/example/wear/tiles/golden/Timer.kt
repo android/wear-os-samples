@@ -37,7 +37,7 @@ object Timer {
         context: Context,
         deviceParameters: DeviceParameters,
         timerList: List<Timer>,
-        clickable: Clickable,
+        clickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -54,8 +54,10 @@ object Timer {
                 CompactChip.Builder(context, "New", clickable, deviceParameters)
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkYellow),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.DarkYellow),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.White)
                         )
                     )
                     .build()
@@ -67,8 +69,10 @@ object Timer {
             .setTextContent(timer.minutes, Typography.TYPOGRAPHY_TITLE3)
             .setButtonColors(
                 ButtonColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                    /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray),
+                    /*backgroundColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.Yellow),
+                    /*contentColor=*/
+                    ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                 )
             )
             .build()
@@ -79,20 +83,20 @@ object Timer {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun timerPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Timer.layout(
-                context,
-                it.deviceConfiguration,
-                timerList =
-                    listOf(
-                        Timer.Timer(minutes = "05", clickable = emptyClickable),
-                        Timer.Timer(minutes = "10", clickable = emptyClickable),
-                        Timer.Timer(minutes = "15", clickable = emptyClickable),
-                        Timer.Timer(minutes = "20", clickable = emptyClickable),
-                        Timer.Timer(minutes = "30", clickable = emptyClickable),
-                        Timer.Timer(minutes = "45", clickable = emptyClickable),
-                    ),
-                clickable = emptyClickable,
-            )
+        Timer.layout(
+            context,
+            it.deviceConfiguration,
+            timerList =
+            listOf(
+                Timer.Timer(minutes = "05", clickable = emptyClickable),
+                Timer.Timer(minutes = "10", clickable = emptyClickable),
+                Timer.Timer(minutes = "15", clickable = emptyClickable),
+                Timer.Timer(minutes = "20", clickable = emptyClickable),
+                Timer.Timer(minutes = "30", clickable = emptyClickable),
+                Timer.Timer(minutes = "45", clickable = emptyClickable)
+            ),
+            clickable = emptyClickable
         )
+    )
         .build()
 }
