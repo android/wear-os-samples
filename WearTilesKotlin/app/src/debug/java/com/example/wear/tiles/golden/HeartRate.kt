@@ -38,7 +38,7 @@ object HeartRate {
         deviceParameters: DeviceParameters,
         highestHeartRateBpm: Int,
         lowestHeartRateBpm: Int,
-        clickable: Clickable,
+        clickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -107,8 +107,10 @@ object HeartRate {
                 CompactChip.Builder(context, "Measure", clickable, deviceParameters)
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.LightRed),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.LightRed),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Black)
                         )
                     )
                     .build()
@@ -119,13 +121,13 @@ object HeartRate {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun heartRateSimplePreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-            HeartRate.simpleLayout(
-                context,
-                it.deviceConfiguration,
-                highestHeartRateBpm = 86,
-                lowestHeartRateBpm = 54,
-                clickable = emptyClickable,
-            )
+        HeartRate.simpleLayout(
+            context,
+            it.deviceConfiguration,
+            highestHeartRateBpm = 86,
+            lowestHeartRateBpm = 54,
+            clickable = emptyClickable
         )
+    )
         .build()
 }

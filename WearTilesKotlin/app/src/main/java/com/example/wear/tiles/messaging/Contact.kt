@@ -22,7 +22,7 @@ data class Contact(
     val id: Long,
     val initials: String,
     val name: String,
-    val avatarSource: AvatarSource,
+    val avatarSource: AvatarSource
 )
 
 sealed interface AvatarSource {
@@ -44,18 +44,18 @@ fun getMockNetworkContacts() =
             id = 0,
             initials = "AC",
             name = "Ali C",
-            avatarSource = AvatarSource.Network("$avatarPath/ali.png"),
+            avatarSource = AvatarSource.Network("$avatarPath/ali.png")
         ),
         Contact(id = 1, initials = "JV", name = "Jyoti V", avatarSource = AvatarSource.None),
         Contact(
             id = 2,
             initials = "TB",
             name = "Taylor B",
-            avatarSource = AvatarSource.Network("$avatarPath/taylor.jpg"),
+            avatarSource = AvatarSource.Network("$avatarPath/taylor.jpg")
         ),
         Contact(id = 3, initials = "FS", name = "Felipe S", avatarSource = AvatarSource.None),
         Contact(id = 4, initials = "JG", name = "Judith G", avatarSource = AvatarSource.None),
-        Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None),
+        Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None)
     )
 
 fun getMockLocalContacts() =
@@ -64,18 +64,18 @@ fun getMockLocalContacts() =
             id = 0,
             initials = "AC",
             name = "Ali C",
-            avatarSource = AvatarSource.Resource(R.drawable.ali),
+            avatarSource = AvatarSource.Resource(R.drawable.ali)
         ),
         Contact(id = 1, initials = "JV", name = "Jyoti V", avatarSource = AvatarSource.None),
         Contact(
             id = 2,
             initials = "TB",
             name = "Taylor B",
-            avatarSource = AvatarSource.Resource(R.drawable.taylor),
+            avatarSource = AvatarSource.Resource(R.drawable.taylor)
         ),
         Contact(id = 3, initials = "FS", name = "Felipe S", avatarSource = AvatarSource.None),
         Contact(id = 4, initials = "JG", name = "Judith G", avatarSource = AvatarSource.None),
-        Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None),
+        Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None)
     )
 
 private const val avatarPath =
