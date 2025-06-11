@@ -74,9 +74,10 @@ dependencies {
     implementation(libs.androidx.wear.protolayout.material)
     implementation(libs.androidx.wear.protolayout.material3)
 
-    // Debug dependencies for previewing tiles in Android Studio
-    debugImplementation(libs.androidx.wear.tiles.renderer)
-    debugImplementation(libs.androidx.wear.tiles.tooling.preview)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.wear.tooling.preview)
+    // Tooling dependencies for previewing tiles in Android Studio.
+    // Scoped as 'implementation' to allow previews in the 'main' source set.
+    implementation(libs.androidx.wear.tiles.renderer)
+    implementation(libs.androidx.wear.tiles.tooling.preview)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
 }
