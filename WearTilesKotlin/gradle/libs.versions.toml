@@ -22,7 +22,7 @@ coil3-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", versio
 coil3-coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 horologist-tiles = { module = "com.google.android.horologist:horologist-tiles", version.ref = "horologist" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
 
 [plugins]
