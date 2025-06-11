@@ -34,37 +34,39 @@ object Ski {
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
         stat1: Stat,
         stat2: Stat
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setContent(
-            MultiSlotLayout.Builder()
-                .setHorizontalSpacerWidth(16f)
-                .addSlotContent(statColumn(context, stat1))
-                .addSlotContent(statColumn(context, stat2))
-                .build()
-        )
-        .build()
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setContent(
+                MultiSlotLayout.Builder()
+                    .setHorizontalSpacerWidth(16f)
+                    .addSlotContent(statColumn(context, stat1))
+                    .addSlotContent(statColumn(context, stat2))
+                    .build()
+            )
+            .build()
 
-    private fun statColumn(context: Context, stat: Stat) = LayoutElementBuilders.Column.Builder()
-        .addContent(
-            Text.Builder(context, stat.label)
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
-                .build()
-        )
-        .addContent(
-            Text.Builder(context, stat.value)
-                .setTypography(Typography.TYPOGRAPHY_DISPLAY3)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .build()
-        )
-        .addContent(
-            Text.Builder(context, stat.unit)
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .build()
-        )
-        .build()
+    private fun statColumn(context: Context, stat: Stat) =
+        LayoutElementBuilders.Column.Builder()
+            .addContent(
+                Text.Builder(context, stat.label)
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
+                    .build()
+            )
+            .addContent(
+                Text.Builder(context, stat.value)
+                    .setTypography(Typography.TYPOGRAPHY_DISPLAY3)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .build()
+            )
+            .addContent(
+                Text.Builder(context, stat.unit)
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .build()
+            )
+            .build()
 
     data class Stat(val label: String, val value: String, val unit: String)
 }
@@ -78,5 +80,6 @@ internal fun skiPreview(context: Context) = TilePreviewData {
             stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
             stat2 = Ski.Stat("Distance", "21.8", "mile")
         )
-    ).build()
+    )
+        .build()
 }

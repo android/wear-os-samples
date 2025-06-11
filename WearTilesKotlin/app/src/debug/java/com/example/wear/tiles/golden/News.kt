@@ -44,35 +44,39 @@ object News {
         headline: String,
         newsVendor: String,
         clickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .apply {
-            if (deviceParameters.screenWidthDp > 225) {
-                setPrimaryLabelTextContent(
-                    Text.Builder(context, date.formatLocalDateTime(today = LocalDate.now(clock)))
-                        .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                        .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                        .build()
-                )
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .apply {
+                if (deviceParameters.screenWidthDp > 225) {
+                    setPrimaryLabelTextContent(
+                        Text.Builder(
+                            context,
+                            date.formatLocalDateTime(today = LocalDate.now(clock))
+                        )
+                            .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                            .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                            .build()
+                    )
+                }
             }
-        }
-        .setContent(
-            Text.Builder(context, headline)
-                .setMaxLines(3)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .setTypography(Typography.TYPOGRAPHY_BODY1)
-                .build()
-        )
-        .setSecondaryLabelTextContent(
-            Text.Builder(context, newsVendor)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.RichBlue))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        )
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "News", clickable, deviceParameters).build()
-        )
-        .build()
+            .setContent(
+                Text.Builder(context, headline)
+                    .setMaxLines(3)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .setTypography(Typography.TYPOGRAPHY_BODY1)
+                    .build()
+            )
+            .setSecondaryLabelTextContent(
+                Text.Builder(context, newsVendor)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.RichBlue))
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .build()
+            )
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "News", clickable, deviceParameters).build()
+            )
+            .build()
 }
 
 internal fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
@@ -100,5 +104,6 @@ internal fun newsPreview(context: Context) = TilePreviewData {
             clock = clock,
             clickable = emptyClickable
         )
-    ).build()
+    )
+        .build()
 }

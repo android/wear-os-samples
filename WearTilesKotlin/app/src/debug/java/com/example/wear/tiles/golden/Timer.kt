@@ -38,32 +38,31 @@ object Timer {
         deviceParameters: DeviceParameters,
         timerList: List<Timer>,
         clickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setContent(
-            MultiButtonLayout.Builder()
-                .apply {
-                    timerList
-                        .take(if (deviceParameters.screenWidthDp > 225) 6 else 5)
-                        .forEach { timer ->
-                            addButtonContent(timerButton(context, timer))
-                        }
-                }
-                .build()
-        )
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "New", clickable, deviceParameters)
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.DarkYellow),
-                        /*contentColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.White)
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setContent(
+                MultiButtonLayout.Builder()
+                    .apply {
+                        timerList
+                            .take(if (deviceParameters.screenWidthDp > 225) 6 else 5)
+                            .forEach { timer -> addButtonContent(timerButton(context, timer)) }
+                    }
+                    .build()
+            )
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "New", clickable, deviceParameters)
+                    .setChipColors(
+                        ChipColors(
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.DarkYellow),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.White)
+                        )
                     )
-                )
-                .build()
-        )
-        .build()
+                    .build()
+            )
+            .build()
 
     private fun timerButton(context: Context, timer: Timer) =
         Button.Builder(context, timer.clickable)
@@ -87,7 +86,8 @@ internal fun timerPreview(context: Context) = TilePreviewData {
         Timer.layout(
             context,
             it.deviceConfiguration,
-            timerList = listOf(
+            timerList =
+            listOf(
                 Timer.Timer(minutes = "05", clickable = emptyClickable),
                 Timer.Timer(minutes = "10", clickable = emptyClickable),
                 Timer.Timer(minutes = "15", clickable = emptyClickable),
@@ -97,5 +97,6 @@ internal fun timerPreview(context: Context) = TilePreviewData {
             ),
             clickable = emptyClickable
         )
-    ).build()
+    )
+        .build()
 }

@@ -27,8 +27,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.wear.tiles"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = 30
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
@@ -55,28 +55,29 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.datastore)
-
-    implementation(libs.androidx.wear.tiles.material)
-
-    implementation(libs.coil)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.guava)
-
-    implementation(libs.horologist.compose.tools)
+    // Horologist provides helpful wrappers for Tiles development
     implementation(libs.horologist.tiles)
 
-    implementation(libs.androidx.wear.tooling.preview)
-    implementation(libs.androidx.tiles.tooling.preview)
-    implementation(libs.compose.ui.tooling.preview)
+    // Coil for asynchronous image loading
+    implementation(libs.coil)
+    implementation(libs.coil.okhttp)
 
+    // Java 8+ API desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.tiles.tooling)
+    // Core Tile dependencies for creating the service and layouts
+    implementation(libs.androidx.wear.tiles)
+    implementation(libs.androidx.wear.protolayout.material)
+    implementation(libs.androidx.wear.protolayout.material3)
+
+    // Tooling dependencies for previewing tiles in Android Studio.
+    // Scoped as 'implementation' to allow previews in the 'main' source set.
+    implementation(libs.androidx.wear.tiles.renderer)
+    implementation(libs.androidx.wear.tiles.tooling.preview)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
 }
