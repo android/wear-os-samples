@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -59,19 +59,24 @@ android {
 }
 
 dependencies {
+    // Horologist provides helpful wrappers for Tiles development
     implementation(libs.horologist.tiles)
 
-    implementation(libs.coil3.coil)
-    implementation(libs.coil3.network.okhttp)
+    // Coil for asynchronous image loading
+    implementation(libs.coil)
+    implementation(libs.coil.okhttp)
 
+    // Java 8+ API desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(libs.androidx.tiles)
-    implementation(libs.androidx.tiles.renderer)
-    implementation(libs.androidx.protolayout.material3)
+    // Core Tile dependencies for creating the service and layouts
+    implementation(libs.androidx.wear.tiles)
+    implementation(libs.androidx.wear.protolayout.material)
+    implementation(libs.androidx.wear.protolayout.material3)
 
-    debugImplementation(libs.androidx.tiles.tooling.preview)
-    debugImplementation(libs.androidx.tiles.tooling)
-    debugImplementation(libs.androidx.ui.tooling)
+    // Debug dependencies for previewing tiles in Android Studio
+    debugImplementation(libs.androidx.wear.tiles.renderer)
+    debugImplementation(libs.androidx.wear.tiles.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.wear.tooling.preview)
 }
