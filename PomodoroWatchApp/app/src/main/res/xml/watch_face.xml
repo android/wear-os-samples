@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<watch-face xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:watchface="http://schemas.android.com/apk/res-auto">
+    <complication-slot
+        android:id="1"
+        watchface:bounds="10,10,90,90"
+        watchface:supportedTypes="RANGED_VALUE|SHORT_TEXT|LONG_TEXT|ICON" />
+</watch-face>
