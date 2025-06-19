@@ -4,15 +4,15 @@ androidx-compose-bom = "2025.06.00"
 androidx-activity = "1.10.1"
 androidx-lifecycle = "2.9.1"
 androidx-wear-compose = "1.4.1"
-compose = "1.8.2"
+compose = "1.8.3"
 compose-compiler = "1.5.15"
 kotlin = "2.0.21"
 org-jetbrains-kotlinx = "1.10.2"
 ktlint = "0.50.0"
 horologist = "0.7.5-alpha"
 robolectric = "4.14.1"
-roborazzi = "1.44.0"
-ui-test-junit4 = "1.8.2"
+roborazzi = "1.45.1"
+ui-test-junit4 = "1.8.3"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
