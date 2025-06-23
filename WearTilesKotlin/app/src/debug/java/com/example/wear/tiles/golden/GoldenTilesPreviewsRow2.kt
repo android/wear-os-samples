@@ -19,14 +19,11 @@ import android.content.Context
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
-import com.example.wear.tiles.messaging.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
-/**
- * b/238548541 (internal bug - the spacing doesn't match Figma)
- */
+/** b/238548541 (internal bug - the spacing doesn't match Figma) */
 @MultiRoundDevicesPreviews
 private fun heartRateSimple(context: Context) = heartRateSimplePreview(context)
 
@@ -36,43 +33,45 @@ private fun heartRateGraph(context: Context) {
 }
 
 @MultiRoundDevicesPreviews
-private fun meditationChips(context: Context) = TilePreviewData(
-    resources {
-        addIdToImageMapping(
-            Meditation.CHIP_1_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_breathe_24)
+private fun meditationChips(context: Context) =
+    TilePreviewData(
+        resources {
+            addIdToImageMapping(
+                Meditation.CHIP_1_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_breathe_24)
+            )
+            addIdToImageMapping(
+                Meditation.CHIP_2_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_mindfulness_24)
+            )
+        }
+    ) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Meditation.chipsLayout(
+                context,
+                it.deviceConfiguration,
+                numOfLeftTasks = 2,
+                session1 =
+                Meditation.Session(
+                    label = "Breathe",
+                    iconId = Meditation.CHIP_1_ICON_ID,
+                    clickable = emptyClickable
+                ),
+                session2 =
+                Meditation.Session(
+                    label = "Daily mindfulness",
+                    iconId = Meditation.CHIP_2_ICON_ID,
+                    clickable = emptyClickable
+                ),
+                browseClickable = emptyClickable
+            )
         )
-        addIdToImageMapping(
-            Meditation.CHIP_2_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_mindfulness_24)
-        )
+            .build()
     }
-) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Meditation.chipsLayout(
-            context,
-            it.deviceConfiguration,
-            numOfLeftTasks = 2,
-            session1 = Meditation.Session(
-                label = "Breathe",
-                iconId = Meditation.CHIP_1_ICON_ID,
-                clickable = emptyClickable
-            ),
-            session2 = Meditation.Session(
-                label = "Daily mindfulness",
-                iconId = Meditation.CHIP_2_ICON_ID,
-                clickable = emptyClickable
-            ),
-            browseClickable = emptyClickable
-        )
-    ).build()
-}
 
 @MultiRoundDevicesPreviews
 private fun meditationButtons(context: Context) = meditationButtonsPreview(context)
 
-@MultiRoundDevicesPreviews
-private fun timer(context: Context) = timerPreview(context)
+@MultiRoundDevicesPreviews private fun timer(context: Context) = timerPreview(context)
 
-@MultiRoundDevicesPreviews
-private fun alarm(context: Context) = alarmPreview(context)
+@MultiRoundDevicesPreviews private fun alarm(context: Context) = alarmPreview(context)

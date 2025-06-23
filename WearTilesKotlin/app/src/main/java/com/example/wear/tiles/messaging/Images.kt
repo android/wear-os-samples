@@ -16,51 +16,50 @@
 package com.example.wear.tiles.messaging
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import androidx.wear.protolayout.ResourceBuilders
+import android.util.Log
 import androidx.wear.protolayout.ResourceBuilders.ImageResource
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
-import java.nio.ByteBuffer
+import coil3.ImageLoader
+import coil3.request.ErrorResult
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowRgb565
+import coil3.toBitmap
+import com.example.wear.tiles.tools.toImageResource
 
-suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact, size: Int? = 64): Bitmap? {
-    val request = ImageRequest.Builder(context)
-        .data(contact.avatarUrl)
-        .apply {
-            if (size != null) {
-                size(size)
+/**
+ * Loads an avatar image for a given [Contact].
+ *
+ * This function attempts to load an avatar based on the [AvatarSource] associated with the
+ * [Contact]. It supports loading avatars from:
+ * - **Network URLs:** If the [AvatarSource] is [AvatarSource.Network], it fetches the image from
+ *   the specified URL using the provided [ImageLoader]. It caches the result, handles potential
+ *   network errors, and converts the result into an [ImageResource].
+ * - **Local Resources:** If the [AvatarSource] is [AvatarSource.Resource], it directly converts the
+ *   provided resource ID into an [ImageResource].
+ * - **No Avatar:** If the [AvatarSource] is [AvatarSource.None], it returns `null`.
+ *
+ * @param context The application context, needed for building the [ImageRequest].
+ * @param contact The [Contact] object containing information about the avatar source.
+ * @return An [ImageResource] representing the loaded avatar, or `null` if no avatar is available or
+ *   an error occurred during network loading.
+ */
+suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact): ImageResource? {
+    return when (val source = contact.avatarSource) {
+        is AvatarSource.Network -> {
+            val request =
+                ImageRequest.Builder(context).data(source.url).size(300).allowRgb565(true).build()
+            val response = execute(request)
+            return when (response) {
+                is SuccessResult -> {
+                    response.image.toBitmap().toImageResource()
+                }
+                is ErrorResult -> {
+                    Log.d("ImageLoader", "Error loading image $source: ${response.throwable}")
+                    null
+                }
             }
         }
-        .allowRgb565(true)
-        .transformations(CircleCropTransformation())
-        .allowHardware(false)
-        .build()
-    val response = execute(request)
-    return (response.drawable as? BitmapDrawable)?.bitmap
-}
-
-fun bitmapToImageResource(bitmap: Bitmap): ImageResource {
-    // TODO check if needed
-    val safeBitmap = bitmap.toRgb565()
-
-    val byteBuffer = ByteBuffer.allocate(safeBitmap.byteCount)
-    safeBitmap.copyPixelsToBuffer(byteBuffer)
-    val bytes: ByteArray = byteBuffer.array()
-
-    return ImageResource.Builder().setInlineResource(
-        ResourceBuilders.InlineImageResource.Builder()
-            .setData(bytes)
-            .setWidthPx(bitmap.width)
-            .setHeightPx(bitmap.height)
-            .setFormat(ResourceBuilders.IMAGE_FORMAT_RGB_565)
-            .build()
-    )
-        .build()
-}
-
-private fun Bitmap.toRgb565(): Bitmap {
-    // TODO avoid copy
-    return this.copy(Bitmap.Config.RGB_565, false)
+        is AvatarSource.Resource -> source.resourceId.toImageResource()
+        is AvatarSource.None -> null
+    }
 }

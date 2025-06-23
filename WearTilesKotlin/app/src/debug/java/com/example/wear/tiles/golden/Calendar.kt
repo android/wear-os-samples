@@ -37,31 +37,32 @@ object Calendar {
         eventName: String,
         eventLocation: String,
         clickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, eventTime)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        )
-        .setContent(
-            Text.Builder(context, eventName)
-                .setMaxLines(3)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .setTypography(Typography.TYPOGRAPHY_BODY1)
-                .build()
-        )
-        .setSecondaryLabelTextContent(
-            Text.Builder(context, eventLocation)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        )
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "Agenda", clickable, deviceParameters).build()
-        )
-        .build()
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setPrimaryLabelTextContent(
+                Text.Builder(context, eventTime)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .build()
+            )
+            .setContent(
+                Text.Builder(context, eventName)
+                    .setMaxLines(3)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .setTypography(Typography.TYPOGRAPHY_BODY1)
+                    .build()
+            )
+            .setSecondaryLabelTextContent(
+                Text.Builder(context, eventLocation)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .build()
+            )
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "Agenda", clickable, deviceParameters).build()
+            )
+            .build()
 }
 
 @MultiRoundDevicesWithFontScalePreviews
@@ -75,5 +76,6 @@ internal fun calendarPreview(context: Context) = TilePreviewData {
             eventLocation = "216 Market Street",
             clickable = emptyClickable
         )
-    ).build()
+    )
+        .build()
 }

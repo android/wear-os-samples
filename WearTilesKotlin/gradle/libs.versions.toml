@@ -1,31 +1,34 @@
 [versions]
 android-gradle-plugin = "8.10.1"
-androidx-wear-tiles = "1.5.0"
-androidx-wear-tooling-preview = "1.0.0"
-compose = "1.8.2"
-horologist = "0.7.14-beta"
+compose = "1.8.3"
 ktlint = "0.50.0"
+ktfmt = "0.54"
+androidx-wear-tiles = "1.5.0"
+androidx-wear-protolayout = "1.3.0"
+coil = "3.2.0"
+horologist = "0.7.12-alpha"
 org-jetbrains-kotlin = "2.1.21"
-org-jetbrains-kotlinx = "1.10.2"
-tiles-tooling-preview = "1.5.0"
+wear-tooling-preview = "1.0.0"
+desugar-jdk = "2.1.5"
 
 [libraries]
-androidx-datastore = "androidx.datastore:datastore-preferences:1.1.7"
-androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.9.1"
-androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1"
-androidx-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "tiles-tooling-preview" }
-androidx-tiles-tooling = { module = "androidx.wear.tiles:tiles-tooling", version.ref = "tiles-tooling-preview" }
-androidx-wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "androidx-wear-tiles" }
-androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "androidx-wear-tooling-preview" }
-coil = "io.coil-kt:coil-compose:2.7.0"
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-horologist-compose-tools = { module = "com.google.android.horologist:horologist-compose-tools", version.ref = "horologist" }
+# AndroidX Wear & Compose
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+androidx-wear-protolayout-material = { module = "androidx.wear.protolayout:protolayout-material", version.ref = "androidx-wear-protolayout" }
+androidx-wear-protolayout-material3 = { module = "androidx.wear.protolayout:protolayout-material3", version.ref = "androidx-wear-protolayout" }
+androidx-wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "androidx-wear-tiles" }
+androidx-wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "androidx-wear-tiles" }
+androidx-wear-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "androidx-wear-tiles" }
+androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "wear-tooling-preview" }
+
+# Coil (Image Loading)
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+
+# Other
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
 horologist-tiles = { module = "com.google.android.horologist:horologist-tiles", version.ref = "horologist" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
-kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "org-jetbrains-kotlinx" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
-desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

@@ -35,7 +35,6 @@ import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
-import com.example.wear.tiles.messaging.resources
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.emptyClickable
 import com.google.android.horologist.tiles.images.drawableResToImageResource
@@ -51,42 +50,47 @@ object Meditation {
         session1: Session,
         session2: Session,
         browseClickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .apply {
-            if (deviceParameters.screenWidthDp > 225) {
-                setPrimaryLabelTextContent(
-                    Text.Builder(context, "$numOfLeftTasks mindful tasks left")
-                        .setTypography(Typography.TYPOGRAPHY_BODY2)
-                        .setColor(ColorBuilders.argb(GoldenTilesColors.Pink))
-                        .build()
-                )
-            }
-        }
-        .setContent(
-            Column.Builder()
-                // See the comment on `setWidth` below in `sessionChip()` too. The default width for
-                // column is "wrap", so we need to explicitly set it to "expand" so that we give the
-                // chips enough space to layout
-                .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-                .addContent(sessionChip(context, deviceParameters, session1))
-                .addContent(Spacer.Builder().setHeight(dp(4f)).build())
-                .addContent(sessionChip(context, deviceParameters, session2))
-                .build()
-        )
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
-                .setChipColors(
-                    ChipColors(
-                        /* backgroundColor = */
-                        ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                        /* contentColor = */
-                        ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .apply {
+                if (deviceParameters.screenWidthDp > 225) {
+                    setPrimaryLabelTextContent(
+                        Text.Builder(context, "$numOfLeftTasks mindful tasks left")
+                            .setTypography(Typography.TYPOGRAPHY_BODY2)
+                            .setColor(ColorBuilders.argb(GoldenTilesColors.Pink))
+                            .build()
                     )
-                )
-                .build()
-        )
-        .build()
+                }
+            }
+            .setContent(
+                Column.Builder()
+                    // See the comment on `setWidth` below in `sessionChip()` too. The default width
+                    // for
+                    // column is "wrap", so we need to explicitly set it to "expand" so that we give
+                    // the
+                    // chips enough space to layout
+                    .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
+                    .addContent(sessionChip(context, deviceParameters, session1))
+                    .addContent(Spacer.Builder().setHeight(dp(4f)).build())
+                    .addContent(sessionChip(context, deviceParameters, session2))
+                    .build()
+            )
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
+                    .setChipColors(
+                        ChipColors(
+                            /* backgroundColor = */
+                            ColorBuilders.argb(
+                                GoldenTilesColors.LightPurple
+                            ),
+                            /* contentColor = */
+                            ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                        )
+                    )
+                    .build()
+            )
+            .build()
 
     private fun sessionChip(
         context: Context,
@@ -124,40 +128,41 @@ object Meditation {
         timer4: Timer,
         timer5: Timer,
         clickable: Clickable
-    ) = PrimaryLayout.Builder(deviceParameters)
-        .setResponsiveContentInsetEnabled(true)
-        .setPrimaryLabelTextContent(
-            Text.Builder(context, "Minutes")
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                .build()
-        )
-        .setContent(
-            MultiButtonLayout.Builder()
-                .addButtonContent(timerButton(context, timer1))
-                .addButtonContent(timerButton(context, timer2))
-                .addButtonContent(timerButton(context, timer3))
-                .apply {
-                    if (deviceParameters.screenWidthDp > 225) {
-                        addButtonContent(timerButton(context, timer4))
-                        addButtonContent(timerButton(context, timer5))
+    ) =
+        PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
+            .setPrimaryLabelTextContent(
+                Text.Builder(context, "Minutes")
+                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
+                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
+                    .build()
+            )
+            .setContent(
+                MultiButtonLayout.Builder()
+                    .addButtonContent(timerButton(context, timer1))
+                    .addButtonContent(timerButton(context, timer2))
+                    .addButtonContent(timerButton(context, timer3))
+                    .apply {
+                        if (deviceParameters.screenWidthDp > 225) {
+                            addButtonContent(timerButton(context, timer4))
+                            addButtonContent(timerButton(context, timer5))
+                        }
                     }
-                }
-                .build()
-        )
-        .setPrimaryChipContent(
-            CompactChip.Builder(context, "New", clickable, deviceParameters)
-                .setChipColors(
-                    ChipColors(
-                        /*backgroundColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.DarkPurple),
-                        /*contentColor=*/
-                        ColorBuilders.argb(GoldenTilesColors.White)
+                    .build()
+            )
+            .setPrimaryChipContent(
+                CompactChip.Builder(context, "New", clickable, deviceParameters)
+                    .setChipColors(
+                        ChipColors(
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.DarkPurple),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.White)
+                        )
                     )
-                )
-                .build()
-        )
-        .build()
+                    .build()
+            )
+            .build()
 
     private fun timerButton(context: Context, timer: Timer) =
         Button.Builder(context, timer.clickable)
@@ -173,41 +178,46 @@ object Meditation {
             .build()
 
     data class Session(val label: String, val iconId: String, val clickable: Clickable)
+
     data class Timer(val minutes: Int, val clickable: Clickable)
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun meditationChipsPreview(context: Context) = TilePreviewData(
-    resources {
-        addIdToImageMapping(
-            Meditation.CHIP_1_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_breathe_24)
+internal fun meditationChipsPreview(context: Context) =
+    TilePreviewData(
+        resources {
+            addIdToImageMapping(
+                Meditation.CHIP_1_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_breathe_24)
+            )
+            addIdToImageMapping(
+                Meditation.CHIP_2_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_mindfulness_24)
+            )
+        }
+    ) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Meditation.chipsLayout(
+                context,
+                it.deviceConfiguration,
+                numOfLeftTasks = 2,
+                session1 =
+                Meditation.Session(
+                    label = "Breathe",
+                    iconId = Meditation.CHIP_1_ICON_ID,
+                    clickable = emptyClickable
+                ),
+                session2 =
+                Meditation.Session(
+                    label = "Daily mindfulness",
+                    iconId = Meditation.CHIP_2_ICON_ID,
+                    clickable = emptyClickable
+                ),
+                browseClickable = emptyClickable
+            )
         )
-        addIdToImageMapping(
-            Meditation.CHIP_2_ICON_ID,
-            drawableResToImageResource(R.drawable.ic_mindfulness_24)
-        )
+            .build()
     }
-) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Meditation.chipsLayout(
-            context,
-            it.deviceConfiguration,
-            numOfLeftTasks = 2,
-            session1 = Meditation.Session(
-                label = "Breathe",
-                iconId = Meditation.CHIP_1_ICON_ID,
-                clickable = emptyClickable
-            ),
-            session2 = Meditation.Session(
-                label = "Daily mindfulness",
-                iconId = Meditation.CHIP_2_ICON_ID,
-                clickable = emptyClickable
-            ),
-            browseClickable = emptyClickable
-        )
-    ).build()
-}
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun meditationButtonsPreview(context: Context) = TilePreviewData {
@@ -222,5 +232,6 @@ internal fun meditationButtonsPreview(context: Context) = TilePreviewData {
             timer5 = Meditation.Timer(minutes = 25, clickable = emptyClickable),
             clickable = emptyClickable
         )
-    ).build()
+    )
+        .build()
 }
