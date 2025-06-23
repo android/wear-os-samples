@@ -18,8 +18,7 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import com.android.build.api.variant.BuiltArtifactsLoader
-import java.io.ByteArrayOutputStream
-import java.util.regex.Pattern
+import com.google.android.wearable.watchface.validator.client.DwfValidatorFactory
 import kotlin.collections.single
 import kotlin.io.path.name
 import kotlin.io.resolve
@@ -40,10 +39,6 @@ abstract class TokenGenerationTask : DefaultTask() {
     @get:Input
     abstract val packageName: Property<String>
 
-    @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val cliToolClasspath: Property<FileCollection>
-
     @get:Internal
     abstract val artifactsLoader: Property<BuiltArtifactsLoader>
 
@@ -57,41 +52,25 @@ abstract class TokenGenerationTask : DefaultTask() {
                 ?: throw GradleException("Cannot load APKs")
         if (artifacts.elements.size != 1)
             throw GradleException("Expected only one APK!")
-        val apkPath = File(artifacts.elements.single().outputFile).toPath()
+        val apk = File(artifacts.elements.single().outputFile)
         val appPackageName = packageName.get()
 
-        val stdOut = ByteArrayOutputStream()
-        val stdErr = ByteArrayOutputStream()
+        val validator = DwfValidatorFactory.create()
+        val result = validator.validate(apk, appPackageName)
 
-        execOperations.javaexec {
-            classpath = cliToolClasspath.get()
-            mainClass = "com.google.android.wearable.watchface.validator.cli.DwfValidation"
-            args("--apk_path=$apkPath")
-            args("--package_name=$appPackageName")
-
-            standardOutput = stdOut
-            errorOutput = stdErr
-
-            isIgnoreExitValue = true
-        }
-
-        val outputAsText = stdOut.toString()
-        val errorAsText = stdErr.toString()
-
-        if (outputAsText.contains("Failed check")) {
-            println(outputAsText)
-            if (errorAsText.isNotEmpty()) {
-                println(errorAsText)
+        val failures = result.failures()
+        if (failures.isNotEmpty()) {
+            val validationException = GradleException("Watch face validation failed with ${failures.size} failures")
+            failures.forEach { failure ->
+                validationException.addSuppressed(SecurityException(failure.toString()))
             }
-            throw GradleException("Watch face validation failed")
+            throw validationException
         }
 
-        val tokenFileName = apkPath.name.removeSuffix(".apk") + "_token.txt"
+        val tokenFileName = apk.toPath().name.removeSuffix(".apk") + "_token.txt"
         val tokenOutFile = tokenDirectory.get().asFile.resolve(tokenFileName)
-        val match = Pattern.compile("generated token: (\\S+)").matcher(outputAsText)
-        if (match.find()) {
-            val token = match.group(1)
-            tokenOutFile.writeText(token)
+        if (result.validationToken().isNotEmpty()) {
+            tokenOutFile.writeText(result.validationToken())
         } else {
             throw TaskExecutionException(
                 this@TokenGenerationTask,
