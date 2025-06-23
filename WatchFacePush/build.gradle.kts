@@ -62,9 +62,9 @@ subprojects {
                 val tokenTask =
                     tasks.register<TokenGenerationTask_gradle.TokenGenerationTask>("assembleToken$variantName") {
                         dependsOn(assembleTask)
-                        val cliConfiguration = rootProject.project("app").configurations.getByName("cliToolConfiguration")
-                        val mainAppPackageName = cliConfiguration.attributes.getAttribute(mainAppNamespace)
-                        cliToolClasspath.set(cliConfiguration)
+
+                        val validatorConfiguration = rootProject.project("app").configurations.getByName("validatorConfiguration")
+                        val mainAppPackageName = validatorConfiguration.attributes.getAttribute(mainAppNamespace)
                         packageName.set(mainAppPackageName)
                         artifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
                         apkLocation.set(variant.artifacts.get(SingleArtifact.APK))

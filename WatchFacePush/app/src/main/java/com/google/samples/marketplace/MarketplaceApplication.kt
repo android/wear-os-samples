@@ -17,10 +17,11 @@
 package com.google.samples.marketplace
 
 import android.app.Application
-import androidx.wear.watchface.push.WatchFacePushManager
+import androidx.wear.watchfacepush.WatchFacePushManagerFactory
+
 import com.google.samples.marketplace.data.WatchFacePackageRepository
 
 class MarketplaceApplication : Application() {
-    val watchFacePushManager by lazy { WatchFacePushManager(this) }
+    val watchFacePushManager by lazy { WatchFacePushManagerFactory.createWatchFacePushManager(this) }
     val watchFacePackageRepository by lazy { WatchFacePackageRepository(this) }
 }

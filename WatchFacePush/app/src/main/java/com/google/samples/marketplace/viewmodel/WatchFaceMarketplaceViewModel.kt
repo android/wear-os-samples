@@ -25,7 +25,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.wear.watchface.push.WatchFacePushManager
+import androidx.wear.watchfacepush.WatchFacePushManager
 import com.google.samples.marketplace.MarketplaceApplication
 import com.google.samples.marketplace.data.WatchFaceData
 import com.google.samples.marketplace.data.WatchFacePackageRepository
