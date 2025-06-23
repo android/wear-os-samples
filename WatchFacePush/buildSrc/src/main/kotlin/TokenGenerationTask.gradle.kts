@@ -55,15 +55,16 @@ abstract class TokenGenerationTask : DefaultTask() {
         val apk = File(artifacts.elements.single().outputFile)
         val appPackageName = packageName.get()
 
-        val validator = DwfValidatorFactory.create()
-        val result = validator.validate(apk, appPackageName)
+val validator = DwfValidatorFactory.create()
+val result = validator.validate(apk, appPackageName)
 
-        val failures = result.failures()
+val failures = result.failures()
         if (failures.isNotEmpty()) {
+            val validationException = GradleException("Watch face validation failed with ${failures.size} failures")
             failures.forEach { failure ->
-                println("Validation failure: ${failure.name()}: ${failure.category()} - ${failure.failureMessage()}")
+                validationException.addSuppressed(SecurityException(failure.toString()))
             }
-            throw GradleException("Watch face validation failed")
+            throw validationException
         }
 
         val tokenFileName = apk.toPath().name.removeSuffix(".apk") + "_token.txt"

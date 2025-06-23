@@ -28,7 +28,12 @@ repositories {
     mavenCentral()
     google()
     // Note: Jitpack is required for dependencies used by the Watch Face Push Validator.
-    maven { url = uri("https://jitpack.io") }
+    maven {
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.xgouchet")
+        }
+    }
     gradlePluginPortal()
 }
 
