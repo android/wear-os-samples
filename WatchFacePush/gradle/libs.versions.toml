@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.1"
+agp = "8.11.0"
 wear-compose-material3 = "1.5.0-beta04"
 wear-compose = "1.5.0-beta04"
 compose-tooling = "1.4.1"
