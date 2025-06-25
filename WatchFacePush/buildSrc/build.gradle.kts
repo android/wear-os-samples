@@ -38,6 +38,6 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.10.1")
+    implementation("com.android.tools.build:gradle-api:8.11.0")
     implementation("com.google.android.wearable.watchface.validator:validator-push:1.0.0-alpha03")
 }
