@@ -1,0 +1,34 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.pomodorowatch">
+
+    <application
+        android:name=".PomodoroApplication"
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.PomodoroWatch">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".watchface.PomodoroWatchFaceService"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" />
+        </service>
+        <service
+            android:name=".watchface.ComplicationDataSourceService"
+            android:permission="android.permission.BIND_COMPLICATION_PROVIDER"
+            android:exported="true" />
+    </application>
+</manifest>
