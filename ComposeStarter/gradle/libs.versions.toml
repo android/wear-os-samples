@@ -1,18 +1,17 @@
 [versions]
-android-gradle-plugin = "8.10.0"
+android-gradle-plugin = "8.10.1"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.05.01"
-androidx-wear-compose-material3 = "1.5.0-beta01"
-androidx-wear-compose = "1.5.0-beta01"
-compose-compiler = "1.5.15"
+androidx-compose-bom = "2025.06.01"
+androidx-wear-compose-material3 = "1.5.0-beta05"
+androidx-wear-compose = "1.5.0-beta05"
 compose-ui-tooling = "1.4.1"
 horologist = "0.7.10-alpha"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "2.1.10"
-robolectric = "4.14.1"
-roborazzi = "1.43.1"
-ui-test-junit4 = "1.8.2"
-ui-test-manifest = "1.8.1"
+org-jetbrains-kotlin = "2.2.0"
+robolectric = "4.15.1"
+roborazzi = "1.45.1"
+ui-test-junit4 = "1.8.3"
+ui-test-manifest = "1.8.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -21,7 +20,6 @@ androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooli
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test-manifest" }
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -45,4 +43,4 @@ com-android-application = { id = "com.android.application", version.ref = "andro
 com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
-
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
