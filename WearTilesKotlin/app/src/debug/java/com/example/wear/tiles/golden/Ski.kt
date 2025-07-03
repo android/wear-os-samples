@@ -33,7 +33,7 @@ object Ski {
         context: Context,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
         stat1: Stat,
-        stat2: Stat,
+        stat2: Stat
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -74,12 +74,12 @@ object Ski {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun skiPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Ski.layout(
-                context,
-                it.deviceConfiguration,
-                stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
-                stat2 = Ski.Stat("Distance", "21.8", "mile"),
-            )
+        Ski.layout(
+            context,
+            it.deviceConfiguration,
+            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+            stat2 = Ski.Stat("Distance", "21.8", "mile")
         )
+    )
         .build()
 }

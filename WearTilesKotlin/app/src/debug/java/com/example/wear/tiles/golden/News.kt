@@ -43,7 +43,7 @@ object News {
         clock: Clock = Clock.systemDefaultZone(),
         headline: String,
         newsVendor: String,
-        clickable: Clickable,
+        clickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -51,9 +51,9 @@ object News {
                 if (deviceParameters.screenWidthDp > 225) {
                     setPrimaryLabelTextContent(
                         Text.Builder(
-                                context,
-                                date.formatLocalDateTime(today = LocalDate.now(clock)),
-                            )
+                            context,
+                            date.formatLocalDateTime(today = LocalDate.now(clock))
+                        )
                             .setColor(ColorBuilders.argb(GoldenTilesColors.White))
                             .setTypography(Typography.TYPOGRAPHY_CAPTION1)
                             .build()
@@ -95,15 +95,15 @@ internal fun newsPreview(context: Context) = TilePreviewData {
     val clock = Clock.fixed(now, Clock.systemUTC().zone)
 
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-            News.layout(
-                context,
-                it.deviceConfiguration,
-                headline = "Millions still without power as new storm moves across US",
-                newsVendor = "The New York Times",
-                date = LocalDate.now(clock).minusDays(1),
-                clock = clock,
-                clickable = emptyClickable,
-            )
+        News.layout(
+            context,
+            it.deviceConfiguration,
+            headline = "Millions still without power as new storm moves across US",
+            newsVendor = "The New York Times",
+            date = LocalDate.now(clock).minusDays(1),
+            clock = clock,
+            clickable = emptyClickable
         )
+    )
         .build()
 }

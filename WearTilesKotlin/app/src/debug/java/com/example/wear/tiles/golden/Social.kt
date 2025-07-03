@@ -46,7 +46,7 @@ object Social {
                 MultiButtonLayout.Builder()
                     .apply {
                         contacts.take(if (deviceParameters.screenWidthDp > 225) 6 else 4).forEach {
-                            contact ->
+                                contact ->
                             addButtonContent(button(context, contact))
                         }
                     }
@@ -65,8 +65,10 @@ object Social {
             }
             .setButtonColors(
                 ButtonColors(
-                    /* backgroundColor = */ ColorBuilders.argb(contact.color),
-                    /* contentColor = */ ColorBuilders.argb(GoldenTilesColors.DarkerGray),
+                    /* backgroundColor = */
+                    ColorBuilders.argb(contact.color),
+                    /* contentColor = */
+                    ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                 )
             )
             .build()
@@ -75,7 +77,7 @@ object Social {
         val initials: String,
         @ColorInt val color: Int = GoldenTilesColors.LightBlue,
         val clickable: Clickable,
-        val avatarId: String?,
+        val avatarId: String?
     )
 }
 
@@ -90,43 +92,43 @@ internal fun socialPreview(context: Context) =
         }
     ) {
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-                Social.layout(
-                    context,
-                    it.deviceConfiguration,
-                    listOf(
-                        Social.Contact(
-                            initials = "AC",
-                            clickable = emptyClickable,
-                            avatarId = Social.AVATAR_ID_1,
-                        ),
-                        Social.Contact(
-                            initials = "AD",
-                            clickable = emptyClickable,
-                            avatarId = null,
-                        ),
-                        Social.Contact(
-                            initials = "BD",
-                            color = GoldenTilesColors.Purple,
-                            clickable = emptyClickable,
-                            avatarId = null,
-                        ),
-                        Social.Contact(
-                            initials = "DC",
-                            clickable = emptyClickable,
-                            avatarId = Social.AVATAR_ID_2,
-                        ),
-                        Social.Contact(
-                            initials = "DA",
-                            clickable = emptyClickable,
-                            avatarId = Social.AVATAR_ID_3,
-                        ),
-                        Social.Contact(
-                            initials = "DB",
-                            clickable = emptyClickable,
-                            avatarId = Social.AVATAR_ID_4,
-                        ),
+            Social.layout(
+                context,
+                it.deviceConfiguration,
+                listOf(
+                    Social.Contact(
+                        initials = "AC",
+                        clickable = emptyClickable,
+                        avatarId = Social.AVATAR_ID_1
                     ),
+                    Social.Contact(
+                        initials = "AD",
+                        clickable = emptyClickable,
+                        avatarId = null
+                    ),
+                    Social.Contact(
+                        initials = "BD",
+                        color = GoldenTilesColors.Purple,
+                        clickable = emptyClickable,
+                        avatarId = null
+                    ),
+                    Social.Contact(
+                        initials = "DC",
+                        clickable = emptyClickable,
+                        avatarId = Social.AVATAR_ID_2
+                    ),
+                    Social.Contact(
+                        initials = "DA",
+                        clickable = emptyClickable,
+                        avatarId = Social.AVATAR_ID_3
+                    ),
+                    Social.Contact(
+                        initials = "DB",
+                        clickable = emptyClickable,
+                        avatarId = Social.AVATAR_ID_4
+                    )
                 )
             )
+        )
             .build()
     }

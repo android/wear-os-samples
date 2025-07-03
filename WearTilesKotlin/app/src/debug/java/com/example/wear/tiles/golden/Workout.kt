@@ -47,7 +47,7 @@ object Workout {
         button1Clickable: ModifiersBuilders.Clickable,
         button2Clickable: ModifiersBuilders.Clickable,
         button3Clickable: ModifiersBuilders.Clickable,
-        chipClickable: ModifiersBuilders.Clickable,
+        chipClickable: ModifiersBuilders.Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -80,8 +80,10 @@ object Workout {
                 CompactChip.Builder(context, "More", chipClickable, deviceParameters)
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.BlueGray),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.White),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.BlueGray),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.White)
                         )
                     )
                     .build()
@@ -92,7 +94,7 @@ object Workout {
         context: Context,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
         clickable: ModifiersBuilders.Clickable,
-        lastWorkoutSummary: String,
+        lastWorkoutSummary: String
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -110,8 +112,10 @@ object Workout {
                     .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.Black),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Yellow),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Black)
                         )
                     )
                     .build()
@@ -129,44 +133,44 @@ object Workout {
 internal fun workoutButtonsPreview(context: Context) =
     TilePreviewData(
         onTileResourceRequest =
-            resources {
-                addIdToImageMapping(
-                    Workout.BUTTON_1_ICON_ID,
-                    drawableResToImageResource(R.drawable.ic_run_24),
-                )
-                addIdToImageMapping(
-                    Workout.BUTTON_2_ICON_ID,
-                    drawableResToImageResource(R.drawable.ic_yoga_24),
-                )
-                addIdToImageMapping(
-                    Workout.BUTTON_3_ICON_ID,
-                    drawableResToImageResource(R.drawable.ic_cycling_24),
-                )
-            }
+        resources {
+            addIdToImageMapping(
+                Workout.BUTTON_1_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_run_24)
+            )
+            addIdToImageMapping(
+                Workout.BUTTON_2_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_yoga_24)
+            )
+            addIdToImageMapping(
+                Workout.BUTTON_3_ICON_ID,
+                drawableResToImageResource(R.drawable.ic_cycling_24)
+            )
+        }
     ) {
         singleTimelineEntryTileBuilder(
-                Workout.buttonsLayout(
-                    context,
-                    it.deviceConfiguration,
-                    weekSummary = "1 run this week",
-                    button1Clickable = emptyClickable,
-                    button2Clickable = emptyClickable,
-                    button3Clickable = emptyClickable,
-                    chipClickable = emptyClickable,
-                )
+            Workout.buttonsLayout(
+                context,
+                it.deviceConfiguration,
+                weekSummary = "1 run this week",
+                button1Clickable = emptyClickable,
+                button2Clickable = emptyClickable,
+                button3Clickable = emptyClickable,
+                chipClickable = emptyClickable
             )
+        )
             .build()
     }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun workoutLargeChipPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
-            Workout.largeChipLayout(
-                context,
-                it.deviceConfiguration,
-                clickable = emptyClickable,
-                lastWorkoutSummary = "Last session 45m",
-            )
+        Workout.largeChipLayout(
+            context,
+            it.deviceConfiguration,
+            clickable = emptyClickable,
+            lastWorkoutSummary = "Last session 45m"
         )
+    )
         .build()
 }

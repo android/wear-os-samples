@@ -38,7 +38,7 @@ object Alarm {
         timeUntilAlarm: String,
         alarmTime: String,
         alarmDays: String,
-        clickable: Clickable,
+        clickable: Clickable
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -56,8 +56,10 @@ object Alarm {
                     .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(GoldenTilesColors.Yellow),
-                            /*contentColor=*/ ColorBuilders.argb(GoldenTilesColors.DarkerGray),
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.Yellow),
+                            /*contentColor=*/
+                            ColorBuilders.argb(GoldenTilesColors.DarkerGray)
                         )
                     )
                     .build()
@@ -75,14 +77,14 @@ object Alarm {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun alarmPreview(context: Context) = TilePreviewData {
     TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Alarm.layout(
-                context,
-                it.deviceConfiguration,
-                timeUntilAlarm = "Less than 1 min",
-                alarmTime = "14:58",
-                alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
-                clickable = emptyClickable,
-            )
+        Alarm.layout(
+            context,
+            it.deviceConfiguration,
+            timeUntilAlarm = "Less than 1 min",
+            alarmTime = "14:58",
+            alarmDays = "Mon, Tue, Wed, Thu, Fri,Sat",
+            clickable = emptyClickable
         )
+    )
         .build()
 }

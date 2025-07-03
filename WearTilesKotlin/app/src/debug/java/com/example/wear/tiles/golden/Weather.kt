@@ -43,7 +43,7 @@ object Weather {
         currentTemperature: String,
         lowTemperature: String,
         highTemperature: String,
-        weatherSummary: String,
+        weatherSummary: String
     ) =
         PrimaryLayout.Builder(deviceParameters)
             .setResponsiveContentInsetEnabled(true)
@@ -101,21 +101,21 @@ internal fun weatherPreview(context: Context) =
         resources {
             addIdToImageMapping(
                 Weather.SCATTERED_SHOWERS_ICON_ID,
-                drawableResToImageResource(R.drawable.scattered_showers),
+                drawableResToImageResource(R.drawable.scattered_showers)
             )
         }
     ) {
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-                Weather.layout(
-                    context,
-                    it.deviceConfiguration,
-                    location = "San Francisco",
-                    weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
-                    currentTemperature = "52°",
-                    lowTemperature = "48°",
-                    highTemperature = "64°",
-                    weatherSummary = "Showers",
-                )
+            Weather.layout(
+                context,
+                it.deviceConfiguration,
+                location = "San Francisco",
+                weatherIconId = Weather.SCATTERED_SHOWERS_ICON_ID,
+                currentTemperature = "52°",
+                lowTemperature = "48°",
+                highTemperature = "64°",
+                weatherSummary = "Showers"
             )
+        )
             .build()
     }

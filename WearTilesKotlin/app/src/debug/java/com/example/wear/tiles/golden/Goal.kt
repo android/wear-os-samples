@@ -60,14 +60,16 @@ object Goal {
 
 private fun blueOnTranslucentWhite() =
     ProgressIndicatorColors(
-        /* indicatorColor = */ ColorBuilders.argb(GoldenTilesColors.Blue),
-        /* trackColor = */ ColorBuilders.argb(GoldenTilesColors.White10Pc),
+        /* indicatorColor = */
+        ColorBuilders.argb(GoldenTilesColors.Blue),
+        /* trackColor = */
+        ColorBuilders.argb(GoldenTilesColors.White10Pc)
     )
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun goalPreview(context: Context) = TilePreviewData {
     singleTimelineEntryTileBuilder(
-            Goal.layout(context, it.deviceConfiguration, steps = 5168, goal = 8000)
-        )
+        Goal.layout(context, it.deviceConfiguration, steps = 5168, goal = 8000)
+    )
         .build()
 }
