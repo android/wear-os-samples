@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId = "com.example.android.wearable.composestarter"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
@@ -60,11 +60,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion =
-            libs.versions.compose.compiler
-                .get()
     }
     packaging {
         resources {
