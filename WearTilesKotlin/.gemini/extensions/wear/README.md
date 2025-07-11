@@ -10,11 +10,11 @@ development environment to perform tasks such as building, installing, and manag
 
 ## Installation
 
-1. Install the necessary dependencies from the directory containing `package.json`:
+1.  Install the necessary dependencies from the directory containing `package.json`:
 
-   ```sh
-   npm install
-   ```
+    ```sh
+    npm install
+    ```
 
 ## Usage
 
@@ -45,6 +45,26 @@ For integration with Android Studio, please refer to the official documentation,
 you're having trouble, try hard-coding all relevant pathnames in `mcp.json`, and provide a suitable
 `PATH` environment variable. If possible, check that the Gemini CLI approach works first.
 
+## Available Tools
+
+This server provides the following tools:
+
+- **`build_apk`**: Builds the debug APK from source.
+- **`install_apk`**: Installs the debug APK on the connected device.
+- **`add_tile`**: Adds a tile to the carousel.
+- **`show_tile`**: Activates and displays the tile at a specific index in the carousel.
+- **`remove_tile`**: Removes all instances of a tile from the carousel.
+- **`list_tiles`**: Lists all available tiles for the current application, returning them in
+  component name format.
+- **`screenshot_to_stdout`**: Takes a screenshot of the connected device and returns the image data
+  as a base64-encoded PNG.
+- **`screenshot_to_file`**: Takes a screenshot of the connected device and saves it to a temporary
+  file, returning the absolute path to the PNG file.
+- **`get_display_size`**: Gets the height and width of the attached display in dp.
+- **`get_state`**: Returns the state of the connected device.
+- **`get_serialno`**: Returns the serial number of the connected device.
+- **`debug_info`**: Returns the values of server-side constants for debugging.
+
 ## Development
 
 ### Inspecting the Server
@@ -61,16 +81,16 @@ DANGEROUSLY_OMIT_AUTH=true npx -y @modelcontextprotocol/inspector npx tsx server
 
 To keep the project's dependencies up to date:
 
-1. **Check for outdated packages:**
+1.  **Check for outdated packages:**
 
-   ```sh
-   npx npm-check-updates
-   ```
+    ```sh
+    npx npm-check-updates
+    ```
 
-2. **Update `package.json` with the latest versions:**
+2.  **Update `package.json` with the latest versions:**
 
-   ```sh
-   npx npm-check-updates -u
-   ```
+    ```sh
+    npx npm-check-updates -u
+    ```
 
-   After updating, run `npm install` to install the new package versions.
+    After updating, run `npm install` to install the new package versions.
