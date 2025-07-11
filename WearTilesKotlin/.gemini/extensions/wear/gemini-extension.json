@@ -1,0 +1,16 @@
+{
+  "name": "wear",
+  "version": "0.0.1",
+  "mcpServers": {
+    "wear-adb-mcp": {
+      "command": "npx",
+      "args": ["-y", "tsx", "server.ts"],
+      "cwd": ".gemini/extensions/wear",
+      "env": {
+        "GRADLE_PROJECT_ROOT": "$PWD/../../..",
+        "GRADLEW_PATH": "$PWD/../../../gradlew",
+        "PACKAGE_NAME": "com.example.wear.tiles"
+      }
+    }
+  }
+}
