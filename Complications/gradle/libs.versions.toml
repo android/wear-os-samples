@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.11.0"
+android-gradle-plugin = "8.11.1"
 androidx-wear-watchface = "1.2.1"
 
 org-jetbrains-kotlin = "2.1.0"
@@ -16,4 +16,4 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.4"
+com-diffplug-spotless = "com.diffplug.spotless:7.1.0"

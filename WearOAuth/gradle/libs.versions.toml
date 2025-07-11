@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.11.0"
+android-gradle-plugin = "8.11.1"
 androidx-compose-bom = "2025.06.01"
 androidx-activity = "1.10.1"
 androidx-lifecycle = "2.9.1"
@@ -11,15 +11,15 @@ org-jetbrains-kotlinx = "1.10.2"
 ktlint = "0.50.0"
 horologist = "0.7.5-alpha"
 robolectric = "4.15.1"
-roborazzi = "1.45.1"
+roborazzi = "1.46.1"
 ui-test-junit4 = "1.8.3"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.1.5"
-android-lint-gradle = "com.android.tools.lint:lint-gradle:31.11.0"
+android-lint-gradle = "com.android.tools.lint:lint-gradle:31.11.1"
 android-material = "com.google.android.material:material:1.12.0"
-android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.11.0"
+android-tools-lint-gradle = "com.android.tools.lint:lint-gradle:31.11.1"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
@@ -53,6 +53,6 @@ roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-ju
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.4"
+com-diffplug-spotless = "com.diffplug.spotless:7.1.0"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

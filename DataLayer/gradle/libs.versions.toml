@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.11.0"
+android-gradle-plugin = "8.11.1"
 androidx-activity = "1.10.1"
 androidx-compose-bom = "2025.06.01"
 androidx-lifecycle = "2.9.1"
@@ -10,7 +10,7 @@ kotlin = "2.1.0"
 org-jetbrains-kotlinx = "1.10.2"
 compose-ui-tooling = "1.4.1"
 robolectric = "4.15.1"
-roborazzi = "1.45.1"
+roborazzi = "1.46.1"
 ui-test-junit4 = "1.8.3"
 ui-test-manifest = "1.8.3"
 horologist = "0.7.5-alpha"
@@ -53,6 +53,6 @@ test-ext-junit = "androidx.test.ext:junit:1.2.1"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.4"
+com-diffplug-spotless = "com.diffplug.spotless:7.1.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

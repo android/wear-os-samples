@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.11.0"
+android-gradle-plugin = "8.11.1"
 androidx-activity = "1.10.1"
 androidx-compose-bom = "2025.06.01"
 androidx-media3 = "1.7.1"
@@ -9,7 +9,7 @@ compose-ui-tooling = "1.4.1"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 robolectric = "4.15.1"
-roborazzi = "1.45.1"
+roborazzi = "1.46.1"
 ui-test-junit4 = "1.8.3"
 ui-test-manifest = "1.8.3"
 horologist = "0.7.5-alpha"
@@ -53,6 +53,6 @@ androidx-media3-exoplayerworkmanager = { module = "androidx.media3:media3-exopla
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.4"
+com-diffplug-spotless = "com.diffplug.spotless:7.1.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
