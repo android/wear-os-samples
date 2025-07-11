@@ -97,7 +97,7 @@ ${error.stderr}`
 }
 
 createTool(
-  "build-apk",
+  "build_apk",
   {
     title: "Builds the debug APK.",
     description:
@@ -119,7 +119,7 @@ createTool(
 );
 
 createTool(
-  "install-apk",
+  "install_apk",
   {
     title: "Installs the debug APK.",
     description:
@@ -141,7 +141,7 @@ createTool(
 );
 
 createTool(
-  "add-tile",
+  "add_tile",
   {
     title: "Adds a tile to the carousel.",
     description:
@@ -164,7 +164,7 @@ createTool(
 );
 
 createTool(
-  "show-tile",
+  "show_tile",
   {
     title: "Shows a tile.",
     description:
@@ -187,7 +187,7 @@ createTool(
 );
 
 createTool(
-  "remove-tile",
+  "remove_tile",
   {
     title: "Removes a tile.",
     description:
@@ -210,7 +210,7 @@ createTool(
 );
 
 createTool(
-  "list-tiles",
+  "list_tiles",
   {
     title: "Lists all tiles for the app.",
     description:
@@ -262,7 +262,7 @@ async function takeScreenshot(): Promise<string> {
 }
 
 createTool(
-  "screenshot-to-stdout",
+  "screenshot_to_stdout",
   {
     title: "Takes a screenshot and returns it as PNG data.",
     description:
@@ -285,7 +285,7 @@ createTool(
 );
 
 createTool(
-  "screenshot-to-file",
+  "screenshot_to_file",
   {
     title: "Takes a screenshot and saves it to a file.",
     description:
@@ -305,7 +305,7 @@ createTool(
 );
 
 createTool(
-  "get-display-size",
+  "get_display_size",
   {
     title: "Gets the display size in dp.",
     description:
@@ -347,7 +347,7 @@ createTool(
 );
 
 createTool(
-  "get-state",
+  "get_state",
   {
     title: "Gets the adb state of a connected device.",
     description:
@@ -378,7 +378,7 @@ createTool(
 );
 
 createTool(
-  "get-serialno",
+  "get_serialno",
   {
     title: "Gets the serial number of a connected device.",
     description: "Runs `adb get-serialno` and returns the result."
@@ -397,7 +397,7 @@ createTool(
 );
 
 createTool(
-  "debug-info",
+  "debug_info",
   {
     title: "Gets server-side debug info.",
     description: "Returns the values of server-side constants for debugging."
