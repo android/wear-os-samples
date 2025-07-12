@@ -56,6 +56,27 @@ choose the "Split" or "Design" editor view.
 
 ![Screenshot of Tile previews for weather, news, calendar, social and media](screenshots/golden3.png)
 
+MCP (Experimental)
+------------------
+
+A simple MCP server for controlling attached devices via `adb` is included in
+the [.gemini/extensions/wear](.gemini/extensions/wear) directory.
+
+To use it via the [Gemini CLI](https://github.com/google-gemini/gemini-cli),
+first ensure a recent version of [NodeJs](https://nodejs.org/en) is installed,
+then:
+
+```sh
+# Install dependencies
+$ npm install --prefix .gemini/extensions/wear
+# Ensure ANDROID_SERIAL is set to the id to an attached device (see `adb devices -l`)
+$ export ANDROID_SERIAL=emulator-5556
+# Run gemini
+$ gemini
+```
+
+See the [`README`](.gemini/extensions/wear/README.md) for more information.
+
 Support
 -------
 
