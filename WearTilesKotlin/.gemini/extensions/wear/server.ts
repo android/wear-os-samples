@@ -125,7 +125,7 @@ createTool(
     description:
       "Installs the debug APK on the connected device. Exact command: `./gradlew :app:installDebug`."
   },
-  async ({ apk }) => {
+  async () => {
     const stdout = await executeCommand(
       `${GRADLEW_PATH} -p ${GRADLE_PROJECT_ROOT} :app:installDebug`
     );
@@ -146,7 +146,14 @@ createTool(
     title: "Adds a tile to the carousel.",
     description:
       "Adds a tile to the carousel. If the tile already exists, it is removed and re-added. If the carousel is full, the last tile is removed to make space. Exact command: `adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation add-tile --ecn component [COMPONENT_NAME]`.",
-    inputSchema: { componentName: z.string() }
+    inputSchema: {
+      componentName: z
+        .string()
+        .regex(
+          /^[\w.]+\/[\w.]+$/,
+          "Invalid component name format. Expected format: com.package.name/com.package.name.service.ClassName"
+        )
+    }
   },
   async ({ componentName }) => {
     const stdout = await executeCommand(
@@ -192,7 +199,14 @@ createTool(
     title: "Removes a tile.",
     description:
       "Removes all instances of a tile from the carousel. Exact command: `adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE --es operation remove-tile --ecn component [COMPONENT_NAME]`.",
-    inputSchema: { componentName: z.string() }
+    inputSchema: {
+      componentName: z
+        .string()
+        .regex(
+          /^[\w.]+\/[\w.]+$/,
+          "Invalid component name format. Expected format: com.package.name/com.package.name.service.ClassName"
+        )
+    }
   },
   async ({ componentName }) => {
     const stdout = await executeCommand(
