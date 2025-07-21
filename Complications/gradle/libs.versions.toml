@@ -16,4 +16,4 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.1.0"
+com-diffplug-spotless = "com.diffplug.spotless:7.2.0"
