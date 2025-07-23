@@ -53,6 +53,6 @@ androidx-media3-exoplayerworkmanager = { module = "androidx.media3:media3-exopla
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.2.0"
+com-diffplug-spotless = "com.diffplug.spotless:7.2.1"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
