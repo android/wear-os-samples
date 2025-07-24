@@ -14,8 +14,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-      <service
-            android:name="com.example.wear.tiles.golden.AlarmTileService"
+        <service
+            android:name=".golden.AlarmTileService"
             android:exported="true"
             android:label="@string/tile_alarm_label"
             android:icon="@mipmap/bolt"
@@ -222,8 +222,6 @@
                 android:name="androidx.wear.tiles.PREVIEW"
                 android:resource="@drawable/tile_preview_ski" />
         </service>
-
-
         <service
             android:name=".golden.WeatherTileService"
             android:label="@string/tile_label_weather"
@@ -238,7 +236,7 @@
                 android:resource="@drawable/tile_preview_weather" />
         </service>
         <service
-            android:name="com.example.wear.tiles.golden.Timer1TileService"
+            android:name=".golden.Timer1TileService"
             android:label="@string/tile_label_timer"
             android:description="@string/tile_label_timer"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"
@@ -251,7 +249,7 @@
                 android:resource="@drawable/tile_preview_timer1" />
         </service>
         <service
-            android:name="com.example.wear.tiles.golden.Timer2TileService"
+            android:name=".golden.Timer2TileService"
             android:label="@string/tile_label_timer"
             android:description="@string/tile_label_timer"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"
@@ -264,4 +262,5 @@
                 android:resource="@drawable/tile_preview_timer2" />
         </service>
     </application>
+
 </manifest>
