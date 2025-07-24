@@ -159,62 +159,6 @@ object Timer {
 }
 
 private fun MaterialScope.timerButton(firstLine: String?, secondLine: String? = null) =
-  timerButton3(firstLine, secondLine)
-
-private fun MaterialScope.timerButton1(firstLine: String?, secondLine: String? = null) =
-  button(
-    onClick = clickable(),
-    width = expand(),
-    height = expand(),
-    colors = filledVariantButtonColors(),
-    style = smallButtonStyle(),
-    horizontalAlignment = HORIZONTAL_ALIGN_CENTER,
-    labelContent = { text(firstLine?.layoutString ?: "".layoutString) },
-    secondaryLabelContent = { text(secondLine?.layoutString ?: "".layoutString) }
-  )
-
-private fun MaterialScope.timerButton2(mainNumber: String?, secondaryText: String?): LayoutElement {
-  // We must use an existing ButtonStyle from its companion object.
-  // Choose the one that provides a good base, then customize padding.
-  val baseButtonStyle = ButtonStyle.defaultButtonStyle() // or ButtonStyle.smallButtonStyle()
-
-  return button(
-    onClick = clickable(),
-    width = DimensionBuilders.wrap(),
-    height = DimensionBuilders.wrap(),
-    // Pass the base style directly. The typography will be overridden by the text composables.
-    style = baseButtonStyle,
-    horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER,
-    //    contentPadding = ModifiersBuilders.Padding.Builder()
-    //      .setStart(DimensionBuilders.dp(8f))
-    //      .setEnd(DimensionBuilders.dp(8f))
-    //      .setTop(DimensionBuilders.dp(4f))
-    //      .setBottom(DimensionBuilders.dp(4f))
-    //      .setRtlAware(true)
-    //      .build(),
-    labelContent = {
-      text(
-        text = mainNumber?.layoutString ?: "".layoutString,
-        typography =
-        androidx.wear.protolayout.material3.Typography
-          .NUMERAL_EXTRA_SMALL // Apply large typography to the first line
-        // Consider setting scalable = false if you want fixed size regardless of user font settings
-        // scalable = false
-      )
-    },
-    secondaryLabelContent = {
-      text(
-        text = secondaryText?.layoutString ?: "".layoutString,
-        typography =
-        androidx.wear.protolayout.material3.Typography
-          .LABEL_SMALL // Apply small typography to the second line
-        // scalable = false
-      )
-    }
-  )
-}
-
-private fun MaterialScope.timerButton3(firstLine: String?, secondLine: String? = null) =
   textButton(
     onClick = clickable(),
     colors = filledVariantButtonColors(),
