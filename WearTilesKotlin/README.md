@@ -30,31 +30,13 @@ the layout (with IDE preview) can be found in
 Golden Tiles
 ------------
 
-Note: these have not yet been updated to [Material 3
-Expressive](https://developer.android.com/design/ui/wear/guides/surfaces/tiles).
+The sample also showcases many of the Tile layout examples from the [Tiles Design
+Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates);
+see [`GoldenTiles.kt`](app/src/main/java/com/example/wear/tiles/golden/GoldenTiles.kt).
+You may find it convenient to start with one of these layouts rather than designing and coding
+your own from scratch.
 
-The sample also showcases most of the Golden Tile layouts from the [Tiles Design
-Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates)
-in the `tiles.golden` package of the `debug` sourceset; see
-`GoldenTilesPreviewsRow[N].kt`. You may find it convenient to start with one of
-these layouts rather than designing and coding your own from scratch.
-
-To see what these look like, open one of the "GoldenTilesPreviewsRowN" files and
-choose the "Split" or "Design" editor view.
-
-![Screenshot of Android Studio showing the design view of GoldenTilesPreviewsRow1.kt. A grid view of Wear OS Tiles are displayed.](screenshots/tile_preview_design_view.png)
-
-`GoldenTilesPreviewsRow1.kt`:
-
-![Screenshot of Tile previews for goal, workoutButtons, workoutLargeChip, run and ski](screenshots/golden1.png)
-
-`GoldenTilesPreviewsRow2.kt`:
-
-![Screenshot of Tile previews for heartRateSample, meditationChips, meditationButtons, timer and alarm](screenshots/golden2.png)
-
-`GoldenTilesPreviewsRow3.kt`:
-
-![Screenshot of Tile previews for weather, news, calendar, social and media](screenshots/golden3.png)
+![Screenshot of Tile layout examples](screenshots/golden_tiles.png)
 
 Support
 -------
