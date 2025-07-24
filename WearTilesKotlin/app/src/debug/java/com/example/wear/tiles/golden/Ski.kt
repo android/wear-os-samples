@@ -82,8 +82,8 @@ object Ski {
       colors =
       filledVariantButtonColors()
         .copy(
-          containerColor = colorScheme.onSecondary,
-          labelColor = colorScheme.secondary
+          containerColor = colorScheme.secondaryContainer,
+          labelColor = colorScheme.onSecondaryContainer
         ),
       labelContent = { statColumn(stat) }
     )
