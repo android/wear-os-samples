@@ -96,7 +96,7 @@ object Alarm {
             onClick = data.clickable,
             title = {
               text(
-                "Mon—Fri".layoutString,
+                data.alarmDays.layoutString,
                 typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM,
                 color = colorScheme.onSurfaceVariant
               )
@@ -141,7 +141,7 @@ internal fun alarmPreview(context: Context) =
         Alarm.AlarmData(
           timeUntilAlarm = "Less than 1 min",
           alarmTime = "14:58",
-          alarmDays = "Mon, Tue, Wed, Thu, Fri, Sat",
+          alarmDays = "Mon—Fri",
           clickable = clickable()
         )
       )
@@ -154,7 +154,7 @@ class AlarmTileService : BaseTileService() {
     Alarm.layout(
       context,
       deviceParameters,
-      Alarm.AlarmData("Less than 1 min", "14:58", "Mon, Tue, Wed, Thu, Fri, Sat", clickable())
+      Alarm.AlarmData("Less than 1 min", "14:58", "Mon—Fri", clickable())
     )
 
   override fun resources(context: Context) = Alarm.resources(context)

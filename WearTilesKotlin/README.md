@@ -37,7 +37,7 @@ The sample also showcases most of the Golden Tile layouts from the [Tiles Design
 Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates)
 in the `tiles.golden` package of the `debug` sourceset; see
 `GoldenTilesPreviewsRow[N].kt`. You may find it convenient to start with one of
-these layouts rather designing and coding your own from scratch.
+these layouts rather than designing and coding your own from scratch.
 
 To see what these look like, open one of the "GoldenTilesPreviewsRowN" files and
 choose the "Split" or "Design" editor view.

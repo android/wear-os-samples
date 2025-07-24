@@ -106,7 +106,7 @@ object Weather {
     }
 
   private fun MaterialScope.conditions(
-    conditions: Weather.Conditions
+    conditions: Conditions
   ): LayoutElement = box {
     setHeight(weight(0.40F))
     setWidth(expand())
@@ -152,19 +152,20 @@ object Weather {
   }
 
   private fun MaterialScope.forecast(forecast: List<Forecast>): LayoutElement =
-    card( // helpme: change the corner radius (shapes) to "large"
+    card(
       onClick = clickable(),
       height = weight(0.60F),
       width = expand(),
       modifier =
       LayoutModifier.background(filledVariantCardColors().backgroundColor),
-      contentPadding = padding(top = 10f)
+      contentPadding = padding(top = 5f)
     ) {
       row {
         setWidth(expand())
         setHeight(expand())
         val maxForecasts = if (isLargeScreen()) 4 else 3
         val displayedForecasts = forecast.take(maxForecasts)
+        addContent(Spacer.Builder().setWidth(dp(6f)).build())
         displayedForecasts.forEachIndexed { index, forecast ->
           addContent(hourForecast(forecast))
           if (index < displayedForecasts.size - 1) {
@@ -173,6 +174,7 @@ object Weather {
             )
           }
         }
+        addContent(Spacer.Builder().setWidth(dp(6f)).build())
       }
     }
 
