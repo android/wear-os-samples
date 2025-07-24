@@ -17,9 +17,7 @@ package com.example.wear.tiles.golden
 
 import android.content.Context
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.protolayout.DimensionBuilders
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
@@ -27,17 +25,13 @@ import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledVariantButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
-import androidx.wear.protolayout.material3.ButtonStyle
-import androidx.wear.protolayout.material3.ButtonStyle.Companion.smallButtonStyle
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.TextButtonStyle.Companion.smallTextButtonStyle
-import androidx.wear.protolayout.material3.Typography
 import androidx.wear.protolayout.material3.Typography.BODY_EXTRA_SMALL
 import androidx.wear.protolayout.material3.Typography.BODY_MEDIUM
 import androidx.wear.protolayout.material3.Typography.LABEL_SMALL
 import androidx.wear.protolayout.material3.Typography.NUMERAL_EXTRA_SMALL
 import androidx.wear.protolayout.material3.Typography.NUMERAL_SMALL
-import androidx.wear.protolayout.material3.button
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.icon
 import androidx.wear.protolayout.material3.iconEdgeButton
