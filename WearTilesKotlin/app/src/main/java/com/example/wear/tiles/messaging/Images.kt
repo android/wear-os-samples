@@ -44,22 +44,22 @@ import com.example.wear.tiles.tools.toImageResource
  *   an error occurred during network loading.
  */
 suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact): ImageResource? {
-    return when (val source = contact.avatarSource) {
-        is AvatarSource.Network -> {
-            val request =
-                ImageRequest.Builder(context).data(source.url).size(300).allowRgb565(true).build()
-            val response = execute(request)
-            return when (response) {
-                is SuccessResult -> {
-                    response.image.toBitmap().toImageResource()
-                }
-                is ErrorResult -> {
-                    Log.d("ImageLoader", "Error loading image $source: ${response.throwable}")
-                    null
-                }
-            }
+  return when (val source = contact.avatarSource) {
+    is AvatarSource.Network -> {
+      val request =
+        ImageRequest.Builder(context).data(source.url).size(300).allowRgb565(true).build()
+      val response = execute(request)
+      return when (response) {
+        is SuccessResult -> {
+          response.image.toBitmap().toImageResource()
         }
-        is AvatarSource.Resource -> source.resourceId.toImageResource()
-        is AvatarSource.None -> null
+        is ErrorResult -> {
+          Log.d("ImageLoader", "Error loading image $source: ${response.throwable}")
+          null
+        }
+      }
     }
+    is AvatarSource.Resource -> source.resourceId.toImageResource()
+    is AvatarSource.None -> null
+  }
 }

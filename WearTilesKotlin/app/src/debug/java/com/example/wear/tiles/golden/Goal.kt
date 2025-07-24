@@ -16,60 +16,106 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.protolayout.material.CircularProgressIndicator
-import androidx.wear.protolayout.material.ProgressIndicatorColors
-import androidx.wear.protolayout.material.Text
-import androidx.wear.protolayout.material.Typography
-import androidx.wear.protolayout.material.layouts.EdgeContentLayout
+import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.material3.CardDefaults.filledTonalCardColors
+import androidx.wear.protolayout.material3.GraphicDataCardDefaults.constructGraphic
+import androidx.wear.protolayout.material3.PrimaryLayoutMargins
+import androidx.wear.protolayout.material3.Typography
+import androidx.wear.protolayout.material3.circularProgressIndicator
+import androidx.wear.protolayout.material3.graphicDataCard
+import androidx.wear.protolayout.material3.icon
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.material3.textEdgeButton
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
+import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
+import com.example.wear.tiles.tools.addIdToImageMapping
+import com.example.wear.tiles.tools.isLargeScreen
+import com.example.wear.tiles.tools.resources
+import java.text.NumberFormat
+import java.util.Locale
 
 object Goal {
-    fun layout(context: Context, deviceParameters: DeviceParameters, steps: Int, goal: Int) =
-        EdgeContentLayout.Builder(deviceParameters)
-            .setResponsiveContentInsetEnabled(true)
-            .setEdgeContent(
-                CircularProgressIndicator.Builder()
-                    .setProgress(steps.toFloat() / goal)
-                    .setCircularProgressIndicatorColors(blueOnTranslucentWhite())
-                    .build()
-            )
-            .setPrimaryLabelTextContent(
-                Text.Builder(context, "Steps")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.Blue))
-                    .build()
-            )
-            .setSecondaryLabelTextContent(
-                Text.Builder(context, "/ $goal")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                    .build()
-            )
-            .setContent(
-                Text.Builder(context, "$steps")
-                    .setTypography(Typography.TYPOGRAPHY_DISPLAY1)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                    .build()
-            )
-            .build()
+  data class GoalData(val steps: Int, val goal: Int)
+
+  fun layout(context: Context, deviceParameters: DeviceParameters, data: GoalData) =
+    materialScope(context = context, deviceConfiguration = deviceParameters) {
+      val stepsString = NumberFormat.getNumberInstance(Locale.US).format(data.steps)
+      val goalString = NumberFormat.getNumberInstance(Locale.US).format(data.goal)
+      primaryLayout(
+        titleSlot = { text("Steps".layoutString) },
+        margins = PrimaryLayoutMargins.MIN_PRIMARY_LAYOUT_MARGIN,
+        mainSlot = {
+          graphicDataCard(
+            onClick = clickable(),
+            height = expand(),
+            colors = filledTonalCardColors(),
+            title = {
+              text(
+                stepsString.layoutString,
+                typography =
+                if (isLargeScreen()) Typography.DISPLAY_LARGE else Typography.DISPLAY_SMALL
+              )
+            },
+            content = {
+              text(
+                "of $goalString".layoutString,
+                typography = if (isLargeScreen()) Typography.TITLE_LARGE else Typography.TITLE_SMALL
+              )
+            },
+            horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_END,
+            graphic = {
+              constructGraphic(
+                mainContent = {
+                  circularProgressIndicator(
+                    staticProgress = 1F * data.steps / data.goal,
+                    startAngleDegrees = 200F,
+                    endAngleDegrees = 520F
+                  )
+                },
+                iconContent = {
+                  icon(context.resources.getResourceName(R.drawable.outline_directions_walk_24))
+                }
+              )
+            }
+          )
+        },
+        bottomSlot = { textEdgeButton(onClick = clickable()) { text("Track".layoutString) } }
+      )
+    }
+
+  fun resources(context: Context) = resources {
+    addIdToImageMapping(
+      context.resources.getResourceName(R.drawable.outline_directions_walk_24),
+      R.drawable.outline_directions_walk_24
+    )
+  }
 }
 
-private fun blueOnTranslucentWhite() =
-    ProgressIndicatorColors(
-        /* indicatorColor = */
-        ColorBuilders.argb(GoldenTilesColors.Blue),
-        /* trackColor = */
-        ColorBuilders.argb(GoldenTilesColors.White10Pc)
-    )
-
 @MultiRoundDevicesWithFontScalePreviews
-internal fun goalPreview(context: Context) = TilePreviewData {
+internal fun goalPreview(context: Context) =
+  TilePreviewData(onTileResourceRequest = Goal.resources(context)) {
     singleTimelineEntryTileBuilder(
-        Goal.layout(context, it.deviceConfiguration, steps = 5168, goal = 8000)
+      Goal.layout(
+        context,
+        it.deviceConfiguration,
+        data = Goal.GoalData(steps = 5168, goal = 8000)
+      )
     )
-        .build()
+      .build()
+  }
+
+class GoalTileService : BaseTileService() {
+  override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+    Goal.layout(context, deviceParameters, data = Goal.GoalData(steps = 5168, goal = 8000))
+
+  override fun resources(context: Context) = Goal.resources(context)
 }

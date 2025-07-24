@@ -40,90 +40,90 @@ import kotlinx.coroutines.coroutineScope
  * provided with the [resourcesRequest] method, which is triggered when the tile uses an Image.
  */
 class MessagingTileService : SuspendingTileService() {
-    private lateinit var imageLoader: ImageLoader
-    private lateinit var contacts: List<Contact>
+  private lateinit var imageLoader: ImageLoader
+  private lateinit var contacts: List<Contact>
 
-    override fun onCreate() {
-        super.onCreate()
+  override fun onCreate() {
+    super.onCreate()
 
-        // For this sample, contacts is a simple static list. In a real application it might come
-        // from an injected repository.
-        contacts = getMockNetworkContacts()
+    // For this sample, contacts is a simple static list. In a real application it might come
+    // from an injected repository.
+    contacts = getMockNetworkContacts()
 
-        // For this sample, make Coil dumb by disabling all caching features.
-        SingletonImageLoader.setSafe { context ->
-            ImageLoader.Builder(context).memoryCache(null).diskCache(null).build()
-        }
-
-        imageLoader = SingletonImageLoader.get(this)
+    // For this sample, make Coil dumb by disabling all caching features.
+    SingletonImageLoader.setSafe { context ->
+      ImageLoader.Builder(context).memoryCache(null).diskCache(null).build()
     }
 
-    /** This method returns a Tile object, which describes the layout of the Tile. */
-    override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val layoutElement = tileLayout(this, requestParams.deviceConfiguration, contacts)
+    imageLoader = SingletonImageLoader.get(this)
+  }
 
-        // Resources are cached and keyed on resourcesVersion. If a Resources object with the same
-        // resourcesVersion is present in the cache, resourcesRequest() is not called, and the
-        // cached version is used instead. To ensure it is *always* called (e.g. for debugging), set
-        // the version to a random string.
-        val resourcesVersion =
-            if (DEBUG_RESOURCES) {
-                UUID.randomUUID().toString()
-            } else {
-                contacts.map { it.id }.toSortedSet().joinToString()
-            }
+  /** This method returns a Tile object, which describes the layout of the Tile. */
+  override suspend fun tileRequest(requestParams: TileRequest): Tile {
+    val layoutElement = tileLayout(this, requestParams.deviceConfiguration, contacts)
 
-        return Tile.Builder()
-            .setResourcesVersion(resourcesVersion)
-            .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
-            .build()
-    }
+    // Resources are cached and keyed on resourcesVersion. If a Resources object with the same
+    // resourcesVersion is present in the cache, resourcesRequest() is not called, and the
+    // cached version is used instead. To ensure it is *always* called (e.g. for debugging), set
+    // the version to a random string.
+    val resourcesVersion =
+      if (DEBUG_RESOURCES) {
+        UUID.randomUUID().toString()
+      } else {
+        contacts.map { it.id }.toSortedSet().joinToString()
+      }
 
-    /**
-     * This method returns a Tile Resources object that contains the image data required to render
-     * and display the tile. It's passed a ResourcesRequest, one property of which is `resourceIds`
-     * (a List<String>) which represents the resources we need to provide. (Note that this is just a
-     * list of strings; these are *not* Android resource ids.)
-     *
-     * In this method we (1) find the Contacts that correspond to the passed resourceIds, (2)
-     * asynchronously load the associated images, and then (3) add this data into a Resources
-     * object.
-     */
-    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
-        // If resourceIds is empty, set resourceIds to all resources
-        val resourceIds =
-            requestParams.resourceIds.ifEmpty { contacts.map { it.imageResourceId() } }
+    return Tile.Builder()
+      .setResourcesVersion(resourcesVersion)
+      .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
+      .build()
+  }
 
-        // Asynchronously load images associated with resourceIds, and create a Map<String,
-        // ResourceBuilders.ImageResource> suitable for adding to the Resources object
-        val resourceMap = coroutineScope {
-            resourceIds
-                .map { id ->
-                    async {
-                        contacts
-                            .find { it.imageResourceId() == id }
-                            ?.let { contact ->
-                                imageLoader.loadAvatar(this@MessagingTileService, contact)?.let {
-                                        image ->
-                                    id to image
-                                }
-                            } ?: (id to R.mipmap.offline.toImageResource())
-                    }
+  /**
+   * This method returns a Tile Resources object that contains the image data required to render
+   * and display the tile. It's passed a ResourcesRequest, one property of which is `resourceIds`
+   * (a List<String>) which represents the resources we need to provide. (Note that this is just a
+   * list of strings; these are *not* Android resource ids.)
+   *
+   * In this method we (1) find the Contacts that correspond to the passed resourceIds, (2)
+   * asynchronously load the associated images, and then (3) add this data into a Resources
+   * object.
+   */
+  override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
+    // If resourceIds is empty, set resourceIds to all resources
+    val resourceIds =
+      requestParams.resourceIds.ifEmpty { contacts.map { it.imageResourceId() } }
+
+    // Asynchronously load images associated with resourceIds, and create a Map<String,
+    // ResourceBuilders.ImageResource> suitable for adding to the Resources object
+    val resourceMap = coroutineScope {
+      resourceIds
+        .map { id ->
+          async {
+            contacts
+              .find { it.imageResourceId() == id }
+              ?.let { contact ->
+                imageLoader.loadAvatar(this@MessagingTileService, contact)?.let {
+                    image ->
+                  id to image
                 }
-                .awaitAll()
-                .toMap()
+              } ?: (id to R.mipmap.offline.toImageResource())
+          }
         }
-
-        // Add images to the Resources object, and return
-        return Resources.Builder()
-            .setVersion(requestParams.version)
-            .apply {
-                resourceMap.forEach { (id, imageResource) ->
-                    addIdToImageMapping(id, imageResource)
-                }
-            }
-            .build()
+        .awaitAll()
+        .toMap()
     }
+
+    // Add images to the Resources object, and return
+    return Resources.Builder()
+      .setVersion(requestParams.version)
+      .apply {
+        resourceMap.forEach { (id, imageResource) ->
+          addIdToImageMapping(id, imageResource)
+        }
+      }
+      .build()
+  }
 }
 
 const val DEBUG_RESOURCES = true
