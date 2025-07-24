@@ -49,134 +49,134 @@ import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.resources
 
 object Hike {
-  data class HikeData(
-    val distance: String,
-    val unit: String,
-    val clickable: Clickable
-  )
+    data class HikeData(val distance: String, val unit: String, val clickable: Clickable)
 
-  fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters,
-    data: HikeData
-  ) =
-    materialScope(context, deviceParameters) {
-      primaryLayout(
-        titleSlot = { text("Hike".layoutString) },
-        bottomSlot = {
-          textEdgeButton(onClick = data.clickable, colors = filledButtonColors(), labelContent = {
-            text("Start".layoutString)
-          })
-        },
-        mainSlot = {
-          column {
-            setWidth(expand())
-            setHeight(expand())
-            addContent(
-              box {
-                setWidth(expand())
-                setHeight(weight(0.3f))
-                addContent(
-                  buttonGroup {
-                    buttonGroupItem {
-                      box {
-                        setWidth(weight(0.4f))
+    fun layout(context: Context, deviceParameters: DeviceParameters, data: HikeData) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                titleSlot = { text("Hike".layoutString) },
+                bottomSlot = {
+                    textEdgeButton(
+                        onClick = data.clickable,
+                        colors = filledButtonColors(),
+                        labelContent = { text("Start".layoutString) }
+                    )
+                },
+                mainSlot = {
+                    column {
+                        setWidth(expand())
                         setHeight(expand())
                         addContent(
-                          textButton(
-                            width = expand(),
-                            height = expand(),
-                            onClick = data.clickable,
-                            shape = shapes.extraLarge,
-                            colors = filledVariantButtonColors(),
-                            labelContent = {
-                              column {
-                                setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
+                            box {
+                                setWidth(expand())
+                                setHeight(weight(0.3f))
                                 addContent(
-                                  text(
-                                    data.distance.layoutString,
-                                    typography = NUMERAL_SMALL,
-                                    alignment = TEXT_ALIGN_CENTER
-                                  )
+                                    buttonGroup {
+                                        buttonGroupItem {
+                                            box {
+                                                setWidth(weight(0.4f))
+                                                setHeight(expand())
+                                                addContent(
+                                                    textButton(
+                                                        width = expand(),
+                                                        height = expand(),
+                                                        onClick = data.clickable,
+                                                        shape = shapes.extraLarge,
+                                                        colors = filledVariantButtonColors(),
+                                                        labelContent = {
+                                                            column {
+                                                                setHorizontalAlignment(
+                                                                    HORIZONTAL_ALIGN_CENTER
+                                                                )
+                                                                addContent(
+                                                                    text(
+                                                                        data.distance.layoutString,
+                                                                        typography = NUMERAL_SMALL,
+                                                                        alignment =
+                                                                        TEXT_ALIGN_CENTER
+                                                                    )
+                                                                )
+                                                                addContent(
+                                                                    text(
+                                                                        data.unit.layoutString,
+                                                                        typography = BODY_SMALL,
+                                                                        alignment =
+                                                                        TEXT_ALIGN_CENTER
+                                                                    )
+                                                                )
+                                                            }
+                                                        }
+                                                    )
+                                                )
+                                            }
+                                        }
+                                        buttonGroupItem {
+                                            box {
+                                                setWidth(weight(0.6f))
+                                                setHeight(expand())
+                                                addContent(
+                                                    Image.Builder()
+                                                        .setResourceId(
+                                                            context.resources.getResourceName(
+                                                                R.drawable.photo_14
+                                                            )
+                                                        )
+                                                        .setContentScaleMode(
+                                                            CONTENT_SCALE_MODE_CROP
+                                                        )
+                                                        .setWidth(expand())
+                                                        .setHeight(expand())
+                                                        .setModifiers(
+                                                            Modifiers.Builder()
+                                                                .setBackground(
+                                                                    Background.Builder()
+                                                                        .setCorner(shapes.large)
+                                                                        .build()
+                                                                )
+                                                                .setClickable(data.clickable)
+                                                                .build()
+                                                        )
+                                                        .build()
+                                                )
+                                            }
+                                        }
+                                    }
                                 )
-                                addContent(
-                                  text(
-                                    data.unit.layoutString,
-                                    typography = BODY_SMALL,
-                                    alignment = TEXT_ALIGN_CENTER
-                                  )
-                                )
-                              }
                             }
-                          )
                         )
-                      }
                     }
-                    buttonGroupItem {
-                      box {
-                        setWidth(weight(0.6f))
-                        setHeight(expand())
-                        addContent(
-                          Image.Builder()
-                            .setResourceId(context.resources.getResourceName(R.drawable.photo_14))
-                            .setContentScaleMode(CONTENT_SCALE_MODE_CROP)
-                            .setWidth(expand())
-                            .setHeight(expand())
-                            .setModifiers(
-                              Modifiers.Builder()
-                                .setBackground(Background.Builder().setCorner(shapes.large).build())
-                                .setClickable(data.clickable)
-                                .build()
-                            )
-                            .build()
-                        )
-                      }
-                    }
-                  }
-                )
-              }
+                }
             )
-          }
         }
-      )
-    }
 
-  fun resources(context: Context) = resources {
-    addIdToImageMapping(context.resources.getResourceName(R.drawable.photo_14), R.drawable.photo_14)
-  }
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.photo_14),
+            R.drawable.photo_14
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun hikePreview(context: Context) =
-  TilePreviewData(Hike.resources(context)) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-      Hike.layout(
-        context,
-        it.deviceConfiguration,
-        Hike.HikeData(
-          distance = "10",
-          unit = "Miles",
-          clickable = clickable()
+    TilePreviewData(Hike.resources(context)) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Hike.layout(
+                context,
+                it.deviceConfiguration,
+                Hike.HikeData(distance = "10", unit = "Miles", clickable = clickable())
+            )
         )
-      )
-    )
-      .build()
-  }
+            .build()
+    }
 
 class HikeTileService : BaseTileService() {
-  override fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters
-  ): LayoutElement =
-    Hike.layout(
-      context,
-      deviceParameters,
-      Hike.HikeData(
-        distance = "10",
-        unit = "Miles",
-        clickable = clickable()
-      )
-    )
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Hike.layout(
+            context,
+            deviceParameters,
+            Hike.HikeData(distance = "10", unit = "Miles", clickable = clickable())
+        )
 
-  override fun resources(context: Context) = Hike.resources(context)
+    override fun resources(context: Context) = Hike.resources(context)
 }

@@ -44,78 +44,93 @@ import java.text.NumberFormat
 import java.util.Locale
 
 object Goal {
-  data class GoalData(val steps: Int, val goal: Int)
+    data class GoalData(val steps: Int, val goal: Int)
 
-  fun layout(context: Context, deviceParameters: DeviceParameters, data: GoalData) =
-    materialScope(context = context, deviceConfiguration = deviceParameters) {
-      val stepsString = NumberFormat.getNumberInstance(Locale.US).format(data.steps)
-      val goalString = NumberFormat.getNumberInstance(Locale.US).format(data.goal)
-      primaryLayout(
-        titleSlot = { text("Steps".layoutString) },
-        margins = PrimaryLayoutMargins.MIN_PRIMARY_LAYOUT_MARGIN,
-        mainSlot = {
-          graphicDataCard(
-            onClick = clickable(),
-            height = expand(),
-            colors = filledTonalCardColors(),
-            title = {
-              text(
-                stepsString.layoutString,
-                typography =
-                if (isLargeScreen()) Typography.DISPLAY_LARGE else Typography.DISPLAY_SMALL
-              )
-            },
-            content = {
-              text(
-                "of $goalString".layoutString,
-                typography = if (isLargeScreen()) Typography.TITLE_LARGE else Typography.TITLE_SMALL
-              )
-            },
-            horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_END,
-            graphic = {
-              constructGraphic(
-                mainContent = {
-                  circularProgressIndicator(
-                    staticProgress = 1F * data.steps / data.goal,
-                    startAngleDegrees = 200F,
-                    endAngleDegrees = 520F
-                  )
+    fun layout(context: Context, deviceParameters: DeviceParameters, data: GoalData) =
+        materialScope(context = context, deviceConfiguration = deviceParameters) {
+            val stepsString = NumberFormat.getNumberInstance(Locale.US).format(data.steps)
+            val goalString = NumberFormat.getNumberInstance(Locale.US).format(data.goal)
+            primaryLayout(
+                titleSlot = { text("Steps".layoutString) },
+                margins = PrimaryLayoutMargins.MIN_PRIMARY_LAYOUT_MARGIN,
+                mainSlot = {
+                    graphicDataCard(
+                        onClick = clickable(),
+                        height = expand(),
+                        colors = filledTonalCardColors(),
+                        title = {
+                            text(
+                                stepsString.layoutString,
+                                typography =
+                                if (isLargeScreen()) {
+                                    Typography.DISPLAY_LARGE
+                                } else {
+                                    Typography.DISPLAY_SMALL
+                                }
+                            )
+                        },
+                        content = {
+                            text(
+                                "of $goalString".layoutString,
+                                typography =
+                                if (isLargeScreen()) {
+                                    Typography.TITLE_LARGE
+                                } else {
+                                    Typography.TITLE_SMALL
+                                }
+                            )
+                        },
+                        horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_END,
+                        graphic = {
+                            constructGraphic(
+                                mainContent = {
+                                    circularProgressIndicator(
+                                        staticProgress = 1F * data.steps / data.goal,
+                                        startAngleDegrees = 200F,
+                                        endAngleDegrees = 520F
+                                    )
+                                },
+                                iconContent = {
+                                    icon(
+                                        context.resources.getResourceName(
+                                            R.drawable.outline_directions_walk_24
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    )
                 },
-                iconContent = {
-                  icon(context.resources.getResourceName(R.drawable.outline_directions_walk_24))
+                bottomSlot = {
+                    textEdgeButton(onClick = clickable()) { text("Track".layoutString) }
                 }
-              )
-            }
-          )
-        },
-        bottomSlot = { textEdgeButton(onClick = clickable()) { text("Track".layoutString) } }
-      )
-    }
+            )
+        }
 
-  fun resources(context: Context) = resources {
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.outline_directions_walk_24),
-      R.drawable.outline_directions_walk_24
-    )
-  }
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_directions_walk_24),
+            R.drawable.outline_directions_walk_24
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun goalPreview(context: Context) =
-  TilePreviewData(onTileResourceRequest = Goal.resources(context)) {
-    singleTimelineEntryTileBuilder(
-      Goal.layout(
-        context,
-        it.deviceConfiguration,
-        data = Goal.GoalData(steps = 5168, goal = 8000)
-      )
-    )
-      .build()
-  }
+    TilePreviewData(onTileResourceRequest = Goal.resources(context)) {
+        singleTimelineEntryTileBuilder(
+            Goal.layout(
+                context,
+                it.deviceConfiguration,
+                data = Goal.GoalData(steps = 5168, goal = 8000)
+            )
+        )
+            .build()
+    }
 
 class GoalTileService : BaseTileService() {
-  override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
-    Goal.layout(context, deviceParameters, data = Goal.GoalData(steps = 5168, goal = 8000))
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Goal.layout(context, deviceParameters, data = Goal.GoalData(steps = 5168, goal = 8000))
 
-  override fun resources(context: Context) = Goal.resources(context)
+    override fun resources(context: Context) = Goal.resources(context)
 }

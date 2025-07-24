@@ -40,81 +40,81 @@ import com.example.wear.tiles.tools.resources
 
 object Ski {
 
-  fun layout(
-    context: Context,
-    deviceParameters: DeviceParametersBuilders.DeviceParameters,
-    stat1: Stat,
-    stat2: Stat
-  ) =
-    materialScope(context, deviceParameters) {
-      primaryLayout(
-        titleSlot = { text("Latest run".layoutString) },
-        mainSlot = {
-          buttonGroup {
-            buttonGroupItem { statTextButton(stat1) }
-            buttonGroupItem { statTextButton(stat2) }
-          }
+    fun layout(
+        context: Context,
+        deviceParameters: DeviceParametersBuilders.DeviceParameters,
+        stat1: Stat,
+        stat2: Stat
+    ) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                titleSlot = { text("Latest run".layoutString) },
+                mainSlot = {
+                    buttonGroup {
+                        buttonGroupItem { statTextButton(stat1) }
+                        buttonGroupItem { statTextButton(stat2) }
+                    }
+                }
+            )
         }
-      )
+
+    private fun MaterialScope.statColumn(stat: Stat): LayoutElementBuilders.Column {
+        val largeScreen = isLargeScreen()
+        val labelTypography = if (largeScreen) Typography.TITLE_MEDIUM else Typography.TITLE_SMALL
+        val valueTypography =
+            if (largeScreen) Typography.NUMERAL_SMALL else Typography.NUMERAL_EXTRA_SMALL
+        val unitTypography = if (largeScreen) Typography.TITLE_MEDIUM else Typography.TITLE_SMALL
+
+        return LayoutElementBuilders.Column.Builder()
+            .addContent(text(stat.label.layoutString, typography = labelTypography))
+            .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(6f)).build())
+            .addContent(text(stat.value.layoutString, typography = valueTypography))
+            .addContent(text(stat.unit.layoutString, typography = unitTypography))
+            .build()
     }
 
-  private fun MaterialScope.statColumn(stat: Stat): LayoutElementBuilders.Column {
-    val largeScreen = isLargeScreen()
-    val labelTypography = if (largeScreen) Typography.TITLE_MEDIUM else Typography.TITLE_SMALL
-    val valueTypography =
-      if (largeScreen) Typography.NUMERAL_SMALL else Typography.NUMERAL_EXTRA_SMALL
-    val unitTypography = if (largeScreen) Typography.TITLE_MEDIUM else Typography.TITLE_SMALL
+    private fun MaterialScope.statTextButton(stat: Stat) =
+        textButton(
+            onClick = clickable(),
+            width = expand(),
+            height = expand(),
+            shape = shapes.extraLarge,
+            colors =
+            filledVariantButtonColors()
+                .copy(
+                    containerColor = colorScheme.secondaryContainer,
+                    labelColor = colorScheme.onSecondaryContainer
+                ),
+            labelContent = { statColumn(stat) }
+        )
 
-    return LayoutElementBuilders.Column.Builder()
-      .addContent(text(stat.label.layoutString, typography = labelTypography))
-      .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(6f)).build())
-      .addContent(text(stat.value.layoutString, typography = valueTypography))
-      .addContent(text(stat.unit.layoutString, typography = unitTypography))
-      .build()
-  }
-
-  private fun MaterialScope.statTextButton(stat: Stat) =
-    textButton(
-      onClick = clickable(),
-      width = expand(),
-      height = expand(),
-      shape = shapes.extraLarge,
-      colors =
-      filledVariantButtonColors()
-        .copy(
-          containerColor = colorScheme.secondaryContainer,
-          labelColor = colorScheme.onSecondaryContainer
-        ),
-      labelContent = { statColumn(stat) }
-    )
-
-  data class Stat(val label: String, val value: String, val unit: String)
+    data class Stat(val label: String, val value: String, val unit: String)
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun skiPreview(context: Context) = TilePreviewData {
-  TilePreviewHelper.singleTimelineEntryTileBuilder(
-    Ski.layout(
-      context,
-      it.deviceConfiguration,
-      stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
-      stat2 = Ski.Stat("Distance", "21.8", "mile")
+    TilePreviewHelper.singleTimelineEntryTileBuilder(
+        Ski.layout(
+            context,
+            it.deviceConfiguration,
+            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+            stat2 = Ski.Stat("Distance", "21.8", "mile")
+        )
     )
-  )
-    .build()
+        .build()
 }
 
 class SkiTileService : BaseTileService() {
-  override fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters
-  ): LayoutElement =
-    Ski.layout(
-      context,
-      deviceParameters,
-      stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
-      stat2 = Ski.Stat("Distance", "21.8", "mile")
-    )
+    override fun layout(
+        context: Context,
+        deviceParameters: DeviceParameters
+    ): LayoutElement =
+        Ski.layout(
+            context,
+            deviceParameters,
+            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+            stat2 = Ski.Stat("Distance", "21.8", "mile")
+        )
 
-  override fun resources(context: Context) = resources {}
+    override fun resources(context: Context) = resources {}
 }

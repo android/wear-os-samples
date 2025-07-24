@@ -62,288 +62,266 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 object News {
-  data class ArticleData(
-    val date: String,
-    val headline: String,
-    val newsVendor: String,
-    val clickable: Clickable,
-    val imageResourceId: String
-  )
-
-  private fun MaterialScope.newsImage(resourceId: String): LayoutElementBuilders.LayoutElement {
-    return image {
-      setResourceId(resourceId)
-      setContentScaleMode(CONTENT_SCALE_MODE_CROP)
-      setWidth(expand())
-      setHeight(expand())
-      setModifiers(
-        Modifiers.Builder()
-          .setBackground(Background.Builder().setCorner(shapes.large).build())
-          .build()
-      )
-    }
-  }
-
-  private fun MaterialScope.newsText(
-    headline: String,
-    newsVendor: String
-  ): LayoutElementBuilders.LayoutElement {
-    return column {
-      setWidth(expand())
-      setHeight(expand())
-      addContent(
-        text(
-          text = headline.layoutString,
-          typography = LABEL_SMALL,
-          maxLines = if (isLargeScreen()) 4 else 3,
-          alignment = LayoutElementBuilders.TEXT_ALIGN_START
-        )
-      )
-      addContent(Spacer.Builder().setHeight(dp(3f)).build())
-      addContent(
-        text(
-          text = newsVendor.layoutString,
-          typography = BODY_SMALL,
-          color = colorScheme.onSurfaceVariant,
-          maxLines = 1,
-          alignment = LayoutElementBuilders.TEXT_ALIGN_START
-        )
-      )
-    }
-  }
-
-  private fun MaterialScope.newsCard1(
-    clickable: Clickable,
-    headline: String,
-    newsVendor: String,
-    imageResourceId: String
-  ) =
-    card(
-      onClick = clickable,
-      width = expand(),
-      height = expand(),
-      modifier = LayoutModifier.background(colorScheme.surfaceContainer),
-      content = {
-        row {
-          setWidth(expand())
-          setHeight(expand())
-          setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
-          addContent(
-            LayoutElementBuilders.Box.Builder()
-              .setWidth(weight(0.4f))
-              .setHeight(expand())
-              .setModifiers(LayoutModifier.padding(2f).toProtoLayoutModifiers())
-              .addContent(
-                newsImage(imageResourceId)
-              )
-              .build()
-          )
-          addContent(Spacer.Builder().setWidth(dp(12f)).build())
-          addContent(
-            LayoutElementBuilders.Box.Builder()
-              .setWidth(weight(0.6f))
-              .setHeight(expand())
-              .setModifiers(
-                LayoutModifier.padding(horizontal = 0f, vertical = 10f)
-                  .toProtoLayoutModifiers()
-              )
-              .addContent(newsText(headline, newsVendor))
-              .build()
-          )
-        }
-      }
+    data class ArticleData(
+        val date: String,
+        val headline: String,
+        val newsVendor: String,
+        val clickable: Clickable,
+        val imageResourceId: String
     )
 
-  fun layout1(
-    context: Context,
-    deviceParameters: DeviceParameters,
-    data: ArticleData
-  ) =
-    materialScope(
-      context = context,
-      deviceConfiguration = deviceParameters
-    ) {
-      primaryLayout(
-        titleSlot = { text(data.date.layoutString) },
-        mainSlot = {
-          newsCard1(
-            data.clickable,
-            data.headline,
-            data.newsVendor,
-            data.imageResourceId
-          )
-        },
-        bottomSlot = {
-          textEdgeButton(
-            colors =
-            ButtonColors(
-              labelColor = colorScheme.onSurface,
-              containerColor = colorScheme.surfaceContainer
-            ),
-            onClick = data.clickable,
-            labelContent = { text("News".layoutString) }
-          )
+    private fun MaterialScope.newsImage(resourceId: String): LayoutElementBuilders.LayoutElement {
+        return image {
+            setResourceId(resourceId)
+            setContentScaleMode(CONTENT_SCALE_MODE_CROP)
+            setWidth(expand())
+            setHeight(expand())
+            setModifiers(
+                Modifiers.Builder()
+                    .setBackground(Background.Builder().setCorner(shapes.large).build())
+                    .build()
+            )
         }
-      )
     }
 
-  private fun MaterialScope.newsCard2(
-    clickable: Clickable,
-    headline: String,
-    imageResourceId: String
-  ) =
-    card(
-      onClick = clickable,
-      width = expand(),
-      height = expand(),
-      backgroundContent = {
-        backgroundImage(
-          protoLayoutResourceId = imageResourceId,
-          contentScaleMode = CONTENT_SCALE_MODE_CROP
-        )
-      },
-      content = {
-        text(
-          text = headline.layoutString,
-          maxLines = 3,
-          typography = if (isLargeScreen()) BODY_LARGE else BODY_MEDIUM
-        )
-      }
-    )
-
-  fun layout2(
-    context: Context,
-    deviceParameters: DeviceParameters,
-    data: ArticleData
-  ) =
-    materialScope(
-      context = context,
-      deviceConfiguration = deviceParameters
-    ) {
-      primaryLayout(
-        titleSlot = { text(data.date.layoutString) },
-        mainSlot = { newsCard2(data.clickable, data.headline, data.imageResourceId) },
-        bottomSlot = {
-          textEdgeButton(
-            colors =
-            ButtonColors(
-              labelColor = colorScheme.onSurface,
-              containerColor = colorScheme.surfaceContainer
-            ),
-            onClick = data.clickable,
-            labelContent = { text("News".layoutString) }
-          )
+    private fun MaterialScope.newsText(
+        headline: String,
+        newsVendor: String
+    ): LayoutElementBuilders.LayoutElement {
+        return column {
+            setWidth(expand())
+            setHeight(expand())
+            addContent(
+                text(
+                    text = headline.layoutString,
+                    typography = LABEL_SMALL,
+                    maxLines = if (isLargeScreen()) 4 else 3,
+                    alignment = LayoutElementBuilders.TEXT_ALIGN_START
+                )
+            )
+            addContent(Spacer.Builder().setHeight(dp(3f)).build())
+            addContent(
+                text(
+                    text = newsVendor.layoutString,
+                    typography = BODY_SMALL,
+                    color = colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    alignment = LayoutElementBuilders.TEXT_ALIGN_START
+                )
+            )
         }
-      )
     }
 
-  fun resources(context: Context) = resources {
-    addIdToImageMapping(context.resources.getResourceName(R.drawable.photo_15), R.drawable.photo_15)
-  }
+    private fun MaterialScope.newsCard1(
+        clickable: Clickable,
+        headline: String,
+        newsVendor: String,
+        imageResourceId: String
+    ) =
+        card(
+            onClick = clickable,
+            width = expand(),
+            height = expand(),
+            modifier = LayoutModifier.background(colorScheme.surfaceContainer),
+            content = {
+                row {
+                    setWidth(expand())
+                    setHeight(expand())
+                    setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
+                    addContent(
+                        LayoutElementBuilders.Box.Builder()
+                            .setWidth(weight(0.4f))
+                            .setHeight(expand())
+                            .setModifiers(LayoutModifier.padding(2f).toProtoLayoutModifiers())
+                            .addContent(newsImage(imageResourceId))
+                            .build()
+                    )
+                    addContent(Spacer.Builder().setWidth(dp(12f)).build())
+                    addContent(
+                        LayoutElementBuilders.Box.Builder()
+                            .setWidth(weight(0.6f))
+                            .setHeight(expand())
+                            .setModifiers(
+                                LayoutModifier.padding(horizontal = 0f, vertical = 10f)
+                                    .toProtoLayoutModifiers()
+                            )
+                            .addContent(newsText(headline, newsVendor))
+                            .build()
+                    )
+                }
+            }
+        )
 
-  internal fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
-    val yesterday = today.minusDays(1)
+    fun layout1(context: Context, deviceParameters: DeviceParameters, data: ArticleData) =
+        materialScope(context = context, deviceConfiguration = deviceParameters) {
+            primaryLayout(
+                titleSlot = { text(data.date.layoutString) },
+                mainSlot = {
+                    newsCard1(data.clickable, data.headline, data.newsVendor, data.imageResourceId)
+                },
+                bottomSlot = {
+                    textEdgeButton(
+                        colors =
+                        ButtonColors(
+                            labelColor = colorScheme.onSurface,
+                            containerColor = colorScheme.surfaceContainer
+                        ),
+                        onClick = data.clickable,
+                        labelContent = { text("News".layoutString) }
+                    )
+                }
+            )
+        }
 
-    return when {
-      this == yesterday -> "yesterday ${format(DateTimeFormatter.ofPattern("MMM d"))}"
-      this == today -> "today ${format(DateTimeFormatter.ofPattern("MMM d"))}"
-      else -> format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+    private fun MaterialScope.newsCard2(
+        clickable: Clickable,
+        headline: String,
+        imageResourceId: String
+    ) =
+        card(
+            onClick = clickable,
+            width = expand(),
+            height = expand(),
+            backgroundContent = {
+                backgroundImage(
+                    protoLayoutResourceId = imageResourceId,
+                    contentScaleMode = CONTENT_SCALE_MODE_CROP
+                )
+            },
+            content = {
+                text(
+                    text = headline.layoutString,
+                    maxLines = 3,
+                    typography = if (isLargeScreen()) BODY_LARGE else BODY_MEDIUM
+                )
+            }
+        )
+
+    fun layout2(context: Context, deviceParameters: DeviceParameters, data: ArticleData) =
+        materialScope(context = context, deviceConfiguration = deviceParameters) {
+            primaryLayout(
+                titleSlot = { text(data.date.layoutString) },
+                mainSlot = { newsCard2(data.clickable, data.headline, data.imageResourceId) },
+                bottomSlot = {
+                    textEdgeButton(
+                        colors =
+                        ButtonColors(
+                            labelColor = colorScheme.onSurface,
+                            containerColor = colorScheme.surfaceContainer
+                        ),
+                        onClick = data.clickable,
+                        labelContent = { text("News".layoutString) }
+                    )
+                }
+            )
+        }
+
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.photo_15),
+            R.drawable.photo_15
+        )
     }
-  }
+
+    internal fun LocalDate.formatLocalDateTime(today: LocalDate = LocalDate.now()): String {
+        val yesterday = today.minusDays(1)
+
+        return when {
+            this == yesterday -> "yesterday ${format(DateTimeFormatter.ofPattern("MMM d"))}"
+            this == today -> "today ${format(DateTimeFormatter.ofPattern("MMM d"))}"
+            else -> format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+        }
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun news1Preview(context: Context): TilePreviewData {
-  val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
-  return TilePreviewData(
-    News.resources(context)
-  ) {
-    val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
-    Clock.fixed(now, Clock.systemUTC().zone)
+    val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
+    return TilePreviewData(News.resources(context)) {
+        val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
+        Clock.fixed(now, Clock.systemUTC().zone)
 
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-      News.layout1(
-        context,
-        it.deviceConfiguration,
-        News.ArticleData(
-          headline = "Millions still without power as new storm moves across US",
-          newsVendor = "The New York Times",
-          date = "Today, 31 July",
-          clickable = clickable(),
-          imageResourceId = imageResourceId
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            News.layout1(
+                context,
+                it.deviceConfiguration,
+                News.ArticleData(
+                    headline = "Millions still without power as new storm moves across US",
+                    newsVendor = "The New York Times",
+                    date = "Today, 31 July",
+                    clickable = clickable(),
+                    imageResourceId = imageResourceId
+                )
+            )
         )
-      )
-    )
-      .build()
-  }
+            .build()
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun news2Preview(context: Context): TilePreviewData {
-  val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
-  return TilePreviewData(
-    News.resources(context)
-  ) {
-    val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
-    Clock.fixed(now, Clock.systemUTC().zone)
+    val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
+    return TilePreviewData(News.resources(context)) {
+        val now = LocalDateTime.of(2024, 8, 1, 0, 0).toInstant(ZoneOffset.UTC)
+        Clock.fixed(now, Clock.systemUTC().zone)
 
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-      News.layout2(
-        context,
-        it.deviceConfiguration,
-        News.ArticleData(
-          headline = "Millions still without power as new storm moves across US",
-          newsVendor = "The New York Times",
-          date = "Today, 31 July",
-          clickable = clickable(),
-          imageResourceId = imageResourceId
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            News.layout2(
+                context,
+                it.deviceConfiguration,
+                News.ArticleData(
+                    headline = "Millions still without power as new storm moves across US",
+                    newsVendor = "The New York Times",
+                    date = "Today, 31 July",
+                    clickable = clickable(),
+                    imageResourceId = imageResourceId
+                )
+            )
         )
-      )
-    )
-      .build()
-  }
+            .build()
+    }
 }
 
 class News1TileService : BaseTileService() {
-  override fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters
-  ): LayoutElementBuilders.LayoutElement {
-    val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
-    return News.layout1(
-      context,
-      deviceParameters,
-      News.ArticleData(
-        headline = "Millions still without power as new storm moves across US",
-        newsVendor = "The New York Times",
-        date = "Today, 31 July",
-        clickable = clickable(),
-        imageResourceId = imageResourceId
-      )
-    )
-  }
+    override fun layout(
+        context: Context,
+        deviceParameters: DeviceParameters
+    ): LayoutElementBuilders.LayoutElement {
+        val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
+        return News.layout1(
+            context,
+            deviceParameters,
+            News.ArticleData(
+                headline = "Millions still without power as new storm moves across US",
+                newsVendor = "The New York Times",
+                date = "Today, 31 July",
+                clickable = clickable(),
+                imageResourceId = imageResourceId
+            )
+        )
+    }
 
-  override fun resources(context: Context) = News.resources(context)
+    override fun resources(context: Context) = News.resources(context)
 }
 
 class News2TileService : BaseTileService() {
-  override fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters
-  ): LayoutElementBuilders.LayoutElement {
-    val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
-    return News.layout2(
-      context,
-      deviceParameters,
-      News.ArticleData(
-        headline = "Millions still without power as new storm moves across US",
-        newsVendor = "The New York Times",
-        date = "Today, 31 July",
-        clickable = clickable(),
-        imageResourceId = imageResourceId
-      )
-    )
-  }
+    override fun layout(
+        context: Context,
+        deviceParameters: DeviceParameters
+    ): LayoutElementBuilders.LayoutElement {
+        val imageResourceId = context.resources.getResourceName(R.drawable.photo_15)
+        return News.layout2(
+            context,
+            deviceParameters,
+            News.ArticleData(
+                headline = "Millions still without power as new storm moves across US",
+                newsVendor = "The New York Times",
+                date = "Today, 31 July",
+                clickable = clickable(),
+                imageResourceId = imageResourceId
+            )
+        )
+    }
 
-  override fun resources(context: Context) = News.resources(context)
+    override fun resources(context: Context) = News.resources(context)
 }

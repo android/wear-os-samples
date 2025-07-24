@@ -50,112 +50,114 @@ import java.time.LocalTime
 import java.util.Locale
 
 fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
-  val hour24 = time.hour
-  val minute = time.minute
+    val hour24 = time.hour
+    val minute = time.minute
 
-  val amPm = if (hour24 < 12) "AM" else "PM"
+    val amPm = if (hour24 < 12) "AM" else "PM"
 
-  var hour12 = hour24 % 12
-  if (hour12 == 0) {
-    hour12 = 12
-  }
+    var hour12 = hour24 % 12
+    if (hour12 == 0) {
+        hour12 = 12
+    }
 
-  val timeString = "$hour12:${String.format(Locale.US, "%02d", minute)}"
+    val timeString = "$hour12:${String.format(Locale.US, "%02d", minute)}"
 
-  return LayoutElementBuilders.Row.Builder()
-    .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
-    .addContent(
-      text(
-        text = timeString.layoutString,
-        typography = if (isLargeScreen()) DISPLAY_LARGE else DISPLAY_MEDIUM
-      )
-    )
-    .addContent(
-      text(
-        text = " $amPm".layoutString,
-        typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM
-      )
-    )
-    .build()
+    return LayoutElementBuilders.Row.Builder()
+        .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
+        .addContent(
+            text(
+                text = timeString.layoutString,
+                typography = if (isLargeScreen()) DISPLAY_LARGE else DISPLAY_MEDIUM
+            )
+        )
+        .addContent(
+            text(
+                text = " $amPm".layoutString,
+                typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM
+            )
+        )
+        .build()
 }
 
 object Alarm {
-  data class AlarmData(
-    val timeUntilAlarm: String,
-    val alarmTime: String,
-    val alarmDays: String,
-    val clickable: Clickable
-  )
-
-  fun layout(context: Context, deviceParameters: DeviceParameters, data: AlarmData) =
-    materialScope(context, deviceParameters) {
-      primaryLayout(
-        titleSlot = { text("Alarm".layoutString) },
-        mainSlot = {
-          titleCard(
-            onClick = data.clickable,
-            title = {
-              text(
-                data.alarmDays.layoutString,
-                typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM,
-                color = colorScheme.onSurfaceVariant
-              )
-            },
-            content = { styledTime(LocalTime.parse(data.alarmTime)) },
-            height = expand(),
-            colors = filledVariantCardColors(),
-            style =
-            if (isLargeScreen()) {
-              TitleCardStyle.extraLargeTitleCardStyle()
-            } else {
-              TitleCardStyle.defaultTitleCardStyle()
-            }
-          )
-        },
-        bottomSlot = {
-          iconEdgeButton(
-            onClick = data.clickable,
-            colors = filledTonalButtonColors(),
-            modifier = LayoutModifier.contentDescription("Plus"),
-            iconContent = { icon(context.resources.getResourceName(R.drawable.outline_add_2_24)) }
-          )
-        }
-      )
-    }
-
-  fun resources(context: Context) = resources {
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.outline_add_2_24),
-      R.drawable.outline_add_2_24
+    data class AlarmData(
+        val timeUntilAlarm: String,
+        val alarmTime: String,
+        val alarmDays: String,
+        val clickable: Clickable
     )
-  }
+
+    fun layout(context: Context, deviceParameters: DeviceParameters, data: AlarmData) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                titleSlot = { text("Alarm".layoutString) },
+                mainSlot = {
+                    titleCard(
+                        onClick = data.clickable,
+                        title = {
+                            text(
+                                data.alarmDays.layoutString,
+                                typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM,
+                                color = colorScheme.onSurfaceVariant
+                            )
+                        },
+                        content = { styledTime(LocalTime.parse(data.alarmTime)) },
+                        height = expand(),
+                        colors = filledVariantCardColors(),
+                        style =
+                        if (isLargeScreen()) {
+                            TitleCardStyle.extraLargeTitleCardStyle()
+                        } else {
+                            TitleCardStyle.defaultTitleCardStyle()
+                        }
+                    )
+                },
+                bottomSlot = {
+                    iconEdgeButton(
+                        onClick = data.clickable,
+                        colors = filledTonalButtonColors(),
+                        modifier = LayoutModifier.contentDescription("Plus"),
+                        iconContent = {
+                            icon(context.resources.getResourceName(R.drawable.outline_add_2_24))
+                        }
+                    )
+                }
+            )
+        }
+
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_add_2_24),
+            R.drawable.outline_add_2_24
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun alarmPreview(context: Context) =
-  TilePreviewData(Alarm.resources(context)) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-      Alarm.layout(
-        context,
-        it.deviceConfiguration,
-        Alarm.AlarmData(
-          timeUntilAlarm = "Less than 1 min",
-          alarmTime = "14:58",
-          alarmDays = "Mon—Fri",
-          clickable = clickable()
+    TilePreviewData(Alarm.resources(context)) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Alarm.layout(
+                context,
+                it.deviceConfiguration,
+                Alarm.AlarmData(
+                    timeUntilAlarm = "Less than 1 min",
+                    alarmTime = "14:58",
+                    alarmDays = "Mon—Fri",
+                    clickable = clickable()
+                )
+            )
         )
-      )
-    )
-      .build()
-  }
+            .build()
+    }
 
 class AlarmTileService : BaseTileService() {
-  override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
-    Alarm.layout(
-      context,
-      deviceParameters,
-      Alarm.AlarmData("Less than 1 min", "14:58", "Mon—Fri", clickable())
-    )
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Alarm.layout(
+            context,
+            deviceParameters,
+            Alarm.AlarmData("Less than 1 min", "14:58", "Mon—Fri", clickable())
+        )
 
-  override fun resources(context: Context) = Alarm.resources(context)
+    override fun resources(context: Context) = Alarm.resources(context)
 }

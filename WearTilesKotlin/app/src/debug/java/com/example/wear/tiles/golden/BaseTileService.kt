@@ -30,26 +30,26 @@ import java.util.UUID
 
 abstract class BaseTileService : TileService() {
 
-  override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<Tile> =
-    Futures.immediateFuture(
-      Tile.Builder()
-        .setResourcesVersion(
-          UUID.randomUUID().toString()
-        ) // random string; resources will be loaded every time
-        .setTileTimeline(
-          Timeline.fromLayoutElement(layout(this, requestParams.deviceConfiguration))
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<Tile> =
+        Futures.immediateFuture(
+            Tile.Builder()
+                .setResourcesVersion(
+                    UUID.randomUUID().toString()
+                ) // random string; resources will be loaded every time
+                .setTileTimeline(
+                    Timeline.fromLayoutElement(layout(this, requestParams.deviceConfiguration))
+                )
+                .build()
         )
-        .build()
-    )
 
-  override fun onTileResourcesRequest(
-    requestParams: ResourcesRequest
-  ): ListenableFuture<Resources> = Futures.immediateFuture(resources(this)(requestParams))
+    override fun onTileResourcesRequest(
+        requestParams: ResourcesRequest
+    ): ListenableFuture<Resources> = Futures.immediateFuture(resources(this)(requestParams))
 
-  abstract fun layout(
-    context: Context,
-    deviceParameters: DeviceParametersBuilders.DeviceParameters
-  ): LayoutElementBuilders.LayoutElement
+    abstract fun layout(
+        context: Context,
+        deviceParameters: DeviceParametersBuilders.DeviceParameters
+    ): LayoutElementBuilders.LayoutElement
 
-  abstract fun resources(context: Context): (ResourcesRequest) -> Resources
+    abstract fun resources(context: Context): (ResourcesRequest) -> Resources
 }

@@ -40,7 +40,6 @@ import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
-import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.ButtonStyle.Companion.defaultButtonStyle
 import androidx.wear.protolayout.material3.ButtonStyle.Companion.smallButtonStyle
 import androidx.wear.protolayout.material3.button
@@ -62,98 +61,109 @@ import com.example.wear.tiles.tools.resources
 
 object Meditation {
 
-  fun listLayout(context: Context, deviceParameters: DeviceParameters, tasksLeft: Int) =
-    materialScope(context, deviceParameters) {
-      primaryLayout(
-        titleSlot =
-        if (isLargeScreen()) {
-          { text("$tasksLeft mindful tasks left".layoutString) }
-        } else {
-          null
-        },
-        bottomSlot = {
-          textEdgeButton(onClick = clickable(), labelContent = { text("Browse".layoutString) })
-        },
-        mainSlot = {
-          column {
-            setWidth(expand())
-            setHeight(expand())
-            addContent(
-              button(
-                onClick = clickable(),
-                width = expand(),
-                height = expand(),
-                colors = filledTonalButtonColors(),
-                style =
+    fun listLayout(context: Context, deviceParameters: DeviceParameters, tasksLeft: Int) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                titleSlot =
                 if (isLargeScreen()) {
-                  defaultButtonStyle()
+                    { text("$tasksLeft mindful tasks left".layoutString) }
                 } else {
-                  smallButtonStyle()
+                    null
                 },
-                iconContent = {
-                  icon(context.resources.getResourceName(R.drawable.outline_air_24))
+                bottomSlot = {
+                    textEdgeButton(
+                        onClick = clickable(),
+                        labelContent = { text("Browse".layoutString) }
+                    )
                 },
-                labelContent = { text("Breath".layoutString) }
-              )
+                mainSlot = {
+                    column {
+                        setWidth(expand())
+                        setHeight(expand())
+                        addContent(
+                            button(
+                                onClick = clickable(),
+                                width = expand(),
+                                height = expand(),
+                                colors = filledTonalButtonColors(),
+                                style =
+                                if (isLargeScreen()) {
+                                    defaultButtonStyle()
+                                } else {
+                                    smallButtonStyle()
+                                },
+                                iconContent = {
+                                    icon(
+                                        context.resources.getResourceName(
+                                            R.drawable.outline_air_24
+                                        )
+                                    )
+                                },
+                                labelContent = { text("Breath".layoutString) }
+                            )
+                        )
+                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                        addContent(
+                            button(
+                                onClick = clickable(),
+                                width = expand(),
+                                height = expand(),
+                                colors = filledTonalButtonColors(),
+                                style =
+                                if (isLargeScreen()) {
+                                    defaultButtonStyle()
+                                } else {
+                                    smallButtonStyle()
+                                },
+                                iconContent = {
+                                    icon(context.resources.getResourceName(R.drawable.ic_yoga_24))
+                                },
+                                labelContent = {
+                                    text("Daily mindfulness".layoutString, maxLines = 2)
+                                }
+                            )
+                        )
+                    }
+                }
             )
-            addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-            addContent(
-              button(
-                onClick = clickable(),
-                width = expand(),
-                height = expand(),
-                colors = filledTonalButtonColors(),
-                style =
-                if (isLargeScreen()) {
-                  defaultButtonStyle()
-                } else {
-                  smallButtonStyle()
-                },
-                iconContent = { icon(context.resources.getResourceName(R.drawable.ic_yoga_24)) },
-                labelContent = { text("Daily mindfulness".layoutString, maxLines = 2) }
-              )
-            )
-          }
         }
-      )
-    }
 
-  fun resources(context: Context) = resources {
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.ic_yoga_24),
-      R.drawable.ic_yoga_24
-    )
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.outline_air_24),
-      R.drawable.outline_air_24
-    )
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.ic_breathe_24),
-      R.drawable.ic_breathe_24
-    )
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.ic_mindfulness_24),
-      R.drawable.ic_mindfulness_24
-    )
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.outline_add_2_24),
-      R.drawable.outline_add_2_24
-    )
-  }
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.ic_yoga_24),
+            R.drawable.ic_yoga_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_air_24),
+            R.drawable.outline_air_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.ic_breathe_24),
+            R.drawable.ic_breathe_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.ic_mindfulness_24),
+            R.drawable.ic_mindfulness_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_add_2_24),
+            R.drawable.outline_add_2_24
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 fun mindfulnessPreview(context: Context) =
-  TilePreviewData(Meditation.resources(context)) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-      Meditation.listLayout(context, it.deviceConfiguration, 3)
-    )
-      .build()
-  }
+    TilePreviewData(Meditation.resources(context)) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Meditation.listLayout(context, it.deviceConfiguration, 3)
+        )
+            .build()
+    }
 
 class MindfulnessTileService : BaseTileService() {
-  override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
-    Meditation.listLayout(context, deviceParameters, 2)
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Meditation.listLayout(context, deviceParameters, 2)
 
-  override fun resources(context: Context) = Meditation.resources(context)
+    override fun resources(context: Context) = Meditation.resources(context)
 }

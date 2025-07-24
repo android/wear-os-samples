@@ -51,119 +51,132 @@ import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.resources
 
 object Calendar {
-  data class Event(
-    val date: String,
-    val time: String,
-    val name: String,
-    val location: String,
-    val imageId: String? = null,
-    val clickable: Clickable
-  )
-
-  fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters,
-    data: Event
-  ) =
-    materialScope(context, deviceParameters) {
-      primaryLayout(
-        mainSlot = {
-          column {
-            setWidth(expand())
-            setHeight(expand())
-            addContent(
-              box {
-                setWidth(expand())
-                setHeight(weight(0.3f))
-                addContent(
-                  buttonGroup {
-                    buttonGroupItem {
-                      box {
-                        setWidth(weight(0.6f))
-                        setHeight(expand())
-                        addContent(
-                          textButton(
-                            onClick = data.clickable,
-                            labelContent = { text(data.date.layoutString) },
-                            colors = filledTonalButtonColors(),
-                            width = expand(),
-                            height = expand()
-                          )
-                        )
-                      }
-                    }
-                    buttonGroupItem {
-                      box {
-                        setWidth(weight(0.4f))
-                        setHeight(expand())
-                        addContent(
-                          iconButton(
-                            onClick = data.clickable,
-                            iconContent = {
-                              icon(context.resources.getResourceName(R.drawable.outline_add_24))
-                            },
-                            colors = filledButtonColors(),
-                            modifier = LayoutModifier.contentDescription("Add Event"),
-                            width = expand(),
-                            height = expand()
-                          )
-                        )
-                      }
-                    }
-                  }
-                )
-              }
-            )
-            addContent(Spacer.Builder().setHeight(dp(4f)).build())
-            addContent(
-              box {
-                setWidth(expand())
-                setHeight(weight(0.7f))
-                addContent(
-                  titleCard(
-                    onClick = data.clickable,
-                    title = {
-                      text(
-                        data.name.layoutString,
-                        maxLines = if (isLargeScreen()) 3 else 2
-                      )
-                    },
-                    content = {
-                      column {
-                        addContent(text(data.time.layoutString))
-                        if (isLargeScreen()) {
-                          addContent(text(data.location.layoutString, maxLines = 1))
-                        }
-                      }
-                    },
-                    colors = filledVariantCardColors(),
-                    backgroundContent =
-                    data.imageId?.let { id ->
-                      {
-                        backgroundImage(
-                          protoLayoutResourceId = id,
-                          contentScaleMode = CONTENT_SCALE_MODE_CROP
-                        )
-                      }
-                    },
-                    shape = shapes.extraLarge,
-                    height = expand()
-                  )
-                )
-              }
-            )
-          }
-        }
-      )
-    }
-
-  fun resources(context: Context) = resources {
-    addIdToImageMapping(
-      context.resources.getResourceName(R.drawable.outline_add_24),
-      R.drawable.outline_add_24
+    data class Event(
+        val date: String,
+        val time: String,
+        val name: String,
+        val location: String,
+        val imageId: String? = null,
+        val clickable: Clickable
     )
-    addIdToImageMapping(context.resources.getResourceName(R.drawable.photo_38), R.drawable.photo_38)
-  }
+
+    fun layout(context: Context, deviceParameters: DeviceParameters, data: Event) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                mainSlot = {
+                    column {
+                        setWidth(expand())
+                        setHeight(expand())
+                        addContent(
+                            box {
+                                setWidth(expand())
+                                setHeight(weight(0.3f))
+                                addContent(
+                                    buttonGroup {
+                                        buttonGroupItem {
+                                            box {
+                                                setWidth(weight(0.6f))
+                                                setHeight(expand())
+                                                addContent(
+                                                    textButton(
+                                                        onClick = data.clickable,
+                                                        labelContent = {
+                                                            text(data.date.layoutString)
+                                                        },
+                                                        colors = filledTonalButtonColors(),
+                                                        width = expand(),
+                                                        height = expand()
+                                                    )
+                                                )
+                                            }
+                                        }
+                                        buttonGroupItem {
+                                            box {
+                                                setWidth(weight(0.4f))
+                                                setHeight(expand())
+                                                addContent(
+                                                    iconButton(
+                                                        onClick = data.clickable,
+                                                        iconContent = {
+                                                            icon(
+                                                                context.resources.getResourceName(
+                                                                    R.drawable.outline_add_24
+                                                                )
+                                                            )
+                                                        },
+                                                        colors = filledButtonColors(),
+                                                        modifier =
+                                                        LayoutModifier.contentDescription(
+                                                            "Add Event"
+                                                        ),
+                                                        width = expand(),
+                                                        height = expand()
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+                        )
+                        addContent(Spacer.Builder().setHeight(dp(4f)).build())
+                        addContent(
+                            box {
+                                setWidth(expand())
+                                setHeight(weight(0.7f))
+                                addContent(
+                                    titleCard(
+                                        onClick = data.clickable,
+                                        title = {
+                                            text(
+                                                data.name.layoutString,
+                                                maxLines = if (isLargeScreen()) 3 else 2
+                                            )
+                                        },
+                                        content = {
+                                            column {
+                                                addContent(text(data.time.layoutString))
+                                                if (isLargeScreen()) {
+                                                    addContent(
+                                                        text(
+                                                            data.location.layoutString,
+                                                            maxLines = 1
+                                                        )
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        colors = filledVariantCardColors(),
+                                        backgroundContent =
+                                        data.imageId?.let { id ->
+                                            {
+                                                backgroundImage(
+                                                    protoLayoutResourceId = id,
+                                                    contentScaleMode = CONTENT_SCALE_MODE_CROP
+                                                )
+                                            }
+                                        },
+                                        shape = shapes.extraLarge,
+                                        height = expand()
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
+            )
+        }
+
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_add_24),
+            R.drawable.outline_add_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.photo_38),
+            R.drawable.photo_38
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
@@ -171,65 +184,59 @@ internal fun calendar1Preview(context: Context) = calendarPreviewX(context)
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun calendar2Preview(context: Context) =
-  calendarPreviewX(context, context.resources.getResourceName(R.drawable.photo_38))
+    calendarPreviewX(context, context.resources.getResourceName(R.drawable.photo_38))
 
 fun calendarPreviewX(context: Context, eventImageId: String? = null) =
-  TilePreviewData(Calendar.resources(context)) {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-      Calendar.layout(
-        context,
-        it.deviceConfiguration,
-        Calendar.Event(
-          date = "25 July",
-          time = "6:30-7:30 PM",
-          name = "Advanced Tennis Coaching with Christina Lloyd",
-          location = "216 Market Street",
-          imageId = eventImageId,
-          clickable = clickable()
+    TilePreviewData(Calendar.resources(context)) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Calendar.layout(
+                context,
+                it.deviceConfiguration,
+                Calendar.Event(
+                    date = "25 July",
+                    time = "6:30-7:30 PM",
+                    name = "Advanced Tennis Coaching with Christina Lloyd",
+                    location = "216 Market Street",
+                    imageId = eventImageId,
+                    clickable = clickable()
+                )
+            )
         )
-      )
-    )
-      .build()
-  }
+            .build()
+    }
 
 class Calendar1TileService : BaseTileService() {
-  override fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters
-  ): LayoutElement =
-    Calendar.layout(
-      context,
-      deviceParameters,
-      Calendar.Event(
-        date = "25 July",
-        time = "6:30-7:30 PM",
-        name = "Advanced Tennis Coaching with Christina Lloyd",
-        location = "216 Market Street",
-        imageId = null,
-        clickable = clickable()
-      )
-    )
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Calendar.layout(
+            context,
+            deviceParameters,
+            Calendar.Event(
+                date = "25 July",
+                time = "6:30-7:30 PM",
+                name = "Advanced Tennis Coaching with Christina Lloyd",
+                location = "216 Market Street",
+                imageId = null,
+                clickable = clickable()
+            )
+        )
 
-  override fun resources(context: Context) = Calendar.resources(context)
+    override fun resources(context: Context) = Calendar.resources(context)
 }
 
 class Calendar2TileService : BaseTileService() {
-  override fun layout(
-    context: Context,
-    deviceParameters: DeviceParameters
-  ): LayoutElement =
-    Calendar.layout(
-      context,
-      deviceParameters,
-      Calendar.Event(
-        date = "25 July",
-        time = "6:30-7:30 PM",
-        name = "Advanced Tennis Coaching with Christina Lloyd",
-        location = "216 Market Street",
-        imageId = context.resources.getResourceName(R.drawable.photo_38),
-        clickable = clickable()
-      )
-    )
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Calendar.layout(
+            context,
+            deviceParameters,
+            Calendar.Event(
+                date = "25 July",
+                time = "6:30-7:30 PM",
+                name = "Advanced Tennis Coaching with Christina Lloyd",
+                location = "216 Market Street",
+                imageId = context.resources.getResourceName(R.drawable.photo_38),
+                clickable = clickable()
+            )
+        )
 
-  override fun resources(context: Context) = Calendar.resources(context)
+    override fun resources(context: Context) = Calendar.resources(context)
 }
