@@ -48,8 +48,8 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
-test-ext-junit = "androidx.test.ext:junit:1.2.1"
+test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
+test-ext-junit = "androidx.test.ext:junit:1.3.0"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
