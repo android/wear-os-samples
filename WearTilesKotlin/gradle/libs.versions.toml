@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.11.1"
+android-gradle-plugin = "8.12.0"
 compose = "1.8.3"
 ktlint = "0.50.0"
 ktfmt = "0.54"
