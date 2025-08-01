@@ -1,11 +1,11 @@
 [versions]
-android-gradle-plugin = "8.11.1"
+android-gradle-plugin = "8.12.0"
 compose = "1.8.3"
 ktlint = "0.50.0"
 ktfmt = "0.54"
 androidx-wear-tiles = "1.5.0"
 androidx-wear-protolayout = "1.3.0"
-coil = "3.2.0"
+coil = "3.3.0"
 horologist = "0.7.12-alpha"
 org-jetbrains-kotlin = "2.1.21"
 wear-tooling-preview = "1.0.0"
@@ -33,5 +33,5 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.2.0"
+com-diffplug-spotless = "com.diffplug.spotless:7.2.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
