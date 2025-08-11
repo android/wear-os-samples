@@ -41,15 +41,14 @@ import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.resources
 import java.text.NumberFormat
-import java.util.Locale
 
 object Goal {
     data class GoalData(val steps: Int, val goal: Int)
 
     fun layout(context: Context, deviceParameters: DeviceParameters, data: GoalData) =
         materialScope(context = context, deviceConfiguration = deviceParameters) {
-            val stepsString = NumberFormat.getNumberInstance(Locale.US).format(data.steps)
-            val goalString = NumberFormat.getNumberInstance(Locale.US).format(data.goal)
+            val stepsString = NumberFormat.getNumberInstance().format(data.steps)
+            val goalString = NumberFormat.getNumberInstance().format(data.goal)
             primaryLayout(
                 titleSlot = { text("Steps".layoutString) },
                 margins = PrimaryLayoutMargins.MIN_PRIMARY_LAYOUT_MARGIN,
