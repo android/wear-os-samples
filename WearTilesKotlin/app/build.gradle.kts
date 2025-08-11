@@ -78,6 +78,7 @@ dependencies {
     debugImplementation(libs.androidx.wear.tiles.renderer)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.wear.tooling.preview)
+    debugImplementation(libs.androidx.wear.tiles.tooling)
     // The tile preview code is in the same file as the tiles themselves, so we need to make the
     // androidx.wear.tiles:tiles-tooling-preview dependency available to release builds, not
     // just debug builds.
