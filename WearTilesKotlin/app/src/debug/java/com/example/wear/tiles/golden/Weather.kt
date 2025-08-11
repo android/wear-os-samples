@@ -51,17 +51,6 @@ import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.resources
 import com.example.wear.tiles.tools.row
 
-private fun getRandomWeatherIcon(context: Context): String {
-    val weatherIcons =
-        listOf(
-            R.drawable.scattered_showers,
-            R.drawable.baseline_cloud_24,
-            R.drawable.baseline_thunderstorm_24,
-            R.drawable.outline_partly_cloudy_day_24
-        )
-    return context.resources.getResourceName(weatherIcons.random())
-}
-
 object Weather {
     data class Forecast(
         val weatherIconId: String,
@@ -225,6 +214,13 @@ class WeatherTileService : BaseTileService() {
         context: Context,
         deviceParameters: DeviceParameters
     ): LayoutElement {
+        val weatherIcons =
+            listOf(
+                R.drawable.scattered_showers,
+                R.drawable.baseline_cloud_24,
+                R.drawable.baseline_thunderstorm_24,
+                R.drawable.outline_partly_cloudy_day_24
+            ).map { context.resources.getResourceName(it) }
         return Weather.layout(
             context,
             deviceParameters,
@@ -232,7 +228,7 @@ class WeatherTileService : BaseTileService() {
                 location = "San Francisco",
                 conditions =
                 Weather.Conditions(
-                    weatherIconId = getRandomWeatherIcon(context),
+                    weatherIconId = weatherIcons[0],
                     currentTemperature = "52°",
                     lowTemperature = "48°",
                     highTemperature = "64°",
@@ -240,10 +236,10 @@ class WeatherTileService : BaseTileService() {
                 ),
                 forecast =
                 listOf(
-                    Weather.Forecast(getRandomWeatherIcon(context), "68°", "9AM"),
-                    Weather.Forecast(getRandomWeatherIcon(context), "65°", "10AM"),
-                    Weather.Forecast(getRandomWeatherIcon(context), "62°", "11AM"),
-                    Weather.Forecast(getRandomWeatherIcon(context), "60°", "12PM")
+                    Weather.Forecast(weatherIcons[1], "68°", "9AM"),
+                    Weather.Forecast(weatherIcons[2], "65°", "10AM"),
+                    Weather.Forecast(weatherIcons[3], "62°", "11AM"),
+                    Weather.Forecast(weatherIcons[0], "60°", "12PM")
                 )
             )
         )
@@ -255,6 +251,13 @@ class WeatherTileService : BaseTileService() {
 @MultiRoundDevicesWithFontScalePreviews
 internal fun weatherPreview(context: Context) =
     TilePreviewData(Weather.resources(context)) {
+        val weatherIcons =
+            listOf(
+                R.drawable.scattered_showers,
+                R.drawable.baseline_cloud_24,
+                R.drawable.baseline_thunderstorm_24,
+                R.drawable.outline_partly_cloudy_day_24
+            ).map { context.resources.getResourceName(it) }
         TilePreviewHelper.singleTimelineEntryTileBuilder(
             Weather.layout(
                 context,
@@ -263,7 +266,7 @@ internal fun weatherPreview(context: Context) =
                     location = "San Francisco",
                     conditions =
                     Weather.Conditions(
-                        weatherIconId = getRandomWeatherIcon(context),
+                        weatherIconId = weatherIcons[0],
                         currentTemperature = "52°",
                         lowTemperature = "48°",
                         highTemperature = "64°",
@@ -271,10 +274,10 @@ internal fun weatherPreview(context: Context) =
                     ),
                     forecast =
                     listOf(
-                        Weather.Forecast(getRandomWeatherIcon(context), "68°", "9AM"),
-                        Weather.Forecast(getRandomWeatherIcon(context), "65°", "10AM"),
-                        Weather.Forecast(getRandomWeatherIcon(context), "62°", "11AM"),
-                        Weather.Forecast(getRandomWeatherIcon(context), "60°", "12PM")
+                        Weather.Forecast(weatherIcons[1], "68°", "9AM"),
+                        Weather.Forecast(weatherIcons[2], "65°", "10AM"),
+                        Weather.Forecast(weatherIcons[3], "62°", "11AM"),
+                        Weather.Forecast(weatherIcons[0], "60°", "12PM")
                     )
                 )
             )
