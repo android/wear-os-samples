@@ -17,7 +17,6 @@ package com.example.wear.tiles.tools
 
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
-import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.Box
 import androidx.wear.protolayout.LayoutElementBuilders.Column
@@ -109,4 +108,3 @@ fun Bitmap.toImageResource(): ImageResource {
         )
         .build()
 }
-
