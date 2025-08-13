@@ -20,6 +20,7 @@ import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
@@ -85,7 +86,7 @@ object Workout {
                             if (isLargeScreen()) {
                                 iconDataCard(
                                     onClick = clickable(),
-                                    width = dp(80f),
+                                    width = weight(1.5f),
                                     height = expand(),
                                     shape = shapes.large,
                                     title = {
