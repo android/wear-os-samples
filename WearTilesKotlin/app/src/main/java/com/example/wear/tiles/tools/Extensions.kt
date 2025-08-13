@@ -110,5 +110,3 @@ fun Bitmap.toImageResource(): ImageResource {
         .build()
 }
 
-fun MaterialScope.noOpElement(): LayoutElementBuilders.LayoutElement =
-    LayoutElementBuilders.Spacer.Builder().setWidth(dp(0F)).setHeight(dp(0F)).build()

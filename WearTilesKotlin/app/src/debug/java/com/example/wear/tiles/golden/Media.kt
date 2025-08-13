@@ -49,7 +49,7 @@ private fun MaterialScope.playlistButton(
     playlist: Media.Playlist
 ) =
     button(
-        onClick = playlist.clickable ?: clickable(),
+        onClick = playlist.clickable,
         width = expand(),
         height = expand(),
         colors = filledTonalButtonColors(),
@@ -77,7 +77,7 @@ object Media {
     data class Playlist(
         val label: String,
         val imageId: String? = null,
-        val clickable: Clickable? = clickable()
+        val clickable: Clickable = clickable()
     )
 
     fun layout(

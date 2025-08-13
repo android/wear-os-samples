@@ -33,6 +33,7 @@ import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.Typography.TITLE_SMALL
+import androidx.wear.protolayout.material3.avatarImage
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
@@ -45,7 +46,6 @@ import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.clip
 import androidx.wear.protolayout.modifiers.contentDescription
 import androidx.wear.protolayout.modifiers.padding
-import androidx.wear.protolayout.modifiers.toProtoLayoutModifiers
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
@@ -53,7 +53,6 @@ import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.column
-import com.example.wear.tiles.tools.image
 import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.resources
 
@@ -90,13 +89,12 @@ data class Contact(
 @OptIn(ProtoLayoutExperimental::class)
 fun MaterialScope.contactButton(contact: Contact): LayoutElement {
     if (contact.avatarId != null) {
-        return image {
-            setHeight(expand())
-            setWidth(expand())
-            setModifiers(LayoutModifier.clip(shapes.full).toProtoLayoutModifiers())
-            setResourceId(contact.avatarId)
-            setContentScaleMode(CONTENT_SCALE_MODE_CROP)
-        }
+        return avatarImage(
+            protoLayoutResourceId = contact.avatarId,
+            width = expand(),
+            height = expand(),
+            contentScaleMode = CONTENT_SCALE_MODE_CROP
+        )
     } else {
         val colors =
             listOf(

@@ -18,7 +18,6 @@
             android:name=".golden.AlarmTileService"
             android:exported="true"
             android:label="@string/tile_alarm_label"
-            android:icon="@mipmap/bolt"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
             <intent-filter>
                 <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
@@ -40,21 +39,8 @@
                 android:name="androidx.wear.tiles.PREVIEW"
                 android:resource="@drawable/tile_preview_goal" />
         </service>
-<!--        <service-->
-<!--            android:name=".golden.News1TileService"-->
-<!--            android:label="@string/tile_news_1_label"-->
-<!--            android:description="@string/tile_news_1_label"-->
-<!--            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data-->
-<!--                android:name="androidx.wear.tiles.PREVIEW"-->
-<!--                android:resource="@drawable/tile_preview_news1" />-->
-<!--        </service>-->
         <service
-            android:name=".golden.News2TileService"
+            android:name=".golden.NewsTileService"
             android:label="@string/tile_news_2_label"
             android:description="@string/tile_news_2_label"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"
@@ -170,19 +156,6 @@
                 android:name="androidx.wear.tiles.PREVIEW"
                 android:resource="@drawable/tile_preview_calendar2" />
         </service>
-<!--        <service-->
-<!--            android:name=".golden.HeartRateTileService"-->
-<!--            android:label="@string/tile_label_heart_rate"-->
-<!--            android:description="@string/tile_label_heart_rate"-->
-<!--            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data-->
-<!--                android:name="androidx.wear.tiles.PREVIEW"-->
-<!--                android:resource="@drawable/tile_preview_heart_rate" />-->
-<!--        </service>-->
         <service
             android:name=".golden.HikeTileService"
             android:label="@string/tile_label_hike"

@@ -18,15 +18,14 @@ package com.example.wear.tiles.golden
 import android.content.Context
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledVariantButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
+import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
-import androidx.wear.protolayout.material3.TextButtonStyle.Companion.smallTextButtonStyle
 import androidx.wear.protolayout.material3.Typography.BODY_EXTRA_SMALL
 import androidx.wear.protolayout.material3.Typography.BODY_MEDIUM
 import androidx.wear.protolayout.material3.Typography.LABEL_SMALL
@@ -39,6 +38,7 @@ import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.material3.textButton
+import androidx.wear.protolayout.material3.textDataCard
 import androidx.wear.protolayout.modifiers.LayoutModifier
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.contentDescription
@@ -160,29 +160,22 @@ object Timer {
 }
 
 private fun MaterialScope.timerButton(firstLine: String?, secondLine: String? = null) =
-    textButton(
+    textDataCard(
         onClick = clickable(),
-        colors = filledVariantButtonColors(),
+        colors = filledVariantCardColors(),
         width = expand(),
         height = expand(),
-        style = smallTextButtonStyle(),
-        labelContent = {
-            column {
-                setWidth(expand())
-                setHorizontalAlignment(HORIZONTAL_ALIGN_CENTER)
-                addContent(
-                    text(
-                        text = firstLine?.layoutString ?: "".layoutString,
-                        typography = if (isLargeScreen()) NUMERAL_EXTRA_SMALL else BODY_MEDIUM
-                    )
-                )
-                addContent(
-                    text(
-                        text = secondLine?.layoutString ?: "".layoutString,
-                        typography = if (isLargeScreen()) LABEL_SMALL else BODY_EXTRA_SMALL
-                    )
-                )
-            }
+        title = {
+            text(
+                text = firstLine?.layoutString ?: "".layoutString,
+                typography = if (isLargeScreen()) NUMERAL_EXTRA_SMALL else BODY_MEDIUM
+            )
+        },
+        content = {
+            text(
+                text = secondLine?.layoutString ?: "".layoutString,
+                typography = if (isLargeScreen()) LABEL_SMALL else BODY_EXTRA_SMALL
+            )
         }
     )
 

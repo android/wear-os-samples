@@ -18,18 +18,16 @@ package com.example.wear.tiles.golden
 import android.content.Context
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
-import androidx.wear.protolayout.material3.ButtonDefaults.filledVariantButtonColors
+import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.Typography
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
-import androidx.wear.protolayout.material3.textButton
+import androidx.wear.protolayout.material3.textDataCard
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
@@ -58,34 +56,52 @@ object Ski {
             )
         }
 
-    private fun MaterialScope.statColumn(stat: Stat): LayoutElementBuilders.Column {
-        val largeScreen = isLargeScreen()
-        val labelTypography = if (largeScreen) Typography.TITLE_MEDIUM else Typography.TITLE_SMALL
-        val valueTypography =
-            if (largeScreen) Typography.NUMERAL_SMALL else Typography.NUMERAL_EXTRA_SMALL
-        val unitTypography = if (largeScreen) Typography.TITLE_MEDIUM else Typography.TITLE_SMALL
-
-        return LayoutElementBuilders.Column.Builder()
-            .addContent(text(stat.label.layoutString, typography = labelTypography))
-            .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(6f)).build())
-            .addContent(text(stat.value.layoutString, typography = valueTypography))
-            .addContent(text(stat.unit.layoutString, typography = unitTypography))
-            .build()
-    }
-
     private fun MaterialScope.statTextButton(stat: Stat) =
-        textButton(
+        textDataCard(
             onClick = clickable(),
             width = expand(),
             height = expand(),
             shape = shapes.extraLarge,
             colors =
-            filledVariantButtonColors()
-                .copy(
-                    containerColor = colorScheme.secondaryContainer,
-                    labelColor = colorScheme.onSecondaryContainer
-                ),
-            labelContent = { statColumn(stat) }
+            filledVariantCardColors().copy(
+                backgroundColor = colorScheme.secondaryContainer,
+                titleColor = colorScheme.onSecondaryContainer,
+                contentColor = colorScheme.onSecondaryContainer,
+                secondaryTextColor = colorScheme.onSecondaryContainer
+            ),
+            title = {
+                text(
+                    stat.value.layoutString,
+                    typography =
+                    if (isLargeScreen()) {
+                        Typography.NUMERAL_SMALL
+                    } else {
+                        Typography.NUMERAL_EXTRA_SMALL
+                    }
+                )
+            },
+            content = {
+                text(
+                    stat.unit.layoutString,
+                    typography =
+                    if (isLargeScreen()) {
+                        Typography.TITLE_MEDIUM
+                    } else {
+                        Typography.TITLE_SMALL
+                    }
+                )
+            },
+            secondaryText = {
+                text(
+                    stat.label.layoutString,
+                    typography =
+                    if (isLargeScreen()) {
+                        Typography.TITLE_MEDIUM
+                    } else {
+                        Typography.TITLE_SMALL
+                    }
+                )
+            }
         )
 
     data class Stat(val label: String, val value: String, val unit: String)

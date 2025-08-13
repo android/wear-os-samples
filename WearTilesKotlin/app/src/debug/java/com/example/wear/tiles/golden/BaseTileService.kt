@@ -26,16 +26,17 @@ import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TileService
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import java.util.UUID
+
+// A hash of the resources (a randomly-selected constant in this sample). Ensure this changes
+// every time the resources change, otherwise you will get cached resources.
+const val RESOURCES_VERSION = "6ba4c6f1dc6f03516c8784397484bb0c4a63423e"
 
 abstract class BaseTileService : TileService() {
 
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<Tile> =
         Futures.immediateFuture(
             Tile.Builder()
-                .setResourcesVersion(
-                    UUID.randomUUID().toString()
-                ) // random string; resources will be loaded every time
+                .setResourcesVersion(RESOURCES_VERSION)
                 .setTileTimeline(
                     Timeline.fromLayoutElement(layout(this, requestParams.deviceConfiguration))
                 )

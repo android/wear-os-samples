@@ -47,11 +47,10 @@ import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.resources
 import java.time.LocalTime
-import java.util.Locale
 
-fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
-    val hour24 = time.hour
-    val minute = time.minute
+fun MaterialScope.styledTime(time: LocalTime?): LayoutElement {
+    val hour24 = time?.hour ?: 0
+    val minute = time?.minute ?: 0
 
     val amPm = if (hour24 < 12) "AM" else "PM"
 
@@ -60,7 +59,7 @@ fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
         hour12 = 12
     }
 
-    val timeString = "$hour12:${String.format(Locale.US, "%02d", minute)}"
+    val timeString = "$hour12:${String.format("%02d", minute)}" // TODO: Localize
 
     return LayoutElementBuilders.Row.Builder()
         .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
@@ -81,8 +80,7 @@ fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
 
 object Alarm {
     data class AlarmData(
-        val timeUntilAlarm: String,
-        val alarmTime: String,
+        val alarmTime: LocalTime?,
         val alarmDays: String,
         val clickable: Clickable
     )
@@ -101,7 +99,7 @@ object Alarm {
                                 color = colorScheme.onSurfaceVariant
                             )
                         },
-                        content = { styledTime(LocalTime.parse(data.alarmTime)) },
+                        content = { styledTime(data.alarmTime) },
                         height = expand(),
                         colors = filledVariantCardColors(),
                         style =
@@ -141,8 +139,7 @@ internal fun alarmPreview(context: Context) =
                 context,
                 it.deviceConfiguration,
                 Alarm.AlarmData(
-                    timeUntilAlarm = "Less than 1 min",
-                    alarmTime = "14:58",
+                    alarmTime = LocalTime.parse("14:58"),
                     alarmDays = "Mon—Fri",
                     clickable = clickable()
                 )
@@ -156,7 +153,11 @@ class AlarmTileService : BaseTileService() {
         Alarm.layout(
             context,
             deviceParameters,
-            Alarm.AlarmData("Less than 1 min", "14:58", "Mon—Fri", clickable())
+            Alarm.AlarmData(
+                alarmTime = LocalTime.parse("14:58"),
+                alarmDays = "Mon—Fri",
+                clickable = clickable()
+            )
         )
 
     override fun resources(context: Context) = Alarm.resources(context)

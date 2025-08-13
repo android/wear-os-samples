@@ -21,6 +21,7 @@ import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledVariantButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
@@ -48,7 +49,6 @@ import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
-import com.example.wear.tiles.tools.noOpElement
 import com.example.wear.tiles.tools.resources
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 
@@ -82,32 +82,44 @@ object Workout {
                             )
                         }
                         buttonGroupItem {
-                            iconDataCard(
-                                onClick = clickable(),
-                                width = if (isLargeScreen()) dp(80f) else expand(),
-                                height = expand(),
-                                shape = shapes.large,
-                                title = {
-                                    if (isLargeScreen()) {
+                            if (isLargeScreen()) {
+                                iconDataCard(
+                                    onClick = clickable(),
+                                    width = dp(80f),
+                                    height = expand(),
+                                    shape = shapes.large,
+                                    title = {
                                         text("30".layoutString, typography = DISPLAY_MEDIUM)
-                                    } else {
-                                        noOpElement()
-                                    }
-                                },
-                                content = {
-                                    if (isLargeScreen()) {
+                                    },
+                                    content = {
                                         text("Mins".layoutString, typography = TITLE_MEDIUM)
-                                    } else {
-                                        noOpElement()
+                                    },
+                                    secondaryIcon = {
+                                        icon(
+                                            protoLayoutResourceId =
+                                            context.resources.getResourceName(
+                                                R.drawable.ic_run_24
+                                            )
+                                        )
                                     }
-                                },
-                                secondaryIcon = {
-                                    icon(
-                                        protoLayoutResourceId =
-                                        context.resources.getResourceName(R.drawable.ic_run_24)
-                                    )
-                                }
-                            )
+                                )
+                            } else {
+                                iconButton(
+                                    onClick = clickable(),
+                                    width = expand(),
+                                    height = expand(),
+                                    shape = shapes.large,
+                                    colors = filledButtonColors(),
+                                    iconContent = {
+                                        icon(
+                                            protoLayoutResourceId =
+                                            context.resources.getResourceName(
+                                                R.drawable.ic_run_24
+                                            )
+                                        )
+                                    }
+                                )
+                            }
                         }
                         buttonGroupItem {
                             iconButton(
@@ -133,11 +145,7 @@ object Workout {
             )
         }
 
-    fun layout2(
-        context: Context,
-        deviceParameters: DeviceParameters,
-        data: WorkoutData
-    ) =
+    fun layout2(context: Context, deviceParameters: DeviceParameters, data: WorkoutData) =
         materialScope(context = context, deviceConfiguration = deviceParameters) {
             primaryLayout(
                 titleSlot = { text(data.titleText.layoutString) },
@@ -219,10 +227,7 @@ object Workout {
                     }
                 },
                 bottomSlot = {
-                    textEdgeButton(
-                        onClick = clickable(),
-                        colors = filledVariantButtonColors()
-                    ) {
+                    textEdgeButton(onClick = clickable(), colors = filledVariantButtonColors()) {
                         text("More".layoutString)
                     }
                 }
@@ -238,25 +243,11 @@ object Workout {
             onClick = clickable(),
             height = expand(),
             width = expand(),
-            labelContent = {
-                text(
-                    titleText.layoutString,
-                    typography = TITLE_LARGE
-                )
-            },
-            secondaryLabelContent = {
-                text(
-                    contentText.layoutString,
-                    typography = LABEL_SMALL
-                )
-            },
+            labelContent = { text(titleText.layoutString, typography = TITLE_LARGE) },
+            secondaryLabelContent = { text(contentText.layoutString, typography = LABEL_SMALL) },
             horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_START,
             iconContent = {
-                icon(
-                    protoLayoutResourceId = iconResourceName,
-                    width = dp(36f),
-                    height = dp(36f)
-                )
+                icon(protoLayoutResourceId = iconResourceName, width = dp(36f), height = dp(36f))
             }
         )
 
@@ -315,11 +306,7 @@ class WorkoutTileService1 : BaseTileService() {
         context: Context,
         deviceParameters: DeviceParameters
     ): LayoutElementBuilders.LayoutElement =
-        Workout.layout1(
-            context,
-            deviceParameters,
-            Workout.WorkoutData("Exercise", "30 min goal")
-        )
+        Workout.layout1(context, deviceParameters, Workout.WorkoutData("Exercise", "30 min goal"))
 
     override fun resources(context: Context) = Workout.resources(context)
 }
@@ -329,11 +316,7 @@ class WorkoutTileService2 : BaseTileService() {
         context: Context,
         deviceParameters: DeviceParameters
     ): LayoutElementBuilders.LayoutElement =
-        Workout.layout2(
-            context,
-            deviceParameters,
-            Workout.WorkoutData("Exercise", "30 min goal")
-        )
+        Workout.layout2(context, deviceParameters, Workout.WorkoutData("Exercise", "30 min goal"))
 
     override fun resources(context: Context) = Workout.resources(context)
 }

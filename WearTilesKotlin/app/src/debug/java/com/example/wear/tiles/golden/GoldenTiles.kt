@@ -36,19 +36,13 @@ import com.example.wear.tiles.tools.MultiRoundDevicesPreviews
 
 @MultiRoundDevicesPreviews private fun ski(context: Context) = skiPreview(context)
 
-// @MultiRoundDevicesPreviews private fun weather(context: Context) = weatherPreview(context)
-
-// @MultiRoundDevicesPreviews private fun news1(context: Context) = news1Preview(context)
-
-@MultiRoundDevicesPreviews private fun news2(context: Context) = news2Preview(context)
+@MultiRoundDevicesPreviews private fun news(context: Context) = newsPreview(context)
 
 @MultiRoundDevicesPreviews private fun calendar1(context: Context) = calendar1Preview(context)
 
 @MultiRoundDevicesPreviews private fun calendar2(context: Context) = calendar2Preview(context)
 
 @MultiRoundDevicesPreviews private fun media(context: Context) = mediaPreview(context)
-
-// @MultiRoundDevicesPreviews private fun heartRate(context: Context) = heartRatePreview(context)
 
 @MultiRoundDevicesPreviews private fun hike(context: Context) = hikePreview(context)
 

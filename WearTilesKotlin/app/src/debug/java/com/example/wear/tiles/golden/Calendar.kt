@@ -17,15 +17,14 @@ package com.example.wear.tiles.golden
 
 import android.content.Context
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
-import androidx.wear.protolayout.LayoutElementBuilders.Spacer
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
+import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.backgroundImage
 import androidx.wear.protolayout.material3.buttonGroup
@@ -70,56 +69,40 @@ object Calendar {
                         addContent(
                             box {
                                 setWidth(expand())
-                                setHeight(weight(0.3f))
                                 addContent(
                                     buttonGroup {
+                                        setHeight(weight(0.3f))
                                         buttonGroupItem {
-                                            box {
-                                                setWidth(weight(0.6f))
-                                                setHeight(expand())
-                                                addContent(
-                                                    textButton(
-                                                        onClick = data.clickable,
-                                                        labelContent = {
-                                                            text(data.date.layoutString)
-                                                        },
-                                                        colors = filledTonalButtonColors(),
-                                                        width = expand(),
-                                                        height = expand()
-                                                    )
-                                                )
-                                            }
+                                            textButton(
+                                                onClick = data.clickable,
+                                                labelContent = { text(data.date.layoutString) },
+                                                colors = filledTonalButtonColors(),
+                                                width = weight(0.6f),
+                                                height = expand()
+                                            )
                                         }
                                         buttonGroupItem {
-                                            box {
-                                                setWidth(weight(0.4f))
-                                                setHeight(expand())
-                                                addContent(
-                                                    iconButton(
-                                                        onClick = data.clickable,
-                                                        iconContent = {
-                                                            icon(
-                                                                context.resources.getResourceName(
-                                                                    R.drawable.outline_add_24
-                                                                )
-                                                            )
-                                                        },
-                                                        colors = filledButtonColors(),
-                                                        modifier =
-                                                        LayoutModifier.contentDescription(
-                                                            "Add Event"
-                                                        ),
-                                                        width = expand(),
-                                                        height = expand()
+                                            iconButton(
+                                                onClick = data.clickable,
+                                                iconContent = {
+                                                    icon(
+                                                        context.resources.getResourceName(
+                                                            R.drawable.outline_add_24
+                                                        )
                                                     )
-                                                )
-                                            }
+                                                },
+                                                colors = filledButtonColors(),
+                                                modifier =
+                                                LayoutModifier.contentDescription("Add Event"),
+                                                width = weight(0.4f),
+                                                height = expand()
+                                            )
                                         }
                                     }
                                 )
                             }
                         )
-                        addContent(Spacer.Builder().setHeight(dp(4f)).build())
+                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
                         addContent(
                             box {
                                 setWidth(expand())
