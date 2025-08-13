@@ -20,7 +20,10 @@ import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.expression.DynamicBuilders.DynamicFloat
+import androidx.wear.protolayout.expression.PlatformEventSources
 import androidx.wear.protolayout.material3.CardDefaults.filledTonalCardColors
+import androidx.wear.protolayout.material3.CircularProgressIndicatorDefaults
 import androidx.wear.protolayout.material3.GraphicDataCardDefaults.constructGraphic
 import androidx.wear.protolayout.material3.PrimaryLayoutMargins
 import androidx.wear.protolayout.material3.Typography
@@ -85,6 +88,17 @@ object Goal {
                                 mainContent = {
                                     circularProgressIndicator(
                                         staticProgress = 1F * data.steps / data.goal,
+                                        // On supported devices, animate the arc
+                                        dynamicProgress =
+                                        DynamicFloat.onCondition(
+                                            PlatformEventSources.isLayoutVisible()
+                                        )
+                                            .use(1F * data.steps / data.goal)
+                                            .elseUse(0F)
+                                            .animate(
+                                                CircularProgressIndicatorDefaults
+                                                    .recommendedAnimationSpec
+                                            ),
                                         startAngleDegrees = 200F,
                                         endAngleDegrees = 520F
                                     )

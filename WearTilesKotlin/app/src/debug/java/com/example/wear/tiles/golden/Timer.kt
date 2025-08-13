@@ -89,7 +89,7 @@ object Timer {
                     iconEdgeButton(
                         onClick = clickable(),
                         colors = filledButtonColors(),
-                        modifier = LayoutModifier.contentDescription("Plus"),
+                        modifier = LayoutModifier.contentDescription("Add"),
                         iconContent = {
                             icon(context.resources.getResourceName(R.drawable.outline_add_2_24))
                         }
