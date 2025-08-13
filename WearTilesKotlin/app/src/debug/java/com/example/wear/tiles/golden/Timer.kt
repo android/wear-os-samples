@@ -26,10 +26,8 @@ import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
-import androidx.wear.protolayout.material3.Typography.BODY_EXTRA_SMALL
-import androidx.wear.protolayout.material3.Typography.BODY_MEDIUM
-import androidx.wear.protolayout.material3.Typography.LABEL_SMALL
-import androidx.wear.protolayout.material3.Typography.NUMERAL_EXTRA_SMALL
+import androidx.wear.protolayout.material3.Typography.BODY_SMALL
+import androidx.wear.protolayout.material3.Typography.DISPLAY_SMALL
 import androidx.wear.protolayout.material3.Typography.NUMERAL_SMALL
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.icon
@@ -42,6 +40,7 @@ import androidx.wear.protolayout.material3.textDataCard
 import androidx.wear.protolayout.modifiers.LayoutModifier
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.contentDescription
+import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
@@ -168,15 +167,16 @@ private fun MaterialScope.timerButton(firstLine: String?, secondLine: String? = 
         title = {
             text(
                 text = firstLine?.layoutString ?: "".layoutString,
-                typography = if (isLargeScreen()) NUMERAL_EXTRA_SMALL else BODY_MEDIUM
+                typography = if (isLargeScreen()) DISPLAY_SMALL else DISPLAY_SMALL
             )
         },
         content = {
             text(
                 text = secondLine?.layoutString ?: "".layoutString,
-                typography = if (isLargeScreen()) LABEL_SMALL else BODY_EXTRA_SMALL
+                typography = if (isLargeScreen()) BODY_SMALL else BODY_SMALL
             )
-        }
+        },
+        contentPadding = padding(all = 4f)
     )
 
 @MultiRoundDevicesWithFontScalePreviews
