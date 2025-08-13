@@ -48,9 +48,9 @@ import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.resources
 import java.time.LocalTime
 
-fun MaterialScope.styledTime(time: LocalTime?): LayoutElement {
-    val hour24 = time?.hour ?: 0
-    val minute = time?.minute ?: 0
+fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
+    val hour24 = time.hour
+    val minute = time.minute
 
     val amPm = if (hour24 < 12) "AM" else "PM"
 
@@ -80,7 +80,7 @@ fun MaterialScope.styledTime(time: LocalTime?): LayoutElement {
 
 object Alarm {
     data class AlarmData(
-        val alarmTime: LocalTime?,
+        val alarmTime: LocalTime,
         val alarmDays: String,
         val clickable: Clickable
     )
