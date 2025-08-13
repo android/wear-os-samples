@@ -27,9 +27,18 @@ import androidx.wear.tiles.TileService
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
-// A hash of the resources (a randomly-selected constant in this sample). Ensure this changes
-// every time the resources change, otherwise you will get cached resources.
-const val RESOURCES_VERSION = "6ba4c6f1dc6f03516c8784397484bb0c4a63423e"
+// This constant serves as a cache key for the tile's resources. The Tiles library
+// uses this string to determine if the resources for this tile are current or if they
+// need to be refetched.
+//
+// This value MUST be changed whenever any of the underlying image assets (e.g., drawables)
+// for the tile are updated or added. If this version string remains the same after resource
+// have been changed, the system will continue to use the old, cached set of resources.
+//
+// In a production app, this would ideally be a hash of the resources, automatically
+// generated from the set of resources necessary to build the tile. In this sample, it's a
+// manually-updated constant for simplicity.
+const val RESOURCES_VERSION = "6ba4c6f1dc6f03516c8784397484bb0c4a63423f"
 
 abstract class BaseTileService : TileService() {
 
