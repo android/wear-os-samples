@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,222 +16,127 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
-import androidx.wear.protolayout.DimensionBuilders
-import androidx.wear.protolayout.DimensionBuilders.dp
-import androidx.wear.protolayout.LayoutElementBuilders.Column
-import androidx.wear.protolayout.LayoutElementBuilders.Spacer
+import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
-import androidx.wear.protolayout.material.Button
-import androidx.wear.protolayout.material.ButtonColors
-import androidx.wear.protolayout.material.Chip
-import androidx.wear.protolayout.material.ChipColors
-import androidx.wear.protolayout.material.CompactChip
-import androidx.wear.protolayout.material.Text
-import androidx.wear.protolayout.material.Typography
-import androidx.wear.protolayout.material.layouts.MultiButtonLayout
-import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
+import androidx.wear.protolayout.material3.ButtonGroupDefaults
+import androidx.wear.protolayout.material3.ButtonStyle.Companion.defaultButtonStyle
+import androidx.wear.protolayout.material3.ButtonStyle.Companion.smallButtonStyle
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.protolayout.material3.button
+import androidx.wear.protolayout.material3.icon
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.material3.textEdgeButton
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.tiles.images.drawableResToImageResource
+import com.example.wear.tiles.tools.addIdToImageMapping
+import com.example.wear.tiles.tools.column
+import com.example.wear.tiles.tools.isLargeScreen
+import com.example.wear.tiles.tools.resources
+
+private fun MaterialScope.meditationButton(task: Meditation.MeditationTask) =
+    button(
+        onClick = task.clickable,
+        width = expand(),
+        height = expand(),
+        colors = filledTonalButtonColors(),
+        style =
+        if (isLargeScreen()) {
+            defaultButtonStyle()
+        } else {
+            smallButtonStyle()
+        },
+        iconContent = { icon(task.iconResourceIdName) },
+        labelContent = { text(task.label.layoutString, maxLines = task.maxLines) }
+    )
 
 object Meditation {
-    const val CHIP_1_ICON_ID = "meditation_1"
-    const val CHIP_2_ICON_ID = "meditation_2"
 
-    fun chipsLayout(
-        context: Context,
-        deviceParameters: DeviceParameters,
-        numOfLeftTasks: Int,
-        session1: Session,
-        session2: Session,
-        browseClickable: Clickable
-    ) =
-        PrimaryLayout.Builder(deviceParameters)
-            .setResponsiveContentInsetEnabled(true)
-            .apply {
-                if (deviceParameters.screenWidthDp > 225) {
-                    setPrimaryLabelTextContent(
-                        Text.Builder(context, "$numOfLeftTasks mindful tasks left")
-                            .setTypography(Typography.TYPOGRAPHY_BODY2)
-                            .setColor(ColorBuilders.argb(GoldenTilesColors.Pink))
-                            .build()
+    data class MeditationTask(
+        val label: String,
+        val iconResourceIdName: String,
+        val maxLines: Int = 1,
+        val clickable: Clickable = clickable()
+    )
+
+    fun listLayout(context: Context, deviceParameters: DeviceParameters, tasksLeft: Int) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                titleSlot =
+                if (isLargeScreen()) {
+                    { text("$tasksLeft mindful tasks left".layoutString) }
+                } else {
+                    null
+                },
+                bottomSlot = {
+                    textEdgeButton(
+                        onClick = clickable(),
+                        labelContent = { text("Browse".layoutString) }
                     )
-                }
-            }
-            .setContent(
-                Column.Builder()
-                    // See the comment on `setWidth` below in `sessionChip()` too. The default width
-                    // for
-                    // column is "wrap", so we need to explicitly set it to "expand" so that we give
-                    // the
-                    // chips enough space to layout
-                    .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-                    .addContent(sessionChip(context, deviceParameters, session1))
-                    .addContent(Spacer.Builder().setHeight(dp(4f)).build())
-                    .addContent(sessionChip(context, deviceParameters, session2))
-                    .build()
-            )
-            .setPrimaryChipContent(
-                CompactChip.Builder(context, "Browse", browseClickable, deviceParameters)
-                    .setChipColors(
-                        ChipColors(
-                            /* backgroundColor = */
-                            ColorBuilders.argb(
-                                GoldenTilesColors.LightPurple
-                            ),
-                            /* contentColor = */
-                            ColorBuilders.argb(GoldenTilesColors.DarkerGray)
+                },
+                mainSlot = {
+                    column {
+                        setWidth(expand())
+                        setHeight(expand())
+                        addContent(
+                            meditationButton(
+                                MeditationTask(
+                                    label = "Breath",
+                                    iconResourceIdName =
+                                    context.resources.getResourceName(
+                                        R.drawable.outline_air_24
+                                    )
+                                )
+                            )
                         )
-                    )
-                    .build()
-            )
-            .build()
-
-    private fun sessionChip(
-        context: Context,
-        deviceParameters: DeviceParameters,
-        session: Session
-    ): Chip {
-        return Chip.Builder(context, session.clickable, deviceParameters)
-            // TitleChip/Chip's default width == device width minus some padding
-            // Since PrimaryLayout's content slot already has margin, this leads to clipping
-            // unless we override the width to use the available space
-            .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-            .setIconContent(session.iconId)
-            .setPrimaryLabelContent(session.label)
-            .setChipColors(
-                ChipColors(
-                    /* backgroundColor = */
-                    ColorBuilders.argb(GoldenTilesColors.DarkPurple),
-                    /* iconColor = */
-                    ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                    /* contentColor = */
-                    ColorBuilders.argb(GoldenTilesColors.White),
-                    /* secondaryContentColor = */
-                    ColorBuilders.argb(GoldenTilesColors.White)
-                )
-            )
-            .build()
-    }
-
-    fun buttonsLayout(
-        context: Context,
-        deviceParameters: DeviceParameters,
-        timer1: Timer,
-        timer2: Timer,
-        timer3: Timer,
-        timer4: Timer,
-        timer5: Timer,
-        clickable: Clickable
-    ) =
-        PrimaryLayout.Builder(deviceParameters)
-            .setResponsiveContentInsetEnabled(true)
-            .setPrimaryLabelTextContent(
-                Text.Builder(context, "Minutes")
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                    .build()
-            )
-            .setContent(
-                MultiButtonLayout.Builder()
-                    .addButtonContent(timerButton(context, timer1))
-                    .addButtonContent(timerButton(context, timer2))
-                    .addButtonContent(timerButton(context, timer3))
-                    .apply {
-                        if (deviceParameters.screenWidthDp > 225) {
-                            addButtonContent(timerButton(context, timer4))
-                            addButtonContent(timerButton(context, timer5))
-                        }
+                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                        addContent(
+                            meditationButton(
+                                MeditationTask(
+                                    label = "Daily mindfulness",
+                                    iconResourceIdName =
+                                    context.resources.getResourceName(R.drawable.ic_yoga_24),
+                                    maxLines = 2
+                                )
+                            )
+                        )
                     }
-                    .build()
+                }
             )
-            .setPrimaryChipContent(
-                CompactChip.Builder(context, "New", clickable, deviceParameters)
-                    .setChipColors(
-                        ChipColors(
-                            /*backgroundColor=*/
-                            ColorBuilders.argb(GoldenTilesColors.DarkPurple),
-                            /*contentColor=*/
-                            ColorBuilders.argb(GoldenTilesColors.White)
-                        )
-                    )
-                    .build()
-            )
-            .build()
+        }
 
-    private fun timerButton(context: Context, timer: Timer) =
-        Button.Builder(context, timer.clickable)
-            .setTextContent(timer.minutes.toString(), Typography.TYPOGRAPHY_TITLE3)
-            .setButtonColors(
-                ButtonColors(
-                    /*backgroundColor=*/
-                    ColorBuilders.argb(GoldenTilesColors.LightPurple),
-                    /*contentColor=*/
-                    ColorBuilders.argb(GoldenTilesColors.DarkerGray)
-                )
-            )
-            .build()
-
-    data class Session(val label: String, val iconId: String, val clickable: Clickable)
-
-    data class Timer(val minutes: Int, val clickable: Clickable)
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.ic_yoga_24),
+            R.drawable.ic_yoga_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_air_24),
+            R.drawable.outline_air_24
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun meditationChipsPreview(context: Context) =
-    TilePreviewData(
-        resources {
-            addIdToImageMapping(
-                Meditation.CHIP_1_ICON_ID,
-                drawableResToImageResource(R.drawable.ic_breathe_24)
-            )
-            addIdToImageMapping(
-                Meditation.CHIP_2_ICON_ID,
-                drawableResToImageResource(R.drawable.ic_mindfulness_24)
-            )
-        }
-    ) {
+fun mindfulnessPreview(context: Context) =
+    TilePreviewData(Meditation.resources(context)) {
         TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Meditation.chipsLayout(
-                context,
-                it.deviceConfiguration,
-                numOfLeftTasks = 2,
-                session1 =
-                Meditation.Session(
-                    label = "Breathe",
-                    iconId = Meditation.CHIP_1_ICON_ID,
-                    clickable = emptyClickable
-                ),
-                session2 =
-                Meditation.Session(
-                    label = "Daily mindfulness",
-                    iconId = Meditation.CHIP_2_ICON_ID,
-                    clickable = emptyClickable
-                ),
-                browseClickable = emptyClickable
-            )
+            Meditation.listLayout(context, it.deviceConfiguration, 3)
         )
             .build()
     }
 
-@MultiRoundDevicesWithFontScalePreviews
-internal fun meditationButtonsPreview(context: Context) = TilePreviewData {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Meditation.buttonsLayout(
-            context,
-            it.deviceConfiguration,
-            timer1 = Meditation.Timer(minutes = 5, clickable = emptyClickable),
-            timer2 = Meditation.Timer(minutes = 10, clickable = emptyClickable),
-            timer3 = Meditation.Timer(minutes = 15, clickable = emptyClickable),
-            timer4 = Meditation.Timer(minutes = 20, clickable = emptyClickable),
-            timer5 = Meditation.Timer(minutes = 25, clickable = emptyClickable),
-            clickable = emptyClickable
-        )
-    )
-        .build()
+class MindfulnessTileService : BaseTileService() {
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Meditation.listLayout(context, deviceParameters, 2)
+
+    override fun resources(context: Context) = Meditation.resources(context)
 }
