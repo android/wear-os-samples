@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.12.0"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.07.00"
+androidx-compose-bom = "2025.08.00"
 androidx-media3 = "1.8.0"
 androidx-wear-compose = "1.4.1"
 compose-compiler = "1.5.15"
@@ -9,9 +9,9 @@ compose-ui-tooling = "1.4.1"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.25"
 robolectric = "4.15.1"
-roborazzi = "1.46.1"
-ui-test-junit4 = "1.8.3"
-ui-test-manifest = "1.8.3"
+roborazzi = "1.48.0"
+ui-test-junit4 = "1.9.0"
+ui-test-manifest = "1.9.0"
 horologist = "0.7.5-alpha"
 
 [libraries]
@@ -21,7 +21,7 @@ androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooli
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test-manifest" }
-androidx-media = "androidx.media:media:1.7.0"
+androidx-media = "androidx.media:media:1.7.1"
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
