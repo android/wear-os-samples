@@ -30,7 +30,7 @@ android {
         applicationId = "com.example.android.wearable.datalayer"
         versionCode = 1
         versionName = "1.0"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

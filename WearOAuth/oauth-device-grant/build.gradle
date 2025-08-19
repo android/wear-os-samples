@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-  compileSdk 35
+  compileSdk 36
   namespace "com.example.android.wearable.oauth.devicegrant"
 
   defaultConfig {
@@ -90,6 +90,9 @@ dependencies {
   implementation libs.androidx.ui.test.manifest
 
   implementation(libs.wear.compose.material3)
+
+  // Needed by Roborazzi
+  implementation(libs.androidx.core.ktx)
 
   // Testing
   testImplementation libs.androidx.ui.test.junit4
