@@ -1,17 +1,17 @@
 [versions]
-android-gradle-plugin = "8.10.1"
-androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.06.01"
-androidx-wear-compose-material3 = "1.5.0-beta05"
-androidx-wear-compose = "1.5.0-beta05"
+android-gradle-plugin = "8.12.0"
+androidx-activity = "1.12.0-alpha06"
+androidx-compose-bom = "2025.08.00"
+androidx-wear-compose-material3 = "1.5.0-rc02"
+androidx-wear-compose = "1.5.0-rc02"
 compose-ui-tooling = "1.4.1"
-horologist = "0.7.10-alpha"
+horologist = "0.7.15"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "2.2.0"
+org-jetbrains-kotlin = "2.2.10"
 robolectric = "4.15.1"
-roborazzi = "1.45.1"
-ui-test-junit4 = "1.8.3"
-ui-test-manifest = "1.8.3"
+roborazzi = "1.49.0"
+ui-test-junit4 = "1.9.0"
+ui-test-manifest = "1.9.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -31,8 +31,8 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
-test-ext-junit = "androidx.test.ext:junit:1.2.1"
+test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
+test-ext-junit = "androidx.test.ext:junit:1.3.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material3", version.ref = "androidx-wear-compose-material3" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
@@ -40,7 +40,7 @@ horologist-compose-layout = { module = "com.google.android.horologist:horologist
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
+com-diffplug-spotless = "com.diffplug.spotless:7.2.1"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
