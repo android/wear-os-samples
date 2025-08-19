@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,66 +16,210 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.DimensionBuilders.weight
+import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
+import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
-import androidx.wear.protolayout.material.CompactChip
-import androidx.wear.protolayout.material.Text
-import androidx.wear.protolayout.material.Typography
-import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
+import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
+import androidx.wear.protolayout.material3.ButtonGroupDefaults
+import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
+import androidx.wear.protolayout.material3.backgroundImage
+import androidx.wear.protolayout.material3.buttonGroup
+import androidx.wear.protolayout.material3.icon
+import androidx.wear.protolayout.material3.iconButton
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.material3.textButton
+import androidx.wear.protolayout.material3.titleCard
+import androidx.wear.protolayout.modifiers.LayoutModifier
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.modifiers.contentDescription
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.emptyClickable
+import com.example.wear.tiles.tools.addIdToImageMapping
+import com.example.wear.tiles.tools.box
+import com.example.wear.tiles.tools.column
+import com.example.wear.tiles.tools.isLargeScreen
+import com.example.wear.tiles.tools.resources
 
 object Calendar {
+    data class Event(
+        val date: String,
+        val time: String,
+        val name: String,
+        val location: String,
+        val imageId: String? = null,
+        val clickable: Clickable
+    )
 
-    fun layout(
-        context: Context,
-        deviceParameters: DeviceParameters,
-        eventTime: String,
-        eventName: String,
-        eventLocation: String,
-        clickable: Clickable
-    ) =
-        PrimaryLayout.Builder(deviceParameters)
-            .setResponsiveContentInsetEnabled(true)
-            .setPrimaryLabelTextContent(
-                Text.Builder(context, eventTime)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.LightBlue))
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .build()
+    fun layout(context: Context, deviceParameters: DeviceParameters, data: Event) =
+        materialScope(context, deviceParameters) {
+            primaryLayout(
+                mainSlot = {
+                    column {
+                        setWidth(expand())
+                        setHeight(expand())
+                        addContent(
+                            box {
+                                setWidth(expand())
+                                addContent(
+                                    buttonGroup {
+                                        setHeight(weight(0.3f))
+                                        buttonGroupItem {
+                                            textButton(
+                                                onClick = data.clickable,
+                                                labelContent = { text(data.date.layoutString) },
+                                                colors = filledTonalButtonColors(),
+                                                width = weight(0.6f),
+                                                height = expand()
+                                            )
+                                        }
+                                        buttonGroupItem {
+                                            iconButton(
+                                                onClick = data.clickable,
+                                                iconContent = {
+                                                    icon(
+                                                        context.resources.getResourceName(
+                                                            R.drawable.outline_add_24
+                                                        )
+                                                    )
+                                                },
+                                                colors = filledButtonColors(),
+                                                modifier =
+                                                LayoutModifier.contentDescription("Add Event"),
+                                                width = weight(0.4f),
+                                                height = expand()
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        )
+                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                        addContent(
+                            box {
+                                setWidth(expand())
+                                setHeight(weight(0.7f))
+                                addContent(
+                                    titleCard(
+                                        onClick = data.clickable,
+                                        title = {
+                                            text(
+                                                data.name.layoutString,
+                                                maxLines = if (isLargeScreen()) 3 else 2
+                                            )
+                                        },
+                                        content = {
+                                            column {
+                                                addContent(text(data.time.layoutString))
+                                                if (isLargeScreen()) {
+                                                    addContent(
+                                                        text(
+                                                            data.location.layoutString,
+                                                            maxLines = 1
+                                                        )
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        colors = filledVariantCardColors(),
+                                        backgroundContent =
+                                        data.imageId?.let { id ->
+                                            {
+                                                backgroundImage(
+                                                    protoLayoutResourceId = id,
+                                                    contentScaleMode = CONTENT_SCALE_MODE_CROP
+                                                )
+                                            }
+                                        },
+                                        shape = shapes.extraLarge,
+                                        height = expand()
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
             )
-            .setContent(
-                Text.Builder(context, eventName)
-                    .setMaxLines(3)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.White))
-                    .setTypography(Typography.TYPOGRAPHY_BODY1)
-                    .build()
-            )
-            .setSecondaryLabelTextContent(
-                Text.Builder(context, eventLocation)
-                    .setColor(ColorBuilders.argb(GoldenTilesColors.Gray))
-                    .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                    .build()
-            )
-            .setPrimaryChipContent(
-                CompactChip.Builder(context, "Agenda", clickable, deviceParameters).build()
-            )
-            .build()
+        }
+
+    fun resources(context: Context) = resources {
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.outline_add_24),
+            R.drawable.outline_add_24
+        )
+        addIdToImageMapping(
+            context.resources.getResourceName(R.drawable.photo_38),
+            R.drawable.photo_38
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun calendarPreview(context: Context) = TilePreviewData {
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
+internal fun calendar1Preview(context: Context) = calendarPreviewX(context)
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun calendar2Preview(context: Context) =
+    calendarPreviewX(context, context.resources.getResourceName(R.drawable.photo_38))
+
+fun calendarPreviewX(context: Context, eventImageId: String? = null) =
+    TilePreviewData(Calendar.resources(context)) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Calendar.layout(
+                context,
+                it.deviceConfiguration,
+                Calendar.Event(
+                    date = "25 July",
+                    time = "6:30-7:30 PM",
+                    name = "Advanced Tennis Coaching with Christina Lloyd",
+                    location = "216 Market Street",
+                    imageId = eventImageId,
+                    clickable = clickable()
+                )
+            )
+        )
+            .build()
+    }
+
+class Calendar1TileService : BaseTileService() {
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
         Calendar.layout(
             context,
-            it.deviceConfiguration,
-            eventTime = "6:30-7:30 PM",
-            eventName = "Morning Pilates with Christina Lloyd",
-            eventLocation = "216 Market Street",
-            clickable = emptyClickable
+            deviceParameters,
+            Calendar.Event(
+                date = "25 July",
+                time = "6:30-7:30 PM",
+                name = "Advanced Tennis Coaching with Christina Lloyd",
+                location = "216 Market Street",
+                imageId = null,
+                clickable = clickable()
+            )
         )
-    )
-        .build()
+
+    override fun resources(context: Context) = Calendar.resources(context)
+}
+
+class Calendar2TileService : BaseTileService() {
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
+        Calendar.layout(
+            context,
+            deviceParameters,
+            Calendar.Event(
+                date = "25 July",
+                time = "6:30-7:30 PM",
+                name = "Advanced Tennis Coaching with Christina Lloyd",
+                location = "216 Market Street",
+                imageId = context.resources.getResourceName(R.drawable.photo_38),
+                clickable = clickable()
+            )
+        )
+
+    override fun resources(context: Context) = Calendar.resources(context)
 }

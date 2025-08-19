@@ -90,7 +90,7 @@ fun tileLayout(
         deviceConfiguration = deviceParameters,
         allowDynamicTheme = true
     ) {
-        val visibleContacts = contacts.take(if (deviceParameters.isLargeScreen()) 6 else 4)
+        val visibleContacts = contacts.take(if (isLargeScreen()) 6 else 4)
 
         val (row1, row2) =
             visibleContacts.chunked(if (visibleContacts.size > 4) 3 else 2).let { chunkedList ->

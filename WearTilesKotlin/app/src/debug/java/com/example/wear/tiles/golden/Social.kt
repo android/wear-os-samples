@@ -16,119 +16,271 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
-import androidx.annotation.ColorInt
-import androidx.wear.protolayout.ColorBuilders
+import androidx.annotation.DrawableRes
+import androidx.annotation.OptIn
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
+import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
+import androidx.wear.protolayout.LayoutElementBuilders.FONT_WEIGHT_MEDIUM
+import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
+import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.LayoutElementBuilders.TEXT_ALIGN_CENTER
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
-import androidx.wear.protolayout.material.Button
-import androidx.wear.protolayout.material.ButtonColors
-import androidx.wear.protolayout.material.Typography
-import androidx.wear.protolayout.material.layouts.MultiButtonLayout
-import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.expression.ProtoLayoutExperimental
+import androidx.wear.protolayout.layout.basicText
+import androidx.wear.protolayout.layout.fontStyle
+import androidx.wear.protolayout.material3.ButtonColors
+import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.protolayout.material3.Typography.TITLE_SMALL
+import androidx.wear.protolayout.material3.avatarImage
+import androidx.wear.protolayout.material3.buttonGroup
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.material3.textButton
+import androidx.wear.protolayout.material3.textEdgeButton
+import androidx.wear.protolayout.modifiers.LayoutModifier
+import androidx.wear.protolayout.modifiers.background
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.modifiers.clip
+import androidx.wear.protolayout.modifiers.contentDescription
+import androidx.wear.protolayout.modifiers.padding
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.emptyClickable
-import com.google.android.horologist.tiles.images.drawableResToImageResource
+import com.example.wear.tiles.tools.addIdToImageMapping
+import com.example.wear.tiles.tools.column
+import com.example.wear.tiles.tools.isLargeScreen
+import com.example.wear.tiles.tools.resources
 
-object Social {
-
-    const val AVATAR_ID_1 = "social avatar id 1"
-    const val AVATAR_ID_2 = "social avatar id 2"
-    const val AVATAR_ID_3 = "social avatar id 3"
-    const val AVATAR_ID_4 = "social avatar id 4"
-
-    fun layout(context: Context, deviceParameters: DeviceParameters, contacts: List<Contact>) =
-        PrimaryLayout.Builder(deviceParameters)
-            .setResponsiveContentInsetEnabled(true)
-            .setContent(
-                MultiButtonLayout.Builder()
-                    .apply {
-                        contacts.take(if (deviceParameters.screenWidthDp > 225) 6 else 4).forEach {
-                                contact ->
-                            addButtonContent(button(context, contact))
-                        }
-                    }
-                    .build()
-            )
-            .build()
-
-    private fun button(context: Context, contact: Contact) =
-        Button.Builder(context, contact.clickable)
-            .apply {
-                if (contact.avatarId != null) {
-                    setImageContent(contact.avatarId)
-                } else {
-                    setTextContent(contact.initials, Typography.TYPOGRAPHY_TITLE3)
-                }
-            }
-            .setButtonColors(
-                ButtonColors(
-                    /* backgroundColor = */
-                    ColorBuilders.argb(contact.color),
-                    /* contentColor = */
-                    ColorBuilders.argb(GoldenTilesColors.DarkerGray)
-                )
-            )
-            .build()
-
-    data class Contact(
-        val initials: String,
-        @ColorInt val color: Int = GoldenTilesColors.LightBlue,
-        val clickable: Clickable,
-        val avatarId: String?
+fun Context.mockContacts(): List<Contact> {
+    return listOf(
+        Contact(
+            initials = "MS",
+            avatarId = resources.getResourceName(R.drawable.avatar_illustration_18),
+            avatarResource = R.drawable.avatar_illustration_18
+        ),
+        Contact(initials = "AB", avatarId = null, avatarResource = null),
+        Contact(
+            initials = "WW",
+            avatarId = resources.getResourceName(R.drawable.photo_17),
+            avatarResource = R.drawable.photo_17
+        ),
+        Contact(initials = "CD", avatarId = null, avatarResource = null),
+        Contact(
+            initials = "AD",
+            avatarId = resources.getResourceName(R.drawable.avatar_3d_24),
+            avatarResource = R.drawable.avatar_3d_24
+        ),
+        Contact(initials = "EF", avatarId = null, avatarResource = null)
     )
 }
 
-@MultiRoundDevicesWithFontScalePreviews
-internal fun socialPreview(context: Context) =
-    TilePreviewData(
-        resources {
-            addIdToImageMapping(Social.AVATAR_ID_1, drawableResToImageResource(R.drawable.avatar1))
-            addIdToImageMapping(Social.AVATAR_ID_2, drawableResToImageResource(R.drawable.avatar2))
-            addIdToImageMapping(Social.AVATAR_ID_3, drawableResToImageResource(R.drawable.avatar3))
-            addIdToImageMapping(Social.AVATAR_ID_4, drawableResToImageResource(R.drawable.avatar4))
-        }
-    ) {
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Social.layout(
-                context,
-                it.deviceConfiguration,
-                listOf(
-                    Social.Contact(
-                        initials = "AC",
-                        clickable = emptyClickable,
-                        avatarId = Social.AVATAR_ID_1
-                    ),
-                    Social.Contact(
-                        initials = "AD",
-                        clickable = emptyClickable,
-                        avatarId = null
-                    ),
-                    Social.Contact(
-                        initials = "BD",
-                        color = GoldenTilesColors.Purple,
-                        clickable = emptyClickable,
-                        avatarId = null
-                    ),
-                    Social.Contact(
-                        initials = "DC",
-                        clickable = emptyClickable,
-                        avatarId = Social.AVATAR_ID_2
-                    ),
-                    Social.Contact(
-                        initials = "DA",
-                        clickable = emptyClickable,
-                        avatarId = Social.AVATAR_ID_3
-                    ),
-                    Social.Contact(
-                        initials = "DB",
-                        clickable = emptyClickable,
-                        avatarId = Social.AVATAR_ID_4
-                    )
+data class Contact(
+    val initials: String,
+    val clickable: Clickable = clickable(),
+    val avatarId: String?,
+    @DrawableRes val avatarResource: Int?
+)
+
+@OptIn(ProtoLayoutExperimental::class)
+fun MaterialScope.contactButton(contact: Contact): LayoutElement {
+    if (contact.avatarId != null) {
+        return avatarImage(
+            protoLayoutResourceId = contact.avatarId,
+            width = expand(),
+            height = expand(),
+            contentScaleMode = CONTENT_SCALE_MODE_CROP
+        )
+    } else {
+        val colors =
+            listOf(
+                ButtonColors(
+                    labelColor = colorScheme.onPrimary,
+                    containerColor = colorScheme.primaryDim
+                ),
+                ButtonColors(
+                    labelColor = colorScheme.onSecondary,
+                    containerColor = colorScheme.secondaryDim
+                ),
+                ButtonColors(
+                    labelColor = colorScheme.onTertiary,
+                    containerColor = colorScheme.tertiaryDim
                 )
+            )[
+                contact.initials.hashCode() % 3
+            ]
+        return textButton(
+            onClick = clickable(),
+            labelContent = {
+                basicText(
+                    text = contact.initials.layoutString,
+                    fontStyle =
+                    fontStyle(
+                        color = colors.labelColor,
+                        settings = listOf(FontSetting.width(60F)),
+                        size = 30F,
+                        weight = FONT_WEIGHT_MEDIUM
+                    ),
+                    modifier =
+                    LayoutModifier.background(colors.containerColor)
+                        .clip(shapes.full)
+                        .padding(horizontal = 2F, vertical = 2F)
+                )
+            },
+            width = expand(),
+            height = expand(),
+            contentPadding = padding(horizontal = 4F, vertical = 2F),
+            colors = colors
+        )
+    }
+}
+
+object Social {
+    data class SocialData(val contacts: List<Contact>)
+
+    fun layout(
+        context: Context,
+        deviceParameters: DeviceParameters,
+        data: SocialData
+    ): LayoutElement {
+        return materialScope(
+            context = context,
+            deviceConfiguration = deviceParameters,
+            allowDynamicTheme = true
+        ) {
+            val (row1, row2) =
+                data.contacts.take(6).take(if (isLargeScreen()) 6 else 4).run {
+                    when (count()) {
+                        1 -> Pair(subList(0, 1), emptyList()) // 1 | 0 split
+                        2 -> Pair(subList(0, 2), emptyList()) // 2 | 0 split
+                        3 -> Pair(subList(0, 2), subList(2, 3)) // 2 | 1 split
+                        4 -> Pair(subList(0, 2), subList(2, 4)) // 2 | 2 split
+                        5 -> Pair(subList(0, 3), subList(3, 5)) // 3 | 2 split
+                        6 -> Pair(subList(0, 3), subList(3, 6)) // 3 | 3 split
+                        else ->
+                            throw IllegalArgumentException(
+                                "Unsupported contact count: ${count()}. Expected 1 to 6."
+                            )
+                    }
+                }
+
+            primaryLayout(
+                titleSlot =
+                if (row2.isEmpty()) {
+                    {
+                        text(
+                            text = "Contacts".layoutString,
+                            color = colorScheme.onBackground,
+                            typography = TITLE_SMALL,
+                            maxLines = 2,
+                            alignment = TEXT_ALIGN_CENTER,
+                            modifier = LayoutModifier.contentDescription("Contacts")
+                        )
+                    }
+                } else {
+                    null
+                },
+                mainSlot = {
+                    column {
+                        setWidth(expand())
+                        setHeight(expand())
+                        addContent(
+                            buttonGroup {
+                                row1.forEach { buttonGroupItem { contactButton(it) } }
+                            }
+                        )
+                        if (!row2.isEmpty()) {
+                            addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                            addContent(
+                                buttonGroup {
+                                    row2.forEach { buttonGroupItem { contactButton(it) } }
+                                }
+                            )
+                        }
+                    }
+                },
+                bottomSlot = {
+                    textEdgeButton(
+                        onClick = clickable(),
+                        labelContent = { text("More".layoutString) },
+                        colors =
+                        ButtonColors(
+                            labelColor = colorScheme.onSurface,
+                            containerColor = colorScheme.surfaceContainer
+                        )
+                    )
+                }
             )
+        }
+    }
+
+    fun resources(context: Context, contacts: List<Contact>) = resources {
+        contacts.forEach {
+            if (it.avatarId != null && it.avatarResource != null) {
+                addIdToImageMapping(it.avatarId, it.avatarResource)
+            }
+        }
+    }
+}
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun socialPreview1(context: Context) = socialPreviewN(context, 1)
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun socialPreview2(context: Context) = socialPreviewN(context, 2)
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun socialPreview3(context: Context) = socialPreviewN(context, 3)
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun socialPreview4(context: Context) = socialPreviewN(context, 4)
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun socialPreview5(context: Context) = socialPreviewN(context, 5)
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun socialPreview6(context: Context) = socialPreviewN(context, 6)
+
+internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
+    val contacts = context.mockContacts().take(n)
+    return TilePreviewData(Social.resources(context, contacts)) {
+        TilePreviewHelper.singleTimelineEntryTileBuilder(
+            Social.layout(context, it.deviceConfiguration, Social.SocialData(contacts))
         )
             .build()
     }
+}
+
+class SocialTileService5 : BaseTileService() {
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement {
+        val contacts = context.mockContacts().take(5)
+        return Social.layout(context, deviceParameters, Social.SocialData(contacts))
+    }
+
+    override fun resources(context: Context) =
+        Social.resources(context, context.mockContacts().take(5))
+}
+
+class SocialTileService6 : BaseTileService() {
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement {
+        val contacts = context.mockContacts().take(6)
+        return Social.layout(context, deviceParameters, Social.SocialData(contacts))
+    }
+
+    override fun resources(context: Context) =
+        Social.resources(context, context.mockContacts().take(6))
+}
+
+class SocialTileService2 : BaseTileService() {
+    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement {
+        val contacts = context.mockContacts().take(2)
+        return Social.layout(context, deviceParameters, Social.SocialData(contacts))
+    }
+
+    override fun resources(context: Context) =
+        Social.resources(context, context.mockContacts().take(2))
+}
