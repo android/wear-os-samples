@@ -1,25 +1,25 @@
 [versions]
-android-gradle-plugin = "8.10.0"
-androidx-compose-bom = "2025.05.01"
+android-gradle-plugin = "8.12.0"
+androidx-compose-bom = "2025.08.00"
 androidx-activity = "1.10.1"
-androidx-lifecycle = "2.9.0"
-androidx-wear-compose = "1.5.0-beta01"
-compose = "1.8.2"
+androidx-lifecycle = "2.9.2"
+androidx-wear-compose = "1.5.0-rc02"
+compose = "1.9.0"
 compose-compiler = "1.5.15"
-kotlin = "2.0.21"
+kotlin = "2.2.10"
 org-jetbrains-kotlinx = "1.10.2"
 ktlint = "0.50.0"
-horologist = "0.7.5-alpha"
-robolectric = "4.14.1"
-roborazzi = "1.43.1"
-ui-test-junit4 = "1.8.2"
-wear-compose-material3 = "1.5.0-beta01"
+horologist = "0.7.15"
+robolectric = "4.15.1"
+roborazzi = "1.49.0"
+ui-test-junit4 = "1.9.0"
+wear-compose-material3 = "1.5.0-rc02"
 
 [libraries]
-androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
 androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "androidx-wear-compose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.7"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.9"
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-wear = "androidx.wear:wear:1.3.0"
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest"}
@@ -46,6 +46,6 @@ wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-mate
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:7.0.3"
+com-diffplug-spotless = "com.diffplug.spotless:7.2.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
