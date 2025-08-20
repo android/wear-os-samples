@@ -18,6 +18,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -111,10 +112,14 @@ dependencies {
     implementation(libs.horologist.audio.ui.model)
     implementation(libs.horologist.media.data)
     implementation(libs.horologist.images.coil)
+    implementation(libs.horologist.media.ui.material3)
+    implementation(libs.horologist.audio.ui.material3)
 
     implementation(libs.androidx.media3.exoplayerworkmanager)
     implementation(libs.androidx.media3.common)
     implementation(libs.androidx.media3.exoplayer)
+
+    implementation(libs.wear.compose.material3)
 
     // Preview Tooling
     implementation(libs.compose.ui.tooling.preview)

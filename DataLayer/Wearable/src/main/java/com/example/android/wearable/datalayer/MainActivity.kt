@@ -15,11 +15,11 @@
  */
 package com.example.android.wearable.datalayer
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.net.toUri
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
 
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
         messageClient.addListener(mainViewModel)
         capabilityClient.addListener(
             mainViewModel,
-            Uri.parse("wear://"),
+            "wear://".toUri(),
             CapabilityClient.FILTER_REACHABLE
         )
     }

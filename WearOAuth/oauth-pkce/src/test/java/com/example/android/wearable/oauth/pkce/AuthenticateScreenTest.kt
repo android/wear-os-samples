@@ -15,9 +15,7 @@
  */
 package com.example.android.wearable.oauth.pkce
 
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ResponsiveTimeText
-import com.google.android.horologist.screenshots.FixedTimeSource
+import androidx.wear.compose.material3.AppScaffold
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
 import org.junit.Test
@@ -36,18 +34,14 @@ class AuthenticateScreenTest(override val device: WearDevice) : WearScreenshotTe
 
     @Test
     fun authenticateScreenTest() = runTest {
-        AppScaffold(
-            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
-        ) {
+        AppScaffold {
             AuthenticateScreenPreview()
         }
     }
 
     @Test
     fun authenticateFailedScreenTest() = runTest {
-        AppScaffold(
-            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
-        ) {
+        AppScaffold {
             AuthenticateScreenFailedPreview()
         }
     }

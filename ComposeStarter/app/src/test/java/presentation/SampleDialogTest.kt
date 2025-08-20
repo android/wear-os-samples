@@ -15,7 +15,7 @@
  */
 package presentation
 
-import com.example.android.wearable.composestarter.presentation.SampleDialogContent
+import com.example.android.wearable.composestarter.presentation.SampleDialog
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
 import org.junit.Test
@@ -28,7 +28,12 @@ class SampleDialogTest(override val device: WearDevice) : WearScreenshotTest() {
 
     @Test
     fun greetingScreenTest() = runTest {
-        SampleDialogContent(onCancel = { }, onDismiss = { }, onOk = {})
+        SampleDialog(
+            onCancel = { },
+            onDismiss = { },
+            onOk = {},
+            showDialog = true
+        )
     }
 
     companion object {

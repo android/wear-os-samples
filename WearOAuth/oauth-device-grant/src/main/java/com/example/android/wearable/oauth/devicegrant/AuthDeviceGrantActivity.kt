@@ -18,23 +18,24 @@ package com.example.android.wearable.oauth.devicegrant
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ListHeader
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 /**
  * Demonstrates the OAuth 2.0 flow on Wear OS using Device Authorization Grant, as described in
@@ -69,21 +70,25 @@ fun AuthenticateApp(deviceGrantViewModel: AuthDeviceGrantViewModel) {
     }
 }
 
-@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun AuthenticateScreen(
     statusCode: Int,
     resultMessage: String,
     startAuthFlow: () -> Unit
 ) {
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ItemType.Text,
-            last = ItemType.Text
+    val listState = rememberTransformingLazyColumnState()
+
+    ScreenScaffold(
+        scrollState = listState,
+        contentPadding = rememberResponsiveColumnPadding(
+            first = ColumnItemType.ListHeader,
+            last = ColumnItemType.BodyText
         )
-    )
-    ScreenScaffold(scrollState = columnState) {
-        ScalingLazyColumn(columnState = columnState) {
+    ) { padding ->
+        TransformingLazyColumn(
+            state = listState,
+            contentPadding = padding
+        ) {
             item {
                 ListHeader {
                     Text(
@@ -93,13 +98,14 @@ fun AuthenticateScreen(
                 }
             }
             item {
-                Chip(
+                Button(
                     onClick = { startAuthFlow() },
                     label = {
                         Text(
                             text = stringResource(R.string.get_grant_from_phone)
                         )
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             item { Text(stringResource(id = statusCode)) }

@@ -25,12 +25,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -123,7 +122,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                val coroutineScope = rememberCoroutineScope()
                 var apiAvailable by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) {
                     apiAvailable = isAvailable(capabilityClient)

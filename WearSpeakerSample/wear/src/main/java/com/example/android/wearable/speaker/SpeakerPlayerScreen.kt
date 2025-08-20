@@ -25,9 +25,9 @@ import androidx.media3.common.util.UnstableApi
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.audio.ui.VolumeViewModel
 import com.google.android.horologist.audio.ui.components.actions.SetVolumeButton
-import com.google.android.horologist.media.ui.components.PodcastControlButtons
-import com.google.android.horologist.media.ui.screens.player.DefaultMediaInfoDisplay
-import com.google.android.horologist.media.ui.screens.player.PlayerScreen
+import com.google.android.horologist.media.ui.material3.components.PodcastControlButtons
+import com.google.android.horologist.media.ui.material3.screens.player.DefaultMediaInfoDisplay
+import com.google.android.horologist.media.ui.material3.screens.player.PlayerScreen
 import com.google.android.horologist.media.ui.state.PlayerUiController
 import com.google.android.horologist.media.ui.state.PlayerUiState
 import kotlinx.coroutines.flow.filterNotNull
@@ -38,9 +38,9 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun SpeakerPlayerScreen(
     onVolumeClick: () -> Unit,
+    modifier: Modifier = Modifier,
     volumeViewModel: VolumeViewModel = viewModel(factory = VolumeViewModel.Factory),
-    playerViewModel: SpeakerPlayerViewModel = viewModel(factory = SpeakerPlayerViewModel.Factory),
-    modifier: Modifier = Modifier
+    playerViewModel: SpeakerPlayerViewModel = viewModel(factory = SpeakerPlayerViewModel.Factory)
 ) {
     val volumeUiState by volumeViewModel.volumeUiState.collectAsStateWithLifecycle()
 

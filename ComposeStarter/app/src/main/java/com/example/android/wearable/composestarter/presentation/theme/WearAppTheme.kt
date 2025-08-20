@@ -16,14 +16,16 @@
 package com.example.android.wearable.composestarter.presentation.theme
 
 import androidx.compose.runtime.Composable
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.platform.LocalContext
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.dynamicColorScheme
 
 @Composable
 fun WearAppTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colors = wearColorPalette,
+        colorScheme = dynamicColorScheme(LocalContext.current) ?: wearColorPalette,
         typography = Typography,
         // For shapes, we generally recommend using the default Material Wear shapes which are
         // optimized for round and non-round devices.

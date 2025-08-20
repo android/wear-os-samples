@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     namespace = "com.example.android.wearable.datalayer"
 
@@ -30,7 +30,7 @@ android {
         applicationId = "com.example.android.wearable.datalayer"
         versionCode = 1
         versionName = "1.0"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -63,15 +63,15 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(composeBom)
+    implementation(libs.compose.material3)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.compose.material)
     implementation(libs.compose.ui.tooling)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.playservices.wearable)
+    implementation(libs.androidx.fragment.ktx)
 }

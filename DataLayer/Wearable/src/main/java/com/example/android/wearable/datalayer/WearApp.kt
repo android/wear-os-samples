@@ -25,30 +25,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
-import androidx.wear.compose.material.Card
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.Card
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.Chip
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 @Composable
 fun WearApp(mainViewModel: MainViewModel) {
@@ -86,7 +85,6 @@ fun MainScreen(
     )
 }
 
-@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun MainScreen(
     image: Bitmap?,
@@ -94,32 +92,39 @@ fun MainScreen(
     onShowNodesList: () -> Unit,
     onShowCameraNodesList: () -> Unit
 ) {
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ItemType.Chip,
-            last = ItemType.Text
-        )
-    )
+    val listState = rememberTransformingLazyColumnState()
 
-    ScreenScaffold(scrollState = columnState) {
-            /*
-             * The Horologist [ScalingLazyColumn] takes care of the horizontal and vertical
-             * padding for the list, so there is no need to specify it.
-             */
-        ScalingLazyColumn(
-            columnState = columnState,
-            modifier = Modifier
+    ScreenScaffold(
+        scrollState = listState,
+        contentPadding = rememberResponsiveColumnPadding(
+            first = ColumnItemType.Button,
+            last = ColumnItemType.Card
+        )
+    ) { padding ->
+        TransformingLazyColumn(
+            state = listState,
+            contentPadding = padding
         ) {
             item {
-                Chip(
-                    label = stringResource(id = R.string.query_other_devices),
-                    onClick = onShowNodesList
+                Button(
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.query_other_devices)
+                        )
+                    },
+                    onClick = onShowNodesList,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             item {
-                Chip(
-                    label = stringResource(id = R.string.query_mobile_camera),
-                    onClick = onShowCameraNodesList
+                Button(
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.query_mobile_camera)
+                        )
+                    },
+                    onClick = onShowCameraNodesList,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
@@ -167,11 +172,11 @@ fun MainScreen(
                         Column {
                             Text(
                                 stringResource(id = event.title),
-                                style = MaterialTheme.typography.title3
+                                style = MaterialTheme.typography.titleLarge
                             )
                             Text(
                                 event.text,
-                                style = MaterialTheme.typography.body2
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
@@ -212,7 +217,7 @@ fun MainScreenPreviewEvents() {
                 text = "Event 6"
             )
         ),
-        image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888).apply {
+        image = createBitmap(100, 100).apply {
             eraseColor(Color.WHITE)
         },
         onShowCameraNodesList = {},

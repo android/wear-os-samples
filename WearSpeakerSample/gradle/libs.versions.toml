@@ -1,18 +1,19 @@
 [versions]
 android-gradle-plugin = "8.12.0"
 androidx-activity = "1.10.1"
-androidx-compose-bom = "2025.07.00"
+androidx-compose-bom = "2025.08.00"
 androidx-media3 = "1.8.0"
-androidx-wear-compose = "1.4.1"
+androidx-wear-compose = "1.5.0-rc02"
 compose-compiler = "1.5.15"
 compose-ui-tooling = "1.4.1"
 ktlint = "0.50.0"
-org-jetbrains-kotlin = "1.9.25"
+kotlin = "2.2.10"
 robolectric = "4.15.1"
-roborazzi = "1.46.1"
-ui-test-junit4 = "1.8.3"
-ui-test-manifest = "1.8.3"
-horologist = "0.7.5-alpha"
+roborazzi = "1.49.0"
+ui-test-junit4 = "1.9.0"
+ui-test-manifest = "1.9.0"
+horologist = "0.7.15"
+wear-compose-material3 = "1.5.0-rc02"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -21,8 +22,7 @@ androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooli
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test-manifest" }
-androidx-media = "androidx.media:media:1.7.0"
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
+androidx-media = "androidx.media:media:1.7.1"
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
@@ -35,14 +35,14 @@ horologist-images-coil = { module = "com.google.android.horologist:horologist-im
 horologist-media-data = { module = "com.google.android.horologist:horologist-media-data", version.ref = "horologist" }
 horologist-media-ui = { module = "com.google.android.horologist:horologist-media-ui", version.ref = "horologist" }
 horologist-media-ui-model = { module = "com.google.android.horologist:horologist-media-ui-model", version.ref = "horologist" }
+horologist-media-ui-material3 = { module = "com.google.android.horologist:horologist-media-ui-material3", version.ref = "horologist" }
+horologist-audio-ui-material3 = { module = "com.google.android.horologist:horologist-audio-ui-material3", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
-test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
-test-ext-junit = "androidx.test.ext:junit:1.3.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
@@ -50,9 +50,10 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 androidx-media3-common = { module = "androidx.media3:media3-common", version.ref = "androidx-media3" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
 androidx-media3-exoplayerworkmanager = { module = "androidx.media3:media3-exoplayer-workmanager", version.ref = "androidx-media3" }
+wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wear-compose-material3" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:7.2.1"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
-
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
