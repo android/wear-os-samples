@@ -13,6 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
+ plugins {
     id("com.android.application") version "8.12.0" apply false
 }

@@ -251,6 +251,7 @@ fun SampleDialog(
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
+        modifier = modifier,
         visible = showDialog,
         onDismissRequest = onDismiss,
         icon = {},
