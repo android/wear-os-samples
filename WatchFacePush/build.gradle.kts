@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2025 Google LLC
  *
@@ -25,6 +26,8 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.compose.compiler) apply false
 }
+
+val mainAppNamespace = Attribute.of("wfp.app.namespace", String::class.java)
 
 subprojects {
     if (!path.startsWith(":samples:")) {
@@ -60,8 +63,10 @@ subprojects {
                 val tokenTask =
                     tasks.register<TokenGenerationTask_gradle.TokenGenerationTask>("assembleToken$variantName") {
                         dependsOn(assembleTask)
-                        packageName.set(variant.namespace)
-                        cliToolClasspath.set(rootProject.project("app").configurations.getByName("cliToolConfiguration"))
+
+                        val validatorConfiguration = rootProject.project("app").configurations.getByName("validatorConfiguration")
+                        val mainAppPackageName = validatorConfiguration.attributes.getAttribute(mainAppNamespace)
+                        packageName.set(mainAppPackageName)
                         artifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
                         apkLocation.set(variant.artifacts.get(SingleArtifact.APK))
 

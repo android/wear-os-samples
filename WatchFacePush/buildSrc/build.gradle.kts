@@ -25,11 +25,19 @@ java {
 }
 
 repositories {
-    gradlePluginPortal()
-    google()
     mavenCentral()
+    google()
+    // Note: Jitpack is required for dependencies used by the Watch Face Push Validator.
+    maven {
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.xgouchet")
+        }
+    }
+    gradlePluginPortal()
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.10.0")
+    implementation("com.android.tools.build:gradle-api:8.12.0")
+    implementation("com.google.android.wearable.watchface.validator:validator-push:1.0.0-alpha06")
 }

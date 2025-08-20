@@ -70,6 +70,8 @@ android {
     }
 }
 
+
+val mainAppNamespace = Attribute.of("wfp.app.namespace", String::class.java)
 // Define configurations that allows this app to include the sample watch faces in their assets
 configurations {
     create("debugWatchfaceOutput") {
@@ -92,9 +94,12 @@ configurations {
             )
         }
     }
-    create("cliToolConfiguration") {
+    create("validatorConfiguration") {
         isCanBeConsumed = false
         isCanBeResolved = true
+        attributes {
+            attribute(mainAppNamespace, android.namespace!!)
+        }
     }
 }
 
@@ -122,8 +127,6 @@ dependencies {
 
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
-
-    "cliToolConfiguration"(libs.validator.push.cli)
 }
 
 // The watch face samples and their associated tokens are put in the

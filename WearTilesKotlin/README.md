@@ -3,49 +3,40 @@ Wear Tiles Sample
 
 ![Tile Messaging Screenshot](screenshots/tile_messaging.png)
 
-[Tiles](https://d.android.com/training/wearables/tiles) provide easy access to the information and
-actions users need in order to get things done. With a simple swipe from the watch face, a user can
-find out the latest forecast or start a timer.
+[Tiles](https://d.android.com/training/wearables/tiles) provide easy access to
+the information and actions users need in order to get things done. With a
+simple swipe from the watch face, a user can find out the latest forecast or
+start a timer.
 
-This repository contains a sample tile built using the [Tiles Material Components](https://developer.android.com/reference/androidx/wear/protolayout/material/package-summary)
-library (for UI) and [Horologist Tiles](https://github.com/google/horologist#-tiles) (preview
-utilities and Kotlin-friendly wrappers).
+This repository contains a sample tile built using the [Tiles Material
+Components](https://developer.android.com/reference/androidx/wear/protolayout/material/package-summary)
+library (for UI) and [Horologist
+Tiles](https://github.com/google/horologist#-tiles) (preview utilities and
+Kotlin-friendly wrappers).
 
 Get Started
 -----------
 
-Build the project from the command line using `./gradlew build` or import it into Android Studio to
-benefit from the IDE shortcuts like direct surface launching which lets you launch the Messaging
-tile directly to a device or emulator in just one click.
+Build the project from the command line using `./gradlew build` or import it
+into Android Studio to benefit from the IDE shortcuts like direct surface
+launching which lets you launch the Messaging tile directly to a device or
+emulator in just one click.
 
-For the sample, start with `MessagingTileService.kt`; the layout (with IDE preview) can be found in 
-`MessagingTileLayout.kt`.
+For the sample, start with
+[`Service.kt`](app/src/main/java/com/example/wear/tiles/messaging/Service.kt);
+the layout (with IDE preview) can be found in
+[`Layout.kt`](app/src/main/java/com/example/wear/tiles/messaging/Layout.kt).
 
 Golden Tiles
 ------------
 
-The sample also showcases most of the Golden Tile layouts from the [Tiles Design
-Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates)
-in the `tiles.golden` package of the `debug` sourceset; see
-`GoldenTilesPreviewsRow[N].kt`. You may find it convenient to start with one of
-these layouts rather designing and coding your own from scratch.
+The sample also showcases many of the Tile layout examples from the [Tiles Design
+Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates);
+see [`GoldenTiles.kt`](app/src/main/java/com/example/wear/tiles/golden/GoldenTiles.kt).
+You may find it convenient to start with one of these layouts rather than designing and coding
+your own from scratch.
 
-To see what these look like, open one of the "GoldenTilesPreviewsRowN" files and
-choose the "Split" or "Design" editor view.
-
-![Screenshot of Android Studio showing the design view of GoldenTilesPreviewsRow1.kt. A grid view of Wear OS Tiles are displayed.](screenshots/tile_preview_design_view.png)
-
-`GoldenTilesPreviewsRow1.kt`:
-
-![Screenshot of Tile previews for goal, workoutButtons, workoutLargeChip, run and ski](screenshots/golden1.png)
-
-`GoldenTilesPreviewsRow2.kt`:
-
-![Screenshot of Tile previews for heartRateSample, meditationChips, meditationButtons, timer and alarm](screenshots/golden2.png)
-
-`GoldenTilesPreviewsRow3.kt`:
-
-![Screenshot of Tile previews for weather, news, calendar, social and media](screenshots/golden3.png)
+![Screenshot of Tile layout examples](screenshots/golden_tiles.png)
 
 Support
 -------

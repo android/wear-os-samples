@@ -75,9 +75,13 @@ dependencies {
     implementation(libs.androidx.wear.protolayout.material3)
 
     // Tooling dependencies for previewing tiles in Android Studio.
-    // Scoped as 'implementation' to allow previews in the 'main' source set.
-    implementation(libs.androidx.wear.tiles.renderer)
+    implementation(libs.androidx.tiles.tooling)
+    debugImplementation(libs.androidx.wear.tiles.renderer)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.wear.tooling.preview)
+    debugImplementation(libs.androidx.wear.tiles.tooling)
+    // The tile preview code is in the same file as the tiles themselves, so we need to make the
+    // androidx.wear.tiles:tiles-tooling-preview dependency available to release builds, not
+    // just debug builds.
     implementation(libs.androidx.wear.tiles.tooling.preview)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.wear.tooling.preview)
 }

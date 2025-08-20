@@ -22,8 +22,10 @@ import androidx.wear.tooling.preview.devices.WearDevices
 @Preview(device = WearDevices.LARGE_ROUND, name = "Large Round")
 internal annotation class MultiRoundDevicesPreviews
 
-@Preview(device = WearDevices.SMALL_ROUND, name = "Small Round")
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 0.94f, name = "Small Round 0.94f")
+@Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.00f, name = "Small Round 1.00f")
 @Preview(device = WearDevices.SMALL_ROUND, fontScale = 1.24f, name = "Small Round 1.24f")
-@Preview(device = WearDevices.LARGE_ROUND, name = "Large Round")
 @Preview(device = WearDevices.LARGE_ROUND, fontScale = 0.94f, name = "Large Round 0.94f")
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.00f, name = "Large Round 1.00f")
+@Preview(device = WearDevices.LARGE_ROUND, fontScale = 1.24f, name = "Large Round 1.24f")
 internal annotation class MultiRoundDevicesWithFontScalePreviews
