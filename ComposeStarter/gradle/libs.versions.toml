@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.12.0"
+android-gradle-plugin = "8.12.1"
 androidx-activity = "1.12.0-alpha06"
 androidx-compose-bom = "2025.08.00"
 androidx-wear-compose-material3 = "1.5.0-rc02"
@@ -8,8 +8,8 @@ compose-ui-tooling = "1.4.1"
 horologist = "0.7.15"
 ktlint = "0.50.0"
 org-jetbrains-kotlin = "2.2.10"
-robolectric = "4.15.1"
-roborazzi = "1.49.0"
+robolectric = "4.16"
+roborazzi = "1.50.0"
 ui-test-junit4 = "1.9.0"
 ui-test-manifest = "1.9.0"
 
