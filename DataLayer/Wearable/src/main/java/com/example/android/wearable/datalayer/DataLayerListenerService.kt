@@ -19,6 +19,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.wearable.DataEventBuffer
+import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
@@ -44,6 +45,9 @@ class DataLayerListenerService : WearableListenerService() {
             val uri = dataEvent.dataItem.uri
             when (uri.path) {
                 COUNT_PATH -> {
+                    val dataMapItem = DataMapItem.fromDataItem(dataEvent.dataItem)
+                    val count = dataMapItem.dataMap.getInt(COUNT_KEY, COUNT_DEFAULT)
+                    Log.d(TAG, "Count changed to: $count")
                     scope.launch {
                         try {
                             val nodeId = uri.host!!
@@ -95,6 +99,8 @@ class DataLayerListenerService : WearableListenerService() {
         private const val START_ACTIVITY_PATH = "/start-activity"
         private const val DATA_ITEM_RECEIVED_PATH = "/data-item-received"
         const val COUNT_PATH = "/count"
+        const val COUNT_KEY = "count"
+        const val COUNT_DEFAULT = -1
         const val IMAGE_PATH = "/image"
         const val IMAGE_KEY = "photo"
     }
