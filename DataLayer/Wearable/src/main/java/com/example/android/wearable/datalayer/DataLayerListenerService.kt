@@ -45,6 +45,8 @@ class DataLayerListenerService : WearableListenerService() {
             val uri = dataEvent.dataItem.uri
             when (uri.path) {
                 COUNT_PATH -> {
+                    // Retrieve the count. This must be done synchronously: dataEvents is likely to
+                    // be stale/invalid if accessed from the new coroutine created by scope.launch.
                     val dataMapItem = DataMapItem.fromDataItem(dataEvent.dataItem)
                     val count = dataMapItem.dataMap.getInt(COUNT_KEY, COUNT_DEFAULT)
                     Log.d(TAG, "Count changed to: $count")
