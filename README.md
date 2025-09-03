@@ -1,3 +1,5 @@
+**This branch is not maintained after the latest update to Compose for Wear OS Material 3 1.5.0-rc02. Please refer to the main branch.**
+
 Wear OS Samples Repository
 ======================
 
