@@ -14,7 +14,7 @@ Introduction
 
 This sample showcases how a phone and a Wear OS app can exchange data. It implements 3 use cases:
 
-1. Send a data asset from the phone to the watch
+1. Send a data item from the phone to the watch
 In the sample you can take a photo on the phone and send it to the paired watch. The photo is sent 
 as a [DataItem][5] by using [DataClient][2].
 ```
