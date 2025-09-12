@@ -14,9 +14,9 @@ Introduction
 
 This sample showcases how a phone and a Wear OS app can exchange data. It implements 3 use cases:
 
-1. Send a data asset from the phone to the watch
+1. Send a data item from the phone to the watch
 In the sample you can take a photo on the phone and send it to the paired watch. The photo is sent 
-as a [DataAsset][6] by using [DataClient][2].
+as a [DataItem][5] by using [DataClient][2].
 ```
 val request = PutDataMapRequest.create(IMAGE_PATH).apply {
   dataMap.putAsset(IMAGE_KEY, imageAsset)
@@ -80,7 +80,6 @@ some devices)
 [3]: https://developers.google.com/android/reference/com/google/android/gms/wearable/MessageClient
 [4]: https://developers.google.com/android/reference/com/google/android/gms/wearable/CapabilityClient
 [5]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataItem
-[6]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataAsset
 [7]: https://google.github.io/horologist/datalayer-phone-ui/#install-app
 [8]: https://google.github.io/horologist/datalayer-phone-ui/#reengage-prompt
 [9]: https://google.github.io/horologist/datalayer-phone-ui/#signin-prompt
