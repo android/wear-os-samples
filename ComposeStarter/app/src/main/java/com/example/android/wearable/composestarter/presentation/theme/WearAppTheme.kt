@@ -21,9 +21,7 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.dynamicColorScheme
 
 @Composable
-fun WearAppTheme(
-    content: @Composable () -> Unit
-) {
+fun WearAppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = dynamicColorScheme(LocalContext.current) ?: wearColorScheme,
         typography = Typography,

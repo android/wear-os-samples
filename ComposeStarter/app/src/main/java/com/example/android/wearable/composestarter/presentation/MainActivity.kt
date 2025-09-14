@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,11 @@ fun WearApp() {
 }
 
 @Composable
-fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modifier = Modifier) {
+fun GreetingScreen(
+    greetingName: String,
+    onShowList: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val scrollState = rememberTransformingLazyColumnState()
 
     /* If you have enough items in your list, use [TransformingLazyColumn] which is an optimized
@@ -123,11 +127,11 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modif
         // The bottom padding value is always ignored when using EdgeButton because this button is
         // always placed at the end of the screen.
         // The `ScreenScaffold` parameter `edgeButtonSpacing` can be used to specify the
-        // gap between edge button and content.
+        // gap between edgeButton and content.
         contentPadding =
-        rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader
-        )
+            rememberResponsiveColumnPadding(
+                first = ColumnItemType.ListHeader
+            )
     ) { contentPadding ->
         // Use workaround from Horologist for padding or wait until fix lands
         TransformingLazyColumn(
@@ -155,13 +159,13 @@ fun ListScreen(modifier: Modifier = Modifier) {
         /*
          * TransformingLazyColumn takes care of the horizontal and vertical
          * padding for the list and handles scrolling.
+         * Use workaround from Horologist for padding or wait until fix lands
          */
-        // Use workaround from Horologist for padding or wait until fix lands
         contentPadding =
-        rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.IconButton
-        )
+            rememberResponsiveColumnPadding(
+                first = ColumnItemType.ListHeader,
+                last = ColumnItemType.IconButton
+            )
     ) { contentPadding ->
         TransformingLazyColumn(
             state = listState,
@@ -170,9 +174,9 @@ fun ListScreen(modifier: Modifier = Modifier) {
             item {
                 ListHeader(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec),
+                        Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 ) { Text(text = "Header") }
             }
@@ -185,9 +189,9 @@ fun ListScreen(modifier: Modifier = Modifier) {
                     },
                     onClick = { },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec),
+                        Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec),
                     colors = AppCardDefaults.cardColors()
                 ) {
@@ -204,46 +208,48 @@ fun ListScreen(modifier: Modifier = Modifier) {
                     },
                     onClick = { },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec),
+                        Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 )
             }
             item {
                 ButtonGroup(
-                    modifier = modifier
-                        .graphicsLayer {
-                            with(transformationSpec) {
-                                applyContainerTransformation(scrollProgress)
-                            }
-                        }
-                        .transformedHeight(this, transformationSpec)
+                    modifier =
+                        modifier
+                            .graphicsLayer {
+                                with(transformationSpec) {
+                                    applyContainerTransformation(scrollProgress)
+                                }
+                            }.transformedHeight(this, transformationSpec)
                 ) {
                     FilledIconButton(
                         onClick = { showDialog = true },
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
-                            contentColor = MaterialTheme.colorScheme.onSecondary
-                        )
+                        colors =
+                            IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
+                            )
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.settings),
-                            contentDescription = stringResource(
-                                R.string.settings_button_content_description
-                            )
+                            contentDescription =
+                                stringResource(
+                                    R.string.settings_button_content_description
+                                )
                         )
                     }
                     FilledIconButton(
                         onClick = { },
                         shapes = IconButtonDefaults.animatedShapes()
-
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.thumb_up),
-                            contentDescription = stringResource(
-                                R.string.thumbs_up_button_content_description
-                            ),
+                            contentDescription =
+                                stringResource(
+                                    R.string.thumbs_up_button_content_description
+                                )
                         )
                     }
                 }
@@ -260,7 +266,10 @@ fun ListScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Greeting(greetingName: String, modifier: Modifier = Modifier) {
+fun Greeting(
+    greetingName: String,
+    modifier: Modifier = Modifier
+) {
     ListHeader {
         Text(
             modifier = modifier.fillMaxWidth(),
