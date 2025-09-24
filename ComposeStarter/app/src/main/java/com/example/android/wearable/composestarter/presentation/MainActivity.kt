@@ -21,7 +21,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Build
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,11 +40,14 @@ import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AlertDialogDefaults
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonGroup
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
@@ -56,6 +60,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
+import com.example.android.wearable.composestarter.presentation.theme.AppCardDefaults
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
 import com.google.android.horologist.compose.layout.ColumnItemType
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
@@ -173,17 +178,26 @@ fun ListScreen(modifier: Modifier = Modifier) {
             item {
                 ListHeader(
                     modifier =
-                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 ) { Text(text = "Header") }
             }
             item {
                 TitleCard(
-                    title = { Text(stringResource(R.string.example_card_title)) },
+                    title = {
+                        Text(
+                            stringResource(R.string.example_card_title) // Removed explicit color
+                        )
+                    },
                     onClick = { },
                     modifier =
-                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
-                    transformation = SurfaceTransformation(transformationSpec)
+                    Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    colors = AppCardDefaults.cardColors()
                 ) {
                     Text(stringResource(R.string.example_card_content))
                 }
@@ -198,26 +212,48 @@ fun ListScreen(modifier: Modifier = Modifier) {
                     },
                     onClick = { },
                     modifier =
-                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 )
             }
             item {
-                FilledIconButton(
-                    onClick = { showDialog = true },
-                    modifier = modifier.graphicsLayer {
-                        with(transformationSpec) {
-                            applyContainerTransformation(scrollProgress)
+                ButtonGroup(
+                    modifier = modifier
+                        .graphicsLayer {
+                            with(transformationSpec) {
+                                applyContainerTransformation(scrollProgress)
+                            }
                         }
-                    }
                         .transformedHeight(this, transformationSpec)
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Build,
-                        contentDescription = stringResource(
-                            R.string.example_button_content_description
+                    FilledIconButton(
+                        onClick = { showDialog = true },
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
                         )
-                    )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Settings,
+                            contentDescription = stringResource(
+                                R.string.settings_button_content_description
+                            )
+                        )
+                    }
+                    FilledIconButton(
+                        onClick = { },
+                        shapes = IconButtonDefaults.animatedShapes()
+
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.ThumbUp,
+                            contentDescription = stringResource(
+                                R.string.thumbs_up_button_content_description
+                            )
+                        )
+                    }
                 }
             }
         }
