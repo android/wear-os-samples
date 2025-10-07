@@ -23,18 +23,21 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class SampleDialogTest(override val device: WearDevice) : WearScreenshotTest() {
+class SampleDialogTest(
+    override val device: WearDevice
+) : WearScreenshotTest() {
     override val tolerance = 0.02f
 
     @Test
-    fun greetingScreenTest() = runTest {
-        SampleDialog(
-            onCancel = { },
-            onDismiss = { },
-            onOk = {},
-            showDialog = true
-        )
-    }
+    fun greetingScreenTest() =
+        runTest {
+            SampleDialog(
+                onCancel = { },
+                onDismiss = { },
+                onOk = {},
+                showDialog = true
+            )
+        }
 
     companion object {
         @JvmStatic

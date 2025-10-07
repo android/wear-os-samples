@@ -22,7 +22,8 @@ import androidx.wear.compose.material3.MaterialTheme
 
 object AppCardDefaults {
     @Composable
-    fun cardColors(): CardColors = CardDefaults.cardColors(
-        titleColor = MaterialTheme.colorScheme.tertiary
-    )
+    fun cardColors(): CardColors =
+        CardDefaults.cardColors(
+            titleColor = MaterialTheme.colorScheme.tertiary
+        )
 }
