@@ -26,17 +26,20 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class GreetingScreenTest(override val device: WearDevice) : WearScreenshotTest() {
+class GreetingScreenTest(
+    override val device: WearDevice
+) : WearScreenshotTest() {
     override val tolerance = 0.02f
 
     @Test
-    fun greetingScreenTest() = runTest {
-        AppScaffold(
-            timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
-        ) {
-            GreetingScreen(greetingName = "screenshot", onShowList = {})
+    fun greetingScreenTest() =
+        runTest {
+            AppScaffold(
+                timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
+            ) {
+                GreetingScreen(greetingName = "screenshot", onShowList = {})
+            }
         }
-    }
 
     companion object {
         @JvmStatic

@@ -25,7 +25,7 @@ fun WearAppTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = dynamicColorScheme(LocalContext.current) ?: wearColorPalette,
+        colorScheme = dynamicColorScheme(LocalContext.current) ?: wearColorScheme,
         typography = Typography,
         // For shapes, we generally recommend using the default Material Wear shapes which are
         // optimized for round and non-round devices.
