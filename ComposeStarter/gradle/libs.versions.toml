@@ -1,17 +1,17 @@
 [versions]
 android-gradle-plugin = "8.13.0"
 androidx-activity = "1.12.0-alpha09"
-androidx-compose-bom = "2025.09.01"
-androidx-wear-compose-material3 = "1.5.2"
-androidx-wear-compose = "1.5.2"
-compose-ui-tooling = "1.5.2"
+androidx-compose-bom = "2025.10.00"
+androidx-wear-compose-material3 = "1.5.3"
+androidx-wear-compose = "1.5.3"
+compose-ui-tooling = "1.5.3"
 horologist = "0.7.15"
 ktlint = "1.4.0"
 org-jetbrains-kotlin = "2.2.20"
 robolectric = "4.16"
 roborazzi = "1.50.0"
-ui-test-junit4 = "1.9.2"
-ui-test-manifest = "1.9.2"
+ui-test-junit4 = "1.9.3"
+ui-test-manifest = "1.9.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
