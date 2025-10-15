@@ -26,13 +26,19 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 /**
  * Class to migrate data items to the new phone when the user gets a new device.
  */
 class MigrationDataLayerService : WearableListenerService() {
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     private val dataClient by lazy { Wearable.getDataClient(this) }
     private val nodeClient by lazy { Wearable.getNodeClient(this) }
 
@@ -45,22 +51,28 @@ class MigrationDataLayerService : WearableListenerService() {
     override fun onNodeMigrated(nodeId: String, archive: DataItemBuffer) {
         super.onNodeMigrated(nodeId, archive)
 
-        runBlocking {
-            Log.i(TAG, "Migrating ${archive.count} items")
-            Log.i(TAG, "From: $nodeId")
-            Log.i(TAG, "To: ${getLocalNode().displayName} - ${getLocalNode().id}")
+        Log.i(TAG, "Migrating ${archive.count} items")
+        Log.i(TAG, "From: $nodeId")
 
-            val dataItemsToHandle = mutableListOf<DataItem>()
-
-            for (dataItem in archive) {
+        val dataItemsToHandle = archive.use { buffer ->
+            buffer.map { dataItem ->
                 Log.i(TAG, "Preparing ${dataItem.uri.path}")
-                dataItemsToHandle.add(dataItem.freeze())
+                dataItem.freeze()
             }
+        }
+
+        serviceScope.launch {
+            Log.i(TAG, "To: ${getLocalNode().displayName} - ${getLocalNode().id}")
 
             dataItemsToHandle.forEach { archiveItem ->
                 migrateDataItem(archiveItem)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
     }
 
     private suspend fun migrateDataItem(dataItem: DataItem) {

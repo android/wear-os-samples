@@ -242,8 +242,9 @@ class MainActivity : ComponentActivity() {
                 val dataMapItem = DataMapItem.fromDataItem(dataItem)
                 val asset = dataMapItem.dataMap.getAsset(IMAGE_KEY)
                 asset?.let {
-                    return dataClient.getFdForAsset(asset).await().let { fd ->
-                        BitmapFactory.decodeFileDescriptor(fd.fdForAsset.fileDescriptor)
+                    val assetResponse = dataClient.getFdForAsset(asset).await()
+                    return assetResponse.fdForAsset.use { fd ->
+                        BitmapFactory.decodeFileDescriptor(fd.fileDescriptor)
                     }
                 }
             }
