@@ -22,9 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun CameraNodesScreen(
-    viewModel: NodesViewModel = viewModel(factory = NodesViewModel.Factory)
-) {
+fun CameraNodesScreen(viewModel: NodesViewModel = viewModel(factory = NodesViewModel.Factory)) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     NodesScreen(nodes = state.cameraNodes, modifier = Modifier)
