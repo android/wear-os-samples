@@ -345,14 +345,14 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
-
-        private const val START_ACTIVITY_PATH = "/start-activity"
         const val COUNT_PATH = "/count"
         const val IMAGE_PATH = "/image"
-        const val IMAGE_KEY = "photo"
-        const val TIME_KEY = "time"
-        const val COUNT_KEY = "count"
+
+        private const val TAG = "MainActivity"
+        private const val START_ACTIVITY_PATH = "/start-activity"
+        private const val IMAGE_KEY = "photo"
+        private const val TIME_KEY = "time"
+        private const val COUNT_KEY = "count"
         private const val CAMERA_CAPABILITY = "camera"
         private const val WEAR_CAPABILITY = "wear"
         private const val WEAR_SCHEME = "wear"

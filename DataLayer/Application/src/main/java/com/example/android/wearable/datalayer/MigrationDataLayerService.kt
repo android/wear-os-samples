@@ -26,9 +26,6 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
@@ -36,7 +33,6 @@ import kotlinx.coroutines.tasks.await
  * Class to migrate data items to the new phone when the user gets a new device.
  */
 class MigrationDataLayerService : WearableListenerService() {
-    private val serviceScope = CoroutineScope(Job() + Dispatchers.IO)
     private val dataClient by lazy { Wearable.getDataClient(this) }
     private val nodeClient by lazy { Wearable.getNodeClient(this) }
 
