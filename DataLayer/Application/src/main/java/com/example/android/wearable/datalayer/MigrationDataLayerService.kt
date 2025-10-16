@@ -29,8 +29,7 @@ import com.google.android.gms.wearable.WearableListenerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -61,18 +60,15 @@ class MigrationDataLayerService : WearableListenerService() {
             }
         }
 
-        serviceScope.launch {
+        runBlocking {
+            Log.i(TAG, "Migrating items")
             Log.i(TAG, "To: ${getLocalNode().displayName} - ${getLocalNode().id}")
 
             dataItemsToHandle.forEach { archiveItem ->
                 migrateDataItem(archiveItem)
             }
+            Log.i(TAG, "Migration complete")
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        serviceScope.cancel()
     }
 
     private suspend fun migrateDataItem(dataItem: DataItem) {
