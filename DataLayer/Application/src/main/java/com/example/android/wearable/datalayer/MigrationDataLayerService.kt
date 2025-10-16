@@ -18,6 +18,7 @@ package com.example.android.wearable.datalayer
 import android.util.Log
 import com.example.android.wearable.datalayer.MainActivity.Companion.COUNT_PATH
 import com.example.android.wearable.datalayer.MainActivity.Companion.IMAGE_PATH
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wearable.DataItem
 import com.google.android.gms.wearable.DataItemBuffer
 import com.google.android.gms.wearable.DataMapItem
@@ -65,7 +66,11 @@ class MigrationDataLayerService : WearableListenerService() {
             Log.i(TAG, "To: ${getLocalNode().displayName} - ${getLocalNode().id}")
 
             dataItemsToHandle.forEach { archiveItem ->
-                migrateDataItem(archiveItem)
+                try {
+                    migrateDataItem(archiveItem)
+                } catch (e: ApiException) {
+                    Log.e(TAG, "Error migrating data item: ${archiveItem.uri.path}", e)
+                }
             }
             Log.i(TAG, "Migration complete")
         }
