@@ -61,6 +61,7 @@ class MigrationDataLayerService : WearableListenerService() {
             }
         }
 
+        // Using runBlocking to make sure all migration is done before returning.
         runBlocking {
             Log.i(TAG, "Migrating items")
             Log.i(TAG, "To: ${getLocalNode().displayName} - ${getLocalNode().id}")
