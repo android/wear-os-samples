@@ -22,9 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun ConnectedNodesScreen(
-    viewModel: NodesViewModel = viewModel(factory = NodesViewModel.Factory)
-) {
+fun ConnectedNodesScreen(viewModel: NodesViewModel = viewModel(factory = NodesViewModel.Factory)) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     NodesScreen(nodes = state.nodes, modifier = Modifier)

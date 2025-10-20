@@ -18,6 +18,7 @@ package com.example.android.wearable.datalayer
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +41,7 @@ import com.google.android.gms.common.api.GoogleApi
 import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
@@ -70,7 +72,7 @@ import kotlinx.coroutines.withContext
  */
 @SuppressLint("VisibleForTests")
 class MainActivity : ComponentActivity() {
-
+    private val nodeClient by lazy { Wearable.getNodeClient(this) }
     private val dataClient by lazy { Wearable.getDataClient(this) }
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
@@ -81,11 +83,12 @@ class MainActivity : ComponentActivity() {
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
 
-    private val takePhotoLauncher = registerForActivityResult(
-        ActivityResultContracts.TakePicturePreview()
-    ) { bitmap ->
-        clientDataViewModel.onPictureTaken(bitmap = bitmap)
-    }
+    private val takePhotoLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.TakePicturePreview()
+        ) { bitmap ->
+            clientDataViewModel.onPictureTaken(bitmap = bitmap)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +105,8 @@ class MainActivity : ComponentActivity() {
                         // point. This could be less than the count interval if sending the count took
                         // some time.
                         delay(
-                            Duration.between(Instant.now(), lastTriggerTime + countInterval)
+                            Duration
+                                .between(Instant.now(), lastTriggerTime + countInterval)
                                 .toMillis()
                         )
                         // Update when we are triggering sending the count
@@ -116,6 +120,16 @@ class MainActivity : ComponentActivity() {
                         // https://google.github.io/horologist/datalayer/
                         count++
                     }
+                }
+            }
+        }
+
+        // Loads any previous photo that was stored, to show in the app when it is launched.
+        lifecycleScope.launch {
+            if (isAvailable(dataClient)) {
+                val initialImage = loadInitialImage()
+                initialImage?.let {
+                    clientDataViewModel.onPictureTaken(it)
                 }
             }
         }
@@ -191,21 +205,24 @@ class MainActivity : ComponentActivity() {
     private fun startWearableActivity() {
         lifecycleScope.launch {
             try {
-                val nodes = capabilityClient
-                    .getCapability(WEAR_CAPABILITY, CapabilityClient.FILTER_REACHABLE)
-                    .await()
-                    .nodes
+                val nodes =
+                    capabilityClient
+                        .getCapability(WEAR_CAPABILITY, CapabilityClient.FILTER_REACHABLE)
+                        .await()
+                        .nodes
 
                 // Send a message to all nodes in parallel
                 // If you need an acknowledge for the start activity use case, you can alternatively use
                 // [MessageClient.sendRequest](https://developers.google.com/android/reference/com/google/android/gms/wearable/MessageClient#sendRequest(java.lang.String,%20java.lang.String,%20byte[]))
                 // See an implementation in Horologist DataHelper https://github.com/google/horologist/blob/release-0.5.x/datalayer/core/src/main/java/com/google/android/horologist/data/apphelper/DataLayerAppHelper.kt#L210
-                nodes.map { node ->
-                    async {
-                        messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf())
-                            .await()
-                    }
-                }.awaitAll()
+                nodes
+                    .map { node ->
+                        async {
+                            messageClient
+                                .sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf())
+                                .await()
+                        }
+                    }.awaitAll()
 
                 Log.d(TAG, "Starting activity requests sent successfully")
             } catch (cancellationException: CancellationException) {
@@ -213,6 +230,39 @@ class MainActivity : ComponentActivity() {
             } catch (exception: Exception) {
                 Log.d(TAG, "Starting activity failed: $exception")
             }
+        }
+    }
+
+    private suspend fun loadInitialImage(): Bitmap? {
+        try {
+            val uri = buildUri(IMAGE_PATH) ?: return null
+
+            val dataItem = dataClient.getDataItem(uri).await()
+            dataItem.data?.let {
+                val dataMapItem = DataMapItem.fromDataItem(dataItem)
+                val asset = dataMapItem.dataMap.getAsset(IMAGE_KEY)
+                asset?.let {
+                    val assetResponse = dataClient.getFdForAsset(asset).await()
+                    return assetResponse.fdForAsset.use { fd ->
+                        BitmapFactory.decodeFileDescriptor(fd.fileDescriptor)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "loadInitialImage failed", e)
+        }
+        return null
+    }
+
+    private suspend fun buildUri(dataPath: String): Uri? {
+        val node = nodeClient.localNode.await()
+        return node?.let { it ->
+            Uri
+                .Builder()
+                .scheme(WEAR_SCHEME)
+                .authority(it.id)
+                .path(dataPath)
+                .build()
         }
     }
 
@@ -226,12 +276,14 @@ class MainActivity : ComponentActivity() {
             try {
                 val image = clientDataViewModel.image ?: return@launch
                 val imageAsset = image.toAsset()
-                val request = PutDataMapRequest.create(IMAGE_PATH).apply {
-                    dataMap.putAsset(IMAGE_KEY, imageAsset)
-                    dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
-                }
-                    .asPutDataRequest()
-                    .setUrgent()
+                val request =
+                    PutDataMapRequest
+                        .create(IMAGE_PATH)
+                        .apply {
+                            dataMap.putAsset(IMAGE_KEY, imageAsset)
+                            dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
+                        }.asPutDataRequest()
+                        .setUrgent()
 
                 val result = dataClient.putDataItem(request).await()
 
@@ -246,11 +298,13 @@ class MainActivity : ComponentActivity() {
 
     private suspend fun sendCount(count: Int) {
         try {
-            val request = PutDataMapRequest.create(COUNT_PATH).apply {
-                dataMap.putInt(COUNT_KEY, count)
-            }
-                .asPutDataRequest()
-                .setUrgent()
+            val request =
+                PutDataMapRequest
+                    .create(COUNT_PATH)
+                    .apply {
+                        dataMap.putInt(COUNT_KEY, count)
+                    }.asPutDataRequest()
+                    .setUrgent()
 
             val result = dataClient.putDataItem(request).await()
 
@@ -265,45 +319,44 @@ class MainActivity : ComponentActivity() {
     /**
      * Converts the [Bitmap] to an asset, compress it to a png image in a background thread.
      */
-    private suspend fun Bitmap.toAsset(): Asset =
-        withContext(Dispatchers.Default) {
-            ByteArrayOutputStream().use { byteStream ->
-                compress(Bitmap.CompressFormat.PNG, 100, byteStream)
-                Asset.createFromBytes(byteStream.toByteArray())
-            }
+    private suspend fun Bitmap.toAsset(): Asset = withContext(Dispatchers.Default) {
+        ByteArrayOutputStream().use { byteStream ->
+            compress(Bitmap.CompressFormat.PNG, 100, byteStream)
+            Asset.createFromBytes(byteStream.toByteArray())
         }
+    }
 
     // This function checks that the Wearable API is available on the mobile device.
     // If you are using the Horologist DataHelpers, this method is available in
     // https://google.github.io/horologist/datalayer-helpers-guide/#check-api-availability
 
-    private suspend fun isAvailable(api: GoogleApi<*>): Boolean {
-        return try {
-            GoogleApiAvailability.getInstance()
-                .checkApiAvailability(api)
-                .await()
+    private suspend fun isAvailable(api: GoogleApi<*>): Boolean = try {
+        GoogleApiAvailability
+            .getInstance()
+            .checkApiAvailability(api)
+            .await()
 
-            true
-        } catch (e: AvailabilityException) {
-            Log.d(
-                TAG,
-                "${api.javaClass.simpleName} API is not available in this device."
-            )
-            false
-        }
+        true
+    } catch (e: AvailabilityException) {
+        Log.d(
+            TAG,
+            "${api.javaClass.simpleName} API is not available in this device."
+        )
+        false
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        const val COUNT_PATH = "/count"
+        const val IMAGE_PATH = "/image"
 
+        private const val TAG = "MainActivity"
         private const val START_ACTIVITY_PATH = "/start-activity"
-        private const val COUNT_PATH = "/count"
-        private const val IMAGE_PATH = "/image"
         private const val IMAGE_KEY = "photo"
         private const val TIME_KEY = "time"
         private const val COUNT_KEY = "count"
         private const val CAMERA_CAPABILITY = "camera"
         private const val WEAR_CAPABILITY = "wear"
+        private const val WEAR_SCHEME = "wear"
 
         private val countInterval = Duration.ofSeconds(5)
     }
