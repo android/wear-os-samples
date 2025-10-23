@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "8.13.0"
-compose = "1.9.3"
+compose = "1.9.4"
 ktlint = "0.50.0"
 ktfmt = "0.54"
 androidx-wear-tiles = "1.5.0"
