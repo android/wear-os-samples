@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.13.1"
-androidx-activity = "1.11.0"
-androidx-compose-bom = "2025.11.00"
+androidx-activity = "1.12.0"
+androidx-compose-bom = "2025.11.01"
 androidx-media3 = "1.8.0"
 androidx-wear-compose = "1.5.5"
 compose-compiler = "1.5.15"
@@ -10,8 +10,8 @@ ktlint = "0.50.0"
 kotlin = "2.2.10"
 robolectric = "4.16"
 roborazzi = "1.51.0"
-ui-test-junit4 = "1.9.4"
-ui-test-manifest = "1.9.4"
+ui-test-junit4 = "1.9.5"
+ui-test-manifest = "1.9.5"
 horologist = "0.7.15"
 wear-compose-material3 = "1.5.5"
 
@@ -54,6 +54,6 @@ wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-mate
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:8.0.0"
+com-diffplug-spotless = "com.diffplug.spotless:8.1.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

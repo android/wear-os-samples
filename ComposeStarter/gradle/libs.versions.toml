@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.13.1"
-androidx-activity = "1.12.0-rc01"
-androidx-compose-bom = "2025.11.00"
+androidx-activity = "1.12.0"
+androidx-compose-bom = "2025.11.01"
 androidx-wear-compose-material3 = "1.5.5"
 androidx-wear-compose = "1.5.5"
 compose-ui-tooling = "1.5.5"
@@ -10,8 +10,8 @@ ktlint = "1.4.0"
 org-jetbrains-kotlin = "2.2.20"
 robolectric = "4.16"
 roborazzi = "1.51.0"
-ui-test-junit4 = "1.9.4"
-ui-test-manifest = "1.9.4"
+ui-test-junit4 = "1.9.5"
+ui-test-manifest = "1.9.5"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -40,7 +40,7 @@ horologist-compose-layout = { module = "com.google.android.horologist:horologist
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:8.0.0"
+com-diffplug-spotless = "com.diffplug.spotless:8.1.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
