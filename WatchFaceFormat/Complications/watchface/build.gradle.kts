@@ -15,25 +15,23 @@
  */
 plugins {
     alias(libs.plugins.android.application)
-    // Use the locally-defined validator to demonstrate validation on-build.
-    id("com.google.wff.validatorplugin")
 }
 
 android {
     namespace = "com.example.complications"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.complications"
-        minSdk = 33
-        targetSdk = 33
+        minSdk = 34
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
     }
 
     buildTypes {
         debug {
-          isMinifyEnabled = true
+            isMinifyEnabled = true
         }
         release {
             // TODO:Add your signingConfig here to build release builds
