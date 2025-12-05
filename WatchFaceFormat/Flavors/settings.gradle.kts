@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 pluginManagement {
-    includeBuild("../validator-plugin")
     repositories {
         google()
         mavenCentral()
