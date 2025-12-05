@@ -4,4 +4,8 @@
     <string name="colors_label">Color theme</string>
     <string name="theme_one_label">Theme 1</string>
     <string name="theme_two_label">Theme 2</string>
+    <string name="top_complication_label">Top</string>
+    <string name="left_complication_label">Left</string>
+    <string name="right_complication_label">Right</string>
+    <string name="bottom_complication_label">Bottom</string>
 </resources>
