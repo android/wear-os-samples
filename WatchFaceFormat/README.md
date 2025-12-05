@@ -52,8 +52,7 @@ cd SimpleDigital
 
 ## Debugging
 
-1. Use the in-built linter within Android Studio to look for any syntax errors within your watch 
-   face XML.
+1. Use the built-in linter within Android Studio to find any syntax errors in your watch face XML.
 1. Use `logcat` to look for any error messages from the WFF runtime, such as
    potential errors in WFF expressions.
 
