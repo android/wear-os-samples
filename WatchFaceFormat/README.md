@@ -50,20 +50,10 @@ cd SimpleDigital
 ./gradlew assembleDebug
 ```
 
-Additional commands that you can run from the command-line:
-
-- `./gradlew validateWff` - This only validates the WFF XML files, but will not build the APK. This task is automatically run as part of `assembleDebug` and
-  `bundleDebug`.
-- `./gradlew memoryFootprint`- this runs the [memory footprint evaluator][validator-tools] on the resulting package.
-- `./gradlew validateWffAndInstall [--device <deviceid>]` - builds and validates the watch face, then installs and sets on a connected device or emulator.
-
-For more guidance on building and signing release builds, see
-[signing guidance][signing] on developer.android.com
-
 ## Debugging
 
-1. Use the [XML validator][validator-tools] to confirm that the XML in
-   `watchface.xml` is valid.
+1. Use the in-built linter within Android Studio to look for any syntax errors within your watch 
+   face XML.
 1. Use `logcat` to look for any error messages from the WFF runtime, such as
    potential errors in WFF expressions.
 
