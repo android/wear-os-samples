@@ -32,7 +32,7 @@ Golden Tiles
 
 The sample also showcases many of the Tile layout examples from the [Tiles Design
 Kit](https://developer.android.com/training/wearables/design/tiles-design-system#tile-templates);
-see [`GoldenTiles.kt`](app/src/main/java/com/example/wear/tiles/golden/GoldenTiles.kt).
+see [`GoldenTiles.kt`](app/src/debug/java/com/example/wear/tiles/golden/GoldenTiles.kt)).
 You may find it convenient to start with one of these layouts rather than designing and coding
 your own from scratch.
 
