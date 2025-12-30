@@ -26,10 +26,11 @@ jobs:
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-        working-directory: ./WatchFaceFormat/simpledigital
+        working-directory: ./WatchFaceFormat/SimpleDigital
 
       - name: Build DataLayer Application app
-        working-directory: ./WatchFaceFormat/simpledigital
+        working-directory: ./WatchFaceFormat/SimpleDigital
         run: ./gradlew assembleDebug
+        
       - name: List files
         run: ls ./ -R
