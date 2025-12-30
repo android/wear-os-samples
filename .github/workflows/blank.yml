@@ -1,0 +1,35 @@
+# Workflow name
+name: Build Wear OS Face Application
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: ./WatchFaceFormat/simpledigital
+
+      - name: Build DataLayer Application app
+        working-directory: ./WatchFaceFormat/simpledigital
+        run: ./gradlew assembleDebug
+      - name: List files
+        run: ls ./ -R
