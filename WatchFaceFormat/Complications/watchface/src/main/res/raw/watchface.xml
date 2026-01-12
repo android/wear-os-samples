@@ -14,7 +14,7 @@
                 </PartImage>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="169" y="45" width="113" height="113" slotId="1" displayName="top_complication_label" supportedTypes="SHORT_TEXT SMALL_IMAGE ICON RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS EMPTY">
+        <ComplicationSlot x="169" y="45" width="113" height="113" slotId="1" displayName="top_complication_label" supportedTypes="SHORT_TEXT SMALL_IMAGE RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS EMPTY">
             <BoundingOval x="0" y="0" width="113" height="113" outlinePadding="2.0"/>
             <Complication type="SHORT_TEXT">
                 <PartDraw x="0" y="0" width="113" height="113">
@@ -543,7 +543,7 @@
                 </Condition>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="45" y="158" width="113" height="113" slotId="2" displayName="left_complication_label" supportedTypes="SHORT_TEXT SMALL_IMAGE ICON RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS EMPTY">
+        <ComplicationSlot x="45" y="158" width="113" height="113" slotId="2" displayName="left_complication_label" supportedTypes="SHORT_TEXT SMALL_IMAGE RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS EMPTY">
             <BoundingOval x="0" y="0" width="113" height="113" outlinePadding="2.0"/>
             <Complication type="SHORT_TEXT">
                 <PartDraw x="0" y="0" width="113" height="113">
@@ -1072,7 +1072,7 @@
                 </Condition>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="293" y="158" width="113" height="113" slotId="3" displayName="right_complication_label" supportedTypes="SHORT_TEXT SMALL_IMAGE ICON RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS EMPTY">
+        <ComplicationSlot x="293" y="158" width="113" height="113" slotId="3" displayName="right_complication_label" supportedTypes="SHORT_TEXT SMALL_IMAGE RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS EMPTY">
             <BoundingOval x="0" y="0" width="113" height="113" outlinePadding="2.0"/>
             <Complication type="SHORT_TEXT">
                 <PartDraw x="0" y="0" width="113" height="113">
