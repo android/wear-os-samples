@@ -24,6 +24,6 @@ object AppCardDefaults {
     @Composable
     fun cardColors(): CardColors =
         CardDefaults.cardColors(
-            titleColor = MaterialTheme.colorScheme.tertiary
+            titleColor = MaterialTheme.colorScheme.onTertiary
         )
 }
