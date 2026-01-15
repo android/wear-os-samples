@@ -20,8 +20,8 @@ import androidx.wear.compose.material3.ColorScheme
 
 internal val wearColorScheme: ColorScheme =
     ColorScheme(
-        primary = Color(0xFFD8BAFA),
-        onPrimary = Color(0xFF3C245A),
+        primary = Color(0xFF6E00B4),
+        onPrimary = Color(0xFF9856EC),
         primaryContainer = Color(0xFF543B72),
         onPrimaryContainer = Color(0xFFEEDBFF),
         secondary = Color(0xFFCFC1DA),
