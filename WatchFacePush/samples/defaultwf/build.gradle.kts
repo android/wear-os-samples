@@ -22,7 +22,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.marketplace.watchfacepush.defaultwf"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.google.samples.marketplace.watchfacepush.defaultwf"
@@ -55,6 +55,12 @@ android {
                     output.outputFileName = "default_watchface.apk"
                 }
             }
+        }
+    }
+    packaging {
+        resources {
+            // Exclude all .kotlin_builtins files
+            excludes += "/**/*.kotlin_builtins"
         }
     }
 }

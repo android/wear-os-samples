@@ -25,21 +25,20 @@ import kotlin.text.trimMargin
  * Task to create a resource file containing the validation token of the default watch face.
  */
 abstract class TokenResourceTask : DefaultTask() {
-    @get:Input
-    abstract val buildVariant: Property<String>
+    @get:InputFile
+    abstract val tokenFile: RegularFileProperty
 
     @get:OutputDirectory
     abstract val outputDirectory: RegularFileProperty
 
     @TaskAction
     fun performAction() {
-        val tokenFile =
-            project.layout.buildDirectory.file("intermediates/watchfaceAssets/${buildVariant.get()}/default_watchface_token.txt")
-                .get()
-        val outputFile = outputDirectory.get().asFile.resolve("res/values/wf_token.xml")
+
+
+        val outputFile = outputDirectory.get().asFile.resolve("values/wf_token.xml")
         project.mkdir(outputFile.parent)
         val tokenResText = """<resources>
-                         |    <string name="default_wf_token">${tokenFile.asFile.readText()}</string>
+                         |    <string name="default_wf_token">${tokenFile.get().asFile.readText()}</string>
                          |</resources>
                        """.trimMargin()
         outputFile.writeText(tokenResText)

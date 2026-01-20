@@ -15,9 +15,8 @@
  */
 
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.compose.compiler)
+    id(libs.plugins.androidApplication.get().pluginId)
+    id(libs.plugins.compose.compiler.get().pluginId)
 }
 
 // Watch Face Push requires API level 36 and above.
@@ -46,9 +45,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
     }
@@ -57,19 +53,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
-    sourceSets {
-        getByName("release") {
-            assets.srcDirs(layout.buildDirectory.dir("intermediates/watchfaceAssets/release"))
-            res.srcDirs(layout.buildDirectory.file("generated/wfTokenRes/release/res/"))
-        }
-        getByName("debug") {
-            assets.srcDirs(layout.buildDirectory.dir("intermediates/watchfaceAssets/debug"))
-            res.srcDirs(layout.buildDirectory.file("generated/wfTokenRes/debug/res/"))
-        }
-    }
 }
 
+kotlin {
+    jvmToolchain(17)
+}
 
 val mainAppNamespace = Attribute.of("wfp.app.namespace", String::class.java)
 // Define configurations that allows this app to include the sample watch faces in their assets
@@ -141,25 +129,35 @@ dependencies {
 // of the default watch face. This token is read from the marketplace manifest
 // upon installation, so that the default watch face can be installed.
 
-afterEvaluate {
-    android.applicationVariants.all {
-        val capsVariantName = name.replaceFirstChar(Char::titlecase)
-        val variantName = name
-        val copyTask = tasks.register("copyWatchFaceAssets$capsVariantName", Copy::class.java) {
-            from(configurations.getByName("${variantName}WatchfaceOutput").incoming.artifactView {}.files)
-            into(layout.buildDirectory.dir("intermediates/watchfaceAssets/$variantName"))
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+androidComponents.onVariants { variant ->
+    val capsVariantName = variant.name.replaceFirstChar(Char::titlecase)
+    val variantName = variant.name
+
+    val assetsDir = layout.buildDirectory.dir("intermediates/watchfaceAssets/${variantName}")
+        .get().asFile
+    val resDir = layout.buildDirectory.dir("generated/wfTokenRes/${variantName}/res/")
+        .get().asFile
+    val tokenFilePath = project.layout.buildDirectory.file("intermediates/watchfaceAssets/${variantName}/default_watchface_token.txt")
+        .get()
+
+    variant.sources.assets?.addStaticSourceDirectory(assetsDir.absolutePath)
+    variant.sources.res?.addStaticSourceDirectory(resDir.absolutePath)
+
+    val copyTask = tasks.register("copyWatchFaceAssets$capsVariantName", Copy::class.java) {
+        from(configurations.getByName("${variantName}WatchfaceOutput").incoming.artifactView {}.files)
+        into(assetsDir)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    val tokenResTask =
+        tasks.register<TokenResourceTask_gradle.TokenResourceTask>("tokenResTask$capsVariantName") {
+            dependsOn(copyTask)
+            tokenFile.set(tokenFilePath)
+            outputDirectory.set(resDir)
         }
 
-        val tokenResTask =
-            tasks.register<TokenResourceTask_gradle.TokenResourceTask>("tokenResTask$capsVariantName") {
-                dependsOn(copyTask)
-                buildVariant.set(variantName)
-                outputDirectory.set(layout.buildDirectory.dir("generated/wfTokenRes/$variantName").get().asFile)
-            }
-        // make sure to run the two defined tasks before doing anything else.
-        // tokenResTask will cause copyWatchFaceAssets to
-        // run as well
+    afterEvaluate {
         tasks.named("pre${capsVariantName}Build").configure {
             dependsOn(tokenResTask)
         }

@@ -20,7 +20,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.marketplace.watchfacepush.firefly"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.google.samples.marketplace.watchfacepush.firefly"
@@ -44,6 +44,13 @@ android {
             // this is required so that dex files are stripped from the watch
             // face, which is a necessary step for the DWF to be valid.
             isMinifyEnabled = true
+        }
+    }
+
+    packaging {
+        resources {
+            // Exclude all .kotlin_builtins files
+            excludes += "/**/*.kotlin_builtins"
         }
     }
 }
