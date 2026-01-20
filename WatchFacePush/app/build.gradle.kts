@@ -121,7 +121,7 @@ dependencies {
 // watchfaceOutput configuration, and a dependency is added to these artifacts
 // from the app module. This tasks copies the artifacts from the configuration
 // into the build directory, so that we can include them as assets into the
-// marketplace app. For. more details, see the gradle configuration docs:
+// marketplace app. For more details, see the gradle configuration docs:
 // https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.Configuration.html
 
 // After the watch face apks and copied into the intermediates build directory,
