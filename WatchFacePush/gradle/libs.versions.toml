@@ -1,15 +1,15 @@
 [versions]
-agp = "8.13.1"
-wear-compose-material3 = "1.5.5"
-wear-compose = "1.5.5"
-compose-tooling = "1.5.5"
-kotlin = "2.1.21"
-lifecycleViewmodelKtx = "2.9.4"
-composeBom = "2025.11.00"
-activityCompose = "1.11.0"
+agp = "9.0.0"
+wear-compose-material3 = "1.5.6"
+wear-compose = "1.5.6"
+compose-tooling = "1.5.6"
+kotlin = "2.3.0"
+lifecycleViewmodelKtx = "2.10.0"
+composeBom = "2026.01.00"
+activityCompose = "1.12.2"
 coreSplashscreen = "1.2.0"
-watchfacePush = "1.0.0-alpha01"
-horologist = "0.7.14-beta"
+watchfacePush = "1.0.0-beta01"
+horologist = "0.7.15"
 
 [libraries]
 compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "wear-compose" }
