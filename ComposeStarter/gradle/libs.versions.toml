@@ -43,3 +43,4 @@ com-android-application = { id = "com.android.application", version.ref = "andro
 com-diffplug-spotless = "com.diffplug.spotless:8.4.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
