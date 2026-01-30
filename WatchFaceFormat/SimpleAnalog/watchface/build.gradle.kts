@@ -18,6 +18,7 @@ plugins {
 }
 
 android {
+    enableKotlin = false
     namespace = "com.example.simpleanalog"
     compileSdk = 33
 

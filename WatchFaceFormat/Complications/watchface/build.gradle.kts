@@ -18,6 +18,7 @@ plugins {
 }
 
 android {
+    enableKotlin = false
     namespace = "com.example.complications"
     compileSdk = 34
 

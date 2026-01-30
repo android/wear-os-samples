@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
 }
 
 android {
+    enableKotlin = false
     namespace = "com.example.photosmask"
     compileSdk = 36
 
