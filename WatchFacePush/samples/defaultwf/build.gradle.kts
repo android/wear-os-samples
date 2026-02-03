@@ -32,6 +32,8 @@ android {
         versionName = "1.0"
     }
 
+    enableKotlin = false
+
     buildTypes {
         release {
             // just for convenience, re-use the debug certificate for the
@@ -55,12 +57,6 @@ android {
                     output.outputFileName = "default_watchface.apk"
                 }
             }
-        }
-    }
-    packaging {
-        resources {
-            // Exclude all .kotlin_builtins files
-            excludes += "/**/*.kotlin_builtins"
         }
     }
 }
