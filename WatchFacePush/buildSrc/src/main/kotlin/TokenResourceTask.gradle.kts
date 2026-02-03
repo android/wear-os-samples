@@ -33,10 +33,8 @@ abstract class TokenResourceTask : DefaultTask() {
 
     @TaskAction
     fun performAction() {
-
-
         val outputFile = outputDirectory.get().asFile.resolve("values/wf_token.xml")
-        project.mkdir(outputFile.parent)
+        outputFile.parentFile.mkdirs()
         val tokenResText = """<resources>
                          |    <string name="default_wf_token">${tokenFile.get().asFile.readText()}</string>
                          |</resources>
