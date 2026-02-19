@@ -39,7 +39,6 @@ class ClientDataViewModel :
     DataClient.OnDataChangedListener,
     MessageClient.OnMessageReceivedListener,
     CapabilityClient.OnCapabilityChangedListener {
-
     private val _events = mutableStateListOf<Event>()
 
     /**
@@ -57,11 +56,12 @@ class ClientDataViewModel :
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         _events.addAll(
             dataEvents.map { dataEvent ->
-                val title = when (dataEvent.type) {
-                    DataEvent.TYPE_CHANGED -> R.string.data_item_changed
-                    DataEvent.TYPE_DELETED -> R.string.data_item_deleted
-                    else -> R.string.data_item_unknown
-                }
+                val title =
+                    when (dataEvent.type) {
+                        DataEvent.TYPE_CHANGED -> R.string.data_item_changed
+                        DataEvent.TYPE_DELETED -> R.string.data_item_deleted
+                        else -> R.string.data_item_unknown
+                    }
 
                 Event(
                     title = title,
@@ -97,7 +97,4 @@ class ClientDataViewModel :
 /**
  * A data holder describing a client event.
  */
-data class Event(
-    @StringRes val title: Int,
-    val text: String
-)
+data class Event(@StringRes val title: Int, val text: String)

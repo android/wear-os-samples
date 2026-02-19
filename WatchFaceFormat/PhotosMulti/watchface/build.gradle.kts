@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 plugins {
-    id("com.android.application")
-    // Use the locally-defined validator to demonstrate validation on-build.
-    id("com.google.wff.validatorplugin")
+    alias(libs.plugins.android.application)
 }
 
 android {
+    enableKotlin = false
     namespace = "com.example.photosmulti"
     compileSdk = 36
 

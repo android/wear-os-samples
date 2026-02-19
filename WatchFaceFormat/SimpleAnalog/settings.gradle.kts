@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 pluginManagement {
-    includeBuild("../validator-plugin")
     repositories {
         google()
         mavenCentral()
@@ -28,8 +27,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-// See: https://medium.com/@ttdevelopment/encountering-the-unable-to-make-progress-running-work-error-in-gradle-6bc363ac1eb8
-gradle.startParameter.excludedTaskNames.addAll(listOf(":validator-plugin:plugins:testClasses"))
 
 rootProject.name = "SimpleAnalog"
 include(":watchface")

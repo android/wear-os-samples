@@ -31,10 +31,7 @@ import com.google.android.horologist.compose.layout.ColumnItemType
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 @Composable
-fun NodesScreen(
-    nodes: Set<NodeUiModel>,
-    modifier: Modifier = Modifier
-) {
+fun NodesScreen(nodes: Set<NodeUiModel>, modifier: Modifier = Modifier) {
     val listState = rememberTransformingLazyColumnState()
 
     ScreenScaffold(

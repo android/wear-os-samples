@@ -20,9 +20,6 @@ import com.android.build.gradle.AppPlugin
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
-    alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.compose.compiler) apply false
 }
 
@@ -61,7 +58,7 @@ subprojects {
                 }
                 val tokenTask =
                     tasks.register<TokenGenerationTask_gradle.TokenGenerationTask>("assembleToken$variantName") {
-                        dependsOn(assembleTask)
+                        dependsOn(assembleTask!!)
 
                         val validatorConfiguration = rootProject.project("app").configurations.getByName("validatorConfiguration")
                         val mainAppPackageName = validatorConfiguration.attributes.getAttribute(mainAppNamespace)

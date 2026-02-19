@@ -30,7 +30,9 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class ListScreenTest(override val device: WearDevice) : WearScreenshotTest() {
+class ListScreenTest(
+    override val device: WearDevice
+) : WearScreenshotTest() {
     override val tolerance = 0.03f
 
     @Test
@@ -43,7 +45,8 @@ class ListScreenTest(override val device: WearDevice) : WearScreenshotTest() {
             }
         }
 
-        composeRule.onNode(hasScrollToIndexAction())
+        composeRule
+            .onNode(hasScrollToIndexAction())
             .performScrollToIndex(3)
             .performTouchInput {
                 swipeUp()

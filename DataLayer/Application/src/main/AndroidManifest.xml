@@ -41,5 +41,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".MigrationDataLayerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.NODE_MIGRATED" />
+                <data android:scheme="wear" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

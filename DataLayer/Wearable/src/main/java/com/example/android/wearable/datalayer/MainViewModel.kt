@@ -46,9 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class MainViewModel(
-    application: Application
-) :
+class MainViewModel(application: Application) :
     AndroidViewModel(application),
     DataClient.OnDataChangedListener,
     MessageClient.OnMessageReceivedListener,
@@ -152,7 +150,4 @@ class MainViewModel(
 /**
  * A data holder describing a client event.
  */
-data class Event(
-    @StringRes val title: Int,
-    val text: String
-)
+data class Event(@StringRes val title: Int, val text: String)

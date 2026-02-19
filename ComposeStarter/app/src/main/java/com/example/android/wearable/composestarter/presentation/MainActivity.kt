@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,21 +27,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AlertDialogDefaults
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonGroup
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
@@ -56,6 +56,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
+import com.example.android.wearable.composestarter.presentation.theme.AppCardDefaults
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
 import com.google.android.horologist.compose.layout.ColumnItemType
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
@@ -102,7 +103,11 @@ fun WearApp() {
 }
 
 @Composable
-fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modifier = Modifier) {
+fun GreetingScreen(
+    greetingName: String,
+    onShowList: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val scrollState = rememberTransformingLazyColumnState()
 
     /* If you have enough items in your list, use [TransformingLazyColumn] which is an optimized
@@ -116,14 +121,17 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modif
                 onClick = onShowList,
                 buttonSize = EdgeButtonSize.ExtraSmall
             ) {
-                Text(stringResource(R.string.show_list), textAlign = TextAlign.Center)
+                Text(stringResource(R.string.show_list))
             }
         },
+        // The bottom padding value is always ignored when using EdgeButton because this button is
+        // always placed at the end of the screen.
+        // The `ScreenScaffold` parameter `edgeButtonSpacing` can be used to specify the
+        // gap between edgeButton and content.
         contentPadding =
-        rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = EdgeButtonPadding
-        )
+            rememberResponsiveColumnPadding(
+                first = ColumnItemType.ListHeader
+            )
     ) { contentPadding ->
         // Use workaround from Horologist for padding or wait until fix lands
         TransformingLazyColumn(
@@ -133,13 +141,6 @@ fun GreetingScreen(greetingName: String, onShowList: () -> Unit, modifier: Modif
             item { Greeting(greetingName = greetingName, modifier = modifier.fillMaxSize()) }
         }
     }
-}
-
-object EdgeButtonPadding : ColumnItemType {
-    // Edge buttons are always at the bottom of the screen, so they don't need any top padding.
-    @Composable override fun topPadding(horizontalPercent: Float): Dp = 0.dp
-
-    @Composable override fun bottomPadding(horizontalPercent: Float): Dp = 0.dp
 }
 
 @Composable
@@ -158,13 +159,13 @@ fun ListScreen(modifier: Modifier = Modifier) {
         /*
          * TransformingLazyColumn takes care of the horizontal and vertical
          * padding for the list and handles scrolling.
+         * Use workaround from Horologist for padding or wait until fix lands
          */
-        // Use workaround from Horologist for padding or wait until fix lands
         contentPadding =
-        rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.IconButton
-        )
+            rememberResponsiveColumnPadding(
+                first = ColumnItemType.ListHeader,
+                last = ColumnItemType.IconButton
+            )
     ) { contentPadding ->
         TransformingLazyColumn(
             state = listState,
@@ -173,17 +174,26 @@ fun ListScreen(modifier: Modifier = Modifier) {
             item {
                 ListHeader(
                     modifier =
-                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                        Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 ) { Text(text = "Header") }
             }
             item {
                 TitleCard(
-                    title = { Text(stringResource(R.string.example_card_title)) },
+                    title = {
+                        Text(
+                            stringResource(R.string.example_card_title) // Removed explicit color
+                        )
+                    },
                     onClick = { },
                     modifier =
-                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
-                    transformation = SurfaceTransformation(transformationSpec)
+                        Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    colors = AppCardDefaults.cardColors()
                 ) {
                     Text(stringResource(R.string.example_card_content))
                 }
@@ -198,26 +208,50 @@ fun ListScreen(modifier: Modifier = Modifier) {
                     },
                     onClick = { },
                     modifier =
-                    Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                        Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 )
             }
             item {
-                FilledIconButton(
-                    onClick = { showDialog = true },
-                    modifier = modifier.graphicsLayer {
-                        with(transformationSpec) {
-                            applyContainerTransformation(scrollProgress)
-                        }
-                    }
-                        .transformedHeight(this, transformationSpec)
+                ButtonGroup(
+                    modifier =
+                        modifier
+                            .graphicsLayer {
+                                with(transformationSpec) {
+                                    applyContainerTransformation(scrollProgress)
+                                }
+                            }.transformedHeight(this, transformationSpec)
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Build,
-                        contentDescription = stringResource(
-                            R.string.example_button_content_description
+                    FilledIconButton(
+                        onClick = { showDialog = true },
+                        colors =
+                            IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
+                            )
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.settings),
+                            contentDescription =
+                                stringResource(
+                                    R.string.settings_button_content_description
+                                )
                         )
-                    )
+                    }
+                    FilledIconButton(
+                        onClick = { },
+                        shapes = IconButtonDefaults.animatedShapes()
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.thumb_up),
+                            contentDescription =
+                                stringResource(
+                                    R.string.thumbs_up_button_content_description
+                                )
+                        )
+                    }
                 }
             }
         }
@@ -232,7 +266,10 @@ fun ListScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Greeting(greetingName: String, modifier: Modifier = Modifier) {
+fun Greeting(
+    greetingName: String,
+    modifier: Modifier = Modifier
+) {
     ListHeader {
         Text(
             modifier = modifier.fillMaxWidth(),

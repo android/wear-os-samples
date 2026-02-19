@@ -20,7 +20,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.marketplace.watchfacepush.firefly"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.google.samples.marketplace.watchfacepush.firefly"
@@ -29,6 +29,8 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    enableKotlin = false
 
     buildTypes {
         release {

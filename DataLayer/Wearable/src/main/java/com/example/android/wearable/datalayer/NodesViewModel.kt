@@ -34,9 +34,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.tasks.await
 
-class NodesViewModel(
-    private val capabilityClient: CapabilityClient
-) : ViewModel() {
+class NodesViewModel(private val capabilityClient: CapabilityClient) : ViewModel() {
 
     private val nodes: SharedFlow<Set<Node>> = flow {
         emit(
@@ -119,11 +117,7 @@ class NodesViewModel(
     }
 }
 
-data class NodeUiModel(
-    val id: String,
-    val displayName: String,
-    val isNearby: Boolean
-)
+data class NodeUiModel(val id: String, val displayName: String, val isNearby: Boolean)
 
 fun Node.toNodesUI(): NodeUiModel = NodeUiModel(
     id = this.id,
