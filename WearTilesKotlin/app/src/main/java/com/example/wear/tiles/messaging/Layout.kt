@@ -43,20 +43,25 @@ import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.image
 import com.example.wear.tiles.tools.isLargeScreen
+import com.example.wear.tiles.tools.toImageResource
 
 @OptIn(ProtoLayoutExperimental::class)
-fun MaterialScope.contactButton(contact: Contact): LayoutElement {
-    if (contact.avatarSource !is AvatarSource.None) {
+fun MaterialScope.contactButton(
+    contact: Contact,
+    imageResource: ResourceBuilders.ImageResource?
+): LayoutElement {
+    if (imageResource != null) {
         return image {
             setHeight(expand())
             setWidth(expand())
             setModifiers(LayoutModifier.clip(shapes.full).toProtoLayoutModifiers())
-            setResourceId(contact.imageResourceId())
+            setImageResource(imageResource, contact.imageResourceId())
             setContentScaleMode(CONTENT_SCALE_MODE_CROP)
         }
     } else {
@@ -81,7 +86,8 @@ fun MaterialScope.contactButton(contact: Contact): LayoutElement {
 }
 
 fun MaterialScope.tileLayout(
-    contacts: List<Contact>
+    contacts: List<Contact>,
+    imageResources: Map<String, ResourceBuilders.ImageResource?>
 ): LayoutElement {
     val visibleContacts = contacts.take(if (isLargeScreen()) 6 else 4)
 
@@ -108,12 +114,22 @@ fun MaterialScope.tileLayout(
                 setWidth(expand())
                 setHeight(expand())
                 addContent(
-                    buttonGroup { row1.forEach { buttonGroupItem { contactButton(it) } } }
+                    buttonGroup {
+                        row1.forEach {
+                            buttonGroupItem { contactButton(it, imageResources[it.imageResourceId()]) }
+                        }
+                    }
                 )
                 if (!row2.isEmpty()) {
                     addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
                     addContent(
-                        buttonGroup { row2.forEach { buttonGroupItem { contactButton(it) } } }
+                        buttonGroup {
+                            row2.forEach {
+                                buttonGroupItem {
+                                    contactButton(it, imageResources[it.imageResourceId()])
+                                }
+                            }
+                        }
                     )
                 }
             }
@@ -166,18 +182,19 @@ internal fun socialPreview6(context: Context) = socialPreviewN(context, 6)
 
 internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
     val contacts = getMockLocalContacts().take(n)
-    return TilePreviewData(
-        resources {
-            contacts.forEach {
-                if (it.avatarSource is AvatarSource.Resource) {
-                    addIdToImageMapping(it.imageResourceId(), it.avatarSource.resourceId)
-                }
+    return TilePreviewData {
+        val imageResources = contacts.associate<Contact, String, ResourceBuilders.ImageResource> {
+            val id = it.imageResourceId()
+            val resource = if (it.avatarSource is AvatarSource.Resource) {
+                it.avatarSource.resourceId.toImageResource()
+            } else {
+                R.mipmap.offline.toImageResource()
             }
+            id to resource
         }
-    ) {
         TilePreviewHelper.singleTimelineEntryTileBuilder(
             materialScope(context, it.deviceConfiguration, true) {
-                tileLayout(contacts)
+                tileLayout(contacts, imageResources)
             }
         )
             .build()

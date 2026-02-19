@@ -25,6 +25,10 @@ import androidx.wear.protolayout.ResourceBuilders.ImageResource
 import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.tiles.RequestBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
+import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.tile
+import kotlin.time.Duration
 import java.nio.ByteBuffer
 
 // Resources extensions
@@ -77,6 +81,20 @@ fun box(builder: Box.Builder.() -> Unit) = Box.Builder().apply(builder).build()
 
 // LayoutElementBuilders extensions
 
+fun MaterialScope.tile(
+    timeline: Timeline,
+    freshness: Duration? = null
+): Tile {
+    return tile(
+        timeline = timeline,
+        freshness = freshness
+    )
+}
+
+fun MaterialScope.image(builder: LayoutElementBuilders.Image.Builder.() -> Unit) =
+    LayoutElementBuilders.Image.Builder(protoLayoutScope).apply(builder).build()
+
+@Deprecated("Use MaterialScope.image instead", replaceWith = ReplaceWith("image(builder)"))
 fun image(builder: LayoutElementBuilders.Image.Builder.() -> Unit) =
     LayoutElementBuilders.Image.Builder().apply(builder).build()
 

@@ -15,17 +15,16 @@
  */
 package com.example.wear.tiles.messaging
 
-import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.tiles.Material3TileService
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.tile
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.toImageResource
-import java.util.UUID
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -59,46 +58,26 @@ class MessagingTileService : Material3TileService() {
 
     /** This method returns a Tile object, which describes the layout and resources of the Tile. */
     override suspend fun MaterialScope.tileResponse(requestParams: TileRequest): Tile {
-        val layoutElement = tileLayout(contacts)
-
         // Asynchronously load images associated with resourceIds, and create a Map<String,
         // ResourceBuilders.ImageResource> suitable for adding to the Resources object
-        val resourceMap = coroutineScope {
+        val imageResources = coroutineScope {
             contacts.map { contact ->
                 async {
                     val id = contact.imageResourceId()
-                    imageLoader.loadAvatar(this@MessagingTileService, contact)?.let { image ->
+                    val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
+                    if (image == null && contact.avatarSource !is AvatarSource.None) {
+                        id to R.mipmap.offline.toImageResource()
+                    } else {
                         id to image
-                    } ?: (id to R.mipmap.offline.toImageResource())
+                    }
                 }
             }.awaitAll().toMap()
         }
 
-        // Resources are cached and keyed on resourcesVersion. If a Resources object with the same
-        // resourcesVersion is present in the cache, resourcesRequest() is not called, and the
-        // cached version is used instead. To ensure it is *always* called (e.g. for debugging), set
-        // the version to a random string.
-        val resourcesVersion =
-            if (DEBUG_RESOURCES) {
-                UUID.randomUUID().toString()
-            } else {
-                contacts.map { it.id }.toSortedSet().joinToString()
-            }
+        val layoutElement = tileLayout(contacts, imageResources)
 
-        val resources = Resources.Builder()
-            .setVersion(resourcesVersion)
-            .apply {
-                resourceMap.forEach { (id, imageResource) ->
-                    addIdToImageMapping(id, imageResource)
-                }
-            }
-            .build()
-
-        return Tile.Builder()
-            .setResourcesVersion(resourcesVersion)
-            .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
-            .build()
+        return tile(
+            timeline = Timeline.fromLayoutElement(layoutElement)
+        )
     }
 }
-
-const val DEBUG_RESOURCES = true

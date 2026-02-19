@@ -44,7 +44,7 @@ fun getMockNetworkContacts() =
             id = 0,
             initials = "AC",
             name = "Ali C",
-            avatarSource = AvatarSource.Network("$avatarPath/ali.png")
+            avatarSource = AvatarSource.Network("$avatarPath/ali.jpg")
         ),
         Contact(id = 1, initials = "JV", name = "Jyoti V", avatarSource = AvatarSource.None),
         Contact(
