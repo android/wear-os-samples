@@ -17,14 +17,14 @@ package com.example.wear.tiles.messaging
 
 import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.TimelineBuilders.Timeline
-import androidx.wear.tiles.RequestBuilders.ResourcesRequest
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.tiles.Material3TileService
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.TileBuilders.Tile
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.toImageResource
-import com.google.android.horologist.tiles.SuspendingTileService
 import java.util.UUID
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -33,13 +33,12 @@ import kotlinx.coroutines.coroutineScope
 /**
  * Creates a Messaging tile, showing up to 6 contacts, an icon button and an edge button.
  *
- * It extends [SuspendingTileService], a Coroutine-friendly wrapper around
- * [androidx.wear.tiles.TileService], and implements [tileRequest] and [resourcesRequest].
+ * It extends [Material3TileService], a Coroutine-friendly wrapper around
+ * [androidx.wear.tiles.TileService] that provides [MaterialScope], and implements [tileResponse].
  *
- * The main function, [tileRequest], is triggered when the system calls for a tile. Resources are
- * provided with the [resourcesRequest] method, which is triggered when the tile uses an Image.
+ * The main function, [tileResponse], is triggered when the system calls for a tile.
  */
-class MessagingTileService : SuspendingTileService() {
+class MessagingTileService : Material3TileService() {
     private lateinit var imageLoader: ImageLoader
     private lateinit var contacts: List<Contact>
 
@@ -58,9 +57,22 @@ class MessagingTileService : SuspendingTileService() {
         imageLoader = SingletonImageLoader.get(this)
     }
 
-    /** This method returns a Tile object, which describes the layout of the Tile. */
-    override suspend fun tileRequest(requestParams: TileRequest): Tile {
-        val layoutElement = tileLayout(this, requestParams.deviceConfiguration, contacts)
+    /** This method returns a Tile object, which describes the layout and resources of the Tile. */
+    override suspend fun MaterialScope.tileResponse(requestParams: TileRequest): Tile {
+        val layoutElement = tileLayout(contacts)
+
+        // Asynchronously load images associated with resourceIds, and create a Map<String,
+        // ResourceBuilders.ImageResource> suitable for adding to the Resources object
+        val resourceMap = coroutineScope {
+            contacts.map { contact ->
+                async {
+                    val id = contact.imageResourceId()
+                    imageLoader.loadAvatar(this@MessagingTileService, contact)?.let { image ->
+                        id to image
+                    } ?: (id to R.mipmap.offline.toImageResource())
+                }
+            }.awaitAll().toMap()
+        }
 
         // Resources are cached and keyed on resourcesVersion. If a Resources object with the same
         // resourcesVersion is present in the cache, resourcesRequest() is not called, and the
@@ -73,55 +85,18 @@ class MessagingTileService : SuspendingTileService() {
                 contacts.map { it.id }.toSortedSet().joinToString()
             }
 
-        return Tile.Builder()
-            .setResourcesVersion(resourcesVersion)
-            .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
-            .build()
-    }
-
-    /**
-     * This method returns a Tile Resources object that contains the image data required to render
-     * and display the tile. It's passed a ResourcesRequest, one property of which is `resourceIds`
-     * (a List<String>) which represents the resources we need to provide. (Note that this is just a
-     * list of strings; these are *not* Android resource ids.)
-     *
-     * In this method we (1) find the Contacts that correspond to the passed resourceIds, (2)
-     * asynchronously load the associated images, and then (3) add this data into a Resources
-     * object.
-     */
-    override suspend fun resourcesRequest(requestParams: ResourcesRequest): Resources {
-        // If resourceIds is empty, set resourceIds to all resources
-        val resourceIds =
-            requestParams.resourceIds.ifEmpty { contacts.map { it.imageResourceId() } }
-
-        // Asynchronously load images associated with resourceIds, and create a Map<String,
-        // ResourceBuilders.ImageResource> suitable for adding to the Resources object
-        val resourceMap = coroutineScope {
-            resourceIds
-                .map { id ->
-                    async {
-                        contacts
-                            .find { it.imageResourceId() == id }
-                            ?.let { contact ->
-                                imageLoader.loadAvatar(this@MessagingTileService, contact)?.let {
-                                        image ->
-                                    id to image
-                                }
-                            } ?: (id to R.mipmap.offline.toImageResource())
-                    }
-                }
-                .awaitAll()
-                .toMap()
-        }
-
-        // Add images to the Resources object, and return
-        return Resources.Builder()
-            .setVersion(requestParams.version)
+        val resources = Resources.Builder()
+            .setVersion(resourcesVersion)
             .apply {
                 resourceMap.forEach { (id, imageResource) ->
                     addIdToImageMapping(id, imageResource)
                 }
             }
+            .build()
+
+        return Tile.Builder()
+            .setResourcesVersion(resourcesVersion)
+            .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
             .build()
     }
 }
