@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.13.2"
+android-gradle-plugin = "9.1.0"
 compose = "1.10.3"
 ktlint = "0.50.0"
 ktfmt = "0.54"
@@ -7,7 +7,7 @@ androidx-wear-tiles = "1.6.0-beta01"
 androidx-wear-protolayout = "1.4.0-beta01"
 coil = "3.3.0"
 horologist = "0.7.12-alpha"
-org-jetbrains-kotlin = "2.1.21"
+org-jetbrains-kotlin = "2.2.10"
 wear-tooling-preview = "1.0.0"
 desugar-jdk = "2.1.5"
 
