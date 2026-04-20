@@ -15,12 +15,11 @@
  */
 package presentation
 
+import androidx.compose.runtime.Composable
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.TimeSource
+import androidx.wear.compose.material3.TimeText
 import com.example.android.wearable.composestarter.presentation.GreetingScreen
-import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.android.horologist.compose.layout.ResponsiveTimeText
-import com.google.android.horologist.screenshots.FixedTimeSource
-import com.google.android.horologist.screenshots.rng.WearDevice
-import com.google.android.horologist.screenshots.rng.WearScreenshotTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -35,7 +34,15 @@ class GreetingScreenTest(
     fun greetingScreenTest() =
         runTest {
             AppScaffold(
-                timeText = { ResponsiveTimeText(timeSource = FixedTimeSource) }
+                timeText = {
+                    TimeText(
+                        timeSource =
+                            object : TimeSource {
+                                @Composable
+                                override fun currentTime(): String = "10:10"
+                            }
+                    )
+                }
             ) {
                 GreetingScreen(greetingName = "screenshot", onShowList = {})
             }
