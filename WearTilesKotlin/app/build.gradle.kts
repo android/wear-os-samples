@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -47,24 +47,18 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    buildFeatures {
-        compose = true
-    }
+
 
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-        freeCompilerArgs.add("-opt-in=com.google.android.horologist.annotations.ExperimentalHorologistApi")
     }
 }
 
 dependencies {
-    // Horologist provides helpful wrappers for Tiles development
-    implementation(libs.horologist.tiles)
-
     // Coil for asynchronous image loading
     implementation(libs.coil)
     implementation(libs.coil.okhttp)
@@ -79,6 +73,7 @@ dependencies {
 
     // Tooling dependencies for previewing tiles in Android Studio.
     implementation(libs.androidx.tiles.tooling)
+
     debugImplementation(libs.androidx.wear.tiles.renderer)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.wear.tooling.preview)

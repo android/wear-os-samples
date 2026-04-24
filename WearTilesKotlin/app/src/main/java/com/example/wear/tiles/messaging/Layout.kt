@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 package com.example.wear.tiles.messaging
 
 import android.content.Context
-import androidx.annotation.OptIn
-import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.expression.ProtoLayoutExperimental
+import androidx.wear.protolayout.layout.basicImage
 import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
@@ -38,27 +37,31 @@ import androidx.wear.protolayout.modifiers.LayoutModifier
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.clip
 import androidx.wear.protolayout.modifiers.padding
-import androidx.wear.protolayout.modifiers.toProtoLayoutModifiers
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
+import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.column
-import com.example.wear.tiles.tools.image
 import com.example.wear.tiles.tools.isLargeScreen
+import com.example.wear.tiles.tools.toImageResource
+import kotlin.OptIn
 
 @OptIn(ProtoLayoutExperimental::class)
-fun MaterialScope.contactButton(contact: Contact): LayoutElement {
-    if (contact.avatarSource !is AvatarSource.None) {
-        return image {
-            setHeight(expand())
-            setWidth(expand())
-            setModifiers(LayoutModifier.clip(shapes.full).toProtoLayoutModifiers())
-            setResourceId(contact.imageResourceId())
-            setContentScaleMode(CONTENT_SCALE_MODE_CROP)
-        }
+fun MaterialScope.contactButton(
+    contact: Contact,
+    imageResource: ResourceBuilders.ImageResource?
+): LayoutElement {
+    if (imageResource != null) {
+        return protoLayoutScope.basicImage(
+            resource = imageResource,
+            width = expand(),
+            height = expand(),
+            protoLayoutResourceId = contact.imageResourceId(),
+            modifier = LayoutModifier.clip(shapes.full),
+            contentScaleMode = CONTENT_SCALE_MODE_CROP
+        )
     } else {
         // Simple function to return one of a set of themed button colors
         val colors = buttonColorsByIndex(contact.initials.hashCode())
@@ -80,60 +83,68 @@ fun MaterialScope.contactButton(contact: Contact): LayoutElement {
     }
 }
 
-fun tileLayout(
-    context: Context,
-    deviceParameters: DeviceParameters,
-    contacts: List<Contact>
+fun MaterialScope.tileLayout(
+    contacts: List<Contact>,
+    imageResources: Map<String, ResourceBuilders.ImageResource?>
 ): LayoutElement {
-    return materialScope(
-        context = context,
-        deviceConfiguration = deviceParameters,
-        allowDynamicTheme = true
-    ) {
-        val visibleContacts = contacts.take(if (isLargeScreen()) 6 else 4)
+    val visibleContacts = contacts.take(if (isLargeScreen()) 6 else 4)
 
-        val (row1, row2) =
-            visibleContacts.chunked(if (visibleContacts.size > 4) 3 else 2).let { chunkedList ->
-                Pair(
-                    chunkedList.getOrElse(0) { emptyList() },
-                    chunkedList.getOrElse(1) { emptyList() }
-                )
-            }
+    val (row1, row2) =
+        visibleContacts.chunked(if (visibleContacts.size > 4) 3 else 2).let { chunkedList ->
+            Pair(
+                chunkedList.getOrElse(0) { emptyList() },
+                chunkedList.getOrElse(1) { emptyList() }
+            )
+        }
 
-        primaryLayout(
-            titleSlot =
-            // Only display the title if there's one row, otherwise the touch targets become
-            // too small (less than 48dp). See
-            // https://developer.android.com/training/wearables/accessibility#set-minimum
+    return primaryLayout(
+        // Only display the title if there's one row, otherwise the touch targets become
+        // too small (less than 48dp). See
+        // https://developer.android.com/training/wearables/accessibility#set-minimum
+        titleSlot =
             if (row2.isEmpty()) {
                 { text(text = "Contacts".layoutString) }
             } else {
                 null
             },
-            mainSlot = {
-                column {
-                    setWidth(expand())
-                    setHeight(expand())
-                    addContent(
-                        buttonGroup { row1.forEach { buttonGroupItem { contactButton(it) } } }
-                    )
-                    if (!row2.isEmpty()) {
-                        addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(
-                            buttonGroup { row2.forEach { buttonGroupItem { contactButton(it) } } }
-                        )
+        mainSlot = {
+            column {
+                setWidth(expand())
+                setHeight(expand())
+                addContent(
+                    buttonGroup {
+                        row1.forEach {
+                            buttonGroupItem {
+                                contactButton(
+                                    it,
+                                    imageResources[it.imageResourceId()]
+                                )
+                            }
+                        }
                     }
-                }
-            },
-            bottomSlot = {
-                textEdgeButton(
-                    onClick = clickable(),
-                    labelContent = { text("More".layoutString) },
-                    colors = filledTonalButtonColors()
                 )
+                if (!row2.isEmpty()) {
+                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                    addContent(
+                        buttonGroup {
+                            row2.forEach {
+                                buttonGroupItem {
+                                    contactButton(it, imageResources[it.imageResourceId()])
+                                }
+                            }
+                        }
+                    )
+                }
             }
-        )
-    }
+        },
+        bottomSlot = {
+            textEdgeButton(
+                onClick = clickable(),
+                labelContent = { text("More".layoutString) },
+                colors = filledTonalButtonColors()
+            )
+        }
+    )
 }
 
 /** Returns a set of [ButtonColors] based on the provided index [n]. */
@@ -151,8 +162,7 @@ private fun MaterialScope.buttonColorsByIndex(n: Int): ButtonColors =
             labelColor = colorScheme.onTertiary,
             containerColor = colorScheme.tertiaryDim
         )
-    )
-        .let { it[n.mod(it.size)] }
+    ).let { it[n.mod(it.size)] }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun socialPreview1(context: Context) = socialPreviewN(context, 1)
@@ -172,26 +182,39 @@ internal fun socialPreview5(context: Context) = socialPreviewN(context, 5)
 @MultiRoundDevicesWithFontScalePreviews
 internal fun socialPreview6(context: Context) = socialPreviewN(context, 6)
 
-internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
+internal fun socialPreviewN(
+    context: Context,
+    n: Int
+): TilePreviewData {
     val contacts = getMockLocalContacts().take(n)
-    return TilePreviewData(
-        resources {
-            contacts.forEach {
-                if (it.avatarSource is AvatarSource.Resource) {
-                    addIdToImageMapping(it.imageResourceId(), it.avatarSource.resourceId)
-                }
+    return TilePreviewData {
+        val imageResources =
+            contacts.associate {
+                val id = it.imageResourceId()
+                val resource =
+                    if (it.avatarSource is AvatarSource.Resource) {
+                        it.avatarSource.resourceId.toImageResource()
+                    } else {
+                        R.mipmap.offline.toImageResource()
+                    }
+                id to resource
             }
-        }
-    ) {
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            tileLayout(context, it.deviceConfiguration, contacts)
-        )
-            .build()
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                materialScope(context, it.deviceConfiguration, true) {
+                    tileLayout(contacts, imageResources)
+                }
+            ).build()
     }
 }
 
 internal fun resources(
     fn: ResourceBuilders.Resources.Builder.() -> Unit
-): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources = {
-    ResourceBuilders.Resources.Builder().setVersion(it.version).apply(fn).build()
-}
+): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources =
+    {
+        ResourceBuilders.Resources
+            .Builder()
+            .setVersion(it.version)
+            .apply(fn)
+            .build()
+    }

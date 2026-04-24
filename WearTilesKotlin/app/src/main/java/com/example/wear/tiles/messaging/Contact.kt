@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,14 @@ data class Contact(
 
 sealed interface AvatarSource {
     // Represents an image fetched from a network URL
-    data class Network(val url: String) : AvatarSource
+    data class Network(
+        val url: String
+    ) : AvatarSource
 
     // Represents an image loaded from Android drawable resources
-    data class Resource(@DrawableRes val resourceId: Int) : AvatarSource
+    data class Resource(
+        @DrawableRes val resourceId: Int
+    ) : AvatarSource
 
     // Represents the absence of a specific avatar
     object None : AvatarSource
@@ -44,14 +48,14 @@ fun getMockNetworkContacts() =
             id = 0,
             initials = "AC",
             name = "Ali C",
-            avatarSource = AvatarSource.Network("$avatarPath/ali.png")
+            avatarSource = AvatarSource.Network("$AVATAR_PATH/ali.jpg")
         ),
         Contact(id = 1, initials = "JV", name = "Jyoti V", avatarSource = AvatarSource.None),
         Contact(
             id = 2,
             initials = "TB",
             name = "Taylor B",
-            avatarSource = AvatarSource.Network("$avatarPath/taylor.jpg")
+            avatarSource = AvatarSource.Network("$AVATAR_PATH/taylor.jpg")
         ),
         Contact(id = 3, initials = "FS", name = "Felipe S", avatarSource = AvatarSource.None),
         Contact(id = 4, initials = "JG", name = "Judith G", avatarSource = AvatarSource.None),
@@ -78,6 +82,6 @@ fun getMockLocalContacts() =
         Contact(id = 5, initials = "AO", name = "Andrew O", avatarSource = AvatarSource.None)
     )
 
-private const val avatarPath =
+private const val AVATAR_PATH =
     "https://raw.githubusercontent.com" +
         "/android/wear-os-samples/main/WearTilesKotlin/app/src/main/res/drawable-nodpi"
