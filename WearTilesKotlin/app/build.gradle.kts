@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -49,14 +48,11 @@ android {
 
 
 
+
+
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-    }
-}
+
 
 dependencies {
     // Coil for asynchronous image loading
@@ -73,9 +69,10 @@ dependencies {
 
     // Tooling dependencies for previewing tiles in Android Studio.
     implementation(libs.androidx.tiles.tooling)
+    implementation(libs.horologist.tiles)
 
     debugImplementation(libs.androidx.wear.tiles.renderer)
-    debugImplementation(libs.androidx.compose.ui.tooling)
+
     debugImplementation(libs.androidx.wear.tooling.preview)
     debugImplementation(libs.androidx.wear.tiles.tooling)
     // The tile preview code is in the same file as the tiles themselves, so we need to make the
