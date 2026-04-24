@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -47,9 +47,7 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    buildFeatures {
-        compose = true
-    }
+
 
 }
 
@@ -75,7 +73,7 @@ dependencies {
 
     // Tooling dependencies for previewing tiles in Android Studio.
     implementation(libs.androidx.tiles.tooling)
-    implementation("androidx.compose.runtime:runtime:1.7.0")
+
     debugImplementation(libs.androidx.wear.tiles.renderer)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.wear.tooling.preview)
