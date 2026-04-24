@@ -28,7 +28,7 @@ import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColor
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.buttonGroup
-import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.material3.textButton
@@ -123,7 +123,7 @@ fun MaterialScope.tileLayout(
                         }
                     }
                 )
-                if (!row2.isEmpty()) {
+                if (row2.isNotEmpty()) {
                     addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
                     addContent(
                         buttonGroup {
@@ -187,25 +187,45 @@ internal fun socialPreviewN(
     n: Int
 ): TilePreviewData {
     val contacts = getMockLocalContacts().take(n)
-    return TilePreviewData {
-        val imageResources =
-            contacts.associate {
-                val id = it.imageResourceId()
-                val resource =
-                    if (it.avatarSource is AvatarSource.Resource) {
-                        it.avatarSource.resourceId.toImageResource()
-                    } else {
-                        R.mipmap.offline.toImageResource()
-                    }
-                id to resource
-            }
-        TilePreviewHelper
-            .singleTimelineEntryTileBuilder(
-                materialScope(context, it.deviceConfiguration, true) {
-                    tileLayout(contacts, imageResources)
+    val imageResources =
+        contacts.associate {
+            val id = it.imageResourceId()
+            val resource =
+                if (it.avatarSource is AvatarSource.Resource) {
+                    it.avatarSource.resourceId.toImageResource()
+                } else {
+                    R.mipmap.offline.toImageResource()
                 }
-            ).build()
-    }
+            id to resource
+        }
+    return TilePreviewData(
+        onTileRequest = { request ->
+            TilePreviewHelper
+                .singleTimelineEntryTileBuilder(
+                    materialScopeWithResources(
+                        context = context,
+                        protoLayoutScope = request.scope,
+                        deviceConfiguration = request.deviceConfiguration,
+                        allowDynamicTheme = true,
+                        defaultColorScheme =
+                            androidx.wear.protolayout.material3
+                                .ColorScheme()
+                    ) {
+                        tileLayout(contacts, imageResources)
+                    }
+                ).build()
+        },
+        onTileResourceRequest = { request ->
+            val builder =
+                androidx.wear.protolayout.ResourceBuilders.Resources
+                    .Builder()
+                    .setVersion(request.version)
+            imageResources.forEach { (id, resource) ->
+                builder.addIdToImageMapping(id, resource)
+            }
+            builder.build()
+        }
+    )
 }
 
 internal fun resources(

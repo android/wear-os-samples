@@ -83,6 +83,7 @@ class MessagingTileService : Material3TileService() {
 
         val layoutElement = tileLayout(contacts, imageResources)
 
+        // Note: Images could be cached by the system because version is tied to contact IDs.
         val resourcesVersion = contacts.map { it.id }.toSortedSet().joinToString()
 
         return Tile
