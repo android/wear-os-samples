@@ -49,6 +49,7 @@ class MessagingTileService : Material3TileService() {
         contacts = getMockNetworkContacts()
 
         // For this sample, make Coil dumb by disabling all caching features.
+        // Configured here for simplicity in this sample, though Application level is preferred in production.
         SingletonImageLoader.setSafe { context ->
             ImageLoader
                 .Builder(context)
