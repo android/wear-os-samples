@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2025-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.example.wear.tiles.golden
 
 import android.content.Context
@@ -52,68 +54,72 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
 object Hike {
-    data class HikeData(val distance: String, val unit: String, val clickable: Clickable)
+    data class HikeData(
+        val distance: String,
+        val unit: String,
+        val clickable: Clickable
+    )
 
     fun layout(
         context: Context,
         deviceParameters: DeviceParameters,
         protoLayoutScope: ProtoLayoutScope,
         data: HikeData
-    ) =
-        materialScopeWithResources(context, protoLayoutScope, deviceParameters) {
-            primaryLayout(
-                titleSlot = { text("Hike".layoutString) },
-                bottomSlot = {
-                    textEdgeButton(
-                        onClick = data.clickable,
-                        colors = filledButtonColors(),
-                        labelContent = { text("Start".layoutString) }
-                    )
-                },
-                mainSlot = {
-                    buttonGroup {
-                        buttonGroupItem {
-                            textDataCard(
-                                width = weight(0.4f),
-                                height = expand(),
-                                onClick = data.clickable,
-                                colors = filledVariantCardColors(),
-                                title = {
-                                    text(
-                                        data.distance.layoutString,
-                                        typography = NUMERAL_SMALL,
-                                        alignment = TEXT_ALIGN_CENTER
-                                    )
-                                },
-                                content = {
-                                    text(
-                                        data.unit.layoutString,
-                                        typography = BODY_SMALL,
-                                        alignment = TEXT_ALIGN_CENTER
-                                    )
-                                }
-                            )
-                        }
-                        buttonGroupItem {
-                            imageButton(
-                                width = weight(0.6f),
-                                height = expand(),
-                                onClick = data.clickable,
-                                modifier = LayoutModifier.clip(shapes.large),
-                                backgroundContent = {
-                                    backgroundImage(
-                                        resource = imageResource(
+    ) = materialScopeWithResources(context, protoLayoutScope, deviceParameters) {
+        primaryLayout(
+            titleSlot = { text("Hike".layoutString) },
+            bottomSlot = {
+                textEdgeButton(
+                    onClick = data.clickable,
+                    colors = filledButtonColors(),
+                    labelContent = { text("Start".layoutString) }
+                )
+            },
+            mainSlot = {
+                buttonGroup {
+                    buttonGroupItem {
+                        textDataCard(
+                            width = weight(0.4f),
+                            height = expand(),
+                            onClick = data.clickable,
+                            colors = filledVariantCardColors(),
+                            title = {
+                                text(
+                                    data.distance.layoutString,
+                                    typography = NUMERAL_SMALL,
+                                    alignment = TEXT_ALIGN_CENTER
+                                )
+                            },
+                            content = {
+                                text(
+                                    data.unit.layoutString,
+                                    typography = BODY_SMALL,
+                                    alignment = TEXT_ALIGN_CENTER
+                                )
+                            }
+                        )
+                    }
+                    buttonGroupItem {
+                        imageButton(
+                            width = weight(0.6f),
+                            height = expand(),
+                            onClick = data.clickable,
+                            modifier = LayoutModifier.clip(shapes.large),
+                            backgroundContent = {
+                                backgroundImage(
+                                    resource =
+                                        imageResource(
                                             androidImage = androidImageResource(R.drawable.photo_14)
                                         ),
-                                        overlayColor = null
-                                    )
-                                }
-                            )
-                        }
+                                    overlayColor = null
+                                )
+                            }
+                        )
                     }
                 }
-            )
-        }
+            }
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
@@ -121,32 +127,38 @@ internal fun hikePreview(context: Context): TilePreviewData {
     val protoLayoutScope = ProtoLayoutScope()
     return TilePreviewData(
         onTileRequest = { requestParams ->
-            TilePreviewHelper.singleTimelineEntryTileBuilder(
-                Hike.layout(
-                    context = context,
-                    deviceParameters = requestParams.deviceConfiguration,
-                    protoLayoutScope = protoLayoutScope,
-                    data = Hike.HikeData(distance = "10", unit = "Miles", clickable = clickable())
-                )
-            )
-                .build()
+            TilePreviewHelper
+                .singleTimelineEntryTileBuilder(
+                    Hike.layout(
+                        context = context,
+                        deviceParameters = requestParams.deviceConfiguration,
+                        protoLayoutScope = protoLayoutScope,
+                        data =
+                            Hike.HikeData(
+                                distance = "10",
+                                unit = "Miles",
+                                clickable = clickable()
+                            )
+                    )
+                ).build()
         },
         onTileResourceRequest = { protoLayoutScope.collectResources() }
     )
 }
 
 class HikeTileService : TileService() {
-    override fun onTileRequest(
-        requestParams: RequestBuilders.TileRequest
-    ): ListenableFuture<Tile?> {
-        val layout = Hike.layout(
-            this,
-            requestParams.deviceConfiguration,
-            requestParams.scope,
-            Hike.HikeData(distance = "10", unit = "Miles", clickable = clickable())
-        )
-        val tile = TilePreviewHelper.singleTimelineEntryTileBuilder(layout)
-            .build()
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<Tile?> {
+        val layout =
+            Hike.layout(
+                this,
+                requestParams.deviceConfiguration,
+                requestParams.scope,
+                Hike.HikeData(distance = "10", unit = "Miles", clickable = clickable())
+            )
+        val tile =
+            TilePreviewHelper
+                .singleTimelineEntryTileBuilder(layout)
+                .build()
         return Futures.immediateFuture(tile)
     }
 }

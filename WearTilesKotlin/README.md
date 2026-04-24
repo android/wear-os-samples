@@ -21,7 +21,7 @@ launching which lets you launch the Messaging tile directly to a device or
 emulator in just one click.
 
 For the sample, start with
-[`Service.kt`](app/src/main/java/com/example/wear/tiles/messaging/Service.kt);
+[`MessagingTileService.kt`](app/src/main/java/com/example/wear/tiles/messaging/MessagingTileService.kt);
 the layout (with IDE preview) can be found in
 [`Layout.kt`](app/src/main/java/com/example/wear/tiles/messaging/Layout.kt).
 

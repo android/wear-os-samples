@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package com.example.wear.tiles.messaging
 
 import android.content.Context
-import androidx.annotation.OptIn
-import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
@@ -45,11 +43,11 @@ import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.addIdToImageMapping
 import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.image
 import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.toImageResource
+import kotlin.OptIn
 
 @OptIn(ProtoLayoutExperimental::class)
 fun MaterialScope.contactButton(
@@ -100,15 +98,15 @@ fun MaterialScope.tileLayout(
         }
 
     return primaryLayout(
-        titleSlot =
         // Only display the title if there's one row, otherwise the touch targets become
         // too small (less than 48dp). See
         // https://developer.android.com/training/wearables/accessibility#set-minimum
-        if (row2.isEmpty()) {
-            { text(text = "Contacts".layoutString) }
-        } else {
-            null
-        },
+        titleSlot =
+            if (row2.isEmpty()) {
+                { text(text = "Contacts".layoutString) }
+            } else {
+                null
+            },
         mainSlot = {
             column {
                 setWidth(expand())
@@ -116,7 +114,12 @@ fun MaterialScope.tileLayout(
                 addContent(
                     buttonGroup {
                         row1.forEach {
-                            buttonGroupItem { contactButton(it, imageResources[it.imageResourceId()]) }
+                            buttonGroupItem {
+                                contactButton(
+                                    it,
+                                    imageResources[it.imageResourceId()]
+                                )
+                            }
                         }
                     }
                 )
@@ -159,8 +162,7 @@ private fun MaterialScope.buttonColorsByIndex(n: Int): ButtonColors =
             labelColor = colorScheme.onTertiary,
             containerColor = colorScheme.tertiaryDim
         )
-    )
-        .let { it[n.mod(it.size)] }
+    ).let { it[n.mod(it.size)] }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun socialPreview1(context: Context) = socialPreviewN(context, 1)
@@ -180,29 +182,39 @@ internal fun socialPreview5(context: Context) = socialPreviewN(context, 5)
 @MultiRoundDevicesWithFontScalePreviews
 internal fun socialPreview6(context: Context) = socialPreviewN(context, 6)
 
-internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
+internal fun socialPreviewN(
+    context: Context,
+    n: Int
+): TilePreviewData {
     val contacts = getMockLocalContacts().take(n)
     return TilePreviewData {
-        val imageResources = contacts.associate<Contact, String, ResourceBuilders.ImageResource> {
-            val id = it.imageResourceId()
-            val resource = if (it.avatarSource is AvatarSource.Resource) {
-                it.avatarSource.resourceId.toImageResource()
-            } else {
-                R.mipmap.offline.toImageResource()
+        val imageResources =
+            contacts.associate<Contact, String, ResourceBuilders.ImageResource> {
+                val id = it.imageResourceId()
+                val resource =
+                    if (it.avatarSource is AvatarSource.Resource) {
+                        it.avatarSource.resourceId.toImageResource()
+                    } else {
+                        R.mipmap.offline.toImageResource()
+                    }
+                id to resource
             }
-            id to resource
-        }
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            materialScope(context, it.deviceConfiguration, true) {
-                tileLayout(contacts, imageResources)
-            }
-        )
-            .build()
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                materialScope(context, it.deviceConfiguration, true) {
+                    tileLayout(contacts, imageResources)
+                }
+            ).build()
     }
 }
 
 internal fun resources(
     fn: ResourceBuilders.Resources.Builder.() -> Unit
-): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources = {
-    ResourceBuilders.Resources.Builder().setVersion(it.version).apply(fn).build()
-}
+): (RequestBuilders.ResourcesRequest) -> ResourceBuilders.Resources =
+    {
+        ResourceBuilders.Resources
+            .Builder()
+            .setVersion(it.version)
+            .apply(fn)
+            .build()
+    }

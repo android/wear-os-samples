@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.example.wear.tiles.golden
 
 import android.content.Context
@@ -23,6 +25,10 @@ import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
@@ -33,10 +39,6 @@ import androidx.wear.protolayout.material3.Typography.TITLE_MEDIUM
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.card
 import androidx.wear.protolayout.material3.icon
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.layout.androidImageResource
-import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -83,60 +85,63 @@ object Weather {
         scope: ProtoLayoutScope,
         deviceParameters: DeviceParameters,
         data: WeatherData
-    ) =
-        materialScopeWithResources(context, scope, deviceParameters) {
-            primaryLayout(
-                titleSlot = { text(data.location.layoutString) },
-                mainSlot = {
-                    column {
-                        setHeight(expand())
-                        setWidth(expand())
-                        addContent(conditions(data.conditions))
-                        addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(forecast(data.forecast))
-                    }
-                }
-            )
-        }
-
-    private fun MaterialScope.conditions(conditions: Conditions): LayoutElement = box {
-        setHeight(weight(0.40F))
-        setWidth(expand())
-        addContent(
-            buttonGroup {
-                setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
-                buttonGroupItem {
-                    icon(
-                        imageResource(androidImageResource(conditions.weatherIconId)),
-                        width = dp(32F),
-                        height = dp(32F),
-                        tintColor = colorScheme.tertiary
-                    )
-                }
-                buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
-                buttonGroupItem {
-                    text(
-                        conditions.currentTemperature.layoutString,
-                        typography = if (isLargeScreen()) NUMERAL_LARGE else NUMERAL_MEDIUM
-                    )
-                }
-                buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
-                buttonGroupItem {
-                    column {
-                        addContent(
-                            text(
-                                conditions.highTemperature.layoutString,
-                                typography = TITLE_MEDIUM
-                            )
-                        )
-                        addContent(
-                            text(conditions.lowTemperature.layoutString, typography = TITLE_MEDIUM)
-                        )
-                    }
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot = { text(data.location.layoutString) },
+            mainSlot = {
+                column {
+                    setHeight(expand())
+                    setWidth(expand())
+                    addContent(conditions(data.conditions))
+                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                    addContent(forecast(data.forecast))
                 }
             }
         )
     }
+
+    private fun MaterialScope.conditions(conditions: Conditions): LayoutElement =
+        box {
+            setHeight(weight(0.40F))
+            setWidth(expand())
+            addContent(
+                buttonGroup {
+                    setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
+                    buttonGroupItem {
+                        icon(
+                            imageResource(androidImageResource(conditions.weatherIconId)),
+                            width = dp(32F),
+                            height = dp(32F),
+                            tintColor = colorScheme.tertiary
+                        )
+                    }
+                    buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
+                    buttonGroupItem {
+                        text(
+                            conditions.currentTemperature.layoutString,
+                            typography = if (isLargeScreen()) NUMERAL_LARGE else NUMERAL_MEDIUM
+                        )
+                    }
+                    buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
+                    buttonGroupItem {
+                        column {
+                            addContent(
+                                text(
+                                    conditions.highTemperature.layoutString,
+                                    typography = TITLE_MEDIUM
+                                )
+                            )
+                            addContent(
+                                text(
+                                    conditions.lowTemperature.layoutString,
+                                    typography = TITLE_MEDIUM
+                                )
+                            )
+                        }
+                    }
+                }
+            )
+        }
 
     private fun MaterialScope.forecast(forecast: List<Forecast>): LayoutElement =
         card(
@@ -155,8 +160,8 @@ object Weather {
             }
         }
 
-    private fun MaterialScope.hourForecast(forecast: Forecast): LayoutElement {
-        return column {
+    private fun MaterialScope.hourForecast(forecast: Forecast): LayoutElement =
+        column {
             setWidth(expand())
             setHeight(expand())
             addContent(
@@ -173,13 +178,13 @@ object Weather {
                 }
             )
         }
-    }
 }
 
 class WeatherTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Weather.layout(
@@ -189,40 +194,40 @@ class WeatherTileService : TileService() {
                             weatherData()
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun weatherPreview(context: Context) =
     TilePreviewData { request ->
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Weather.layout(
-                context,
-                request.scope,
-                request.deviceConfiguration,
-                weatherData()
-            )
-        )
-            .build()
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Weather.layout(
+                    context,
+                    request.scope,
+                    request.deviceConfiguration,
+                    weatherData()
+                )
+            ).build()
     }
 
-private fun weatherData() = Weather.WeatherData(
-    location = "San Francisco",
-    conditions =
-    Weather.Conditions(
-        weatherIconId = R.drawable.scattered_showers,
-        currentTemperature = "52°",
-        lowTemperature = "48°",
-        highTemperature = "64°",
-        weatherSummary = "Showers"
-    ),
-    forecast =
-    listOf(
-        Weather.Forecast(R.drawable.baseline_cloud_24, "68°", "9AM"),
-        Weather.Forecast(R.drawable.baseline_thunderstorm_24, "65°", "10AM"),
-        Weather.Forecast(R.drawable.outline_partly_cloudy_day_24, "62°", "11AM"),
-        Weather.Forecast(R.drawable.scattered_showers, "60°", "12PM")
+private fun weatherData() =
+    Weather.WeatherData(
+        location = "San Francisco",
+        conditions =
+            Weather.Conditions(
+                weatherIconId = R.drawable.scattered_showers,
+                currentTemperature = "52°",
+                lowTemperature = "48°",
+                highTemperature = "64°",
+                weatherSummary = "Showers"
+            ),
+        forecast =
+            listOf(
+                Weather.Forecast(R.drawable.baseline_cloud_24, "68°", "9AM"),
+                Weather.Forecast(R.drawable.baseline_thunderstorm_24, "65°", "10AM"),
+                Weather.Forecast(R.drawable.outline_partly_cloudy_day_24, "62°", "11AM"),
+                Weather.Forecast(R.drawable.scattered_showers, "60°", "12PM")
+            )
     )
-)

@@ -7,7 +7,7 @@ androidx-wear-tiles = "1.6.0"
 androidx-wear-protolayout = "1.4.0"
 coil = "3.3.0"
 horologist = "0.7.12-alpha"
-org-jetbrains-kotlin = "2.3.20"
+org-jetbrains-kotlin = "2.2.10"
 wear-tooling-preview = "1.0.0"
 desugar-jdk = "2.1.5"
 

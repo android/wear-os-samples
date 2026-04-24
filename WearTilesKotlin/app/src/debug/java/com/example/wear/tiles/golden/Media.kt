@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,11 @@ import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
-import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.ButtonStyle.Companion.defaultButtonStyle
@@ -30,10 +33,6 @@ import androidx.wear.protolayout.material3.ButtonStyle.Companion.smallButtonStyl
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.backgroundImage
 import androidx.wear.protolayout.material3.button
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.layout.androidImageResource
-import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -54,20 +53,19 @@ import com.google.common.util.concurrent.Futures
 private fun MaterialScope.playlistButton(
     deviceParameters: DeviceParameters,
     playlist: Media.Playlist
-) =
-    button(
-        onClick = playlist.clickable,
-        width = expand(),
-        height = expand(),
-        colors = filledTonalButtonColors(),
-        style =
+) = button(
+    onClick = playlist.clickable,
+    width = expand(),
+    height = expand(),
+    colors = filledTonalButtonColors(),
+    style =
         if (isLargeScreen()) {
             defaultButtonStyle()
         } else {
             smallButtonStyle()
         },
-        horizontalAlignment = LayoutElementBuilders.TEXT_ALIGN_START,
-        backgroundContent =
+    horizontalAlignment = LayoutElementBuilders.TEXT_ALIGN_START,
+    backgroundContent =
         playlist.imageId?.let {
             {
                 backgroundImage(
@@ -76,11 +74,10 @@ private fun MaterialScope.playlistButton(
                 )
             }
         },
-        labelContent = { text(playlist.label.layoutString) }
-    )
+    labelContent = { text(playlist.label.layoutString) }
+)
 
 object Media {
-
     data class Playlist(
         val label: String,
         @DrawableRes val imageId: Int? = null,
@@ -93,61 +90,61 @@ object Media {
         deviceParameters: DeviceParameters,
         playlist1: Playlist,
         playlist2: Playlist
-    ) =
-        materialScopeWithResources(context, scope, deviceParameters) {
-            primaryLayout(
-                titleSlot =
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot =
                 if (isLargeScreen()) {
                     { text("Last played".layoutString) }
                 } else {
                     null
                 },
-                bottomSlot = {
-                    textEdgeButton(
-                        onClick = clickable(),
-                        labelContent = { text("Browse".layoutString) }
-                    )
-                },
-                mainSlot = {
-                    column {
-                        setWidth(expand())
-                        setHeight(expand())
-                        addContent(playlistButton(deviceParameters, playlist1))
-                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(playlistButton(deviceParameters, playlist2))
-                    }
+            bottomSlot = {
+                textEdgeButton(
+                    onClick = clickable(),
+                    labelContent = { text("Browse".layoutString) }
+                )
+            },
+            mainSlot = {
+                column {
+                    setWidth(expand())
+                    setHeight(expand())
+                    addContent(playlistButton(deviceParameters, playlist1))
+                    addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                    addContent(playlistButton(deviceParameters, playlist2))
                 }
-            )
-        }
+            }
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun mediaPreview(context: Context) =
     TilePreviewData { request ->
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Media.layout(
-                context,
-                request.scope,
-                request.deviceConfiguration,
-                playlist1 =
-                Media.Playlist(
-                    "Metal mix",
-                    imageId = R.drawable.photo_01
-                ),
-                playlist2 =
-                Media.Playlist(
-                    "Chilled mix",
-                    imageId = R.drawable.photo_11
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Media.layout(
+                    context,
+                    request.scope,
+                    request.deviceConfiguration,
+                    playlist1 =
+                        Media.Playlist(
+                            "Metal mix",
+                            imageId = R.drawable.photo_01
+                        ),
+                    playlist2 =
+                        Media.Playlist(
+                            "Chilled mix",
+                            imageId = R.drawable.photo_11
+                        )
                 )
-            )
-        )
-            .build()
+            ).build()
     }
 
 class MediaTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Media.layout(
@@ -155,18 +152,17 @@ class MediaTileService : TileService() {
                             requestParams.scope,
                             requestParams.deviceConfiguration,
                             playlist1 =
-                            Media.Playlist(
-                                "Metal mix",
-                                imageId = R.drawable.photo_01
-                            ),
+                                Media.Playlist(
+                                    "Metal mix",
+                                    imageId = R.drawable.photo_01
+                                ),
                             playlist2 =
-                            Media.Playlist(
-                                "Chilled mix",
-                                imageId = R.drawable.photo_11
-                            )
+                                Media.Playlist(
+                                    "Chilled mix",
+                                    imageId = R.drawable.photo_11
+                                )
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }

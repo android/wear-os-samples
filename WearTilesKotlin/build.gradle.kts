@@ -29,6 +29,7 @@ plugins {
 subprojects {
     apply(plugin = "com.diffplug.spotless")
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        ratchetFrom = "origin/main"
         kotlin {
             target("**/*.kt")
             val buildDir = layout.buildDirectory.get().asFile

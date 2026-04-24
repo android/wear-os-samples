@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2021-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,11 @@ class MessagingTileService : Material3TileService() {
 
         // For this sample, make Coil dumb by disabling all caching features.
         SingletonImageLoader.setSafe { context ->
-            ImageLoader.Builder(context).memoryCache(null).diskCache(null).build()
+            ImageLoader
+                .Builder(context)
+                .memoryCache(null)
+                .diskCache(null)
+                .build()
         }
 
         imageLoader = SingletonImageLoader.get(this)
@@ -60,19 +64,22 @@ class MessagingTileService : Material3TileService() {
     override suspend fun MaterialScope.tileResponse(requestParams: TileRequest): Tile {
         // Asynchronously load images associated with resourceIds, and create a Map<String,
         // ResourceBuilders.ImageResource> suitable for adding to the Resources object
-        val imageResources = coroutineScope {
-            contacts.map { contact ->
-                async {
-                    val id = contact.imageResourceId()
-                    val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
-                    if (image == null && contact.avatarSource !is AvatarSource.None) {
-                        id to R.mipmap.offline.toImageResource()
-                    } else {
-                        id to image
-                    }
-                }
-            }.awaitAll().toMap()
-        }
+        val imageResources =
+            coroutineScope {
+                contacts
+                    .map { contact ->
+                        async {
+                            val id = contact.imageResourceId()
+                            val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
+                            if (image == null && contact.avatarSource !is AvatarSource.None) {
+                                id to R.mipmap.offline.toImageResource()
+                            } else {
+                                id to image
+                            }
+                        }
+                    }.awaitAll()
+                    .toMap()
+            }
 
         val layoutElement = tileLayout(contacts, imageResources)
 

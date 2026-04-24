@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@ import android.content.Context
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.Typography
 import androidx.wear.protolayout.material3.buttonGroup
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -42,25 +41,23 @@ import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
 object Ski {
-
     fun layout(
         context: Context,
         scope: ProtoLayoutScope,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
         stat1: Stat,
         stat2: Stat
-    ) =
-        materialScopeWithResources(context, scope, deviceParameters) {
-            primaryLayout(
-                titleSlot = { text("Latest run".layoutString) },
-                mainSlot = {
-                    buttonGroup {
-                        buttonGroupItem { statTextButton(stat1) }
-                        buttonGroupItem { statTextButton(stat2) }
-                    }
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot = { text("Latest run".layoutString) },
+            mainSlot = {
+                buttonGroup {
+                    buttonGroupItem { statTextButton(stat1) }
+                    buttonGroupItem { statTextButton(stat2) }
                 }
-            )
-        }
+            }
+        )
+    }
 
     private fun MaterialScope.statTextButton(stat: Stat) =
         textDataCard(
@@ -69,68 +66,74 @@ object Ski {
             height = expand(),
             shape = shapes.extraLarge,
             colors =
-            filledVariantCardColors().copy(
-                backgroundColor = colorScheme.secondaryContainer,
-                titleColor = colorScheme.onSecondaryContainer,
-                contentColor = colorScheme.onSecondaryContainer,
-                secondaryTextColor = colorScheme.onSecondaryContainer
-            ),
+                filledVariantCardColors().copy(
+                    backgroundColor = colorScheme.secondaryContainer,
+                    titleColor = colorScheme.onSecondaryContainer,
+                    contentColor = colorScheme.onSecondaryContainer,
+                    secondaryTextColor = colorScheme.onSecondaryContainer
+                ),
             title = {
                 text(
                     stat.value.layoutString,
                     typography =
-                    if (isLargeScreen()) {
-                        Typography.NUMERAL_SMALL
-                    } else {
-                        Typography.NUMERAL_EXTRA_SMALL
-                    }
+                        if (isLargeScreen()) {
+                            Typography.NUMERAL_SMALL
+                        } else {
+                            Typography.NUMERAL_EXTRA_SMALL
+                        }
                 )
             },
             content = {
                 text(
                     stat.unit.layoutString,
                     typography =
-                    if (isLargeScreen()) {
-                        Typography.TITLE_MEDIUM
-                    } else {
-                        Typography.TITLE_SMALL
-                    }
+                        if (isLargeScreen()) {
+                            Typography.TITLE_MEDIUM
+                        } else {
+                            Typography.TITLE_SMALL
+                        }
                 )
             },
             secondaryText = {
                 text(
                     stat.label.layoutString,
                     typography =
-                    if (isLargeScreen()) {
-                        Typography.TITLE_MEDIUM
-                    } else {
-                        Typography.TITLE_SMALL
-                    }
+                        if (isLargeScreen()) {
+                            Typography.TITLE_MEDIUM
+                        } else {
+                            Typography.TITLE_SMALL
+                        }
                 )
             }
         )
 
-    data class Stat(val label: String, val value: String, val unit: String)
+    data class Stat(
+        val label: String,
+        val value: String,
+        val unit: String
+    )
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun skiPreview(context: Context) = TilePreviewData { request ->
-    TilePreviewHelper.singleTimelineEntryTileBuilder(
-        Ski.layout(
-            context,
-            request.scope,
-            request.deviceConfiguration,
-            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
-            stat2 = Ski.Stat("Distance", "21.8", "mile")
-        )
-    )
-        .build()
-}
+internal fun skiPreview(context: Context) =
+    TilePreviewData { request ->
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Ski.layout(
+                    context,
+                    request.scope,
+                    request.deviceConfiguration,
+                    stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+                    stat2 = Ski.Stat("Distance", "21.8", "mile")
+                )
+            ).build()
+    }
 
 class SkiTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Ski.layout(
@@ -141,7 +144,6 @@ class SkiTileService : TileService() {
                             stat2 = Ski.Stat("Distance", "21.8", "mile")
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }

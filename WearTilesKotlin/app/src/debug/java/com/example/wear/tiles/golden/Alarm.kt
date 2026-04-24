@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2025-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,10 @@ import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
@@ -31,10 +35,6 @@ import androidx.wear.protolayout.material3.Typography.TITLE_LARGE
 import androidx.wear.protolayout.material3.Typography.TITLE_MEDIUM
 import androidx.wear.protolayout.material3.icon
 import androidx.wear.protolayout.material3.iconEdgeButton
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.layout.androidImageResource
-import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -67,21 +67,20 @@ fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
 
     val timeString = "$hour12:${String.format("%02d", minute)}" // TODO: Localize
 
-    return LayoutElementBuilders.Row.Builder()
+    return LayoutElementBuilders.Row
+        .Builder()
         .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
         .addContent(
             text(
                 text = timeString.layoutString,
                 typography = if (isLargeScreen()) DISPLAY_LARGE else DISPLAY_MEDIUM
             )
-        )
-        .addContent(
+        ).addContent(
             text(
                 text = " $amPm".layoutString,
                 typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM
             )
-        )
-        .build()
+        ).build()
 }
 
 object Alarm {
@@ -96,71 +95,71 @@ object Alarm {
         scope: ProtoLayoutScope,
         deviceParameters: DeviceParameters,
         data: AlarmData
-    ) =
-        materialScopeWithResources(context, scope, deviceParameters) {
-            primaryLayout(
-                titleSlot = { text("Alarm".layoutString) },
-                mainSlot = {
-                    titleCard(
-                        onClick = data.clickable,
-                        title = {
-                            text(
-                                data.alarmDays.layoutString,
-                                typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM,
-                                color = colorScheme.onSurfaceVariant
-                            )
-                        },
-                        content = { styledTime(data.alarmTime) },
-                        height = expand(),
-                        colors = filledVariantCardColors(),
-                        style =
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot = { text("Alarm".layoutString) },
+            mainSlot = {
+                titleCard(
+                    onClick = data.clickable,
+                    title = {
+                        text(
+                            data.alarmDays.layoutString,
+                            typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM,
+                            color = colorScheme.onSurfaceVariant
+                        )
+                    },
+                    content = { styledTime(data.alarmTime) },
+                    height = expand(),
+                    colors = filledVariantCardColors(),
+                    style =
                         if (isLargeScreen()) {
                             TitleCardStyle.extraLargeTitleCardStyle()
                         } else {
                             TitleCardStyle.defaultTitleCardStyle()
                         }
-                    )
-                },
-                bottomSlot = {
-                    iconEdgeButton(
-                        onClick = data.clickable,
-                        colors = filledTonalButtonColors(),
-                        modifier = LayoutModifier.contentDescription("Plus"),
-                        iconContent = {
-                            icon(
-                                imageResource(
-                                    androidImageResource(R.drawable.outline_add_2_24)
-                                )
+                )
+            },
+            bottomSlot = {
+                iconEdgeButton(
+                    onClick = data.clickable,
+                    colors = filledTonalButtonColors(),
+                    modifier = LayoutModifier.contentDescription("Plus"),
+                    iconContent = {
+                        icon(
+                            imageResource(
+                                androidImageResource(R.drawable.outline_add_2_24)
                             )
-                        }
-                    )
-                }
-            )
-        }
+                        )
+                    }
+                )
+            }
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun alarmPreview(context: Context) =
     TilePreviewData { request ->
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Alarm.layout(
-                context,
-                request.scope,
-                request.deviceConfiguration,
-                Alarm.AlarmData(
-                    alarmTime = LocalTime.parse("14:58"),
-                    alarmDays = "Mon—Fri",
-                    clickable = clickable()
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Alarm.layout(
+                    context,
+                    request.scope,
+                    request.deviceConfiguration,
+                    Alarm.AlarmData(
+                        alarmTime = LocalTime.parse("14:58"),
+                        alarmDays = "Mon—Fri",
+                        clickable = clickable()
+                    )
                 )
-            )
-        )
-            .build()
+            ).build()
     }
 
 class AlarmTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Alarm.layout(
@@ -174,7 +173,6 @@ class AlarmTileService : TileService() {
                             )
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }

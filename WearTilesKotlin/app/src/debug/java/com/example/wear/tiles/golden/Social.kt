@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,19 @@ import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.LayoutElementBuilders.TEXT_ALIGN_CENTER
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.expression.ProtoLayoutExperimental
+import androidx.wear.protolayout.layout.androidImageResource
 import androidx.wear.protolayout.layout.basicText
 import androidx.wear.protolayout.layout.fontStyle
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.Typography.TITLE_SMALL
 import androidx.wear.protolayout.material3.avatarImage
 import androidx.wear.protolayout.material3.buttonGroup
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.layout.androidImageResource
-import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -62,8 +62,8 @@ import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
-fun Context.mockContacts(): List<Contact> {
-    return listOf(
+fun Context.mockContacts(): List<Contact> =
+    listOf(
         Contact(
             initials = "MS",
             avatarResource = R.drawable.avatar_illustration_18
@@ -80,7 +80,6 @@ fun Context.mockContacts(): List<Contact> {
         ),
         Contact(initials = "EF", avatarResource = null)
     )
-}
 
 data class Contact(
     val initials: String,
@@ -121,16 +120,17 @@ fun MaterialScope.contactButton(contact: Contact): LayoutElement {
                 basicText(
                     text = contact.initials.layoutString,
                     fontStyle =
-                    fontStyle(
-                        color = colors.labelColor,
-                        settings = listOf(FontSetting.width(60F)),
-                        size = 30F,
-                        weight = FONT_WEIGHT_MEDIUM
-                    ),
+                        fontStyle(
+                            color = colors.labelColor,
+                            settings = listOf(FontSetting.width(60F)),
+                            size = 30F,
+                            weight = FONT_WEIGHT_MEDIUM
+                        ),
                     modifier =
-                    LayoutModifier.background(colors.containerColor)
-                        .clip(shapes.full)
-                        .padding(horizontal = 2F, vertical = 2F)
+                        LayoutModifier
+                            .background(colors.containerColor)
+                            .clip(shapes.full)
+                            .padding(horizontal = 2F, vertical = 2F)
                 )
             },
             width = expand(),
@@ -142,15 +142,17 @@ fun MaterialScope.contactButton(contact: Contact): LayoutElement {
 }
 
 object Social {
-    data class SocialData(val contacts: List<Contact>)
+    data class SocialData(
+        val contacts: List<Contact>
+    )
 
     fun layout(
         context: Context,
         scope: ProtoLayoutScope,
         deviceParameters: DeviceParameters,
         data: SocialData
-    ): LayoutElement {
-        return materialScopeWithResources(
+    ): LayoutElement =
+        materialScopeWithResources(
             context,
             scope,
             deviceParameters,
@@ -174,20 +176,20 @@ object Social {
 
             primaryLayout(
                 titleSlot =
-                if (row2.isEmpty()) {
-                    {
-                        text(
-                            text = "Contacts".layoutString,
-                            color = colorScheme.onBackground,
-                            typography = TITLE_SMALL,
-                            maxLines = 2,
-                            alignment = TEXT_ALIGN_CENTER,
-                            modifier = LayoutModifier.contentDescription("Contacts")
-                        )
-                    }
-                } else {
-                    null
-                },
+                    if (row2.isEmpty()) {
+                        {
+                            text(
+                                text = "Contacts".layoutString,
+                                color = colorScheme.onBackground,
+                                typography = TITLE_SMALL,
+                                maxLines = 2,
+                                alignment = TEXT_ALIGN_CENTER,
+                                modifier = LayoutModifier.contentDescription("Contacts")
+                            )
+                        }
+                    } else {
+                        null
+                    },
                 mainSlot = {
                     column {
                         setWidth(expand())
@@ -212,15 +214,14 @@ object Social {
                         onClick = clickable(),
                         labelContent = { text("More".layoutString) },
                         colors =
-                        ButtonColors(
-                            labelColor = colorScheme.onSurface,
-                            containerColor = colorScheme.surfaceContainer
-                        )
+                            ButtonColors(
+                                labelColor = colorScheme.onSurface,
+                                containerColor = colorScheme.surfaceContainer
+                            )
                     )
                 }
             )
         }
-    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
@@ -241,20 +242,24 @@ internal fun socialPreview5(context: Context) = socialPreviewN(context, 5)
 @MultiRoundDevicesWithFontScalePreviews
 internal fun socialPreview6(context: Context) = socialPreviewN(context, 6)
 
-internal fun socialPreviewN(context: Context, n: Int): TilePreviewData {
+internal fun socialPreviewN(
+    context: Context,
+    n: Int
+): TilePreviewData {
     val contacts = context.mockContacts().take(n)
     return TilePreviewData { request ->
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Social.layout(context, request.scope, request.deviceConfiguration, Social.SocialData(contacts))
-        )
-            .build()
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Social.layout(context, request.scope, request.deviceConfiguration, Social.SocialData(contacts))
+            ).build()
     }
 }
 
 class SocialTileService5 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Social.layout(
@@ -264,15 +269,15 @@ class SocialTileService5 : TileService() {
                             Social.SocialData(mockContacts().take(5))
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }
 
 class SocialTileService6 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Social.layout(
@@ -282,15 +287,15 @@ class SocialTileService6 : TileService() {
                             Social.SocialData(mockContacts().take(6))
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }
 
 class SocialTileService2 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Social.layout(
@@ -300,7 +305,6 @@ class SocialTileService2 : TileService() {
                             Social.SocialData(mockContacts().take(2))
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }

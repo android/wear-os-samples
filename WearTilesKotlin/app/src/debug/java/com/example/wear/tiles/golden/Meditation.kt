@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2025-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,11 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.ButtonStyle.Companion.defaultButtonStyle
@@ -28,10 +31,6 @@ import androidx.wear.protolayout.material3.ButtonStyle.Companion.smallButtonStyl
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.button
 import androidx.wear.protolayout.material3.icon
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.layout.androidImageResource
-import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -56,17 +55,16 @@ private fun MaterialScope.meditationButton(task: Meditation.MeditationTask) =
         height = expand(),
         colors = filledTonalButtonColors(),
         style =
-        if (isLargeScreen()) {
-            defaultButtonStyle()
-        } else {
-            smallButtonStyle()
-        },
+            if (isLargeScreen()) {
+                defaultButtonStyle()
+            } else {
+                smallButtonStyle()
+            },
         iconContent = { icon(imageResource(androidImageResource(task.iconId))) },
         labelContent = { text(task.label.layoutString, maxLines = task.maxLines) }
     )
 
 object Meditation {
-
     data class MeditationTask(
         val label: String,
         @DrawableRes val iconId: Int,
@@ -79,62 +77,62 @@ object Meditation {
         scope: ProtoLayoutScope,
         deviceParameters: DeviceParameters,
         tasksLeft: Int
-    ) =
-        materialScopeWithResources(context, scope, deviceParameters) {
-            primaryLayout(
-                titleSlot =
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot =
                 if (isLargeScreen()) {
                     { text("$tasksLeft mindful tasks left".layoutString) }
                 } else {
                     null
                 },
-                bottomSlot = {
-                    textEdgeButton(
-                        onClick = clickable(),
-                        labelContent = { text("Browse".layoutString) }
+            bottomSlot = {
+                textEdgeButton(
+                    onClick = clickable(),
+                    labelContent = { text("Browse".layoutString) }
+                )
+            },
+            mainSlot = {
+                column {
+                    setWidth(expand())
+                    setHeight(expand())
+                    addContent(
+                        meditationButton(
+                            MeditationTask(
+                                label = "Breath",
+                                iconId = R.drawable.outline_air_24
+                            )
+                        )
                     )
-                },
-                mainSlot = {
-                    column {
-                        setWidth(expand())
-                        setHeight(expand())
-                        addContent(
-                            meditationButton(
-                                MeditationTask(
-                                    label = "Breath",
-                                    iconId = R.drawable.outline_air_24
-                                )
+                    addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
+                    addContent(
+                        meditationButton(
+                            MeditationTask(
+                                label = "Daily mindfulness",
+                                iconId = R.drawable.ic_yoga_24,
+                                maxLines = 2
                             )
                         )
-                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(
-                            meditationButton(
-                                MeditationTask(
-                                    label = "Daily mindfulness",
-                                    iconId = R.drawable.ic_yoga_24,
-                                    maxLines = 2
-                                )
-                            )
-                        )
-                    }
+                    )
                 }
-            )
-        }
+            }
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 fun mindfulnessPreview(context: Context) =
     TilePreviewData { request ->
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Meditation.listLayout(context, request.scope, request.deviceConfiguration, 3)
-        )
-            .build()
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Meditation.listLayout(context, request.scope, request.deviceConfiguration, 3)
+            ).build()
     }
 
 class MindfulnessTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Meditation.listLayout(
@@ -144,7 +142,6 @@ class MindfulnessTileService : TileService() {
                             2
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }

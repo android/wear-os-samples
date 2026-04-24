@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@ import android.content.Context
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
-import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.expression.DynamicBuilders.DynamicFloat
 import androidx.wear.protolayout.expression.PlatformEventSources
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.CardDefaults.filledTonalCardColors
 import androidx.wear.protolayout.material3.CircularProgressIndicatorDefaults
 import androidx.wear.protolayout.material3.GraphicDataCardDefaults.constructGraphic
@@ -30,10 +33,6 @@ import androidx.wear.protolayout.material3.Typography
 import androidx.wear.protolayout.material3.circularProgressIndicator
 import androidx.wear.protolayout.material3.graphicDataCard
 import androidx.wear.protolayout.material3.icon
-import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.layout.androidImageResource
-import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
@@ -52,86 +51,88 @@ import com.google.common.util.concurrent.Futures
 import java.text.NumberFormat
 
 object Goal {
-    data class GoalData(val steps: Int, val goal: Int)
+    data class GoalData(
+        val steps: Int,
+        val goal: Int
+    )
 
     fun layout(
         context: Context,
         scope: ProtoLayoutScope,
         deviceParameters: DeviceParameters,
         data: GoalData
-    ) =
-        materialScopeWithResources(context, scope, deviceParameters) {
-            val stepsString = NumberFormat.getNumberInstance().format(data.steps)
-            val goalString = NumberFormat.getNumberInstance().format(data.goal)
-            primaryLayout(
-                titleSlot = { text("Steps".layoutString) },
-                margins = PrimaryLayoutMargins.MIN_PRIMARY_LAYOUT_MARGIN,
-                mainSlot = {
-                    graphicDataCard(
-                        onClick = clickable(),
-                        height = expand(),
-                        colors = filledTonalCardColors(),
-                        title = {
-                            text(
-                                stepsString.layoutString,
-                                typography =
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        val stepsString = NumberFormat.getNumberInstance().format(data.steps)
+        val goalString = NumberFormat.getNumberInstance().format(data.goal)
+        primaryLayout(
+            titleSlot = { text("Steps".layoutString) },
+            margins = PrimaryLayoutMargins.MIN_PRIMARY_LAYOUT_MARGIN,
+            mainSlot = {
+                graphicDataCard(
+                    onClick = clickable(),
+                    height = expand(),
+                    colors = filledTonalCardColors(),
+                    title = {
+                        text(
+                            stepsString.layoutString,
+                            typography =
                                 if (isLargeScreen()) {
                                     Typography.DISPLAY_LARGE
                                 } else {
                                     Typography.DISPLAY_SMALL
                                 }
-                            )
-                        },
-                        content = {
-                            text(
-                                "of $goalString".layoutString,
-                                typography =
+                        )
+                    },
+                    content = {
+                        text(
+                            "of $goalString".layoutString,
+                            typography =
                                 if (isLargeScreen()) {
                                     Typography.TITLE_LARGE
                                 } else {
                                     Typography.TITLE_SMALL
                                 }
-                            )
-                        },
-                        horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_END,
-                        graphic = {
-                            constructGraphic(
-                                mainContent = {
-                                    circularProgressIndicator(
-                                        staticProgress = 1F * data.steps / data.goal,
-                                        // On supported devices, animate the arc
-                                        dynamicProgress =
-                                        DynamicFloat.onCondition(
-                                            PlatformEventSources.isLayoutVisible()
-                                        )
-                                            .use(1F * data.steps / data.goal)
+                        )
+                    },
+                    horizontalAlignment = LayoutElementBuilders.HORIZONTAL_ALIGN_END,
+                    graphic = {
+                        constructGraphic(
+                            mainContent = {
+                                circularProgressIndicator(
+                                    staticProgress = 1F * data.steps / data.goal,
+                                    // On supported devices, animate the arc
+                                    dynamicProgress =
+                                        DynamicFloat
+                                            .onCondition(
+                                                PlatformEventSources.isLayoutVisible()
+                                            ).use(1F * data.steps / data.goal)
                                             .elseUse(0F)
                                             .animate(
                                                 CircularProgressIndicatorDefaults
                                                     .recommendedAnimationSpec
                                             ),
-                                        startAngleDegrees = 200F,
-                                        endAngleDegrees = 520F
-                                    )
-                                },
-                                iconContent = {
-                                    icon(
-                                        imageResource(
-                                            androidImageResource(
-                                                R.drawable.outline_directions_walk_24
-                                            )
+                                    startAngleDegrees = 200F,
+                                    endAngleDegrees = 520F
+                                )
+                            },
+                            iconContent = {
+                                icon(
+                                    imageResource(
+                                        androidImageResource(
+                                            R.drawable.outline_directions_walk_24
                                         )
                                     )
-                                }
-                            )
-                        }
-                    )
-                },
-                bottomSlot = {
-                    textEdgeButton(onClick = clickable()) { text("Track".layoutString) }
-                }
-            )
-        }
+                                )
+                            }
+                        )
+                    }
+                )
+            },
+            bottomSlot = {
+                textEdgeButton(onClick = clickable()) { text("Track".layoutString) }
+            }
+        )
+    }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
@@ -144,14 +145,14 @@ internal fun goalPreview(context: Context) =
                 request.deviceConfiguration,
                 data = Goal.GoalData(steps = 5168, goal = 8000)
             )
-        )
-            .build()
+        ).build()
     }
 
 class GoalTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile.Builder()
+            TileBuilders.Tile
+                .Builder()
                 .setTileTimeline(
                     TimelineBuilders.Timeline.fromLayoutElement(
                         Goal.layout(
@@ -161,7 +162,6 @@ class GoalTileService : TileService() {
                             data = Goal.GoalData(steps = 5168, goal = 8000)
                         )
                     )
-                )
-                .build()
+                ).build()
         )
 }
