@@ -20,7 +20,6 @@ import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.tiles.Material3TileService
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.tile
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import com.example.wear.tiles.R
@@ -82,13 +81,12 @@ class MessagingTileService : Material3TileService() {
                     .toMap()
             }
 
-
-
         val layoutElement = tileLayout(contacts, imageResources)
 
         val resourcesVersion = contacts.map { it.id }.toSortedSet().joinToString()
 
-        return Tile.Builder()
+        return Tile
+            .Builder()
             .setResourcesVersion(resourcesVersion)
             .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
             .build()
