@@ -28,8 +28,8 @@ import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColor
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.buttonGroup
-import androidx.wear.protolayout.material3.createMaterialScope
 import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.material3.textButton
@@ -202,13 +202,15 @@ internal fun socialPreviewN(
     return TilePreviewData(
         onTileRequest = { request ->
             TilePreviewHelper.singleTimelineEntryTileBuilder(
-                createMaterialScope(
+                materialScopeWithResources(
                     context = context,
-                    deviceConfiguration = request.deviceConfiguration,
                     protoLayoutScope = request.scope,
+                    deviceConfiguration = request.deviceConfiguration,
                     allowDynamicTheme = true,
                     defaultColorScheme = androidx.wear.protolayout.material3.ColorScheme()
-                ).tileLayout(contacts, imageResources)
+                ) {
+                    tileLayout(contacts, imageResources)
+                }
             ).build()
         },
         onTileResourceRequest = { request ->
