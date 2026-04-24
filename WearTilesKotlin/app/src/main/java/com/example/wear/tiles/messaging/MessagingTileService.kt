@@ -81,10 +81,15 @@ class MessagingTileService : Material3TileService() {
                     .toMap()
             }
 
+
+
         val layoutElement = tileLayout(contacts, imageResources)
 
-        return tile(
-            timeline = Timeline.fromLayoutElement(layoutElement)
-        )
+        val resourcesVersion = contacts.map { it.id }.toSortedSet().joinToString()
+
+        return Tile.Builder()
+            .setResourcesVersion(resourcesVersion)
+            .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
+            .build()
     }
 }

@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.horologist.tiles)
 
     debugImplementation(libs.androidx.wear.tiles.renderer)
-    debugImplementation(libs.androidx.compose.ui.tooling)
+
     debugImplementation(libs.androidx.wear.tooling.preview)
     debugImplementation(libs.androidx.wear.tiles.tooling)
     // The tile preview code is in the same file as the tiles themselves, so we need to make the
