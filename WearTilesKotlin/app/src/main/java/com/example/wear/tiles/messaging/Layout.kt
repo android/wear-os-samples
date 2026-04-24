@@ -48,6 +48,7 @@ import com.example.wear.tiles.tools.image
 import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.toImageResource
 import kotlin.OptIn
+import androidx.wear.protolayout.layout.basicImage
 
 @OptIn(ProtoLayoutExperimental::class)
 fun MaterialScope.contactButton(
@@ -55,13 +56,14 @@ fun MaterialScope.contactButton(
     imageResource: ResourceBuilders.ImageResource?
 ): LayoutElement {
     if (imageResource != null) {
-        return image {
-            setHeight(expand())
-            setWidth(expand())
-            setModifiers(LayoutModifier.clip(shapes.full).toProtoLayoutModifiers())
-            setResourceId(contact.imageResourceId())
-            setContentScaleMode(CONTENT_SCALE_MODE_CROP)
-        }
+        return protoLayoutScope.basicImage(
+            resource = imageResource,
+            width = expand(),
+            height = expand(),
+            protoLayoutResourceId = contact.imageResourceId(),
+            modifier = LayoutModifier.clip(shapes.full),
+            contentScaleMode = CONTENT_SCALE_MODE_CROP
+        )
     } else {
         // Simple function to return one of a set of themed button colors
         val colors = buttonColorsByIndex(contact.initials.hashCode())
