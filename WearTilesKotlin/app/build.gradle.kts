@@ -46,8 +46,6 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-
-
     buildFeatures {
         compose = true
     }
@@ -58,14 +56,10 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-        freeCompilerArgs.add("-opt-in=com.google.android.horologist.annotations.ExperimentalHorologistApi")
     }
 }
 
 dependencies {
-    // Horologist provides helpful wrappers for Tiles development
-    implementation(libs.horologist.tiles)
-
     // Coil for asynchronous image loading
     implementation(libs.coil)
     implementation(libs.coil.okhttp)

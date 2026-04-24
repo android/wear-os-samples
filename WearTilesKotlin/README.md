@@ -10,9 +10,7 @@ start a timer.
 
 This repository contains a sample tile built using the [Tiles Material
 Components](https://developer.android.com/reference/androidx/wear/protolayout/material/package-summary)
-library (for UI) and [Horologist
-Tiles](https://github.com/google/horologist#-tiles) (preview utilities and
-Kotlin-friendly wrappers).
+library (for UI).
 
 Get Started
 -----------
