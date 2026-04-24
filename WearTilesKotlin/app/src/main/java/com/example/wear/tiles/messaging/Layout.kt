@@ -59,7 +59,7 @@ fun MaterialScope.contactButton(
             setHeight(expand())
             setWidth(expand())
             setModifiers(LayoutModifier.clip(shapes.full).toProtoLayoutModifiers())
-            setImageResource(imageResource, contact.imageResourceId())
+            setResourceId(contact.imageResourceId())
             setContentScaleMode(CONTENT_SCALE_MODE_CROP)
         }
     } else {
@@ -189,7 +189,7 @@ internal fun socialPreviewN(
     val contacts = getMockLocalContacts().take(n)
     return TilePreviewData {
         val imageResources =
-            contacts.associate<Contact, String, ResourceBuilders.ImageResource> {
+            contacts.associate {
                 val id = it.imageResourceId()
                 val resource =
                     if (it.avatarSource is AvatarSource.Resource) {

@@ -18,6 +18,7 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.weight
@@ -62,7 +63,7 @@ object Calendar {
         val time: String,
         val name: String,
         val location: String,
-        val imageId: String? = null,
+        @DrawableRes val imageId: Int? = null,
         val clickable: Clickable
     )
 
@@ -144,14 +145,12 @@ object Calendar {
                                     },
                                     colors = filledVariantCardColors(),
                                     backgroundContent =
-                                        data.imageId?.let {
+                                        data.imageId?.let { imageResId ->
                                             {
                                                 backgroundImage(
                                                     resource =
                                                         imageResource(
-                                                            androidImageResource(
-                                                                R.drawable.photo_38
-                                                            )
+                                                            androidImageResource(imageResId)
                                                         ),
                                                     contentScaleMode = CONTENT_SCALE_MODE_CROP
                                                 )
@@ -174,11 +173,11 @@ internal fun calendar1Preview(context: Context) = calendarPreviewX(context)
 
 @MultiRoundDevicesWithFontScalePreviews
 internal fun calendar2Preview(context: Context) =
-    calendarPreviewX(context, context.resources.getResourceName(R.drawable.photo_38))
+    calendarPreviewX(context, R.drawable.photo_38)
 
 fun calendarPreviewX(
     context: Context,
-    eventImageId: String? = null
+    @DrawableRes eventImageId: Int? = null
 ) = TilePreviewData { request ->
     TilePreviewHelper
         .singleTimelineEntryTileBuilder(
@@ -239,7 +238,7 @@ class Calendar2TileService : TileService() {
                                 time = "6:30-7:30 PM",
                                 name = "Advanced Tennis Coaching with Christina Lloyd",
                                 location = "216 Market Street",
-                                imageId = resources.getResourceName(R.drawable.photo_38),
+                                imageId = R.drawable.photo_38,
                                 clickable = clickable()
                             )
                         )
