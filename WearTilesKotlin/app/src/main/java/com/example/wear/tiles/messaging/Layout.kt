@@ -22,6 +22,7 @@ import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.expression.ProtoLayoutExperimental
+import androidx.wear.protolayout.layout.basicImage
 import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
@@ -36,7 +37,6 @@ import androidx.wear.protolayout.modifiers.LayoutModifier
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.clip
 import androidx.wear.protolayout.modifiers.padding
-import androidx.wear.protolayout.modifiers.toProtoLayoutModifiers
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.tooling.preview.TilePreviewData
@@ -44,11 +44,9 @@ import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.column
-import com.example.wear.tiles.tools.image
 import com.example.wear.tiles.tools.isLargeScreen
 import com.example.wear.tiles.tools.toImageResource
 import kotlin.OptIn
-import androidx.wear.protolayout.layout.basicImage
 
 @OptIn(ProtoLayoutExperimental::class)
 fun MaterialScope.contactButton(

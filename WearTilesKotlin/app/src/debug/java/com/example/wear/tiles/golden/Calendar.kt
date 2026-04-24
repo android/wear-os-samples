@@ -172,8 +172,7 @@ object Calendar {
 internal fun calendar1Preview(context: Context) = calendarPreviewX(context)
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun calendar2Preview(context: Context) =
-    calendarPreviewX(context, R.drawable.photo_38)
+internal fun calendar2Preview(context: Context) = calendarPreviewX(context, R.drawable.photo_38)
 
 fun calendarPreviewX(
     context: Context,
