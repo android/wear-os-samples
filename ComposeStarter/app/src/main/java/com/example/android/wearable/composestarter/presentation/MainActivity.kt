@@ -30,12 +30,17 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AlertDialogDefaults
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ButtonGroup
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
@@ -43,6 +48,7 @@ import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
@@ -50,16 +56,13 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.composable
-import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.example.android.wearable.composestarter.R
 import com.example.android.wearable.composestarter.presentation.theme.AppCardDefaults
 import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
-import com.google.android.horologist.compose.layout.ColumnItemType
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
+import kotlinx.serialization.Serializable
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
@@ -67,9 +70,9 @@ import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadd
  * Displays a centered [Text] composable and a list built with [TransformingLazyColumn].
  *
  * Use the Wear version of Compose Navigation. You can carry
- * over your knowledge from mobile and it supports the swipe-to-dismiss gesture (Wear OS's
+ * over your knowledge from mobile, and it supports the swipe-to-dismiss gesture (Wear OS's
  * back action). For more information, go here:
- * https://developer.android.com/reference/kotlin/androidx/wear/compose/navigation/package-summary
+ * https://developer.android.com/reference/kotlin/androidx/wear/compose/navigation3/package-summary
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,23 +84,43 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Serializable
+sealed interface AppKey : NavKey
+
+@Serializable
+data object MenuScreen : AppKey
+
+@Serializable
+data object ListNavScreen : AppKey
+
 @Composable
 fun WearApp() {
-    val navController = rememberSwipeDismissableNavController()
+    val backStack = rememberNavBackStack(MenuScreen)
 
     WearAppTheme {
         AppScaffold {
-            SwipeDismissableNavHost(navController = navController, startDestination = "menu") {
-                composable("menu") {
-                    GreetingScreen(
-                        "Android",
-                        onShowList = { navController.navigate("list") }
-                    )
+            val entryProvider =
+                remember {
+                    entryProvider<NavKey> {
+                        entry<MenuScreen> {
+                            GreetingScreen(
+                                "Android",
+                                onShowList = { backStack.add(ListNavScreen) }
+                            )
+                        }
+                        entry<ListNavScreen> {
+                            ListScreen()
+                        }
+                    }
                 }
-                composable("list") {
-                    ListScreen()
-                }
-            }
+
+            val swipeDismissableSceneStrategy = rememberSwipeDismissableSceneStrategy<NavKey>()
+
+            NavDisplay(
+                backStack = backStack,
+                entryProvider = entryProvider,
+                sceneStrategies = listOf(swipeDismissableSceneStrategy)
+            )
         }
     }
 }
@@ -123,22 +146,25 @@ fun GreetingScreen(
             ) {
                 Text(stringResource(R.string.show_list))
             }
-        },
-        // The bottom padding value is always ignored when using EdgeButton because this button is
-        // always placed at the end of the screen.
-        // The `ScreenScaffold` parameter `edgeButtonSpacing` can be used to specify the
-        // gap between edgeButton and content.
-        contentPadding =
-            rememberResponsiveColumnPadding(
-                first = ColumnItemType.ListHeader
-            )
+            // The `ScreenScaffold` parameter `edgeButtonSpacing` can be used to specify the
+            // gap between edgeButton and content.
+        }
     ) { contentPadding ->
-        // Use workaround from Horologist for padding or wait until fix lands
         TransformingLazyColumn(
             state = scrollState,
             contentPadding = contentPadding
         ) {
-            item { Greeting(greetingName = greetingName, modifier = modifier.fillMaxSize()) }
+            item {
+                Greeting(
+                    greetingName = greetingName,
+                    modifier =
+                        modifier
+                            .fillMaxSize()
+                            .minimumVerticalContentPadding(
+                                ListHeaderDefaults.minimumTopListContentPadding
+                            )
+                )
+            }
         }
     }
 }
@@ -146,26 +172,15 @@ fun GreetingScreen(
 @Composable
 fun ListScreen(modifier: Modifier = Modifier) {
     var showDialog by remember { mutableStateOf(false) }
-
-    /*
-     * Specifying the types of items that appear at the start and end of the list ensures that the
-     * appropriate padding is used.
-     */
     val listState = rememberTransformingLazyColumnState()
     val transformationSpec = rememberTransformationSpec()
 
     ScreenScaffold(
-        scrollState = listState,
+        scrollState = listState
         /*
          * TransformingLazyColumn takes care of the horizontal and vertical
          * padding for the list and handles scrolling.
-         * Use workaround from Horologist for padding or wait until fix lands
          */
-        contentPadding =
-            rememberResponsiveColumnPadding(
-                first = ColumnItemType.ListHeader,
-                last = ColumnItemType.IconButton
-            )
     ) { contentPadding ->
         TransformingLazyColumn(
             state = listState,
@@ -176,7 +191,10 @@ fun ListScreen(modifier: Modifier = Modifier) {
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .transformedHeight(this, transformationSpec),
+                            .transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(
+                                ListHeaderDefaults.minimumTopListContentPadding
+                            ),
                     transformation = SurfaceTransformation(transformationSpec)
                 ) { Text(text = "Header") }
             }
@@ -223,6 +241,9 @@ fun ListScreen(modifier: Modifier = Modifier) {
                                     applyContainerTransformation(scrollProgress)
                                 }
                             }.transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(
+                                ButtonDefaults.minimumVerticalListContentPadding
+                            )
                 ) {
                     FilledIconButton(
                         onClick = { showDialog = true },

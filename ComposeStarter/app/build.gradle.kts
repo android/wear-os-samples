@@ -19,6 +19,7 @@ plugins {
     id("com.android.application")
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -91,15 +92,16 @@ dependencies {
     implementation(libs.wear.compose.foundation)
     implementation(libs.androidx.material.icons.core)
 
-    implementation(libs.horologist.compose.layout)
-
     // Preview Tooling
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.ui.tooling)
 
     // If you are using Compose Navigation, use the Wear OS version (NOT the
     // androidx.navigation:navigation-compose version), that is, uncomment the line below.
-    implementation(libs.wear.compose.navigation)
+    implementation(libs.wear.compose.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.ui.test.manifest)
 

@@ -1,17 +1,19 @@
 [versions]
-android-gradle-plugin = "9.0.0"
-androidx-activity = "1.12.3"
-androidx-compose-bom = "2026.01.01"
-androidx-wear-compose-material3 = "1.5.6"
-androidx-wear-compose = "1.5.6"
-compose-ui-tooling = "1.5.6"
+android-gradle-plugin = "9.1.0"
+androidx-activity = "1.13.0"
+androidx-compose-bom = "2026.03.01"
+androidx-wear-compose-material3 = "1.6.0"
+androidx-wear-compose = "1.6.0"
+compose-ui-tooling = "1.6.0"
 horologist = "0.7.15"
 ktlint = "1.4.0"
-org-jetbrains-kotlin = "2.3.0"
+org-jetbrains-kotlin = "2.3.20"
 robolectric = "4.16.1"
-roborazzi = "1.56.0"
-ui-test-junit4 = "1.10.2"
-ui-test-manifest = "1.9.4"
+roborazzi = "1.59.0"
+ui-test-junit4 = "1.10.6"
+ui-test-manifest = "1.10.6"
+androidx-navigation3 = "1.1.0"
+kotlinx-serialization = "1.10.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -35,11 +37,15 @@ test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
 test-ext-junit = "androidx.test.ext:junit:1.3.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material3", version.ref = "androidx-wear-compose-material3" }
-wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose" }
-horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
+wear-compose-navigation3 = { module = "androidx.wear.compose:compose-navigation3", version.ref = "androidx-wear-compose" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation3" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:8.0.0"
+com-diffplug-spotless = "com.diffplug.spotless:8.4.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin" }
