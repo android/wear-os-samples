@@ -39,10 +39,11 @@ abstract class WearScreenshotTest {
     abstract val device: WearDevice
     open val tolerance: Float = 0.02f
 
-    protected val fixedTimeSource = object : TimeSource {
-        @Composable
-        override fun currentTime(): String = "10:10"
-    }
+    protected val fixedTimeSource =
+        object : TimeSource {
+            @Composable
+            override fun currentTime(): String = "10:10"
+        }
 
     fun runTest(
         suffix: String = "",

@@ -15,13 +15,11 @@
  */
 package presentation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import androidx.wear.compose.material3.AppScaffold
-import androidx.wear.compose.material3.TimeSource
 import androidx.wear.compose.material3.TimeText
 import com.example.android.wearable.composestarter.presentation.ListScreen
 import org.junit.Test

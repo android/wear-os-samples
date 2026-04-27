@@ -15,9 +15,7 @@
  */
 package presentation
 
-import androidx.compose.runtime.Composable
 import androidx.wear.compose.material3.AppScaffold
-import androidx.wear.compose.material3.TimeSource
 import androidx.wear.compose.material3.TimeText
 import com.example.android.wearable.composestarter.presentation.GreetingScreen
 import org.junit.Test
