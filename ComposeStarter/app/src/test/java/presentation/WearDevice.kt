@@ -27,6 +27,8 @@ data class WearDevice(
 ) {
     val dp: Int = (screenSizePx / density).roundToInt()
     val dpi: Int = (density * 160).roundToInt()
+    val qualifier: String =
+        "w${dp}dp-h${dp}dp-small-notlong-${if (isRound) "round" else "notround"}-watch-${dpi}dpi-keyshidden-nonav"
 
     companion object {
         val MobvoiTicWatchPro5 =

@@ -39,13 +39,7 @@ class ListScreenTest(
         runTest {
             AppScaffold(
                 timeText = {
-                    TimeText(
-                        timeSource =
-                            object : TimeSource {
-                                @Composable
-                                override fun currentTime(): String = "10:10"
-                            }
-                    )
+                    TimeText(timeSource = fixedTimeSource)
                 }
             ) {
                 ListScreen()

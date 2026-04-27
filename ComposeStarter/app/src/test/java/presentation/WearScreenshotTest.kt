@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Density
+import androidx.wear.compose.material3.TimeSource
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureScreenRoboImage
@@ -38,20 +39,22 @@ abstract class WearScreenshotTest {
     abstract val device: WearDevice
     open val tolerance: Float = 0.02f
 
+    protected val fixedTimeSource = object : TimeSource {
+        @Composable
+        override fun currentTime(): String = "10:10"
+    }
+
     fun runTest(
         suffix: String = "",
         content: @Composable () -> Unit
     ) {
-        val qualifier =
-            "w${device.dp}dp-h${device.dp}dp-small" +
-                "-notlong-round-watch-${device.dpi}dpi-keyshidden-nonav"
-        RuntimeEnvironment.setQualifiers(qualifier)
+        RuntimeEnvironment.setQualifiers(device.qualifier)
 
         composeRule.setContent {
             CompositionLocalProvider(
                 LocalDensity provides
                     Density(
-                        density = LocalDensity.current.density,
+                        density = device.density,
                         fontScale = device.fontScale
                     )
             ) {
