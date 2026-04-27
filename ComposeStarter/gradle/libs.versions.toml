@@ -5,7 +5,7 @@ androidx-compose-bom = "2026.03.01"
 androidx-wear-compose-material3 = "1.6.0"
 androidx-wear-compose = "1.6.0"
 compose-ui-tooling = "1.6.0"
-horologist = "0.7.15"
+
 ktlint = "1.4.0"
 org-jetbrains-kotlin = "2.3.20"
 robolectric = "4.16.1"
@@ -26,7 +26,7 @@ compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 desugar-jdk-libs = "com.android.tools:desugar_jdk_libs:2.1.5"
-horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
+
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
