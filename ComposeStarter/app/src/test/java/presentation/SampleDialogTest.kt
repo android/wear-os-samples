@@ -16,8 +16,6 @@
 package presentation
 
 import com.example.android.wearable.composestarter.presentation.SampleDialog
-import com.google.android.horologist.screenshots.rng.WearDevice
-import com.google.android.horologist.screenshots.rng.WearScreenshotTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
