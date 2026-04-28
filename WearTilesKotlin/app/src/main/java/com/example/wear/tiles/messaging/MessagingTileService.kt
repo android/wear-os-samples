@@ -15,6 +15,7 @@
  */
 package com.example.wear.tiles.messaging
 
+import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.tiles.Material3TileService
@@ -64,7 +65,7 @@ class MessagingTileService : Material3TileService() {
     override suspend fun MaterialScope.tileResponse(requestParams: TileRequest): Tile {
         // Asynchronously load images associated with resourceIds, and create a Map<String,
         // ResourceBuilders.ImageResource> suitable for adding to the Resources object
-        val imageResources =
+        val imageResources: Map<String, ResourceBuilders.ImageResource?> =
             coroutineScope {
                 contacts
                     .map { contact ->
@@ -83,12 +84,8 @@ class MessagingTileService : Material3TileService() {
 
         val layoutElement = tileLayout(contacts, imageResources)
 
-        // Note: Images could be cached by the system because version is tied to contact IDs.
-        val resourcesVersion = contacts.map { it.id }.toSortedSet().joinToString()
-
         return Tile
             .Builder()
-            .setResourcesVersion(resourcesVersion)
             .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
             .build()
     }

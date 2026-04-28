@@ -26,6 +26,7 @@ import androidx.wear.protolayout.layout.basicImage
 import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
+import androidx.wear.protolayout.material3.ColorScheme
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.materialScopeWithResources
@@ -52,21 +53,21 @@ import kotlin.OptIn
 fun MaterialScope.contactButton(
     contact: Contact,
     imageResource: ResourceBuilders.ImageResource?
-): LayoutElement {
-    if (imageResource != null) {
-        return protoLayoutScope.basicImage(
-            resource = imageResource,
+): LayoutElement =
+    imageResource?.let {
+        protoLayoutScope.basicImage(
+            resource = it,
             width = expand(),
             height = expand(),
             protoLayoutResourceId = contact.imageResourceId(),
             modifier = LayoutModifier.clip(shapes.full),
             contentScaleMode = CONTENT_SCALE_MODE_CROP
         )
-    } else {
+    } ?: run {
         // Simple function to return one of a set of themed button colors
         val colors = buttonColorsByIndex(contact.initials.hashCode())
 
-        return textButton(
+        textButton(
             onClick = clickable(),
             labelContent = {
                 text(
@@ -81,7 +82,6 @@ fun MaterialScope.contactButton(
             colors = colors
         )
     }
-}
 
 fun MaterialScope.tileLayout(
     contacts: List<Contact>,
@@ -207,23 +207,11 @@ internal fun socialPreviewN(
                         protoLayoutScope = request.scope,
                         deviceConfiguration = request.deviceConfiguration,
                         allowDynamicTheme = true,
-                        defaultColorScheme =
-                            androidx.wear.protolayout.material3
-                                .ColorScheme()
+                        defaultColorScheme = ColorScheme()
                     ) {
                         tileLayout(contacts, imageResources)
                     }
                 ).build()
-        },
-        onTileResourceRequest = { request ->
-            val builder =
-                androidx.wear.protolayout.ResourceBuilders.Resources
-                    .Builder()
-                    .setVersion(request.version)
-            imageResources.forEach { (id, resource) ->
-                builder.addIdToImageMapping(id, resource)
-            }
-            builder.build()
         }
     )
 }
