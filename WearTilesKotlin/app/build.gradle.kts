@@ -21,6 +21,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+@Suppress("DEPRECATION")
 android {
     compileSdk = 37
 
@@ -46,9 +47,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+
 
 
 }
@@ -80,4 +79,10 @@ dependencies {
     // androidx.wear.tiles:tiles-tooling-preview dependency available to release builds, not
     // just debug builds.
     implementation(libs.androidx.wear.tiles.tooling.preview)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
