@@ -18,10 +18,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 37
 
     namespace = "com.example.wear.tiles"
 
@@ -45,9 +46,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
-
-
-
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
 
 }
@@ -55,6 +56,7 @@ android {
 
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
     // Coil for asynchronous image loading
     implementation(libs.coil)
     implementation(libs.coil.okhttp)
