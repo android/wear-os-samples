@@ -69,7 +69,6 @@ dependencies {
 
     // Tooling dependencies for previewing tiles in Android Studio.
     implementation(libs.androidx.tiles.tooling)
-    implementation(libs.horologist.tiles)
 
     debugImplementation(libs.androidx.wear.tiles.renderer)
 

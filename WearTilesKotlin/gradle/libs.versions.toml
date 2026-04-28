@@ -6,7 +6,7 @@ ktfmt = "0.54"
 androidx-wear-tiles = "1.6.0"
 androidx-wear-protolayout = "1.4.0"
 coil = "3.3.0"
-horologist = "0.7.12-alpha"
+
 org-jetbrains-kotlin = "2.2.10"
 wear-tooling-preview = "1.0.0"
 desugar-jdk = "2.1.5"
@@ -29,7 +29,7 @@ coil-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "
 
 # Other
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
-horologist-tiles = { module = "com.google.android.horologist:horologist-tiles", version.ref = "horologist" }
+
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
