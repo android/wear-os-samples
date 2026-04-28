@@ -62,8 +62,8 @@ object Hike {
 
     fun layout(
         context: Context,
-        deviceParameters: DeviceParameters,
         protoLayoutScope: ProtoLayoutScope,
+        deviceParameters: DeviceParameters,
         data: HikeData
     ) = materialScopeWithResources(context, protoLayoutScope, deviceParameters) {
         primaryLayout(
@@ -109,7 +109,7 @@ object Hike {
                                 backgroundImage(
                                     resource =
                                         imageResource(
-                                            androidImage = androidImageResource(R.drawable.photo_14)
+                                            androidImageResource(R.drawable.photo_14)
                                         ),
                                     overlayColor = null
                                 )
@@ -123,36 +123,31 @@ object Hike {
 }
 
 @MultiRoundDevicesWithFontScalePreviews
-internal fun hikePreview(context: Context): TilePreviewData {
-    val protoLayoutScope = ProtoLayoutScope()
-    return TilePreviewData(
-        onTileRequest = { requestParams ->
-            TilePreviewHelper
-                .singleTimelineEntryTileBuilder(
-                    Hike.layout(
-                        context = context,
-                        deviceParameters = requestParams.deviceConfiguration,
-                        protoLayoutScope = protoLayoutScope,
-                        data =
-                            Hike.HikeData(
-                                distance = "10",
-                                unit = "Miles",
-                                clickable = clickable()
-                            )
-                    )
-                ).build()
-        },
-        onTileResourceRequest = { protoLayoutScope.collectResources() }
-    )
-}
+internal fun hikePreview(context: Context) =
+    TilePreviewData { request ->
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Hike.layout(
+                    context = context,
+                    protoLayoutScope = request.scope,
+                    deviceParameters = request.deviceConfiguration,
+                    data =
+                        Hike.HikeData(
+                            distance = "10",
+                            unit = "Miles",
+                            clickable = clickable()
+                        )
+                )
+            ).build()
+    }
 
 class HikeTileService : TileService() {
-    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<Tile?> {
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<Tile> {
         val layout =
             Hike.layout(
                 this,
-                requestParams.deviceConfiguration,
                 requestParams.scope,
+                requestParams.deviceConfiguration,
                 Hike.HikeData(distance = "10", unit = "Miles", clickable = clickable())
             )
         val tile =
