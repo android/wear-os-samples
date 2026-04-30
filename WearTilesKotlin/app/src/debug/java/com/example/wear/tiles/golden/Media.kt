@@ -23,8 +23,9 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
@@ -40,13 +41,12 @@ import androidx.wear.protolayout.material3.textEdgeButton
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -105,13 +105,13 @@ object Media {
                 )
             },
             mainSlot = {
-                column {
-                    setWidth(expand())
-                    setHeight(expand())
-                    addContent(playlistButton(deviceParameters, playlist1))
-                    addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    addContent(playlistButton(deviceParameters, playlist2))
-                }
+                column(
+                    playlistButton(deviceParameters, playlist1),
+                    ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    playlistButton(deviceParameters, playlist2),
+                    width = expand(),
+                    height = expand()
+                )
             }
         )
     }
@@ -143,26 +143,24 @@ internal fun mediaPreview(context: Context) =
 class MediaTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Media.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            playlist1 =
-                                Media.Playlist(
-                                    "Metal mix",
-                                    imageId = R.drawable.photo_01
-                                ),
-                            playlist2 =
-                                Media.Playlist(
-                                    "Chilled mix",
-                                    imageId = R.drawable.photo_11
-                                )
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Media.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        playlist1 =
+                            Media.Playlist(
+                                "Metal mix",
+                                imageId = R.drawable.photo_01
+                            ),
+                        playlist2 =
+                            Media.Playlist(
+                                "Chilled mix",
+                                imageId = R.drawable.photo_11
+                            )
                     )
-                ).build()
+                )
+            )
         )
 }

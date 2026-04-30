@@ -20,8 +20,9 @@ import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledVariantButtonColors
@@ -46,13 +47,12 @@ import androidx.wear.protolayout.modifiers.contentDescription
 import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -66,24 +66,20 @@ object Timer {
             titleSlot = { text("Minutes".layoutString) },
             mainSlot = {
                 if (isLargeScreen()) {
-                    column {
-                        setWidth(expand())
-                        setHeight(expand())
-                        addContent(
-                            buttonGroup {
-                                buttonGroupItem { timerTextButton1("5") }
-                                buttonGroupItem { timerTextButton1("10") }
-                            }
-                        )
-                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(
-                            buttonGroup {
-                                buttonGroupItem { timerTextButton1("15") }
-                                buttonGroupItem { timerTextButton1("20") }
-                                buttonGroupItem { timerTextButton1("30") }
-                            }
-                        )
-                    }
+                    column(
+                        buttonGroup {
+                            buttonGroupItem { timerTextButton1("5") }
+                            buttonGroupItem { timerTextButton1("10") }
+                        },
+                        ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                        buttonGroup {
+                            buttonGroupItem { timerTextButton1("15") }
+                            buttonGroupItem { timerTextButton1("20") }
+                            buttonGroupItem { timerTextButton1("30") }
+                        },
+                        width = expand(),
+                        height = expand()
+                    )
                 } else {
                     buttonGroup {
                         buttonGroupItem { timerTextButton1("5") }
@@ -113,25 +109,20 @@ object Timer {
     ) = materialScopeWithResources(context, scope, deviceParameters) {
         primaryLayout(
             mainSlot = {
-                column {
-                    setWidth(expand())
-                    setHeight(expand())
-                    addContent(
-                        buttonGroup {
-                            buttonGroupItem { timerButton("1:00", "Hour") }
-                            buttonGroupItem { timerButton("5", "Mins") }
-                        }
-                    )
-                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    addContent(
-                        buttonGroup {
-                            buttonGroupItem { timerButton("15", "Mins") }
-                            buttonGroupItem { timerButton("20", "Mins") }
-                            buttonGroupItem { timerButton("25", "Mins") }
-                        }
-                    )
-                    build()
-                }
+                column(
+                    buttonGroup {
+                        buttonGroupItem { timerButton("1:00", "Hour") }
+                        buttonGroupItem { timerButton("5", "Mins") }
+                    },
+                    DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    buttonGroup {
+                        buttonGroupItem { timerButton("15", "Mins") }
+                        buttonGroupItem { timerButton("20", "Mins") }
+                        buttonGroupItem { timerButton("25", "Mins") }
+                    },
+                    width = expand(),
+                    height = expand()
+                )
             },
             bottomSlot = {
                 iconEdgeButton(
@@ -206,34 +197,30 @@ fun timer2LayoutPreview(context: Context) =
 class Timer1TileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Timer.timer1Layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Timer.timer1Layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration
                     )
-                ).build()
+                )
+            )
         )
 }
 
 class Timer2TileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Timer.timer2Layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            clickable()
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Timer.timer2Layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        clickable()
                     )
-                ).build()
+                )
+            )
         )
 }

@@ -25,8 +25,10 @@ import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.box
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
@@ -46,14 +48,12 @@ import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.contentDescription
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.box
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -75,94 +75,80 @@ object Calendar {
     ) = materialScopeWithResources(context, scope, deviceParameters) {
         primaryLayout(
             mainSlot = {
-                column {
-                    setWidth(expand())
-                    setHeight(expand())
-                    addContent(
-                        box {
-                            setWidth(expand())
-                            addContent(
-                                buttonGroup {
-                                    setHeight(weight(0.3f))
-                                    buttonGroupItem {
-                                        textButton(
-                                            onClick = data.clickable,
-                                            labelContent = { text(data.date.layoutString) },
-                                            colors = filledTonalButtonColors(),
-                                            width = weight(0.6f),
-                                            height = expand()
-                                        )
-                                    }
-                                    buttonGroupItem {
-                                        iconButton(
-                                            onClick = data.clickable,
-                                            iconContent = {
-                                                icon(
-                                                    imageResource(
-                                                        androidImageResource(
-                                                            R.drawable.outline_add_24
-                                                        )
-                                                    )
-                                                )
-                                            },
-                                            colors = filledButtonColors(),
-                                            modifier =
-                                                LayoutModifier.contentDescription("Add Event"),
-                                            width = weight(0.4f),
-                                            height = expand()
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    )
-                    addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    addContent(
-                        box {
-                            setWidth(expand())
-                            setHeight(weight(0.7f))
-                            addContent(
-                                titleCard(
+                column(
+                    box(
+                        buttonGroup(height = weight(0.3f)) {
+                            buttonGroupItem {
+                                textButton(
                                     onClick = data.clickable,
-                                    title = {
-                                        text(
-                                            data.name.layoutString,
-                                            maxLines = if (isLargeScreen()) 3 else 2
-                                        )
-                                    },
-                                    content = {
-                                        column {
-                                            addContent(text(data.time.layoutString))
-                                            if (isLargeScreen()) {
-                                                addContent(
-                                                    text(
-                                                        data.location.layoutString,
-                                                        maxLines = 1
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    },
-                                    colors = filledVariantCardColors(),
-                                    backgroundContent =
-                                        data.imageId?.let { imageResId ->
-                                            {
-                                                backgroundImage(
-                                                    resource =
-                                                        imageResource(
-                                                            androidImageResource(imageResId)
-                                                        ),
-                                                    contentScaleMode = CONTENT_SCALE_MODE_CROP
-                                                )
-                                            }
-                                        },
-                                    shape = shapes.extraLarge,
+                                    labelContent = { text(data.date.layoutString) },
+                                    colors = filledTonalButtonColors(),
+                                    width = weight(0.6f),
                                     height = expand()
                                 )
-                            )
-                        }
-                    )
-                }
+                            }
+                            buttonGroupItem {
+                                iconButton(
+                                    onClick = data.clickable,
+                                    iconContent = {
+                                        icon(
+                                            imageResource(
+                                                androidImageResource(
+                                                    R.drawable.outline_add_24
+                                                )
+                                            )
+                                        )
+                                    },
+                                    colors = filledButtonColors(),
+                                    modifier =
+                                        LayoutModifier.contentDescription("Add Event"),
+                                    width = weight(0.4f),
+                                    height = expand()
+                                )
+                            }
+                        },
+                        width = expand()
+                    ),
+                    ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    box(
+                        titleCard(
+                            onClick = data.clickable,
+                            title = {
+                                text(
+                                    data.name.layoutString,
+                                    maxLines = if (isLargeScreen()) 3 else 2
+                                )
+                            },
+                            content = {
+                                column(
+                                    *listOfNotNull(
+                                        text(data.time.layoutString),
+                                        if (isLargeScreen()) text(data.location.layoutString, maxLines = 1) else null
+                                    ).toTypedArray()
+                                )
+                            },
+                            colors = filledVariantCardColors(),
+                            backgroundContent =
+                                data.imageId?.let { imageResId ->
+                                    {
+                                        backgroundImage(
+                                            resource =
+                                                imageResource(
+                                                    androidImageResource(imageResId)
+                                                ),
+                                            contentScaleMode = CONTENT_SCALE_MODE_CROP
+                                        )
+                                    }
+                                },
+                            shape = shapes.extraLarge,
+                            height = expand()
+                        ),
+                        width = expand(),
+                        height = weight(0.7f)
+                    ),
+                    width = expand(),
+                    height = expand()
+                )
             }
         )
     }
@@ -199,49 +185,45 @@ fun calendarPreviewX(
 class Calendar1TileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Calendar.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Calendar.Event(
-                                date = "25 July",
-                                time = "6:30-7:30 PM",
-                                name = "Advanced Tennis Coaching with Christina Lloyd",
-                                location = "216 Market Street",
-                                imageId = null,
-                                clickable = clickable()
-                            )
+            tile(
+                Timeline.fromLayoutElement(
+                    Calendar.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Calendar.Event(
+                            date = "25 July",
+                            time = "6:30-7:30 PM",
+                            name = "Advanced Tennis Coaching with Christina Lloyd",
+                            location = "216 Market Street",
+                            imageId = null,
+                            clickable = clickable()
                         )
                     )
-                ).build()
+                )
+            )
         )
 }
 
 class Calendar2TileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Calendar.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Calendar.Event(
-                                date = "25 July",
-                                time = "6:30-7:30 PM",
-                                name = "Advanced Tennis Coaching with Christina Lloyd",
-                                location = "216 Market Street",
-                                imageId = R.drawable.photo_38,
-                                clickable = clickable()
-                            )
+            tile(
+                Timeline.fromLayoutElement(
+                    Calendar.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Calendar.Event(
+                            date = "25 July",
+                            time = "6:30-7:30 PM",
+                            name = "Advanced Tennis Coaching with Christina Lloyd",
+                            location = "216 Market Street",
+                            imageId = R.drawable.photo_38,
+                            clickable = clickable()
                         )
                     )
-                ).build()
+                )
+            )
         )
 }

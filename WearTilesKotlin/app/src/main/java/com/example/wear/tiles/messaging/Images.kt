@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.example.wear.tiles.messaging
 import android.content.Context
 import android.util.Log
 import androidx.wear.protolayout.ResourceBuilders.ImageResource
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import coil3.ImageLoader
 import coil3.request.ErrorResult
 import coil3.request.ImageRequest
@@ -43,11 +45,19 @@ import com.example.wear.tiles.tools.toImageResource
  * @return An [ImageResource] representing the loaded avatar, or `null` if no avatar is available or
  *   an error occurred during network loading.
  */
-suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact): ImageResource? {
+suspend fun ImageLoader.loadAvatar(
+    context: Context,
+    contact: Contact
+): ImageResource? {
     return when (val source = contact.avatarSource) {
         is AvatarSource.Network -> {
             val request =
-                ImageRequest.Builder(context).data(source.url).size(300).allowRgb565(true).build()
+                ImageRequest
+                    .Builder(context)
+                    .data(source.url)
+                    .size(300)
+                    .allowRgb565(true)
+                    .build()
             val response = execute(request)
             return when (response) {
                 is SuccessResult -> {
@@ -59,7 +69,7 @@ suspend fun ImageLoader.loadAvatar(context: Context, contact: Contact): ImageRes
                 }
             }
         }
-        is AvatarSource.Resource -> source.resourceId.toImageResource()
+        is AvatarSource.Resource -> imageResource(androidImage = androidImageResource(source.resourceId))
         is AvatarSource.None -> null
     }
 }

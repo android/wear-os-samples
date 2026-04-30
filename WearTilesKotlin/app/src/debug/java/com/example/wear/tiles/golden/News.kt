@@ -24,7 +24,7 @@ import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders.CONTENT_SCALE_MODE_CROP
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonColors
@@ -40,8 +40,8 @@ import androidx.wear.protolayout.material3.textEdgeButton
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
@@ -132,22 +132,20 @@ internal fun newsPreview(context: Context): TilePreviewData =
 class NewsTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        News.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            News.ArticleData(
-                                headline = "Millions still without power as new storm moves across US",
-                                date = "Today, 31 July",
-                                clickable = clickable(),
-                                imageResourceId = R.drawable.photo_15
-                            )
+            tile(
+                Timeline.fromLayoutElement(
+                    News.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        News.ArticleData(
+                            headline = "Millions still without power as new storm moves across US",
+                            date = "Today, 31 July",
+                            clickable = clickable(),
+                            imageResourceId = R.drawable.photo_15
                         )
                     )
-                ).build()
+                )
+            )
         )
 }

@@ -26,8 +26,10 @@ import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.box
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
@@ -48,14 +50,12 @@ import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.box
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -89,59 +89,53 @@ object Weather {
         primaryLayout(
             titleSlot = { text(data.location.layoutString) },
             mainSlot = {
-                column {
-                    setHeight(expand())
-                    setWidth(expand())
-                    addContent(conditions(data.conditions))
-                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    addContent(forecast(data.forecast))
-                }
+                column(
+                    conditions(data.conditions),
+                    DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    forecast(data.forecast),
+                    width = expand(),
+                    height = expand()
+                )
             }
         )
     }
 
     private fun MaterialScope.conditions(conditions: Conditions): LayoutElement =
-        box {
-            setHeight(weight(0.40F))
-            setWidth(expand())
-            addContent(
-                buttonGroup {
-                    setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
-                    buttonGroupItem {
-                        icon(
-                            imageResource(androidImageResource(conditions.weatherIconId)),
-                            width = dp(32F),
-                            height = dp(32F),
-                            tintColor = colorScheme.tertiary
-                        )
-                    }
-                    buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
-                    buttonGroupItem {
-                        text(
-                            conditions.currentTemperature.layoutString,
-                            typography = if (isLargeScreen()) NUMERAL_LARGE else NUMERAL_MEDIUM
-                        )
-                    }
-                    buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
-                    buttonGroupItem {
-                        column {
-                            addContent(
-                                text(
-                                    conditions.highTemperature.layoutString,
-                                    typography = TITLE_MEDIUM
-                                )
-                            )
-                            addContent(
-                                text(
-                                    conditions.lowTemperature.layoutString,
-                                    typography = TITLE_MEDIUM
-                                )
-                            )
-                        }
-                    }
+        box(
+            buttonGroup {
+                buttonGroupItem {
+                    icon(
+                        imageResource(androidImageResource(conditions.weatherIconId)),
+                        width = dp(32F),
+                        height = dp(32F),
+                        tintColor = colorScheme.tertiary
+                    )
                 }
-            )
-        }
+                buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
+                buttonGroupItem {
+                    text(
+                        conditions.currentTemperature.layoutString,
+                        typography = if (isLargeScreen()) NUMERAL_LARGE else NUMERAL_MEDIUM
+                    )
+                }
+                buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
+                buttonGroupItem {
+                    column(
+                        text(
+                            conditions.highTemperature.layoutString,
+                            typography = TITLE_MEDIUM
+                        ),
+                        text(
+                            conditions.lowTemperature.layoutString,
+                            typography = TITLE_MEDIUM
+                        )
+                    )
+                }
+            },
+            width = expand(),
+            height = weight(0.40F),
+            verticalAlignment = LayoutElementBuilders.VERTICAL_ALIGN_CENTER
+        )
 
     private fun MaterialScope.forecast(forecast: List<Forecast>): LayoutElement =
         card(
@@ -161,40 +155,34 @@ object Weather {
         }
 
     private fun MaterialScope.hourForecast(forecast: Forecast): LayoutElement =
-        column {
-            setWidth(expand())
-            setHeight(expand())
-            addContent(
-                column {
-                    addContent(icon(imageResource(androidImageResource(forecast.weatherIconId))))
-                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    if (isLargeScreen()) {
-                        addContent(
-                            text(forecast.temperature.layoutString, typography = TITLE_MEDIUM)
-                        )
-                        addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    }
-                    addContent(text(forecast.time.layoutString, typography = BODY_SMALL))
-                }
-            )
-        }
+        column(
+            column(
+                *listOfNotNull(
+                    icon(imageResource(androidImageResource(forecast.weatherIconId))),
+                    DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    if (isLargeScreen()) text(forecast.temperature.layoutString, typography = TITLE_MEDIUM) else null,
+                    if (isLargeScreen()) DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS else null,
+                    text(forecast.time.layoutString, typography = BODY_SMALL)
+                ).toTypedArray()
+            ),
+            width = expand(),
+            height = expand()
+        )
 }
 
 class WeatherTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Weather.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            weatherData()
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Weather.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        weatherData()
                     )
-                ).build()
+                )
+            )
         )
 }
 

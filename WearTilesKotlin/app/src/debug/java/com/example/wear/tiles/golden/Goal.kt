@@ -20,7 +20,7 @@ import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.expression.DynamicBuilders.DynamicFloat
 import androidx.wear.protolayout.expression.PlatformEventSources
 import androidx.wear.protolayout.layout.androidImageResource
@@ -40,8 +40,8 @@ import androidx.wear.protolayout.material3.textEdgeButton
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
 import com.example.wear.tiles.R
@@ -151,17 +151,15 @@ internal fun goalPreview(context: Context) =
 class GoalTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Goal.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            data = Goal.GoalData(steps = 5168, goal = 8000)
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Goal.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        data = Goal.GoalData(steps = 5168, goal = 8000)
                     )
-                ).build()
+                )
+            )
         )
 }

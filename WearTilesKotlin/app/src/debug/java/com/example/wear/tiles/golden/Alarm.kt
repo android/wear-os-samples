@@ -22,9 +22,10 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
 import androidx.wear.protolayout.layout.imageResource
+import androidx.wear.protolayout.layout.row
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
@@ -44,8 +45,8 @@ import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.contentDescription
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
@@ -67,20 +68,17 @@ fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
 
     val timeString = "$hour12:${String.format("%02d", minute)}" // TODO: Localize
 
-    return LayoutElementBuilders.Row
-        .Builder()
-        .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
-        .addContent(
-            text(
-                text = timeString.layoutString,
-                typography = if (isLargeScreen()) DISPLAY_LARGE else DISPLAY_MEDIUM
-            )
-        ).addContent(
-            text(
-                text = " $amPm".layoutString,
-                typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM
-            )
-        ).build()
+    return row(
+        text(
+            text = timeString.layoutString,
+            typography = if (isLargeScreen()) DISPLAY_LARGE else DISPLAY_MEDIUM
+        ),
+        text(
+            text = " $amPm".layoutString,
+            typography = if (isLargeScreen()) TITLE_LARGE else TITLE_MEDIUM
+        ),
+        verticalAlignment = LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM
+    )
 }
 
 object Alarm {
@@ -158,21 +156,19 @@ internal fun alarmPreview(context: Context) =
 class AlarmTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Alarm.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Alarm.AlarmData(
-                                alarmTime = LocalTime.parse("14:58"),
-                                alarmDays = "Mon—Fri",
-                                clickable = clickable()
-                            )
+            tile(
+                Timeline.fromLayoutElement(
+                    Alarm.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Alarm.AlarmData(
+                            alarmTime = LocalTime.parse("14:58"),
+                            alarmDays = "Mon—Fri",
+                            clickable = clickable()
                         )
                     )
-                ).build()
+                )
+            )
         )
 }

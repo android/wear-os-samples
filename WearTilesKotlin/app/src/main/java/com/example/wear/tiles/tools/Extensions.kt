@@ -17,19 +17,14 @@ package com.example.wear.tiles.tools
 
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
-import androidx.wear.protolayout.LayoutElementBuilders
-import androidx.wear.protolayout.LayoutElementBuilders.Box
-import androidx.wear.protolayout.LayoutElementBuilders.Column
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.ResourceBuilders.ImageResource
 import androidx.wear.protolayout.ResourceBuilders.Resources
-import androidx.wear.protolayout.TimelineBuilders.Timeline
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders.Tile
-import androidx.wear.tiles.tile
 import java.nio.ByteBuffer
-import kotlin.time.Duration
 
 // Resources extensions
 
@@ -47,7 +42,11 @@ fun resources(
 fun Resources.Builder.addIdToImageMapping(
     id: String,
     @DrawableRes resId: Int
-): Resources.Builder = addIdToImageMapping(id, resId.toImageResource())
+): Resources.Builder =
+    addIdToImageMapping(
+        id,
+        imageResource(androidImage = androidImageResource(resId))
+    )
 
 fun Resources.Builder.addIdToImageMapping(
     id: String,
@@ -79,53 +78,9 @@ operator fun Resources.plus(other: Resources): Resources {
 
 fun MaterialScope.isLargeScreen() = deviceConfiguration.screenWidthDp >= 225
 
-// Column extensions
-
-fun column(builder: Column.Builder.() -> Unit) = Column.Builder().apply(builder).build()
-
-fun row(builder: LayoutElementBuilders.Row.Builder.() -> Unit) =
-    LayoutElementBuilders.Row
-        .Builder()
-        .apply(builder)
-        .build()
-
-fun box(builder: Box.Builder.() -> Unit) = Box.Builder().apply(builder).build()
-
 // LayoutElementBuilders extensions
 
-fun MaterialScope.tile(
-    timeline: Timeline,
-    freshness: Duration? = null
-): Tile =
-    tile(
-        timeline = timeline,
-        freshness = freshness
-    )
-
-fun MaterialScope.image(builder: LayoutElementBuilders.Image.Builder.() -> Unit) =
-    LayoutElementBuilders.Image
-        .Builder(protoLayoutScope)
-        .apply(builder)
-        .build()
-
-@Deprecated("Use MaterialScope.image instead", replaceWith = ReplaceWith("image(builder)"))
-fun image(builder: LayoutElementBuilders.Image.Builder.() -> Unit) =
-    LayoutElementBuilders.Image
-        .Builder()
-        .apply(builder)
-        .build()
-
 // Image extensions
-
-fun @receiver:DrawableRes Int.toImageResource(): ImageResource =
-    ImageResource
-        .Builder()
-        .setAndroidResourceByResId(
-            ResourceBuilders.AndroidImageResourceByResId
-                .Builder()
-                .setResourceId(this)
-                .build()
-        ).build()
 
 fun Bitmap.toImageResource(): ImageResource {
     val safeBitmap = this.copy(Bitmap.Config.RGB_565, false)

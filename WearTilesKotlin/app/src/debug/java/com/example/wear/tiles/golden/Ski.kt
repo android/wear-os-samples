@@ -20,7 +20,7 @@ import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.Typography
@@ -32,8 +32,8 @@ import androidx.wear.protolayout.material3.textDataCard
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
@@ -132,18 +132,16 @@ internal fun skiPreview(context: Context) =
 class SkiTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Ski.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
-                            stat2 = Ski.Stat("Distance", "21.8", "mile")
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Ski.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        stat1 = Ski.Stat("Max Spd", "46.5", "mph"),
+                        stat2 = Ski.Stat("Distance", "21.8", "mile")
                     )
-                ).build()
+                )
+            )
         )
 }

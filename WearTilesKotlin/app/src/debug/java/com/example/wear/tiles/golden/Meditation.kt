@@ -21,8 +21,9 @@ import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
@@ -38,13 +39,12 @@ import androidx.wear.protolayout.material3.textEdgeButton
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -92,28 +92,24 @@ object Meditation {
                 )
             },
             mainSlot = {
-                column {
-                    setWidth(expand())
-                    setHeight(expand())
-                    addContent(
-                        meditationButton(
-                            MeditationTask(
-                                label = "Breath",
-                                iconId = R.drawable.outline_air_24
-                            )
+                column(
+                    meditationButton(
+                        MeditationTask(
+                            label = "Breath",
+                            iconId = R.drawable.outline_air_24
                         )
-                    )
-                    addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    addContent(
-                        meditationButton(
-                            MeditationTask(
-                                label = "Daily mindfulness",
-                                iconId = R.drawable.ic_yoga_24,
-                                maxLines = 2
-                            )
+                    ),
+                    ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    meditationButton(
+                        MeditationTask(
+                            label = "Daily mindfulness",
+                            iconId = R.drawable.ic_yoga_24,
+                            maxLines = 2
                         )
-                    )
-                }
+                    ),
+                    width = expand(),
+                    height = expand()
+                )
             }
         )
     }
@@ -131,17 +127,15 @@ fun mindfulnessPreview(context: Context) =
 class MindfulnessTileService : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Meditation.listLayout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            2
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Meditation.listLayout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        2
                     )
-                ).build()
+                )
+            )
         )
 }

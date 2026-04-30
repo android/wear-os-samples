@@ -22,7 +22,10 @@ import androidx.wear.protolayout.LayoutElementBuilders.FontSetting
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.expression.ProtoLayoutExperimental
+import androidx.wear.protolayout.layout.androidImageResource
 import androidx.wear.protolayout.layout.basicImage
+import androidx.wear.protolayout.layout.column
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
@@ -44,9 +47,7 @@ import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
-import com.example.wear.tiles.tools.toImageResource
 import kotlin.OptIn
 
 @OptIn(ProtoLayoutExperimental::class)
@@ -108,10 +109,8 @@ fun MaterialScope.tileLayout(
                 null
             },
         mainSlot = {
-            column {
-                setWidth(expand())
-                setHeight(expand())
-                addContent(
+            column(
+                *listOfNotNull(
                     buttonGroup {
                         row1.forEach {
                             buttonGroupItem {
@@ -121,11 +120,9 @@ fun MaterialScope.tileLayout(
                                 )
                             }
                         }
-                    }
-                )
-                if (row2.isNotEmpty()) {
-                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    addContent(
+                    },
+                    if (row2.isNotEmpty()) DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS else null,
+                    if (row2.isNotEmpty()) {
                         buttonGroup {
                             row2.forEach {
                                 buttonGroupItem {
@@ -133,9 +130,13 @@ fun MaterialScope.tileLayout(
                                 }
                             }
                         }
-                    )
-                }
-            }
+                    } else {
+                        null
+                    }
+                ).toTypedArray(),
+                width = expand(),
+                height = expand()
+            )
         },
         bottomSlot = {
             textEdgeButton(
@@ -192,9 +193,9 @@ internal fun socialPreviewN(
             val id = it.imageResourceId()
             val resource =
                 if (it.avatarSource is AvatarSource.Resource) {
-                    it.avatarSource.resourceId.toImageResource()
+                    imageResource(androidImage = androidImageResource(it.avatarSource.resourceId))
                 } else {
-                    R.mipmap.offline.toImageResource()
+                    imageResource(androidImage = androidImageResource(R.mipmap.offline))
                 }
             id to resource
         }

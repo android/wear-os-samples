@@ -27,10 +27,11 @@ import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.LayoutElementBuilders.TEXT_ALIGN_CENTER
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.expression.ProtoLayoutExperimental
 import androidx.wear.protolayout.layout.androidImageResource
 import androidx.wear.protolayout.layout.basicText
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.fontStyle
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonColors
@@ -52,13 +53,12 @@ import androidx.wear.protolayout.modifiers.contentDescription
 import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -191,23 +191,23 @@ object Social {
                         null
                     },
                 mainSlot = {
-                    column {
-                        setWidth(expand())
-                        setHeight(expand())
-                        addContent(
+                    column(
+                        *listOfNotNull(
                             buttonGroup {
                                 row1.forEach { buttonGroupItem { contactButton(it) } }
-                            }
-                        )
-                        if (!row2.isEmpty()) {
-                            addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                            addContent(
+                            },
+                            if (!row2.isEmpty()) DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS else null,
+                            if (!row2.isEmpty()) {
                                 buttonGroup {
                                     row2.forEach { buttonGroupItem { contactButton(it) } }
                                 }
-                            )
-                        }
-                    }
+                            } else {
+                                null
+                            }
+                        ).toTypedArray(),
+                        width = expand(),
+                        height = expand()
+                    )
                 },
                 bottomSlot = {
                     textEdgeButton(
@@ -258,53 +258,47 @@ internal fun socialPreviewN(
 class SocialTileService5 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Social.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Social.SocialData(mockContacts().take(5))
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Social.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Social.SocialData(mockContacts().take(5))
                     )
-                ).build()
+                )
+            )
         )
 }
 
 class SocialTileService6 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Social.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Social.SocialData(mockContacts().take(6))
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Social.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Social.SocialData(mockContacts().take(6))
                     )
-                ).build()
+                )
+            )
         )
 }
 
 class SocialTileService2 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Social.layout(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Social.SocialData(mockContacts().take(2))
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Social.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Social.SocialData(mockContacts().take(2))
                     )
-                ).build()
+                )
+            )
         )
 }

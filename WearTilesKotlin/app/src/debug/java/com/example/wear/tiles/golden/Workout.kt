@@ -24,8 +24,9 @@ import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ProtoLayoutScope
-import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.TimelineBuilders.Timeline
 import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.column
 import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledButtonColors
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
@@ -49,13 +50,12 @@ import androidx.wear.protolayout.material3.textEdgeButton
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper.singleTimelineEntryTileBuilder
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 
@@ -170,73 +170,69 @@ object Workout {
             margins = PrimaryLayoutMargins.MID_PRIMARY_LAYOUT_MARGIN,
             mainSlot = {
                 if (isLargeScreen()) {
-                    column {
-                        setWidth(expand())
-                        setHeight(expand())
-                        addContent(
-                            workoutGraphicDataCard(
-                                titleText = "Start Run",
-                                contentText = data.contentText,
-                                iconId = R.drawable.ic_run_24
-                            )
-                        )
-                        addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(
-                            buttonGroup {
-                                buttonGroupItem {
-                                    iconButton(
-                                        onClick = clickable(),
-                                        height = expand(),
-                                        width = expand(),
-                                        colors = filledTonalButtonColors(),
-                                        iconContent = {
-                                            icon(
-                                                imageResource(
-                                                    androidImageResource(
-                                                        R.drawable.self_improvement_24px
-                                                    )
+                    column(
+                        workoutGraphicDataCard(
+                            titleText = "Start Run",
+                            contentText = data.contentText,
+                            iconId = R.drawable.ic_run_24
+                        ),
+                        DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                        buttonGroup {
+                            buttonGroupItem {
+                                iconButton(
+                                    onClick = clickable(),
+                                    height = expand(),
+                                    width = expand(),
+                                    colors = filledTonalButtonColors(),
+                                    iconContent = {
+                                        icon(
+                                            imageResource(
+                                                androidImageResource(
+                                                    R.drawable.self_improvement_24px
                                                 )
                                             )
-                                        }
-                                    )
-                                }
-                                buttonGroupItem {
-                                    iconButton(
-                                        onClick = clickable(),
-                                        width = expand(),
-                                        height = expand(),
-                                        colors = filledTonalButtonColors(),
-                                        iconContent = {
-                                            icon(
-                                                imageResource(
-                                                    androidImageResource(
-                                                        R.drawable.ic_run_24
-                                                    )
-                                                )
-                                            )
-                                        }
-                                    )
-                                }
-                                buttonGroupItem {
-                                    iconButton(
-                                        onClick = clickable(),
-                                        width = expand(),
-                                        height = expand(),
-                                        colors = filledTonalButtonColors(),
-                                        iconContent = {
-                                            icon(
-                                                imageResource(
-                                                    androidImageResource(
-                                                        R.drawable.ic_cycling_24
-                                                    )
-                                                )
-                                            )
-                                        }
-                                    )
-                                }
+                                        )
+                                    }
+                                )
                             }
-                        )
-                    }
+                            buttonGroupItem {
+                                iconButton(
+                                    onClick = clickable(),
+                                    width = expand(),
+                                    height = expand(),
+                                    colors = filledTonalButtonColors(),
+                                    iconContent = {
+                                        icon(
+                                            imageResource(
+                                                androidImageResource(
+                                                    R.drawable.ic_run_24
+                                                )
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+                            buttonGroupItem {
+                                iconButton(
+                                    onClick = clickable(),
+                                    width = expand(),
+                                    height = expand(),
+                                    colors = filledTonalButtonColors(),
+                                    iconContent = {
+                                        icon(
+                                            imageResource(
+                                                androidImageResource(
+                                                    R.drawable.ic_cycling_24
+                                                )
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+                        },
+                        width = expand(),
+                        height = expand()
+                    )
                 } else {
                     workoutGraphicDataCard(
                         titleText = "Start Run",
@@ -303,35 +299,31 @@ internal fun workoutLayout2Preview(context: Context) =
 class WorkoutTileService1 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Workout.layout1(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Workout.WorkoutData("Exercise", "30 min goal")
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Workout.layout1(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Workout.WorkoutData("Exercise", "30 min goal")
                     )
-                ).build()
+                )
+            )
         )
 }
 
 class WorkoutTileService2 : TileService() {
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
         Futures.immediateFuture(
-            TileBuilders.Tile
-                .Builder()
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        Workout.layout2(
-                            this,
-                            requestParams.scope,
-                            requestParams.deviceConfiguration,
-                            Workout.WorkoutData("Exercise", "30 min goal")
-                        )
+            tile(
+                Timeline.fromLayoutElement(
+                    Workout.layout2(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        Workout.WorkoutData("Exercise", "30 min goal")
                     )
-                ).build()
+                )
+            )
         )
 }
