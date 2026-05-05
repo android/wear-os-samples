@@ -1,15 +1,15 @@
 [versions]
-agp = "9.1.0"
-wear-compose-material3 = "1.6.0"
-wear-compose = "1.6.0"
-compose-tooling = "1.6.0"
-kotlin = "2.3.20"
+agp = "9.1.1"
+wear-compose-material3 = "1.6.1"
+wear-compose = "1.6.1"
+compose-tooling = "1.6.1"
+kotlin = "2.3.21"
 lifecycleViewmodelKtx = "2.10.0"
-composeBom = "2026.03.01"
+composeBom = "2026.04.01"
 activityCompose = "1.13.0"
 coreSplashscreen = "1.2.0"
-watchfacePush = "1.0.0-beta01"
-horologist = "0.7.15"
+watchfacePush = "1.0.0"
+ktlint = "1.4.0"
 
 [libraries]
 compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "wear-compose" }
@@ -23,7 +23,6 @@ compose-material = { group = "androidx.wear.compose", name = "compose-material3"
 compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wear-compose" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
-horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 watchface-push = { group = "androidx.wear.watchfacepush", name="watchfacepush", version.ref = "watchfacePush" }
 
 [plugins]
@@ -31,3 +30,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+com-diffplug-spotless = "com.diffplug.spotless:8.4.0"

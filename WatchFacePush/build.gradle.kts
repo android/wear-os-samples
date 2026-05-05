@@ -20,6 +20,7 @@ import com.android.build.gradle.AppPlugin
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
+    alias(libs.plugins.com.diffplug.spotless) apply(false)
     alias(libs.plugins.compose.compiler) apply false
 }
 
@@ -81,6 +82,24 @@ subprojects {
                 }
                 watchFaceOutput.outgoing.artifact(variant.artifacts.get(SingleArtifact.APK))
             }
+        }
+    }
+}
+
+subprojects {
+    apply(plugin = "com.diffplug.spotless")
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("bin/**/*.kt")
+
+            ktlint(libs.versions.ktlint.get())
+            licenseHeaderFile(rootProject.file("../spotless/copyright.kt"))
+        }
+
+        kotlinGradle {
+            target("*.gradle.kts")
+            ktlint()
         }
     }
 }
