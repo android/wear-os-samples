@@ -76,10 +76,10 @@ class WatchFacePackageRepository(
         val loadedPackages = mutableListOf<Pair<Path, PackageInfo>>()
         val packages =
             context.assets
-                .list("")!!
-                .asSequence()
-                .filter { it.endsWith(".apk") }
-                .toList()
+                .list("")
+                ?.asSequence()
+                ?.filter { it.endsWith(".apk") }
+                ?.toList() ?: emptyList()
         packages.forEach {
             val loadedPackage = parseWatchFacePackage(it)
             loadedPackage?.let { loadedPackages.add(it) }
@@ -108,18 +108,25 @@ class WatchFacePackageRepository(
     private suspend fun parseWatchFacePackage(assetPath: String) =
         withContext(Dispatchers.IO) {
             val apkFile = copyApkFileIntoTemporaryFile(assetPath)
-            val packageInfo = context.packageManager.getPackageArchiveInfo(apkFile.absolutePath, 0)
-            if (packageInfo == null) {
-                Log.w(TAG, "Package $assetPath could not be parsed.")
-                null
-            } else {
-                Paths.get(assetPath) to packageInfo
+            try {
+                val packageInfo = context.packageManager.getPackageArchiveInfo(
+                    apkFile.absolutePath,
+                    android.content.pm.PackageManager.PackageInfoFlags.of(0)
+                )
+                if (packageInfo == null) {
+                    Log.w(TAG, "Package $assetPath could not be parsed.")
+                    null
+                } else {
+                    Paths.get(assetPath) to packageInfo
+                }
+            } finally {
+                apkFile.delete()
             }
         }
 
     private suspend fun copyApkFileIntoTemporaryFile(apkAssetPath: String) =
         withContext(Dispatchers.IO) {
-            val copiedFile = File.createTempFile(apkAssetPath, null, context.cacheDir)
+            val copiedFile = File.createTempFile("watchface", ".apk", context.cacheDir)
             copiedFile.deleteOnExit()
             context.assets.open(apkAssetPath).use { inputStream ->
                 FileOutputStream(copiedFile).use { outputStream ->

@@ -182,7 +182,7 @@ class WatchFaceMarketplaceViewModel(
                 watchFacePushManager.setWatchFaceAsActive(slotId)
                 watchFaceSlots.value = loadWatchFaces()
                 logWithDialog("Watch face set as active")
-            } catch (exception: Exception) {
+            } catch (exception: WatchFacePushManager.SetWatchFaceAsActiveException) {
                 logWithDialog("Failed to set watch face as active", exception)
             }
         }
