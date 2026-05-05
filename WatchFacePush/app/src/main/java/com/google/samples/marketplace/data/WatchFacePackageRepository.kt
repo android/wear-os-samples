@@ -1,11 +1,11 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.samples.marketplace.data
 
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.ParcelFileDescriptor
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Class that loads the watch face packages and validation tokens from the assets folder.
  */
-class WatchFacePackageRepository(val context: Context) {
+class WatchFacePackageRepository(
+    val context: Context
+) {
     /**
      * Creates a pipe to transfer the watch face apk to the Watch Face Push service.
      *
@@ -42,7 +43,10 @@ class WatchFacePackageRepository(val context: Context) {
      * @return The pipe, containing the read and write ends of the pipe. It is the responsibility of
      *     the caller to close the pipe.
      */
-    fun pipeWatchFace(scope: CoroutineScope, watchFaceData: WatchFaceData): FdPipe {
+    fun pipeWatchFace(
+        scope: CoroutineScope,
+        watchFaceData: WatchFaceData
+    ): FdPipe {
         val (readFd, writeFd) = ParcelFileDescriptor.createPipe()
         scope.launch(Dispatchers.IO) {
             writeFd.use {
@@ -70,11 +74,12 @@ class WatchFacePackageRepository(val context: Context) {
 
     suspend fun loadPackages(): List<Pair<Path, PackageInfo>> {
         val loadedPackages = mutableListOf<Pair<Path, PackageInfo>>()
-        val packages = context.assets
-            .list("")!!
-            .asSequence()
-            .filter { it.endsWith(".apk") }
-            .toList()
+        val packages =
+            context.assets
+                .list("")
+                ?.asSequence()
+                ?.filter { it.endsWith(".apk") }
+                ?.toList() ?: emptyList()
         packages.forEach {
             val loadedPackage = parseWatchFacePackage(it)
             loadedPackage?.let { loadedPackages.add(it) }
@@ -91,30 +96,42 @@ class WatchFacePackageRepository(val context: Context) {
     fun getValidationToken(name: String): String? {
         val tokenName = name.split('.').first() + "_token.txt"
         return try {
-            context.assets.open(tokenName).readAllBytes().let { String(it, Charsets.UTF_8) }
+            context.assets
+                .open(tokenName)
+                .readAllBytes()
+                .let { String(it, Charsets.UTF_8) }
         } catch (e: IOException) {
             null
         }
     }
 
-    private suspend fun parseWatchFacePackage(assetPath: String) = withContext(Dispatchers.IO) {
-        val apkFile = copyApkFileIntoTemporaryFile(assetPath)
-        val packageInfo = context.packageManager.getPackageArchiveInfo(apkFile.absolutePath, 0)
-        if (packageInfo == null) {
-            Log.w(TAG, "Package $assetPath could not be parsed.")
-            null
-        } else {
-            Paths.get(assetPath) to packageInfo
+    private suspend fun parseWatchFacePackage(assetPath: String) =
+        withContext(Dispatchers.IO) {
+            val apkFile = copyApkFileIntoTemporaryFile(assetPath)
+            try {
+                val packageInfo = context.packageManager.getPackageArchiveInfo(
+                    apkFile.absolutePath,
+                    android.content.pm.PackageManager.PackageInfoFlags.of(0)
+                )
+                if (packageInfo == null) {
+                    Log.w(TAG, "Package $assetPath could not be parsed.")
+                    null
+                } else {
+                    Paths.get(assetPath) to packageInfo
+                }
+            } finally {
+                apkFile.delete()
+            }
         }
-    }
-
 
     private suspend fun copyApkFileIntoTemporaryFile(apkAssetPath: String) =
         withContext(Dispatchers.IO) {
-            val copiedFile = File.createTempFile(apkAssetPath, null, context.cacheDir)
+            val copiedFile = File.createTempFile("watchface", ".apk", context.cacheDir)
             copiedFile.deleteOnExit()
             context.assets.open(apkAssetPath).use { inputStream ->
-                FileOutputStream(copiedFile).use { outputStream -> inputStream.copyTo(outputStream) }
+                FileOutputStream(copiedFile).use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
             }
             copiedFile
         }
@@ -126,7 +143,7 @@ class WatchFacePackageRepository(val context: Context) {
 
 data class FdPipe(
     val readFd: ParcelFileDescriptor,
-    private val writeFd: ParcelFileDescriptor,
+    private val writeFd: ParcelFileDescriptor
 ) : AutoCloseable {
     override fun close() {
         Log.d(TAG, "Closing pipe")

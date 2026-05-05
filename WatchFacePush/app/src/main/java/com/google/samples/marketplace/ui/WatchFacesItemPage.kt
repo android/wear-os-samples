@@ -1,11 +1,11 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.samples.marketplace.ui
 
 import android.app.Activity
@@ -29,8 +28,7 @@ import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.ConfirmationDialog
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import com.google.android.horologist.compose.layout.ColumnItemType
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import com.google.samples.marketplace.R
 import com.google.samples.marketplace.viewmodel.WatchFaceMarketplaceViewModel
 
@@ -70,19 +68,20 @@ fun WatchFaceItemPage(viewModel: WatchFaceMarketplaceViewModel) {
     val watchFaceState by viewModel.watchFaceState.collectAsStateWithLifecycle()
     val selectedWatchFace = watchFaceState.selectedWatchFace!!
     val watchFaceData = watchFaceState.watchFaces.find { it.packageName == selectedWatchFace }!!
-    val updatable = watchFaceState.watchFaces.any {
-        (it != watchFaceData && it.slotInfo != null) ||
-            (it == watchFaceData && it.slotInfo != null && it.slotInfo.versionCode < watchFaceData.versionCode)
-    }
+    val updatable =
+        watchFaceState.watchFaces.any {
+            (it != watchFaceData && it.slotInfo != null) ||
+                (
+                    it == watchFaceData &&
+                        it.slotInfo != null &&
+                        it.slotInfo.versionCode < watchFaceData.versionCode
+                )
+        }
     val statusUpdate by viewModel.dialogMessage
+    val transformationSpec = rememberTransformationSpec()
 
     ScreenScaffold(
-        scrollState = scrollState,
-        // Use Horologist for now to get correct top and bottom padding in list.
-        contentPadding = rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.Button
-        )
+        scrollState = scrollState
     ) { contentPadding ->
         TransformingLazyColumn(
             state = scrollState,
@@ -96,7 +95,8 @@ fun WatchFaceItemPage(viewModel: WatchFaceMarketplaceViewModel) {
                 onSetActiveButtonClicked = onSetActiveButtonClicked,
                 onInstallClick = { viewModel.installWatchFace(watchFaceData) },
                 onUpdateClick = { viewModel.updateWatchFace(watchFaceData) },
-                onUninstallClick = { viewModel.uninstallWatchFace() }
+                onUninstallClick = { viewModel.uninstallWatchFace() },
+                transformationSpec = transformationSpec
             )
         }
         ConfirmationDialog(

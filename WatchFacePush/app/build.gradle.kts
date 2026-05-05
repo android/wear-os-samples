@@ -15,8 +15,16 @@
  */
 
 plugins {
-    id(libs.plugins.androidApplication.get().pluginId)
-    id(libs.plugins.compose.compiler.get().pluginId)
+    id(
+        libs.plugins.androidApplication
+            .get()
+            .pluginId
+    )
+    id(
+        libs.plugins.compose.compiler
+            .get()
+            .pluginId
+    )
 }
 
 // Watch Face Push requires API level 36 and above.
@@ -28,8 +36,8 @@ android {
         applicationId = "com.google.samples.marketplace"
         minSdk = 36
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     buildTypes {
@@ -101,7 +109,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.core.splashscreen)
     implementation(libs.compose.navigation)
-    implementation(libs.horologist.compose.layout)
 
     implementation(libs.watchface.push)
 
@@ -129,26 +136,41 @@ dependencies {
 // of the default watch face. This token is read from the marketplace manifest
 // upon installation, so that the default watch face can be installed.
 
-
 androidComponents.onVariants { variant ->
     val capsVariantName = variant.name.replaceFirstChar(Char::titlecase)
     val variantName = variant.name
 
-    val assetsDir = layout.buildDirectory.dir("intermediates/watchfaceAssets/${variantName}")
-        .get().asFile
-    val resDir = layout.buildDirectory.dir("generated/wfTokenRes/${variantName}/res/")
-        .get().asFile
-    val tokenFilePath = project.layout.buildDirectory.file("intermediates/watchfaceAssets/${variantName}/default_watchface_token.txt")
-        .get()
+    val assetsDir =
+        layout.buildDirectory
+            .dir("intermediates/watchfaceAssets/$variantName")
+            .get()
+            .asFile
+    val resDir =
+        layout.buildDirectory
+            .dir("generated/wfTokenRes/$variantName/res/")
+            .get()
+            .asFile
+    val tokenFilePath =
+        project.layout.buildDirectory
+            .file(
+                "intermediates/watchfaceAssets/$variantName/default_watchface_token.txt"
+            ).get()
 
     variant.sources.assets?.addStaticSourceDirectory(assetsDir.absolutePath)
     variant.sources.res?.addStaticSourceDirectory(resDir.absolutePath)
 
-    val copyTask = tasks.register("copyWatchFaceAssets$capsVariantName", Copy::class.java) {
-        from(configurations.getByName("${variantName}WatchfaceOutput").incoming.artifactView {}.files)
-        into(assetsDir)
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
+    val copyTask =
+        tasks.register("copyWatchFaceAssets$capsVariantName", Copy::class.java) {
+            from(
+                configurations
+                    .getByName("${variantName}WatchfaceOutput")
+                    .incoming
+                    .artifactView {}
+                    .files
+            )
+            into(assetsDir)
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
 
     val tokenResTask =
         tasks.register<TokenResourceTask_gradle.TokenResourceTask>("tokenResTask$capsVariantName") {

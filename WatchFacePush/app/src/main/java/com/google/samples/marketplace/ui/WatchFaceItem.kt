@@ -1,11 +1,11 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.samples.marketplace.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,14 @@ import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumnScope
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.TransformationSpec
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.google.samples.marketplace.R
 import com.google.samples.marketplace.data.WatchFaceData
@@ -39,11 +45,24 @@ fun TransformingLazyColumnScope.watchFaceItem(
     onInstallClick: () -> Unit,
     onUpdateClick: () -> Unit,
     onUninstallClick: () -> Unit,
+    transformationSpec: TransformationSpec,
     modifier: Modifier = Modifier
 ) {
     val isInstalled = watchFaceData.slotInfo != null
     val isActive = watchFaceData.slotInfo?.isActive == true
     val customVersion = watchFaceData.slotInfo?.customVersion
+    item {
+        ListHeader(
+            modifier =
+                Modifier
+                    .transformedHeight(this, transformationSpec)
+                    .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding)
+                    .fillMaxWidth()
+        ) {
+            Text("Details")
+        }
+    }
+
     item { Text(name) }
     item { Text(watchFaceData.packageName) }
     item { Text(stringResource(R.string.version_code, watchFaceData.versionCode)) }
@@ -54,36 +73,53 @@ fun TransformingLazyColumnScope.watchFaceItem(
     }
     item {
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier =
+                Modifier
+                    .transformedHeight(this, transformationSpec)
+                    .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding)
+                    .fillMaxWidth(),
+            transformation = SurfaceTransformation(transformationSpec),
             enabled = isInstalled && !isActive,
-            onClick = onSetActiveButtonClicked,
+            onClick = onSetActiveButtonClicked
         ) {
             Text(stringResource(R.string.set_active))
         }
     }
     item {
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier =
+                Modifier
+                    .transformedHeight(this, transformationSpec)
+                    .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding)
+                    .fillMaxWidth(),
             enabled = !isInstalled && isUnusedSlotAvailable,
-            onClick = onInstallClick,
+            onClick = onInstallClick
         ) {
             Text(stringResource(R.string.install))
         }
     }
     item {
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier =
+                Modifier
+                    .transformedHeight(this, transformationSpec)
+                    .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding)
+                    .fillMaxWidth(),
             enabled = isUpdateable,
-            onClick = onUpdateClick,
+            onClick = onUpdateClick
         ) {
             Text(stringResource(R.string.update))
         }
     }
     item {
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier =
+                Modifier
+                    .transformedHeight(this, transformationSpec)
+                    .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding)
+                    .fillMaxWidth(),
             enabled = isInstalled == true,
-            onClick = onUninstallClick,
+            onClick = onUninstallClick
         ) {
             Text(stringResource(R.string.uninstall))
         }
@@ -94,22 +130,25 @@ fun TransformingLazyColumnScope.watchFaceItem(
 @Composable
 private fun WatchFaceItemPreview() {
     val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
     TransformingLazyColumn(
         state = scrollState
     ) {
-        val watchFaceData = WatchFaceData(
-            name = "Watch Face 1",
-            assetPath = "",
-            packageName = "com.example.watchface1",
-            versionCode = 10,
-            slotInfo = WatchFaceSlotInfo(
+        val watchFaceData =
+            WatchFaceData(
+                name = "Watch Face 1",
+                assetPath = "",
                 packageName = "com.example.watchface1",
-                slotId = "123",
                 versionCode = 10,
-                isActive = true,
-                customVersion = "1.2.3"
+                slotInfo =
+                    WatchFaceSlotInfo(
+                        packageName = "com.example.watchface1",
+                        slotId = "123",
+                        versionCode = 10,
+                        isActive = true,
+                        customVersion = "1.2.3"
+                    )
             )
-        )
         watchFaceItem(
             name = "Watchface 1",
             watchFaceData = watchFaceData,
@@ -118,7 +157,8 @@ private fun WatchFaceItemPreview() {
             onSetActiveButtonClicked = { },
             onInstallClick = { },
             onUpdateClick = { },
-            onUninstallClick = { }
+            onUninstallClick = { },
+            transformationSpec = transformationSpec
         )
     }
 }
