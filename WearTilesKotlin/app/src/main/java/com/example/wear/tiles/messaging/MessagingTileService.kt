@@ -15,15 +15,18 @@
  */
 package com.example.wear.tiles.messaging
 
+import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.TimelineBuilders.Timeline
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.tiles.Material3TileService
 import androidx.wear.tiles.RequestBuilders.TileRequest
 import androidx.wear.tiles.TileBuilders.Tile
+import androidx.wear.tiles.tile
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import com.example.wear.tiles.R
-import com.example.wear.tiles.tools.toImageResource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -64,7 +67,7 @@ class MessagingTileService : Material3TileService() {
     override suspend fun MaterialScope.tileResponse(requestParams: TileRequest): Tile {
         // Asynchronously load images associated with resourceIds, and create a Map<String,
         // ResourceBuilders.ImageResource> suitable for adding to the Resources object
-        val imageResources =
+        val imageResources: Map<String, ResourceBuilders.ImageResource?> =
             coroutineScope {
                 contacts
                     .map { contact ->
@@ -72,7 +75,7 @@ class MessagingTileService : Material3TileService() {
                             val id = contact.imageResourceId()
                             val image = imageLoader.loadAvatar(this@MessagingTileService, contact)
                             if (image == null && contact.avatarSource !is AvatarSource.None) {
-                                id to R.mipmap.offline.toImageResource()
+                                id to imageResource(androidImage = androidImageResource(R.mipmap.offline))
                             } else {
                                 id to image
                             }
@@ -83,13 +86,6 @@ class MessagingTileService : Material3TileService() {
 
         val layoutElement = tileLayout(contacts, imageResources)
 
-        // Note: Images could be cached by the system because version is tied to contact IDs.
-        val resourcesVersion = contacts.map { it.id }.toSortedSet().joinToString()
-
-        return Tile
-            .Builder()
-            .setResourcesVersion(resourcesVersion)
-            .setTileTimeline(Timeline.fromLayoutElement(layoutElement))
-            .build()
+        return tile(Timeline.fromLayoutElement(layoutElement))
     }
 }

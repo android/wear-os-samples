@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.example.wear.tiles.golden
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.weight
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders.Timeline
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.box
+import androidx.wear.protolayout.layout.column
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS
 import androidx.wear.protolayout.material3.CardDefaults.filledVariantCardColors
 import androidx.wear.protolayout.material3.MaterialScope
@@ -32,7 +41,7 @@ import androidx.wear.protolayout.material3.Typography.TITLE_MEDIUM
 import androidx.wear.protolayout.material3.buttonGroup
 import androidx.wear.protolayout.material3.card
 import androidx.wear.protolayout.material3.icon
-import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.modifiers.LayoutModifier
@@ -40,21 +49,25 @@ import androidx.wear.protolayout.modifiers.background
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.types.layoutString
+import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.addIdToImageMapping
-import com.example.wear.tiles.tools.box
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
-import com.example.wear.tiles.tools.resources
+import com.google.common.util.concurrent.Futures
 
 object Weather {
-    data class Forecast(val weatherIconId: String, val temperature: String, val time: String)
+    data class Forecast(
+        @DrawableRes val weatherIconId: Int,
+        val temperature: String,
+        val time: String
+    )
 
     data class Conditions(
-        val weatherIconId: String,
+        @DrawableRes val weatherIconId: Int,
         val currentTemperature: String,
         val lowTemperature: String,
         val highTemperature: String,
@@ -67,31 +80,32 @@ object Weather {
         val forecast: List<Forecast>
     )
 
-    fun layout(context: Context, deviceParameters: DeviceParameters, data: WeatherData) =
-        materialScope(context, deviceParameters) {
-            primaryLayout(
-                titleSlot = { text(data.location.layoutString) },
-                mainSlot = {
-                    column {
-                        setHeight(expand())
-                        setWidth(expand())
-                        addContent(conditions(data.conditions))
-                        addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(forecast(data.forecast))
-                    }
-                }
-            )
-        }
+    fun layout(
+        context: Context,
+        scope: ProtoLayoutScope,
+        deviceParameters: DeviceParameters,
+        data: WeatherData
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot = { text(data.location.layoutString) },
+            mainSlot = {
+                column(
+                    conditions(data.conditions),
+                    DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    forecast(data.forecast),
+                    width = expand(),
+                    height = expand()
+                )
+            }
+        )
+    }
 
-    private fun MaterialScope.conditions(conditions: Conditions): LayoutElement = box {
-        setHeight(weight(0.40F))
-        setWidth(expand())
-        addContent(
+    private fun MaterialScope.conditions(conditions: Conditions): LayoutElement =
+        box(
             buttonGroup {
-                setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
                 buttonGroupItem {
                     icon(
-                        conditions.weatherIconId,
+                        imageResource(androidImageResource(conditions.weatherIconId)),
                         width = dp(32F),
                         height = dp(32F),
                         tintColor = colorScheme.tertiary
@@ -106,21 +120,22 @@ object Weather {
                 }
                 buttonGroupItem { DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS }
                 buttonGroupItem {
-                    column {
-                        addContent(
-                            text(
-                                conditions.highTemperature.layoutString,
-                                typography = TITLE_MEDIUM
-                            )
+                    column(
+                        text(
+                            conditions.highTemperature.layoutString,
+                            typography = TITLE_MEDIUM
+                        ),
+                        text(
+                            conditions.lowTemperature.layoutString,
+                            typography = TITLE_MEDIUM
                         )
-                        addContent(
-                            text(conditions.lowTemperature.layoutString, typography = TITLE_MEDIUM)
-                        )
-                    }
+                    )
                 }
-            }
+            },
+            width = expand(),
+            height = weight(0.40F),
+            verticalAlignment = LayoutElementBuilders.VERTICAL_ALIGN_CENTER
         )
-    }
 
     private fun MaterialScope.forecast(forecast: List<Forecast>): LayoutElement =
         card(
@@ -139,117 +154,68 @@ object Weather {
             }
         }
 
-    private fun MaterialScope.hourForecast(forecast: Forecast): LayoutElement {
-        return column {
-            setWidth(expand())
-            setHeight(expand())
-            addContent(
-                column {
-                    addContent(icon(forecast.weatherIconId))
-                    addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    if (isLargeScreen()) {
-                        addContent(
-                            text(forecast.temperature.layoutString, typography = TITLE_MEDIUM)
-                        )
-                        addContent(DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                    }
-                    addContent(text(forecast.time.layoutString, typography = BODY_SMALL))
-                }
-            )
-        }
-    }
-
-    fun resources(context: Context) = resources {
-        addIdToImageMapping(
-            context.resources.getResourceName(R.drawable.scattered_showers),
-            R.drawable.scattered_showers
+    private fun MaterialScope.hourForecast(forecast: Forecast): LayoutElement =
+        column(
+            column(
+                *listOfNotNull(
+                    icon(imageResource(androidImageResource(forecast.weatherIconId))),
+                    DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    if (isLargeScreen()) text(forecast.temperature.layoutString, typography = TITLE_MEDIUM) else null,
+                    if (isLargeScreen()) DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS else null,
+                    text(forecast.time.layoutString, typography = BODY_SMALL)
+                ).toTypedArray()
+            ),
+            width = expand(),
+            height = expand()
         )
-        addIdToImageMapping(
-            context.resources.getResourceName(R.drawable.baseline_cloud_24),
-            R.drawable.baseline_cloud_24
-        )
-        addIdToImageMapping(
-            context.resources.getResourceName(R.drawable.baseline_thunderstorm_24),
-            R.drawable.baseline_thunderstorm_24
-        )
-        addIdToImageMapping(
-            context.resources.getResourceName(R.drawable.outline_partly_cloudy_day_24),
-            R.drawable.outline_partly_cloudy_day_24
-        )
-    }
 }
 
-class WeatherTileService : BaseTileService() {
-    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement {
-        val weatherIcons =
-            listOf(
-                R.drawable.scattered_showers,
-                R.drawable.baseline_cloud_24,
-                R.drawable.baseline_thunderstorm_24,
-                R.drawable.outline_partly_cloudy_day_24
-            )
-                .map { context.resources.getResourceName(it) }
-        return Weather.layout(
-            context,
-            deviceParameters,
-            Weather.WeatherData(
-                location = "San Francisco",
-                conditions =
-                Weather.Conditions(
-                    weatherIconId = weatherIcons[0],
-                    currentTemperature = "52°",
-                    lowTemperature = "48°",
-                    highTemperature = "64°",
-                    weatherSummary = "Showers"
-                ),
-                forecast =
-                listOf(
-                    Weather.Forecast(weatherIcons[1], "68°", "9AM"),
-                    Weather.Forecast(weatherIcons[2], "65°", "10AM"),
-                    Weather.Forecast(weatherIcons[3], "62°", "11AM"),
-                    Weather.Forecast(weatherIcons[0], "60°", "12PM")
-                )
-            )
-        )
-    }
-
-    override fun resources(context: Context) = Weather.resources(context)
-}
-
-@MultiRoundDevicesWithFontScalePreviews
-internal fun weatherPreview(context: Context) =
-    TilePreviewData(Weather.resources(context)) {
-        val weatherIcons =
-            listOf(
-                R.drawable.scattered_showers,
-                R.drawable.baseline_cloud_24,
-                R.drawable.baseline_thunderstorm_24,
-                R.drawable.outline_partly_cloudy_day_24
-            )
-                .map { context.resources.getResourceName(it) }
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Weather.layout(
-                context,
-                it.deviceConfiguration,
-                Weather.WeatherData(
-                    location = "San Francisco",
-                    conditions =
-                    Weather.Conditions(
-                        weatherIconId = weatherIcons[0],
-                        currentTemperature = "52°",
-                        lowTemperature = "48°",
-                        highTemperature = "64°",
-                        weatherSummary = "Showers"
-                    ),
-                    forecast =
-                    listOf(
-                        Weather.Forecast(weatherIcons[1], "68°", "9AM"),
-                        Weather.Forecast(weatherIcons[2], "65°", "10AM"),
-                        Weather.Forecast(weatherIcons[3], "62°", "11AM"),
-                        Weather.Forecast(weatherIcons[0], "60°", "12PM")
+class WeatherTileService : TileService() {
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
+        Futures.immediateFuture(
+            tile(
+                Timeline.fromLayoutElement(
+                    Weather.layout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        weatherData()
                     )
                 )
             )
         )
-            .build()
+}
+
+@MultiRoundDevicesWithFontScalePreviews
+internal fun weatherPreview(context: Context) =
+    TilePreviewData { request ->
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Weather.layout(
+                    context,
+                    request.scope,
+                    request.deviceConfiguration,
+                    weatherData()
+                )
+            ).build()
     }
+
+private fun weatherData() =
+    Weather.WeatherData(
+        location = "San Francisco",
+        conditions =
+            Weather.Conditions(
+                weatherIconId = R.drawable.scattered_showers,
+                currentTemperature = "52°",
+                lowTemperature = "48°",
+                highTemperature = "64°",
+                weatherSummary = "Showers"
+            ),
+        forecast =
+            listOf(
+                Weather.Forecast(R.drawable.baseline_cloud_24, "68°", "9AM"),
+                Weather.Forecast(R.drawable.baseline_thunderstorm_24, "65°", "10AM"),
+                Weather.Forecast(R.drawable.outline_partly_cloudy_day_24, "62°", "11AM"),
+                Weather.Forecast(R.drawable.scattered_showers, "60°", "12PM")
+            )
+    )
