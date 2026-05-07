@@ -18,10 +18,12 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
+    alias(libs.plugins.kotlin.android)
 }
 
+@Suppress("DEPRECATION")
 android {
-    compileSdk = 35
+    compileSdk = 37
 
     namespace = "com.example.wear.tiles"
 
@@ -48,13 +50,12 @@ android {
 
 
 
-
-
 }
 
 
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
     // Coil for asynchronous image loading
     implementation(libs.coil)
     implementation(libs.coil.okhttp)
@@ -69,7 +70,6 @@ dependencies {
 
     // Tooling dependencies for previewing tiles in Android Studio.
     implementation(libs.androidx.tiles.tooling)
-    implementation(libs.horologist.tiles)
 
     debugImplementation(libs.androidx.wear.tiles.renderer)
 
@@ -79,4 +79,10 @@ dependencies {
     // androidx.wear.tiles:tiles-tooling-preview dependency available to release builds, not
     // just debug builds.
     implementation(libs.androidx.wear.tiles.tooling.preview)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }

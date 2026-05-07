@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2025-2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,15 @@
 package com.example.wear.tiles.golden
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.wear.protolayout.DeviceParametersBuilders.DeviceParameters
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders.Clickable
+import androidx.wear.protolayout.ProtoLayoutScope
+import androidx.wear.protolayout.TimelineBuilders.Timeline
+import androidx.wear.protolayout.layout.androidImageResource
+import androidx.wear.protolayout.layout.column
+import androidx.wear.protolayout.layout.imageResource
 import androidx.wear.protolayout.material3.ButtonDefaults.filledTonalButtonColors
 import androidx.wear.protolayout.material3.ButtonGroupDefaults
 import androidx.wear.protolayout.material3.ButtonStyle.Companion.defaultButtonStyle
@@ -27,20 +32,21 @@ import androidx.wear.protolayout.material3.ButtonStyle.Companion.smallButtonStyl
 import androidx.wear.protolayout.material3.MaterialScope
 import androidx.wear.protolayout.material3.button
 import androidx.wear.protolayout.material3.icon
-import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.materialScopeWithResources
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.material3.textEdgeButton
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.types.layoutString
+import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tile
 import androidx.wear.tiles.tooling.preview.TilePreviewData
 import androidx.wear.tiles.tooling.preview.TilePreviewHelper
 import com.example.wear.tiles.R
 import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
-import com.example.wear.tiles.tools.addIdToImageMapping
-import com.example.wear.tiles.tools.column
 import com.example.wear.tiles.tools.isLargeScreen
-import com.example.wear.tiles.tools.resources
+import com.google.common.util.concurrent.Futures
 
 private fun MaterialScope.meditationButton(task: Meditation.MeditationTask) =
     button(
@@ -49,94 +55,87 @@ private fun MaterialScope.meditationButton(task: Meditation.MeditationTask) =
         height = expand(),
         colors = filledTonalButtonColors(),
         style =
-        if (isLargeScreen()) {
-            defaultButtonStyle()
-        } else {
-            smallButtonStyle()
-        },
-        iconContent = { icon(task.iconResourceIdName) },
+            if (isLargeScreen()) {
+                defaultButtonStyle()
+            } else {
+                smallButtonStyle()
+            },
+        iconContent = { icon(imageResource(androidImageResource(task.iconId))) },
         labelContent = { text(task.label.layoutString, maxLines = task.maxLines) }
     )
 
 object Meditation {
-
     data class MeditationTask(
         val label: String,
-        val iconResourceIdName: String,
+        @DrawableRes val iconId: Int,
         val maxLines: Int = 1,
         val clickable: Clickable = clickable()
     )
 
-    fun listLayout(context: Context, deviceParameters: DeviceParameters, tasksLeft: Int) =
-        materialScope(context, deviceParameters) {
-            primaryLayout(
-                titleSlot =
+    fun listLayout(
+        context: Context,
+        scope: ProtoLayoutScope,
+        deviceParameters: DeviceParameters,
+        tasksLeft: Int
+    ) = materialScopeWithResources(context, scope, deviceParameters) {
+        primaryLayout(
+            titleSlot =
                 if (isLargeScreen()) {
                     { text("$tasksLeft mindful tasks left".layoutString) }
                 } else {
                     null
                 },
-                bottomSlot = {
-                    textEdgeButton(
-                        onClick = clickable(),
-                        labelContent = { text("Browse".layoutString) }
-                    )
-                },
-                mainSlot = {
-                    column {
-                        setWidth(expand())
-                        setHeight(expand())
-                        addContent(
-                            meditationButton(
-                                MeditationTask(
-                                    label = "Breath",
-                                    iconResourceIdName =
-                                    context.resources.getResourceName(
-                                        R.drawable.outline_air_24
-                                    )
-                                )
-                            )
+            bottomSlot = {
+                textEdgeButton(
+                    onClick = clickable(),
+                    labelContent = { text("Browse".layoutString) }
+                )
+            },
+            mainSlot = {
+                column(
+                    meditationButton(
+                        MeditationTask(
+                            label = "Breath",
+                            iconId = R.drawable.outline_air_24
                         )
-                        addContent(ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS)
-                        addContent(
-                            meditationButton(
-                                MeditationTask(
-                                    label = "Daily mindfulness",
-                                    iconResourceIdName =
-                                    context.resources.getResourceName(R.drawable.ic_yoga_24),
-                                    maxLines = 2
-                                )
-                            )
+                    ),
+                    ButtonGroupDefaults.DEFAULT_SPACER_BETWEEN_BUTTON_GROUPS,
+                    meditationButton(
+                        MeditationTask(
+                            label = "Daily mindfulness",
+                            iconId = R.drawable.ic_yoga_24,
+                            maxLines = 2
                         )
-                    }
-                }
-            )
-        }
-
-    fun resources(context: Context) = resources {
-        addIdToImageMapping(
-            context.resources.getResourceName(R.drawable.ic_yoga_24),
-            R.drawable.ic_yoga_24
-        )
-        addIdToImageMapping(
-            context.resources.getResourceName(R.drawable.outline_air_24),
-            R.drawable.outline_air_24
+                    ),
+                    width = expand(),
+                    height = expand()
+                )
+            }
         )
     }
 }
 
 @MultiRoundDevicesWithFontScalePreviews
 fun mindfulnessPreview(context: Context) =
-    TilePreviewData(Meditation.resources(context)) {
-        TilePreviewHelper.singleTimelineEntryTileBuilder(
-            Meditation.listLayout(context, it.deviceConfiguration, 3)
-        )
-            .build()
+    TilePreviewData { request ->
+        TilePreviewHelper
+            .singleTimelineEntryTileBuilder(
+                Meditation.listLayout(context, request.scope, request.deviceConfiguration, 3)
+            ).build()
     }
 
-class MindfulnessTileService : BaseTileService() {
-    override fun layout(context: Context, deviceParameters: DeviceParameters): LayoutElement =
-        Meditation.listLayout(context, deviceParameters, 2)
-
-    override fun resources(context: Context) = Meditation.resources(context)
+class MindfulnessTileService : TileService() {
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest) =
+        Futures.immediateFuture(
+            tile(
+                Timeline.fromLayoutElement(
+                    Meditation.listLayout(
+                        this,
+                        requestParams.scope,
+                        requestParams.deviceConfiguration,
+                        2
+                    )
+                )
+            )
+        )
 }
