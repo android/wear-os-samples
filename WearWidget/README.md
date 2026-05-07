@@ -79,6 +79,7 @@ broadcast intent via ADB.
 ```bash
 adb shell am broadcast \
   -a com.google.example.wear_widget.UPDATE_WEATHER \
+  -n com.google.example.wear_widget/.WeatherUpdateReceiver \
   --ei temp 75 \
   --es condition "'🌧️'"
 ```
