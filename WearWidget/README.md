@@ -55,6 +55,8 @@ adb shell am broadcast \
 The `HelloWidget` is a simple, static widget designed to show the minimal
 implementation required for a Wear Widget.
 
+![Hello Widget](app/src/main/res/drawable/hello_widget_fullscreen.png)
+
 To preview it on a device or emulator, follow the steps in the **Add and Preview
 your Widget** section above.
 
@@ -62,6 +64,8 @@ your Widget** section above.
 
 The `WeatherWidget` demonstrates how to handle dynamic content updates. You can
 trigger updates in two ways:
+
+![Weather Widget](app/src/main/res/drawable/weather_widget_fullscreen.png)
 
 ### Via the In-App Control Panel
 
