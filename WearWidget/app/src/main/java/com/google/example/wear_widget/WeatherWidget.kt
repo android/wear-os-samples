@@ -41,6 +41,9 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.wear.compose.material3.ColorScheme
+import androidx.wear.compose.remote.material3.RemoteColorScheme
+import androidx.compose.remote.creation.compose.state.RemoteColor
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
 private val ColorSunny = Color(0xFF2196F3)
@@ -61,37 +64,43 @@ class WeatherWidget : GlanceWearWidget() {
 
         val location = context.getString(R.string.weather_location_london)
 
+        val localColorScheme = ColorScheme()
+        val remoteColorScheme = RemoteColorScheme(localColorScheme)
+
         val bgColor =
             when (state.condition) {
                 "☀️" -> ColorSunny
                 "☁️" -> ColorCloudy
                 "🌧️" -> ColorRainy
                 "❄️" -> ColorSnowy
-                else -> Color.Black
+                else -> null
             }
 
         val textColor = if (state.condition == "❄️") Color.Black else Color.White
 
-        return WearWidgetDocument(background = WearWidgetBrush.color(bgColor.rc)) {
-            WeatherContent(state, location, textColor)
+        val brush = if (bgColor != null) WearWidgetBrush.color(bgColor.rc) else WearWidgetBrush.color(remoteColorScheme.primary)
+        val resolvedTextColor = if (bgColor != null) textColor.rc else remoteColorScheme.onPrimary
+
+        return WearWidgetDocument(background = brush) {
+            WeatherContent(state, location, resolvedTextColor)
         }
     }
 }
 
 @RemoteComposable
 @Composable
-fun WeatherContent(state: WeatherState, location: String, textColor: Color) {
+fun WeatherContent(state: WeatherState, location: String, textColor: RemoteColor) {
     RemoteBox(modifier = RemoteModifier.fillMaxSize(), contentAlignment = RemoteAlignment.Center) {
         RemoteColumn(horizontalAlignment = RemoteAlignment.CenterHorizontally) {
             RemoteText(
                 text = location.rs,
-                color = textColor.rc,
+                color = textColor,
                 fontSize = 14.rsp,
                 modifier = RemoteModifier.padding(bottom = 4.rdp),
             )
             RemoteText(
                 text = "${state.temp}° ${state.condition}".rs,
-                color = textColor.rc,
+                color = textColor,
                 fontSize = 36.rsp,
             )
         }
@@ -104,6 +113,6 @@ fun WeatherContentPreview() = RemotePreview {
     WeatherContent(
         state = WeatherState(72, "☀️"),
         location = "London",
-        textColor = Color.White,
+        textColor = Color.White.rc,
     )
 }

@@ -39,6 +39,8 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.wear.compose.material3.ColorScheme
+import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
@@ -54,26 +56,35 @@ class HelloWidget : GlanceWearWidget() {
         params: WearWidgetParams,
     ): WearWidgetData {
         Log.d("HelloWidget", "provideWidgetData")
-        return WearWidgetDocument(background = WearWidgetBrush.color(DefaultBlue.rc)) {
-            HelloWidgetContent()
+        val localColorScheme = ColorScheme()
+        val remoteColorScheme = RemoteColorScheme(localColorScheme)
+        return WearWidgetDocument(background = WearWidgetBrush.color(remoteColorScheme.primary)) {
+            HelloWidgetContent(remoteColorScheme)
         }
     }
 }
 
 @RemoteComposable
 @Composable
-fun HelloWidgetContent() {
-    RemoteMaterialTheme {
+fun HelloWidgetContent(colorScheme: RemoteColorScheme) {
+    RemoteMaterialTheme(colorScheme = colorScheme) {
         RemoteBox(
-            modifier =
-                RemoteModifier.fillMaxSize().background(RemoteMaterialTheme.colorScheme.primary),
+            modifier = RemoteModifier.fillMaxSize(),
             contentAlignment = RemoteAlignment.Center,
         ) {
-            RemoteText(text = "Hello, World!".rs, color = Color.White.rc, fontSize = 20.rsp)
+            RemoteText(
+                text = "Hello, World!".rs,
+                color = colorScheme.onPrimary,
+                fontSize = 20.rsp,
+            )
         }
     }
 }
 
 @WearPreviewDevices
 @Composable
-fun HelloWidgetContentPreview() = RemotePreview { HelloWidgetContent() }
+fun HelloWidgetContentPreview() = RemotePreview {
+    val localColorScheme = ColorScheme()
+    val remoteColorScheme = RemoteColorScheme(localColorScheme)
+    HelloWidgetContent(remoteColorScheme)
+}
