@@ -17,7 +17,6 @@ package com.google.example.wear_widget
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -53,8 +52,12 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
                     context.setWeatherState(
                         WeatherState(temp, WeatherCondition.fromEmoji(condition))
                     )
-                    triggerUpdateOption1(context)
-                    // triggerUpdateOption2(context)
+                    val manager = GlanceWearWidgetManager(context)
+                    val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
+                    val widget = WeatherWidget()
+                    activeWidgets.forEach { handle ->
+                        widget.triggerUpdate(context.applicationContext, handle.instanceId)
+                    }
                     Log.d("WeatherReceiver", "Pushed weather update: $temp, $condition")
                 } catch (e: Exception) {
                     Log.e("WeatherReceiver", "Error updating weather", e)
@@ -62,24 +65,6 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
                     goAsync.finish()
                 }
             }
-        }
-    }
-
-    private fun triggerUpdateOption1(context: android.content.Context) {
-        @SuppressLint("RestrictedApi")
-        WeatherWidget()
-            .triggerUpdate(
-                context.applicationContext,
-                ComponentName(context, WeatherWidgetService::class.java),
-            )
-    }
-
-    private suspend fun triggerUpdateOption2(context: android.content.Context) {
-        val manager = GlanceWearWidgetManager(context)
-        val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
-        val widget = WeatherWidget()
-        activeWidgets.forEach { handle ->
-            widget.triggerUpdate(context.applicationContext, handle.instanceId)
         }
     }
 }

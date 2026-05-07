@@ -16,7 +16,6 @@
 package com.google.example.wear_widget
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -57,26 +56,17 @@ class WeatherActivity : ComponentActivity() {
                     onUpdate = { temp, cond ->
                         scope.launch {
                             setWeatherState(WeatherState(temp, cond))
-                            triggerUpdateOption1(this@WeatherActivity)
-                            // triggerUpdateOption2(this@WeatherActivity)
+                            val manager = GlanceWearWidgetManager(this@WeatherActivity)
+                            val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
+                            val widget = WeatherWidget()
+                            activeWidgets.forEach { handle ->
+                                widget.triggerUpdate(this@WeatherActivity, handle.instanceId)
+                            }
                         }
                     },
                 )
             }
         }
-    }
-
-    private fun triggerUpdateOption1(context: android.content.Context) {
-        @SuppressLint("RestrictedApi")
-        WeatherWidget()
-            .triggerUpdate(context, ComponentName(context, WeatherWidgetService::class.java))
-    }
-
-    private suspend fun triggerUpdateOption2(context: android.content.Context) {
-        val manager = GlanceWearWidgetManager(context)
-        val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
-        val widget = WeatherWidget()
-        activeWidgets.forEach { handle -> widget.triggerUpdate(context, handle.instanceId) }
     }
 }
 
