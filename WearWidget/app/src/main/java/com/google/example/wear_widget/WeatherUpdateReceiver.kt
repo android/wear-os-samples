@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
 
 class WeatherUpdateReceiver : BroadcastReceiver() {
 
-    @android.annotation.SuppressLint("RestrictedApi")
+    // Suppressed because triggerUpdate is restricted to LIBRARY_GROUP.
+    @SuppressLint("RestrictedApi")
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "com.google.example.wear_widget.UPDATE_WEATHER") {
             val temp = intent.getIntExtra("temp", 72)

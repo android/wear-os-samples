@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:android.annotation.SuppressLint("RestrictedApi")
+@file:SuppressLint("RestrictedApi")
 
 package com.google.example.wear_widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
@@ -51,6 +52,8 @@ private val ColorCloudy = Color(0xFF9E9E9E)
 private val ColorRainy = Color(0xFF673AB7)
 private val ColorSnowy = Color(0xFFE3F2FD)
 
+// Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
+// LIBRARY_GROUP.
 class WeatherWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = WeatherWidget()
 }

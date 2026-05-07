@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:android.annotation.SuppressLint("RestrictedApi")
+@file:SuppressLint("RestrictedApi")
 
 package com.google.example.wear_widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
@@ -45,6 +46,8 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
 private val DefaultBlue = Color(0xFF2196F3)
 
+// Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
+// LIBRARY_GROUP.
 class HelloWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = HelloWidget()
 }
