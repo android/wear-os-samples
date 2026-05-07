@@ -45,8 +45,9 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
             val condition = intent.getStringExtra(EXTRA_CONDITION) ?: "☀️"
 
             val goAsync = goAsync()
-            // TODO: In production apps, use an application-scoped coroutine scope injected via DI.
-            // Using a shared scope here as recommended by reviewer.
+            // In production apps, use an application-scoped coroutine scope injected via DI.
+            // Using a shared scope in the companion object here as a compromise for this sample
+            // to avoid per-broadcast allocations without adding DI complexity.
             scope.launch {
                 try {
                     context.setWeatherState(

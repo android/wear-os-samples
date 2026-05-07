@@ -115,10 +115,6 @@ fun WeatherContentPreview() = RemotePreview {
         modifier = RemoteModifier.fillMaxSize().background(ColorSunny.rc),
         contentAlignment = RemoteAlignment.Center,
     ) {
-        WeatherContent(
-            weatherText = "72° ☀️",
-            location = "London",
-            textColor = Color.White.rc,
-        )
+        WeatherContent(weatherText = "72° ☀️", location = "London", textColor = Color.White.rc)
     }
 }
