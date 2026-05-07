@@ -20,6 +20,6 @@
 
     <container
         type="LARGE"
-        previewImage="@drawable/force_update_fullscreen" />
+        previewImage="@drawable/weather_widget_large" />
 
 </wearwidget-provider>

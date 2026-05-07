@@ -88,7 +88,7 @@
 
         <meta-data
             android:name="androidx.wear.tiles.PREVIEW"
-            android:resource="@drawable/force_update_fullscreen" />
+            android:resource="@drawable/weather_widget_fullscreen" />
     </service>
 
 
