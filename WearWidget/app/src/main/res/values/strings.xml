@@ -25,7 +25,6 @@
 
     <!-- Weather Widget Strings -->
     <string name="weather_location_london">London</string>
-    <string name="weather_last_updated_just_now">Last updated: Just now</string>
 
     <!-- Weather Activity Strings -->
     <string name="weather_push_title">Weather Push</string>

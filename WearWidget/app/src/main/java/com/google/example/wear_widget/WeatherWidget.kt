@@ -60,7 +60,6 @@ class WeatherWidget : GlanceWearWidget() {
         val state = context.getWeatherState()
 
         val location = context.getString(R.string.weather_location_london)
-        val lastUpdated = context.getString(R.string.weather_last_updated_just_now)
 
         val bgColor =
             when (state.condition) {
@@ -74,14 +73,14 @@ class WeatherWidget : GlanceWearWidget() {
         val textColor = if (state.condition == "❄️") Color.Black else Color.White
 
         return WearWidgetDocument(background = WearWidgetBrush.color(bgColor.rc)) {
-            WeatherContent(state, location, lastUpdated, textColor)
+            WeatherContent(state, location, textColor)
         }
     }
 }
 
 @RemoteComposable
 @Composable
-fun WeatherContent(state: WeatherState, location: String, lastUpdated: String, textColor: Color) {
+fun WeatherContent(state: WeatherState, location: String, textColor: Color) {
     RemoteBox(modifier = RemoteModifier.fillMaxSize(), contentAlignment = RemoteAlignment.Center) {
         RemoteColumn(horizontalAlignment = RemoteAlignment.CenterHorizontally) {
             RemoteText(
@@ -95,12 +94,6 @@ fun WeatherContent(state: WeatherState, location: String, lastUpdated: String, t
                 color = textColor.rc,
                 fontSize = 36.rsp,
             )
-            RemoteText(
-                text = lastUpdated.rs,
-                color = textColor.copy(alpha = 0.7f).rc,
-                fontSize = 10.rsp,
-                modifier = RemoteModifier.padding(top = 8.rdp),
-            )
         }
     }
 }
@@ -111,7 +104,6 @@ fun WeatherContentPreview() = RemotePreview {
     WeatherContent(
         state = WeatherState(72, "☀️"),
         location = "London",
-        lastUpdated = "Last updated: Just now",
         textColor = Color.White,
     )
 }
