@@ -109,11 +109,7 @@ dependencies {
     // Tooling dependencies for previewing tiles in Android Studio.
     implementation(libs.wear.tiles.tooling)
     debugImplementation(libs.wear.tiles.renderer)
-    // ui-tooling is already added above via libs.ui.tooling (debugImplementation) and libs.androidx.ui.tooling
-    // debugImplementation("androidx.compose.ui:ui-tooling:1.9.4") 
-    // wear-tooling-preview is already added above via libs.wear.tooling.preview
-    // debugImplementation("androidx.wear:wear-tooling-preview:1.0.0")
-    // Tiles tooling repeated in original file, removing duplicate.
+
     
     // The tile preview code is in the same file as the tiles themselves, so we need to make the
     // androidx.wear.tiles:tiles-tooling-preview dependency available to release builds, not

@@ -24,21 +24,30 @@ import android.util.Log
 import androidx.glance.wear.GlanceWearWidgetManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class WeatherUpdateReceiver : BroadcastReceiver() {
 
+    companion object {
+        const val ACTION_UPDATE_WEATHER = "com.google.example.wear_widget.UPDATE_WEATHER"
+        const val EXTRA_TEMP = "temp"
+        const val EXTRA_CONDITION = "condition"
+
+        private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    }
+
     // Suppressed because triggerUpdate is restricted to LIBRARY_GROUP.
     @SuppressLint("RestrictedApi")
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == "com.google.example.wear_widget.UPDATE_WEATHER") {
-            val temp = intent.getIntExtra("temp", 72)
-            val condition = intent.getStringExtra("condition") ?: "☀️"
+        if (intent.action == ACTION_UPDATE_WEATHER) {
+            val temp = intent.getIntExtra(EXTRA_TEMP, 72)
+            val condition = intent.getStringExtra(EXTRA_CONDITION) ?: "☀️"
 
             val goAsync = goAsync()
             // TODO: In production apps, use an application-scoped coroutine scope injected via DI.
-            // Using a localized scope here as a compromise for this simple sample.
-            CoroutineScope(Dispatchers.IO).launch {
+            // Using a shared scope here as recommended by reviewer.
+            scope.launch {
                 try {
                     context.setWeatherState(
                         WeatherState(temp, WeatherCondition.fromEmoji(condition))

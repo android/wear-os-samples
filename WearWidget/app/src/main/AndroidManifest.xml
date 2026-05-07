@@ -38,58 +38,58 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-    <service
-        android:name=".HelloWidgetService"
-        android:exported="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/hello_widget_label"
-        android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+        <service
+            android:name=".HelloWidgetService"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/hello_widget_label"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
 
-        <intent-filter>
-            <action android:name="androidx.glance.wear.action.BIND_WIDGET_PROVIDER" />
-            <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.glance.wear.action.BIND_WIDGET_PROVIDER" />
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
 
-        <meta-data
-            android:name="androidx.glance.wear.widget.provider"
-            android:resource="@xml/hello_widget_info" />
+            <meta-data
+                android:name="androidx.glance.wear.widget.provider"
+                android:resource="@xml/hello_widget_info" />
 
-        <meta-data
-            android:name="androidx.wear.tiles.PREVIEW"
-            android:resource="@drawable/hello_widget_fullscreen" />
-    </service>
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/hello_widget_fullscreen" />
+        </service>
 
-    <activity
-        android:name=".WeatherActivity"
-        android:exported="true"
-        android:label="Weather Update"
-        android:taskAffinity="com.google.example.wear_widget.weather"
-        android:theme="@android:style/Theme.DeviceDefault">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+        <activity
+            android:name=".WeatherActivity"
+            android:exported="true"
+            android:label="Weather Update"
+            android:taskAffinity="com.google.example.wear_widget.weather"
+            android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-    <service
-        android:name=".WeatherWidgetService"
-        android:exported="true"
-        android:label="Weather Widget"
-        android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+        <service
+            android:name=".WeatherWidgetService"
+            android:exported="true"
+            android:label="Weather Widget"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
 
-        <intent-filter>
-            <action android:name="androidx.glance.wear.action.BIND_WIDGET_PROVIDER" />
-            <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.glance.wear.action.BIND_WIDGET_PROVIDER" />
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
 
-        <meta-data
-            android:name="androidx.glance.wear.widget.provider"
-            android:resource="@xml/weather_widget_info" />
+            <meta-data
+                android:name="androidx.glance.wear.widget.provider"
+                android:resource="@xml/weather_widget_info" />
 
-        <meta-data
-            android:name="androidx.wear.tiles.PREVIEW"
-            android:resource="@drawable/weather_widget_fullscreen" />
-    </service>
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/weather_widget_fullscreen" />
+        </service>
 
 
         <activity
