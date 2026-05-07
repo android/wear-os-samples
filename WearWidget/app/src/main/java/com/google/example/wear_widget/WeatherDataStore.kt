@@ -58,7 +58,7 @@ enum class WeatherCondition(val emoji: String) {
 
     companion object {
         fun fromEmoji(emoji: String): WeatherCondition {
-            return values().find { it.emoji == emoji } ?: SUNNY
+            return entries.find { it.emoji == emoji } ?: SUNNY
         }
     }
 }
