@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
@@ -32,42 +33,65 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.Card
+import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.composable
-import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
-import com.google.android.horologist.compose.layout.ColumnItemType
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface WearAppKey : NavKey
+
+@Serializable
+data object MainScreenKey : WearAppKey
+
+@Serializable
+data object NodesListScreenKey : WearAppKey
+
+@Serializable
+data object CameraNodesListScreenKey : WearAppKey
 
 @Composable
 fun WearApp(mainViewModel: MainViewModel) {
+    val backStack = rememberNavBackStack(MainScreenKey)
     AppScaffold {
-        val navController = rememberSwipeDismissableNavController()
-        SwipeDismissableNavHost(navController = navController, startDestination = "main") {
-            composable("main") {
-                MainScreen(
-                    onShowNodesList = { navController.navigate("nodeslist") },
-                    onShowCameraNodesList = { navController.navigate("cameraNodeslist") },
-                    mainViewModel = mainViewModel
-                )
-            }
-            composable("nodeslist") {
-                ConnectedNodesScreen()
-            }
-            composable("cameraNodeslist") {
-                CameraNodesScreen()
+        val entryProvider = remember {
+            entryProvider<NavKey> {
+                entry<MainScreenKey> {
+                    MainScreen(
+                        onShowNodesList = { backStack.add(NodesListScreenKey) },
+                        onShowCameraNodesList = { backStack.add(CameraNodesListScreenKey) },
+                        mainViewModel = mainViewModel
+                    )
+                }
+                entry<NodesListScreenKey> {
+                    ConnectedNodesScreen()
+                }
+                entry<CameraNodesListScreenKey> {
+                    CameraNodesScreen()
+                }
             }
         }
+        val swipeDismissableSceneStrategy = rememberSwipeDismissableSceneStrategy<NavKey>()
+        NavDisplay(
+            backStack = backStack,
+            entryProvider = entryProvider,
+            sceneStrategies = listOf(swipeDismissableSceneStrategy)
+        )
     }
 }
 
@@ -95,11 +119,7 @@ fun MainScreen(
     val listState = rememberTransformingLazyColumnState()
 
     ScreenScaffold(
-        scrollState = listState,
-        contentPadding = rememberResponsiveColumnPadding(
-            first = ColumnItemType.Button,
-            last = ColumnItemType.Card
-        )
+        scrollState = listState
     ) { padding ->
         TransformingLazyColumn(
             state = listState,
@@ -113,7 +133,11 @@ fun MainScreen(
                         )
                     },
                     onClick = onShowNodesList,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .minimumVerticalContentPadding(
+                            ButtonDefaults.minimumVerticalListContentPadding
+                        )
                 )
             }
             item {
@@ -159,7 +183,11 @@ fun MainScreen(
                 item {
                     Text(
                         stringResource(id = R.string.waiting),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .minimumVerticalContentPadding(
+                                ButtonDefaults.minimumVerticalListContentPadding
+                            ),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -167,7 +195,10 @@ fun MainScreen(
                 items(events) { event ->
                     Card(
                         onClick = {},
-                        enabled = false
+                        enabled = false,
+                        modifier = Modifier.minimumVerticalContentPadding(
+                            CardDefaults.minimumVerticalListContentPadding
+                        )
                     ) {
                         Column {
                             Text(
