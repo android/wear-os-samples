@@ -46,7 +46,8 @@ class WeatherActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val scope = rememberCoroutineScope()
-            val weatherState by weatherStateFlow.collectAsState(initial = WeatherState(72, "☀️"))
+            val weatherState by
+                weatherStateFlow.collectAsState(initial = WeatherState(72, WeatherCondition.SUNNY))
             MaterialTheme {
                 WeatherControlPanel(
                     currentState = weatherState,
@@ -77,7 +78,10 @@ class WeatherActivity : ComponentActivity() {
 }
 
 @Composable
-private fun WeatherControlPanel(currentState: WeatherState, onUpdate: (Int, String) -> Unit) {
+private fun WeatherControlPanel(
+    currentState: WeatherState,
+    onUpdate: (Int, WeatherCondition) -> Unit,
+) {
     val listState = rememberTransformingLazyColumnState()
 
     ScreenScaffold(scrollState = listState) { contentPadding ->
@@ -102,8 +106,8 @@ private fun WeatherControlPanel(currentState: WeatherState, onUpdate: (Int, Stri
                 WeatherButton(
                     stringResource(R.string.weather_condition_sunny),
                     72,
-                    "☀️",
-                    currentState.condition == "☀️",
+                    WeatherCondition.SUNNY,
+                    currentState.condition == WeatherCondition.SUNNY,
                     onUpdate,
                 )
             }
@@ -111,8 +115,8 @@ private fun WeatherControlPanel(currentState: WeatherState, onUpdate: (Int, Stri
                 WeatherButton(
                     stringResource(R.string.weather_condition_cloudy),
                     55,
-                    "☁️",
-                    currentState.condition == "☁️",
+                    WeatherCondition.CLOUDY,
+                    currentState.condition == WeatherCondition.CLOUDY,
                     onUpdate,
                 )
             }
@@ -120,8 +124,8 @@ private fun WeatherControlPanel(currentState: WeatherState, onUpdate: (Int, Stri
                 WeatherButton(
                     stringResource(R.string.weather_condition_rainy),
                     48,
-                    "🌧️",
-                    currentState.condition == "🌧️",
+                    WeatherCondition.RAINY,
+                    currentState.condition == WeatherCondition.RAINY,
                     onUpdate,
                 )
             }
@@ -129,8 +133,8 @@ private fun WeatherControlPanel(currentState: WeatherState, onUpdate: (Int, Stri
                 WeatherButton(
                     stringResource(R.string.weather_condition_snowy),
                     28,
-                    "❄️",
-                    currentState.condition == "❄️",
+                    WeatherCondition.SNOWY,
+                    currentState.condition == WeatherCondition.SNOWY,
                     onUpdate,
                 )
             }
@@ -142,9 +146,9 @@ private fun WeatherControlPanel(currentState: WeatherState, onUpdate: (Int, Stri
 private fun WeatherButton(
     label: String,
     temp: Int,
-    cond: String,
+    cond: WeatherCondition,
     isSelected: Boolean,
-    onUpdate: (Int, String) -> Unit,
+    onUpdate: (Int, WeatherCondition) -> Unit,
 ) {
     Button(
         onClick = { onUpdate(temp, cond) },

@@ -26,6 +26,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
+private val KEY_TEMP = intPreferencesKey("temp")
+private val KEY_CONDITION = stringPreferencesKey("condition")
+
 private val Context.weatherDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "weather_prefs")
 
@@ -33,8 +36,8 @@ val Context.weatherStateFlow: Flow<WeatherState>
     get() =
         weatherDataStore.data.map { preferences ->
             WeatherState(
-                temp = preferences[intPreferencesKey("temp")] ?: 72,
-                condition = preferences[stringPreferencesKey("condition")] ?: "☀️",
+                temp = preferences[KEY_TEMP] ?: 72,
+                condition = WeatherCondition.fromEmoji(preferences[KEY_CONDITION] ?: "☀️"),
             )
         }
 
@@ -42,9 +45,22 @@ suspend fun Context.getWeatherState(): WeatherState = weatherStateFlow.first()
 
 suspend fun Context.setWeatherState(state: WeatherState) {
     weatherDataStore.edit { preferences ->
-        preferences[intPreferencesKey("temp")] = state.temp
-        preferences[stringPreferencesKey("condition")] = state.condition
+        preferences[KEY_TEMP] = state.temp
+        preferences[KEY_CONDITION] = state.condition.emoji
     }
 }
 
-data class WeatherState(val temp: Int, val condition: String)
+enum class WeatherCondition(val emoji: String) {
+    SUNNY("☀️"),
+    CLOUDY("☁️"),
+    RAINY("🌧️"),
+    SNOWY("❄️");
+
+    companion object {
+        fun fromEmoji(emoji: String): WeatherCondition {
+            return values().find { it.emoji == emoji } ?: SUNNY
+        }
+    }
+}
+
+data class WeatherState(val temp: Int, val condition: WeatherCondition)

@@ -39,7 +39,9 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
             // Using a localized scope here as a compromise for this simple sample.
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    context.setWeatherState(WeatherState(temp, condition))
+                    context.setWeatherState(
+                        WeatherState(temp, WeatherCondition.fromEmoji(condition))
+                    )
                     triggerUpdateOption1(context)
                     // triggerUpdateOption2(context)
                     Log.d("WeatherReceiver", "Pushed weather update: $temp, $condition")

@@ -27,6 +27,7 @@ import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.background
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.padding
+import androidx.compose.remote.creation.compose.state.RemoteColor
 import androidx.compose.remote.creation.compose.state.rc
 import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rs
@@ -43,7 +44,6 @@ import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.wear.compose.material3.ColorScheme
 import androidx.wear.compose.remote.material3.RemoteColorScheme
-import androidx.compose.remote.creation.compose.state.RemoteColor
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
 private val ColorSunny = Color(0xFF2196F3)
@@ -69,27 +69,29 @@ class WeatherWidget : GlanceWearWidget() {
 
         val bgColor =
             when (state.condition) {
-                "☀️" -> ColorSunny
-                "☁️" -> ColorCloudy
-                "🌧️" -> ColorRainy
-                "❄️" -> ColorSnowy
-                else -> null
+                WeatherCondition.SUNNY -> ColorSunny
+                WeatherCondition.CLOUDY -> ColorCloudy
+                WeatherCondition.RAINY -> ColorRainy
+                WeatherCondition.SNOWY -> ColorSnowy
             }
 
-        val textColor = if (state.condition == "❄️") Color.Black else Color.White
+        val textColor = if (state.condition == WeatherCondition.SNOWY) Color.Black else Color.White
 
-        val brush = if (bgColor != null) WearWidgetBrush.color(bgColor.rc) else WearWidgetBrush.color(remoteColorScheme.primary)
-        val resolvedTextColor = if (bgColor != null) textColor.rc else remoteColorScheme.onPrimary
+        val brush = WearWidgetBrush.color(bgColor.rc)
+        val resolvedTextColor = textColor.rc
+
+        val weatherText =
+            context.getString(R.string.weather_format, state.temp, state.condition.emoji)
 
         return WearWidgetDocument(background = brush) {
-            WeatherContent(state, location, resolvedTextColor)
+            WeatherContent(weatherText, location, resolvedTextColor)
         }
     }
 }
 
 @RemoteComposable
 @Composable
-fun WeatherContent(state: WeatherState, location: String, textColor: RemoteColor) {
+fun WeatherContent(weatherText: String, location: String, textColor: RemoteColor) {
     RemoteBox(modifier = RemoteModifier.fillMaxSize(), contentAlignment = RemoteAlignment.Center) {
         RemoteColumn(horizontalAlignment = RemoteAlignment.CenterHorizontally) {
             RemoteText(
@@ -98,11 +100,7 @@ fun WeatherContent(state: WeatherState, location: String, textColor: RemoteColor
                 fontSize = 14.rsp,
                 modifier = RemoteModifier.padding(bottom = 4.rdp),
             )
-            RemoteText(
-                text = "${state.temp}° ${state.condition}".rs,
-                color = textColor,
-                fontSize = 36.rsp,
-            )
+            RemoteText(text = weatherText.rs, color = textColor, fontSize = 36.rsp)
         }
     }
 }
@@ -110,9 +108,5 @@ fun WeatherContent(state: WeatherState, location: String, textColor: RemoteColor
 @WearPreviewDevices
 @Composable
 fun WeatherContentPreview() = RemotePreview {
-    WeatherContent(
-        state = WeatherState(72, "☀️"),
-        location = "London",
-        textColor = Color.White.rc,
-    )
+    WeatherContent(weatherText = "72° ☀️", location = "London", textColor = Color.White.rc)
 }

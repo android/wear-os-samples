@@ -26,7 +26,6 @@ import androidx.compose.remote.creation.compose.layout.RemoteText
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.background
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
-import androidx.compose.remote.creation.compose.state.rc
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.remote.tooling.preview.RemotePreview
@@ -59,24 +58,20 @@ class HelloWidget : GlanceWearWidget() {
         val localColorScheme = ColorScheme()
         val remoteColorScheme = RemoteColorScheme(localColorScheme)
         return WearWidgetDocument(background = WearWidgetBrush.color(remoteColorScheme.primary)) {
-            HelloWidgetContent(remoteColorScheme)
+            HelloWidgetContent(remoteColorScheme, context.getString(R.string.hello_world))
         }
     }
 }
 
 @RemoteComposable
 @Composable
-fun HelloWidgetContent(colorScheme: RemoteColorScheme) {
+fun HelloWidgetContent(colorScheme: RemoteColorScheme, text: String) {
     RemoteMaterialTheme(colorScheme = colorScheme) {
         RemoteBox(
             modifier = RemoteModifier.fillMaxSize(),
             contentAlignment = RemoteAlignment.Center,
         ) {
-            RemoteText(
-                text = "Hello, World!".rs,
-                color = colorScheme.onPrimary,
-                fontSize = 20.rsp,
-            )
+            RemoteText(text = text.rs, color = colorScheme.onPrimary, fontSize = 20.rsp)
         }
     }
 }
@@ -86,5 +81,5 @@ fun HelloWidgetContent(colorScheme: RemoteColorScheme) {
 fun HelloWidgetContentPreview() = RemotePreview {
     val localColorScheme = ColorScheme()
     val remoteColorScheme = RemoteColorScheme(localColorScheme)
-    HelloWidgetContent(remoteColorScheme)
+    HelloWidgetContent(remoteColorScheme, "Hello, World!")
 }

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id("ee.schimke.composeai.preview") version "0.8.10"
     alias(libs.plugins.roborazzi)
     // alias(libs.plugins.dependency.analysis)
 }
@@ -134,7 +133,6 @@ dependencies {
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
     testImplementation(libs.compose.ui.test.junit4)
-    testImplementation("ee.schimke.composeai:renderer-android:0.8.10")
     debugImplementation(libs.compose.ui.test.manifest)
 }
 
