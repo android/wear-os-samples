@@ -1,0 +1,69 @@
+[versions]
+agp = "9.1.0"
+desugar_jdk_libs = "2.1.5"
+playServicesWearable = "19.0.0"
+kotlin = "2.3.21"
+composeBom = "2026.03.01"
+dependencyAnalysis = "3.5.1"
+remoteMaterialAlpha = "1.0.0-alpha02"
+remoteComposeAlpha = "1.0.0-alpha08"
+runtime = "1.10.6"
+uiTooling = "1.10.1"
+wear = "1.0.0-alpha08"
+wearCore = "1.0.0-alpha08"
+wearToolingPreview = "1.0.0"
+composeMaterial = "1.6.1"
+activityCompose = "1.12.2"
+datastore = "1.2.0"
+tiles = "1.6.0-rc02"
+robolectric = "4.17-SNAPSHOT"
+roborazzi = "1.59.0"
+junit = "4.13.2"
+ext-junit = "1.2.1"
+spotless = "8.4.0"
+
+[libraries]
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooling" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+remote-creation-compose = { module = "androidx.compose.remote:remote-creation-compose", version.ref = "remoteComposeAlpha" }
+remote-creation = { module = "androidx.compose.remote:remote-creation", version.ref = "remoteComposeAlpha" }
+remote-creation-core = { module = "androidx.compose.remote:remote-creation-core", version.ref = "remoteComposeAlpha" }
+runtime = { module = "androidx.compose.runtime:runtime", version.ref = "runtime" }
+ui = { group = "androidx.compose.ui", name = "ui" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiTooling" }
+wear = { module = "androidx.glance.wear:wear", version.ref = "wear" }
+wear-core = { module = "androidx.glance.wear:wear-core", version.ref = "wearCore" }
+wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "wearToolingPreview" }
+wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "composeMaterial" }
+remote-tooling-preview = { module = "androidx.compose.remote:remote-tooling-preview", version.ref = "remoteComposeAlpha" }
+remote-material3 = { module = "androidx.wear.compose.remote:remote-material3", version.ref = "remoteMaterialAlpha" }
+remote-core = { module = "androidx.compose.remote:remote-core", version.ref = "remoteComposeAlpha" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+wear-tiles-tooling = { module = "androidx.wear.tiles:tiles-tooling", version.ref = "tiles" }
+wear-tiles-renderer = { module = "androidx.wear.tiles:tiles-renderer", version.ref = "tiles" }
+wear-tiles-tooling-preview = { module = "androidx.wear.tiles:tiles-tooling-preview", version.ref = "tiles" }
+wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "composeMaterial" }
+wear-compose-material3 = { module = "androidx.wear.compose:compose-material3", version.ref = "composeMaterial" }
+wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "composeMaterial" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-junit" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2026 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">WearWidget</string>
+    <string name="hello_widget_label">Hello Widget</string>
+    <string name="widget_catalog_label">Widget Catalog</string>
+    <string name="force_update_label">Force Update</string>
+    <string name="component_catalog_label">Component Catalog</string>
+    <string name="hello_widget_description">AX Hello widget sample</string>
+    <string name="widget_catalog_description">Catalog of all available widget samples</string>
+    <string name="force_update_description">Sample for forcing widget updates</string>
+    <string name="component_catalog_description">Catalog of individual components</string>
+    <string name="hello">Hello, Clem!</string>
+
+    <!-- Weather Widget Strings -->
+    <string name="weather_location_london">London</string>
+    <string name="weather_last_updated_just_now">Last updated: Just now</string>
+
+    <!-- Weather Activity Strings -->
+    <string name="weather_push_title">Weather Push</string>
+    <string name="weather_push_subtitle">Simulate weather sync</string>
+    <string name="weather_condition_sunny">Sunny</string>
+    <string name="weather_condition_cloudy">Cloudy</string>
+    <string name="weather_condition_rainy">Rainy</string>
+    <string name="weather_condition_snowy">Snowy</string>
+    <string name="hello_world">Hello, World!</string>
+</resources>

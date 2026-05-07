@@ -1,0 +1,72 @@
+/*
+ * Copyright 2026 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.google.example.wear_widget
+
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import androidx.glance.wear.GlanceWearWidgetManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class WeatherUpdateReceiver : BroadcastReceiver() {
+
+    @android.annotation.SuppressLint("RestrictedApi")
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == "com.google.example.wear_widget.UPDATE_WEATHER") {
+            val temp = intent.getIntExtra("temp", 72)
+            val condition = intent.getStringExtra("condition") ?: "☀️"
+
+            val goAsync = goAsync()
+            // TODO: In production apps, use an application-scoped coroutine scope injected via DI.
+            // Using a localized scope here as a compromise for this simple sample.
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    context.setWeatherState(WeatherState(temp, condition))
+                    triggerUpdateOption1(context)
+                    // triggerUpdateOption2(context)
+                    Log.d("WeatherReceiver", "Pushed weather update: $temp, $condition")
+                } catch (e: Exception) {
+                    Log.e("WeatherReceiver", "Error updating weather", e)
+                } finally {
+                    goAsync.finish()
+                }
+            }
+        }
+    }
+
+    private fun triggerUpdateOption1(context: android.content.Context) {
+        @SuppressLint("RestrictedApi")
+        WeatherWidget()
+            .triggerUpdate(
+                context.applicationContext,
+                ComponentName(context, WeatherWidgetService::class.java),
+            )
+    }
+
+    private suspend fun triggerUpdateOption2(context: android.content.Context) {
+        val manager = GlanceWearWidgetManager(context)
+        val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
+        val widget = WeatherWidget()
+        activeWidgets.forEach { handle ->
+            widget.triggerUpdate(context.applicationContext, handle.instanceId)
+        }
+    }
+}
