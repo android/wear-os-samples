@@ -111,5 +111,14 @@ fun WeatherContent(weatherText: String, location: String, textColor: RemoteColor
 @WearPreviewDevices
 @Composable
 fun WeatherContentPreview() = RemotePreview {
-    WeatherContent(weatherText = "72° ☀️", location = "London", textColor = Color.White.rc)
+    RemoteBox(
+        modifier = RemoteModifier.fillMaxSize().background(ColorSunny.rc),
+        contentAlignment = RemoteAlignment.Center,
+    ) {
+        WeatherContent(
+            weatherText = "72° ☀️",
+            location = "London",
+            textColor = Color.White.rc,
+        )
+    }
 }
