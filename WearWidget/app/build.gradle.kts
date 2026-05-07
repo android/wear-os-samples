@@ -52,29 +52,6 @@ android {
 }
 
 dependencies {
-    // WORKAROUND: Pin core remote compose libraries to alpha08.
-    // The latest available version of remote-material3 (1.0.0-alpha02) is currently
-    // incompatible with core library versions >= 1.0.0-alpha09 due to an ABI break
-    // (relocated classes and changed method signatures in the clickable modifier).
-    // This block should be removed once remote-material3 is updated to support alpha09+.
-    constraints {
-        val coreVersion = "1.0.0-alpha08"
-        implementation("androidx.compose.remote:remote-creation-compose") {
-            version { strictly(coreVersion) }
-        }
-        implementation("androidx.compose.remote:remote-creation") {
-            version { strictly(coreVersion) }
-        }
-        implementation("androidx.compose.remote:remote-creation-core") {
-            version { strictly(coreVersion) }
-        }
-        implementation("androidx.compose.remote:remote-core") {
-            version { strictly(coreVersion) }
-        }
-        implementation("androidx.compose.remote:remote-tooling-preview") {
-            version { strictly(coreVersion) }
-        }
-    }
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
