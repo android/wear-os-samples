@@ -14,13 +14,8 @@
 <resources>
     <string name="app_name">WearWidget</string>
     <string name="hello_widget_label">Hello Widget</string>
-    <string name="widget_catalog_label">Widget Catalog</string>
-    <string name="force_update_label">Force Update</string>
-    <string name="component_catalog_label">Component Catalog</string>
     <string name="hello_widget_description">AX Hello widget sample</string>
-    <string name="widget_catalog_description">Catalog of all available widget samples</string>
     <string name="force_update_description">Sample for forcing widget updates</string>
-    <string name="component_catalog_description">Catalog of individual components</string>
 
     <!-- Weather Widget Strings -->
     <string name="weather_format">%1$d° %2$s</string>
