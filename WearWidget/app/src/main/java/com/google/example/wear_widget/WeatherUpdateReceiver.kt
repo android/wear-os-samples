@@ -53,8 +53,8 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
                         WeatherState(temp, WeatherCondition.fromEmoji(condition))
                     )
                     val manager = GlanceWearWidgetManager(context)
-                    val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
                     val widget = WeatherWidget()
+                    val activeWidgets = manager.fetchActiveWidgets(widget::class)
                     activeWidgets.forEach { handle ->
                         widget.triggerUpdate(context.applicationContext, handle.instanceId)
                     }

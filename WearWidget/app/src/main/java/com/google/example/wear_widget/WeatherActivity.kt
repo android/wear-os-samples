@@ -57,8 +57,8 @@ class WeatherActivity : ComponentActivity() {
                         scope.launch {
                             setWeatherState(WeatherState(temp, cond))
                             val manager = GlanceWearWidgetManager(this@WeatherActivity)
-                            val activeWidgets = manager.fetchActiveWidgets(WeatherWidget::class)
                             val widget = WeatherWidget()
+                            val activeWidgets = manager.fetchActiveWidgets(widget::class)
                             activeWidgets.forEach { handle ->
                                 widget.triggerUpdate(this@WeatherActivity, handle.instanceId)
                             }
