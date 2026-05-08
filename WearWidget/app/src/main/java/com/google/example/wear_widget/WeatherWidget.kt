@@ -43,8 +43,6 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
-import androidx.wear.compose.material3.ColorScheme
-import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
 private val ColorSunny = Color(0xFF2196F3)
@@ -67,9 +65,6 @@ class WeatherWidget : GlanceWearWidget() {
 
         val location = context.getString(R.string.weather_location_london)
 
-        val localColorScheme = ColorScheme()
-        val remoteColorScheme = RemoteColorScheme(localColorScheme)
-
         val bgColor =
             when (state.condition) {
                 WeatherCondition.SUNNY -> ColorSunny
@@ -81,13 +76,11 @@ class WeatherWidget : GlanceWearWidget() {
         val textColor = if (state.condition == WeatherCondition.SNOWY) Color.Black else Color.White
 
         val brush = WearWidgetBrush.color(bgColor.rc)
-        val resolvedTextColor = textColor.rc
-
         val weatherText =
             context.getString(R.string.weather_format, state.temp, state.condition.emoji)
 
         return WearWidgetDocument(background = brush) {
-            WeatherContent(weatherText, location, resolvedTextColor)
+            WeatherContent(weatherText, location, textColor.rc)
         }
     }
 }
