@@ -25,11 +25,13 @@ import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.profile.RcPlatformProfiles.WEAR_WIDGETS
 import androidx.compose.remote.tooling.preview.RemotePreview
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material3.ColorScheme
 import androidx.wear.compose.remote.material3.RemoteColorScheme
 
-/** Common wrapper that handles tooling configuration and suppresses internal lints. */
+/**
+ * Common wrapper that handles tooling configuration, suppresses internal lints, and sets colors
+ * (like background) that would otherwise be set by the renderer.
+ */
 // TODO: Remove RestrictedApi suppression once WearWidgetParams is made public in alpha09+
 @SuppressLint("RestrictedApi")
 @Composable
@@ -45,7 +47,3 @@ fun WidgetPreview(content: @RemoteComposable @Composable () -> Unit) {
         }
     }
 }
-
-/** Custom preview annotation for Wear OS Large Round display. */
-@Preview(name = "Wear Large Round", device = "id:wearos_large_round", showSystemUi = true)
-annotation class PreviewWearLarge
