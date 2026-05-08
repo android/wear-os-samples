@@ -16,18 +16,34 @@
 package com.google.example.wear_widget
 
 import android.annotation.SuppressLint
+import androidx.compose.remote.creation.compose.layout.RemoteAlignment
+import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
+import androidx.compose.remote.creation.compose.modifier.RemoteModifier
+import androidx.compose.remote.creation.compose.modifier.background
+import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.profile.RcPlatformProfiles.WEAR_WIDGETS
 import androidx.compose.remote.tooling.preview.RemotePreview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.compose.material3.ColorScheme
+import androidx.wear.compose.remote.material3.RemoteColorScheme
 
 /** Common wrapper that handles tooling configuration and suppresses internal lints. */
 // TODO: Remove RestrictedApi suppression once WearWidgetParams is made public in alpha09+
 @SuppressLint("RestrictedApi")
 @Composable
 fun WidgetPreview(content: @RemoteComposable @Composable () -> Unit) {
-    RemotePreview(profile = WEAR_WIDGETS, content = content)
+    val localColorScheme = ColorScheme()
+    val remoteColorScheme = RemoteColorScheme(localColorScheme)
+    RemotePreview(profile = WEAR_WIDGETS) {
+        RemoteBox(
+            modifier = RemoteModifier.fillMaxSize().background(remoteColorScheme.primary),
+            contentAlignment = RemoteAlignment.Center,
+        ) {
+            content()
+        }
+    }
 }
 
 /** Custom preview annotation for Wear OS Large Round display. */
