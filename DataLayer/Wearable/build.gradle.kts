@@ -19,6 +19,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -110,9 +111,11 @@ dependencies {
 
     implementation(libs.androidx.ui.test.manifest)
 
-    // Horologist for correct Compose layout
-    implementation(libs.horologist.compose.layout)
-    implementation(libs.horologist.compose.material)
+    // Navigation 3 and Serialization dependencies
+    implementation(libs.wear.compose.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.json)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

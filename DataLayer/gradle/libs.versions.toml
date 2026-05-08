@@ -1,21 +1,23 @@
 [versions]
 android-gradle-plugin = "8.13.1"
-androidx-activity = "1.12.0-rc01"
+androidx-activity = "1.13.0"
 androidx-compose-bom = "2025.11.00"
-androidx-lifecycle = "2.9.4"
-androidx-wear-compose = "1.5.5"
+androidx-lifecycle = "2.10.0"
+androidx-wear-compose = "1.6.1"
 compose-compiler = "1.5.15"
 ktlint = "1.6.0"
 kotlin = "2.2.10"
 org-jetbrains-kotlinx = "1.10.2"
-compose-ui-tooling = "1.5.5"
-robolectric = "4.16"
-roborazzi = "1.51.0"
+compose-ui-tooling = "1.6.1"
+robolectric = "4.16.1"
+roborazzi = "1.60.0"
 ui-test-junit4 = "1.9.4"
-ui-test-manifest = "1.9.4"
+ui-test-manifest = "1.11.1"
 horologist = "0.7.15"
-wear-compose-material3 = "1.5.5"
+wear-compose-material3 = "1.6.1"
 androidx-fragment = "1.8.9"
+androidx-navigation3 = "1.1.1"
+kotlinx-serialization = "1.11.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -35,10 +37,14 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "org-jetbrains-kotlinx" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "org-jetbrains-kotlinx" }
-playservices-wearable = "com.google.android.gms:play-services-wearable:19.0.0"
+playservices-wearable = "com.google.android.gms:play-services-wearable:20.0.1"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wear-compose-material3" }
 wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "compose-ui-tooling" }
+wear-compose-navigation3 = { module = "androidx.wear.compose:compose-navigation3", version.ref = "androidx-wear-compose" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation3" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
 horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "horologist" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -57,3 +63,4 @@ com-android-application = { id = "com.android.application", version.ref = "andro
 com-diffplug-spotless = "com.diffplug.spotless:8.0.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

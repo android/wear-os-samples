@@ -22,13 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
-import com.google.android.horologist.compose.layout.ColumnItemType
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 @Composable
 fun NodesScreen(nodes: Set<NodeUiModel>, modifier: Modifier = Modifier) {
@@ -36,10 +36,6 @@ fun NodesScreen(nodes: Set<NodeUiModel>, modifier: Modifier = Modifier) {
 
     ScreenScaffold(
         scrollState = listState,
-        contentPadding = rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.Button
-        ),
         modifier = modifier
     ) { padding ->
         TransformingLazyColumn(
@@ -47,7 +43,11 @@ fun NodesScreen(nodes: Set<NodeUiModel>, modifier: Modifier = Modifier) {
             contentPadding = padding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier.minimumVerticalContentPadding(
+                        ListHeaderDefaults.minimumTopListContentPadding
+                    )
+                ) {
                     Text(stringResource(id = R.string.nodes))
                 }
             }
@@ -59,7 +59,11 @@ fun NodesScreen(nodes: Set<NodeUiModel>, modifier: Modifier = Modifier) {
                         )
                     },
                     onClick = { },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .minimumVerticalContentPadding(
+                            ButtonDefaults.minimumVerticalListContentPadding
+                        )
                 )
             }
         }
