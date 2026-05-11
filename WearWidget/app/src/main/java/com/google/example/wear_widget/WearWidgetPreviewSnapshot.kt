@@ -18,7 +18,6 @@ package com.google.example.wear_widget
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -71,33 +70,30 @@ fun WearWidgetPreviewSnapshot(
         }
 
     Box(
-        modifier =
-            Modifier.size(300.dp)
-                .clip(CircleShape)
-                .background(Color.Black)
-                .border(2.dp, Color(0xFFFF1493), CircleShape),
+        modifier = Modifier.size(300.dp).clip(CircleShape).background(Color.Black),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().padding(top = 8.dp),
+            modifier = Modifier.fillMaxSize(),
         ) {
             Box(
-                modifier = Modifier.size(48.dp).clip(CircleShape).background(Color.Gray),
+                modifier = Modifier.size(50.dp).clip(CircleShape).background(Color(0xFFE0E0E0)),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "Android Logo",
                     modifier = Modifier.size(32.dp),
+                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color(0xFF424242)),
                 )
             }
             Text(
                 text = "Weather Widget",
                 color = Color.White,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.padding(top = 2.dp),
             )
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 RemoteDocPreview(

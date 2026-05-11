@@ -52,7 +52,7 @@ class WearWidgetParamsProviderSnapshot : PreviewParameterProvider<WearWidgetPara
                 instanceId = WidgetInstanceId("widgets", 2),
                 containerType = ContainerInfo.CONTAINER_TYPE_SMALL,
                 widthDp = 200f,
-                heightDp = 60f,
+                heightDp = 120f,
                 verticalPaddingDp = 8f,
                 horizontalPaddingDp = 8f,
                 cornerRadiusDp = 26f,
