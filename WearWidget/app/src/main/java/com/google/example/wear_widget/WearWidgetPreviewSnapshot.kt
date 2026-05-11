@@ -59,6 +59,7 @@ fun WearWidgetPreviewSnapshot(
     widget: GlanceWearWidget,
     params: WearWidgetParams,
     modifier: Modifier = Modifier,
+    title: String = widget.javaClass.simpleName.replace(Regex("(?<=.)(?=\\p{Lu})"), " "),
 ) {
     val context = LocalContext.current
     val document =
@@ -89,7 +90,7 @@ fun WearWidgetPreviewSnapshot(
                 )
             }
             Text(
-                text = "Weather Widget",
+                text = title,
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,

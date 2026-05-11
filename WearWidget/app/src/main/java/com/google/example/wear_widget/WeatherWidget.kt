@@ -128,4 +128,9 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
 @Composable
 fun WeatherWidgetPreview(
     @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
-) = WearWidgetPreviewSnapshot(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
+) =
+    WearWidgetPreviewSnapshot(
+        MockWeatherWidget(75, WeatherCondition.SUNNY),
+        params,
+        title = "Weather Widget",
+    )
