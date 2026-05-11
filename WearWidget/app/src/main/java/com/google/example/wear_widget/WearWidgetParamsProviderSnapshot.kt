@@ -41,7 +41,7 @@ class WearWidgetParamsProviderSnapshot : PreviewParameterProvider<WearWidgetPara
             WearWidgetParams(
                 instanceId = WidgetInstanceId("widgets", 2),
                 containerType = ContainerInfo.CONTAINER_TYPE_SMALL,
-                widthDp = 200f,
+                widthDp = 180f,
                 heightDp = 70f,
                 verticalPaddingDp = 8f,
                 horizontalPaddingDp = 8f,
@@ -51,8 +51,8 @@ class WearWidgetParamsProviderSnapshot : PreviewParameterProvider<WearWidgetPara
             WearWidgetParams(
                 instanceId = WidgetInstanceId("widgets", 1),
                 containerType = ContainerInfo.CONTAINER_TYPE_LARGE,
-                widthDp = 200f,
-                heightDp = 100f,
+                widthDp = 180f,
+                heightDp = 90f,
                 verticalPaddingDp = 8f,
                 horizontalPaddingDp = 8f,
                 cornerRadiusDp = 26f,

@@ -71,40 +71,39 @@ fun WearWidgetPreviewSnapshot(
         }
 
     Box(
-        modifier = Modifier.size(300.dp).clip(CircleShape).background(Color.Black),
+        modifier = Modifier.size(227.dp).clip(CircleShape).background(Color.Black),
         contentAlignment = Alignment.Center,
     ) {
+        RemoteDocPreview(
+            document,
+            modifier =
+                modifier
+                    .width((params.widthDp + 2f * params.horizontalPaddingDp).dp)
+                    .height((params.heightDp + 2f * params.verticalPaddingDp).dp),
+        )
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(top = 8.dp),
         ) {
             Box(
-                modifier = Modifier.size(50.dp).clip(CircleShape).background(Color(0xFFE0E0E0)),
+                modifier = Modifier.size(32.dp).clip(CircleShape).background(Color(0xFFE0E0E0)),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "Android Logo",
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(20.dp),
                     colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color(0xFF424242)),
                 )
             }
             Text(
                 text = title,
                 color = Color.White,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 2.dp),
             )
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                RemoteDocPreview(
-                    document,
-                    modifier =
-                        modifier
-                            .width((params.widthDp + 2f * params.horizontalPaddingDp).dp)
-                            .height((params.heightDp + 2f * params.verticalPaddingDp).dp),
-                )
-            }
         }
     }
 }
