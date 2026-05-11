@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -78,29 +79,30 @@ fun WearWidgetPreviewSnapshot(
             document,
             modifier =
                 modifier
+                    .offset(y = 14.dp)
                     .width((params.widthDp + 2f * params.horizontalPaddingDp).dp)
                     .height((params.heightDp + 2f * params.verticalPaddingDp).dp),
         )
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().padding(top = 8.dp),
+            modifier = Modifier.fillMaxSize().padding(top = 10.dp),
         ) {
             Box(
-                modifier = Modifier.size(32.dp).clip(CircleShape).background(Color(0xFFE0E0E0)),
+                modifier = Modifier.size(40.dp).clip(CircleShape).background(Color(0xFFE0E0E0)),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "Android Logo",
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(38.dp),
                     colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color(0xFF424242)),
                 )
             }
             Text(
                 text = title,
                 color = Color.White,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 2.dp),
             )
