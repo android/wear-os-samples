@@ -37,22 +37,22 @@ import androidx.glance.wear.core.WidgetInstanceId
 class WearWidgetParamsProviderSnapshot : PreviewParameterProvider<WearWidgetParams> {
     override val values: Sequence<WearWidgetParams> =
         sequenceOf(
-            // Large Widget Preview
-            WearWidgetParams(
-                instanceId = WidgetInstanceId("widgets", 1),
-                containerType = ContainerInfo.CONTAINER_TYPE_LARGE,
-                widthDp = 200f,
-                heightDp = 112f,
-                verticalPaddingDp = 8f,
-                horizontalPaddingDp = 8f,
-                cornerRadiusDp = 26f,
-            ),
             // Small Widget Preview
             WearWidgetParams(
                 instanceId = WidgetInstanceId("widgets", 2),
                 containerType = ContainerInfo.CONTAINER_TYPE_SMALL,
                 widthDp = 200f,
-                heightDp = 120f,
+                heightDp = 70f,
+                verticalPaddingDp = 8f,
+                horizontalPaddingDp = 8f,
+                cornerRadiusDp = 26f,
+            ),
+            // Large Widget Preview
+            WearWidgetParams(
+                instanceId = WidgetInstanceId("widgets", 1),
+                containerType = ContainerInfo.CONTAINER_TYPE_LARGE,
+                widthDp = 200f,
+                heightDp = 100f,
                 verticalPaddingDp = 8f,
                 horizontalPaddingDp = 8f,
                 cornerRadiusDp = 26f,
