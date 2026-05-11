@@ -101,8 +101,31 @@ fun WeatherContent(weatherText: String, location: String, textColor: RemoteColor
     }
 }
 
+class MockWeatherWidget(private val temp: Int, private val condition: WeatherCondition) :
+    GlanceWearWidget() {
+    override suspend fun provideWidgetData(
+        context: Context,
+        params: WearWidgetParams,
+    ): WearWidgetData {
+        val location = context.getString(R.string.weather_location_london)
+        val bgColor =
+            when (condition) {
+                WeatherCondition.SUNNY -> ColorSunny
+                WeatherCondition.CLOUDY -> ColorCloudy
+                WeatherCondition.RAINY -> ColorRainy
+                WeatherCondition.SNOWY -> ColorSnowy
+            }
+        val textColor = if (condition == WeatherCondition.SNOWY) Color.Black else Color.White
+        val brush = WearWidgetBrush.color(bgColor.rc)
+        val weatherText = context.getString(R.string.weather_format, temp, condition.emoji)
+        return WearWidgetDocument(background = brush) {
+            WeatherContent(weatherText, location, textColor.rc)
+        }
+    }
+}
+
 @Preview
 @Composable
 fun WeatherWidgetPreview(
     @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
-) = WearWidgetPreviewSnapshot(WeatherWidget(), params)
+) = WearWidgetPreviewSnapshot(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
