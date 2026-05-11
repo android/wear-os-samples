@@ -19,6 +19,10 @@
     preferredType="LARGE">
 
     <container
+        type="SMALL"
+        previewImage="@drawable/weather_widget_small" />
+
+    <container
         type="LARGE"
         previewImage="@drawable/weather_widget_large" />
 
