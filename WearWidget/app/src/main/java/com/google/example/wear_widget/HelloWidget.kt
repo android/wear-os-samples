@@ -29,6 +29,8 @@ import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.glance.wear.GlanceWearWidget
 import androidx.glance.wear.GlanceWearWidgetService
 import androidx.glance.wear.WearWidgetBrush
@@ -39,9 +41,6 @@ import androidx.glance.wear.core.WearWidgetParams
 import androidx.wear.compose.material3.ColorScheme
 import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
 // Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
 // LIBRARY_GROUP.
@@ -74,14 +73,6 @@ fun HelloWidgetContent(colorScheme: RemoteColorScheme, text: String) {
             RemoteText(text = text.rs, color = colorScheme.onPrimary, fontSize = 20.rsp)
         }
     }
-}
-
-@WearPreviewDevices
-@Composable
-fun HelloWidgetContentPreview() = WidgetPreview {
-    val localColorScheme = ColorScheme()
-    val remoteColorScheme = RemoteColorScheme(localColorScheme)
-    HelloWidgetContent(remoteColorScheme, "Hello, World!")
 }
 
 @Preview

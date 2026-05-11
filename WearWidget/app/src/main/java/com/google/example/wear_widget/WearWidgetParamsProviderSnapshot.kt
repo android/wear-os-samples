@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:SuppressLint("RestrictedApi")
+
 package com.google.example.wear_widget
 
+import android.annotation.SuppressLint
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.glance.wear.core.ContainerInfo
 import androidx.glance.wear.core.WearWidgetParams
@@ -23,11 +26,14 @@ import androidx.glance.wear.core.WidgetInstanceId
 /**
  * A [PreviewParameterProvider] that provides a variety of [WearWidgetParams] for Wear previews.
  *
- * Note: This is taken from https://android-review.googlesource.com/c/platform/frameworks/support/+/4045856
- * Once that change lands in the library:
+ * Note: This is taken from
+ * https://android-review.googlesource.com/c/platform/frameworks/support/+/4045856 Once that change
+ * lands in the library:
  * 1. Remove this file.
- * 2. Update imports and usages in the project to use `androidx.glance.wear.tooling.preview.WearWidgetParamsProvider`.
+ * 2. Update imports and usages in the project to use
+ *    `androidx.glance.wear.tooling.preview.WearWidgetParamsProvider`.
  */
+// Suppressed RestrictedApi because WearWidgetParams is currently restricted to LIBRARY_GROUP.
 class WearWidgetParamsProviderSnapshot : PreviewParameterProvider<WearWidgetParams> {
     override val values: Sequence<WearWidgetParams> =
         sequenceOf(

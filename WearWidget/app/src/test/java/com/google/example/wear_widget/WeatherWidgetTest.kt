@@ -36,7 +36,9 @@ class WeatherWidgetTest {
     @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun testWeatherWidgetPreview() {
-        composeRule.setContent { WeatherContentPreview() }
+        composeRule.setContent {
+            WeatherWidgetPreview(params = WearWidgetParamsProviderSnapshot().values.first())
+        }
         captureScreenRoboImage("src/test/screenshots/WeatherWidgetPreview.png")
     }
 }

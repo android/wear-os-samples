@@ -33,9 +33,10 @@ import androidx.compose.remote.creation.compose.state.rc
 import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
-import androidx.compose.remote.tooling.preview.RemotePreview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.glance.wear.GlanceWearWidget
 import androidx.glance.wear.GlanceWearWidgetService
 import androidx.glance.wear.WearWidgetBrush
@@ -43,7 +44,6 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
-import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 
 private val ColorSunny = Color(0xFF2196F3)
 private val ColorCloudy = Color(0xFF9E9E9E)
@@ -101,13 +101,8 @@ fun WeatherContent(weatherText: String, location: String, textColor: RemoteColor
     }
 }
 
-@WearPreviewDevices
+@Preview
 @Composable
-fun WeatherContentPreview() = RemotePreview {
-    RemoteBox(
-        modifier = RemoteModifier.fillMaxSize().background(ColorSunny.rc),
-        contentAlignment = RemoteAlignment.Center,
-    ) {
-        WeatherContent(weatherText = "72° ☀️", location = "London", textColor = Color.White.rc)
-    }
-}
+fun WeatherWidgetPreview(
+    @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
+) = WearWidgetPreviewSnapshot(WeatherWidget(), params)
