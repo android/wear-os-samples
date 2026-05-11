@@ -32,7 +32,9 @@ import kotlinx.coroutines.runBlocking
  * Previews a [GlanceWearWidget] within a widget container in the Android Studio Preview.
  *
  * Note: This is taken from https://android-review.googlesource.com/c/platform/frameworks/support/+/4045856
- * and should be removed/migrated to that approach once that change lands.
+ * Once that change lands in the library:
+ * 1. Remove this file.
+ * 2. Update imports and usages in the project to use `androidx.glance.wear.tooling.preview.WearWidgetPreview`.
  */
 @SuppressLint("RestrictedApi")
 @Composable
