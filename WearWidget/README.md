@@ -4,9 +4,9 @@ Demonstrates building Wear Widgets using Remote Compose for Wear OS.
 
 ## Introduction
 
-Wear Widgets are partial-height, vertically scrolling surfaces that complement
-apps and watch faces, providing effortless access to information and key
-actions. They leverage
+[Wear Widgets](https://developer.android.com/reference/kotlin/androidx/wear/widget/package-summary)
+are partial-height, vertically scrolling surfaces that complement apps and watch
+faces, providing effortless access to information and key actions. They leverage
 [Remote Compose](https://developer.android.com/jetpack/androidx/releases/compose-remote),
 featuring a declarative DSL similar to Jetpack Compose.
 
