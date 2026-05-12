@@ -38,6 +38,10 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
+        <!-- 
+            Exposed as a Tile Provider to support compatibility mode on devices 
+            where native widgets are not supported.
+        -->
         <service
             android:name=".HelloWidgetService"
             android:exported="true"
@@ -71,6 +75,10 @@
             </intent-filter>
         </activity>
 
+        <!-- 
+            Exposed as a Tile Provider to support compatibility mode on devices 
+            where native widgets are not supported.
+        -->
         <service
             android:name=".WeatherWidgetService"
             android:exported="true"

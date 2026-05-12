@@ -16,6 +16,12 @@ This sample includes:
 - **WeatherWidget**: A widget that displays dynamic content based on stored
   state.
 
+## Compatibility
+
+Wear Widgets are compatible with Wear OS 4 and above. On devices where native
+widgets are not supported, the library automatically translates them and makes
+them available to the system as a Tile.
+
 ## Getting Started
 
 This sample uses the Gradle build system. To build this project, use the
@@ -72,7 +78,7 @@ trigger updates in two ways:
 The sample includes a `WeatherActivity` that acts as a control panel.
 
 1. Launch the **Weather Update** app from the app launcher on your watch.
-2. Tap any of the weather condition buttons (Sunny, Cloudy, etc.) to push that
+1. Tap any of the weather condition buttons (Sunny, Cloudy, etc.) to push that
    state to the widget.
 
 ### Via ADB Broadcast
