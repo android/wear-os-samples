@@ -83,15 +83,10 @@ dependencies {
     implementation(libs.remote.creation.core)
     implementation(libs.remote.creation)
 
-    // Tooling dependencies for previewing tiles in Android Studio.
-    implementation(libs.wear.tiles.tooling)
-    debugImplementation(libs.wear.tiles.renderer)
+
 
     
-    // The tile preview code is in the same file as the tiles themselves, so we need to make the
-    // androidx.wear.tiles:tiles-tooling-preview dependency available to release builds, not
-    // just debug builds.
-    implementation(libs.wear.tiles.tooling.preview)
+
     implementation(libs.activity.compose)
     implementation(libs.wear.compose.material)
     implementation(libs.wear.compose.material3)
