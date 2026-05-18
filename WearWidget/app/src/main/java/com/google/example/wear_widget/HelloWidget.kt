@@ -29,6 +29,7 @@ import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.glance.wear.GlanceWearWidget
@@ -38,7 +39,6 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
-import androidx.wear.compose.material3.ColorScheme
 import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
 
@@ -54,23 +54,26 @@ class HelloWidget : GlanceWearWidget() {
         params: WearWidgetParams,
     ): WearWidgetData {
         Log.d("HelloWidget", "provideWidgetData")
-        val localColorScheme = ColorScheme()
-        val remoteColorScheme = RemoteColorScheme(localColorScheme)
+        val remoteColorScheme = RemoteColorScheme()
         return WearWidgetDocument(background = WearWidgetBrush.color(remoteColorScheme.primary)) {
-            HelloWidgetContent(remoteColorScheme, context.getString(R.string.hello_world))
+            HelloWidgetContent()
         }
     }
 }
 
 @RemoteComposable
 @Composable
-fun HelloWidgetContent(colorScheme: RemoteColorScheme, text: String) {
-    RemoteMaterialTheme(colorScheme = colorScheme) {
+fun HelloWidgetContent() {
+    RemoteMaterialTheme {
         RemoteBox(
             modifier = RemoteModifier.fillMaxSize(),
             contentAlignment = RemoteAlignment.Center,
         ) {
-            RemoteText(text = text.rs, color = colorScheme.onPrimary, fontSize = 20.rsp)
+            RemoteText(
+                text = stringResource(R.string.hello_world).rs,
+                color = RemoteMaterialTheme.colorScheme.onPrimary,
+                fontSize = 20.rsp,
+            )
         }
     }
 }

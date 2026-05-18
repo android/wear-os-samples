@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
+// This BroadcastReceiver is used to simulate external updates for the sample.
 class WeatherUpdateReceiver : BroadcastReceiver() {
 
     companion object {
