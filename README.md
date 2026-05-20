@@ -26,4 +26,4 @@ Samples
 
 * **[WatchFacePush](WatchFacePush)** (Kotlin) - Demonstrates the Watch Face Push AndroidX Library. [Guide](https://developer.android.com/training/wearables/watch-face-push)
 
-* **[WearWidget](WearWidget)** (Compose/Kotlin) - Demonstrates building Wear Widgets using Remote Compose.
+* **[WearWidget](WearWidget)** (Compose/Kotlin) - Demonstrates building Wear Widgets using Remote Compose. [Guide](https://developer.android.com/training/wearables/widgets)
