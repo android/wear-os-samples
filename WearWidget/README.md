@@ -47,6 +47,13 @@ adb shell am broadcast \
   --ecn component com.google.example.wear_widget/.HelloWidgetService
 ```
 
+Note: The preceding command adds a FULLSCREEN tile by default. You can also
+specify LARGE and SMALL sizes by passing `--ei type [0|1|2]` to the command
+(where type 0 is FULLSCREEN). Depending on the device state, app-triggered
+content updates via `triggerUpdate()` might not reflect on screen for **LARGE**
+and **SMALL** widget sizes due to a known platform bug. This issue only affects
+developers during testing; a fix is coming in a future release.
+
 **2. Show the tile:**
 
 ```bash
