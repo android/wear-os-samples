@@ -3,17 +3,19 @@ android-gradle-plugin = "8.13.1"
 androidx-activity = "1.11.0"
 androidx-compose-bom = "2025.11.00"
 androidx-media3 = "1.8.0"
-androidx-wear-compose = "1.5.5"
+androidx-wear-compose = "1.6.2"
 compose-compiler = "1.5.15"
-compose-ui-tooling = "1.5.5"
-ktlint = "0.50.0"
+compose-ui-tooling = "1.6.2"
+ktlint = "1.0.1"
 kotlin = "2.2.10"
 robolectric = "4.16"
 roborazzi = "1.51.0"
 ui-test-junit4 = "1.9.4"
 ui-test-manifest = "1.9.4"
 horologist = "0.7.15"
-wear-compose-material3 = "1.5.5"
+wear-compose-material3 = "1.6.2"
+androidx-navigation3 = "1.1.1"
+kotlinx-serialization = "1.11.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -51,9 +53,14 @@ androidx-media3-common = { module = "androidx.media3:media3-common", version.ref
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
 androidx-media3-exoplayerworkmanager = { module = "androidx.media3:media3-exoplayer-workmanager", version.ref = "androidx-media3" }
 wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wear-compose-material3" }
+wear-compose-navigation3 = { module = "androidx.wear.compose:compose-navigation3", version.ref = "androidx-wear-compose" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidx-navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation3" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:8.0.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

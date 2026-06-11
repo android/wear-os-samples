@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.speaker
 
+import androidx.compose.runtime.Composable
 import androidx.wear.compose.material3.AppScaffold
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
@@ -33,6 +34,11 @@ class SpeakerRecordingScreenTest(override val device: WearDevice) : WearScreensh
                 SpeakerScreenPreview(PlaybackState.Recording)
             }
         }
+    }
+
+    @Composable
+    override fun TestScaffold(content: @Composable () -> Unit) {
+        content()
     }
 
     companion object {

@@ -38,7 +38,9 @@ subprojects {
             targetExclude("bin/**/*.kt")
 
             ktlint(libs.versions.ktlint.get())
+                .editorConfigOverride(mapOf("ktlint_function_naming_ignore_when_annotated_with" to "Composable"))
             licenseHeaderFile(rootProject.file("../spotless/copyright.kt"))
+
         }
 
         kotlinGradle {

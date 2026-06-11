@@ -15,26 +15,80 @@
  */
 package com.example.android.wearable.speaker
 
+import android.content.Context
+import android.os.Vibrator
+import androidx.compose.runtime.Composable
 import androidx.wear.compose.material3.AppScaffold
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.audio.AudioOutput
+import com.google.android.horologist.audio.AudioOutputRepository
+import com.google.android.horologist.audio.VolumeRepository
+import com.google.android.horologist.audio.VolumeState
+import com.google.android.horologist.audio.ui.VolumeViewModel
 import com.google.android.horologist.screenshots.rng.WearDevice
 import com.google.android.horologist.screenshots.rng.WearScreenshotTest
-import org.junit.Ignore
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+
+class FakeVolumeRepository : VolumeRepository {
+    override val volumeState: StateFlow<VolumeState> =
+        MutableStateFlow(VolumeState(current = 5, max = 15))
+
+    override fun increaseVolume() {}
+
+    override fun decreaseVolume() {}
+
+    override fun setVolume(volume: Int) {}
+
+    override fun close() {}
+}
+
+class FakeAudioOutputRepository : AudioOutputRepository {
+    override val audioOutput: StateFlow<AudioOutput> =
+        MutableStateFlow(AudioOutput.Unknown("id", "name", true))
+    override val available: StateFlow<List<AudioOutput>> = MutableStateFlow(emptyList())
+
+    override fun launchOutputSelection(closeOnConnect: Boolean, clientPackageName: String?) {}
+
+    override fun close() {}
+}
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class SpeakerPlayerScreenTest(override val device: WearDevice) : WearScreenshotTest() {
     override val tolerance = 0.02f
 
     @OptIn(ExperimentalHorologistApi::class)
-    @Ignore
     @Test
-    fun speakerPlayerScreenTest() = runTest {
-        AppScaffold {
-            SpeakerPlayerScreen(onVolumeClick = {})
+    fun speakerPlayerScreenTest() {
+        val vibrator =
+            RuntimeEnvironment.getApplication().getSystemService(
+                Context.VIBRATOR_SERVICE
+            ) as Vibrator
+        val volumeViewModel =
+            VolumeViewModel(
+                FakeVolumeRepository(),
+                FakeAudioOutputRepository(),
+                {},
+                vibrator
+            )
+
+        runTest {
+            AppScaffold {
+                SpeakerPlayerScreen(
+                    onVolumeClick = {},
+                    volumeViewModel = volumeViewModel
+                )
+            }
         }
+    }
+
+    @Composable
+    override fun TestScaffold(content: @Composable () -> Unit) {
+        content()
     }
 
     companion object {
