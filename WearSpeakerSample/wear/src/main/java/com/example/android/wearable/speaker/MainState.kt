@@ -172,7 +172,9 @@ class MainState(
  */
 sealed class PlaybackState {
     object Ready : PlaybackState()
+
     object PlayingVoice : PlaybackState()
+
     object Recording : PlaybackState()
 }
 
@@ -184,22 +186,25 @@ sealed class PlaybackState {
 private fun speakerIsSupported(activity: Activity): Boolean {
     val hasAudioOutputFeature =
         activity.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
-    val devices = activity.getSystemService<AudioManager>()!!
-        .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+    val devices =
+        activity.getSystemService<AudioManager>()!!
+            .getDevices(AudioManager.GET_DEVICES_OUTPUTS)
 
     // We can only trust AudioDeviceInfo.TYPE_BUILTIN_SPEAKER if the device advertises
     // FEATURE_AUDIO_OUTPUT
-    val hasBuiltInSpeaker = devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER } &&
-        hasAudioOutputFeature
+    val hasBuiltInSpeaker =
+        devices.any { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER } &&
+            hasAudioOutputFeature
 
     // Check all the Wear supported BT devices
     // https://developer.android.com/training/wearables/apps/audio
-    val hasBluetoothSpeaker = devices.any {
-        it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP ||
-            it.type == AudioDeviceInfo.TYPE_BLE_BROADCAST ||
-            it.type == AudioDeviceInfo.TYPE_BLE_SPEAKER ||
-            it.type == AudioDeviceInfo.TYPE_BLE_HEADSET
-    }
+    val hasBluetoothSpeaker =
+        devices.any {
+            it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP ||
+                it.type == AudioDeviceInfo.TYPE_BLE_BROADCAST ||
+                it.type == AudioDeviceInfo.TYPE_BLE_SPEAKER ||
+                it.type == AudioDeviceInfo.TYPE_BLE_HEADSET
+        }
 
     return hasBuiltInSpeaker || hasBluetoothSpeaker
 }

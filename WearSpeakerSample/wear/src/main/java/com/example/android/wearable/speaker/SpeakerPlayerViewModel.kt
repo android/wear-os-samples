@@ -38,17 +38,17 @@ class SpeakerPlayerViewModel(
     audioFile: File,
     audioFileUri: String
 ) : PlayerViewModel(playerRepository) {
-
     init {
         viewModelScope.launch {
             playerRepository.connect(player) {}
             if (audioFile.exists()) {
-                val media = Media(
-                    id = "",
-                    uri = audioFileUri,
-                    title = "Recorded audio",
-                    artist = ""
-                )
+                val media =
+                    Media(
+                        id = "",
+                        uri = audioFileUri,
+                        title = "Recorded audio",
+                        artist = ""
+                    )
                 playerRepository.setMedia(media)
             }
         }
@@ -60,26 +60,28 @@ class SpeakerPlayerViewModel(
     companion object {
         private const val TAG = "SpeakerPlayerViewModel"
 
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY]!!
+        val Factory: ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val application = this[APPLICATION_KEY]!!
 
-                val outputFileName = "audiorecord.opus"
-                val audioFile = File(application.filesDir, outputFileName)
-                val audioFileUri = application.filesDir.path + "/" + outputFileName
+                    val outputFileName = "audiorecord.opus"
+                    val audioFile = File(application.filesDir, outputFileName)
+                    val audioFileUri = application.filesDir.path + "/" + outputFileName
 
-                val player = ExoPlayer.Builder(application)
-                    .setSeekForwardIncrementMs(5000L)
-                    .setSeekBackIncrementMs(5000L)
-                    .build()
+                    val player =
+                        ExoPlayer.Builder(application)
+                            .setSeekForwardIncrementMs(5000L)
+                            .setSeekBackIncrementMs(5000L)
+                            .build()
 
-                SpeakerPlayerViewModel(
-                    PlayerRepositoryImpl(),
-                    player,
-                    audioFile,
-                    audioFileUri
-                )
+                    SpeakerPlayerViewModel(
+                        PlayerRepositoryImpl(),
+                        player,
+                        audioFile,
+                        audioFileUri
+                    )
+                }
             }
-        }
     }
 }

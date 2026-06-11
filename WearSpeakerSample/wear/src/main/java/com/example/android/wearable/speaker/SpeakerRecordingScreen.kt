@@ -54,45 +54,44 @@ fun SpeakerRecordingScreen(
 private fun computeControlDashboardUiState(
     playbackState: PlaybackState,
     isPermissionDenied: Boolean
-): ControlDashboardUiState =
-    when (playbackState) {
-        PlaybackState.PlayingVoice -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = false,
-                visible = false
-            ),
-            playState = ControlDashboardButtonUiState(
-                expanded = true,
-                enabled = true,
-                visible = true
-            )
+): ControlDashboardUiState = when (playbackState) {
+    PlaybackState.PlayingVoice -> ControlDashboardUiState(
+        micState = ControlDashboardButtonUiState(
+            expanded = false,
+            enabled = false,
+            visible = false
+        ),
+        playState = ControlDashboardButtonUiState(
+            expanded = true,
+            enabled = true,
+            visible = true
         )
-        PlaybackState.Ready -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = !isPermissionDenied,
-                visible = true
-            ),
-            playState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = true,
-                visible = true
-            )
+    )
+    PlaybackState.Ready -> ControlDashboardUiState(
+        micState = ControlDashboardButtonUiState(
+            expanded = false,
+            enabled = !isPermissionDenied,
+            visible = true
+        ),
+        playState = ControlDashboardButtonUiState(
+            expanded = false,
+            enabled = true,
+            visible = true
         )
-        PlaybackState.Recording -> ControlDashboardUiState(
-            micState = ControlDashboardButtonUiState(
-                expanded = true,
-                enabled = true,
-                visible = true
-            ),
-            playState = ControlDashboardButtonUiState(
-                expanded = false,
-                enabled = false,
-                visible = false
-            )
+    )
+    PlaybackState.Recording -> ControlDashboardUiState(
+        micState = ControlDashboardButtonUiState(
+            expanded = true,
+            enabled = true,
+            visible = true
+        ),
+        playState = ControlDashboardButtonUiState(
+            expanded = false,
+            enabled = false,
+            visible = false
         )
-    }
+    )
+}
 
 private class PlaybackStatePreviewProvider : CollectionPreviewParameterProvider<PlaybackState>(
     listOf(

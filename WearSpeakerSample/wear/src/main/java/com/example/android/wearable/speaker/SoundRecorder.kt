@@ -35,7 +35,8 @@ class SoundRecorder(
     private var state = State.IDLE
 
     private enum class State {
-        IDLE, RECORDING
+        IDLE,
+        RECORDING
     }
 
     /**
@@ -52,18 +53,19 @@ class SoundRecorder(
 
         suspendCancellableCoroutine<Unit> { cont ->
             @Suppress("DEPRECATION")
-            val mediaRecorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.OGG)
-                setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
-                setOutputFile(audioFile.path)
-                setOnInfoListener { mr, what, extra ->
-                    println("info: $mr $what $extra")
+            val mediaRecorder =
+                MediaRecorder().apply {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.OGG)
+                    setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+                    setOutputFile(audioFile.path)
+                    setOnInfoListener { mr, what, extra ->
+                        println("info: $mr $what $extra")
+                    }
+                    setOnErrorListener { mr, what, extra ->
+                        println("error: $mr $what $extra")
+                    }
                 }
-                setOnErrorListener { mr, what, extra ->
-                    println("error: $mr $what $extra")
-                }
-            }
 
             cont.invokeOnCancellation {
                 mediaRecorder.stop()
