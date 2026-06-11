@@ -13,7 +13,7 @@ roborazzi = "1.59.0"
 ui-test-junit4 = "1.10.6"
 ui-test-manifest = "1.10.6"
 androidx-navigation3 = "1.1.0"
-kotlinx-serialization = "1.10.0"
+kotlinx-serialization = "1.11.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
