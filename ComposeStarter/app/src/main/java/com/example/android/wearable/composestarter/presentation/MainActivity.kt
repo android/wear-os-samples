@@ -18,8 +18,8 @@ package com.example.android.wearable.composestarter.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -42,8 +43,6 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ButtonGroup
-import androidx.wear.compose.material3.EdgeButton
-import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.FilledIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
@@ -93,6 +92,9 @@ data object MenuScreen : AppKey
 @Serializable
 data object ListNavScreen : AppKey
 
+@Serializable
+data object GestureNavScreen : AppKey
+
 @Composable
 fun WearApp() {
     val backStack = rememberNavBackStack(MenuScreen)
@@ -104,12 +106,16 @@ fun WearApp() {
                     entryProvider<NavKey> {
                         entry<MenuScreen> {
                             GreetingScreen(
-                                "Android",
-                                onShowList = { backStack.add(ListNavScreen) }
+                                greetingName = "Android",
+                                onShowList = { backStack.add(ListNavScreen) },
+                                onShowGestures = { backStack.add(GestureNavScreen) }
                             )
                         }
                         entry<ListNavScreen> {
                             ListScreen()
+                        }
+                        entry<GestureNavScreen> {
+                            GestureScreen()
                         }
                     }
                 }
@@ -129,26 +135,14 @@ fun WearApp() {
 fun GreetingScreen(
     greetingName: String,
     onShowList: () -> Unit,
+    onShowGestures: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
-    /* If you have enough items in your list, use [TransformingLazyColumn] which is an optimized
-     * version of LazyColumn for wear devices with some added features. For more information,
-     * see d.android.com/wear/compose.
-     */
     ScreenScaffold(
-        scrollState = scrollState,
-        edgeButton = {
-            EdgeButton(
-                onClick = onShowList,
-                buttonSize = EdgeButtonSize.ExtraSmall
-            ) {
-                Text(stringResource(R.string.show_list))
-            }
-            // The `ScreenScaffold` parameter `edgeButtonSpacing` can be used to specify the
-            // gap between edgeButton and content.
-        }
+        scrollState = scrollState
     ) { contentPadding ->
         TransformingLazyColumn(
             state = scrollState,
@@ -159,10 +153,46 @@ fun GreetingScreen(
                     greetingName = greetingName,
                     modifier =
                         modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .minimumVerticalContentPadding(
                                 ListHeaderDefaults.minimumTopListContentPadding
                             )
+                )
+            }
+            item {
+                Button(
+                    label = {
+                        Text(
+                            "List Demo",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    onClick = onShowList,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 10.dp)
+                            .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec)
+                )
+            }
+            item {
+                Button(
+                    label = {
+                        Text(
+                            "Gesture Demo",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    onClick = onShowGestures,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 10.dp)
+                            .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec)
                 )
             }
         }
@@ -340,7 +370,7 @@ fun SampleDialog(
 @WearPreviewFontScales
 @Composable
 fun GreetingScreenPreview() {
-    GreetingScreen("Preview Android", onShowList = {})
+    GreetingScreen("Preview Android", onShowList = {}, onShowGestures = {})
 }
 
 @WearPreviewDevices
