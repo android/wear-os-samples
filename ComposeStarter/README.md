@@ -97,6 +97,14 @@ automation.
    adb shell cmd IWearGestureService override-constraints reset
    ```
 
+1. **Force UI Hints (Reset Education Budget)**: The system automatically hides
+   gesture hints (radial ripples/dots) after a few views. To force them to show
+   again during testing, clear the hint history:
+
+   ```bash
+   adb shell cmd IWearGestureService hint clear com.example.android.wearable.composestarter
+   ```
+
 ## Support
 
 - Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
