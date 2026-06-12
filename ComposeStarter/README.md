@@ -99,11 +99,17 @@ automation.
 
 1. **Force UI Hints (Reset Education Budget)**: The system automatically hides
    gesture hints (radial ripples/dots) after a few views. To force them to show
-   again during testing, clear the hint history:
+   again during testing, reset the history:
 
-   ```bash
-   adb shell cmd IWearGestureService hint clear com.example.android.wearable.composestarter
-   ```
+   - **On Emulators** (Requires `adb root`):
+     ```bash
+     adb root
+     adb shell cmd IWearGestureService hint clear com.example.android.wearable.composestarter
+     ```
+   - **On Retail Watches** (Root-free fallback):
+     ```bash
+     adb shell pm clear com.example.android.wearable.composestarter
+     ```
 
 ## Support
 
