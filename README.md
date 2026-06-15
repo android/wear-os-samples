@@ -22,6 +22,8 @@ Samples
 
 * **[WearSpeakerSample](WearSpeakerSample)** (Compose/Kotlin) - Demonstrates audio recording and playback if the wearable device has a speaker. This is also demonstrate how to handling permissions. [Guide](https://developer.android.com/training/wearables/wearable-sounds)
 
-* **[WearTilesKotlin](WearTilesKotlin)** (Kotlin) - Demonstrates tiles using the new AndroidX library. [Guide](https://developer.android.com/training/articles/wear-tiles)
+* **[WearTilesKotlin](WearTilesKotlin)** (Kotlin) - Demonstrates tiles using the AndroidX library. [Guide](https://developer.android.com/training/articles/wear-tiles)
 
 * **[WatchFacePush](WatchFacePush)** (Kotlin) - Demonstrates the Watch Face Push AndroidX Library. [Guide](https://developer.android.com/training/wearables/watch-face-push)
+
+* **[WearWidget](WearWidget)** (Compose/Kotlin) - Demonstrates building Wear Widgets using Remote Compose. [Guide](https://developer.android.com/training/wearables/widgets)
