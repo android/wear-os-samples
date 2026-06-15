@@ -83,8 +83,8 @@ fun SpeakerApp() {
         val mainState = remember(activity) {
             MainState(
                 activity = activity,
-                requestPermission = {
-                    requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                requestPermission = { permission ->
+                    requestPermissionLauncher.launch(permission)
                 }
             )
         }
@@ -113,6 +113,18 @@ fun SpeakerApp() {
                     lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
                 }
             }
+
+            // Request Notification permission for Foreground Service on Android 13+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                val notificationPermissionLauncher = rememberLauncherForActivityResult(
+                    RequestPermission()
+                ) { /* Result not critical for recording itself */ }
+
+                androidx.compose.runtime.LaunchedEffect(Unit) {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+
             val entryProvider = remember {
                 entryProvider<NavKey> {
                     entry<SpeakerScreen> {

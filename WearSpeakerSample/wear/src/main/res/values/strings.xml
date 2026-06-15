@@ -26,4 +26,5 @@
     <string name="stop_recording">Stop Recording</string>
     <string name="stop_playing_recording">Stop Playing Recording</string>
     <string name="stop_playing_music">Stop Playing Music</string>
+    <string name="recording_in_progress">Recording in progress…</string>
 </resources>

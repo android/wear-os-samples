@@ -17,6 +17,7 @@ package com.example.android.wearable.speaker
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
@@ -41,7 +42,7 @@ import kotlinx.coroutines.launch
  */
 class MainState(
     private val activity: Activity,
-    private val requestPermission: () -> Unit
+    private val requestPermission: (String) -> Unit
 ) {
     /**
      * The [MutatorMutex] that guards the playback state of the app.
@@ -111,6 +112,7 @@ class MainState(
                             Manifest.permission.RECORD_AUDIO
                         ) == PackageManager.PERMISSION_GRANTED -> {
                             // We have the permission, we can start recording now
+                            startRecordingService()
                             playbackState = PlaybackState.Recording
                             record(
                                 soundRecorder = soundRecorder,
@@ -119,6 +121,7 @@ class MainState(
                                 }
                             )
                             playbackState = PlaybackState.Ready
+                            stopRecordingService()
                         }
                         activity.shouldShowRequestPermissionRationale(
                             Manifest.permission.RECORD_AUDIO
@@ -130,13 +133,14 @@ class MainState(
                         }
                         else -> {
                             // Request the permission
-                            requestPermission()
+                            requestPermission(Manifest.permission.RECORD_AUDIO)
                             playbackState = PlaybackState.Ready
                         }
                     }
                 // If we were already recording, transition back to ready
                 PlaybackState.Recording -> {
                     playbackState = PlaybackState.Ready
+                    stopRecordingService()
                 }
             }
         }
@@ -150,6 +154,7 @@ class MainState(
                 PackageManager.PERMISSION_GRANTED
             ) {
                 // The user granted the permission, continue on to start recording
+                startRecordingService()
                 playbackState = PlaybackState.Recording
                 record(
                     soundRecorder = soundRecorder,
@@ -158,12 +163,23 @@ class MainState(
                     }
                 )
                 playbackState = PlaybackState.Ready
+                stopRecordingService()
             } else {
                 // We have confirmation now that the user denied the permission
                 isPermissionDenied = true
                 playbackState = PlaybackState.Ready
             }
         }
+    }
+
+    private fun startRecordingService() {
+        val intent = Intent(activity, RecordingService::class.java)
+        ContextCompat.startForegroundService(activity, intent)
+    }
+
+    private fun stopRecordingService() {
+        val intent = Intent(activity, RecordingService::class.java)
+        activity.stopService(intent)
     }
 }
 
