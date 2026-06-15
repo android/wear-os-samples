@@ -35,7 +35,7 @@ android {
     defaultConfig {
         applicationId = "com.google.samples.marketplace"
         minSdk = 36
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 2
         versionName = "1.1"
     }
