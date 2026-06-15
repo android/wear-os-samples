@@ -30,12 +30,12 @@ plugins {
 // Watch Face Push requires API level 36 and above.
 android {
     namespace = "com.google.samples.marketplace"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.google.samples.marketplace"
         minSdk = 36
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 2
         versionName = "1.1"
     }

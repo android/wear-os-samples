@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     namespace = "com.example.android.wearable.datalayer"
 
@@ -31,7 +31,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 37
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

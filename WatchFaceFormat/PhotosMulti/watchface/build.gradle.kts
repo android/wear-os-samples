@@ -20,12 +20,12 @@ plugins {
 android {
     enableKotlin = false
     namespace = "com.example.photosmulti"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.photosmulti"
         minSdk = 36
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
     }

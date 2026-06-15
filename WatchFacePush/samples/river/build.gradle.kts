@@ -20,12 +20,12 @@ plugins {
 
 android {
     namespace = "com.google.samples.marketplace.watchfacepush.river"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.google.samples.marketplace.watchfacepush.river"
         minSdk = 33
-        targetSdk = 33
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
     }

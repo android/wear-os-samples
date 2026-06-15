@@ -19,13 +19,13 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 37
 
     namespace 'com.example.android.wearable.oauth.util'
 
     defaultConfig {
         minSdk 23
-        targetSdk 33
+        targetSdk 37
         versionCode 1
         versionName "1.0"
 

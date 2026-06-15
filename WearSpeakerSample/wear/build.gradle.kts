@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     namespace = "com.example.android.wearable.speaker"
 
@@ -30,7 +30,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 37
     }
 
     buildTypes {

@@ -20,14 +20,14 @@ plugins {
 android {
     enableKotlin = false
     namespace = "com.example.flavors"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.flavors"
         // Flavors requires version 2 of the watch face format, which is
         // supported from Wear OS 5 onwards.
         minSdk = 34
-        targetSdk = 34
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
     }

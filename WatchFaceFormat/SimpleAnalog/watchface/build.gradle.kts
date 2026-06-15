@@ -20,12 +20,12 @@ plugins {
 android {
     enableKotlin = false
     namespace = "com.example.simpleanalog"
-    compileSdk = 33
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.simpleanalog"
         minSdk = 33
-        targetSdk = 33
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
     }

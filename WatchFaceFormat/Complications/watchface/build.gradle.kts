@@ -20,12 +20,12 @@ plugins {
 android {
     enableKotlin = false
     namespace = "com.example.complications"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.complications"
         minSdk = 34
-        targetSdk = 34
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
     }
