@@ -2,8 +2,8 @@
 android-gradle-plugin = "9.1.0"
 androidx-activity = "1.13.0"
 androidx-compose-bom = "2026.03.01"
-androidx-wear-compose-material3 = "1.6.0"
-androidx-wear-compose = "1.6.0"
+androidx-wear-compose-material3 = "1.7.0-alpha04"
+androidx-wear-compose = "1.7.0-alpha04"
 compose-ui-tooling = "1.6.0"
 
 ktlint = "1.4.0"
@@ -20,6 +20,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "compose-ui-tooling" }
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-test-manifest" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }

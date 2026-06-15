@@ -1,59 +1,131 @@
-Compose for Wear OS Starter Sample
-==================================
-Demonstrates a simple "Hello, World" starter project for using Compose with Wear OS.
+# Compose for Wear OS Starter Sample
 
-Introduction
-------------
+Demonstrates a simple "Hello, World" starter project for using Compose with Wear
+OS.
+
+## Introduction
 
 Simple "Hello, World" app meant as a starting point for a new project using
 Compose for Wear OS.
 
-Displays a centered [Text] composable and a list built with [Compose for Wear OS Material 3][compose-wear-material-3].
+Displays a centered [Text] composable and a list built with
+[Compose for Wear OS Material 3][compose-wear-material-3].
 
 For more information on composable options in Compose for Wear OS, check out our
-[documentation][documentation].
+[documentation].
 
-Screenshots
------------
+## Screenshots
 
 <img src="app/src/test/screenshots/GreetingScreenTest_pixel_watch.png" height="384" alt="Round Screenshot"/>
 
+## Getting Started
 
-Getting Started
----------------
+This sample uses the Gradle build system. To build this project, use the
+"gradlew build" command or use "Import Project" in Android Studio.
 
-This sample uses the Gradle build system. To build this project,
-use the "gradlew build" command or use "Import Project" in Android Studio.
+## Designing for different display sizes
 
-Designing for different display sizes
--------------------------------------
+This sample demonstrates two techniques for helping you design for different
+display sizes:
 
-This sample demonstrates two techniques for helping you design for different display sizes:
+1. Compose [`WearPreviewDevices`][wear-preview-devices] and
+   [`WearPreviewFontScales`][wear-preview-font-scales] annotations: These
+   generate a set of previews in the preview pane within Android Studio, for a
+   range of different screen sizes and font display size settings, allowing you
+   to see how your design would look.
 
-1.  Compose [`WearPreviewDevices`][wear-preview-devices] and [`WearPreviewFontScales`][wear-preview-font-scales] annotations: These generate a set of previews in the preview pane within Android Studio, for a range of different screen sizes and font display size settings, allowing you to see how your design would look.
+1. Screenshot tests: This sample also demonstrates screenshot testing, for a set
+   of [defined devices][wear-device]. For more information on screenshot
+   testing, see this talk from [droidcon London][droidcon-talk], and see the
+   [Continuous Integration][ci-guide] for more details on how to build
+   screenshot testing into your automated workflows.
 
-2.  Screenshot tests: This sample also demonstrates screenshot testing, for a set of [defined devices][wear-device]. For more information on screenshot testing, see this talk from [droidcon London][droidcon-talk], and see the [Continuous Integration][ci-guide] for more details on how to build screenshot
-    testing into your automated workflows.
+   - To generate new images for the tests, run `./gradlew recordRoborazziDebug`
+   - To test against existing reference images, run
+     `./gradlew verifyRoborazziDebug`
 
-    - To generate new images for the tests, run `./gradlew recordRoborazziDebug`
-    - To test against existing reference images, run `./gradlew verifyRoborazziDebug`
-  
-Together, this allows you to check for any unexpected visual changes to your UI, across a range of device sizes.
+Together, this allows you to check for any unexpected visual changes to your UI,
+across a range of device sizes.
 
-Support
--------
+## One-Handed Gestures Demo (Wear OS 7+)
+
+This sample includes a **Gesture Demo** screen that showcases support for Wear
+OS 7 one-handed gestures (Double Pinch and Wrist Turn).
+
+It demonstrates:
+
+- A **Gesture-Clickable Button**: A Play/Pause media button that intercepts the
+  **Double Pinch** (Primary Action) gesture using `Modifier.oneHandedGesture`
+  and displays the official `OneHandedGestureIndicator`.
+- A **Gesture-Scrollable List**: A `TransformingLazyColumn` that scrolls
+  item-by-item using `OneHandedGestureDefaults.scrollToNextItem` when the button
+  is not visible, coordinating click and scroll priorities.
+
+### Triggering Gestures via ADB
+
+You can simulate these gestures programmatically using ADB for testing and
+automation.
+
+1. **Enable Settings**:
+
+   - On the watch, ensure Hand Gestures are ON (**Settings** -> **Gestures** ->
+     **Hand gestures**).
+   - **CRITICAL**: Enable **External device control** (**Settings** ->
+     **Gestures** -> **Hand gestures** -> **External Control**).
+
+1. **Bypass Off-Body Constraint** (if the watch is on a desk or charging dock):
+
+   ```bash
+   adb shell cmd IWearGestureService override-constraints offbody-state
+   ```
+
+1. **Simulate Double Pinch (Primary Action)**:
+
+   ```bash
+   adb shell cmd IWearGestureService gesture 1
+   ```
+
+1. **Simulate Wrist Turn (Dismiss Action)**:
+
+   ```bash
+   adb shell cmd IWearGestureService gesture 2
+   ```
+
+1. **Reset Constraints** when finished:
+
+   ```bash
+   adb shell cmd IWearGestureService override-constraints reset
+   ```
+
+1. **Force UI Hints (Reset Education Budget)**: The system automatically hides
+   gesture hints (radial ripples/dots) after a few views. To force them to show
+   again during testing, reset the history:
+
+   - **On Emulators** (Requires `adb root`):
+     ```bash
+     adb root
+     adb shell cmd IWearGestureService hint clear com.example.android.wearable.composestarter
+     ```
+   - **On Retail Watches** (Root-free fallback):
+     ```bash
+     adb shell pm clear com.example.android.wearable.composestarter
+     ```
+
+## Support
 
 - Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
 
-If you've found an error in this sample, please [create an issue](https://github.com/android/wear-os-samples/issues/new).
+If you've found an error in this sample, please
+[create an issue](https://github.com/android/wear-os-samples/issues/new).
 
 Patches are encouraged, and may be submitted by forking this project and
-submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
+submitting a pull request through GitHub. Please see CONTRIBUTING.md for more
+details.
 
-[documentation]: https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary.html
+[ci-guide]: https://developer.android.com/training/testing/continuous-integration
 [compose-wear-material-3]: https://developer.android.com/jetpack/androidx/releases/wear-compose
+[documentation]: https://developer.android.com/reference/kotlin/androidx/wear/compose/material/package-summary.html
 [droidcon-talk]: https://www.droidcon.com/2023/11/15/easy-screenshot-testing-with-compose/
 [wear-device]: https://github.com/android/wear-os-samples/blob/main/ComposeStarter/app/src/test/java/presentation/WearDevice.kt
-[wear-preview-font-scales]: https://developer.android.com/reference/kotlin/androidx/wear/compose/ui/tooling/preview/WearPreviewFontScales
 [wear-preview-devices]: https://developer.android.com/reference/kotlin/androidx/wear/compose/ui/tooling/preview/WearPreviewDevices
-[ci-guide]: https://developer.android.com/training/testing/continuous-integration
+[wear-preview-font-scales]: https://developer.android.com/reference/kotlin/androidx/wear/compose/ui/tooling/preview/WearPreviewFontScales
