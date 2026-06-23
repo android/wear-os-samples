@@ -1,11 +1,11 @@
 [versions]
-agp = "9.1.1"
-wear-compose-material3 = "1.6.1"
-wear-compose = "1.6.1"
-compose-tooling = "1.6.1"
+agp = "9.2.1"
+wear-compose-material3 = "1.6.2"
+wear-compose = "1.6.2"
+compose-tooling = "1.6.2"
 kotlin = "2.3.21"
-lifecycleViewmodelKtx = "2.10.0"
-composeBom = "2026.04.01"
+lifecycleViewmodelKtx = "2.11.0"
+composeBom = "2026.06.00"
 activityCompose = "1.13.0"
 coreSplashscreen = "1.2.0"
 watchfacePush = "1.0.0"
@@ -30,4 +30,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-com-diffplug-spotless = "com.diffplug.spotless:8.4.0"
+com-diffplug-spotless = "com.diffplug.spotless:8.7.0"
