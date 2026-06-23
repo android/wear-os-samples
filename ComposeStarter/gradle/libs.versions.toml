@@ -1,18 +1,18 @@
 [versions]
-android-gradle-plugin = "9.1.0"
+android-gradle-plugin = "9.2.1"
 androidx-activity = "1.13.0"
-androidx-compose-bom = "2026.03.01"
-androidx-wear-compose-material3 = "1.6.0"
-androidx-wear-compose = "1.6.0"
-compose-ui-tooling = "1.6.0"
+androidx-compose-bom = "2026.06.00"
+androidx-wear-compose-material3 = "1.6.2"
+androidx-wear-compose = "1.6.2"
+compose-ui-tooling = "1.6.2"
 
 ktlint = "1.4.0"
 org-jetbrains-kotlin = "2.3.20"
 robolectric = "4.16.1"
-roborazzi = "1.59.0"
-ui-test-junit4 = "1.10.6"
-ui-test-manifest = "1.10.6"
-androidx-navigation3 = "1.1.0"
+roborazzi = "1.64.0"
+ui-test-junit4 = "1.11.3"
+ui-test-manifest = "1.11.3"
+androidx-navigation3 = "1.1.3"
 kotlinx-serialization = "1.11.0"
 
 [libraries]
@@ -44,7 +44,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-com-diffplug-spotless = "com.diffplug.spotless:8.4.0"
+com-diffplug-spotless = "com.diffplug.spotless:8.7.0"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
