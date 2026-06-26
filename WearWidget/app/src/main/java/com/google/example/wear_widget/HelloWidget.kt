@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.glance.wear.GlanceWearWidget
+import androidx.glance.wear.tooling.preview.WearWidgetPreview
+import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
 import androidx.glance.wear.GlanceWearWidgetService
 import androidx.glance.wear.WearWidgetBrush
 import androidx.glance.wear.WearWidgetData
@@ -81,5 +83,5 @@ fun HelloWidgetContent() {
 @Preview
 @Composable
 fun HelloWidgetPreview(
-    @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
-) = WearWidgetPreviewSnapshot(HelloWidget(), params)
+    @PreviewParameter(SquircleSmallWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(HelloWidget(), params)

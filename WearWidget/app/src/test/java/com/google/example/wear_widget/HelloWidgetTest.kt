@@ -16,6 +16,7 @@
 package com.google.example.wear_widget
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import kotlin.OptIn
@@ -37,7 +38,7 @@ class HelloWidgetTest {
     @Test
     fun testHelloWidgetPreview() {
         composeRule.setContent {
-            HelloWidgetPreview(params = WearWidgetParamsProviderSnapshot().values.first())
+            HelloWidgetPreview(params = SquircleSmallWidgetPreviewParams().values.first())
         }
         captureScreenRoboImage("src/test/screenshots/HelloWidgetPreview.png")
     }
