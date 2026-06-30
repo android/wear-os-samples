@@ -16,7 +16,7 @@
 package com.google.example.wear_widget
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
-import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import kotlin.OptIn
@@ -46,7 +46,7 @@ class ImageWidgetTest {
         org.junit.Assert.assertNotNull("Bitmap should not be null!", bitmap)
 
         composeRule.setContent {
-            ImageWidgetPreview(params = SquircleSmallWidgetPreviewParams().values.first())
+            ImageWidgetPreview(params = SquircleAllWidgetPreviewParams().values.first())
         }
         captureScreenRoboImage("src/test/screenshots/ImageWidgetPreview.png")
     }
