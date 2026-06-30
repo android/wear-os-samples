@@ -63,6 +63,31 @@
                 android:resource="@drawable/hello_widget_fullscreen" />
         </service>
 
+        <!-- 
+            Exposed as a Tile Provider to support compatibility mode on devices 
+            where native widgets are not supported.
+        -->
+        <service
+            android:name=".ImageWidgetService"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/image_widget_label"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+
+            <intent-filter>
+                <action android:name="androidx.glance.wear.action.BIND_WIDGET_PROVIDER" />
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="androidx.glance.wear.widget.provider"
+                android:resource="@xml/image_widget_info" />
+
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/image_widget_fullscreen" />
+        </service>
+
         <activity
             android:name=".WeatherActivity"
             android:exported="true"
