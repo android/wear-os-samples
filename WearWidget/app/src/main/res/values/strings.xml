@@ -29,4 +29,7 @@
     <string name="weather_condition_rainy">Rainy</string>
     <string name="weather_condition_snowy">Snowy</string>
     <string name="hello_world">Hello, World!</string>
+    <string name="image_widget_label">Image Widget</string>
+    <string name="image_widget_description">Wear Widget with background image</string>
+    <string name="hello_wear">Hello Wear!</string>
 </resources>
