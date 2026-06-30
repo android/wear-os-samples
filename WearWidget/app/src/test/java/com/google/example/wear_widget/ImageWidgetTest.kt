@@ -15,7 +15,7 @@
  */
 package com.google.example.wear_widget
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
