@@ -39,7 +39,7 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
-import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
@@ -83,5 +83,5 @@ fun HelloWidgetContent() {
 @Preview
 @Composable
 fun HelloWidgetPreview(
-    @PreviewParameter(SquircleSmallWidgetPreviewParams::class) params: WearWidgetParams
+    @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(HelloWidget(), params)
