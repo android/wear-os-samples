@@ -44,6 +44,8 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.WearWidgetPreview
 
 private val ColorSunny = Color(0xFF2196F3)
 private val ColorCloudy = Color(0xFF9E9E9E)
@@ -127,10 +129,5 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
 @Preview
 @Composable
 fun WeatherWidgetPreview(
-    @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
-) =
-    WearWidgetPreviewSnapshot(
-        MockWeatherWidget(75, WeatherCondition.SUNNY),
-        params,
-        title = "Weather Widget",
-    )
+    @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)

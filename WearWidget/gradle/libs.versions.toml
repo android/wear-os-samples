@@ -4,12 +4,12 @@ desugar_jdk_libs = "2.1.5"
 playServicesWearable = "20.0.1"
 kotlin = "2.3.21"
 composeBom = "2026.05.00"
-remoteMaterialAlpha = "1.0.0-alpha03"
-remoteComposeAlpha = "1.0.0-alpha010"
+remoteMaterialAlpha = "1.0.0-alpha06"
+remoteComposeAlpha = "1.0.0-alpha13"
 runtime = "1.11.1"
 uiTooling = "1.11.1"
-wear = "1.0.0-alpha09"
-wearCore = "1.0.0-alpha09"
+wear = "1.0.0-alpha12"
+wearCore = "1.0.0-alpha12"
 wearToolingPreview = "1.0.0"
 composeMaterial = "1.6.1"
 activityCompose = "1.13.0"
@@ -36,7 +36,7 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiTooling" }
 wear = { module = "androidx.glance.wear:wear", version.ref = "wear" }
 wear-core = { module = "androidx.glance.wear:wear-core", version.ref = "wearCore" }
-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "wearToolingPreview" }
+wear-tooling-preview = { module = "androidx.glance.wear:wear-tooling-preview", version.ref = "wear" }
 wear-compose-ui-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "composeMaterial" }
 remote-tooling-preview = { module = "androidx.compose.remote:remote-tooling-preview", version.ref = "remoteComposeAlpha" }
 remote-material3 = { module = "androidx.wear.compose.remote:remote-material3", version.ref = "remoteMaterialAlpha" }
