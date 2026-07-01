@@ -49,6 +49,8 @@ import androidx.glance.wear.image
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ImageWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = ImageWidget()
@@ -63,8 +65,9 @@ class ImageWidget : GlanceWearWidget() {
 
         // Load the background image from resources
         val bitmap =
-            BitmapFactory.decodeResource(context.resources, R.drawable.widget_background)
-                ?.asImageBitmap() ?: ImageBitmap(1, 1)
+            withContext(Dispatchers.IO) {
+                BitmapFactory.decodeResource(context.resources, R.drawable.widget_background)
+            }?.asImageBitmap() ?: ImageBitmap(1, 1)
 
         // Create a full-bleed background image brush using ContentScale.Crop
         val brush = WearWidgetBrush.image(bitmap.rb, ContentScale.Crop)
