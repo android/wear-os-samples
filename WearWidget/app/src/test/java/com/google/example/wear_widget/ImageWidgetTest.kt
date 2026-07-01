@@ -29,6 +29,9 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [33], qualifiers = "w227dp-h227dp-small-notlong-round-watch-xhdpi-keyshidden-nonav")
@@ -39,7 +42,7 @@ class ImageWidgetTest(private val params: WearWidgetParams) {
     @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun testImageWidgetPreview() {
-        val context = org.robolectric.RuntimeEnvironment.getApplication()
+        val context = ApplicationProvider.getApplicationContext<Context>()
         val bitmap =
             android.graphics.BitmapFactory.decodeResource(
                 context.resources,
