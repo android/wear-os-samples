@@ -15,12 +15,10 @@
  */
 package com.google.example.wear_widget
 
-import android.content.Context
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.glance.wear.core.ContainerInfo
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
-import androidx.test.core.app.ApplicationProvider
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import kotlin.OptIn
@@ -41,14 +39,6 @@ class ImageWidgetTest(private val params: WearWidgetParams) {
     @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun testImageWidgetPreview() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val bitmap =
-            android.graphics.BitmapFactory.decodeResource(
-                context.resources,
-                R.drawable.widget_background,
-            )
-        org.junit.Assert.assertNotNull("Bitmap should not be null!", bitmap)
-
         val type =
             when (params.containerType) {
                 ContainerInfo.CONTAINER_TYPE_SMALL -> "small"

@@ -15,7 +15,7 @@
  */
 package com.google.example.wear_widget
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.glance.wear.core.ContainerInfo
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
