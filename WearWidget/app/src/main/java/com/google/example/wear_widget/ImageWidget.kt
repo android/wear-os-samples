@@ -66,8 +66,9 @@ class ImageWidget : GlanceWearWidget() {
         // Load the background image from resources
         val bitmap =
             withContext(Dispatchers.IO) {
-                BitmapFactory.decodeResource(context.resources, R.drawable.widget_background)
-            }?.asImageBitmap() ?: ImageBitmap(1, 1)
+                    BitmapFactory.decodeResource(context.resources, R.drawable.widget_background)
+                }
+                ?.asImageBitmap() ?: ImageBitmap(1, 1)
 
         // Create a full-bleed background image brush using ContentScale.Crop
         val brush = WearWidgetBrush.image(bitmap.rb, ContentScale.Crop)

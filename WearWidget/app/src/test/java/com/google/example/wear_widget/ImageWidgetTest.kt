@@ -15,10 +15,12 @@
  */
 package com.google.example.wear_widget
 
+import android.content.Context
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.glance.wear.core.ContainerInfo
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
+import androidx.test.core.app.ApplicationProvider
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import kotlin.OptIn
@@ -28,9 +30,6 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
-
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -50,16 +49,15 @@ class ImageWidgetTest(private val params: WearWidgetParams) {
             )
         org.junit.Assert.assertNotNull("Bitmap should not be null!", bitmap)
 
-        val type = when (params.containerType) {
-            ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
-            ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
-            else -> "unknown"
-        }
+        val type =
+            when (params.containerType) {
+                ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
+                ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
+                else -> "unknown"
+            }
         val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
 
-        composeRule.setContent {
-            ImageWidgetPreview(params = params)
-        }
+        composeRule.setContent { ImageWidgetPreview(params = params) }
         captureScreenRoboImage("src/test/screenshots/ImageWidgetPreview_${type}_$sizeLabel.png")
     }
 
@@ -71,4 +69,3 @@ class ImageWidgetTest(private val params: WearWidgetParams) {
         }
     }
 }
-
