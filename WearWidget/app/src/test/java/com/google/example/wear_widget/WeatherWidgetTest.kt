@@ -39,16 +39,15 @@ class WeatherWidgetTest(private val params: WearWidgetParams) {
     @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun testWeatherWidgetPreview() {
-        val type = when (params.containerType) {
-            ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
-            ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
-            else -> "unknown"
-        }
+        val type =
+            when (params.containerType) {
+                ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
+                ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
+                else -> "unknown"
+            }
         val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
 
-        composeRule.setContent {
-            WeatherWidgetPreview(params = params)
-        }
+        composeRule.setContent { WeatherWidgetPreview(params = params) }
         captureScreenRoboImage("src/test/screenshots/WeatherWidgetPreview_${type}_$sizeLabel.png")
     }
 
@@ -60,4 +59,3 @@ class WeatherWidgetTest(private val params: WearWidgetParams) {
         }
     }
 }
-

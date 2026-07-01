@@ -39,16 +39,15 @@ class HelloWidgetTest(private val params: WearWidgetParams) {
     @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun testHelloWidgetPreview() {
-        val type = when (params.containerType) {
-            ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
-            ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
-            else -> "unknown"
-        }
+        val type =
+            when (params.containerType) {
+                ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
+                ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
+                else -> "unknown"
+            }
         val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
 
-        composeRule.setContent {
-            HelloWidgetPreview(params = params)
-        }
+        composeRule.setContent { HelloWidgetPreview(params = params) }
         captureScreenRoboImage("src/test/screenshots/HelloWidgetPreview_${type}_$sizeLabel.png")
     }
 
@@ -60,4 +59,3 @@ class HelloWidgetTest(private val params: WearWidgetParams) {
         }
     }
 }
-
