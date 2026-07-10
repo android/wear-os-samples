@@ -15,7 +15,6 @@
  */
 package com.google.example.wear_widget
 
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
