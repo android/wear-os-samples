@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.glance.wear.AssociateWithGlanceWearWidget
 import androidx.glance.wear.GlanceWearWidget
 import androidx.glance.wear.GlanceWearWidgetService
 import androidx.glance.wear.WearWidgetBrush
@@ -48,6 +49,7 @@ private val ColorCloudy = Color(0xFF9E9E9E)
 private val ColorRainy = Color(0xFF673AB7)
 private val ColorSnowy = Color(0xFFE3F2FD)
 
+@AssociateWithGlanceWearWidget(WeatherWidget::class)
 class WeatherWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = WeatherWidget()
 }

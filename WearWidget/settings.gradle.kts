@@ -23,6 +23,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+        maven(url = "https://androidx.dev/snapshots/builds/15818446/artifacts/repository")
     }
 }
 
