@@ -37,8 +37,6 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
         private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 
-    // Suppressed because triggerUpdate is restricted to LIBRARY_GROUP.
-    @SuppressLint("RestrictedApi")
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION_UPDATE_WEATHER) {
             val temp = intent.getIntExtra(EXTRA_TEMP, 72)

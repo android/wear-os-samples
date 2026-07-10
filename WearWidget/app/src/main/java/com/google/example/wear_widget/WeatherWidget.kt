@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:SuppressLint("RestrictedApi")
-
 package com.google.example.wear_widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteColumn
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
-import androidx.compose.remote.creation.compose.layout.RemoteText
+import androidx.wear.compose.remote.material3.RemoteText
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
-import androidx.compose.remote.creation.compose.modifier.background
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.padding
 import androidx.compose.remote.creation.compose.state.RemoteColor
@@ -44,14 +40,14 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.glance.wear.tooling.preview.WearWidgetPreview
+import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 
 private val ColorSunny = Color(0xFF2196F3)
 private val ColorCloudy = Color(0xFF9E9E9E)
 private val ColorRainy = Color(0xFF673AB7)
 private val ColorSnowy = Color(0xFFE3F2FD)
 
-// Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
-// LIBRARY_GROUP.
 class WeatherWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = WeatherWidget()
 }
@@ -127,10 +123,9 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
 @Preview
 @Composable
 fun WeatherWidgetPreview(
-    @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
+    @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) =
-    WearWidgetPreviewSnapshot(
+    WearWidgetPreview(
         MockWeatherWidget(75, WeatherCondition.SUNNY),
         params,
-        title = "Weather Widget",
     )

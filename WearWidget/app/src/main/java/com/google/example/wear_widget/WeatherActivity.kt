@@ -41,8 +41,6 @@ import androidx.wear.compose.material3.Text
 import kotlinx.coroutines.launch
 
 class WeatherActivity : ComponentActivity() {
-    // Suppressed because triggerUpdate is restricted to LIBRARY_GROUP.
-    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

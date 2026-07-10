@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.wear.compose.ui.tooling)
     implementation(libs.wear.tooling.preview)
+    implementation(libs.glance.wear.tooling.preview)
     implementation(libs.remote.tooling.preview)
 
     implementation(libs.remote.creation.core)

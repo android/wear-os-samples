@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:SuppressLint("RestrictedApi")
-
 package com.google.example.wear_widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
-import androidx.compose.remote.creation.compose.layout.RemoteText
+import androidx.wear.compose.remote.material3.RemoteText
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.state.rs
@@ -39,11 +36,11 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.glance.wear.tooling.preview.WearWidgetPreview
+import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
 
-// Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
-// LIBRARY_GROUP.
 class HelloWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = HelloWidget()
 }
@@ -81,5 +78,5 @@ fun HelloWidgetContent() {
 @Preview
 @Composable
 fun HelloWidgetPreview(
-    @PreviewParameter(WearWidgetParamsProviderSnapshot::class) params: WearWidgetParams
-) = WearWidgetPreviewSnapshot(HelloWidget(), params)
+    @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(HelloWidget(), params)

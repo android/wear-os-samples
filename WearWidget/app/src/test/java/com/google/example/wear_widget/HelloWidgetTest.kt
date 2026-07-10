@@ -25,6 +25,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -37,7 +38,7 @@ class HelloWidgetTest {
     @Test
     fun testHelloWidgetPreview() {
         composeRule.setContent {
-            HelloWidgetPreview(params = WearWidgetParamsProviderSnapshot().values.first())
+            HelloWidgetPreview(params = SquircleAllWidgetPreviewParams().values.first())
         }
         captureScreenRoboImage("src/test/screenshots/HelloWidgetPreview.png")
     }
