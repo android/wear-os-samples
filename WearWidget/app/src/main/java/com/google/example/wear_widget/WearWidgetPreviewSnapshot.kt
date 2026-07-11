@@ -27,7 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.remote.tooling.preview.RemoteDocPreview
+import androidx.compose.remote.tooling.preview.RemoteDocumentPreview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -75,7 +75,7 @@ fun WearWidgetPreviewSnapshot(
         modifier = Modifier.size(227.dp).clip(CircleShape).background(Color.Black),
         contentAlignment = Alignment.Center,
     ) {
-        RemoteDocPreview(
+        RemoteDocumentPreview(
             document,
             modifier =
                 modifier
