@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.glance.wear.AssociateWithGlanceWearWidget
 import androidx.glance.wear.GlanceWearWidget
 import androidx.glance.wear.GlanceWearWidgetService
 import androidx.glance.wear.WearWidgetBrush
@@ -52,6 +53,7 @@ import androidx.wear.compose.remote.material3.RemoteMaterialTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+@AssociateWithGlanceWearWidget(ImageWidget::class)
 class ImageWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = ImageWidget()
 }

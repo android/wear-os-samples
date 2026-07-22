@@ -37,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.glance.wear.AssociateWithGlanceWearWidget
 import androidx.glance.wear.GlanceWearWidget
 import androidx.glance.wear.GlanceWearWidgetService
 import androidx.glance.wear.WearWidgetBrush
@@ -54,6 +55,7 @@ private val ColorSnowy = Color(0xFFE3F2FD)
 
 // Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
 // LIBRARY_GROUP.
+@AssociateWithGlanceWearWidget(WeatherWidget::class)
 class WeatherWidgetService : GlanceWearWidgetService() {
     override val widget: GlanceWearWidget = WeatherWidget()
 }
