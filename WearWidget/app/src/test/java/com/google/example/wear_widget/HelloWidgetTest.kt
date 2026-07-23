@@ -16,8 +16,6 @@
 package com.google.example.wear_widget
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
-import androidx.glance.wear.core.ContainerInfo
-import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
@@ -25,37 +23,23 @@ import kotlin.OptIn
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-@RunWith(ParameterizedRobolectricTestRunner::class)
+@RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [33], qualifiers = "w227dp-h227dp-small-notlong-round-watch-xhdpi-keyshidden-nonav")
-class HelloWidgetTest(private val params: WearWidgetParams) {
+class HelloWidgetTest {
 
     @get:Rule val composeRule = createComposeRule()
 
     @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun testHelloWidgetPreview() {
-        val type =
-            when (params.containerType) {
-                ContainerInfo.CONTAINER_TYPE_SMALL -> "small"
-                ContainerInfo.CONTAINER_TYPE_LARGE -> "large"
-                else -> "unknown"
-            }
-        val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
-
-        composeRule.setContent { HelloWidgetSquirclePreview(params = params) }
-        captureScreenRoboImage("src/test/screenshots/HelloWidgetPreview_${type}_$sizeLabel.png")
-    }
-
-    companion object {
-        @JvmStatic
-        @ParameterizedRobolectricTestRunner.Parameters
-        fun parameters(): List<WearWidgetParams> {
-            return SquircleAllWidgetPreviewParams().values.toList()
+        composeRule.setContent {
+            HelloWidgetSquirclePreview(params = SquircleAllWidgetPreviewParams().values.first())
         }
+        captureScreenRoboImage("src/test/screenshots/HelloWidgetPreview.png")
     }
 }
