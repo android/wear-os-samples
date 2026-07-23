@@ -47,7 +47,7 @@ class WeatherWidgetTest(private val params: WearWidgetParams) {
             }
         val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
 
-        composeRule.setContent { WeatherWidgetPreview(params = params) }
+        composeRule.setContent { WeatherWidgetSquirclePreview(params = params) }
         captureScreenRoboImage("src/test/screenshots/WeatherWidgetPreview_${type}_$sizeLabel.png")
     }
 

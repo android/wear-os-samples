@@ -47,7 +47,7 @@ class HelloWidgetTest(private val params: WearWidgetParams) {
             }
         val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
 
-        composeRule.setContent { HelloWidgetPreview(params = params) }
+        composeRule.setContent { HelloWidgetSquirclePreview(params = params) }
         captureScreenRoboImage("src/test/screenshots/HelloWidgetPreview_${type}_$sizeLabel.png")
     }
 

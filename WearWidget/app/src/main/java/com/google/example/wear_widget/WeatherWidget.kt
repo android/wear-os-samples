@@ -45,6 +45,7 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 
@@ -130,6 +131,12 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
 
 @Preview
 @Composable
-fun WeatherWidgetPreview(
+fun WeatherWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
+
+@Preview
+@Composable
+fun WeatherWidgetRectangularPreview(
+    @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
