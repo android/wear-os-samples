@@ -47,7 +47,7 @@ class ImageWidgetTest(private val params: WearWidgetParams) {
             }
         val sizeLabel = "${params.widthDp.toInt()}x${params.heightDp.toInt()}"
 
-        composeRule.setContent { ImageWidgetPreview(params = params) }
+        composeRule.setContent { ImageWidgetSquirclePreview(params = params) }
         captureScreenRoboImage("src/test/screenshots/ImageWidgetPreview_${type}_$sizeLabel.png")
     }
 

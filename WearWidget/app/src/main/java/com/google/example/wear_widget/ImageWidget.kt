@@ -47,6 +47,7 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.image
+import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
@@ -98,6 +99,12 @@ fun ImageWidgetContent() {
 
 @Preview
 @Composable
-fun ImageWidgetPreview(
+fun ImageWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(ImageWidget(), params)
+
+@Preview
+@Composable
+fun ImageWidgetRectangularPreview(
+    @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(ImageWidget(), params)
