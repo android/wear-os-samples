@@ -63,6 +63,7 @@
                 android:resource="@drawable/hello_widget_fullscreen" />
         </service>
 
+
         <activity
             android:name=".WeatherActivity"
             android:exported="true"
