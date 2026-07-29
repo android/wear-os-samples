@@ -72,6 +72,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("androidx.wear.compose:compose-material3:1.7.0-SNAPSHOT")
+    }
+}
+
 dependencies {
 
     val composeBom = platform(libs.androidx.compose.bom)

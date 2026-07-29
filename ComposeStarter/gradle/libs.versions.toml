@@ -2,8 +2,8 @@
 android-gradle-plugin = "9.1.0"
 androidx-activity = "1.13.0"
 androidx-compose-bom = "2026.03.01"
-androidx-wear-compose-material3 = "1.7.0-alpha04"
-androidx-wear-compose = "1.7.0-alpha04"
+androidx-wear-compose-material3 = "1.7.0-SNAPSHOT"
+androidx-wear-compose = "1.7.0-alpha07"
 compose-ui-tooling = "1.6.0"
 
 ktlint = "1.4.0"

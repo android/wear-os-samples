@@ -43,12 +43,15 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.onehandedgesture.GestureAction
-import androidx.wear.compose.material3.onehandedgesture.GesturePriority
+import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureAction
+import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureClickIndicator
+import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureClickIndicatorState
 import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureDefaults
-import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureIndicator
+import androidx.wear.compose.material3.onehandedgesture.OneHandedGesturePriority
 import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureScrollIndicator
+import androidx.wear.compose.material3.onehandedgesture.OneHandedGestureScrollIndicatorState
 import androidx.wear.compose.material3.onehandedgesture.oneHandedGesture
+import androidx.wear.compose.material3.onehandedgesture.rememberOneHandedGestureConfiguration
 
 @Composable
 fun GestureScreen(modifier: Modifier = Modifier) {
@@ -58,12 +61,25 @@ fun GestureScreen(modifier: Modifier = Modifier) {
     val scrollState = rememberTransformingLazyColumnState()
     val scrollInteractionSource = remember { MutableInteractionSource() }
 
+    val scrollGestureConfig = rememberOneHandedGestureConfiguration(
+        action = OneHandedGestureAction.Primary,
+        priority = OneHandedGesturePriority.Scrollable
+    )
+    val scrollIndicatorState = remember { OneHandedGestureScrollIndicatorState() }
+
+    val buttonGestureConfig = rememberOneHandedGestureConfiguration(
+        action = OneHandedGestureAction.Primary,
+        priority = OneHandedGesturePriority.Clickable
+    )
+    val buttonIndicatorState = remember { OneHandedGestureClickIndicatorState() }
+
     ScreenScaffold(
         scrollState = scrollState,
         scrollIndicator = {
             OneHandedGestureScrollIndicator(
-                interactionSource = scrollInteractionSource,
-                state = scrollState,
+                gestureConfiguration = scrollGestureConfig,
+                indicatorState = scrollIndicatorState,
+                scrollState = scrollState,
                 modifier = Modifier.align(Alignment.CenterEnd)
             )
         }
@@ -75,10 +91,10 @@ fun GestureScreen(modifier: Modifier = Modifier) {
                 Modifier
                     .fillMaxSize()
                     .oneHandedGesture(
-                        action = GestureAction.Primary,
-                        priority = GesturePriority.Scrollable,
+                        gestureConfiguration = scrollGestureConfig,
+                        onGestureLabel = "Scroll to next item",
                         interactionSource = scrollInteractionSource,
-                        onGesture = { OneHandedGestureDefaults.scrollToNextItem(scrollState) }
+                        onGesture = { OneHandedGestureDefaults.scrollDownToNextItem(scrollState) }
                     )
         ) {
             item {
@@ -102,8 +118,8 @@ fun GestureScreen(modifier: Modifier = Modifier) {
                             .onVisibilityChanged { buttonVisible = it } then
                             if (buttonVisible) {
                                 Modifier.oneHandedGesture(
-                                    action = GestureAction.Primary,
-                                    priority = GesturePriority.Clickable,
+                                    gestureConfiguration = buttonGestureConfig,
+                                    onGestureLabel = if (isPlaying) "Pause" else "Play",
                                     interactionSource = buttonInteractionSource,
                                     onGesture = onClick
                                 )
@@ -111,7 +127,10 @@ fun GestureScreen(modifier: Modifier = Modifier) {
                                 Modifier
                             }
                 ) {
-                    OneHandedGestureIndicator(interactionSource = buttonInteractionSource) {
+                    OneHandedGestureClickIndicator(
+                        gestureConfiguration = buttonGestureConfig,
+                        state = buttonIndicatorState
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
