@@ -46,6 +46,7 @@ import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 
@@ -129,13 +130,19 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
     }
 }
 
-@Preview
+@Preview(name = "Squircle Suite (Pixel Watch)", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
 
-@Preview
+@Preview(name = "Round Suite (Galaxy Watch)", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Composable
+fun WeatherWidgetRoundPreview(
+    @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
+
+@Preview(name = "Play Store Catalog Asset", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetRectangularPreview(
     @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams

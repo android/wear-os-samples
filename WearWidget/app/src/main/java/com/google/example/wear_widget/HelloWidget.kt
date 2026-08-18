@@ -41,6 +41,7 @@ import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 import androidx.wear.compose.remote.material3.RemoteColorScheme
@@ -83,13 +84,19 @@ fun HelloWidgetContent() {
     }
 }
 
-@Preview
+@Preview(name = "Squircle Suite (Pixel Watch)", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun HelloWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(HelloWidget(), params)
 
-@Preview
+@Preview(name = "Round Suite (Galaxy Watch)", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Composable
+fun HelloWidgetRoundPreview(
+    @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(HelloWidget(), params)
+
+@Preview(name = "Play Store Catalog Asset", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun HelloWidgetRectangularPreview(
     @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
