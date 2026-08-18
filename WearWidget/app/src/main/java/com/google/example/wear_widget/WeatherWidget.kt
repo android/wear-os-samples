@@ -130,19 +130,19 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
     }
 }
 
-@Preview(name = "Squircle Suite (Pixel Watch)", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Preview(name = "Squircle Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
 
-@Preview(name = "Round Suite (Galaxy Watch)", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Preview(name = "Round Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetRoundPreview(
     @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
 
-@Preview(name = "Play Store Catalog Asset", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Preview(name = "Play Store Asset", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetRectangularPreview(
     @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
