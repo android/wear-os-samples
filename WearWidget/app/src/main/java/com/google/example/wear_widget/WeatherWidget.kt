@@ -46,6 +46,7 @@ import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 
@@ -129,13 +130,23 @@ class MockWeatherWidget(private val temp: Int, private val condition: WeatherCon
     }
 }
 
-@Preview
+@Preview(name = "Squircle Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
 
-@Preview
+@Preview(name = "Round Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Composable
+fun WeatherWidgetRoundPreview(
+    @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(MockWeatherWidget(75, WeatherCondition.SUNNY), params)
+
+// Generates the uncropped rectangular preview images referenced by
+// <container previewImage="@drawable/..." /> in res/xml/weather_widget_info.xml.
+// Providing a full rectangular asset allows the system widget picker on each
+// device (Pixel Watch, Galaxy Watch, etc.) to apply its own native shape mask.
+@Preview(name = "Widget Picker Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun WeatherWidgetRectangularPreview(
     @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams

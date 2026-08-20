@@ -41,6 +41,7 @@ import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 import androidx.wear.compose.remote.material3.RemoteColorScheme
@@ -83,13 +84,23 @@ fun HelloWidgetContent() {
     }
 }
 
-@Preview
+@Preview(name = "Squircle Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun HelloWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(HelloWidget(), params)
 
-@Preview
+@Preview(name = "Round Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Composable
+fun HelloWidgetRoundPreview(
+    @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(HelloWidget(), params)
+
+// Generates the uncropped rectangular preview images referenced by
+// <container previewImage="@drawable/..." /> in res/xml/hello_widget_info.xml.
+// Providing a full rectangular asset allows the system widget picker on each
+// device (Pixel Watch, Galaxy Watch, etc.) to apply its own native shape mask.
+@Preview(name = "Widget Picker Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
 @Composable
 fun HelloWidgetRectangularPreview(
     @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
