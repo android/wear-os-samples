@@ -4,17 +4,16 @@ androidx-compose-bom = "2025.11.00"
 androidx-activity = "1.12.0-alpha06"
 androidx-core = "1.17.0"
 androidx-lifecycle = "2.9.4"
-androidx-wear-compose = "1.5.5"
+androidx-wear-compose = "1.6.2"
 compose = "1.9.4"
 compose-compiler = "1.5.15"
 kotlin = "2.2.10"
 org-jetbrains-kotlinx = "1.11.0"
 ktlint = "0.50.0"
-horologist = "0.7.15"
 robolectric = "4.16"
 roborazzi = "1.51.0"
 ui-test-junit4 = "1.9.4"
-wear-compose-material3 = "1.5.5"
+wear-compose-material3 = "1.6.2"
 
 [libraries]
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
@@ -28,8 +27,6 @@ androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest"}
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-horologist-compose-layout = { group = "com.google.android.horologist", name = "horologist-compose-layout", version.ref = "horologist" }
-horologist-roboscreenshots = { module = "com.google.android.horologist:horologist-roboscreenshots", version.ref = "horologist" }
 junit = "junit:junit:4.13.2"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
