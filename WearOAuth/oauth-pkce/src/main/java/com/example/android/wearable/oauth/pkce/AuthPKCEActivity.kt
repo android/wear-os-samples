@@ -30,13 +30,16 @@ import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
-import com.google.android.horologist.compose.layout.ColumnItemType
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 /**
  * Demonstrates the OAuth flow on Wear OS. This sample currently handles the callback from the
@@ -75,20 +78,25 @@ fun AuthenticateScreen(
     startAuthFlow: () -> Unit
 ) {
     val listState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
     ScreenScaffold(
-        scrollState = listState,
-        contentPadding = rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.BodyText
-        )
-    ) { paddingValues ->
+        scrollState = listState
+    ) { contentPadding ->
         TransformingLazyColumn(
             state = listState,
-            contentPadding = paddingValues
+            contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(
+                            ListHeaderDefaults.minimumTopListContentPadding
+                        ),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     Text(
                         stringResource(R.string.oauth_pkce),
                         textAlign = TextAlign.Center
@@ -106,7 +114,13 @@ fun AuthenticateScreen(
                                 .fillMaxWidth()
                         )
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(
+                            ButtonDefaults.minimumVerticalListContentPadding
+                        ),
+                    transformation = SurfaceTransformation(transformationSpec)
                 )
             }
             item { Text(stringResource(id = statusCode)) }

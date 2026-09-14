@@ -16,8 +16,7 @@
 package com.example.android.wearable.oauth.pkce
 
 import androidx.wear.compose.material3.AppScaffold
-import com.google.android.horologist.screenshots.rng.WearDevice
-import com.google.android.horologist.screenshots.rng.WearScreenshotTest
+import androidx.wear.compose.material3.TimeText
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -26,22 +25,24 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 class AuthenticateScreenTest(override val device: WearDevice) : WearScreenshotTest() {
     override val tolerance = 0.02f
 
-    // code to make sure multiple tests are run
-    override fun testName(suffix: String): String =
-        "src/test/snapshots/images/" +
-            "${this.javaClass.`package`?.name}_${this.javaClass.simpleName}_" +
-            "${testInfo.methodName}$suffix.png"
-
     @Test
     fun authenticateScreenTest() = runTest {
-        AppScaffold {
+        AppScaffold(
+            timeText = {
+                TimeText(timeSource = fixedTimeSource)
+            }
+        ) {
             AuthenticateScreenPreview()
         }
     }
 
     @Test
     fun authenticateFailedScreenTest() = runTest {
-        AppScaffold {
+        AppScaffold(
+            timeText = {
+                TimeText(timeSource = fixedTimeSource)
+            }
+        ) {
             AuthenticateScreenFailedPreview()
         }
     }
