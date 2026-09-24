@@ -20,6 +20,12 @@
     <!-- Weather Widget Strings -->
     <string name="weather_format">%1$d° %2$s</string>
     <string name="weather_location_london">London</string>
+    <string name="weather_location_san_francisco">San Francisco</string>
+    <string name="weather_temperature_format">%1$d°</string>
+    <string name="weather_high_format">H: %1$d°</string>
+    <string name="weather_low_format">L: %1$d°</string>
+    <string name="weather_feels_like_format">Feels like %1$d°</string>
+    <string name="weather_high_low_format">%1$d° • %2$d°</string>
 
     <!-- Weather Activity Strings -->
     <string name="weather_push_title">Weather Push</string>
