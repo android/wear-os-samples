@@ -15,12 +15,10 @@
  */
 package com.google.example.wear_widget
 
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.glance.wear.GlanceWearWidgetManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -37,8 +35,6 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
         private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 
-    // Suppressed because triggerUpdate is restricted to LIBRARY_GROUP.
-    @SuppressLint("RestrictedApi")
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION_UPDATE_WEATHER) {
             val temp = intent.getIntExtra(EXTRA_TEMP, 72)
@@ -53,12 +49,7 @@ class WeatherUpdateReceiver : BroadcastReceiver() {
                     context.setWeatherState(
                         WeatherState(temp, WeatherCondition.fromEmoji(condition))
                     )
-                    val manager = GlanceWearWidgetManager(context)
-                    val widget = WeatherWidget()
-                    val activeWidgets = manager.fetchActiveWidgets(widget::class)
-                    activeWidgets.forEach { handle ->
-                        widget.triggerUpdate(context.applicationContext, handle.instanceId)
-                    }
+                    WeatherWidget().triggerUpdateAll(context)
                     Log.d("WeatherReceiver", "Pushed weather update: $temp, $condition")
                 } catch (e: Exception) {
                     Log.e("WeatherReceiver", "Error updating weather", e)

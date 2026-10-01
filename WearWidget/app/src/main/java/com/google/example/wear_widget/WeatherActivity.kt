@@ -15,7 +15,6 @@
  */
 package com.google.example.wear_widget
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.glance.wear.GlanceWearWidgetManager
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.Button
@@ -41,8 +39,6 @@ import androidx.wear.compose.material3.Text
 import kotlinx.coroutines.launch
 
 class WeatherActivity : ComponentActivity() {
-    // Suppressed because triggerUpdate is restricted to LIBRARY_GROUP.
-    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,12 +52,7 @@ class WeatherActivity : ComponentActivity() {
                     onUpdate = { temp, cond ->
                         scope.launch {
                             setWeatherState(WeatherState(temp, cond))
-                            val manager = GlanceWearWidgetManager(this@WeatherActivity)
-                            val widget = WeatherWidget()
-                            val activeWidgets = manager.fetchActiveWidgets(widget::class)
-                            activeWidgets.forEach { handle ->
-                                widget.triggerUpdate(this@WeatherActivity, handle.instanceId)
-                            }
+                            WeatherWidget().triggerUpdateAll(this@WeatherActivity)
                         }
                     },
                 )
