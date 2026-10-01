@@ -36,4 +36,4 @@ jobs:
 
       - name: Build and Verify Screenshots
         working-directory: ${{ env.SAMPLE_PATH }}
-        run: ./gradlew verifyRoborazziDebug --stacktrace
+        run: ./gradlew check verifyRoborazziDebug --stacktrace
