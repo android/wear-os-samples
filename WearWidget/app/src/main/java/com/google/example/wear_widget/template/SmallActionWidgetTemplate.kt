@@ -28,20 +28,19 @@ import androidx.compose.remote.creation.compose.layout.RemoteComposable
 import androidx.compose.remote.creation.compose.layout.RemoteRow
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.background
+import androidx.compose.remote.creation.compose.modifier.clickable
 import androidx.compose.remote.creation.compose.modifier.clip
 import androidx.compose.remote.creation.compose.modifier.fillMaxHeight
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.padding
 import androidx.compose.remote.creation.compose.modifier.size
 import androidx.compose.remote.creation.compose.shapes.RemoteCircleShape
-import androidx.compose.remote.creation.compose.state.rc
 import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rememberMutableRemoteInt
 import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,8 +57,6 @@ import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
-import androidx.wear.compose.remote.material3.RemoteButton
-import androidx.wear.compose.remote.material3.RemoteButtonDefaults
 import androidx.wear.compose.remote.material3.RemoteIcon
 import androidx.wear.compose.remote.material3.RemoteText
 import com.google.example.wear_widget.R
@@ -93,71 +90,58 @@ fun SmallActionWidgetTemplate(
     modifier: RemoteModifier = RemoteModifier.fillMaxSize(),
 ) {
     RemoteRow(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().padding(end = 4.rdp),
         verticalAlignment = RemoteAlignment.CenterVertically,
     ) {
-        // Left primary pill button
-        RemoteButton(
-            onClick = onPrimaryClick,
-            modifier = RemoteModifier.weight(1f).fillMaxHeight(),
-            shape = RemoteCircleShape,
-            colors =
-                RemoteButtonDefaults.buttonColors(
-                    containerColor = colors.secondaryContainerColor,
-                    contentColor = colors.contentColor,
-                ),
+        // Left primary clickable region
+        RemoteRow(
+            modifier =
+                RemoteModifier.weight(1f)
+                    .fillMaxHeight()
+                    .clickable(onPrimaryClick)
+                    .padding(start = if (config.isNarrow) 12.rdp else 16.rdp, end = 8.rdp),
+            verticalAlignment = RemoteAlignment.CenterVertically,
         ) {
-            RemoteRow(
+            RemoteBox(
                 modifier =
-                    RemoteModifier.fillMaxSize()
-                        .padding(start = if (config.isNarrow) 8.rdp else 12.rdp, end = 6.rdp),
-                verticalAlignment = RemoteAlignment.CenterVertically,
+                    RemoteModifier.size(config.badgeSize)
+                        .clip(RemoteCircleShape)
+                        .background(colors.badgeBackgroundColor),
+                contentAlignment = RemoteAlignment.Center,
             ) {
-                RemoteBox(
-                    modifier =
-                        RemoteModifier.size(config.badgeSize)
-                            .clip(RemoteCircleShape)
-                            .background(colors.badgeBackgroundColor),
-                    contentAlignment = RemoteAlignment.Center,
-                ) {
-                    RemoteIcon(
-                        imageVector = ImageVector.vectorResource(id = iconRes),
-                        contentDescription = title.rs,
-                        modifier = RemoteModifier.size(config.badgeIconSize),
-                        tint = colors.badgeIconTint,
-                    )
-                }
-
-                RemoteBox(modifier = RemoteModifier.size(8.rdp))
-
-                RemoteText(
-                    text = title.rs,
-                    color = colors.contentColor,
-                    fontSize = if (config.isNarrow) 14.rsp else 16.rsp,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                RemoteIcon(
+                    imageVector = ImageVector.vectorResource(id = iconRes),
+                    contentDescription = title.rs,
+                    modifier = RemoteModifier.size(config.badgeIconSize),
+                    tint = colors.badgeIconTint,
                 )
             }
+
+            RemoteBox(modifier = RemoteModifier.size(8.rdp))
+
+            RemoteText(
+                text = title.rs,
+                color = colors.contentColor,
+                fontSize = if (config.isNarrow) 14.rsp else 16.rsp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
 
-        RemoteBox(modifier = RemoteModifier.size(4.rdp))
-
         // Right circular action button
-        RemoteButton(
-            onClick = onActionClick,
-            modifier = RemoteModifier.size(config.actionButtonSize),
-            shape = RemoteCircleShape,
-            colors =
-                RemoteButtonDefaults.buttonColors(
-                    containerColor = colors.containerColor,
-                    contentColor = colors.actionIconTint,
-                ),
+        RemoteBox(
+            modifier =
+                RemoteModifier.size(config.actionButtonSize)
+                    .clip(RemoteCircleShape)
+                    .background(colors.containerColor)
+                    .clickable(onActionClick),
+            contentAlignment = RemoteAlignment.Center,
         ) {
             RemoteIcon(
                 imageVector = ImageVector.vectorResource(id = actionIconRes),
                 contentDescription = "Action".rs,
-                modifier = RemoteModifier.size(20.rdp),
+                modifier = RemoteModifier.size(24.rdp),
                 tint = colors.actionIconTint,
             )
         }
@@ -176,7 +160,9 @@ class SmallActionWidget(
         params: WearWidgetParams,
     ): WearWidgetData {
         val config = WidgetTemplateConfig.from(params)
-        return WearWidgetDocument(background = WearWidgetBrush.color(Color.Transparent.rc)) {
+        return WearWidgetDocument(
+            background = WearWidgetBrush.color(colors.secondaryContainerColor)
+        ) {
             SmallActionWidgetTemplate(
                 title = title,
                 iconRes = iconRes,
