@@ -90,7 +90,14 @@ fun SmallActionWidgetTemplate(
     modifier: RemoteModifier = RemoteModifier.fillMaxSize(),
 ) {
     RemoteRow(
-        modifier = modifier.fillMaxSize().padding(end = 4.rdp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(
+                    end = config.actionButtonEndPadding,
+                    top = config.actionButtonVerticalPadding,
+                    bottom = config.actionButtonVerticalPadding,
+                ),
         verticalAlignment = RemoteAlignment.CenterVertically,
     ) {
         // Left primary clickable region

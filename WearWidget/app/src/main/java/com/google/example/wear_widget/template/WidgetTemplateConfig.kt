@@ -39,6 +39,8 @@ data class WidgetTemplateConfig(
     val badgeIconSize: RemoteDp = 16.rdp,
     val cardRadius: RemoteDp = if (isNarrow) 16.rdp else 24.rdp,
     val actionButtonSize: RemoteDp = if (isNarrow) 46.rdp else 52.rdp,
+    val actionButtonEndPadding: RemoteDp = 4.rdp,
+    val actionButtonVerticalPadding: RemoteDp = 0.rdp,
 ) {
     companion object {
         /** Threshold below which a host surface is considered narrow. */
@@ -48,7 +50,13 @@ data class WidgetTemplateConfig(
         fun from(params: WearWidgetParams): WidgetTemplateConfig {
             val usableWidth = params.widthDp - 2f * params.horizontalPaddingDp
             val isNarrow = usableWidth < NARROW_WIDTH_THRESHOLD_DP || params.heightDp <= 56f
-            return WidgetTemplateConfig(isNarrow = isNarrow)
+            val totalContainerHeight = params.heightDp + 2f * params.verticalPaddingDp
+            return WidgetTemplateConfig(
+                isNarrow = isNarrow,
+                actionButtonSize = (totalContainerHeight - 8f).rdp,
+                actionButtonEndPadding = (4f - params.horizontalPaddingDp).rdp,
+                actionButtonVerticalPadding = (4f - params.verticalPaddingDp).rdp,
+            )
         }
     }
 }
