@@ -58,6 +58,7 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
@@ -109,11 +110,7 @@ fun MediumAdaptiveCardTemplate(
     val hasActions = topActionIconRes != null || bottomActionIconRes != null
 
     RemoteRow(
-        modifier =
-            modifier.padding(
-                horizontal = config.horizontalPadding,
-                vertical = config.verticalPadding,
-            ),
+        modifier = modifier.fillMaxSize(),
         verticalAlignment = RemoteAlignment.CenterVertically,
     ) {
         // Left main card (fills remaining width)
@@ -125,8 +122,8 @@ fun MediumAdaptiveCardTemplate(
                     .background(colors.containerColor)
                     .clickable(onCardClick)
                     .padding(
-                        horizontal = if (config.isNarrow) 8.rdp else 12.rdp,
-                        vertical = if (config.isNarrow) 8.rdp else 10.rdp,
+                        horizontal = if (config.isNarrow) 10.rdp else 14.rdp,
+                        vertical = if (config.isNarrow) 8.rdp else 12.rdp,
                     ),
             verticalArrangement = RemoteArrangement.SpaceBetween,
         ) {
@@ -242,6 +239,7 @@ class MediumAdaptiveCardWidget(
     @param:DrawableRes private val headerIconRes: Int = R.drawable.ic_bolt_24,
     @param:DrawableRes private val topActionIconRes: Int? = R.drawable.ic_sparkle_24,
     @param:DrawableRes private val bottomActionIconRes: Int? = R.drawable.ic_sparkle_24,
+    private val colors: WidgetTemplateColors = WidgetTemplateColors(),
 ) : GlanceWearWidget() {
     override suspend fun provideWidgetData(
         context: Context,
@@ -256,6 +254,7 @@ class MediumAdaptiveCardWidget(
                 headerIconRes = headerIconRes,
                 topActionIconRes = topActionIconRes,
                 bottomActionIconRes = bottomActionIconRes,
+                colors = colors,
                 config = config,
             )
         }
@@ -282,10 +281,16 @@ fun MediumAdaptiveCardRoundPreview(
     @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
 ) =
     WearWidgetPreview(
-        MediumAdaptiveCardWidget(
-            title = "Activity",
-            headline = "12,450",
-            subtitle = "Daily Goal 10,000",
-        ),
+        MediumAdaptiveCardWidget(title = "Title", headline = "This is a\nHeadline"),
+        params,
+    )
+
+@Preview(name = "Widget Picker Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Composable
+fun MediumAdaptiveCardRectangularPreview(
+    @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
+) =
+    WearWidgetPreview(
+        MediumAdaptiveCardWidget(title = "Title", headline = "This is a\nHeadline"),
         params,
     )

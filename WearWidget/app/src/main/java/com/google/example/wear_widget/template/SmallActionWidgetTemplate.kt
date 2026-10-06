@@ -54,6 +54,7 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
+import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
@@ -92,25 +93,24 @@ fun SmallActionWidgetTemplate(
     modifier: RemoteModifier = RemoteModifier.fillMaxSize(),
 ) {
     RemoteRow(
-        modifier =
-            modifier.padding(
-                horizontal = config.horizontalPadding,
-                vertical = config.verticalPadding,
-            ),
+        modifier = modifier.fillMaxSize(),
         verticalAlignment = RemoteAlignment.CenterVertically,
     ) {
         // Left primary pill button
         RemoteButton(
             onClick = onPrimaryClick,
             modifier = RemoteModifier.weight(1f).fillMaxHeight(),
+            shape = RemoteCircleShape,
             colors =
                 RemoteButtonDefaults.buttonColors(
-                    containerColor = colors.containerColor,
+                    containerColor = colors.secondaryContainerColor,
                     contentColor = colors.contentColor,
                 ),
         ) {
             RemoteRow(
-                modifier = RemoteModifier.fillMaxSize().padding(horizontal = 8.rdp),
+                modifier =
+                    RemoteModifier.fillMaxSize()
+                        .padding(start = if (config.isNarrow) 8.rdp else 12.rdp, end = 6.rdp),
                 verticalAlignment = RemoteAlignment.CenterVertically,
             ) {
                 RemoteBox(
@@ -128,7 +128,7 @@ fun SmallActionWidgetTemplate(
                     )
                 }
 
-                RemoteBox(modifier = RemoteModifier.size(config.contentGap))
+                RemoteBox(modifier = RemoteModifier.size(8.rdp))
 
                 RemoteText(
                     text = title.rs,
@@ -141,7 +141,7 @@ fun SmallActionWidgetTemplate(
             }
         }
 
-        RemoteBox(modifier = RemoteModifier.size(config.contentGap))
+        RemoteBox(modifier = RemoteModifier.size(4.rdp))
 
         // Right circular action button
         RemoteButton(
@@ -150,7 +150,7 @@ fun SmallActionWidgetTemplate(
             shape = RemoteCircleShape,
             colors =
                 RemoteButtonDefaults.buttonColors(
-                    containerColor = colors.actionButtonColor,
+                    containerColor = colors.containerColor,
                     contentColor = colors.actionIconTint,
                 ),
         ) {
@@ -166,9 +166,10 @@ fun SmallActionWidgetTemplate(
 
 /** Standalone widget wrapping [SmallActionWidgetTemplate]. */
 class SmallActionWidget(
-    private val title: String = "Action",
+    private val title: String = "Title",
     @param:DrawableRes private val iconRes: Int = R.drawable.ic_bolt_24,
     @param:DrawableRes private val actionIconRes: Int = R.drawable.ic_sparkle_24,
+    private val colors: WidgetTemplateColors = WidgetTemplateColors(),
 ) : GlanceWearWidget() {
     override suspend fun provideWidgetData(
         context: Context,
@@ -180,6 +181,7 @@ class SmallActionWidget(
                 title = title,
                 iconRes = iconRes,
                 actionIconRes = actionIconRes,
+                colors = colors,
                 config = config,
             )
         }
@@ -200,4 +202,10 @@ fun SmallActionWidgetSquirclePreview(
 @Composable
 fun SmallActionWidgetRoundPreview(
     @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
+) = WearWidgetPreview(SmallActionWidget(), params)
+
+@Preview(name = "Widget Picker Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Composable
+fun SmallActionWidgetRectangularPreview(
+    @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
 ) = WearWidgetPreview(SmallActionWidget(), params)

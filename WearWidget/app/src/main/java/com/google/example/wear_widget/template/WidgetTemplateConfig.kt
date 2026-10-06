@@ -32,13 +32,13 @@ import androidx.glance.wear.core.WearWidgetParams
  */
 data class WidgetTemplateConfig(
     val isNarrow: Boolean = false,
-    val horizontalPadding: RemoteDp = if (isNarrow) 8.rdp else 12.rdp,
-    val verticalPadding: RemoteDp = if (isNarrow) 6.rdp else 8.rdp,
-    val contentGap: RemoteDp = if (isNarrow) 6.rdp else 8.rdp,
-    val badgeSize: RemoteDp = if (isNarrow) 24.rdp else 28.rdp,
-    val badgeIconSize: RemoteDp = if (isNarrow) 14.rdp else 16.rdp,
-    val cardRadius: RemoteDp = if (isNarrow) 16.rdp else 20.rdp,
-    val actionButtonSize: RemoteDp = if (isNarrow) 40.rdp else 48.rdp,
+    val horizontalPadding: RemoteDp = if (isNarrow) 12.rdp else 16.rdp,
+    val verticalPadding: RemoteDp = if (isNarrow) 8.rdp else 10.rdp,
+    val contentGap: RemoteDp = if (isNarrow) 8.rdp else 12.rdp,
+    val badgeSize: RemoteDp = if (isNarrow) 28.rdp else 32.rdp,
+    val badgeIconSize: RemoteDp = 16.rdp,
+    val cardRadius: RemoteDp = if (isNarrow) 16.rdp else 24.rdp,
+    val actionButtonSize: RemoteDp = if (isNarrow) 48.rdp else 56.rdp,
 ) {
     companion object {
         /** Threshold below which a host surface is considered narrow. */
@@ -56,11 +56,12 @@ val LocalWidgetTemplateConfig = compositionLocalOf { WidgetTemplateConfig() }
 
 /** Styling color tokens for widget templates with default redline palette. */
 data class WidgetTemplateColors(
-    val containerColor: RemoteColor = Color(0xFF362220).rc,
+    val containerColor: RemoteColor = Color(0xFF74332C).rc,
+    val secondaryContainerColor: RemoteColor = Color(0xFF442926).rc,
     val contentColor: RemoteColor = Color.White.rc,
     val secondaryContentColor: RemoteColor = Color(0xFFD7C1BF).rc,
-    val badgeBackgroundColor: RemoteColor = Color(0xFF592824).rc,
-    val badgeIconTint: RemoteColor = Color(0xFFFFB4AB).rc,
-    val actionButtonColor: RemoteColor = Color(0xFF592824).rc,
-    val actionIconTint: RemoteColor = Color(0xFFFFB4AB).rc,
+    val badgeBackgroundColor: RemoteColor = Color(0xFFFF8578).rc,
+    val badgeIconTint: RemoteColor = Color(0xFF450002).rc,
+    val actionButtonColor: RemoteColor = Color(0xFF442926).rc,
+    val actionIconTint: RemoteColor = Color(0xFFFFD7D2).rc,
 )
