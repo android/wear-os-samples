@@ -51,9 +51,16 @@ data class WidgetTemplateConfig(
             val usableWidth = params.widthDp - 2f * params.horizontalPaddingDp
             val isNarrow = usableWidth < NARROW_WIDTH_THRESHOLD_DP || params.heightDp <= 56f
             val totalContainerHeight = params.heightDp + 2f * params.verticalPaddingDp
+            val isSmall = params.heightDp <= 64f
+            val actionButtonSize =
+                if (isSmall) {
+                    (totalContainerHeight - 8f).rdp
+                } else {
+                    ((totalContainerHeight - 12f) / 2f).rdp
+                }
             return WidgetTemplateConfig(
                 isNarrow = isNarrow,
-                actionButtonSize = (totalContainerHeight - 8f).rdp,
+                actionButtonSize = actionButtonSize,
                 actionButtonEndPadding = (4f - params.horizontalPaddingDp).rdp,
                 actionButtonVerticalPadding = (4f - params.verticalPaddingDp).rdp,
             )

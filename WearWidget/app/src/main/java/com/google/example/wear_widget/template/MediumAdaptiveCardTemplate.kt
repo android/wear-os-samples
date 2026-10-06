@@ -38,14 +38,12 @@ import androidx.compose.remote.creation.compose.modifier.padding
 import androidx.compose.remote.creation.compose.modifier.size
 import androidx.compose.remote.creation.compose.shapes.RemoteCircleShape
 import androidx.compose.remote.creation.compose.shapes.RemoteRoundedCornerShape
-import androidx.compose.remote.creation.compose.state.rc
 import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rememberMutableRemoteInt
 import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -110,7 +108,15 @@ fun MediumAdaptiveCardTemplate(
     val hasActions = topActionIconRes != null || bottomActionIconRes != null
 
     RemoteRow(
-        modifier = modifier.fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(
+                    start = config.actionButtonEndPadding,
+                    end = config.actionButtonEndPadding,
+                    top = config.actionButtonVerticalPadding,
+                    bottom = config.actionButtonVerticalPadding,
+                ),
         verticalAlignment = RemoteAlignment.CenterVertically,
     ) {
         // Left main card (fills remaining width)
@@ -196,7 +202,7 @@ fun MediumAdaptiveCardTemplate(
                         modifier =
                             RemoteModifier.size(config.actionButtonSize)
                                 .clip(RemoteCircleShape)
-                                .background(colors.actionButtonColor)
+                                .background(colors.containerColor)
                                 .clickable(onTopActionClick),
                         contentAlignment = RemoteAlignment.Center,
                     ) {
@@ -214,7 +220,7 @@ fun MediumAdaptiveCardTemplate(
                         modifier =
                             RemoteModifier.size(config.actionButtonSize)
                                 .clip(RemoteCircleShape)
-                                .background(colors.actionButtonColor)
+                                .background(colors.containerColor)
                                 .clickable(onBottomActionClick),
                         contentAlignment = RemoteAlignment.Center,
                     ) {
@@ -246,7 +252,9 @@ class MediumAdaptiveCardWidget(
         params: WearWidgetParams,
     ): WearWidgetData {
         val config = WidgetTemplateConfig.from(params)
-        return WearWidgetDocument(background = WearWidgetBrush.color(Color.Transparent.rc)) {
+        return WearWidgetDocument(
+            background = WearWidgetBrush.color(colors.secondaryContainerColor)
+        ) {
             MediumAdaptiveCardTemplate(
                 title = title,
                 headline = headline,
