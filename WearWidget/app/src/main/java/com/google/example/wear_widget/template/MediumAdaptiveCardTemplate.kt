@@ -22,6 +22,8 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.remote.creation.compose.action.Action
 import androidx.compose.remote.creation.compose.action.valueChange
+import androidx.compose.remote.creation.compose.capture.RemoteImageVector
+import androidx.compose.remote.creation.compose.capture.vectorResource
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteArrangement
 import androidx.compose.remote.creation.compose.layout.RemoteBox
@@ -44,8 +46,6 @@ import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -143,7 +143,7 @@ fun MediumAdaptiveCardTemplate(
                     contentAlignment = RemoteAlignment.Center,
                 ) {
                     RemoteIcon(
-                        imageVector = ImageVector.vectorResource(id = headerIconRes),
+                        imageVector = RemoteImageVector.vectorResource(id = headerIconRes),
                         contentDescription = title.rs,
                         modifier = RemoteModifier.size(config.badgeIconSize),
                         tint = colors.badgeIconTint,
@@ -207,7 +207,7 @@ fun MediumAdaptiveCardTemplate(
                         contentAlignment = RemoteAlignment.Center,
                     ) {
                         RemoteIcon(
-                            imageVector = ImageVector.vectorResource(id = topActionIconRes),
+                            imageVector = RemoteImageVector.vectorResource(id = topActionIconRes),
                             contentDescription = "Top Action".rs,
                             modifier = RemoteModifier.size(20.rdp),
                             tint = colors.actionIconTint,
@@ -225,7 +225,7 @@ fun MediumAdaptiveCardTemplate(
                         contentAlignment = RemoteAlignment.Center,
                     ) {
                         RemoteIcon(
-                            imageVector = ImageVector.vectorResource(id = bottomActionIconRes),
+                            imageVector = RemoteImageVector.vectorResource(id = bottomActionIconRes),
                             contentDescription = "Bottom Action".rs,
                             modifier = RemoteModifier.size(20.rdp),
                             tint = colors.actionIconTint,

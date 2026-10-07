@@ -22,6 +22,8 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.remote.creation.compose.action.Action
 import androidx.compose.remote.creation.compose.action.valueChange
+import androidx.compose.remote.creation.compose.capture.RemoteImageVector
+import androidx.compose.remote.creation.compose.capture.vectorResource
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
@@ -40,8 +42,6 @@ import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -99,7 +99,7 @@ fun SmallHeroWidgetTemplate(
             contentAlignment = RemoteAlignment.Center,
         ) {
             RemoteIcon(
-                imageVector = ImageVector.vectorResource(id = iconRes),
+                imageVector = RemoteImageVector.vectorResource(id = iconRes),
                 contentDescription = title.rs,
                 modifier = RemoteModifier.size(config.badgeIconSize),
                 tint = colors.badgeIconTint,
