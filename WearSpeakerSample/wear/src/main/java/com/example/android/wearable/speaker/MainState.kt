@@ -16,6 +16,7 @@
 package com.example.android.wearable.speaker
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -199,6 +200,7 @@ sealed class PlaybackState {
  *
  * This could be an on-device speaker, or a connected bluetooth device.
  */
+@SuppressLint("InlinedApi") // Newer device-type constants are inlined; older releases cannot report them.
 private fun speakerIsSupported(activity: Activity): Boolean {
     val hasAudioOutputFeature =
         activity.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)
