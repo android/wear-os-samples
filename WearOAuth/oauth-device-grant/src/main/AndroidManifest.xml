@@ -22,7 +22,7 @@
 
     <application
         android:allowBackup="false"
-        android:label="OAuth Device Authorization Grant"
+        android:label="@string/oauth_device_authorization_grant"
         android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.DeviceDefault">
 

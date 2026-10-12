@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright 2021 The Android Open Source Project
+     Copyright 2021-2026 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -15,10 +15,7 @@
     <string name="app_name">Tiles samples</string>
     <string name="tile_messaging_label">Messaging</string>
     <string name="tile_messaging_description">Open a chat with one of your favorite contacts.</string>
-    <string name="tile_messaging_search">Search</string>
-    <string name="tile_messaging_create_new">New</string>
     <string name="tile_goal_label">Goal</string>
-    <string name="tile_news_1_label">News 1</string>
     <string name="tile_news_2_label">News 2</string>
     <string name="tile_social_5_label">Social 5</string>
     <string name="tile_social_6_label">Social 6</string>
@@ -27,12 +24,9 @@
     <string name="tile_workout_2_label">Workout 2</string>
     <string name="tile_alarm_label">Alarm</string>
     <string name="tile_mindfulness_label">Mindfulness</string>
-    <string name="tile_meditation_minutes_label">Meditation Minutes</string>
     <string name="tile_label_calendar">Calendar</string>
-    <string name="tile_label_heart_rate">Heart Rate</string>
     <string name="tile_label_hike">Hike</string>
     <string name="tile_label_media">Media</string>
-    <string name="tile_label_run">Run</string>
     <string name="tile_label_ski">Ski</string>
     <string name="tile_label_timer">Timer</string>
     <string name="tile_label_weather">Weather</string>

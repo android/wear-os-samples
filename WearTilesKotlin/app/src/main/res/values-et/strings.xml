@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright 2021 The Android Open Source Project
+     Copyright 2021-2026 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -15,6 +15,4 @@
     <string name="app_name">Tiles Näidised</string>
     <string name="tile_messaging_label">Sõnumite saatmine</string>
     <string name="tile_messaging_description">Avage vestlus ühe oma lemmikkontaktiga.</string>
-    <string name="tile_messaging_search">Otsi</string>
-    <string name="tile_messaging_create_new">Uus</string>
 </resources>
