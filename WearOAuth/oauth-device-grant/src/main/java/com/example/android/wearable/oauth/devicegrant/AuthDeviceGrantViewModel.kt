@@ -18,8 +18,8 @@ package com.example.android.wearable.oauth.devicegrant
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.wear.remote.interactions.RemoteActivityHelper
@@ -51,7 +51,6 @@ data class DeviceGrantState(
  * device, then polls for the access token, and uses it to retrieve the user's name.
  */
 class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
     private val _uiState = MutableStateFlow(DeviceGrantState())
 
     val uiState: StateFlow<DeviceGrantState> = _uiState.asStateFlow()
@@ -73,7 +72,10 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
 
             // Step 2: Show the pairing code & open the verification URI on the paired device
             showStatus(R.string.status_code, verificationInfo.userCode)
-            fireRemoteIntent(context, verificationInfo.verificationUri)
+            fireRemoteIntent(
+                getApplication<Application>().applicationContext,
+                verificationInfo.verificationUri
+            )
 
             // Step 3: Poll the Auth server for the token
             val token = retrieveToken(verificationInfo.deviceCode, verificationInfo.interval)
@@ -141,7 +143,7 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
         RemoteActivityHelper(context).startRemoteActivity(
             Intent(Intent.ACTION_VIEW).apply {
                 addCategory(Intent.CATEGORY_BROWSABLE)
-                data = Uri.parse(verificationUri)
+                data = verificationUri.toUri()
             },
             null
         )

@@ -54,6 +54,7 @@ import com.example.wear.tiles.tools.MultiRoundDevicesWithFontScalePreviews
 import com.example.wear.tiles.tools.isLargeScreen
 import com.google.common.util.concurrent.Futures
 import java.time.LocalTime
+import java.util.Locale
 
 fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
     val hour24 = time.hour
@@ -66,7 +67,7 @@ fun MaterialScope.styledTime(time: LocalTime): LayoutElement {
         hour12 = 12
     }
 
-    val timeString = "$hour12:${String.format("%02d", minute)}" // TODO: Localize
+    val timeString = "$hour12:${String.format(Locale.getDefault(), "%02d", minute)}"
 
     return row(
         text(
