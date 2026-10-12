@@ -104,7 +104,6 @@
         <activity
             android:name=".HelloActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:taskAffinity="com.google.example.wear_widget.hello"
             android:theme="@android:style/Theme.DeviceDefault">
             <intent-filter>
