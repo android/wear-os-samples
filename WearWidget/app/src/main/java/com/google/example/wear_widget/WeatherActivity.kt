@@ -28,14 +28,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
-import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import kotlinx.coroutines.launch
 
 class WeatherActivity : ComponentActivity() {
@@ -47,79 +54,96 @@ class WeatherActivity : ComponentActivity() {
                 remember { weatherStateFlow }
                     .collectAsState(initial = WeatherState(72, WeatherCondition.SUNNY))
             MaterialTheme {
-                WeatherControlPanel(
-                    currentState = weatherState,
-                    onUpdate = { temp, cond ->
-                        scope.launch {
-                            setWeatherState(WeatherState(temp, cond))
-                            WeatherWidget().triggerUpdateAll(this@WeatherActivity)
-                        }
-                    },
-                )
+                AppScaffold {
+                    WeatherControlPanel(
+                        currentState = weatherState,
+                        onUpdate = { temp, cond ->
+                            scope.launch {
+                                setWeatherState(WeatherState(temp, cond))
+                                WeatherWidget().triggerUpdateAll(this@WeatherActivity)
+                            }
+                        },
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun WeatherControlPanel(
+internal fun WeatherControlPanel(
     currentState: WeatherState,
     onUpdate: (Int, WeatherCondition) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val listState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
-    ScreenScaffold(scrollState = listState) { contentPadding ->
+    ScreenScaffold(scrollState = listState, modifier = modifier) { contentPadding ->
         TransformingLazyColumn(state = listState, contentPadding = contentPadding) {
             item {
-                Text(
-                    stringResource(R.string.weather_push_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                )
+                ListHeader(
+                    modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
+                ) {
+                    Text(stringResource(R.string.weather_push_title), textAlign = TextAlign.Center)
+                }
             }
             item {
                 Text(
                     stringResource(R.string.weather_push_subtitle),
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(vertical = 4.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                            .transformedHeight(this, transformationSpec),
                 )
             }
 
             item {
                 WeatherButton(
-                    stringResource(R.string.weather_condition_sunny),
-                    72,
-                    WeatherCondition.SUNNY,
-                    currentState.condition == WeatherCondition.SUNNY,
-                    onUpdate,
+                    label = stringResource(R.string.weather_condition_sunny),
+                    temp = 72,
+                    cond = WeatherCondition.SUNNY,
+                    isSelected = currentState.condition == WeatherCondition.SUNNY,
+                    onUpdate = onUpdate,
+                    modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
                 )
             }
             item {
                 WeatherButton(
-                    stringResource(R.string.weather_condition_cloudy),
-                    55,
-                    WeatherCondition.CLOUDY,
-                    currentState.condition == WeatherCondition.CLOUDY,
-                    onUpdate,
+                    label = stringResource(R.string.weather_condition_cloudy),
+                    temp = 55,
+                    cond = WeatherCondition.CLOUDY,
+                    isSelected = currentState.condition == WeatherCondition.CLOUDY,
+                    onUpdate = onUpdate,
+                    modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
                 )
             }
             item {
                 WeatherButton(
-                    stringResource(R.string.weather_condition_rainy),
-                    48,
-                    WeatherCondition.RAINY,
-                    currentState.condition == WeatherCondition.RAINY,
-                    onUpdate,
+                    label = stringResource(R.string.weather_condition_rainy),
+                    temp = 48,
+                    cond = WeatherCondition.RAINY,
+                    isSelected = currentState.condition == WeatherCondition.RAINY,
+                    onUpdate = onUpdate,
+                    modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
                 )
             }
             item {
                 WeatherButton(
-                    stringResource(R.string.weather_condition_snowy),
-                    28,
-                    WeatherCondition.SNOWY,
-                    currentState.condition == WeatherCondition.SNOWY,
-                    onUpdate,
+                    label = stringResource(R.string.weather_condition_snowy),
+                    temp = 28,
+                    cond = WeatherCondition.SNOWY,
+                    isSelected = currentState.condition == WeatherCondition.SNOWY,
+                    onUpdate = onUpdate,
+                    modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
                 )
             }
         }
@@ -133,26 +157,29 @@ private fun WeatherButton(
     cond: WeatherCondition,
     isSelected: Boolean,
     onUpdate: (Int, WeatherCondition) -> Unit,
+    modifier: Modifier = Modifier,
+    transformation: SurfaceTransformation? = null,
 ) {
-    Button(
-        onClick = { onUpdate(temp, cond) },
-        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor =
-                    if (isSelected) {
-                        MaterialTheme.colorScheme.primaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.surfaceContainer
-                    },
-                contentColor =
-                    if (isSelected) {
-                        MaterialTheme.colorScheme.onPrimaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    },
-            ),
+    RadioButton(
+        selected = isSelected,
+        onSelect = { onUpdate(temp, cond) },
+        modifier = modifier,
+        transformation = transformation,
     ) {
-        Text(label)
+        Text(text = label, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun WeatherControlPanelPreview() {
+    MaterialTheme {
+        AppScaffold {
+            WeatherControlPanel(
+                currentState = WeatherState(72, WeatherCondition.SUNNY),
+                onUpdate = { _, _ -> },
+            )
+        }
     }
 }

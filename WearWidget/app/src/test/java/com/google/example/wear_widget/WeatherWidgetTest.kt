@@ -16,10 +16,12 @@
 package com.google.example.wear_widget
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
-import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
-import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
-import com.github.takahirom.roborazzi.captureScreenRoboImage
-import kotlin.OptIn
+import androidx.compose.ui.test.onRoot
+import androidx.glance.wear.tooling.preview.RectangularSmallWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RoundSmallWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.SquircleLargeWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
+import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,12 +36,66 @@ class WeatherWidgetTest {
 
     @get:Rule val composeRule = createComposeRule()
 
-    @OptIn(ExperimentalRoborazziApi::class)
     @Test
-    fun testWeatherWidgetPreview() {
+    fun testWeatherWidgetSquircleSmallPreview() {
         composeRule.setContent {
-            WeatherWidgetSquirclePreview(params = SquircleAllWidgetPreviewParams().values.first())
+            WeatherWidgetSquirclePreview(params = SquircleSmallWidgetPreviewParams().values.first())
         }
-        captureScreenRoboImage("src/test/screenshots/WeatherWidgetPreview.png")
+        composeRule.onRoot().captureRoboImage("src/test/screenshots/WeatherWidgetPreview.png")
+    }
+
+    @Test
+    fun testWeatherWidgetSquircleLarge240dpPreview() {
+        composeRule.setContent {
+            WeatherWidgetSquirclePreview(params = SquircleLargeWidgetPreviewParams().values.last())
+        }
+        composeRule.onRoot().captureRoboImage("src/test/screenshots/WeatherWidgetLargePreview.png")
+    }
+
+    @Test
+    fun testWeatherWidgetRoundPreview() {
+        composeRule.setContent {
+            WeatherWidgetRoundPreview(params = RoundSmallWidgetPreviewParams().values.first())
+        }
+        composeRule.onRoot().captureRoboImage("src/test/screenshots/WeatherWidgetRoundPreview.png")
+    }
+
+    @Test
+    fun testWeatherWidgetRectangularPreview() {
+        composeRule.setContent {
+            WeatherWidgetRectangularPreview(
+                params = RectangularSmallWidgetPreviewParams().values.first()
+            )
+        }
+        composeRule
+            .onRoot()
+            .captureRoboImage("src/test/screenshots/WeatherWidgetRectangularPreview.png")
+    }
+
+    @Test
+    @Config(fontScale = 1.24f)
+    fun testWeatherWidgetFontScalePreview() {
+        composeRule.setContent { WeatherWidgetFontScalePreview() }
+        composeRule
+            .onRoot()
+            .captureRoboImage("src/test/screenshots/WeatherWidgetFontScalePreview.png")
+    }
+
+    @Test
+    fun testWeatherWidgetCloudyPreview() {
+        composeRule.setContent { WeatherWidgetCloudyPreview() }
+        composeRule.onRoot().captureRoboImage("src/test/screenshots/WeatherWidgetCloudyPreview.png")
+    }
+
+    @Test
+    fun testWeatherWidgetRainyPreview() {
+        composeRule.setContent { WeatherWidgetRainyPreview() }
+        composeRule.onRoot().captureRoboImage("src/test/screenshots/WeatherWidgetRainyPreview.png")
+    }
+
+    @Test
+    fun testWeatherWidgetSnowyPreview() {
+        composeRule.setContent { WeatherWidgetSnowyPreview() }
+        composeRule.onRoot().captureRoboImage("src/test/screenshots/WeatherWidgetSnowyPreview.png")
     }
 }
