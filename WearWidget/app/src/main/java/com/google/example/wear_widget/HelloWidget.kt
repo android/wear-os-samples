@@ -23,13 +23,12 @@ import android.util.Log
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
-import androidx.compose.remote.creation.compose.layout.RemoteText
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.state.rs
-import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.glance.wear.AssociateWithGlanceWearWidget
@@ -40,12 +39,15 @@ import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
 import androidx.glance.wear.core.WearWidgetParams
-import androidx.glance.wear.tooling.preview.RectangularAllWidgetPreviewParams
-import androidx.glance.wear.tooling.preview.RoundAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RectangularSmallWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.RoundSmallWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.SquircleAllWidgetPreviewParams
+import androidx.glance.wear.tooling.preview.SquircleSmallWidgetPreviewParams
 import androidx.glance.wear.tooling.preview.WearWidgetPreview
 import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
+import androidx.wear.compose.remote.material3.RemoteText
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 
 // Suppressed file-level RestrictedApi because Remote Compose APIs are currently restricted to
 // LIBRARY_GROUP.
@@ -78,30 +80,44 @@ fun HelloWidgetContent() {
             RemoteText(
                 text = stringResource(R.string.hello_world).rs,
                 color = RemoteMaterialTheme.colorScheme.onPrimary,
-                fontSize = 20.rsp,
+                style = RemoteMaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
 }
 
-@Preview(name = "Squircle Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Preview(name = "Squircle Preview")
 @Composable
 fun HelloWidgetSquirclePreview(
     @PreviewParameter(SquircleAllWidgetPreviewParams::class) params: WearWidgetParams
-) = WearWidgetPreview(HelloWidget(), params)
+) {
+    WearWidgetPreview(HelloWidget(), params)
+}
 
-@Preview(name = "Round Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Preview(name = "Round Preview")
 @Composable
 fun HelloWidgetRoundPreview(
-    @PreviewParameter(RoundAllWidgetPreviewParams::class) params: WearWidgetParams
-) = WearWidgetPreview(HelloWidget(), params)
+    @PreviewParameter(RoundSmallWidgetPreviewParams::class) params: WearWidgetParams
+) {
+    WearWidgetPreview(HelloWidget(), params)
+}
 
 // Generates the uncropped rectangular preview images referenced by
 // <container previewImage="@drawable/..." /> in res/xml/hello_widget_info.xml.
 // Providing a full rectangular asset allows the system widget picker on each
 // device (Pixel Watch, Galaxy Watch, etc.) to apply its own native shape mask.
-@Preview(name = "Widget Picker Preview", device = "spec:width=1000dp,height=1000dp,dpi=320")
+@Preview(name = "Widget Picker Preview")
 @Composable
 fun HelloWidgetRectangularPreview(
-    @PreviewParameter(RectangularAllWidgetPreviewParams::class) params: WearWidgetParams
-) = WearWidgetPreview(HelloWidget(), params)
+    @PreviewParameter(RectangularSmallWidgetPreviewParams::class) params: WearWidgetParams
+) {
+    WearWidgetPreview(HelloWidget(), params)
+}
+
+@WearPreviewFontScales
+@Composable
+fun HelloWidgetFontScalePreview() {
+    WearWidgetPreview(HelloWidget(), SquircleSmallWidgetPreviewParams().values.first())
+}

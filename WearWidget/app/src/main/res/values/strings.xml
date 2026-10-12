@@ -29,5 +29,4 @@
     <string name="weather_condition_rainy">Rainy</string>
     <string name="weather_condition_snowy">Snowy</string>
     <string name="hello_world">Hello, World!</string>
-    <string name="hello_wear">Hello Wear!</string>
 </resources>
