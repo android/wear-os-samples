@@ -15,6 +15,13 @@ This sample includes:
 - **HelloWidget**: A simple "Hello World" widget.
 - **WeatherWidget**: A widget that displays dynamic content based on stored
   state.
+- **Templates**: Production-ready, responsive partial-height widget templates
+  implementing official design redlines:
+  - `SmallHeroWidgetTemplate`: Single-row pill widget with icon badge and title.
+  - `SmallActionWidgetTemplate`: Dual-action layout with primary weighted pill
+    and standalone circular action button.
+  - `MediumAdaptiveCardTemplate`: Two-row adaptive card with header lockup,
+    headline metric, optional subtitle, and trailing circular actions.
 
 ## Compatibility
 
