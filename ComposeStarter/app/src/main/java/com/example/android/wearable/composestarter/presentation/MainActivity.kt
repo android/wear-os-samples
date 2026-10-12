@@ -138,6 +138,7 @@ fun GreetingScreen(
      * see d.android.com/wear/compose.
      */
     ScreenScaffold(
+        modifier = modifier,
         scrollState = scrollState,
         edgeButton = {
             EdgeButton(
@@ -158,7 +159,7 @@ fun GreetingScreen(
                 Greeting(
                     greetingName = greetingName,
                     modifier =
-                        modifier
+                        Modifier
                             .fillMaxSize()
                             .minimumVerticalContentPadding(
                                 ListHeaderDefaults.minimumTopListContentPadding
@@ -176,6 +177,7 @@ fun ListScreen(modifier: Modifier = Modifier) {
     val transformationSpec = rememberTransformationSpec()
 
     ScreenScaffold(
+        modifier = modifier,
         scrollState = listState
         /*
          * TransformingLazyColumn takes care of the horizontal and vertical
@@ -196,7 +198,7 @@ fun ListScreen(modifier: Modifier = Modifier) {
                                 ListHeaderDefaults.minimumTopListContentPadding
                             ),
                     transformation = SurfaceTransformation(transformationSpec)
-                ) { Text(text = "Header") }
+                ) { Text(text = stringResource(R.string.header)) }
             }
             item {
                 TitleCard(
@@ -221,7 +223,7 @@ fun ListScreen(modifier: Modifier = Modifier) {
                     label = {
                         Text(
                             text = stringResource(R.string.example_button_text),
-                            modifier = modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                         )
                     },
                     onClick = { },
@@ -235,7 +237,7 @@ fun ListScreen(modifier: Modifier = Modifier) {
             item {
                 ButtonGroup(
                     modifier =
-                        modifier
+                        Modifier
                             .graphicsLayer {
                                 with(transformationSpec) {
                                     applyContainerTransformation(scrollProgress)
@@ -291,9 +293,9 @@ fun Greeting(
     greetingName: String,
     modifier: Modifier = Modifier
 ) {
-    ListHeader {
+    ListHeader(modifier = modifier) {
         Text(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             text = stringResource(R.string.hello_world, greetingName)
         )
@@ -340,12 +342,20 @@ fun SampleDialog(
 @WearPreviewFontScales
 @Composable
 fun GreetingScreenPreview() {
-    GreetingScreen("Preview Android", onShowList = {})
+    WearAppTheme {
+        AppScaffold {
+            GreetingScreen("Android", onShowList = {})
+        }
+    }
 }
 
 @WearPreviewDevices
 @WearPreviewFontScales
 @Composable
 fun ListScreenPreview() {
-    ListScreen()
+    WearAppTheme {
+        AppScaffold {
+            ListScreen()
+        }
+    }
 }
