@@ -17,9 +17,10 @@
     <string name="hello_world">From the Round world,\nHello, %1$s!</string>
     <string name="show_list">Show list</string>
     <string name="title">Title</string>
+    <string name="header">Header</string>
     <string name="error_long">An unknown error occurred during the request.</string>
-    <string name="settings_button_content_description">Settings Button</string>
-    <string name="thumbs_up_button_content_description">Thumbs up Button</string>
+    <string name="settings_button_content_description">Settings</string>
+    <string name="thumbs_up_button_content_description">Thumbs up</string>
     <string name="example_card_title">Example Title</string>
     <string name="example_card_content">Example Content\nMore Lines\nAnd More</string>
     <string name="example_button_text">Example Button</string>
