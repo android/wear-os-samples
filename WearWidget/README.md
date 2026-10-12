@@ -91,7 +91,7 @@ The sample includes a `WeatherActivity` that acts as a control panel.
 ### Via ADB Broadcast
 
 You can simulate external data updates (like a background sync) by sending a
-broadcast intent via ADB.
+broadcast intent via ADB. The exported test receiver is included only in debug builds.
 
 ```bash
 adb shell am broadcast \

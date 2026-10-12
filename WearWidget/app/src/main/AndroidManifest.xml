@@ -19,6 +19,7 @@
 
     <application
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -112,15 +113,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver
-            android:name=".WeatherUpdateReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.example.wear_widget.UPDATE_WEATHER" />
-            </intent-filter>
-        </receiver>
-
 
     </application>
 
