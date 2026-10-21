@@ -17,7 +17,7 @@ horologist = "0.7.15"
 wear-compose-material3 = "1.6.1"
 androidx-fragment = "1.8.9"
 androidx-navigation3 = "1.1.1"
-kotlinx-serialization = "1.11.0"
+kotlinx-serialization = "1.12.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
