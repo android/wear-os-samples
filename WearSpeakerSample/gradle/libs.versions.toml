@@ -15,7 +15,7 @@ ui-test-manifest = "1.9.4"
 horologist = "0.7.15"
 wear-compose-material3 = "1.6.2"
 androidx-navigation3 = "1.1.1"
-kotlinx-serialization = "1.11.0"
+kotlinx-serialization = "1.12.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
