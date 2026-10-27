@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
@@ -36,19 +37,21 @@ import com.google.samples.marketplace.viewmodel.WatchFaceMarketplaceViewModel
 @Composable
 fun WatchFaceItemPage(viewModel: WatchFaceMarketplaceViewModel) {
     val context = LocalContext.current
+    val permissionGrantedMessage = stringResource(R.string.permission_granted)
+    val permissionDeniedMessage = stringResource(R.string.permission_denied)
     val changeActiveWatchFacePermissionLauncher =
         rememberLauncherForActivityResult(RequestPermission()) { isGranted ->
             if (isGranted) {
-                viewModel.setDialogMessage(context.getString(R.string.permission_granted))
+                viewModel.setDialogMessage(permissionGrantedMessage)
                 viewModel.setActiveWatchFace()
             } else {
-                viewModel.setDialogMessage(context.getString(R.string.permission_denied))
+                viewModel.setDialogMessage(permissionDeniedMessage)
             }
         }
 
     val onSetActiveButtonClicked = {
         if (PermissionHelper.hasChangeActiveWatchFacePermission(context as Activity)) {
-            viewModel.setDialogMessage(context.getString(R.string.permission_granted))
+            viewModel.setDialogMessage(permissionGrantedMessage)
             viewModel.setActiveWatchFace()
         } else {
             if (PermissionHelper.shouldShowRequestPermissionRationaleForChangeActiveWatchFace(
