@@ -32,10 +32,12 @@ subprojects {
     spotless {
         kotlin {
             target "**/*.kt"
-            targetExclude("$buildDir/**/*.kt")
+            targetExclude("${layout.buildDirectory.get().asFile}/**/*.kt")
             targetExclude("bin/**/*.kt")
 
-            ktlint(libs.versions.ktlint.get())
+            ktlint(libs.versions.ktlint.get()).editorConfigOverride([
+                "ktlint_function_naming_ignore_when_annotated_with": "Composable"
+            ])
             licenseHeaderFile rootProject.file("../spotless/copyright.kt")
         }
     }

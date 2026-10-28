@@ -49,10 +49,7 @@ abstract class WearScreenshotTest {
             override fun currentTime(): String = "10:10"
         }
 
-    fun runTest(
-        suffix: String = "",
-        content: @Composable () -> Unit
-    ) {
+    fun runTest(suffix: String = "", content: @Composable () -> Unit) {
         RuntimeEnvironment.setQualifiers(device.qualifier)
 
         composeRule.setContent {

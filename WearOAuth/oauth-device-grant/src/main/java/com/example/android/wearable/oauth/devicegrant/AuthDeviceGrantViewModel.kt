@@ -66,10 +66,11 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
         viewModelScope.launch {
             // Step 1: Retrieve the verification URI
             showStatus(statusString = R.string.status_switch_to_phone)
-            val verificationInfo = retrieveVerificationInfo().getOrElse {
-                showStatus(statusString = R.string.status_failed)
-                return@launch
-            }
+            val verificationInfo =
+                retrieveVerificationInfo().getOrElse {
+                    showStatus(statusString = R.string.status_failed)
+                    return@launch
+                }
 
             // Step 2: Show the pairing code & open the verification URI on the paired device
             showStatus(R.string.status_code, verificationInfo.userCode)
@@ -79,10 +80,11 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
             val token = retrieveToken(verificationInfo.deviceCode, verificationInfo.interval)
 
             // Step 4: Use the token to make an authorized request
-            val userName = retrieveUserProfile(token).getOrElse {
-                showStatus(R.string.status_failed)
-                return@launch
-            }
+            val userName =
+                retrieveUserProfile(token).getOrElse {
+                    showStatus(R.string.status_failed)
+                    return@launch
+                }
 
             showStatus(R.string.status_retrieved, userName)
         }
@@ -101,30 +103,30 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
      * generates a user & device code pair. The user code is shown to the user and opened on the
      * paired device. The device code is passed while polling the OAuth server.
      */
-    private suspend fun retrieveVerificationInfo(): Result<VerificationInfo> {
-        return try {
-            Log.d(TAG, "Retrieving verification info...")
-            val responseJson = doPostRequest(
+    private suspend fun retrieveVerificationInfo(): Result<VerificationInfo> = try {
+        Log.d(TAG, "Retrieving verification info...")
+        val responseJson =
+            doPostRequest(
                 url = "https://oauth2.googleapis.com/device/code",
-                params = mapOf(
+                params =
+                mapOf(
                     "client_id" to CLIENT_ID,
                     "scope" to "https://www.googleapis.com/auth/userinfo.profile"
                 )
             )
-            Result.success(
-                VerificationInfo(
-                    verificationUri = responseJson.getString("verification_url"),
-                    userCode = responseJson.getString("user_code"),
-                    deviceCode = responseJson.getString("device_code"),
-                    interval = responseJson.getInt("interval")
-                )
+        Result.success(
+            VerificationInfo(
+                verificationUri = responseJson.getString("verification_url"),
+                userCode = responseJson.getString("user_code"),
+                deviceCode = responseJson.getString("device_code"),
+                interval = responseJson.getInt("interval")
             )
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(e)
-        }
+        )
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e)
     }
 
     /**
@@ -162,11 +164,12 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    private suspend fun fetchToken(deviceCode: String): Result<String> {
-        return try {
-            val responseJson = doPostRequest(
+    private suspend fun fetchToken(deviceCode: String): Result<String> = try {
+        val responseJson =
+            doPostRequest(
                 url = "https://oauth2.googleapis.com/token",
-                params = mapOf(
+                params =
+                mapOf(
                     "client_id" to CLIENT_ID,
                     "client_secret" to CLIENT_SECRET,
                     "device_code" to deviceCode,
@@ -174,33 +177,32 @@ class AuthDeviceGrantViewModel(application: Application) : AndroidViewModel(appl
                 )
             )
 
-            Result.success(responseJson.getString("access_token"))
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(e)
-        }
+        Result.success(responseJson.getString("access_token"))
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e)
     }
 
     /**
      * Using the access token, make an authorized request to the Auth server to retrieve the user's
      * profile.
      */
-    private suspend fun retrieveUserProfile(token: String): Result<String> {
-        return try {
-            val responseJson = doGetRequest(
+    private suspend fun retrieveUserProfile(token: String): Result<String> = try {
+        val responseJson =
+            doGetRequest(
                 url = "https://www.googleapis.com/oauth2/v2/userinfo",
-                requestHeaders = mapOf(
+                requestHeaders =
+                mapOf(
                     "Authorization" to "Bearer $token"
                 )
             )
-            Result.success(responseJson.getString("name"))
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(e)
-        }
+        Result.success(responseJson.getString("name"))
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e)
     }
 }

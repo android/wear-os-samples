@@ -17,6 +17,8 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = "WearOAuth"
+
 include ":oauth-device-grant"
 include ":oauth-pkce"
 include ":util"

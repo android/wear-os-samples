@@ -15,19 +15,18 @@
  */
 plugins {
   id 'com.android.application'
-  id 'org.jetbrains.kotlin.android'
   alias libs.plugins.roborazzi
   alias libs.plugins.compose.compiler
 }
 
 android {
-  compileSdk 36
+  compileSdk 37
   namespace "com.example.android.wearable.oauth.pkce"
 
   defaultConfig {
     applicationId "com.example.android.wearable.oauth.pkce"
     minSdk 26
-    targetSdk 34
+    targetSdk 37
     versionCode 1
     versionName "1.0"
   }
@@ -37,8 +36,10 @@ android {
     targetCompatibility = JavaVersion.VERSION_17
   }
 
-  kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_17.majorVersion
+  kotlin {
+    compilerOptions {
+      jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
   }
 
   buildTypes {
@@ -50,9 +51,6 @@ android {
 
   buildFeatures {
     compose true
-  }
-  composeOptions {
-    kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
   }
 
   testOptions {
