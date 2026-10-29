@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -159,7 +160,7 @@ class MainActivity : ComponentActivity() {
         messageClient.addListener(clientDataViewModel)
         capabilityClient.addListener(
             clientDataViewModel,
-            Uri.parse("wear://"),
+            "wear://".toUri(),
             CapabilityClient.FILTER_REACHABLE
         )
 

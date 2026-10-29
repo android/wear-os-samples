@@ -57,7 +57,6 @@ data class ProofKeyCodeExchangeState(
  * access token, and uses the token to retrieve the user's name.
  */
 class AuthPKCEViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
     private val _uiState = MutableStateFlow(ProofKeyCodeExchangeState())
     val uiState: StateFlow<ProofKeyCodeExchangeState> = _uiState.asStateFlow()
 
@@ -78,6 +77,7 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
      */
     fun startAuthFlow() {
         viewModelScope.launch {
+            val context = getApplication<Application>().applicationContext
             val codeVerifier = CodeVerifier()
 
             // Create the authorization Uri that will be shown to the user on the phone. This will
