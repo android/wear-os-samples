@@ -109,10 +109,12 @@ class WatchFacePackageRepository(
         withContext(Dispatchers.IO) {
             val apkFile = copyApkFileIntoTemporaryFile(assetPath)
             try {
-                val packageInfo = context.packageManager.getPackageArchiveInfo(
-                    apkFile.absolutePath,
-                    android.content.pm.PackageManager.PackageInfoFlags.of(0)
-                )
+                val packageInfo =
+                    context.packageManager.getPackageArchiveInfo(
+                        apkFile.absolutePath,
+                        android.content.pm.PackageManager.PackageInfoFlags
+                            .of(0)
+                    )
                 if (packageInfo == null) {
                     Log.w(TAG, "Package $assetPath could not be parsed.")
                     null
