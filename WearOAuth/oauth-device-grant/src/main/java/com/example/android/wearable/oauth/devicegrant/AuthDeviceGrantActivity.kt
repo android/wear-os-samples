@@ -74,11 +74,7 @@ fun AuthenticateApp(deviceGrantViewModel: AuthDeviceGrantViewModel) {
 }
 
 @Composable
-fun AuthenticateScreen(
-    statusCode: Int,
-    resultMessage: String,
-    startAuthFlow: () -> Unit
-) {
+fun AuthenticateScreen(statusCode: Int, resultMessage: String, startAuthFlow: () -> Unit) {
     val listState = rememberTransformingLazyColumnState()
     val transformationSpec = rememberTransformationSpec()
 

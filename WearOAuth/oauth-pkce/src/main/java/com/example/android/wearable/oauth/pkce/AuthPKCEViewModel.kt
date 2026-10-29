@@ -200,20 +200,18 @@ class AuthPKCEViewModel(application: Application) : AndroidViewModel(application
      * Using the access token, make an authorized request to the Auth server to retrieve the user's
      * profile.
      */
-    private suspend fun retrieveUserProfile(token: String): Result<String> {
-        return try {
-            val responseJson = doGetRequest(
-                url = "https://www.googleapis.com/oauth2/v2/userinfo",
-                requestHeaders = mapOf(
-                    "Authorization" to "Bearer $token"
-                )
+    private suspend fun retrieveUserProfile(token: String): Result<String> = try {
+        val responseJson = doGetRequest(
+            url = "https://www.googleapis.com/oauth2/v2/userinfo",
+            requestHeaders = mapOf(
+                "Authorization" to "Bearer $token"
             )
-            Result.success(responseJson.getString("name"))
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(e)
-        }
+        )
+        Result.success(responseJson.getString("name"))
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e)
     }
 }

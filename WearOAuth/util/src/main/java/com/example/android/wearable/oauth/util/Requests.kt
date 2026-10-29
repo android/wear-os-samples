@@ -35,33 +35,31 @@ suspend fun doPostRequest(
     url: String,
     params: Map<String, String>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-): JSONObject {
-    return withContext(dispatcher) {
-        val conn = (URL(url).openConnection() as HttpURLConnection)
-        val postData = StringBuilder()
-        for ((key, value) in params) {
-            if (postData.isNotEmpty()) postData.append('&')
-            postData.append(URLEncoder.encode(key, "UTF-8"))
-            postData.append('=')
-            postData.append(URLEncoder.encode(value, "UTF-8"))
-        }
-        val postDataBytes = postData.toString().toByteArray(charset("UTF-8"))
-
-        conn.apply {
-            requestMethod = "POST"
-            setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-            setRequestProperty("Content-Length", postDataBytes.size.toString())
-            doOutput = true
-            outputStream.write(postDataBytes)
-        }
-
-        val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))
-        val response = inputReader.readText()
-
-        Log.d("PostRequestUtil", "Response: $response")
-
-        JSONObject(response)
+): JSONObject = withContext(dispatcher) {
+    val conn = (URL(url).openConnection() as HttpURLConnection)
+    val postData = StringBuilder()
+    for ((key, value) in params) {
+        if (postData.isNotEmpty()) postData.append('&')
+        postData.append(URLEncoder.encode(key, "UTF-8"))
+        postData.append('=')
+        postData.append(URLEncoder.encode(value, "UTF-8"))
     }
+    val postDataBytes = postData.toString().toByteArray(charset("UTF-8"))
+
+    conn.apply {
+        requestMethod = "POST"
+        setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+        setRequestProperty("Content-Length", postDataBytes.size.toString())
+        doOutput = true
+        outputStream.write(postDataBytes)
+    }
+
+    val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))
+    val response = inputReader.readText()
+
+    Log.d("PostRequestUtil", "Response: $response")
+
+    JSONObject(response)
 }
 
 /**
@@ -71,17 +69,15 @@ suspend fun doGetRequest(
     url: String,
     requestHeaders: Map<String, String>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-): JSONObject {
-    return withContext(dispatcher) {
-        val conn = (URL(url).openConnection() as HttpURLConnection)
-        requestHeaders.onEach { (key, value) ->
-            conn.setRequestProperty(key, value)
-        }
-        val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))
-        val response = inputReader.readText()
-
-        Log.d("RequestUtil", "Response: $response")
-
-        JSONObject(response)
+): JSONObject = withContext(dispatcher) {
+    val conn = (URL(url).openConnection() as HttpURLConnection)
+    requestHeaders.onEach { (key, value) ->
+        conn.setRequestProperty(key, value)
     }
+    val inputReader = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8"))
+    val response = inputReader.readText()
+
+    Log.d("RequestUtil", "Response: $response")
+
+    JSONObject(response)
 }
