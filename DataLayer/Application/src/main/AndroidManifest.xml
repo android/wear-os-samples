@@ -15,6 +15,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.wearable.datalayer">
 
     <uses-feature
@@ -42,9 +43,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Google Play services binds from another process to deliver NODE_MIGRATED. -->
         <service
             android:name=".MigrationDataLayerService"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.NODE_MIGRATED" />
                 <data android:scheme="wear" />
