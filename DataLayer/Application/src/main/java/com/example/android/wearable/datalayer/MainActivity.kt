@@ -21,6 +21,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,7 +47,6 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import java.io.ByteArrayOutputStream
-import java.time.Duration
 import java.time.Instant
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -98,19 +98,18 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             if (isAvailable(capabilityClient)) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    // Set the initial trigger such that the first count will happen in one second.
-                    var lastTriggerTime = Instant.now() - (countInterval - Duration.ofSeconds(1))
+                    // This periodic loop exists only to generate demonstration DataClient
+                    // traffic while the sample activity is visible. Production Wear OS apps
+                    // should prefer event-driven state updates and self-ticking system
+                    // surfaces (such as OngoingActivity StopwatchPart/TimerPart or
+                    // TimeDifferenceComplicationText) over periodic Data Layer ticks.
+                    var nextTriggerRealtimeMs =
+                        SystemClock.elapsedRealtime() + INITIAL_COUNT_DELAY_MS
                     while (isActive) {
-                        // Figure out how much time we still have to wait until our next desired trigger
-                        // point. This could be less than the count interval if sending the count took
-                        // some time.
-                        delay(
-                            Duration
-                                .between(Instant.now(), lastTriggerTime + countInterval)
-                                .toMillis()
-                        )
-                        // Update when we are triggering sending the count
-                        lastTriggerTime = Instant.now()
+                        val delayMs = nextTriggerRealtimeMs - SystemClock.elapsedRealtime()
+                        if (delayMs > 0L) {
+                            delay(delayMs)
+                        }
                         sendCount(count)
 
                         // Increment the count to send next time
@@ -119,6 +118,12 @@ class MainActivity : ComponentActivity() {
                         // is stored in a DataStore and modeled as a proto, see thre Horologist DataLayer sample in
                         // https://google.github.io/horologist/datalayer/
                         count++
+
+                        nextTriggerRealtimeMs =
+                            nextCountTriggerRealtimeMs(
+                                previousTriggerRealtimeMs = nextTriggerRealtimeMs,
+                                nowRealtimeMs = SystemClock.elapsedRealtime()
+                            )
                     }
                 }
             }
@@ -357,7 +362,23 @@ class MainActivity : ComponentActivity() {
         private const val CAMERA_CAPABILITY = "camera"
         private const val WEAR_CAPABILITY = "wear"
         private const val WEAR_SCHEME = "wear"
-
-        private val countInterval = Duration.ofSeconds(5)
     }
+}
+
+internal const val INITIAL_COUNT_DELAY_MS = 1_000L
+internal const val COUNT_INTERVAL_MS = 5_000L
+
+/**
+ * Advances [previousTriggerRealtimeMs] on a fixed [intervalMs] monotonic schedule so wakeup
+ * overshoots do not accumulate across iterations and stalls longer than [intervalMs] skip
+ * already-elapsed intervals without emitting a catch-up burst.
+ */
+internal fun nextCountTriggerRealtimeMs(
+    previousTriggerRealtimeMs: Long,
+    nowRealtimeMs: Long,
+    intervalMs: Long = COUNT_INTERVAL_MS
+): Long {
+    require(intervalMs > 0L) { "intervalMs must be positive" }
+    val missedIntervals = maxOf(0L, nowRealtimeMs - previousTriggerRealtimeMs) / intervalMs
+    return previousTriggerRealtimeMs + (missedIntervals + 1L) * intervalMs
 }

@@ -74,4 +74,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.playservices.wearable)
     implementation(libs.androidx.fragment.ktx)
+
+    testImplementation(libs.junit)
 }
