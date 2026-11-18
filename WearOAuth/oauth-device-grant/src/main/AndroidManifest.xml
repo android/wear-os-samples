@@ -21,6 +21,8 @@
 
     <application
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:label="OAuth Device Authorization Grant"
         android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.DeviceDefault">
